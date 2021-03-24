@@ -1,0 +1,530 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8" />
+
+<link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+<link href="../static/css/gijgo.min.css" rel="stylesheet" th:href="@{/css/gijgo.min.css}" >
+<script type="text/javascript" th:src="@{/js/gijgo.min.js}" ></script>
+<script type="text/javascript" th:src="@{/js/messages.es-es.js}"></script>
+<script type="text/javascript" th:src="@{/js/datetime-moment-order.js}"></script>
+<script type="text/javascript" th:src="@{/js/moment.js}"></script>
+
+<script type="text/javascript" th:src="@{/js/date-uk.js}"></script>
+<script type="text/javascript" th:src="@{/js/date-euro.js}"></script>
+
+<div class="row p-0 m-0">
+	<div class="col-xs-4 col-sm-4">
+		<label>Desde</label>
+		<input type="text" class="form-control rounded-0" id="fecha_desde" name="fecha_desde" onKeyPress="return filterInt(event,this)">
+	</div>
+	<div class="col-xs-4 col-sm-4">
+		<label>Hasta</label>
+		<input type="text" class="form-control rounded-0" id="fecha_hasta" name="fecha_hasta" onKeyPress="return filterInt(event,this)">
+	</div>
+	<div class="col-xs-4 col-sm-4">
+		<label>Nombre</label>
+		<input type="text" class="form-control rounded-0" id="nomie" name="nomie">
+	</div>
+	<div class="col-xs-12 col-sm-6 col-md-4 pt-1">
+     			<label>Departamento</label>
+     			<select class="form-control" id="departamento" name="departamento">
+     				<option value="Todos">Todos</option>	
+     				<option th:each="depa:${departamento}" th:value="${depa.id}" th:utext="${depa.descripcion}"/>       				
+     			</select>
+     		</div>
+     		<div class="col-xs-12 col-sm-6 col-md-4 pt-1">
+     			<label>Provincia</label>
+     			<select class="form-control" id="provincia" name="provincia">
+     				<option value="Todos">Todos</option>
+     			</select>
+     		</div>
+     		<div class="col-xs-12 col-sm-6 col-md-4 pt-1">
+     			<label>Distrito</label>
+     			<select class="form-control" id="distrito" name="distrito">
+     				<option value="Todos">Todos</option>
+     			</select>
+     		</div>
+     		<div class="col-xs-12 col-sm-6 col-md-4 pt-1">
+     			<label>Estado</label>
+     			<select class="form-control" id="estado" name="estado">
+     				<option value='Todos'>Todos</option>
+     				<option value='Inscrito al P.E'>Inscrito al P.E</option>
+     				<option value='Inscrito al Concurso del P.E'>Inscrito al Concurso del P.E</option>
+     			</select>
+     		</div>
+     		<div class="col-xs-12 col-sm-6 col-md-4">
+     			<label>&nbsp;</label>
+     		</div>
+	<div class="col-xs-4 col-md-4 pt-1 pb-2">
+		<label>&nbsp;</label><br>
+		<input type="button" name="btnbuscar" id="btnbuscar" class="btn btn-primary" value="Buscar"/>
+		<input type="button" name="btnlimpiar" id="btnlimpiar" class="btn btn-primary" value="Limpiar"/>
+	</div>
+</div>
+
+<div class="p-0 m-0" style="background:#ECFBF4">
+	<h5 class="p-2 m-0 bg-info text-white">Listado de Registros</h5>
+	<div class="row pt-2 pb-4 m-0">
+		<div class="col-xs-12 col-sm-12">
+			<table id="table_ie"  class="table table-striped table-bordered display nowrap" style="width:100%">
+			<!-- table cellpadding="1" cellspacing="1" id="table_ie"-->
+			    <thead>
+			        <tr>
+			        	<th>Nº</th>
+			            <th>Departamento</th>
+			            <th>Provincia</th>
+			            <th>Distrito</th>
+			            <th>Institución Educativa</th>
+			            <th>Código local I.E</th>
+			            <th>Fecha de registro</th>
+			            <th>Estado</th>
+			            <th>Nivel-N°Secciones-N°Docentes-N°Alumnos-N°varones-N°Mujeres</th>
+			            <th>Ambito</th>
+			            <th style="display:none;">Modalidad de Enseñanza</th>
+			            <th style="display:none;">Código Local</th>
+			            <th style="display:none;">Tipo I.E.</th>
+			            <th style="display:none;">Dirección</th>
+			            <th style="display:none;">DRE</th>
+			            <th style="display:none;">UGEL</th>
+			            <th style="display:none;">TELEF. I.E</th>
+			            <th style="display:none;">EMAIL I.E</th>
+			            <th style="display:none;">Facebook</th>
+			            <th style="display:none;">Lengua</th>
+			            <th style="display:none;">Genero</th>
+			            <th style="display:none;">Turno</th>
+			            <th style="display:none;">ProveedorServicio</th>
+			            <th style="display:none;">Suministro</th>
+			            <th style="display:none;">horas abastecimiento</th>
+			            <th style="display:none;">¿ Piscina ?</th>
+			            <th style="display:none;">Tipo Doc. Director</th>
+			            <th style="display:none;">N° Doc. Director</th>
+			            <th style="display:none;">Apellidos Director</th>
+			            <th style="display:none;">Nombres Director</th>
+			            <th style="display:none;">Telefono Director</th>
+			            <th style="display:none;">Celular Director</th>
+			            <th style="display:none;">Correo Director</th>
+			            <th style="display:none;">Tipo Doc. Profesor</th>
+			            <th style="display:none;">N° Doc. Profesor</th>
+			            <th style="display:none;">Apellidos Profesor</th>
+			            <th style="display:none;">Nombres Profesor</th>
+			            <th style="display:none;">Telefono Profesor</th>
+			            <th style="display:none;">Celular Profesor</th>
+			            <th style="display:none;">Correo Profesor</th>
+			        </tr>   
+			    </thead>
+			</table>
+		</div>
+		<br><br>
+	</div>
+</div>
+</html>
+<script type="text/javascript">
+		
+		var objarray="";
+		var hhmmss="" ;
+		var arrayfecha="" ;
+		var fecha=""; 
+		
+		$("#btnlimpiar").click(function(){
+			
+			$("#fecha_desde").val()
+			$("#fecha_hasta").val()
+			$("#nomie").val()
+			$("#departamento").val("Todos");
+			$("#provincia").val("Todos");
+			$("#distrito").val("Todos");
+			$("#estado").val("Todos");
+			setTimeout(() => {        		  
+				table_ie.draw();
+	      	}, 200);
+		});
+		
+		$("#btnbuscar").click(function(){	
+			
+			$("#consulta_menu").prop("disabled",true);
+        	$("#btnbuscar").prop("disabled",true);
+			
+        	setTimeout(() => {        		  
+        		if(validarFecha($("#fecha_desde").val(),'campo fecha Desde') && validarFecha($("#fecha_hasta").val(),'campo fecha Hasta')){				
+    				if($("#fecha_desde").val()!="" && $("#fecha_hasta").val()!=""){
+    					var fecha_desde= $("#fecha_desde").val();
+    					var fecha_hasta= $("#fecha_hasta").val();					
+    					fecha_desde = fecha_desde.split('/');
+    		    		fecha_desde = fecha_desde[2]+'/'+fecha_desde[1]+'/'+fecha_desde[0];
+    		    	    fecha_desde = moment(fecha_desde).format("YYYY/MM/DD");		    	    
+    		    	    fecha_hasta = fecha_hasta.split('/');
+    		    	    fecha_hasta = fecha_hasta[2]+'/'+fecha_hasta[1]+'/'+fecha_hasta[0];
+    		    	    fecha_hasta = moment(fecha_hasta).format('YYYY/MM/DD');			    	
+    			    	if(fecha_desde>fecha_hasta){
+    			    		alert("FECHA DESDE debe ser menor que FECHA HASTA");
+    			    	}	
+    					else{
+    			    		table_ie.draw();
+    					}
+    				}
+    				else{
+    					table_ie.draw();
+    				}					
+    			}
+        	}, 200); 		
+		});	    
+
+		$("#fecha_desde").datepicker({
+			locale: 'es-es',
+		    format: 'dd/mm/yyyy',
+		    uiLibrary: 'bootstrap4'
+		});
+		$("#fecha_hasta").datepicker({
+			locale: 'es-es',
+		    format: 'dd/mm/yyyy',
+		    uiLibrary: 'bootstrap4'
+		});
+		$("#departamento").on("change",function(){
+    		
+    		if($("#departamento").val()!="Todos"){
+    			$("#provincia").html("");
+    			$.ajax({
+    				url: url_base + "programaeducativo/provincias/bydepa/"+$("#departamento").val(),
+    				success: function(respuesta) {
+    					var contenido = "<option value='Todos'>Todos</option>";
+    					for(var i=0;i<respuesta.length;i++){
+    						contenido = contenido + "<option value="+respuesta[i].id+">"+respuesta[i].descripcion+"</option>";
+    					}
+    					$("#provincia").html(contenido);
+    				},
+    				error: function() {
+    			        console.log("No se ha podido obtener la información");
+    			    }
+    			});
+    		}
+    		else{
+    			$("#provincia").html("<option value='Todos'>Todos</option>");
+    		}
+    		$("#distrito").html("<option value='Todos'>Todos</option>");
+    	});	
+		
+		$("#provincia").on("change",function(){
+    		if($("#provincia").val()!="Todos"){
+    			$.ajax({
+    				url: url_base + "/programaeducativo/distritos/byprovincia/"+$("#provincia").val(),
+    				success: function(respuesta) {
+    					var contenido = "<option value='Todos'>Todos</option>";
+    					for(var i=0;i<respuesta.length;i++){
+    						contenido = contenido + "<option value="+respuesta[i].id+">"+respuesta[i].descripcion+"</option>";
+    					}
+    					$("#distrito").html(contenido);
+    				},
+    				error: function() {
+    			        console.log("No se ha podido obtener la información");
+    			    }
+    			});
+    		}
+    		else{
+    			$("#distrito").html("<option value='Todos'>Todos</option>");
+    		}    		
+    	});
+		
+		$("#table_ie").dataTable().fnDestroy();
+		$.fn.dataTable.moment('DD/MM/YYYY hh:mm:ss');
+		var table_ie = $('#table_ie').DataTable({
+			dom: 'Bfrtip',
+            "scrollX": true,
+            "searching": true,
+            lengthMenu: [
+                [ 10, 15, 25, -1 ],
+                [ '10 filas', '15 filas', '25 filas', 'Mostrar todas' ]
+            ],
+            "processing":true,
+            language: {
+                buttons: {
+                  pageLength: 'Mostrar'
+                },
+                "decimal": "",
+                "emptyTable": "No hay información",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando Registros...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": " ",//No existen registros
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Ultimo",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            },
+            'ajax' : {
+                "url" : url_base + 'programaeducativo/listaprogeduc',
+                "type" : "GET",
+                "dataSrc" : ""
+            },
+            'columns' : [
+            	{ 
+            		"data": null, "render": function (data, type, full, meta) { return meta.row + 1; }
+            	},
+            	{ 'data' : 'departamento' },
+                { 'data' : 'provincia' },
+                { 'data' : 'distrito' },
+                { 'data' : 'insteduc' },
+                { 'data' : 'codlocalie' },
+                { 'data' : 'fecharegistro' },
+                { 'data' : 'concurso'},
+                { 'data' : 'nivel'},
+                { 'data' : 'ambito'},
+                { 'data' : 'modensenianza','searchable': false},
+                { 'data' : 'id','searchable': false},
+                { 'data' : 'tipoieid','searchable': false},
+                { 'data' : 'dirie','searchable': false},
+                { 'data' : 'dre','searchable': false},
+                { 'data' : 'ugel','searchable': false},
+                { 'data' : 'telfie','searchable': false},
+                { 'data' : 'mailie','searchable': false},
+                { 'data' : 'facebook','searchable': false},
+                { 'data' : 'lengua','searchable': false},
+                { 'data' : 'genero','searchable': false},
+                { 'data' : 'turno','searchable': false},
+                { 'data' : 'provedor','searchable': false},
+                { 'data' : 'suministro','searchable': false},
+                { 'data' : 'hora_abastecimiento','searchable': false},
+                { 'data' : 'piscina','searchable': false},
+                { 'data' : 'tipodocdir','searchable': false},
+                { 'data' : 'nrodocidentdir','searchable': false},
+                { 'data' : 'apedir','searchable': false},
+                { 'data' : 'nomdir','searchable': false},
+                { 'data' : 'teldir','searchable': false},
+                { 'data' : 'celdir','searchable': false},
+                { 'data' : 'correodir','searchable': false},
+                { 'data' : 'tipodocprof','searchable': false},
+                { 'data' : 'nrodocidentprof','searchable': false},
+                { 'data' : 'apeprof','searchable': false},
+                { 'data' : 'nomprof','searchable': false},
+                { 'data' : 'telprof','searchable': false},
+                { 'data' : 'celprof','searchable': false},
+                { 'data' : 'correoprof','searchable': false}
+            ],
+            columnDefs: [
+            	{
+	            	type: 'date-euro',"targets": 6,
+	   		      	"render": function(data, type, row, meta){
+	   		      		return moment(data).format('DD/MM/YYYY HH:mm');
+   		      		}
+   		    	},
+            	{ "visible": false, "targets": 10 },
+   		     	{ "visible": false, "targets": 11 },
+   		  		{ "visible": false, "targets": 12 },
+   		  		{ "visible": false, "targets": 13 },
+		     	{ "visible": false, "targets": 14 },
+		  		{ "visible": false, "targets": 15 },
+		  		{ "visible": false, "targets": 16 },
+   		     	{ "visible": false, "targets": 17 },
+   		  		{ "visible": false, "targets": 18 },
+   		  		{ "visible": false, "targets": 19 },
+		     	{ "visible": false, "targets": 20 },
+		  		{ "visible": false, "targets": 21 },
+		  		{ "visible": false, "targets": 22 },
+   		     	{ "visible": false, "targets": 23 },
+   		  		{ "visible": false, "targets": 24 },
+   		  		{ "visible": false, "targets": 25 },
+		     	{ "visible": false, "targets": 26 },
+		  		{ "visible": false, "targets": 27 },
+		  		{ "visible": false, "targets": 28 },
+   		     	{ "visible": false, "targets": 29 },
+   		  		{ "visible": false, "targets": 30 },
+   		  		{ "visible": false, "targets": 31 },
+		     	{ "visible": false, "targets": 32 },
+		  		{ "visible": false, "targets": 33 },
+		  		{ "visible": false, "targets": 34 },
+   		     	{ "visible": false, "targets": 35 },
+   		  		{ "visible": false, "targets": 36 },
+   		  		{ "visible": false, "targets": 37 },
+		     	{ "visible": false, "targets": 38 },
+		  		{ "visible": false, "targets": 39 }
+            ],
+            "fnPreDrawCallback": function(oSettings) {
+            	console.log("inicio carga");
+            	$("#consulta_menu").prop("disabled",true);
+            	$("#btnbuscar").prop("disabled",true);
+            },
+            buttons: [
+            	{
+            		extend: 'excel',
+            		text:'Descargar en Excel',
+                    title: 'INSTITUCIONES EDUCATIVAS DEL PROGRAMA EDUCATIVO',
+                    messageTop: function(){
+                    	return '[ Fecha desde: ' + $("#fecha_desde").val() + ']            [ Fecha hasta: '+ $("#fecha_hasta").val() + ']           [ Nombre: ' + $("#nomie").val() + ']           [ Departamento: ' + $("#departamento option:selected").text() + ']           [ Provincia: '+$("#provincia option:selected").text()+' ]          [ Distrito: '+$("#distrito option:selected").text()+']     [ Estado: '+$("#estado option:selected").text()+ ']';
+                    },
+                    filename : function(){
+                    	var hoy = new Date();
+                    	var dia = String(hoy.getDate());
+                    	if(dia.length==1){
+                    		dia = "0"+dia;
+                    	}
+                    	var mes = String(hoy.getMonth()+1);
+                    	if(mes.length==1){
+                    		mes = "0"+mes;
+                    	}
+                    	var hora = String(hoy.getHours());
+                    	if(hora.length==1){
+                    		hora = "0"+hora;
+                    	}
+                    	var minuto = String(hoy.getMinutes());
+                    	if(minuto.length==1){
+                    		minuto = "0"+minuto;
+                    	}
+            	    	return "PE"+hoy.getFullYear()+'_'+dia+'-'+mes+'-'+hoy.getFullYear()+'_'+hora + minuto;
+                    }
+            	}
+            ]
+        });
+		
+		$('#table_ie').DataTable().on("draw", function(){
+			console.log("draw");
+			$("#consulta_menu").prop("disabled",false);
+        	$("#btnbuscar").prop("disabled",false);
+		});
+		
+		$.fn.dataTable.ext.search.push(
+    	    function( settings, data, dataIndex ) {
+    	    	
+    	    	console.log("settings.nTable.id :" + settings.nTable.id);
+    	    	if ( settings.nTable.id !== 'table_ie' ) {
+    	            return true;
+    	          }
+    	    	
+    	    	var fecha_desde = $("#fecha_desde").val();
+    	    	var fecha_hasta = $("#fecha_hasta").val();
+    	    	var nombre = $("#nomie").val();
+    	    	var departamento = $("#departamento option:selected").text();
+    	    	var provincia = $("#provincia option:selected").text();
+    	    	var distrito = $("#distrito option:selected").text();
+    	    	var estado = $("#estado option:selected").val();
+    	    	
+    	    	if(!filtraUbigeo(departamento,data[1]))
+    	    		return false;
+    	    	if(!filtraUbigeo(provincia,data[2]))
+    	    		return false;
+    	    	if(!filtraUbigeo(distrito,data[3]))
+    	    		return false;	    	
+    	    	if(!filtraNombre(nombre,data[4]))
+    	    		return false;
+    	    	if(!filtraFecha(fecha_desde,fecha_hasta,data[6]))
+    	    		return false;
+    	    	if(!filtraConcurso(estado,data[7]))
+    	    		return false;
+   	    		return true;
+    	    }
+    	);
+    	
+    	function filtraUbigeo(dato,campo){
+	    	if(dato==="Todos")
+	    		return true;
+	    	return dato===campo;
+	    }
+	
+	    function filtraNombre(nombre,campo){
+	    	if(nombre==="" || nombre === undefined)
+	    		return true;
+	    	var posicion = (campo.toLowerCase()).indexOf(nombre.toLowerCase()); 
+	    	if(posicion != -1)
+	    		return  true;
+	    	return false;
+	    }	
+	
+	    function filtraFecha(fecha_desde,fecha_hasta,fecha_registro){
+	    	objarray = fecha_registro.split(" ");
+	    	hhmmss = objarray[1];
+	    	arrayfecha = objarray[0].split("/");
+	    	fecha = arrayfecha[2] + "/" + arrayfecha[1] + "/" + arrayfecha[0] + " "+ hhmmss; 
+	    		
+	    	momentFechaRegistro = moment(fecha).format("YYYY/MM/DD");
+	    	if(fecha_desde==="" && fecha_hasta===""){
+	    		return true;
+	    	}
+	    	if(fecha_desde!="" && fecha_hasta===""){
+	    		fecha_desde = fecha_desde.split('/');
+	    		fecha_desde = fecha_desde[2]+'/'+fecha_desde[1]+'/'+fecha_desde[0];
+	    	    let momentFechaDesde = moment(fecha_desde).format("YYYY/MM/DD");
+	    	    return momentFechaRegistro>=fecha_desde;
+	    	}
+	    	else if(fecha_desde===""  && fecha_hasta!=""){
+	    		fecha_hasta = fecha_hasta.split('/');
+	    	    fecha_hasta = fecha_hasta[2]+'/'+fecha_hasta[1]+'/'+fecha_hasta[0];
+	    	    fecha_hasta = moment(fecha_hasta).format('YYYY/MM/DD');
+	    	    return momentFechaRegistro<=fecha_hasta;
+	    	}
+	    	else{
+	    		fecha_desde = fecha_desde.split('/');
+	    		fecha_desde = fecha_desde[2]+'/'+fecha_desde[1]+'/'+fecha_desde[0];
+	    	    fecha_desde = moment(fecha_desde).format("YYYY/MM/DD");
+	    	    
+	    	    fecha_hasta = fecha_hasta.split('/');
+	    	    fecha_hasta = fecha_hasta[2]+'/'+fecha_hasta[1]+'/'+fecha_hasta[0];
+	    	    fecha_hasta = moment(fecha_hasta).format('YYYY/MM/DD');
+	    	    
+	    	    return momentFechaRegistro>=fecha_desde && momentFechaRegistro<=fecha_hasta;
+	    	}
+	    	return true;
+	    } 
+	
+	    function filtraConcurso(dato,campo){
+	    	if(dato==="Todos")
+	    		return true;
+	    	return dato===campo;	
+	    }
+	    
+	    function validarFecha(fecha,mensaje){
+			if(fecha=="")
+				return true;
+	    	if(validarFormatoFecha(fecha)){
+				if(existeFecha(fecha)){
+					return true;
+				}else{
+					alert("La fecha del "+ mensaje +" introducida no existe.");
+					return false;
+				}
+			}
+			else{
+				alert("El formato del "+ mensaje +" es incorrecto.");
+				return false;
+			}
+		}
+
+		function validarFormatoFecha(campo) {
+			var RegExPattern = /^\d{1,2}\/\d{1,2}\/\d{2,4}$/;
+			if ((campo.match(RegExPattern)) && (campo!='')) {
+				return true;
+			} 
+			else {
+				return false;
+			}
+		}
+
+		function existeFecha(fecha){
+			var fechaf = fecha.split("/");
+			var day = fechaf[0];
+			var month = fechaf[1];
+			var year = fechaf[2];
+			var date = new Date(year,month,'0');
+			if((day-0)>(date.getDate()-0)){
+				return false;
+			}
+			return month > 0 && month < 13 && year > 0 && year < 32768 && day > 0 && day <= (new Date(year, month, 0)).getDate();;
+		}
+		
+		function filterInt(evt,input){
+		    var key = window.Event ? evt.which : evt.keyCode;    
+		    var chark = String.fromCharCode(key);
+		    var tempValue = input.value+chark;
+		    if(key >= 47 && key <= 57){    
+		        return true;
+		    }
+		    else{
+		        return false;
+		    }
+		}
+		
+</script>

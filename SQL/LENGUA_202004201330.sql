@@ -1,0 +1,58 @@
+INSERT INTO PROGEDUCATIVO.LENGUA (ID,DESCRIPCION,ORDEN) VALUES 
+(1,'Achuar',6)
+,(2,'Aimara',3)
+,(3,'Amahuaca',7)
+,(4,'Arabela',8)
+,(5,'Ashaninka',5)
+,(6,'Awajún',4)
+,(7,'Bora',9)
+,(8,'Cashinahua',10)
+,(9,'Chamicuro',11)
+,(10,'Ese Eja',12)
+;
+INSERT INTO PROGEDUCATIVO.LENGUA (ID,DESCRIPCION,ORDEN) VALUES 
+(11,'Español',1)
+,(12,'Harakbut',13)
+,(13,'Ikitu',14)
+,(14,'Iñapari',15)
+,(15,'Iskonawa',16)
+,(16,'Jaqaru',17)
+,(17,'Kakataibo',18)
+,(18,'Kakinte',19)
+,(19,'Kandozi-chapra',20)
+,(20,'Kapanawa',21)
+;
+INSERT INTO PROGEDUCATIVO.LENGUA (ID,DESCRIPCION,ORDEN) VALUES 
+(21,'Kawki',22)
+,(22,'Kukama kukamiria',23)
+,(23,'Madija',24)
+,(24,'Ma?I?J??Ki',25)
+,(25,'Matsés',26)
+,(26,'Matsigenka',27)
+,(27,'Matsigenka montetokunirira',28)
+,(28,'Muniche',29)
+,(29,'Murui-muinan?',30)
+,(30,'Nahua',31)
+;
+INSERT INTO PROGEDUCATIVO.LENGUA (ID,DESCRIPCION,ORDEN) VALUES 
+(31,'Nomatsigenga',32)
+,(32,'Ocaina',33)
+,(33,'Omagua',34)
+,(34,'Quechua',2)
+,(35,'Resígaro',35)
+,(36,'Secoya',36)
+,(37,'Sharanahua',37)
+,(38,'Shawi',38)
+,(39,'Shipibo-konibo',39)
+,(40,'Shiwilu',40)
+;
+INSERT INTO PROGEDUCATIVO.LENGUA (ID,DESCRIPCION,ORDEN) VALUES 
+(41,'Taushiro',41)
+,(42,'Ticuna',42)
+,(43,'Urarina',43)
+,(44,'Wampis',44)
+,(45,'Yagua',45)
+,(46,'Yaminahua',46)
+,(47,'Yanesha',47)
+,(48,'Yine',48)
+;

@@ -1,0 +1,675 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>ProgramaEducativo</title>
+    <script type="text/javascript">
+		window.history.forward();
+	</script>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+	
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+	
+	<!-- jQuery CDN - Slim version (=without AJAX) -->
+    <!-- script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script-->
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+	
+	<link rel="stylesheet" href="../static/css/dataTables.bootstrap4.min.css" th:href="@{/css/dataTables.bootstrap4.min.css}">
+	<link rel="stylesheet" href="../static/css/responsive.bootstrap4.min.css" th:href="@{/css/responsive.bootstrap4.min.css}">
+	<link rel="stylesheet" href="../static/css/editor.dataTables.min.css" th:href="@{/css/editor.dataTables.min.css}">
+	<link rel="stylesheet" href="../static/css/select.dataTables.min.css" th:href="@{/css/select.dataTables.min.css}">
+	<link rel="stylesheet" href="../static/css/buttons.dataTables.min.css" th:href="@{/css/buttons.dataTables.min.css}">
+	<link rel="stylesheet" href="../static/css/colReorder.dataTables.min.css" th:href="@{/css/colReorder.dataTables.min.css}">
+	
+	<script type="text/javascript" th:src="@{/js/jquery-3.3.1.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/bootstrapv4.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/fontawesomev5.0.6.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
+	
+	<script type="text/javascript" th:src="@{/js/bootstrap-select.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/fontawesomev5.0.6.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.dataTables.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.editor.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.select.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.colReorder.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.buttons.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jszip.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/pdfmake.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/vfs_fonts.js}"></script>
+    <script type="text/javascript" th:src="@{/js/buttons.html5.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/buttons.print.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.bootstrap4.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.responsive.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/responsive.bootstrap4.min.js}"></script>      
+    <script type="text/javascript" th:src="@{/js/dataTables.editor.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/datetime.js}"></script>
+    <script type="text/javascript" th:src="@{/js/moment.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/datetime-moment.js}"></script>	
+	
+	<link rel="shortcut icon" th:href="@{/images/logo_login.ico}" />
+	
+	<script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
+	
+	<link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+	<link href="../static/css/gijgo.min.css" rel="stylesheet" th:href="@{/css/gijgo.min.css}" >
+	<script type="text/javascript" th:src="@{/js/gijgo.min.js}" ></script>
+	<script type="text/javascript" th:src="@{/js/messages.es-es.js}"></script>
+	<script type="text/javascript" th:src="@{/js/datetime-moment-order.js}"></script>
+	<script type="text/javascript" th:src="@{/js/moment.js}"></script>
+	
+	<script type="text/javascript" th:src="@{/js/date-uk.js}"></script>
+	<script type="text/javascript" th:src="@{/js/date-euro.js}"></script>    
+	
+	
+</head>
+<body>
+
+<h4 style="color:#4698FF; padding-left:5px">Aperturar Periodo</h4>
+<hr>
+<div class="row" style="padding-left:20px; width:100%; padding-bottom:3px">
+	<div class="col-2" style="padding-left:20px">
+		<label>Aperturar Año </label>
+	</div>
+	<div class="col-2" style="padding-left:20px">
+		<select class="form-control" id="cbanioapertura" >
+			<option value="0">Seleccione</option>
+			<option value="2021">2021</option>
+			<option value="2022">2022</option>
+			<option value="2023">2023</option>
+			<option value="2024">2024</option>
+			<option value="2021">2025</option>
+			<option value="2022">2026</option>
+			<option value="2023">2027</option>
+			<option value="2024">2028</option>
+			<option value="2023">2029</option>
+			<option value="2024">2030</option>
+		</select>
+	</div>
+	<div class="col-2" style="padding-left:20px">
+		<label>Nombre del Concurso Escolar </label>
+	</div>
+	<div class="col-3" style="padding-left:20px">
+		<input type="text" class="form-control" id="nombreconcurso"/>
+	</div>
+</div>
+<br>
+<div class="row" style="padding-left:20px; width:100%; padding-bottom:3px">
+	<div class="col-6" style="padding-left:20px">
+		<strong>Cronograma del Concurso Escolar </strong>
+	</div>
+	<div class="col-3" style="padding-left:20px">
+		<strong>Desde</strong>
+	</div>
+	<div class="col-3" style="padding-left:20px">
+		<strong>Hasta </strong>
+	</div>
+</div>
+<br>
+<div class="row" style="padding-left:20px; width:100%; padding-bottom:3px">
+	<div class="col-4" style="padding-left:20px">
+		<label>Primera Etapa : Lanzamiento Oficial</label>
+	</div>
+	<div class="col-3" style="padding-left:20px">
+		<input type="text" class="form-control rounded-0" id="prietadesde" name="prietadesde" onKeyPress="return filterInt(event,this)" disabled>
+	</div>
+	<div class="col-3" style="padding-left:20px">
+		<input type="text" class="form-control rounded-0" id="prietahasta" name="prietahasta" onKeyPress="return filterInt(event,this)" disabled>
+	</div>
+</div>
+<div class="row" style="padding-left:20px; width:100%; padding-bottom:3px">
+	<div class="col-4" style="padding-left:20px">
+		<label>Segunda Etapa: Proceso de Inscripción</label>
+	</div>
+	<div class="col-3" style="padding-left:20px">
+		<input type="text" class="form-control rounded-0" id="segetadesde" name="segetadesde" onKeyPress="return filterInt(event,this)" disabled>
+	</div>
+	<div class="col-3" style="padding-left:20px">
+		<input type="text" class="form-control rounded-0" id="segetahasta" name="segetahasta" onKeyPress="return filterInt(event,this)" disabled>
+	</div>
+</div>
+<div class="row" style="padding-left:20px; width:100%; padding-bottom:3px">
+	<div class="col-4" style="padding-left:20px">
+		<label>Tercera Etapa: Acompañamiento Técnico para profesores y alumnos</label>
+	</div>
+	<div class="col-3" style="padding-left:20px">
+		<input type="text" class="form-control rounded-0" id="teretadesde" name="teretadesde" onKeyPress="return filterInt(event,this)" disabled>
+	</div>
+	<div class="col-3" style="padding-left:20px">
+		<input type="text" class="form-control rounded-0" id="teretahasta" name="teretahasta" onKeyPress="return filterInt(event,this)" disabled>
+	</div>
+</div>
+<div class="row" style="padding-left:20px; width:100%; padding-bottom:3px">
+	<div class="col-4" style="padding-left:20px">
+		<label>Cuarta Etapa: Recepción de Trabajo</label>
+	</div>
+	<div class="col-3" style="padding-left:20px">
+		<input type="text" class="form-control rounded-0" id="cuaetadesde" name="cuaetadesde" onKeyPress="return filterInt(event,this)" disabled>
+	</div>
+	<div class="col-3" style="padding-left:20px">
+		<input type="text" class="form-control rounded-0" id="cuaetahasta" name="cuaetahasta" onKeyPress="return filterInt(event,this)" disabled>
+	</div>
+</div>
+<div class="row" style="padding-left:20px; width:100%; padding-bottom:3px">
+	<div class="col-4" style="padding-left:20px">
+		<label>Quinta Etapa : Evaluación de Trabajos</label>
+	</div>
+	<div class="col-3" style="padding-left:20px">
+		<input type="text" class="form-control rounded-0" id="quietadesde" name="quietadesde" onKeyPress="return filterInt(event,this)" disabled>
+	</div>
+	<div class="col-3" style="padding-left:20px">
+		<input type="text" class="form-control rounded-0" id="quietahasta" name="quietahasta" onKeyPress="return filterInt(event,this)" disabled>
+	</div>
+</div>
+<div class="row" style="padding-left:20px; width:100%; padding-bottom:3px">
+	<div class="col-4" style="padding-left:20px">
+		<label>Sexta Etapa: Declaratoria de Finalistas</label>
+	</div>
+	<div class="col-3" style="padding-left:20px">
+		<input type="text" class="form-control rounded-0" id="sexetadesde" name="sexetadesde" onKeyPress="return filterInt(event,this)" disabled>
+	</div>
+	<div class="col-3" style="padding-left:20px">
+		<input type="text" class="form-control rounded-0" id="sexetahasta" name="sexetahasta" onKeyPress="return filterInt(event,this)" disabled>
+	</div>
+</div>
+<div class="row" style="padding-left:20px; width:100%; padding-bottom:3px">
+	<div class="col-4" style="padding-left:20px">
+		<label>Septima Etapa : Feria Virtual expoAgua</label>
+	</div>
+	<div class="col-3" style="padding-left:20px">
+		<input type="text" class="form-control rounded-0" id="sepetadesde" name="sepetadesde" onKeyPress="return filterInt(event,this)" disabled>
+	</div>
+	<div class="col-3" style="padding-left:20px">
+		<input type="text" class="form-control rounded-0" id="sepetahasta" name="sepetahasta" onKeyPress="return filterInt(event,this)" disabled>
+	</div>
+</div>
+<br>
+<div class="row" style="padding-left:20px; width:100%; padding-bottom:3px">
+	<div class="col-4" style="padding-left:20px">
+		&nbsp;
+	</div>
+	<div class="col-3" style="padding-left:20px">
+		<input type="button" value="Atras" id="btnatrasaperturarperiodo" class="btn btn-danger text-white rounded-0"/>
+	</div>
+	<div class="col-3" style="padding-left:20px">
+		<input type="button" value="Aperturar" id="btnaperturarperiodo" class="btn btn-primary text-white rounded-0"/>
+	</div>
+</div>
+<br><br>
+<div class="modal" tabindex="-1" role="dialog" id="modalexito">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <img th:src="@{./images/imagen_exito5.png}"/>&nbsp;&nbsp; <strong class="pt-1">Registro exitoso</strong>
+      </div>
+      <div class="modal-body" id="textoexito">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary rounded-0" id="btncerrarmensajeexito" name="btncerrarmensajeexito">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalconfirmacion">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <img th:src="@{./images/imagen_informacion11.png}" />&nbsp;&nbsp; <strong class="pt-1">Confirmacion</strong>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="textoconfirmacion">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary rounded-0" id="btnaceptarmensajeconfirmacion" name="btnaceptarmensajeconfirmacion">Aceptar</button>
+        <button type="button" class="btn btn-danger rounded-0" id="btncerrarmensajeconfirmacion" name="btncerrarmensajeconfirmacion">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalinformacion">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <img th:src="@{./images/imagen_informacion11.png}" />&nbsp;&nbsp; <strong class="pt-1">Alerta</strong>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="textoinformacion">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger rounded-0" id="btncerrarmensajeinformacion" name="btncerrarmensajeinformacion">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalerror">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <img th:src="@{./images/imagen_informacion11.png}"/>&nbsp;&nbsp; <strong class="pt-1">Error</strong>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>	          
+        </button>
+      </div>
+      <div class="modal-body" id="textoerror">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger rounded-0" id="btncerrarmensajeerror" name="btncerrarmensajeerror">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalimagencargando">
+  <center>
+  	<img th:src="@{./images/cargando.gif}" style="line-height: 200px;"/>
+  </center>	  
+</div>	
+</body>
+</html>
+
+<script type="text/javascript">
+	
+	var url_base = location.origin+"/";
+	var msjvalidacion, msjfechas;
+	
+	$(document).ready(function(){	
+		
+		$("#btncerrarmensajeexito").click(function(){			
+			$("#modalexito").modal('hide');
+		});
+			
+		$("#btncerrarmensajeinformacion").click(function(){
+			$("#modalinformacion").modal('hide');
+		});
+		
+		$("#btncerrarmensajeerror").click(function(){
+			$("#modalerror").modal('hide');
+		});
+		
+		$("#btncerrarmensajeconfirmacion").click(function(){
+			$("#modalconfirmacion").modal('hide');
+		});
+		
+		$("#prietadesde").datepicker({
+			locale: 'es-es',
+		    format: 'dd/mm/yyyy',
+		    uiLibrary: 'bootstrap4'
+		});
+		$("#prietahasta").datepicker({
+			locale: 'es-es',
+		    format: 'dd/mm/yyyy',
+		    uiLibrary: 'bootstrap4'
+		});
+		$("#segetadesde").datepicker({
+			locale: 'es-es',
+		    format: 'dd/mm/yyyy',
+		    uiLibrary: 'bootstrap4'
+		});
+		$("#segetahasta").datepicker({
+			locale: 'es-es',
+		    format: 'dd/mm/yyyy',
+		    uiLibrary: 'bootstrap4'
+		});
+		$("#teretadesde").datepicker({
+			locale: 'es-es',
+		    format: 'dd/mm/yyyy',
+		    uiLibrary: 'bootstrap4'
+		});
+		$("#teretahasta").datepicker({
+			locale: 'es-es',
+		    format: 'dd/mm/yyyy',
+		    uiLibrary: 'bootstrap4'
+		});
+		$("#cuaetadesde").datepicker({
+			locale: 'es-es',
+		    format: 'dd/mm/yyyy',
+		    uiLibrary: 'bootstrap4'
+		});
+		$("#cuaetahasta").datepicker({
+			locale: 'es-es',
+		    format: 'dd/mm/yyyy',
+		    uiLibrary: 'bootstrap4'
+		});
+		$("#quietadesde").datepicker({
+			locale: 'es-es',
+		    format: 'dd/mm/yyyy',
+		    uiLibrary: 'bootstrap4'
+		});
+		$("#quietahasta").datepicker({
+			locale: 'es-es',
+		    format: 'dd/mm/yyyy',
+		    uiLibrary: 'bootstrap4'
+		});
+		$("#sexetadesde").datepicker({
+			locale: 'es-es',
+		    format: 'dd/mm/yyyy',
+		    uiLibrary: 'bootstrap4'
+		});
+		$("#sexetahasta").datepicker({
+			locale: 'es-es',
+		    format: 'dd/mm/yyyy',
+		    uiLibrary: 'bootstrap4'
+		});
+		$("#sepetadesde").datepicker({
+			locale: 'es-es',
+		    format: 'dd/mm/yyyy',
+		    uiLibrary: 'bootstrap4'
+		});
+		$("#sepetahasta").datepicker({
+			locale: 'es-es',
+		    format: 'dd/mm/yyyy',
+		    uiLibrary: 'bootstrap4'
+		});
+		
+		$("#btnatrasaperturarperiodo").click(function(){
+			$("#consulta_menu").prop("disabled",true);
+        	$("#btnbuscar").prop("disabled",true);
+    		$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
+    		setTimeout(() => {        		  
+    			$.ajax({
+	    			url: url_base + "programaeducativo/aperturar_anio",
+	    			success: function(respuesta) {
+	    				$("#contenedor_consulta").html(respuesta);    				
+	    			}
+	    		});
+        	}, 200);
+		});
+		
+		$("#btnaperturarperiodo").click(function(){
+			
+			if(validarCampos()){
+					
+				var conf = confirm("¿ Desea Aperturar el año ?");
+				
+				if(conf == true){
+				
+					var anio, nombreconcurso, primeraetapadesde, primeraetapahasta, segundaetapadesde, segundaetapadesde, terceraetapadesde, terceraetapahasta, cuartaetapadesde,cuartaetapahasta,  quintaetapadesde,quintaetapahasta,sextaetapadesde,sextaetapahasta,septimaetapadesde,septimaetapahasta; 
+					var pedesde,pehasta,sedesde,sehasta,tedesde,tehasta,cudesde,cuahasta,quidesde,quihasta,sexdesde,sexhasta,sepdesde,sephasta;
+					
+					anio =  $("#cbanioapertura").val();
+					nombreconcurso  =  $("#nombreconcurso").val();
+					
+					primeraetapadesde = $("#prietadesde").val();
+					primeraetapadesde = primeraetapadesde.split("/");
+					pedesde = new Date(parseInt(primeraetapadesde[2]),parseInt(primeraetapadesde[1]),parseInt(primeraetapadesde[0]));
+					primeraetapadesde = primeraetapadesde[2] + "-" + primeraetapadesde[1] + "-" + primeraetapadesde[0];
+					console.log("pedesde :" + pedesde);
+					
+					primeraetapahasta = $("#prietahasta").val();
+					primeraetapahasta = primeraetapahasta.split("/");
+					pehasta = new Date(parseInt(primeraetapahasta[2]),parseInt(primeraetapahasta[1]),parseInt(primeraetapahasta[0]));
+					primeraetapahasta = primeraetapahasta[2] + "-" + primeraetapahasta[1] + "-" + primeraetapahasta[0];	
+					console.log("pehasta :" + pehasta);
+					
+					segundaetapadesde =  $("#segetadesde").val();
+					segundaetapadesde = segundaetapadesde.split("/");
+					sedesde = new Date(parseInt(segundaetapadesde[2]),parseInt(segundaetapadesde[1]),parseInt(segundaetapadesde[0]));
+					segundaetapadesde = segundaetapadesde[2] + "-" + segundaetapadesde[1] + "-" + segundaetapadesde[0];
+					console.log("sedesde :" + sedesde);
+					
+					segundaetapahasta =  $("#segetahasta").val();
+					segundaetapahasta = segundaetapahasta.split("/");
+					sehasta = new Date(parseInt(segundaetapahasta[2]),parseInt(segundaetapahasta[1]),parseInt(segundaetapahasta[0]));
+					segundaetapahasta = segundaetapahasta[2] + "-" + segundaetapahasta[1] + "-" + segundaetapahasta[0];					
+					console.log("sehasta :" + sehasta);
+					
+					terceraetapadesde =  $("#teretadesde").val();
+					terceraetapadesde = terceraetapadesde.split("/");
+					tedesde = new Date(parseInt(terceraetapadesde[2]),parseInt(terceraetapadesde[1]),parseInt(terceraetapadesde[0]));
+					terceraetapadesde = terceraetapadesde[2] + "-" + terceraetapadesde[1] + "-" + terceraetapadesde[0];					
+					console.log("tedesde :" + tedesde);
+					
+					terceraetapahasta = $("#teretahasta").val();
+					terceraetapahasta = terceraetapahasta.split("/");
+					tehasta = new Date(parseInt(terceraetapahasta[2]),parseInt(terceraetapahasta[1]),parseInt(terceraetapahasta[0]));
+					terceraetapahasta = terceraetapahasta[2] + "-" + terceraetapahasta[1] + "-" +terceraetapahasta[0];					
+					console.log("tehasta :" + tehasta);
+					
+					cuartaetapadesde  = $("#cuaetadesde").val();
+					cuartaetapadesde = cuartaetapadesde.split("/");
+					cudesde = new Date(parseInt(cuartaetapadesde[2]),parseInt(cuartaetapadesde[1]),parseInt(cuartaetapadesde[0]));
+					cuartaetapadesde = cuartaetapadesde[2] + "-" + cuartaetapadesde[1] + "-" +cuartaetapadesde[0];					
+					console.log("cudesde :" + cudesde);
+					
+					cuartaetapahasta  =  $("#cuaetahasta").val();
+					cuartaetapahasta = cuartaetapahasta.split("/");
+					cuahasta = new Date(parseInt(cuartaetapahasta[2]),parseInt(cuartaetapahasta[1]),parseInt(cuartaetapahasta[0]));
+					cuartaetapahasta = cuartaetapahasta[2] + "-" + cuartaetapahasta[1] + "-" +cuartaetapahasta[0];					
+					console.log("cuahasta :" + cuahasta);
+					
+					quintaetapadesde = $("#quietadesde").val();
+					quintaetapadesde = quintaetapadesde.split("/");
+					quidesde = new Date(parseInt(quintaetapadesde[2]),parseInt(quintaetapadesde[1]),parseInt(quintaetapadesde[0]));
+					quintaetapadesde = quintaetapadesde[2] + "-" + quintaetapadesde[1] + "-" +quintaetapadesde[0];					
+					console.log("quidesde :" + quidesde);
+					
+					quintaetapahasta  =  $("#quietahasta").val();
+					quintaetapahasta = quintaetapahasta.split("/");
+					quihasta = new Date(parseInt(quintaetapahasta[2]),parseInt(quintaetapahasta[1]),parseInt(quintaetapahasta[0]));
+					quintaetapahasta = quintaetapahasta[2] + "-" + quintaetapahasta[1] + "-" +quintaetapahasta[0];					
+					console.log("quihasta :" + quihasta);
+					
+					sextaetapadesde  =  $("#sexetadesde").val();
+					sextaetapadesde = sextaetapadesde.split("/");
+					sexdesde = new Date(parseInt(sextaetapadesde[2]),parseInt(sextaetapadesde[1]),parseInt(sextaetapadesde[0]));
+					sextaetapadesde = sextaetapadesde[2] + "-" + sextaetapadesde[1] + "-" +sextaetapadesde[0];					
+					console.log("sexdesde :" + sexdesde);
+					
+					sextaetapahasta  =  $("#sexetahasta").val();
+					sextaetapahasta = sextaetapahasta.split("/");
+					sexhasta = new Date(parseInt(sextaetapahasta[2]),parseInt(sextaetapahasta[1]),parseInt(sextaetapahasta[0]));
+					sextaetapahasta = sextaetapahasta[2] + "-" + sextaetapahasta[1] + "-" +sextaetapahasta[0];
+					console.log("sexhasta :" + sexhasta);
+					
+					septimaetapadesde  =  $("#sepetadesde").val();
+					septimaetapadesde = septimaetapadesde.split("/");
+					sepdesde = new Date(parseInt(septimaetapadesde[2]),parseInt(septimaetapadesde[1]),parseInt(septimaetapadesde[0]));
+					septimaetapadesde = septimaetapadesde[2] + "-" + septimaetapadesde[1] + "-" +septimaetapadesde[0];
+					console.log("sepdesde :" + sepdesde);
+					
+					septimaetapahasta  =  $("#sepetahasta").val();
+					septimaetapahasta = septimaetapahasta.split("/");
+					sephasta = new Date(parseInt(septimaetapahasta[2]),parseInt(septimaetapahasta[1]),parseInt(septimaetapahasta[0]));
+					septimaetapahasta = septimaetapahasta[2] + "-" + septimaetapahasta[1] + "-" +septimaetapahasta[0];	
+					console.log("sephasta :" + sephasta);
+					
+					if(validaFechas(pedesde,pehasta,sedesde,sehasta,tedesde,tehasta,cudesde,cuahasta,quidesde,quihasta,sexdesde,sexhasta,sepdesde,sephasta)){
+						
+						var data = {
+								anio : $("#cbanioapertura").val(),
+								nombreconcurso : $("#nombreconcurso").val(),
+								primeraetapadesde : primeraetapadesde,
+								primeraetapahasta : primeraetapahasta,
+								segundaetapadesde : segundaetapadesde,
+								segundaetapahasta : segundaetapahasta,
+								terceraetapadesde : terceraetapadesde,
+								terceraetapahasta : terceraetapahasta,
+								cuartaetapadesde : cuartaetapadesde,
+								cuartaetapahasta : cuartaetapahasta,
+								quintaetapadesde : quintaetapadesde,
+								quintaetapahasta : quintaetapahasta,
+								sextaetapadesde : sextaetapadesde,
+								sextaetapahasta : sextaetapahasta,
+								septimaetapadesde : septimaetapadesde ,
+								septimaetapahasta : septimaetapahasta  ,
+								estado : 'Activo'
+							};
+						
+						$.ajax({
+							type : "POST",
+						    contentType : "application/json",
+						    url : url_base + "programaeducativo/saveaperturaanio",
+						    data : JSON.stringify(data),
+						    dataType : 'json',
+							success: function(respuesta) {
+								switch(respuesta){
+									case 1: 
+										$("#textoinformacion").html("El año que quiere Aperturar ya se encuentra registrado");
+										$('#modalinformacion').modal({
+											show : true,
+											backdrop : 'static',
+											keyboard:false
+										});
+										break;
+									case 2: 						
+										$("#modalimagencargando").modal('hide');						
+										$("#textoexito").html("Se Aperturo el año exitosamente");
+										$('#modalexito').modal({
+											show : true,
+											backdrop : 'static',
+											keyboard:false
+										});		
+										limpiarCampos();
+										break;
+									case 3: 
+										$("#textoerror").html("Error al aperturar año");
+										$('#modalerror').modal({
+											show : true,
+											backdrop : 'static',
+											keyboard:false
+										});
+										break;
+								}
+							},
+							error: function() {
+								$("#modalimagencargando").modal('hide');
+								$("#textoerror").html("Excepcion al aperturar el año");
+								$('#modalerror').modal({
+									show : true,
+									backdrop : 'static',
+									keyboard:false
+								});
+						    }
+						});
+					}	
+					else{
+						$("#textoinformacion").html("<div style='color:red'>"+msjfechas+"</div>");
+						$('#modalinformacion').modal({
+							show : true,
+							backdrop : 'static',
+							keyboard:false
+						});
+					}
+				}				
+			}
+			else{
+				$("#textoinformacion").html("<div style='color:red'>"+msjvalidacion+"</div>");
+				$('#modalinformacion').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+			}
+			
+			
+		});			
+		
+	});
+	
+	function limpiarCampos(){
+		$("#nombreconcurso").val("");
+		$("#prietadesde").val("");
+		$("#prietahasta").val("");
+		$("#segetadesde").val("");
+		$("#segetahasta").val("");
+		$("#teretadesde").val("");
+		$("#teretahasta").val("");
+		$("#cuaetadesde").val("");
+		$("#cuaetahasta").val("");
+		$("#quietadesde").val("");
+		$("#quietahasta").val("");
+		$("#sexetadesde").val("");
+		$("#sexetahasta").val("");
+		$("#sepetadesde").val("");
+		$("#sepetahasta").val("");
+	}
+	
+	function validarCampos(){
+		
+		msjvalidacion="";
+		if($("#cbanioapertura").val()==0)
+			msjvalidacion += "Completar campo año de apertura<br>";
+		if($("#nombreconcurso").val().trim()=="")
+			msjvalidacion += "Completar campo nombre de concurso<br>";
+		if($("#prietadesde").val().trim()=="")
+			msjvalidacion += "Completar campo Primera etapa desde<br>";		
+		if($("#prietahasta").val().trim()=="")
+			msjvalidacion += "Completar campo Primera etapa hasta<br>";			
+		if($("#segetadesde").val().trim()=="")
+			msjvalidacion += "Completar campo Segunda Etapa desde<br>";				
+		if($("#segetahasta").val().trim()=="")
+			msjvalidacion += "Completar campo Segunda Etapa hasta<br>";					
+		if($("#teretadesde").val().trim()=="")
+			msjvalidacion += "Completar campo Tercera Etapa desde<br>";						
+		if($("#teretahasta").val().trim()=="")
+			msjvalidacion += "Completar campo Tercera Etapa hasta<br>";							
+		if($("#cuaetadesde").val().trim()=="")
+			msjvalidacion += "Completar campo cuarta Etapa desde<br>";								
+		if($("#cuaetahasta").val().trim()=="")
+			msjvalidacion += "Completar campo cuarta Etapa hasta<br>";									
+		if($("#quietadesde").val().trim()=="")
+			msjvalidacion += "Completar campo Quinta Etapa desde<br>";										
+		if($("#quietahasta").val().trim()=="")
+			msjvalidacion += "Completar campo Quinta Etapa hasta<br>";											
+		if($("#sexetadesde").val().trim()=="")
+			msjvalidacion += "Completar campo Sexta Etapa desde<br>";												
+		if($("#sexetahasta").val().trim()=="")
+			msjvalidacion += "Completar campo Sexta Etapa hasta<br>";
+		if($("#sepetadesde").val().trim()=="")
+			msjvalidacion += "Completar campo Septima Etapa Desde<br>";														
+		if($("#sepetahasta").val().trim()=="")
+			msjvalidacion += "Completar campo Septima Etapa hasta<br>";
+		if(msjvalidacion!=""){
+			return false;
+		}
+		return true;
+	}
+	
+	function validaFechas(p1,p2,s1,s2,t1,t2,c1,c2,q1,q2,se1,se2,sep1,sep2){
+		
+		msjfechas="";
+		
+		if(p1>p2)
+			msjfechas += "Fecha Primera etapa desde <strong>debe ser menor que</strong> Fecha Primera etapa hasta<br>";
+		if(s1>s2)			
+			msjfechas += "Fecha Segunda etapa desde <strong>debe ser menor que</strong> Fecha Segunda etapa hasta<br>";
+		if(t1>t2)
+			msjfechas += "Fecha Tercera etapa desde <strong>debe ser menor que</strong> Fecha Tercera etapa hasta<br>";
+		if(c1>c2)
+			msjfechas += "Fecha Cuarta etapa desde <strong>debe ser menor que</strong> Fecha Cuarta etapa hasta<br>";
+		if(q1>q2)
+			msjfechas += "Fecha Quinta etapa desde <strong>debe ser menor que</strong> Fecha Quinta etapa hasta<br>";
+		if(se1>se2)
+			msjfechas += "Fecha Sexta etapa desde <strong>debe ser menor que</strong> Fecha Sexta etapa hasta<br>";
+		if(sep1>sep2)
+			msjfechas += "Fecha Septima etapa desde <strong>debe ser menor que</strong> Fecha Septima etapa hasta<br>";
+			
+		if(msjfechas!=""){
+			return false;
+		}
+		return true;		
+		
+		
+	}
+	
+	
+	
+</script>
+
