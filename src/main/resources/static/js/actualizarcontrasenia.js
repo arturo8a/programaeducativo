@@ -62,7 +62,7 @@ function enviarMensajeCorreo(){
 			
 			$.ajax({
 				type: "POST",
-				url: url_base + "programaeducativo/actualizarcontraseniacorreo/" ,
+				url: url_base + "pedesa/actualizarcontraseniacorreo/" ,
 				data: {
 					contrasenia : $("#contrasenia").val().trim(),
 					tipo: $("#hd_tipo").val(),

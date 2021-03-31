@@ -1,5 +1,6 @@
 package com.progeduc.controller;
 
+import java.io.File;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.progeduc.model.Aperturaranio;
 import com.progeduc.model.Docentetutor;
+import com.progeduc.model.Participante;
 import com.progeduc.model.Postulacionconcurso;
 import com.progeduc.model.Programaeducativo;
 import com.progeduc.model.ProgramaeducativoNivel;
@@ -28,6 +30,10 @@ import com.progeduc.service.IDocentetutorService;
 import com.progeduc.service.IGeneroService;
 import com.progeduc.service.IGenerodirService;
 import com.progeduc.service.IGeneroprofService;
+import com.progeduc.service.IGradoparticipanteService;
+import com.progeduc.service.INivelparticipanteService;
+import com.progeduc.service.IParentescoService;
+import com.progeduc.service.IParticipanteService;
 import com.progeduc.service.IPostulacionconcursoService;
 import com.progeduc.service.IProgeducNivelService;
 import com.progeduc.service.IProgeducTurnoService;
@@ -38,6 +44,7 @@ import com.progeduc.service.LenguaService;
 import com.progeduc.service.ProveedorService;
 import com.progeduc.service.TipodocService;
 import com.progeduc.service.TipoieService;
+import com.progeduc.service.impl.UploadFileService;
 
 @Controller
 @RequestMapping("")
@@ -93,6 +100,21 @@ public class IndexController {
 	
 	@Autowired
 	IAperturaranioService aperturaranioService;
+	
+	@Autowired
+	INivelparticipanteService nivelparticipanteService;
+	
+	@Autowired
+	IGradoparticipanteService gradoparticipanteService;
+	
+	@Autowired
+	IParentescoService parentescoService;
+	
+	@Autowired
+	IParticipanteService participanteService;
+	
+	@Autowired
+	private UploadFileService uploadfile;
 	
 	@GetMapping("/inicio")
 	public String inicio(@RequestParam(name="name",required=false,defaultValue="world") String name, Model model) {
@@ -353,4 +375,36 @@ public class IndexController {
 		}
 		return "postular_concurso";
 	}
+	
+	@GetMapping("/formregistrarparticipante")
+	public String formregistrarparticipante( Model model) {
+		model.addAttribute("tipodoc",tipodocserv.findAll());
+		model.addAttribute("genero",generoprofserv.listar());
+		model.addAttribute("nivel",nivelparticipanteService.listar());
+		model.addAttribute("parentesco",parentescoService.listar());
+		return "formregistrarparticipante";
+	}
+	
+	@GetMapping("/listarparticipante")
+	public String listarparticipante( Model model) {
+		return "listarparticipante";
+	}
+	
+	@GetMapping("/editarviewparticipanteid/{id}")
+	public String editarviewparticipanteid(@PathVariable("id") Integer id,  Model model,HttpSession ses) {
+		
+		Participante pa = participanteService.ListarporId(id);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		model.addAttribute("fechanacimiento", pa.getFechanacimientoestudiante().format(formatter).toString());
+		model.addAttribute("participante", pa);
+		model.addAttribute("tipodoc",tipodocserv.findAll());
+		model.addAttribute("genero",generoprofserv.listar());
+		model.addAttribute("nivel",nivelparticipanteService.listar());
+		model.addAttribute("grado",gradoparticipanteService.listargradopornivel(pa.getGradoestudiante().getNivelparticipante().getId()));
+		model.addAttribute("parentesco",parentescoService.listar());
+		model.addAttribute("nombrearchivo",uploadfile.buscarArchivo(pa.getId()));
+		return "formeditarparticipante";
+	}
 }
+
+

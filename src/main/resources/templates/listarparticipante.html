@@ -1,0 +1,340 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>ProgramaEducativo</title>
+    <script type="text/javascript">
+		window.history.forward();
+	</script>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+	
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+	
+	<!-- jQuery CDN - Slim version (=without AJAX) -->
+    <!-- script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script-->
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+	
+	<link rel="stylesheet" href="../static/css/dataTables.bootstrap4.min.css" th:href="@{/css/dataTables.bootstrap4.min.css}">
+	<link rel="stylesheet" href="../static/css/responsive.bootstrap4.min.css" th:href="@{/css/responsive.bootstrap4.min.css}">
+	<link rel="stylesheet" href="../static/css/editor.dataTables.min.css" th:href="@{/css/editor.dataTables.min.css}">
+	<link rel="stylesheet" href="../static/css/select.dataTables.min.css" th:href="@{/css/select.dataTables.min.css}">
+	<link rel="stylesheet" href="../static/css/buttons.dataTables.min.css" th:href="@{/css/buttons.dataTables.min.css}">
+	<link rel="stylesheet" href="../static/css/colReorder.dataTables.min.css" th:href="@{/css/colReorder.dataTables.min.css}">
+	
+	<script type="text/javascript" th:src="@{/js/jquery-3.3.1.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/bootstrapv4.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/fontawesomev5.0.6.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/aperturar_anio.js}" ></script>
+	
+	<script type="text/javascript" th:src="@{/js/bootstrap-select.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/fontawesomev5.0.6.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.dataTables.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.editor.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.select.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.colReorder.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.buttons.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jszip.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/pdfmake.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/vfs_fonts.js}"></script>
+    <script type="text/javascript" th:src="@{/js/buttons.html5.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/buttons.print.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.bootstrap4.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.responsive.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/responsive.bootstrap4.min.js}"></script>      
+    <script type="text/javascript" th:src="@{/js/dataTables.editor.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/datetime.js}"></script>
+    <script type="text/javascript" th:src="@{/js/moment.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/datetime-moment.js}"></script>	
+	
+	<link rel="shortcut icon" th:href="@{/images/logo_login.ico}" />
+	
+	<script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
+	
+	<link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+	<link href="../static/css/gijgo.min.css" rel="stylesheet" th:href="@{/css/gijgo.min.css}" >
+	<script type="text/javascript" th:src="@{/js/gijgo.min.js}" ></script>
+	<script type="text/javascript" th:src="@{/js/messages.es-es.js}"></script>
+	<script type="text/javascript" th:src="@{/js/datetime-moment-order.js}"></script>
+	<script type="text/javascript" th:src="@{/js/moment.js}"></script>
+	
+	<script type="text/javascript" th:src="@{/js/date-uk.js}"></script>
+	<script type="text/javascript" th:src="@{/js/date-euro.js}"></script>
+	
+</head>
+<body>
+
+<div class="row">
+	<div class="col text-right">
+		<input type="button" value="Agregar participante" id="agregarparticipante" class="btn btn-primary  mr-3">
+	</div>
+</div>
+<div class="row pt-2 pb-4 m-0">
+	<div class="col-xs-12 col-sm-12">
+		<table id="table_lista_participantes"  class="table table-striped table-bordered display nowrap" style="width:100%">
+			<thead>
+		        <tr>
+		        	<th>N&deg;</th>
+		            <th>Apellido paterno</th>
+		            <th>Apellido materno</th>
+		            <th>Nombres</th>
+		            <th>Tipo de documento</th>
+		            <th>N&deg; de documento</th>
+		            <th>Categoría(s)</th>
+		            <th>Modalidad(s)</th>
+		            <th>Ficha de autorización</th>
+					<th>Ver</th>
+		            <th>Editar</th>
+		            <th>Eliminar</th>
+		        </tr>   
+		    </thead>
+		</table>
+	</div>
+</div>
+</body>
+</html>
+					
+<script>
+
+	$(document).ready(function(){
+		
+		listar();
+		
+		$("#agregarparticipante").click(function(){
+			
+			$("#modalimagencargando").modal({
+				show : true,
+				backdrop : 'static',
+				keyboard:false
+			});
+			
+			$.ajax({
+				url: url_base + "pedesa/formregistrarparticipante",
+				success: function(respuesta) {
+					$("#modalimagencargando").modal('hide');
+					$("#container_participante").html(respuesta);					
+				},
+				error: function() {
+			        console.log("No se ha podido vista del web service");
+			    }
+			});
+		});
+		
+	});
+	
+	var listar = function (){
+		
+		$("#table_lista_participantes").dataTable().fnDestroy();
+		table_lista_aperturar_anio = $('#table_lista_participantes').DataTable({
+			dom: 'Bfrtip',
+		    "scrollX": true,
+		    "searching": true,
+		    lengthMenu: [
+		        [ 10, 15, 25, -1 ],
+		        [ '10 filas', '15 filas', '25 filas', 'Mostrar todas' ]
+		    ],
+		    "processing":true,
+		    language: {
+		        "decimal": "",
+		        "emptyTable": "No se han registrado participantes, para agregar hacer click en el botón 'Agregar paciente'",
+		        "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+		        "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
+		        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+		        "infoPostFix": "",
+		        "thousands": ",",
+		        "lengthMenu": "Mostrar _MENU_ Entradas",
+		        "loadingRecords": "Cargando Registros...",
+		        "processing": "Procesando...",
+		        "search": "Buscar:",
+		        "zeroRecords": " ",//No existen registros
+		        "paginate": {
+		            "first": "Primero",
+		            "last": "Ultimo",
+		            "next": "Siguiente",
+		            "previous": "Anterior"
+		        }
+		    },
+		    'ajax' : {
+		        "url" : url_base + 'pedesa/listaparticipantes',
+		        "type" : "GET",
+		        "dataSrc" : ""
+		    },
+		    "deferRender": true,
+		    'columnDefs': [],
+		    'columns' : [
+		    	{ 
+		    		"data": null, "render": function (data, type, full, meta) { return meta.row + 1; }
+		    	},
+		    	{ 'data' : 'appaterno' },
+		        { 'data' : 'apmaterno' },
+		        { 'data' : 'nombre' },
+		        { 'data' : 'tipodocumento' },
+		        { 'data' : 'nrodocumento' },
+		        { 'data' : 'categoria' },
+		        { 'data' : 'modalidad' },
+		        { 'defaultContent' : '<img src="./images/svg/file-pdf-regular.svg" class="archivo" style="width:20px; cursor:pointer"/>' },
+		        { 'defaultContent' : '<img src="./images/svg/file-pdf-regular.svg" class="ver" style="width:20px; cursor:pointer"/>' },
+		        { 'defaultContent' : '<img src="./images/svg/edit-regular.svg" class="editar" style="width:20px; cursor:pointer " />'},
+		        { 'defaultContent' : '<img src="./images/svg/eliminar-alt-regular.svg" class="eliminar" style="width:20px; cursor:pointer " />'}
+		    ],
+		    buttons: []
+		});
+		obtener_data_archivo("#table_lista_participantes tbody",table_lista_aperturar_anio);
+		obtener_data_ver("#table_lista_participantes tbody",table_lista_aperturar_anio);
+        obtener_data_editar("#table_lista_participantes tbody",table_lista_aperturar_anio);
+        obtener_data_eliminar("#table_lista_participantes tbody",table_lista_aperturar_anio);	
+	}
+	
+	var obtener_data_archivo = function(tbody,table){
+		$(tbody).on("click","img.archivo",function(){
+			celdaseleccionada = table.row($(this).parents("tr")).index();
+			var data = table.row($(this).parents("tr")).data();
+			id = data.id;
+			archivo(id);
+		});
+	};
+	
+	var obtener_data_ver = function(tbody,table){
+		$(tbody).on("click","img.ver",function(){
+			celdaseleccionada = table.row($(this).parents("tr")).index();
+			var data = table.row($(this).parents("tr")).data();
+			id = data.id;
+			verPdf(id);
+		});
+	};
+	
+	var obtener_data_editar = function(tbody,table){
+		$(tbody).on("click","img.editar",function(){
+			celdaseleccionada = table.row($(this).parents("tr")).index();
+			var data = table.row($(this).parents("tr")).data();
+			id = data.id;
+			editar(id);
+		});
+	};
+	
+	var obtener_data_eliminar = function(tbody,table){
+		$(tbody).on("click","img.eliminar",function(){
+			celdaseleccionada = table.row($(this).parents("tr")).index();
+			var data = table.row($(this).parents("tr")).data();
+			id = data.id;
+			eliminar(id);
+		});
+	};
+	
+	function archivo(id){
+    	
+		$.ajax({
+			type : "GET",
+		    contentType : "application/json",
+		    url : url_base + "pedesa/fichaautorizacionpdf/"+id,
+			success: function(respuesta) {
+				window.open(respuesta, '_blank');
+			},
+			error: function() {
+				$("#modalimagencargando").modal('hide');
+				$("#textoerror").html("Excepcion al descargar PDF");
+				$('#modalerror').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+		    }
+		});  	
+    }
+	
+	function eliminar(id){
+		
+		var r = confirm("¿ Está seguro de eliminar al estudiante ?");
+		if (r == true) {
+			$.ajax({
+				type : "GET",
+			    url : url_base + "pedesa/eliminarparticipanteid/"+ id,
+				success: function(respuesta) {
+					if(respuesta==1){
+						table_lista_aperturar_anio.row(celdaseleccionada).remove().draw(false);
+					}
+					else{
+						$("#modalimagencargando").modal('hide');
+						$("#textoerror").html("No se pudo Eliminar Participante");
+						$('#modalerror').modal({
+							show : true,
+							backdrop : 'static',
+							keyboard:false
+						});
+					}
+				},
+				error: function() {
+					$("#modalimagencargando").modal('hide');
+					$("#textoerror").html("Excepcion Eliminar Participante");
+					$('#modalerror').modal({
+						show : true,
+						backdrop : 'static',
+						keyboard:false
+					});
+			    }
+			});			
+		}
+	}
+	
+	
+	function editar(id){
+		
+		$("#modalimagencargando").modal({
+			show : true,
+			backdrop : 'static',
+			keyboard:false
+		});
+		
+		$.ajax({
+			type : "GET",
+		    url : url_base + "pedesa/editarviewparticipanteid/"+ id,
+			success: function(respuesta) {
+				$("#modalimagencargando").modal('hide');
+				$("#container_participante").html(respuesta);				
+			},
+			error: function() {
+				$("#modalimagencargando").modal('hide');
+				$("#textoerror").html("Excepcion al cargar vista editar");
+				$('#modalerror').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+		    }
+		});		
+	}
+	
+	function verPdf(id){
+    	
+    	$.ajax({
+			type : "GET",
+		    contentType : "application/json",
+		    url : url_base + "pedesa/descargarparticipantepdf/"+id,
+			success: function(respuesta) {
+				window.open(respuesta, '_blank');
+			},
+			error: function() {
+				$("#modalimagencargando").modal('hide');
+				$("#textoerror").html("Excepcion al descargar PDF");
+				$('#modalerror').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+		    }
+		});    	
+    }
+	
+</script>
+

@@ -19,6 +19,6 @@ public interface IDistritoRepo extends CrudRepository<Distrito,Integer>{
 	
 	Distrito getById(Integer id);
 	
-	@Query(value="SELECT D.* FROM DISTRITO D WHERE D.ODSID=?1 FETCH FIRST 1 ROWS ONLY",nativeQuery = true)
-	Distrito listByOdsid(@Param("id") Integer id);
+	@Query(value="SELECT D.* FROM DISTRITO D WHERE D.ODSID=?1",nativeQuery = true)
+	List<Distrito> listByOdsid(@Param("id") Integer id);
 }

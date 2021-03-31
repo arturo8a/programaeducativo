@@ -37,7 +37,7 @@ $(document).ready(function(){
 		$("#provinciaid").html("");
 		$("#distritoid").html("");
 		$.ajax({
-			url: url_base + "programaeducativo/provincias/bydepa/"+$("#departamentoid").val(),
+			url: url_base + "pedesa/provincias/bydepa/"+$("#departamentoid").val(),
 			success: function(respuesta) {
 				var contenido = "<option value=''>Seleccione</option>";
 				for(var i=0;i<respuesta.length;i++){
@@ -53,7 +53,7 @@ $(document).ready(function(){
 	
 	$("#provinciaid").on("change",function(){
 		$.ajax({
-			url: url_base + "programaeducativo/distritos/byprovincia/"+$("#provinciaid").val(),
+			url: url_base + "pedesa/distritos/byprovincia/"+$("#provinciaid").val(),
 			success: function(respuesta) {
 				var contenido = "<option value=''>Seleccione</option>";
 				for(var i=0;i<respuesta.length;i++){
@@ -331,7 +331,7 @@ $(document).ready(function(){
 		$.ajax({
 			type : "POST",
 		    contentType : "application/json",
-		    url : url_base + "programaeducativo/updateturnonivel",
+		    url : url_base + "pedesa/updateturnonivel",
 		    data : JSON.stringify(obj),
 		    dataType : 'json',
 			success: function(respuesta) {

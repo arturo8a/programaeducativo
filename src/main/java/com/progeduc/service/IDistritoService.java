@@ -8,5 +8,5 @@ public interface IDistritoService {
 	
 	List<Distrito> listByProvincia(Integer id);
 	Distrito getById(Integer id);
-	Distrito listByOdsid(Integer id);
+	List<Distrito> listByOdsid(Integer id);
 }

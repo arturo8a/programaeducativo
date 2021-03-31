@@ -331,7 +331,7 @@
 				$.ajax({
 					type : "POST",
 				    contentType : "application/json",
-				    url : url_base + "programaeducativo/updateaprobarprogramaeducativo",
+				    url : url_base + "pedesa/updateaprobarprogramaeducativo",
 				    data : JSON.stringify(obj1),
 				    dataType : 'json',
 					success: function(respuesta) {
@@ -398,7 +398,7 @@
 					$.ajax({
 						type : "POST",
 					    contentType : "application/json",
-					    url : url_base + "programaeducativo/updateestadoprogramaeducativo",
+					    url : url_base + "pedesa/updateestadoprogramaeducativo",
 					    data : JSON.stringify(obj1),
 					    dataType : 'json',
 						success: function(respuesta) {
@@ -475,7 +475,7 @@
 	                }
 	            },
 	            "ajax" : {
-	                "url" : url_base + 'programaeducativo/listacolegiosinscritos',
+	                "url" : url_base + 'pedesa/listacolegiosinscritos',
 	                "type" : "GET",
 	                "dataSrc" : ""
 	            },
@@ -632,7 +632,7 @@
 				$.ajax({
 					type : "GET",
 				    contentType : "application/json",
-				    url : url_base + "programaeducativo/buscarMotivoPrograma/"+id,
+				    url : url_base + "pedesa/buscarMotivoPrograma/"+id,
 					success: function(respuesta) {							
 						$('#modalmotivo').modal({
 							show : true,
@@ -660,7 +660,7 @@
 		};        
         
         function editarPrograma(id){
-        	window.open(url_base + "programaeducativo/inicioficha/"+id);        	
+        	window.open(url_base + "pedesa/inicioficha/"+id);        	
         }		
         
         function descargarPdf(id){
@@ -668,7 +668,7 @@
         	$.ajax({
 				type : "GET",
 			    contentType : "application/json",
-			    url : url_base + "programaeducativo/descargarpdf/"+id,
+			    url : url_base + "pedesa/descargarpdf/"+id,
 				success: function(respuesta) {
 					window.open(respuesta, '_blank');
 				},

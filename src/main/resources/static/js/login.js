@@ -38,14 +38,14 @@ function validarUsuario(){
 		var data_json = { usuario : usuario, password:password};
 		$.ajax({
 			type: "POST",
-			url: url_base + "programaeducativo/login",
+			url: url_base + "pedesa/login",
 			data: data_json,
 			success: function(respuesta) {
 				if(respuesta=="-1"){
 					$("#msj").html("<br><br><strong><label class='text-danger'>Usuario y/o contraseña incorrectos</label></strong>");	
 				}
 				else{
-					window.location.replace(url_base+"programaeducativo/menu");
+					window.location.replace(url_base+"pedesa/menu");
 				}
 			},
 			error: function() {

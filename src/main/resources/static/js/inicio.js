@@ -13,7 +13,7 @@ $(document).ready(function(){
 	$.ajax({
 		type : "POST",
 	    contentType : "application/json",
-	    url : url_base + "programaeducativo/anioaperturado/"+fechaactual.getFullYear(),
+	    url : url_base + "pedesa/anioaperturado/"+fechaactual.getFullYear(),
 	    dataType : 'json',
 		success: function(respuesta) {
 			console.log(respuesta);
@@ -47,7 +47,7 @@ $(document).ready(function(){
 	$("#divmsjSistemaEducativoFormAdd").css("display","none");
 	
 	$.ajax({
-		url: url_base + "programaeducativo/departamentos",
+		url: url_base + "pedesa/departamentos",
 		success: function(respuesta) {
 			data_ubigeo  =  respuesta;
 		},
@@ -57,7 +57,7 @@ $(document).ready(function(){
 	});
 	
 	$.ajax({
-		url: url_base + "programaeducativo/listcegroupbycodmod",
+		url: url_base + "pedesa/listcegroupbycodmod",
 		success: function(respuesta) {
 			$( "#codmod" ).autocomplete({
 		      source: respuesta,
@@ -77,7 +77,7 @@ $(document).ready(function(){
 		$("#provinciaid").html("");
 		$("#distritoid").html("");
 		$.ajax({
-			url: url_base + "programaeducativo/provincias/bydepa/"+$("#departamentoid").val(),
+			url: url_base + "pedesa/provincias/bydepa/"+$("#departamentoid").val(),
 			success: function(respuesta) {
 				var contenido = "<option value=''>Seleccione</option>";
 				for(var i=0;i<respuesta.length;i++){
@@ -93,7 +93,7 @@ $(document).ready(function(){
 	
 	$("#provinciaid").on("change",function(){
 		$.ajax({
-			url: url_base + "programaeducativo/distritos/byprovincia/"+$("#provinciaid").val(),
+			url: url_base + "pedesa/distritos/byprovincia/"+$("#provinciaid").val(),
 			success: function(respuesta) {
 				var contenido = "<option value=''>Seleccione</option>";
 				for(var i=0;i<respuesta.length;i++){
@@ -589,7 +589,7 @@ $(document).ready(function(){
 		$.ajax({
 			type : "POST",
 		    contentType : "application/json",
-		    url : url_base + "programaeducativo/saveturnonivel",
+		    url : url_base + "pedesa/saveturnonivel",
 		    data : JSON.stringify(obj),
 		    dataType : 'json',
 			success: function(respuesta) {
@@ -992,7 +992,7 @@ function fncPostular(indicador){
 	var promesa1 = $.ajax({
 		type : "POST",
 	    contentType : "application/json",
-	    url : url_base + "programaeducativo/saveturnonivel",
+	    url : url_base + "pedesa/saveturnonivel",
 	    data : JSON.stringify(obj),
 	    dataType : 'json',
 		success: function(respuesta) {
@@ -1043,7 +1043,7 @@ function fncPostular(indicador){
 			$.ajax({
 				type : "POST",
 			    contentType : "application/json",
-			    url : url_base + "programaeducativo/email/send",
+			    url : url_base + "pedesa/email/send",
 			    data : JSON.stringify(obj1),
 			    dataType : 'json',
 				success: function(respuesta) {			
@@ -1095,7 +1095,7 @@ function buscarCodmod(codmod){
 	$("#lblPiscina").removeClass("group_checkbox_red");
 	
 	$.ajax({
-		url: url_base + "programaeducativo/getcodmodbaa/"+codmod,
+		url: url_base + "pedesa/getcodmodbaa/"+codmod,
 		success: function(respuesta) {
 			//console.log('respuesta : '+JSON.stringify(respuesta));
 			if(respuesta.id!=null){
@@ -1106,7 +1106,7 @@ function buscarCodmod(codmod){
 			}
 			else{
 				$.ajax({
-					url: url_base + "programaeducativo/searchcodmod/"+codmod,
+					url: url_base + "pedesa/searchcodmod/"+codmod,
 					success: function(respuesta) {
 						JSON.stringify(respuesta);
 						if(respuesta.progeduc!=null){					

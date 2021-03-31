@@ -9,7 +9,7 @@
     <link href="../static/css/bootstrap-select.min.css" rel="stylesheet" th:href="@{/css/bootstrap-select.min.css}" >    
     <link rel="stylesheet" href="../static/css/jquery-ui.css" th:href="@{/css/jquery-ui.css}">
     
-    <link rel="shortcut icon" th:href="@{programaeducativo/images/logo_login.ico}" />
+    <link rel="shortcut icon" th:href="@{pedesa/images/logo_login.ico}" />
 	
 </head>
 <body>
@@ -46,9 +46,9 @@
 			
 	    	$("#btnCerrarSesion").click(function(){
 	    		$.ajax({
-	    			url: url_base + "programaeducativo/cerrar_sesion",
+	    			url: url_base + "pedesa/cerrar_sesion",
 	    			success: function(respuesta) {
-	    				window.location.href = url_base+"programaeducativo/";
+	    				window.location.href = url_base+"pedesa/";
 	    			}
 	    		});		
 	    	}); 
@@ -61,19 +61,19 @@
 	    			keyboard:false
 	    		});
 	    		$.ajax({
-	    			url: url_base + "programaeducativo/participar_concurso",
+	    			url: url_base + "pedesa/participar_concurso",
 	    			success: function(respuesta) {
-	    				$("#modalimagencargando").modal('hide');
+	    				
 	    				switch(respuesta){
-	    				case "a" : alert("No se encuentra aperturado el año"); break;
-    					case "b" : alert("Esta fuera de fechas del anio aperturado"); break;
-    					case "c" : alert("Estimado (a) docente su inscripción al programa educativo aún no ha sido aprobada, por favor espere el correo de confirmación respectivo.");break;
+	    				case "a" : $("#modalimagencargando").modal('hide'); alert("No se encuentra aperturado el año"); break;
+    					case "b" : $("#modalimagencargando").modal('hide'); alert("Esta fuera de fechas del anio aperturado"); break;
+    					case "c" : $("#modalimagencargando").modal('hide'); alert("Estimado (a) docente su inscripción al programa educativo aún no ha sido aprobada, por favor espere el correo de confirmación respectivo.");break;
     					default : 
-    							$("#container").html("<center><img src='./images/cargando.gif'/></center>");
-	    						var programaeducativoid = parseInt(respuesta);
+    							var programaeducativoid = parseInt(respuesta);
 	    						$.ajax({
-	    			    			url: url_base + "programaeducativo/postular_concurso/"+programaeducativoid,
+	    			    			url: url_base + "pedesa/postular_concurso/"+programaeducativoid,
 	    			    			success: function(respuesta) {
+	    			    				$("#modalimagencargando").modal('hide');
 	    			    				$("#container").html(respuesta);
 	    			    			}
 	    						});

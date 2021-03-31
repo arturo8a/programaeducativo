@@ -275,7 +275,7 @@
 			$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
 			$.ajax({
 				type : "GET",
-			    url : url_base + "programaeducativo/nuevoregistroapertura/",
+			    url : url_base + "pedesa/nuevoregistroapertura/",
 				success: function(respuesta) {
 					$("#contenedor_consulta").html(respuesta);
 				}
@@ -344,7 +344,7 @@
 		        }
 		    },
 		    'ajax' : {
-		        "url" : url_base + 'programaeducativo/listaaperturaranio',
+		        "url" : url_base + 'pedesa/listaaperturaranio',
 		        "type" : "GET",
 		        "dataSrc" : ""
 		    },
@@ -423,7 +423,7 @@
 			var id = data.id;
 			$.ajax({
 				type : "GET",
-			    url : url_base + "programaeducativo/editarviewaperturaanio/"+ id,
+			    url : url_base + "pedesa/editarviewaperturaanio/"+ id,
 				success: function(respuesta) {
 					$("#contenedor_consulta").html(respuesta);
 				},

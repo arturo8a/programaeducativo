@@ -384,7 +384,7 @@
     		$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
     		setTimeout(() => {        		  
     			$.ajax({
-	    			url: url_base + "programaeducativo/aperturar_anio",
+	    			url: url_base + "pedesa/aperturar_anio",
 	    			success: function(respuesta) {
 	    				$("#contenedor_consulta").html(respuesta);    				
 	    			}
@@ -515,7 +515,7 @@
 						$.ajax({
 							type : "POST",
 						    contentType : "application/json",
-						    url : url_base + "programaeducativo/saveaperturaanio",
+						    url : url_base + "pedesa/saveaperturaanio",
 						    data : JSON.stringify(data),
 						    dataType : 'json',
 							success: function(respuesta) {

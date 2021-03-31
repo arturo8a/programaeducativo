@@ -4,12 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +14,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.bouncycastle.util.io.pem.PemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,27 +38,23 @@ import com.progeduc.dto.UpdateAprobarProgramaDto;
 import com.progeduc.dto.UpdateObservarProgramaDto;
 import com.progeduc.dto.Usuarioemail;
 import com.progeduc.model.Aperturaranio;
-import com.progeduc.model.Departamento;
 import com.progeduc.model.Distrito;
 import com.progeduc.model.Docentetutor;
 import com.progeduc.model.Nivel;
-import com.progeduc.model.Ods;
-import com.progeduc.model.Postulacionconcurso;
+import com.progeduc.model.Participante;
 import com.progeduc.model.ProgeducfiltroDto;
 import com.progeduc.model.Programaeducativo;
 import com.progeduc.model.ProgramaeducativoNivel;
 import com.progeduc.model.ProgramaeducativoTurno;
-import com.progeduc.model.Provincia;
 import com.progeduc.model.Turno;
 import com.progeduc.model.Usuario;
-import com.progeduc.service.EmailPort;
 import com.progeduc.service.IAperturaranioService;
 import com.progeduc.service.ICategoriaService;
 import com.progeduc.service.IDepartamentoService;
 import com.progeduc.service.IDistritoService;
 import com.progeduc.service.IDocentetutorService;
 import com.progeduc.service.IOdsService;
-import com.progeduc.service.IPostulacionconcursoService;
+import com.progeduc.service.IParticipanteService;
 import com.progeduc.service.IProgeducNivelService;
 import com.progeduc.service.IProgeducTurnoService;
 import com.progeduc.service.IProgramaeducativoService;
@@ -69,10 +62,7 @@ import com.progeduc.service.IProvinciaService;
 import com.progeduc.service.ITipousuarioService;
 import com.progeduc.service.IUsuarioService;
 import com.progeduc.service.IUsuarioodsService;
-import com.progeduc.service.LenguaService;
-import com.progeduc.service.ProveedorService;
-import com.progeduc.service.TipodocService;
-import com.progeduc.service.TipoieService;
+import com.progeduc.service.impl.UploadFileService;
 
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
@@ -110,28 +100,13 @@ public class ProgramaeducativoController {
 	IUsuarioService usuarioService;
 	
 	@Autowired
-	private LenguaService lenguaserv;
-	
-	@Autowired
 	private IDocentetutorService docentetutorserv;
-	
-	@Autowired
-	private TipoieService tipoieserv;
-
-	@Autowired
-	private ProveedorService proveedorserv;
-	
-	@Autowired
-	private TipodocService tipodocserv;
 	
 	@Autowired
 	private IOdsService odsserv;
 	
 	@Autowired
 	private ITipousuarioService tipousuarioserv;
-	
-	@Autowired
-	private IPostulacionconcursoService postulacionconcursoServ;
 	
 	@Autowired
 	private IDepartamentoService depaServ;
@@ -141,6 +116,9 @@ public class ProgramaeducativoController {
 	
 	@Autowired
 	private IDistritoService distServ;
+	
+	@Autowired
+	private IParticipanteService participanteServ;
 	
 	ProgeducTurnoNivelDto dto;
 	List<Nivel> listNivel;
@@ -155,15 +133,13 @@ public class ProgramaeducativoController {
 	private String suministro;
 	Date fechaNueva=new Date();
 	
-	/*parametros para enviar correo*/
 	Usuarioemail usuarioEmail;
-	@Autowired
-	private EmailPort emailPort;
 	
 	@Autowired
 	IUsuarioService usuarioServ;
-	private String usuario;
-	private String password;
+	
+	@Autowired
+	private UploadFileService uploadfile;
 	
 	Mail mail ;	
 	
@@ -247,7 +223,6 @@ public class ProgramaeducativoController {
 		listProgeducDto = new ArrayList<ProgeducDto>();
 		pedto = new ProgeducDto();
 		progeducTurno = new ProgramaeducativoTurno();
-		//List<Programaeducativo> lista = progeducService.listar();
 		
 		progeducService.listar().forEach(obj->{
 			turno = "";
@@ -351,20 +326,20 @@ public class ProgramaeducativoController {
 			});				
 		}
 		else {
-			int iddist = distServ.listByOdsid(Integer.parseInt(ob.toString())).getId();
-			progeducService.listar(iddist).forEach(obj->{
-				listaie= new ListaInstitucionEducativa();
-				listaie.setOds(odsserv.byOds(obj.getDistrito().getOdsid()).getDescripcion());
-				listaie.setAnhio(obj.getAnhio());
-				listaie.setNomie(obj.getNomie());
-				listaie.setCodmod(obj.getCodmod());
-				listaie.setEstado(obj.getEstado());
-				listaie.setId(obj.getId());
-				listaie.setMotivoobservacion(obj.getMotivoobservacion());
-				arrayie.add(listaie);
-			});	
-		}				
-			
+			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(obj->{
+				progeducService.listar(obj.getId()).forEach(obj1->{
+					listaie= new ListaInstitucionEducativa();
+					listaie.setOds(odsserv.byOds(obj1.getDistrito().getOdsid()).getDescripcion());
+					listaie.setAnhio(obj1.getAnhio());
+					listaie.setNomie(obj1.getNomie());
+					listaie.setCodmod(obj1.getCodmod());
+					listaie.setEstado(obj1.getEstado());
+					listaie.setId(obj.getId());
+					listaie.setMotivoobservacion(obj1.getMotivoobservacion());
+					arrayie.add(listaie);
+				});	
+			});			
+		}			
 		return new ResponseEntity<List<ListaInstitucionEducativa>>(arrayie, HttpStatus.OK) ;
 	}
 	
@@ -385,7 +360,6 @@ public class ProgramaeducativoController {
 	public Integer saveaperturaanio(@Valid @RequestBody Aperturaranio pe){
 		
 		int anio = pe.getAnio();
-		String nombre = pe.getNombreconcurso();
 		
 		if(aperturaranioService.buscarSiExiste(anio)) {
 			return 1; /*existe*/
@@ -436,7 +410,7 @@ public class ProgramaeducativoController {
 		String motivoobservacion = dto.getMotivoObservacion();
 		
 		Programaeducativo pe = progeducService.ListarporId(id);
-		String url = "http://prometeo.sunass.gob.pe/programaeducativo/inicioficha/" + pe.getId();
+		String url = "http://prometeo.sunass.gob.pe/pedesa/inicioficha/" + pe.getId();
 		
 		if( progeducService.updateestado(id, estado,motivoobservacion) == 1) {
 			String msj = "<p>Sistema del Programa Educativo Sunass</p><p>Estimado(a) docente, su registro ha sido observado debido a: " + motivoobservacion +" por favor vuelva a ingresar al formulario de registro para subsanar lo señalado, haciendo clic <a href='"+url+"'>Aquí</a> </p><p>Saludos</p>";
@@ -457,7 +431,6 @@ public class ProgramaeducativoController {
 		int id = dto.getId();
 		Programaeducativo pe = progeducService.ListarporId(id);
 		String estado = dto.getEstado();
-		String url = "http://prometeo.sunass.gob.pe/programaeducativo/concursoeducativo/";
 		if(progeducService.updateestadoaprobar(id, estado) == 1) {
 			String codmod = pe.getCodmod();
 			String dni = pe.getDocdir();
@@ -465,7 +438,7 @@ public class ProgramaeducativoController {
 			if(us!=null) {
 				dni = us.getPassword();
 			}			
-			String mensaje = "<p>Sistema del Programa Educativo Sunass</p>Estimado (a) docente, le damos la bienvenida al Programa Educativo<br>'Aprendiendo a Usar Responsablemente el Agua Potable' de la Sunass. Si desea participar de nuestro Concurso Escolar confirme su inscripción <a href='http://prometeo.sunass.gob.pe/programaeducativo/'>Aquí</a>, ingresando el usuario y contraseña que le brindamos a continuación :<br><br>Usuario :"+ codmod+"<br>Contraseña :" + dni + "<br><br>Muchas gracias por su participación";                                        
+			String mensaje = "<p>Sistema del Programa Educativo Sunass</p>Estimado (a) docente, le damos la bienvenida al Programa Educativo<br>'Aprendiendo a Usar Responsablemente el Agua Potable' de la Sunass. Si desea participar de nuestro Concurso Escolar confirme su inscripción <a href='http://prometeo.sunass.gob.pe/pedesa/'>Aquí</a>, ingresando el usuario y contraseña que le brindamos a continuación :<br><br>Usuario :"+ codmod+"<br>Contraseña :" + dni + "<br><br>Muchas gracias por su participación";                                        
 			mail = new Mail();		
 			if( mail.enviarCorreoIE(mensaje,pe.getMaildir())) {
 				if( mail.enviarCorreoIE(mensaje,pe.getMailprof())) {
@@ -542,19 +515,15 @@ public class ProgramaeducativoController {
 		Integer departamento = dto.getDepartamento();
 		Integer provincia = dto.getProvincia();
 		Integer distrito = dto.getDistrito();
-		/*Integer estado = dto.getEstado();*/
 		
 		listProgeducDto = new ArrayList<ProgeducDto>();
 		pedto = new ProgeducDto();
 		progeducTurno = new ProgramaeducativoTurno();
-		//List<Programaeducativo> lista = progeducService.listar();
 		
 		progeducService.listarfiltro(fecha_desde,fecha_hasta,nombreie,departamento,provincia,distrito).forEach(obj->{
-		//progeducService.listarfiltro(nombreie).forEach(obj->{
 			turno = "";
 			nivel = "";
 			suministro="";
-			//if(obj!=null) {
 				pedto = new ProgeducDto();
 				pedto.setDepartamento((obj.getDistrito()!=null? (obj.getDistrito().getProvincia()!=null?(obj.getDistrito().getProvincia().getDepartamento()!=null?obj.getDistrito().getProvincia().getDepartamento().getDescripcion():""):""):""));
 				pedto.setProvincia((obj.getDistrito()!=null? (obj.getDistrito().getProvincia()!=null?(obj.getDistrito().getProvincia().getDescripcion()):""):""));
@@ -586,14 +555,11 @@ public class ProgramaeducativoController {
 				});
 				pedto.setTurno(turno);
 				
-				
-				
 				listNivel = new ArrayList<Nivel>();
 				
 				progeducNivelService.listProgeducNivel(obj.getId()).forEach(obj2->{
 					nivel += " "+ obj2.getNivel().getTiponivel().getDescripcion();
 				});
-				//nivel += " "+ obj2.getNivel().getTiponivel().getDescripcion() + "-"+(obj2.getNivel().getNrosecciones()!=null?obj2.getNivel().getNrosecciones():'0')+"-"+(obj2.getNivel().getNrodocentes()!=null?obj2.getNivel().getNrodocentes():'0')+"-" + (obj2.getNivel().getNroalumnos()!=null?obj2.getNivel().getNroalumnos():'0')+ "-"+(obj2.getNivel().getNrovarones()!=null?obj2.getNivel().getNrovarones():'0') + "-"+(obj2.getNivel().getNromujeres()!=null?obj2.getNivel().getNromujeres():'0' )+ "/";
 				pedto.setNivel(nivel);
 				pedto.setSuministro(suministro);
 				pedto.setHora_abastecimiento(obj.getAbastecimiento());
@@ -605,7 +571,6 @@ public class ProgramaeducativoController {
 				pedto.setTeldir(obj.getTelfdir());
 				pedto.setCeldir(obj.getCeldir());
 				pedto.setCorreodir(obj.getMaildir());
-				
 				pedto.setTipodocprof(obj.getTipodocidentprof()!=null?obj.getTipodocidentprof().getDescripcion():"");
 				pedto.setNrodocidentprof(obj.getNomprof());
 				pedto.setApeprof(obj.getApeprof());
@@ -614,7 +579,6 @@ public class ProgramaeducativoController {
 				pedto.setCelprof(obj.getCelprof());
 				pedto.setCorreoprof(obj.getMailprof());
 				listProgeducDto.add(pedto);
-			//}
 		});
 		return new ResponseEntity<List<ProgeducDto>>(listProgeducDto, HttpStatus.OK) ;
 	}
@@ -625,6 +589,19 @@ public class ProgramaeducativoController {
 		
 		Programaeducativo pe = progeducService.ListarporId(id);
 		return crearPdf(pe);
+	}
+	
+	@GetMapping(value="/descargarparticipantepdf/{id}")
+	public String descargarparticipantepdf(@PathVariable("id") Integer id, Model model) throws FileNotFoundException, JRException  {
+		
+		Participante part = participanteServ.ListarporId(id);
+		return crearparticipantePdf(part);
+	}
+	
+	@GetMapping(value="/fichaautorizacionpdf/{id}")
+	public String fichaautorizacionpdf(@PathVariable("id") Integer id, Model model) throws FileNotFoundException, JRException  {
+		
+		return "upload_participantes/"+ id.toString() + "/"+ uploadfile.buscarArchivo(id);
 	}
 	
 	
@@ -652,17 +629,67 @@ public class ProgramaeducativoController {
 	}
 	
 	
-	@PostMapping(value="/registrarconcurso")
-	public String registrarconcurso(@Valid @RequestBody Postulacionconcurso dto)  {
+	public String crearparticipantePdf(Participante pe) throws FileNotFoundException, JRException {
 		
-		Postulacionconcurso pc = postulacionconcursoServ.registrar(dto);
-		String respuesta="0";
-		System.out.println("pc :" + pc.getAnio());
-		if(pc !=null) 
-			respuesta = aperturaranioService.buscar(pc.getAnio()).getNombreconcurso();
-		System.out.println("respuesta :" + respuesta);
-		return respuesta;
+		Date date = new Date();
+		DateFormat hourFormat = new SimpleDateFormat("HHmmss");
+		DateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
+	
+	 	File file = ResourceUtils.getFile("classpath:ficha_participante.jrxml" );
+		JasperReport jr = JasperCompileManager.compileReport(file.getAbsolutePath());
+		
+        Map parameters = new HashMap();
+        
+        String categorias="",modalidad="";
+        if(pe.getCategoriaahorroagua()==1)
+        	categorias = "ahorro de agua/";
+        if(pe.getCategoriacomposicionmusical()==1)
+        	categorias += "composición musical/";
+        if(pe.getCategoriacuento()==1)
+        	categorias += "cuento/";
+        if(pe.getCategoriadibujopintura()==1)
+        	categorias += "dibujo pintura/";
+        if(pe.getCategoriapoesia() ==1)
+        	categorias += "poesía/";
+        if(categorias.length()>0)
+        	categorias = categorias.substring(0,categorias.length()-1);	
+        
+        if(pe.getModalidadpostulacionindividual()==1)
+        	modalidad = "individual/";
+        if(pe.getModalidadpostulaciongrupal()==1)
+        	modalidad += "grupal/";
+        if(modalidad.length()>0)
+        	modalidad = modalidad.substring(0,modalidad.length()-1);	
+        
+        parameters.put("appaternoestudiante", pe.getAppaternoestudiante()!=null ? pe.getAppaternoestudiante() : "");
+        parameters.put("apmaternoestudiante", pe.getApmaternoestudiante()!= null ? pe.getApmaternoestudiante() : "");
+        parameters.put("nombreestudiante",pe.getNombreestudiante()!=null? pe.getNombreestudiante() : "" );
+        parameters.put("tipodocumentoestudiante",pe.getTipodocumentoestudiante()!=null ? pe.getTipodocumentoestudiante().getDescripcion() : "");
+        parameters.put("nrodocumentoestudiante", pe.getNrodocumentoestudiante()!=null ? pe.getNrodocumentoestudiante() : "");
+        parameters.put("fechanacimientoestudiante",pe.getFechanacimientoestudiante()!=null?pe.getFechanacimientoestudiante().toString():"");
+        parameters.put("generoestudiante", pe.getGeneroestudiante()!=null ? pe.getGeneroestudiante().getDescripcion() : "");
+        parameters.put("nivelestudiante", pe.getGradoestudiante()!=null ? pe.getGradoestudiante().getNivelparticipante().getDescripcion() : "");
+        parameters.put("gradoestudiante", pe.getGradoestudiante()!=null ? pe.getGradoestudiante().getDescripcion() : "");
+        parameters.put("seccion", pe.getSeccion()!=null ? pe.getSeccion():"");
+        parameters.put("categorias",categorias);
+        parameters.put("modalidad", modalidad);
+        parameters.put("appaternopmt", pe.getAppaternopmt()!=null ? pe.getAppaternopmt():"");
+        parameters.put("apmaternopmt", pe.getApmaternopmt()!=null? pe.getApmaternopmt() : "") ;
+        parameters.put("nombrepmt", pe.getNombrepmt()!=null ? pe.getNombrepmt() :"");
+        parameters.put("parentesco", pe.getParentesco()!=null ? (pe.getParentesco().getDescripcion()!=null? pe.getParentesco().getDescripcion(): "") :"");
+        parameters.put("tipodocumentopmt", pe.getTipodocumentopmt()!=null? (pe.getTipodocumentopmt().getDescripcion()!=null?pe.getTipodocumentopmt().getDescripcion():"")  :"");
+        parameters.put("nrodocumentopmt", pe.getNrodocumentopmt()!=null?pe.getNrodocumentopmt() :"");
+        parameters.put("nrotelefonopmt", pe.getNrotelefonopmt()!=null? pe.getNrotelefonopmt() : "") ;
+        parameters.put("correoelectronicopmt", pe.getCorreoelectronicopmt()!=null? pe.getCorreoelectronicopmt() : "") ;
+        
+		JasperPrint jp = JasperFillManager.fillReport(jr, parameters, new JREmptyDataSource(1));
+		String path = "/opt/apache-tomcat-8.0.27/webapps/pedesa/reportes_participantes/";
+		//String path = "D:/Edwin/ProyectosSunass/ProgEducativo/reportes/";
+		String archivo = pe.getId() + "_"+ dateFormat.format(date) + hourFormat.format(date);
+		JasperExportManager.exportReportToPdfFile(jp,path + archivo + ".pdf");			
+		return "/pedesa/reportes_participantes/"+archivo+".pdf";			
 	}
+	
 
 	public String crearPdf(Programaeducativo pe) throws FileNotFoundException, JRException {
 			
@@ -787,35 +814,11 @@ public class ProgramaeducativoController {
 	        parameters.put("profcorreo", pe.getMailprof());
 	        
 	        JasperPrint jp = JasperFillManager.fillReport(jr, parameters, new JREmptyDataSource(1));
-			String path = "/opt/apache-tomcat-8.0.27/webapps/programaeducativo/reportes/";
+			String path = "/opt/apache-tomcat-8.0.27/webapps/pedesa/reportes/";
 			//String path = "D:/Edwin/ProyectosSunass/ProgEducativo/reportes/";
 			String archivo = pe.getCodmod() + "_"+ dateFormat.format(date) + hourFormat.format(date);
 			JasperExportManager.exportReportToPdfFile(jp,path + archivo + ".pdf");			
-			return "/programaeducativo/reportes/"+archivo+".pdf";			
-	}	
+			return "/pedesa/reportes/"+archivo+".pdf";			
+	}
 	
-	@GetMapping("/participar_concurso")
-	public String participar_concurso(HttpSession ses) throws ParseException {
-		
-		Calendar fecha = Calendar.getInstance();
-		Date date = Calendar.getInstance().getTime();
-		DateFormat formato = new SimpleDateFormat("dd/MM/yy");
-        String today = formato.format(date);
-        Aperturaranio ap = aperturaranioService.buscar(fecha.get(Calendar.YEAR));
-        if(ap != null) {        	
-        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
-        	LocalDate fechaactual = LocalDate.parse(today, formatter);        	
-        	//LocalDate fechaactual = LocalDate.parse("20/04/21", formatter);
-            if(fechaactual.compareTo(ap.getSegundaetapadesde())>=0 && fechaactual.compareTo(ap.getCuartaetapahasta())<=0) {
-            	String codmod = ses.getAttribute("usuario").toString();
-            	Programaeducativo pe = progeducService.verificarEstadoAnio(codmod,fecha.get(Calendar.YEAR), "Aprobado");  
-            	if(pe!=null) {
-            		return pe.getId().toString();
-            	}
-            	return "c";
-            }        	
-        	return "b"; /*esta fuera de las fechas - fecha desde segunda y fecha hasta cuarta*/
-        }
-		return "a";/*no esta aperturado el año*/
-	}	
 }

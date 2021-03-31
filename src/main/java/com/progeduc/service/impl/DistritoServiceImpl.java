@@ -32,7 +32,7 @@ public class DistritoServiceImpl implements IDistritoService{
 	}
 	
 	@Override
-	public Distrito listByOdsid(@Param("id") Integer id) {
+	public List<Distrito> listByOdsid(@Param("id") Integer id) {
 		return distritoRepo.listByOdsid(id);
 	}
 

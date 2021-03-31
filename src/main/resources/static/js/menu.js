@@ -12,7 +12,7 @@ $(document).ready(function(){
 		console.log("btnCerrarSesion");
 		//window.location.href = url_base;
 		$.ajax({
-			url: url_base + "programaeducativo/cerrar_sesion",
+			url: url_base + "pedesa/cerrar_sesion",
 			success: function(respuesta) {
 				window.location.href = url_base;
 			}
@@ -76,7 +76,7 @@ $(document).ready(function(){
 		if($("#departamento").val()!="Todos"){
 			$("#provincia").html("");
 			$.ajax({
-				url: url_base + "programaeducativo/provincias/bydepa/"+$("#departamento").val(),
+				url: url_base + "pedesa/provincias/bydepa/"+$("#departamento").val(),
 				success: function(respuesta) {
 					var contenido = "<option value='Todos'>Todos</option>";
 					for(var i=0;i<respuesta.length;i++){
@@ -98,7 +98,7 @@ $(document).ready(function(){
 	$("#provincia").on("change",function(){
 		if($("#provincia").val()!="Todos"){
 			$.ajax({
-				url: url_base + "programaeducativo/distritos/byprovincia/"+$("#provincia").val(),
+				url: url_base + "pedesa/distritos/byprovincia/"+$("#provincia").val(),
 				success: function(respuesta) {
 					var contenido = "<option value='Todos'>Todos</option>";
 					for(var i=0;i<respuesta.length;i++){
@@ -150,7 +150,7 @@ $(document).ready(function(){
             }
         },
         'ajax' : {
-            "url" : url_base + 'programaeducativo/programaseducativos/listaprogeduc',
+            "url" : url_base + 'pedesa/programaseducativos/listaprogeduc',
             "type" : "GET",
             "dataSrc" : ""
         },

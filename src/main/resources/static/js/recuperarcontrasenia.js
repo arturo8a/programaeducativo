@@ -41,13 +41,13 @@ function enviarMensajeCorreo(){
 		$.ajax({	
 			type : "POST",
 		    contentType : "application/json",
-		    url : url_base +  "programaeducativo/recuperarcorreo",
+		    url : url_base +  "pedesa/recuperarcorreo",
 		    data : JSON.stringify(obj),
 		    dataType : 'json',
 			success: function(respuesta) {
 				switch(respuesta){			
 					case 0 :  
-						$("#textoerror").html("Usted no se encuentra registrado en el PE en este año, para registrarte haga clic <a href='http://prometeo.sunass.gob.pe/programaeducativo/inicio'>Aquí</a>");
+						$("#textoerror").html("Usted no se encuentra registrado en el PE en este año, para registrarte haga clic <a href='http://prometeo.sunass.gob.pe/pedesa/inicio'>Aquí</a>");
 						$('#modalerror').modal({
 							show : true,
 							backdrop : 'static',
