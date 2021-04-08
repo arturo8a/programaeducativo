@@ -1,6 +1,7 @@
 package com.progeduc.controller;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -84,12 +85,25 @@ public class ConcursoeducativoController {
 	}
 	
 	@PostMapping(value="/registrarparticipante")
-	public Integer registrarparticipante(@Valid @RequestBody Participante participante) {
+	public Integer registrarparticipante(@Valid @RequestBody Participante participante,HttpSession ses) {
 		
-		Participante p =  participanteService.registrar(participante);
-		if(p!=null)
-			return p.getId();
-		return 0;
+		String codmod = ses.getAttribute("usuario").toString();
+		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
+		if(pe!=null) {
+			participante.setProgramaeducativo(pe);
+			Date date= new Date();
+			long time = date.getTime();
+			Timestamp ts = new Timestamp(time);
+			participante.setFecha_registro(ts);
+			participante.setAnhio(ts.toLocalDateTime().getYear());
+			
+			Participante p =  participanteService.registrar(participante);
+			if(p!=null)
+				return p.getId();
+			return 0;
+		}
+		return -1;
+		
 	}
 	
 	@PostMapping(value="/subirarchivoparticipante")
@@ -133,7 +147,7 @@ public class ConcursoeducativoController {
         Aperturaranio ap = aperturaranioService.buscar(fecha.get(Calendar.YEAR));
         if(ap != null) {        	
         	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
-        	LocalDate fechaactual = LocalDate.parse(today, formatter);        	
+        	LocalDate fechaactual = LocalDate.parse(today, formatter);
         	//LocalDate fechaactual = LocalDate.parse("20/04/21", formatter);
             if(fechaactual.compareTo(ap.getSegundaetapadesde())>=0 && fechaactual.compareTo(ap.getCuartaetapahasta())<=0) {
             	String codmod = ses.getAttribute("usuario").toString();
@@ -149,10 +163,13 @@ public class ConcursoeducativoController {
 	}	
 	
 	@GetMapping(value = "/listaparticipantes")
-	public ResponseEntity<List<ListaparticipanteDto>> listaparticipante(){
+	public ResponseEntity<List<ListaparticipanteDto>> listaparticipante(HttpSession ses){
+		
+		String codmod = ses.getAttribute("usuario").toString();
+		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
 		
 		List<ListaparticipanteDto> lista = new ArrayList<ListaparticipanteDto>();
-		List<Participante> listaParticipante = participanteService.listarhabilitados();
+		List<Participante> listaParticipante = participanteService.listarhabilitados(pe.getId());
 		if(listaParticipante!=null) {
 			listaParticipante.forEach(obj->{			
 				String categoria = "";

@@ -9,8 +9,8 @@
 		window.history.forward();
 	</script>
 
-    <!-- Bootstrap CSS CDN -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous"-->
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
     <!-- Our Custom CSS -->
     <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
 	
@@ -76,21 +76,21 @@
 </head>
 <body>
 <div style="margin-top:-45px">
-	<div style="width:100%" class="text-right"><input type="button" value="Ir al inicio" id="inicioconcurso1" class="btn btn-primary"/></div>
+	<div style="width:100%" class="text-right"><input type="button" value="Ir al inicio" id="inicioconcurso1" class="btn btn-primary"  style="margin-top:-10px" /></div>
 	<br>
-	<h4 style="color:#4698FF; padding-left:5px">FICHA INSCRIPCION AL CONCURSO ESCOLAR NACIONAL</h4>
+	<h4 style="color:#4698FF; padding-left:5px">FICHA INSCRIPCION AL CONCURSO ESCOLAR NACIONAL </h4>
 	<br>
 	<div style="margin:15px">
 		
 		<ul class="nav nav-tabs" id="myTab" role="tablist">
 		  <li class="nav-item">
-		    <a class="nav-link active" id="docente-tab" data-toggle="tab" href="#docente" role="tab" aria-controls="home" aria-selected="true">1. Datos del Docente</a>
+		    <a class="nav-link active" id="docente-tab" data-toggle="tab" href="#docente" role="tab" aria-controls="home" aria-selected="true">1. Datos del docente</a>
 		  </li>
 		  <li class="nav-item">
-		    <a class="nav-link" id="participante-tab" data-toggle="tab" href="#participante" role="tab" aria-controls="participante" aria-selected="false">2. Datos de los participantes</a>
+		    <a class="nav-link disabled" id="participante-tab" data-toggle="tab" href="#participante" role="tab" aria-controls="participante" aria-selected="false">2. Datos de los participantes</a>
 		  </li>
-		  <li class="nav-item" >
-		    <a class="nav-link" id="trabajosfinales-tab" data-toggle="tab" href="#trabajosfinales" role="tab" aria-controls="trabajosfinales" aria-selected="false">3. Registro de Trabajos Finales</a>
+		  <li class="nav-item">
+		    <a class="nav-link" id="trabajosfinales-tab" data-toggle="tab" href="#trabajosfinales" role="tab" aria-controls="trabajosfinales" aria-selected="false">3. Registro de trabajos finales</a>
 		  </li>
 		</ul>
 		
@@ -110,15 +110,15 @@
 					  <div class="row">
 					  		<div class="col-4 text-left">
 					  			<label>Apellido paterno</label>	
-					  			<input type="text" id="appaterno" class="form-control" style="width:100%" />
+					  			<input type="text" id="appaterno" class="form-control" style="width:100%" onKeyPress="return filterCadena(event,this)"/>
 					  		</div>
 					  		<div class="col-4 text-left">
 					  			<label>Apellido materno</label>	
-					  			<input type="text" id="apmaterno" class="form-control" style="width:100%" />
+					  			<input type="text" id="apmaterno" class="form-control" style="width:100%" onKeyPress="return filterCadena(event,this)"/>
 					  		</div>
 					  		<div class="col-4 text-left">
 					  			<label>Nombres</label>	
-					  			<input type="text" id="nombre" class="form-control" style="width:100%" />
+					  			<input type="text" id="nombre" class="form-control" style="width:100%" onKeyPress="return filterCadena(event,this)"/>
 					  		</div>
 					  </div>
 					  <br>
@@ -132,7 +132,7 @@
 					  		</div>
 					  		<div class="col-4 text-left">
 					  			<label>N° de documento</label>	
-					  			<input type="text" id="nrodocumento" style="width:100%" class="form-control" />
+					  			<input type="text" id="nrodocumento" style="width:100%" class="form-control" onKeyPress="return filterIntNroDocIdentidad(event,this)"/>
 					  		</div>
 					  		<div class="col-4 text-left">
 					  			<label>Género</label>	
@@ -146,7 +146,7 @@
 					  <div class="row">
 					  		<div class="col-4 text-left" >
 					  			<label>N° de teléfono</label>	
-					  			<input type="text" id="nrotelefono" style="width:100%" class="form-control"/>
+					  			<input type="text" id="nrotelefono" style="width:100%" class="form-control" onKeyPress="return filterIntTelf(event,this)" maxlength="10"/>
 					  		</div>
 					  		<div class="col-4 text-left">
 					  			<label>Correo electrónico</label>	
@@ -156,7 +156,7 @@
 					  			<label>Responsable de registro</label>	
 					  			<select class="form-control" name="responsable" id="responsable">
 			        				 <option value="">Seleccione</option>
-			                         <option th:each="len:${responsableregistro}" th:value="${len.id}" th:utext="${len.descripcion}"/>
+			                         <option th:each="len:${responsableregistro}" th:value="${len.id}" th:utext="${len.descripcion}" />
 			                    </select>
 					  		</div>
 					  </div>
@@ -189,10 +189,9 @@
 		  	</div>		
 			<div class="tab-pane fade" id="participante" role="tabpanel" aria-labelledby="participante-tab">
 				<div id="container_participante">
-					<label>Esta opción aún no se encuentra disponible, pronto se habilitará esta sección para el ingreso de datos de sus estudiantes participantes del Concurso, recuerda que debes adjuntar además la autorización de cada padre de familia junto con el registro. Descarga el formato de autorización <a href="/pedesa/reportes/AUTORIZACIÓNDEPADREPARAPARTICIPACIONVIIICONCURSO.docx" download style="color:blue">Aqu&iacute;</a></label>
+					<!-- label>Esta opción aún no se encuentra disponible, pronto se habilitará esta sección para el ingreso de datos de sus estudiantes participantes del Concurso, recuerda que debes adjuntar además la autorización de cada padre de familia junto con el registro. Descarga el formato de autorización <a href="/pedesa/reportes/AUTORIZACIÓNDEPADREPARAPARTICIPACIONVIIICONCURSO.docx" download style="color:blue">Aqu&iacute;</a></label-->
 					<br>
-					<input type="button" value="Ir al inicio" id="inicioconcurso" class="btn btn-primary"/>
-					<!-- div class="row">
+					<div class="row">
 						<div class="col text-right">
 							<input type="button" value="Agregar participante" id="agregarparticipante" class="btn btn-primary  mr-3">
 						</div>
@@ -218,15 +217,44 @@
 							    </thead>
 							</table>
 						</div>
-					</div-->
+					</div>
 				</div>
-			</div>		
-			<div class="tab-pane fade" id="trabajosfinales" role="tabpanel" aria-labelledby="trabajosfinales-tab" >			
+			</div>
+			<div class="tab-pane fade" id="trabajosfinales" role="tabpanel" aria-labelledby="trabajosfinales-tab" >		
+				<br>
+				<label class="text-center w-100">"Esta opción aún no se encuentra disponible, pronto se habilitará esta sección para el ingreso de datos de sus trabajos del Concurso."</label>	
 			</div>
 		</div>
 	</div>
-
 </div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modalagregarParticipante" aria-labelledby="myLargeModalLabel" >
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" style="overflow-y: scroll; height:750px">
+      <div class="modal-header">
+        <strong class="pt-1">AGREGAR PARTICIPANTE</strong>
+      </div>
+      <div class="modal-body" id="contenidoagregarparticipante">
+      	
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modaleditarParticipante" aria-labelledby="myLargeModalLabel" >
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" style="overflow-y: scroll; height:750px">
+      <div class="modal-header">
+        <strong class="pt-1">EDITAR PARTICIPANTE</strong>
+      </div>
+      <div class="modal-body" id="contenidoeditarparticipante">
+      	
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal" tabindex="-1" role="dialog" id="modalexito">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -265,10 +293,10 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <img th:src="@{./images/imagen_informacion11.png}" />&nbsp;&nbsp; <strong class="pt-1">Alerta</strong>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img th:src="@{./images/imagen_informacion11.png}" />&nbsp;&nbsp; <label class="pt-1" style="padding-right:380px">Alerta</label>
+        <!-- button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
-        </button>
+        </button-->
       </div>
       <div class="modal-body" id="textoinformacion">
       </div>
@@ -309,15 +337,65 @@
 <script type="text/javascript">
 	
 	var url_base = location.origin+"/";
-	var table_lista_participantes;
-	var celdaseleccionada,mensajeValidacion;
+	var table_lista_participantes,celdaseleccionada,mensajeValidacion;
+	
+	var data;
+	var appaternoestudiante="",apmaternoestudiante="",nombreestudiante="",tipodocumentoestudiante="",nrodocumentoestudiante="",fechanacimientoestudiante="";
+	var generoestudiante="",nivelestudiante="",gradoestudiante="",seccionestudiante="";
+	var categoriacuento=0, categoriapoesia=0,categoriadibujopintura=0,categoriacomposicionmusical=0,categoriaahorroagua=0,modalidadpostulacionindividual=0,modalidadpostulaciongrupal=0;
+	var appaternopmt="",apmaternopmt="",nombrepmt="",parentesco="",tipodocumentopmt="",nrodocumentopmt="",nrotelefonopmt="",correoelectronicopmt="";
+	var celdaseleccionada,mensajeValidacion=false;
+	
 	
 	$(document).ready(function(){
 		
-		$("#participante-tab").prop('disabled',true);
+		$("#participante-tab").click(function(){
+			console.log("cargar datos");
+			$('#myTab a[href="#participante"]').tab('show');
+			setTimeout(function(){ listar(); }, 100);
+			
+		});
 		
-		$("#btncerrarmensajeexito").click(function(){			
+		if($("#codmod").val().trim()!="" && $("#appaterno").val().trim()!="" && $("#apmaterno").val().trim()!="" && $("#nombre").val().trim()!="" && $("#tipodocumento").val().trim()!="" && $("#nrodocumento").val().trim()!="" && $("#genero").val().trim()!="" && $("#nrotelefono").val().trim()!="" && $("#correoelectronico").val().trim()!="" && $("#responsable").val().trim()!="" && $("#curso").val().trim()!="" ){
+			$("#participante-tab").removeClass("nav-link disabled");
+			$("#participante-tab").addClass("nav-link");			
+		}
+		
+		$("#agregarparticipante").click(function(){
+			
+			$("#modalimagencargando").modal({
+				show : true,
+				backdrop : 'static',
+				keyboard:false
+			});
+			
+			$.ajax({
+				url: url_base + "pedesa/formregistrarparticipante",
+				success: function(respuesta) {
+					$("#modalimagencargando").modal('hide');
+					$("#contenidoagregarparticipante").html(respuesta);
+					$("#modalagregarParticipante").modal({
+						show : true,
+						backdrop : 'static',
+						keyboard:false
+					});
+				},
+				error: function() {
+			        console.log("No se ha podido vista del web service");
+			    }
+			});
+		});	
+		
+		$("#btncancelarparticipante").click(function(){
+			$("#modalagregarParticipante").modal('hide');
+		});
+		
+		$("#btncerrarmensajeexito").click(function(){
 			$("#modalexito").modal('hide');
+			$("#participante-tab").removeClass("nav-link disabled");
+			$("#participante-tab").addClass("nav-link");	
+			$('#myTab a[href="#participante"]').tab('show');
+			listar();
 		});
 			
 		$("#btncerrarmensajeinformacion").click(function(){
@@ -346,8 +424,7 @@
 			});
 		});
 		
-		$("#inicioconcurso").click(function(){
-			//$("#container").html("<center><img src='./images/cargando.gif'/></center>");
+		/*$("#inicioconcurso").click(function(){
 			$("#modalimagencargando").modal({
 				show : true,
 				backdrop : 'static',
@@ -363,7 +440,7 @@
 			        console.log("No se ha podido obtener la información");
 			    }
 			});
-		});
+		});*/
 		
 		$("#fechanacimientoestudiante").datepicker({
 			locale: 'es-es',
@@ -421,7 +498,7 @@
 				    data : JSON.stringify(obj),
 				    dataType : 'json',
 					success: function(respuesta) {
-						
+						console.log("respuesta ..."+respuesta);
 						switch(respuesta){
 							case 0 : 
 									$("#textoerror").html("Error al registrar Docente o tutor");
@@ -439,6 +516,7 @@
 									keyboard:false
 								});
 								break;
+								
 						}
 					},
 					error: function() {
@@ -457,98 +535,88 @@
 			}
 		});
 		
-		$("#btncerrarmensajeexito").click(function(){
-			$("#modalexito").modal('hide');
-			$("#participante-tab").prop('disabled',false);
-			$('#myTab a[href="#participante"]').tab('show');
-			listar();
-		});
 		
-		$("#agregarparticipante").click(function(){
-			
-			$("#modalimagencargando").modal({
-				show : true,
-				backdrop : 'static',
-				keyboard:false
-			});
-			
-			$.ajax({
-				url: url_base + "pedesa/formregistrarparticipante",
-				success: function(respuesta) {
-					$("#modalimagencargando").modal('hide');
-					$("#container_participante").html(respuesta);
-					
-				},
-				error: function() {
-			        console.log("No se ha podido vista del web service");
-			    }
-			});
-		});
-	
 	});
 	
 	var listar = function (){
 		
-		$("#table_lista_participantes").dataTable().fnDestroy();
-		table_lista_aperturar_anio = $('#table_lista_participantes').DataTable({
-			dom: 'Bfrtip',
-		    "scrollX": true,
-		    "searching": true,
-		    lengthMenu: [
-		        [ 10, 15, 25, -1 ],
-		        [ '10 filas', '15 filas', '25 filas', 'Mostrar todas' ]
-		    ],
-		    "processing":true,
-		    language: {
-		        "decimal": "",
-		        "emptyTable": "No se han registrado participantes, para agregar hacer click en el botón 'Agregar paciente'",
-		        "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-		        "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
-		        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-		        "infoPostFix": "",
-		        "thousands": ",",
-		        "lengthMenu": "Mostrar _MENU_ Entradas",
-		        "loadingRecords": "Cargando Registros...",
-		        "processing": "Procesando...",
-		        "search": "Buscar:",
-		        "zeroRecords": " ",//No existen registros
-		        "paginate": {
-		            "first": "Primero",
-		            "last": "Ultimo",
-		            "next": "Siguiente",
-		            "previous": "Anterior"
-		        }
-		    },
-		    'ajax' : {
-		        "url" : url_base + 'pedesa/listaparticipantes',
-		        "type" : "GET",
-		        "dataSrc" : ""
-		    },
-		    "deferRender": true,
-		    'columnDefs': [],
-		    'columns' : [
-		    	{ 
-		    		"data": null, "render": function (data, type, full, meta) { return meta.row + 1; }
-		    	},
-		    	{ 'data' : 'appaterno' },
-		        { 'data' : 'apmaterno' },
-		        { 'data' : 'nombre' },
-		        { 'data' : 'tipodocumento' },
-		        { 'data' : 'nrodocumento' },
-		        { 'data' : 'categoria' },
-		        { 'data' : 'modalidad' },
-		        { 'defaultContent' : '<img src="./images/svg/file-pdf-regular.svg" class="archivo" style="width:20px; cursor:pointer"/>' },
-		        { 'defaultContent' : '<img src="./images/svg/file-pdf-regular.svg" class="ver" style="width:20px; cursor:pointer"/>' },
-		        { 'defaultContent' : '<img src="./images/svg/edit-regular.svg" class="editar" style="width:20px; cursor:pointer" />'},
-		        { 'defaultContent' : '<img src="./images/svg/eliminar-alt-regular.svg" class="eliminar" style="width:20px; cursor:pointer" />'}
-		    ],
-		    buttons: []
-		});
-		
-		obtener_data_archivo("#table_lista_participantes tbody",table_lista_aperturar_anio);
-		obtener_data_ver("#table_lista_participantes tbody",table_lista_aperturar_anio);
-        obtener_data_editar("#table_lista_participantes tbody",table_lista_aperturar_anio);
-        obtener_data_eliminar("#table_lista_participantes tbody",table_lista_aperturar_anio);		
+		console.log("cargainicial :" + cargainicial);
+		if(cargainicial==1){
+			
+			cargainicial = 0;
+			
+			$("#table_lista_participantes").dataTable().fnDestroy();
+			table_lista_participantes = $('#table_lista_participantes').DataTable({
+				dom: 'Bfrtip',
+			    "scrollX": true,
+			    "searching": true,
+			    lengthMenu: [
+			        [ 10, 15, 25, -1 ],
+			        [ '10 filas', '15 filas', '25 filas', 'Mostrar todas' ]
+			    ],
+			    "processing":true,
+			    language: {
+			        "decimal": "",
+			        "emptyTable": "No se han registrado participantes, para agregar hacer click en el botón 'Agregar participante'",
+			        "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+			        "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
+			        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+			        "infoPostFix": "",
+			        "thousands": ",",
+			        "lengthMenu": "Mostrar _MENU_ Entradas",
+			        "loadingRecords": "Cargando Registros...",
+			        "processing": "Procesando...",
+			        "search": "Buscar:",
+			        "zeroRecords": " ",//No existen registros
+			        "paginate": {
+			            "first": "Primero",
+			            "last": "Ultimo",
+			            "next": "Siguiente",
+			            "previous": "Anterior"
+			        }
+			    },
+			    'ajax' : {
+			        "url" : url_base + 'pedesa/listaparticipantes',
+			        "type" : "GET",
+			        "dataSrc" : ""
+			    },
+			    "deferRender": true,
+			    'columnDefs': [],
+			    'columns' : [
+			    	{ 
+			    		"data": null, "render": function (data, type, full, meta) { return meta.row + 1; }
+			    	},
+			    	{ 'data' : 'appaterno' },
+			        { 'data' : 'apmaterno' },
+			        { 'data' : 'nombre' },
+			        { 'data' : 'tipodocumento' },
+			        { 'data' : 'nrodocumento' },
+			        { 'data' : 'categoria' },
+			        { 'data' : 'modalidad' },
+			        { 'defaultContent' : '<img src="./images/svg/file-pdf-regular.svg" class="archivo" style="width:20px; cursor:pointer"/>' },
+			        { 'defaultContent' : '<img src="./images/svg/file-pdf-regular.svg" class="ver" style="width:20px; cursor:pointer"/>' },
+			        { 'defaultContent' : '<img src="./images/svg/edit-regular.svg" class="editar" style="width:20px; cursor:pointer" />'},
+			        { 'defaultContent' : '<img src="./images/svg/eliminar-alt-regular.svg" class="eliminar" style="width:20px; cursor:pointer" />'}
+			    ],
+			    buttons: [
+
+			    	{
+			    		"text" : "Descargar el formato de autorización Aqu&iacute;",
+			    		"titleAttr" : "descargar",
+			    		"action" : function(){
+			    			window.open('/pedesa/reportes/AUTORIZACIÓNDEPADREPARAPARTICIPACIONVIIICONCURSO.docx', '_blank');		    			
+			    		}
+			    	}
+			    ]
+			});
+			
+			obtener_data_archivo("#table_lista_participantes tbody",table_lista_participantes);
+			obtener_data_ver("#table_lista_participantes tbody",table_lista_participantes);
+	        obtener_data_editar("#table_lista_participantes tbody",table_lista_participantes);
+	        obtener_data_eliminar("#table_lista_participantes tbody",table_lista_participantes);
+			
+		}
+				
 	}
 	
 	var obtener_data_archivo = function(tbody,table){
@@ -596,7 +664,7 @@
 			    url : url_base + "pedesa/eliminarparticipanteid/"+ id,
 				success: function(respuesta) {
 					if(respuesta==1){
-						table_lista_aperturar_anio.row(celdaseleccionada).remove().draw(false);
+						table_lista_participantes.row(celdaseleccionada).remove().draw(false);
 					}
 					else{
 						$("#modalimagencargando").modal('hide');
@@ -631,12 +699,15 @@
 		});
 		
 		$.ajax({
-			type : "GET",
-		    url : url_base + "pedesa/editarviewparticipanteid/"+ id,
+			url : url_base + "pedesa/editarviewparticipanteid/"+ id,
 			success: function(respuesta) {
 				$("#modalimagencargando").modal('hide');
-				$("#container_participante").html(respuesta);
-				
+				$("#contenidoeditarparticipante").html(respuesta);
+				$("#modaleditarParticipante").modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
 			},
 			error: function() {
 				$("#modalimagencargando").modal('hide');
@@ -696,6 +767,7 @@
 	function validarCampos(){
 		
 		mensajeValidacion = "";
+		var correoelectronico;
 		
 		if($("#appaterno").val().trim()==""){
 			mensajeValidacion = "Debe ingresar Apellido Paterno"+"<br>";
@@ -721,6 +793,10 @@
 		if($("#correoelectronico").val().trim()==""){
 			mensajeValidacion += "Debe ingresar Correo Eléctronico"+"<br>";
 		}
+		correoelectronico = $("#correoelectronico").val().trim();
+		if(!(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(correoelectronico))){		
+			mensajeValidacion += "Debe ingresar Correctamente el Correo Electrónico "+"<br>";
+		}
 		if($("#responsable").val().trim()==""){
 			mensajeValidacion += "Debe ingresar Responsable"+"<br>";
 		}
@@ -729,6 +805,71 @@
 			return false;
 		}
 		return true;
+	}
+	
+	function filterCadena(evt,input){
+		
+		var key = window.Event ? evt.which : evt.keyCode;    
+	    var chark = String.fromCharCode(key);
+	    var tempValue = input.value+chark;
+	    if((key >= 65 && key <= 90) || (key >= 97 && key <= 122) || (key ==32)){    
+	        return true;
+	    }
+	    else{
+	        return false;
+	    }	
+	}
+	
+	$("#tipodocumento").on("change",function(){
+		
+		if($("#tipodocumento").val()!=""){
+			$("#nrodocumento").prop('disabled', false);
+			$("#nrodocumento").val("");
+			$("#nrodocumento").focus();
+		}
+		else{
+			$("#nrodocumento").val("");
+			$("#nrodocumento").prop('disabled', true);
+		}
+	});
+	
+	function filterIntNroDocIdentidad(evt,input){
+		
+		if($("#tipodocumento").val()==1){
+		    var key = window.Event ? evt.which : evt.keyCode;    
+		    var chark = String.fromCharCode(key);
+		    var tempValue = input.value+chark;
+		    if(key >= 48 && key <= 57){
+		    	if($("#tipodocumento").val() == 1){
+					if($("#nrodocumento").val().trim().length<8)
+						return true;
+					return false;
+				}
+		    	else{
+		    		return false;
+		    	}
+		    }
+		    else{
+		        return false;
+		    }
+		}
+		else if($("#tipodocumento").val()==2){
+			if($("#nrodocumento").val().trim().length<12)
+				return true;
+			return false;
+		}
+	}
+	
+	function filterIntTelf(evt,input){
+		var key = window.Event ? evt.which : evt.keyCode;    
+	    var chark = String.fromCharCode(key);
+	    var tempValue = input.value+chark;
+	    if((key >= 48 && key <= 57) || key==45){    
+	        return true;
+	    }
+	    else{
+	        return false;
+	    }
 	}
 	
 	

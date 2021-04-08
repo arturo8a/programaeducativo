@@ -4,102 +4,98 @@ var idparticipante=0, appaternoestudiante="",apmaternoestudiante="",nombreestudi
 var generoestudiante="",nivelestudiante="",gradoestudiante="",seccionestudiante="";
 var categoriacuento=0, categoriapoesia=0,categoriadibujopintura=0,categoriacomposicionmusical=0,categoriaahorroagua=0,modalidadpostulacionindividual=0,modalidadpostulaciongrupal=0;
 var appaternopmt="",apmaternopmt="",nombrepmt="",parentesco="",tipodocumentopmt="",nrodocumentopmt="",nrotelefonopmt="",correoelectronicopmt="";
-var mensajeValidacion=false;
+var mensajeValidacionEditar="";
 var bandera = false;
 
 $(document).ready(function(){
 
-	$("#tipodocumentoestudiante").change(function(){
-		$("#nrodocumentoestudiante").focus();
+	$("#tipodocumentoestudianteeditar").change(function(){
+		$("#nrodocumentoestudianteeditar").focus();
 	});
-	$("#tipodocumentopmt").change(function(){
-		$("#nrodocumentopmt").focus();
+	$("#tipodocumentopmteditar").change(function(){
+		$("#nrodocumentopmteditar").focus();
 	});
 
-	$("#fechanacimientoestudiante").datepicker({
+	$("#fechanacimientoestudianteeditar").datepicker({
 			locale: 'es-es',
 		    format: 'dd/mm/yyyy',
 		    uiLibrary: 'bootstrap4'
 		});
 		
-	$("#quitararchivo").click(function(){
+	$("#quitararchivoeditar").click(function(){
 	
-		$("#fichaparticipante").prop("disabled",false);	
+		$("#fichaparticipanteeditareditar").prop("disabled",false);	
 		bandera = true;
 	});
+	
+	$("#btncancelarparticipanteeditar").click(function(){
+		limpiarControlesEditar();
+		$("#modaleditarParticipante").modal('hide');
+	});	
 
-	$("#tipodocumentoestudiante").change(function(){
-		$("#nrodocumentoestudiante").focus();
+	$("#tipodocumentoestudianteeditar").change(function(){
+		$("#nrodocumentoestudianteeditar").focus();
 	});
 	
-	$("#gradoestudiante").change(function(){
-		$("#seccionestudiante").focus();
+	$("#gradoestudianteeditar").change(function(){
+		$("#seccionestudianteeditar").focus();
 	});
 	
-	$("#tipodocumentopmt").change(function(){
-		$("#nrodocumentopmt").focus();
+	$("#tipodocumentopmteditar").change(function(){
+		$("#nrodocumentopmteditar").focus();
 	});
 
-	$("#fechanacimientoestudiante").datepicker({
+	$("#fechanacimientoestudianteeditar").datepicker({
 		locale: 'es-es',
 	    format: 'dd/mm/yyyy',
 	    uiLibrary: 'bootstrap4'
 	});
 	
-	$("#btncerrarmensajeexito").click(function(){			
-		$("#modalexito").modal('hide');
+	$("#btncerrarmensajeexitoeditar").click(function(){			
+		$("#modalexitoeditar").modal('hide');
+		limpiarControlesEditar();
+		$("#modaleditarParticipante").modal('hide');
 	});
 		
-	$("#btncerrarmensajeinformacion").click(function(){
-		$("#modalinformacion").modal('hide');
+	$("#btncerrarmensajeinformacioneditar").click(function(){
+		$("#modalinformacioneditar").modal('hide');
 	});
 	
-	$("#btncerrarmensajeerror").click(function(){
-		$("#modalerror").modal('hide');
+	$("#btncerrarmensajeerroreditar").click(function(){
+		$("#modalerroreditar").modal('hide');
 	});
 	
-	$("#btncerrarmensajeconfirmacion").click(function(){
-		$("#modalconfirmacion").modal('hide');
-	});		
+	$("#btncerrarmensajeconfirmacioneditar").click(function(){
+		$("#modalconfirmacioneditar").modal('hide');
+	});
 	
-	$("#btncancelarparticipante").click(function(){
-		$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
-		$.ajax({
-			type : "GET",
-		    url : url_base + "pedesa/listarparticipante",
-			success: function(respuesta) {
-				$("#container_participante").html(respuesta);
-			}
-		});
-	});	
-	
-	$("#tipodocumentoestudiante").on("change",function(){
+	$("#tipodocumentoestudianteeditar").on("change",function(){
 		
-		if($("#tipodocumentoestudiante").val()!=""){
-			$("#nrodocumentoestudiante").prop('disabled', false);
-			$("#nrodocumentoestudiante").val("");
-			$("#nrodocumentoestudiante").focus();
+		if($("#tipodocumentoestudianteeditar").val()!=""){
+			$("#nrodocumentoestudianteeditar").prop('disabled', false);
+			$("#nrodocumentoestudianteeditar").val("");
+			$("#nrodocumentoestudianteeditar").focus();
 		}
 		else{
-			$("#nrodocumentoestudiante").val("");
-			$("#nrodocumentoestudiante").prop('disabled', true);
+			$("#nrodocumentoestudianteeditar").val("");
+			$("#nrodocumentoestudianteeditar").prop('disabled', true);
 		}
 	});
 	
-	$("#tipodocumentopmt").on("change",function(){
-		if($("#tipodocumentopmt").val()!=""){
-			$("#nrodocumentopmt").prop('disabled', false);
-			$("#nrodocumentopmt").val("");
-			$("#nrodocumentopmt").focus();
+	$("#tipodocumentopmteditar").on("change",function(){
+		if($("#tipodocumentopmteditar").val()!=""){
+			$("#nrodocumentopmteditar").prop('disabled', false);
+			$("#nrodocumentopmteditar").val("");
+			$("#nrodocumentopmteditar").focus();
 		}
 		else{
-			$("#nrodocumentopmt").val("");
-			$("#nrodocumentopmt").prop('disabled', true);
+			$("#nrodocumentopmteditar").val("");
+			$("#nrodocumentopmteditar").prop('disabled', true);
 		}
 	});
 	
-	$("#nivelestudiante").click(function(){	
-		nivelestudiante = $("#nivelestudiante").val();
+	$("#nivelestudianteeditar").click(function(){	
+		nivelestudiante = $("#nivelestudianteeditar").val();
 		data = {
 			nivelestudiante : nivelestudiante
 		};
@@ -110,7 +106,7 @@ $(document).ready(function(){
 					for(var i=0;i<respuesta.length;i++){
 						contenido = contenido + "<option value="+respuesta[i].id+">"+respuesta[i].descripcion+"</option>";
 					}
-					$("#gradoestudiante").html(contenido);
+					$("#gradoestudianteeditar").html(contenido);
 				},
 				error: function() {
 					alert("Error al buscar grado por nivel");
@@ -119,10 +115,17 @@ $(document).ready(function(){
 		 
 	});
 	
-	$("#btnactualizarparticipante").click(function(){
+	$("#btnactualizarparticipanteeditar").click(function(){
 		
-		if(validarCampos()){
+		console.log("btnactualizarparticipante");
 		
+		if(validarCamposEditar()){
+		
+			var contenido_categoria = "";
+			var contenido_modalidad = "";
+			
+			console.log("entro validarCamposEditar()");
+			
 			$("#modalimagencargando").modal({
 				show : true,
 				backdrop : 'static',
@@ -140,23 +143,40 @@ $(document).ready(function(){
 			modalidadpostulacionindividual = 0;
 			modalidadpostulaciongrupal = 0;
 			
-			if($("#categoriacuento").is(':checked'))
+			if($("#categoriacuentoeditar").is(':checked')){
 				categoriacuento = 1;
-			if($("#categoriapoesia").is(':checked'))
+				contenido_categoria = "Cuento /";
+			}					
+			if($("#categoriapoesiaeditar").is(':checked')){
 				categoriapoesia = 1;
-			if($("#categoriadibujopintura").is(':checked'))
+				contenido_categoria += "Poesía /";
+			}					
+			if($("#categoriadibujopinturaeditar").is(':checked')){
 				categoriadibujopintura = 1;
-			if($("#categoriacomposicionmusical").is(':checked'))
+				contenido_categoria += "Díbujo o Pintura /";
+			}					
+			if($("#categoriacomposicionmusicaleditar").is(':checked')){
 				categoriacomposicionmusical = 1;
-			if($("#categoriaahorroagua").is(':checked'))
+				contenido_categoria += "Composición musical /";
+			}				
+			if($("#categoriaahorroaguaeditar").is(':checked')){
 				categoriaahorroagua = 1;
-			if($("#modalidadpostulacionindividual").is(':checked'))
+				contenido_categoria += "Ahorro agua/";
+			}					
+			if($("#modalidadpostulacionindividualeditar").is(':checked')){
 				modalidadpostulacionindividual = 1;
-			if($("#modalidadpostulaciongrupal").is(':checked'))
+				contenido_modalidad += "Individual /";
+			}					
+			if($("#modalidadpostulaciongrupaleditar").is(':checked')){
 				modalidadpostulaciongrupal = 1;
+				contenido_modalidad += "Grupal/";
+			}
+			
+			contenido_categoria = contenido_categoria.slice(0, -1);
+			contenido_modalidad = contenido_modalidad.slice(0, -1);
 			
 			data = {
-				id : $("#idparticipante").val() ,
+				id : $("#idparticipanteeditar").val() ,
 				appaternoestudiante : appaternoestudiante,
 				apmaternoestudiante : apmaternoestudiante,
 				nombreestudiante : nombreestudiante,
@@ -195,6 +215,9 @@ $(document).ready(function(){
 				estado : 1
 			};
 			
+			console.log("id ..." + $("#idparticipanteeditar").val());
+			console.log("data ..." + data);
+			
 			$.ajax({
 				type : "POST",
 			    contentType : "application/json",
@@ -205,7 +228,7 @@ $(document).ready(function(){
 					if(respuesta>0){
 						if(bandera){						
 							var data = new FormData();
-							data.append('file',fichaparticipante.files[0]);
+							data.append('file',fichaparticipanteeditar.files[0]);
 							data.append('id',respuesta);						
 							$.ajax({
 						        type: "POST",
@@ -218,12 +241,24 @@ $(document).ready(function(){
 						        timeout: 600000,
 						        success: function (data) {					 
 						            $("#modalimagencargando").modal('hide');
-									$("#textoexito").html("Usted modificó exitosamente los datos del participante");
-									$('#modalexito').modal({
+						            
+						            console.log("celdaseleccionada ..." + celdaseleccionada);
+									table_lista_participantes.cell(celdaseleccionada,1).data(appaternoestudiante).draw();
+									table_lista_participantes.cell(celdaseleccionada,2).data(apmaternoestudiante).draw();
+									table_lista_participantes.cell(celdaseleccionada,3).data(nombreestudiante).draw();
+									table_lista_participantes.cell(celdaseleccionada,4).data($("#tipodocumentoestudianteeditar option:selected").html()).draw();
+									table_lista_participantes.cell(celdaseleccionada,5).data(nrodocumentoestudiante).draw();
+									table_lista_participantes.cell(celdaseleccionada,6).data(contenido_categoria).draw();
+									table_lista_participantes.cell(celdaseleccionada,7).data(contenido_modalidad).draw();
+									
+									$("#textoexitoeditar").html("Usted modificó exitosamente los datos del participante");
+									$('#modalexitoeditar').modal({
 										show : true,
 										backdrop : 'static',
 										keyboard:false
 									});
+												
+									limpiarControlesEditar();
 						 
 						        },
 						        error: function (e) {
@@ -233,8 +268,19 @@ $(document).ready(function(){
 						}
 						else{
 							$("#modalimagencargando").modal('hide');
-							$("#textoexito").html("Usted modificó exitosamente los datos del participante");
-							$('#modalexito').modal({
+							
+							console.log("celdaseleccionada ..." + celdaseleccionada);
+							
+							table_lista_participantes.cell(celdaseleccionada,1).data(appaternoestudiante).draw();
+							table_lista_participantes.cell(celdaseleccionada,2).data(apmaternoestudiante).draw();
+							table_lista_participantes.cell(celdaseleccionada,3).data(nombreestudiante).draw();
+							table_lista_participantes.cell(celdaseleccionada,4).data($("#tipodocumentoestudianteeditar option:selected").html()).draw();
+							table_lista_participantes.cell(celdaseleccionada,5).data(nrodocumentoestudiante).draw();
+							table_lista_participantes.cell(celdaseleccionada,6).data(contenido_categoria).draw();
+							table_lista_participantes.cell(celdaseleccionada,7).data(contenido_modalidad).draw();
+							
+							$("#textoexitoeditar").html("Usted modificó exitosamente los datos del participante");
+							$('#modalexitoeditar').modal({
 								show : true,
 								backdrop : 'static',
 								keyboard:false
@@ -242,9 +288,23 @@ $(document).ready(function(){
 						}	
 											
 					}
-					else{
+					else if(respuesta==0){
 						$("#modalimagencargando").modal('hide');
-						$("#textoexito").html("Error al actualizar participante");
+						$("#textoerror").html("Error al registrar participante");
+						$('#modalerroreditar').modal({
+							show : true,
+							backdrop : 'static',
+							keyboard:false
+						});
+					}
+					else if(respuesta==-1){
+						$("#modalimagencargando").modal('hide');
+						$("#textoerror").html("IE no se ha registrado actualmente en el Programa Educativo");
+						$('#modalerroreditar').modal({
+							show : true,
+							backdrop : 'static',
+							keyboard:false
+						});
 					}					
 				},
 				error: function() {
@@ -254,8 +314,8 @@ $(document).ready(function(){
 			});		
 		}
 		else{
-			$("#textoinformacion").html("<div style='color:red' class='text-left'>"+mensajeValidacion+"</div>");
-			$('#modalinformacion').modal({
+			$("#textoinformacioneditar").html("<div style='color:red' class='text-left'>"+mensajeValidacionEditar+"</div>");
+			$('#modalinformacioneditar').modal({
 				show : true,
 				backdrop : 'static',
 				keyboard:false
@@ -265,101 +325,101 @@ $(document).ready(function(){
 
 });
 
-function validarCampos(){
+function validarCamposEditar(){
 	
-	mensajeValidacion = "";
-	appaternoestudiante = $("#appaternoestudiante").val();
-	apmaternoestudiante = $("#apmaternoestudiante").val();
-	nombreestudiante = $("#nombreestudiante").val();
-	tipodocumentoestudiante = $("#tipodocumentoestudiante").val();
-	nrodocumentoestudiante = $("#nrodocumentoestudiante").val();
+	mensajeValidacionEditar = "";
+	appaternoestudiante = $("#appaternoestudianteeditar").val();
+	apmaternoestudiante = $("#apmaternoestudianteeditar").val();
+	nombreestudiante = $("#nombreestudianteeditar").val();
+	tipodocumentoestudiante = $("#tipodocumentoestudianteeditar").val();
+	nrodocumentoestudiante = $("#nrodocumentoestudianteeditar").val();
 	
-	fechanacimientoestudiante = $("#fechanacimientoestudiante").val();		
+	fechanacimientoestudiante = $("#fechanacimientoestudianteeditar").val();		
 	
-	generoestudiante = $("#generoestudiante").val();
-	nivelestudiante = $("#nivelestudiante").val();
-	gradoestudiante = $("#gradoestudiante").val();
-	seccionestudiante = $("#seccionestudiante").val();
-	appaternopmt = $("#appaternopmt").val();
-	apmaternopmt = $("#apmaternopmt").val();
-	nombrepmt = $("#nombrepmt").val();
-	parentesco = $("#parentesco").val();
-	tipodocumentopmt = $("#tipodocumentopmt").val();
-	nrodocumentopmt = $("#nrodocumentopmt").val();
-	nrotelefonopmt = $("#nrotelefonopmt").val();
-	correoelectronicopmt  = $("#correoelectronicopmt").val();
+	generoestudiante = $("#generoestudianteeditar").val();
+	nivelestudiante = $("#nivelestudianteeditar").val();
+	gradoestudiante = $("#gradoestudianteeditar").val();
+	seccionestudiante = $("#seccionestudianteeditar").val();
+	appaternopmt = $("#appaternopmteditar").val();
+	apmaternopmt = $("#apmaternopmteditar").val();
+	nombrepmt = $("#nombrepmteditar").val();
+	parentesco = $("#parentescoeditar").val();
+	tipodocumentopmt = $("#tipodocumentopmteditar").val();
+	nrodocumentopmt = $("#nrodocumentopmteditar").val();
+	nrotelefonopmt = $("#nrotelefonopmteditar").val();
+	correoelectronicopmt  = $("#correoelectronicopmteditar").val();
 	
 	if(appaternoestudiante.trim()==""){
-		mensajeValidacion = "Debe ingresar Apellido Paterno de Estudiante"+"<br>";
+		mensajeValidacionEditar = "Debe ingresar Apellido Paterno de Estudiante"+"<br>";
 	}
 	if(apmaternoestudiante.trim()==""){
-		mensajeValidacion += "Debe ingresar Apellido Materno de Estudiante"+"<br>";
+		mensajeValidacionEditar += "Debe ingresar Apellido Materno de Estudiante"+"<br>";
 	}
 	if(nombreestudiante.trim()==""){
-		mensajeValidacion += "Debe ingresar Nombre de Estudiante"+"<br>";
+		mensajeValidacionEditar += "Debe ingresar Nombre de Estudiante"+"<br>";
 	}
 	if(generoestudiante==0){
-		mensajeValidacion += "Debe Seleccionar Genero de Estudiante"+"<br>";
+		mensajeValidacionEditar += "Debe Seleccionar Genero de Estudiante"+"<br>";
 	}
 	if(tipodocumentoestudiante==0){
-		mensajeValidacion += "Debe Seleccionar Tipo de Documento de Estudiante"+"<br>";
+		mensajeValidacionEditar += "Debe Seleccionar Tipo de Documento de Estudiante"+"<br>";
 	}
 	if(nrodocumentoestudiante.trim()==""){
-		mensajeValidacion += "Debe ingresar Número de documento de Estudiante"+"<br>";
+		mensajeValidacionEditar += "Debe ingresar Número de documento de Estudiante"+"<br>";
 	}
 	if(fechanacimientoestudiante.trim()==""){
-		mensajeValidacion += "Debe ingresar Fecha nacimiento de Estudiante"+"<br>";
+		mensajeValidacionEditar += "Debe ingresar Fecha nacimiento de Estudiante"+"<br>";
 	}
 	if(nivelestudiante==0){
-		mensajeValidacion += "Debe Seleccionar Nivel  de Estudiante"+"<br>";
+		mensajeValidacionEditar += "Debe Seleccionar Nivel  de Estudiante"+"<br>";
 	}
 	if(gradoestudiante==0){
-		mensajeValidacion += "Debe Seleccionar Grado de Estudiante"+"<br>";
+		mensajeValidacionEditar += "Debe Seleccionar Grado de Estudiante"+"<br>";
 	}
 	if(seccionestudiante.trim()==""){
-		mensajeValidacion += "Debe ingresar Sección de Estudiante"+"<br>";
+		mensajeValidacionEditar += "Debe ingresar Sección de Estudiante"+"<br>";
 	}
-	if(!($("#categoriacuento").is(':checked') || $("#categoriapoesia").is(':checked') || $("#categoriadibujopintura").is(':checked') || $("#categoriacomposicionmusical").is(':checked') || $("#categoriaahorroagua").is(':checked'))){		
-		mensajeValidacion += "Debe Seleccionar una Categoria de Estudiante"+"<br>";
+	if(!($("#categoriacuentoeditar").is(':checked') || $("#categoriapoesiaeditar").is(':checked') || $("#categoriadibujopinturaeditar").is(':checked') || $("#categoriacomposicionmusicaleditar").is(':checked') || $("#categoriaahorroaguaeditar").is(':checked'))){		
+		mensajeValidacionEditar += "Debe Seleccionar una Categoria de Estudiante"+"<br>";
 	}
-	if(!($("#modalidadpostulacionindividual").is(':checked') || $("#modalidadpostulaciongrupal").is(':checked'))){		
-		mensajeValidacion += "Debe Seleccionar Modalidad de Postulación de Estudiante"+"<br>";
+	if(!($("#modalidadpostulacionindividualeditar").is(':checked') || $("#modalidadpostulaciongrupaleditar").is(':checked'))){		
+		mensajeValidacionEditar += "Debe Seleccionar Modalidad de Postulación de Estudiante"+"<br>";
 	}
 	if(appaternopmt.trim()==""){
-		mensajeValidacion += "Debe ingresar Apellido Paterno del Padre,Madre o Tutor"+"<br>";
+		mensajeValidacionEditar += "Debe ingresar Apellido Paterno del Padre,Madre o Tutor"+"<br>";
 	}
 	if(apmaternopmt.trim()==""){
-		mensajeValidacion += "Debe ingresar Apellido Materno del Padre,Madre o Tutor"+"<br>";
+		mensajeValidacionEditar += "Debe ingresar Apellido Materno del Padre,Madre o Tutor"+"<br>";
 	}
 	if(nombrepmt.trim()==""){
-		mensajeValidacion += "Debe ingresar Nombre del Padre , Madre o Tutor"+"<br>";
+		mensajeValidacionEditar += "Debe ingresar Nombre del Padre , Madre o Tutor"+"<br>";
 	}
 	if(parentesco==0){
-		mensajeValidacion += "Debe Seleccionar Parentesco del Padre , Madre o Tutor"+"<br>";
+		mensajeValidacionEditar += "Debe Seleccionar Parentesco del Padre , Madre o Tutor"+"<br>";
 	}
 	if(tipodocumentopmt==0){
-		mensajeValidacion += "Debe Seleccionar Tipo de documento del Padre , Madre o Tutor"+"<br>";
+		mensajeValidacionEditar += "Debe Seleccionar Tipo de documento del Padre , Madre o Tutor"+"<br>";
 	}
 	if(nrodocumentopmt.trim()==""){
-		mensajeValidacion += "Debe ingresar Número de Documento del Padre , Madre o Tutor"+"<br>";
+		mensajeValidacionEditar += "Debe ingresar Número de Documento del Padre , Madre o Tutor"+"<br>";
 	}
 	if(nrotelefonopmt.trim()==""){
-		mensajeValidacion += "Debe ingresar Número de Télefono del Padre , Madre o Tutor"+"<br>";
+		mensajeValidacionEditar += "Debe ingresar Número de Télefono del Padre , Madre o Tutor"+"<br>";
 	}
 	if(correoelectronicopmt.trim()==""){
-		mensajeValidacion += "Debe ingresar Correo Electrónico del Padre , Madre o Tutor"+"<br>";
+		mensajeValidacionEditar += "Debe ingresar Correo Electrónico del Padre , Madre o Tutor"+"<br>";
 	}
 	if(!(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(correoelectronicopmt))){		
-		mensajeValidacion += "Debe ingresar Correctamente el Correo Electrónico del Padre , Madre o Tutor"+"<br>";
+		mensajeValidacionEditar += "Debe ingresar Correctamente el Correo Electrónico del Padre , Madre o Tutor"+"<br>";
 	}
 	
 	if(bandera){
-		var fichaparticipante_name = (fichaparticipante.files[0]).name;
-		var fichaparticipante_size = (fichaparticipante.files[0]).size;
-		if(fichaparticipante_size >5000000){
-			mensajeValidacion += "El archivo no debe superar los 5MB"+"<br>";
+		var fichaparticipanteeditar_name = (fichaparticipanteeditar.files[0]).name;
+		var fichaparticipanteeditar_size = (fichaparticipanteeditar.files[0]).size;
+		if(fichaparticipanteeditar_size >5000000){
+			mensajeValidacionEditar += "El archivo no debe superar los 5MB"+"<br>";
 		}
-		var ext = fichaparticipante_name.split('.').pop();
+		var ext = fichaparticipanteeditar_name.split('.').pop();
 		ext = ext.toLowerCase();
 		switch(ext){
 			case 'jpg': break;
@@ -367,17 +427,17 @@ function validarCampos(){
 			case 'jpeg': break;
 			case 'pdf': break;
 			case 'docx': break;
-			default: mensajeValidacion += "El archivo debe tener extensión jpg , png, pdf, word"+"<br>";	
+			default: mensajeValidacionEditar += "El archivo debe tener extensión jpg , png, pdf, word"+"<br>";	
 		}	
 	}
-	
-	if(mensajeValidacion!=""){
+	console.log("mensajeValidacionEditar .. "+ mensajeValidacionEditar);
+	if(mensajeValidacionEditar!=""){
 		return false;
 	}
 	return true;
 }
 
-function filterInt(evt,input){
+function filterIntEditar(evt,input){
     var key = window.Event ? evt.which : evt.keyCode;    
     var chark = String.fromCharCode(key);
     var tempValue = input.value+chark;
@@ -389,7 +449,19 @@ function filterInt(evt,input){
     }
 }
 
-function filterCadena(evt,input){
+function filterIntTelfEditar(evt,input){
+	var key = window.Event ? evt.which : evt.keyCode;    
+    var chark = String.fromCharCode(key);
+    var tempValue = input.value+chark;
+    if((key >= 48 && key <= 57) || key==45){    
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+function filterCadenaEditar(evt,input){
 	
 	var key = window.Event ? evt.which : evt.keyCode;    
     var chark = String.fromCharCode(key);
@@ -402,15 +474,15 @@ function filterCadena(evt,input){
     }	
 }
 
-function filterIntNroDocIdentidadEstudiante(evt,input){
+function filterIntNroDocIdentidadEstudianteEditar(evt,input){
 	
-	if($("#tipodocumentoestudiante").val()==1){
+	if($("#tipodocumentoestudianteeditar").val()==1){
 	    var key = window.Event ? evt.which : evt.keyCode;    
 	    var chark = String.fromCharCode(key);
 	    var tempValue = input.value+chark;
 	    if(key >= 48 && key <= 57){
-	    	if($("#tipodocumentoestudiante").val() == 1){
-				if($("#nrodocumentoestudiante").val().trim().length<8)
+	    	if($("#tipodocumentoestudianteeditar").val() == 1){
+				if($("#nrodocumentoestudianteeditar").val().trim().length<8)
 					return true;
 				return false;
 			}
@@ -422,22 +494,22 @@ function filterIntNroDocIdentidadEstudiante(evt,input){
 	        return false;
 	    }
 	}
-	else if($("#tipodocumentoestudiante").val()==2){
-		if($("#nrodocumentoestudiante").val().trim().length<12)
+	else if($("#tipodocumentoestudianteeditar").val()==2){
+		if($("#nrodocumentoestudianteeditar").val().trim().length<12)
 			return true;
 		return false;
 	}
 }
 
-function filterIntNroDocIdentidadPmt(evt,input){
+function filterIntNroDocIdentidadPmtEditar(evt,input){
 	
-	if($("#tipodocumentopmt").val()==1){
+	if($("#tipodocumentopmteditar").val()==1){
 	    var key = window.Event ? evt.which : evt.keyCode;    
 	    var chark = String.fromCharCode(key);
 	    var tempValue = input.value+chark;
 	    if(key >= 48 && key <= 57){
-	    	if($("#tipodocumentopmt").val() == 1){
-				if($("#nrodocumentopmt").val().trim().length<8)
+	    	if($("#tipodocumentopmteditar").val() == 1){
+				if($("#nrodocumentopmteditar").val().trim().length<8)
 					return true;
 				return false;
 			}
@@ -449,42 +521,42 @@ function filterIntNroDocIdentidadPmt(evt,input){
 	        return false;
 	    }
 	}
-	else if($("#tipodocumentopmt").val()==2){
-		if($("#nrodocumentopmt").val().trim().length<12)
+	else if($("#tipodocumentopmteditar").val()==2){
+		if($("#nrodocumentopmteditar").val().trim().length<12)
 			return true;
 		return false;
 	}
 }
 
 
-function limpiarControles(){
+function limpiarControlesEditar(){
 	
-	$("#appaternoestudiante").val("");
-	$("#apmaternoestudiante").val("");
-	$("#nombreestudiante").val("");
-	$("#tipodocumentoestudiante").val("0");
-	$("#nrodocumentoestudiante").val("");
-	$("#fechanacimientoestudiante").val("");
-	$("#generoestudiante").val("0");
-	$("#nivelestudiante").val("0");
-	$("#gradoestudiante").val("0");
-	$("#seccionestudiante").val("");
-	$("#categoriacuento").prop("checked", false);
-	$("#categoriapoesia").prop("checked", false);
-	$("#categoriadibujopintura").prop("checked", false);
-	$("#categoriacomposicionmusical").prop("checked", false);
-	$("#categoriaahorroagua").prop("checked", false);
-	$("#modalidadpostulacionindividual").prop("checked", false);
-	$("#modalidadpostulaciongrupal").prop("checked", false);
-	$("#appaternopmt").val("");
-	$("#apmaternopmt").val("");
-	$("#nombrepmt").val("");
-	$("#parentesco").val("");
-	$("#tipodocumentopmt").val("");
-	$("#nrodocumentopmt").val("");
-	$("#nrotelefonopmt").val("");
-	$("#correoelectronicopmt").val("");
-	$("#fichaparticipante").val("");
+	$("#appaternoestudianteeditar").val("");
+	$("#apmaternoestudianteeditar").val("");
+	$("#nombreestudianteeditar").val("");
+	$("#tipodocumentoestudianteeditar").val("0");
+	$("#nrodocumentoestudianteeditar").val("");
+	$("#fechanacimientoestudianteeditar").val("");
+	$("#generoestudianteeditar").val("0");
+	$("#nivelestudianteeditar").val("0");
+	$("#gradoestudianteeditar").val("0");
+	$("#seccionestudianteeditar").val("");
+	$("#categoriacuentoeditar").prop("checked", false);
+	$("#categoriapoesiaeditar").prop("checked", false);
+	$("#categoriadibujopinturaeditar").prop("checked", false);
+	$("#categoriacomposicionmusicaleditar").prop("checked", false);
+	$("#categoriaahorroaguaeditar").prop("checked", false);
+	$("#modalidadpostulacionindividualeditar").prop("checked", false);
+	$("#modalidadpostulaciongrupaleditar").prop("checked", false);
+	$("#appaternopmteditar").val("");
+	$("#apmaternopmteditar").val("");
+	$("#nombrepmteditar").val("");
+	$("#parentescoeditar").val("");
+	$("#tipodocumentopmteditar").val("");
+	$("#nrodocumentopmteditar").val("");
+	$("#nrotelefonopmteditar").val("");
+	$("#correoelectronicopmteditar").val("");
+	$("#fichaparticipanteeditareditar").val("");
 
 }
 

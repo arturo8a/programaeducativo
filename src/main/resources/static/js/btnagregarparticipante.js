@@ -31,6 +31,8 @@ $(document).ready(function(){
 	
 	$("#btncerrarmensajeexito").click(function(){			
 		$("#modalexito").modal('hide');
+		limpiarControles();	
+		$("#modalagregarParticipante").modal('hide');
 	});
 		
 	$("#btncerrarmensajeinformacion").click(function(){
@@ -43,17 +45,11 @@ $(document).ready(function(){
 	
 	$("#btncerrarmensajeconfirmacion").click(function(){
 		$("#modalconfirmacion").modal('hide');
-	});		
+	});	
 	
-	$("#btncancelarparticipante").click(function(){
-		$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
-		$.ajax({
-			type : "GET",
-		    url : url_base + "pedesa/listarparticipante",
-			success: function(respuesta) {
-				$("#container_participante").html(respuesta);
-			}
-		});
+	$("#btncancelarparticipanteagregar").click(function(){
+		limpiarControles();	
+		$("#modalagregarParticipante").modal('hide');
 	});	
 	
 	$("#tipodocumentoestudiante").on("change",function(){
@@ -106,6 +102,9 @@ $(document).ready(function(){
 		
 		if(validarCampos()){
 		
+			var contenido_categoria = "";
+			var contenido_modalidad = "";
+		
 			$("#modalimagencargando").modal({
 				show : true,
 				backdrop : 'static',
@@ -115,6 +114,7 @@ $(document).ready(function(){
 			fechanacimientoestudiante = fechanacimientoestudiante.split("/");
 			fechanacimientoestudiante = fechanacimientoestudiante[2] + "-" + fechanacimientoestudiante[1] + "-" + fechanacimientoestudiante[0];
 			
+			
 			categoriacuento = 0;
 			categoriapoesia = 0;
 			categoriadibujopintura = 0;
@@ -123,20 +123,37 @@ $(document).ready(function(){
 			modalidadpostulacionindividual = 0;
 			modalidadpostulaciongrupal = 0;
 			
-			if($("#categoriacuento").is(':checked'))
+			if($("#categoriacuento").is(':checked')){
 				categoriacuento = 1;
-			if($("#categoriapoesia").is(':checked'))
+				contenido_categoria = "Cuento /";
+			}					
+			if($("#categoriapoesia").is(':checked')){
 				categoriapoesia = 1;
-			if($("#categoriadibujopintura").is(':checked'))
+				contenido_categoria += "Poesía /";
+			}					
+			if($("#categoriadibujopintura").is(':checked')){
 				categoriadibujopintura = 1;
-			if($("#categoriacomposicionmusical").is(':checked'))
+				contenido_categoria += "Díbujo o Pintura /";
+			}					
+			if($("#categoriacomposicionmusical").is(':checked')){
 				categoriacomposicionmusical = 1;
-			if($("#categoriaahorroagua").is(':checked'))
+				contenido_categoria += "Composición musical /";
+			}				
+			if($("#categoriaahorroagua").is(':checked')){
 				categoriaahorroagua = 1;
-			if($("#modalidadpostulacionindividual").is(':checked'))
+				contenido_categoria += "Ahorro agua/";
+			}					
+			if($("#modalidadpostulacionindividual").is(':checked')){
 				modalidadpostulacionindividual = 1;
-			if($("#modalidadpostulaciongrupal").is(':checked'))
+				contenido_modalidad += "Individual /";
+			}					
+			if($("#modalidadpostulaciongrupal").is(':checked')){
 				modalidadpostulaciongrupal = 1;
+				contenido_modalidad += "Grupal/";
+			}
+			
+			contenido_categoria = contenido_categoria.slice(0, -1);
+			contenido_modalidad = contenido_modalidad.slice(0, -1);
 			
 			data = {
 				appaternoestudiante : appaternoestudiante,
@@ -200,12 +217,27 @@ $(document).ready(function(){
 					        timeout: 600000,
 					        success: function (data) {					 
 					            $("#modalimagencargando").modal('hide');
+					            table_lista_participantes.row.add({
+								        "id": respuesta,
+								        "appaterno": appaternoestudiante,
+								        "apmaterno": apmaternoestudiante,
+								        "nombre": nombreestudiante,
+								        "tipodocumento": $("#tipodocumentoestudiante option:selected").html(),
+								        "nrodocumento": nrodocumentoestudiante,
+								        "categoria" : contenido_categoria,
+								        "modalidad" : contenido_modalidad,
+								        "defaultContent" : '<img src="./images/svg/file-pdf-regular.svg" class="archivo" style="width:20px; cursor:pointer"/>',
+								        "defaultContent" : '<img src="./images/svg/file-pdf-regular.svg" class="ver" style="width:20px; cursor:pointer"/>',
+								        "defaultContent" : '<img src="./images/svg/edit-regular.svg" class="editar" style="width:20px; cursor:pointer" />',
+								        "defaultContent" : '<img src="./images/svg/eliminar-alt-regular.svg" class="eliminar" style="width:20px; cursor:pointer" />'
+								    }).draw();	
 								$("#textoexito").html("Usted agregó exitosamente a un nuevo participante");
 								$('#modalexito').modal({
 									show : true,
 									backdrop : 'static',
 									keyboard:false
 								});
+								
 								limpiarControles();
 					 
 					        },
@@ -214,10 +246,23 @@ $(document).ready(function(){
 					        }
 					    });						
 					}
-					else{
+					else if(respuesta==0){
 						$("#modalimagencargando").modal('hide');
-						$("#textoexito").html("Error al registrar participante");
-						//limpiarControles();
+						$("#textoerror").html("Error al registrar participante");
+						$('#modalerror').modal({
+							show : true,
+							backdrop : 'static',
+							keyboard:false
+						});
+					}
+					else if(respuesta==-1){
+						$("#modalimagencargando").modal('hide');
+						$("#textoerror").html("IE no se ha registrado actualmente en el Programa Educativo");
+						$('#modalerror').modal({
+							show : true,
+							backdrop : 'static',
+							keyboard:false
+						});
 					}
 				},
 				error: function() {
@@ -368,6 +413,17 @@ function filterInt(evt,input){
     }
 }
 
+function filterIntTelf(evt,input){
+	var key = window.Event ? evt.which : evt.keyCode;    
+    var chark = String.fromCharCode(key);
+    var tempValue = input.value+chark;
+    if((key >= 48 && key <= 57) || key==45){    
+        return true;
+    }
+    else{
+        return false;
+    }
+}
 
 function filterIntNroDocIdentidadEstudiante(evt,input){
 	

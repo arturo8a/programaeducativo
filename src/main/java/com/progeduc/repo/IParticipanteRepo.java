@@ -20,7 +20,7 @@ public interface IParticipanteRepo extends CrudRepository<Participante,Integer>{
 	@Query("update Participante p set p.estado = ?2 WHERE p.id = ?1")
 	int updateestado(@Param("id") Integer id, @Param("estado") Integer estado);	
 	
-	@Query(value="SELECT TB1.* FROM Participante TB1 where tb1.estado=1",nativeQuery = true)
-	List<Participante> listarhabilitados();
+	@Query(value="SELECT TB1.* FROM Participante TB1 where TB1.programaeducativoid=?1 and tb1.estado=1",nativeQuery = true)
+	List<Participante> listarhabilitados(Integer programaeducativoid);
 	
 }

@@ -1,5 +1,6 @@
 package com.progeduc.model;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
@@ -11,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="PARTICIPANTE")
@@ -88,7 +91,7 @@ public class Participante {
 	@JoinColumn(name="TIPODOCUMENTOPMT",nullable=true,foreignKey=@ForeignKey(name="FK_participante_tipodocpmt"))
 	private Tipodocumento tipodocumentopmt;
 	
-	@Column(name="NRODOCUMENTOPMT",nullable=true,length=10)
+	@Column(name="NRODOCUMENTOPMT",nullable=true,length=15)
 	private String nrodocumentopmt;
 	
 	@Column(name="NROTELEFONOPMT",nullable=true,length=10)
@@ -102,6 +105,19 @@ public class Participante {
 	
 	@Column(name="ESTADO")
 	private Integer estado;
+	
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name="PROGRAMAEDUCATIVOID",nullable=true,foreignKey=@ForeignKey(name="FK_participante_pe"))
+	private Programaeducativo programaeducativo;
+	
+	@JsonIgnore
+	@Column(name="ANHIO",nullable=true)
+	private Integer anhio;
+	
+	@JsonIgnore
+	@Column(name="FECHA_REGISTRO",nullable=true)
+	private Timestamp fecha_registro;
 	
 	public Integer getEstado() {
 		return estado;
@@ -317,6 +333,30 @@ public class Participante {
 
 	public void setArchivo(String archivo) {
 		this.archivo = archivo;
+	}
+
+	public Programaeducativo getProgramaeducativo() {
+		return programaeducativo;
+	}
+
+	public void setProgramaeducativo(Programaeducativo programaeducativo) {
+		this.programaeducativo = programaeducativo;
+	}
+
+	public Integer getAnhio() {
+		return anhio;
+	}
+
+	public void setAnhio(Integer anhio) {
+		this.anhio = anhio;
+	}
+
+	public Timestamp getFecha_registro() {
+		return fecha_registro;
+	}
+
+	public void setFecha_registro(Timestamp fecha_registro) {
+		this.fecha_registro = fecha_registro;
 	}
 	
 }

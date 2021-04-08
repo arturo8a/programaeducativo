@@ -44,6 +44,7 @@ import com.progeduc.service.LenguaService;
 import com.progeduc.service.ProveedorService;
 import com.progeduc.service.TipodocService;
 import com.progeduc.service.TipoieService;
+import com.progeduc.service.impl.NivelServiceImpl;
 import com.progeduc.service.impl.UploadFileService;
 
 @Controller
@@ -318,6 +319,7 @@ public class IndexController {
 				model.addAttribute("tipousuarioid", ses.getAttribute("tipousuarioid"));
 				Calendar fecha = Calendar.getInstance();
 				model.addAttribute("nombre_concurso",aperturaranioService.buscar(fecha.get(Calendar.YEAR)).getNombreconcurso());
+				model.addAttribute("cargainicialtabla", 1);
 				return "menu_concurso";
 			}
 			else { /*El admin u ODS*/
@@ -337,6 +339,7 @@ public class IndexController {
 		model.addAttribute("tipousuarioid", ses.getAttribute("tipousuarioid"));
 		Calendar fecha = Calendar.getInstance();
 		model.addAttribute("nombre_concurso",aperturaranioService.buscar(fecha.get(Calendar.YEAR)).getNombreconcurso());
+		model.addAttribute("cargainicialtabla", 1);
 		return "opciones_concurso";
     }	
 	
@@ -349,6 +352,8 @@ public class IndexController {
 		Docentetutor docentetutor = docentetutorService.ListarporId(id);
 		model.addAttribute("tipodoc",tipodocserv.findAll());
 		model.addAttribute("genero",generoprofserv.listar());
+		model.addAttribute("nivel",nivelparticipanteService.listar());
+		model.addAttribute("parentesco",parentescoService.listar());	
 		if(docentetutor!=null) {
 			model.addAttribute("docentetutor", docentetutor);
 			return "fichainscripcion_update";
@@ -367,6 +372,8 @@ public class IndexController {
 			model.addAttribute("responsableregistro", responsableregistroserv.listar());
 			model.addAttribute("tipodoc",tipodocserv.findAll());
 			model.addAttribute("genero",generoprofserv.listar());
+			model.addAttribute("nivel",nivelparticipanteService.listar());
+			model.addAttribute("parentesco",parentescoService.listar());			
 			if(docentetutor!=null) {
 				model.addAttribute("docentetutor", docentetutor);
 				return "fichainscripcion_update";
@@ -387,6 +394,10 @@ public class IndexController {
 	
 	@GetMapping("/listarparticipante")
 	public String listarparticipante( Model model) {
+		model.addAttribute("tipodoc",tipodocserv.findAll());
+		model.addAttribute("genero",generoprofserv.listar());
+		model.addAttribute("nivel",nivelparticipanteService.listar());
+		model.addAttribute("parentesco",parentescoService.listar());
 		return "listarparticipante";
 	}
 	

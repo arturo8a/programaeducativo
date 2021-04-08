@@ -8,6 +8,6 @@ public interface IParticipanteService extends ICRUD<Participante,Integer>{
 	
 	int updateestado(Integer id, Integer estado);
 	
-	List<Participante> listarhabilitados();
+	List<Participante> listarhabilitados(Integer programaeducativoid);
 		
 }

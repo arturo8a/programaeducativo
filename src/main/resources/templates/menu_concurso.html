@@ -18,6 +18,7 @@
           <nav class="navbar navbar-expand-lg navbar-light bg-primary" style="height:69px">
               <div class="container-fluid">
                   <div>
+                  	  <input type="hidden" id="cargainicialtabla"  th:value="*{cargainicialtabla}" >
 					  <h5 class="text-white">&nbsp;Sistema del Concurso Escolar</h5>
 				  </div>
                   <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -63,6 +64,7 @@
 <script type="text/javascript">    	
 	    
     	var url_base = location.origin + "/";
+    	var cargainicial= $("#cargainicialtabla").val();
 	    
 	    $(document).ready(function(){		
 			
