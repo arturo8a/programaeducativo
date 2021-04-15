@@ -36,13 +36,15 @@
 					<div class="col-4">
 						<img th:src="@{/images/imagen1.PNG}" style="padding:10px; border:1px solid #C9C9C9" width="400px"/>
 						<h4 class="pt-2">
-							<a id="participarce" style="cursor:pointer; color:#2E2D2D">Participar del C.E</a>
+							<a id="item_participar" style="cursor:pointer; color:#2E2D2D">Participar del C.E</a>
 						</h4>
 						<label style="color:#2E2D2D"><i>Aqu&iacute; podr&aacute;s participar el '</i></label><i><label style="color:#2E2D2D" th:text="${nombre_concurso}"></label></i>'
 					</div>
 					<div class="col-4">
 						<img th:src="@{/images/imagen2.PNG}" style="padding:10px; border:1px solid #C9C9C9" width="430px"/>
-						<h4 class="pt-2"><a id="" style="cursor:pointer; color:#2E2D2D">Consulta</a></h4>
+						<h4 class="pt-2">
+							<a id="item_consulta" style="cursor:pointer; color:#2E2D2D">Consulta</a>
+						</h4>
 						<label style="color:#2E2D2D"><i>Aqu&iacute; podras visualizar tus trabajos ingresados en a&ntilde;os anteriores</i></label>
 					</div>
 					<div class="col-4">
@@ -77,7 +79,7 @@
 	    		});		
 	    	}); 
 	    	
-	    	$("#participarce").click(function(){
+	    	$("#item_participar").click(function(){
 	    		
 	    		$("#modalimagencargando").modal({
 	    			show : true,
@@ -106,5 +108,24 @@
 	    			}
 	    		});	
 	    	});
+	    	
+	    	
+			$("#item_consulta").click(function(){
+	    		
+	    		$("#modalimagencargando").modal({
+	    			show : true,
+	    			backdrop : 'static',
+	    			keyboard:false
+	    		});
+	    		$.ajax({
+	    			url: url_base + "pedesa/consulta_concurso",
+	    			success: function(respuesta) {	    				
+	    				$("#modalimagencargando").modal('hide');
+	    				$("#container").html(respuesta);
+	    			}
+	    		});	
+	    	});
+	    	
+	    	
 		});		
     </script>	

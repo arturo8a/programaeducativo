@@ -27,13 +27,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.progeduc.dto.ClaveValor;
+import com.progeduc.dto.ListaDocente;
 import com.progeduc.dto.ListaparticipanteDto;
 import com.progeduc.model.Aperturaranio;
+import com.progeduc.model.Docente;
 import com.progeduc.model.Gradoparticipante;
 import com.progeduc.model.Participante;
 import com.progeduc.model.Postulacionconcurso;
 import com.progeduc.model.Programaeducativo;
 import com.progeduc.service.IAperturaranioService;
+import com.progeduc.service.IDocenteService;
 import com.progeduc.service.IGradoparticipanteService;
 import com.progeduc.service.IParticipanteService;
 import com.progeduc.service.IPostulacionconcursoService;
@@ -52,6 +56,9 @@ public class ConcursoeducativoController {
 	
 	@Autowired
 	IParticipanteService participanteService;
+	
+	@Autowired
+	IDocenteService docenteService;
 	
 	@Autowired
 	private IPostulacionconcursoService postulacionconcursoServ;
@@ -84,6 +91,11 @@ public class ConcursoeducativoController {
 		return participanteService.updateestado(id, 0);
 	}
 	
+	@GetMapping(value="/eliminardocenteid/{id}")
+	public Integer eliminardocenteid(@PathVariable("id") Integer id) {
+		return docenteService.updateestado(id, 0);
+	}
+	
 	@PostMapping(value="/registrarparticipante")
 	public Integer registrarparticipante(@Valid @RequestBody Participante participante,HttpSession ses) {
 		
@@ -104,6 +116,60 @@ public class ConcursoeducativoController {
 		}
 		return -1;
 		
+	}
+	
+	
+	@PostMapping(value="/registrardocente")
+	public ClaveValor registrardocente(@Valid @RequestBody Docente docente,HttpSession ses) {
+		
+		String codmod = ses.getAttribute("usuario").toString();
+		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
+		ClaveValor cl = new ClaveValor();
+		if(pe!=null) {
+			docente.setProgramaeducativo(pe);
+			Date date= new Date();
+			long time = date.getTime();
+			Timestamp ts = new Timestamp(time);
+			docente.setFecha_registro(ts);
+			docente.setAnhio(ts.toLocalDateTime().getYear());
+			
+			Docente d =  docenteService.registrar(docente);
+			if(d!=null) {
+				cl.setId(d.getProgramaeducativo().getId());
+				cl.setValor(d.getProgramaeducativo().getNomie());
+				return cl;
+			}
+			cl.setId(0);
+			cl.setValor("");
+			return cl;
+		}
+		cl.setId(-1);
+		cl.setValor("");
+		return cl;		
+	}
+	
+	@PostMapping(value="/actualizardocente")
+	public Docente actualizardocente(@Valid @RequestBody Docente docente,HttpSession ses) {
+		
+		String codmod = ses.getAttribute("usuario").toString();
+		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
+		
+		Docente midocente = new Docente();
+		midocente.setId(docente.getId());
+		midocente.setAnhio(docenteService.getByProgeduc(pe.getId()).getAnhio());
+		midocente.setAppaterno(docente.getAppaterno());
+		midocente.setApmaterno(docente.getApmaterno());
+		midocente.setCorreoelectronico(docente.getCorreoelectronico());
+		midocente.setEstado(1);
+		midocente.setFecha_registro(docenteService.getByProgeduc(pe.getId()).getFecha_registro());
+		midocente.setNombre(docente.getNombre());
+		midocente.setNrodocumento(docente.getNrodocumento());
+		midocente.setNrotelefono(docente.getNrotelefono());
+		midocente.setGenero(docente.getGenero());
+		midocente.setProgramaeducativo(pe);
+		midocente.setTipodocumento(docente.getTipodocumento());
+		docenteService.registrar(midocente);
+		return midocente;
 	}
 	
 	@PostMapping(value="/subirarchivoparticipante")
@@ -198,6 +264,30 @@ public class ConcursoeducativoController {
 			});
 		}		
 		return new ResponseEntity<List<ListaparticipanteDto>>(lista, HttpStatus.OK) ;
+	}
+	
+	@GetMapping("/listadocentes")
+	public ResponseEntity<List<ListaDocente>> listadocentes(HttpSession ses) {		
+		
+		List<ListaDocente> docente = new ArrayList<ListaDocente>();
+		String codmod = ses.getAttribute("usuario").toString();
+		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
+		docenteService.listarhabilitados(pe.getId()).forEach(obj->{
+			ListaDocente ld = new ListaDocente();
+			ld.setId(obj.getId());
+			ld.setAppaterno(obj.getAppaterno());
+			ld.setApmaterno(obj.getApmaterno());
+			ld.setNombre(obj.getNombre());
+			ld.setTipodocumento(obj.getTipodocumento().getDescripcion());
+			ld.setNrodocumento(obj.getNrodocumento());
+			ld.setNrotelefono(obj.getNrotelefono());
+			ld.setCorreoelectronico(obj.getCorreoelectronico());
+			ld.setFecha_registro(obj.getFecha_registro());
+			Postulacionconcurso pc = postulacionconcursoServ.getByIdAnio(pe.getId(), obj.getAnhio());
+			ld.setNomie(pc!=null?"Si":"No");
+			docente.add(ld);
+		});			
+		return new ResponseEntity<List<ListaDocente>>(docente, HttpStatus.OK) ;
 	}
 
 }

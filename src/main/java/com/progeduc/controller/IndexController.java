@@ -1,6 +1,5 @@
 package com.progeduc.controller;
 
-import java.io.File;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.List;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.progeduc.model.Aperturaranio;
+import com.progeduc.model.Docente;
 import com.progeduc.model.Docentetutor;
 import com.progeduc.model.Participante;
 import com.progeduc.model.Postulacionconcurso;
@@ -26,6 +26,7 @@ import com.progeduc.model.Suministro;
 import com.progeduc.service.IAperturaranioService;
 import com.progeduc.service.IDepartamentoService;
 import com.progeduc.service.IDistritoService;
+import com.progeduc.service.IDocenteService;
 import com.progeduc.service.IDocentetutorService;
 import com.progeduc.service.IGeneroService;
 import com.progeduc.service.IGenerodirService;
@@ -40,11 +41,11 @@ import com.progeduc.service.IProgeducTurnoService;
 import com.progeduc.service.IProgramaeducativoService;
 import com.progeduc.service.IProvinciaService;
 import com.progeduc.service.IResponsableregistroService;
+import com.progeduc.service.ITipodocumentoService;
 import com.progeduc.service.LenguaService;
 import com.progeduc.service.ProveedorService;
 import com.progeduc.service.TipodocService;
 import com.progeduc.service.TipoieService;
-import com.progeduc.service.impl.NivelServiceImpl;
 import com.progeduc.service.impl.UploadFileService;
 
 @Controller
@@ -100,6 +101,9 @@ public class IndexController {
 	private TipodocService tipodocserv;
 	
 	@Autowired
+	private ITipodocumentoService tipodocumentoserv;
+	
+	@Autowired
 	IAperturaranioService aperturaranioService;
 	
 	@Autowired
@@ -113,6 +117,9 @@ public class IndexController {
 	
 	@Autowired
 	IParticipanteService participanteService;
+	
+	@Autowired
+	IDocenteService docenteService;
 	
 	@Autowired
 	private UploadFileService uploadfile;
@@ -416,6 +423,29 @@ public class IndexController {
 		model.addAttribute("nombrearchivo",uploadfile.buscarArchivo(pa.getId()));
 		return "formeditarparticipante";
 	}
+	
+	@GetMapping("/editarviewdocenteid/{id}")
+	public String editarviewdocenteid(@PathVariable("id") Integer id,  Model model,HttpSession ses) {
+		
+		Docente docente = docenteService.ListarporId(id);
+		model.addAttribute("docente", docente);
+		model.addAttribute("tipodoc",tipodocumentoserv.listar());
+		model.addAttribute("genero",generoprofserv.listar());
+		return "formeditardocente";
+	}
+	
+	@GetMapping("/consulta_concurso")
+	public String consulta_concurso() {		
+		return "consulta_concurso";
+	}
+	
+	@GetMapping("/formragregardocente")
+	public String formragregarparticipante(Model model) {
+		model.addAttribute("tipodoc",tipodocumentoserv.listar());
+		model.addAttribute("genero",generoprofserv.listar());
+		return "formregistrardocente";
+	}
+	
+	
 }
-
 

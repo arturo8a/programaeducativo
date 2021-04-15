@@ -14,7 +14,6 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.bouncycastle.util.io.pem.PemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.progeduc.dto.ActualizarContraseniaDto;
 import com.progeduc.dto.DatocorreoDto;
 import com.progeduc.dto.ListaCategoriaDto;
+import com.progeduc.dto.ListaDocente;
 import com.progeduc.dto.ListaInstitucionEducativa;
 import com.progeduc.dto.ProgeducDto;
 import com.progeduc.dto.ProgeducTurnoNivelDto;
@@ -39,6 +39,7 @@ import com.progeduc.dto.UpdateObservarProgramaDto;
 import com.progeduc.dto.Usuarioemail;
 import com.progeduc.model.Aperturaranio;
 import com.progeduc.model.Distrito;
+import com.progeduc.model.Docente;
 import com.progeduc.model.Docentetutor;
 import com.progeduc.model.Nivel;
 import com.progeduc.model.Participante;
@@ -52,6 +53,7 @@ import com.progeduc.service.IAperturaranioService;
 import com.progeduc.service.ICategoriaService;
 import com.progeduc.service.IDepartamentoService;
 import com.progeduc.service.IDistritoService;
+import com.progeduc.service.IDocenteService;
 import com.progeduc.service.IDocentetutorService;
 import com.progeduc.service.IOdsService;
 import com.progeduc.service.IParticipanteService;
@@ -101,6 +103,9 @@ public class ProgramaeducativoController {
 	
 	@Autowired
 	private IDocentetutorService docentetutorserv;
+	
+	@Autowired
+	private IDocenteService docenteserv;
 	
 	@Autowired
 	private IOdsService odsserv;
@@ -334,7 +339,7 @@ public class ProgramaeducativoController {
 					listaie.setNomie(obj1.getNomie());
 					listaie.setCodmod(obj1.getCodmod());
 					listaie.setEstado(obj1.getEstado());
-					listaie.setId(obj.getId());
+					listaie.setId(obj1.getId());
 					listaie.setMotivoobservacion(obj1.getMotivoobservacion());
 					arrayie.add(listaie);
 				});	
@@ -820,5 +825,9 @@ public class ProgramaeducativoController {
 			JasperExportManager.exportReportToPdfFile(jp,path + archivo + ".pdf");			
 			return "/pedesa/reportes/"+archivo+".pdf";			
 	}
+	
+	
+	
+	
 	
 }

@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.progeduc.model.Programaeducativo;
 import com.progeduc.model.Usuario;
 import com.progeduc.model.UsuarioOds;
+import com.progeduc.service.IProgramaeducativoService;
 import com.progeduc.service.IUsuarioService;
 import com.progeduc.service.IUsuarioodsService;
 
@@ -26,12 +28,15 @@ public class LoginController {
 	
 	@Autowired
 	IUsuarioodsService usuarioodsServ;
+	
+	@Autowired
+	IProgramaeducativoService progeducService;
 
 	@RequestMapping(value="/login", method = RequestMethod.POST, produces="text/plain")	
     public @ResponseBody String loginUsuario(@RequestParam("usuario") String usuario, @RequestParam("password") String password,HttpSession ses){
     	
 		try {
-    		Usuario obj = usuarioServ.login(usuario, password);
+    		Usuario obj = usuarioServ.login(usuario, password);    		
         	if(obj==null) {
         		UsuarioOds uo = usuarioodsServ.login(usuario, password);
         		if(uo == null) {
@@ -44,11 +49,18 @@ public class LoginController {
         		return uo.getNombres();
         	}
         	else {
-        		ses.setAttribute("usuario", obj.getUsuario());
-        		ses.setAttribute("perfil", obj.getTipousuario().getDescripcion());
-        		ses.setAttribute("odsid", 0);
-        		ses.setAttribute("tipousuarioid", obj.getTipousuario().getId());
-        		return obj.getNombre();
+        		
+        		Programaeducativo pe = progeducService.getCodmodByAnioActual(obj.getUsuario());
+        		if(pe!=null) {
+        			ses.setAttribute("usuario", obj.getUsuario());
+            		ses.setAttribute("perfil", obj.getTipousuario().getDescripcion());
+            		ses.setAttribute("odsid", 0);
+            		ses.setAttribute("tipousuarioid", obj.getTipousuario().getId());
+            		return obj.getNombre();
+        		}
+        		else {
+        			return "-2";
+        		}        		
         	} 		
     	} catch (Exception ex) {
     		System.out.println("login: " + ex);

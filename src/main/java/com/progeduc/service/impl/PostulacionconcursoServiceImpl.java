@@ -49,5 +49,10 @@ public class PostulacionconcursoServiceImpl implements IPostulacionconcursoServi
 	public Postulacionconcurso getById(Integer programaeducativoid) {
 		return postulacionconcursoRepo.getById(programaeducativoid);
 	}
+	
+	@Override
+	public Postulacionconcurso getByIdAnio(Integer programaeducativoid, Integer anio) {
+		return postulacionconcursoRepo.getByIdAnio(programaeducativoid, anio);
+	}
 
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.progeduc.model.Tipodocidentprof;
+import com.progeduc.model.Tipodocumento;
 import com.progeduc.repo.ITipodocRepo;
 
 @Service
@@ -17,5 +18,4 @@ public class TipodocService {
 	public List<Tipodocidentprof> findAll(){
 		return (List<Tipodocidentprof>) tipodocRepo.findAll();
 	}
-
 }
