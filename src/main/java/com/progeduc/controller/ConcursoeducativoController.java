@@ -29,16 +29,22 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.progeduc.dto.ClaveValor;
 import com.progeduc.dto.ListaDocente;
+import com.progeduc.dto.ListaDocenteInscritos;
+import com.progeduc.dto.ListaInstitucionEducativa;
 import com.progeduc.dto.ListaparticipanteDto;
 import com.progeduc.model.Aperturaranio;
+import com.progeduc.model.Distrito;
 import com.progeduc.model.Docente;
 import com.progeduc.model.Gradoparticipante;
+import com.progeduc.model.Ods;
 import com.progeduc.model.Participante;
 import com.progeduc.model.Postulacionconcurso;
 import com.progeduc.model.Programaeducativo;
 import com.progeduc.service.IAperturaranioService;
+import com.progeduc.service.IDistritoService;
 import com.progeduc.service.IDocenteService;
 import com.progeduc.service.IGradoparticipanteService;
+import com.progeduc.service.IOdsService;
 import com.progeduc.service.IParticipanteService;
 import com.progeduc.service.IPostulacionconcursoService;
 import com.progeduc.service.IProgramaeducativoService;
@@ -69,7 +75,15 @@ public class ConcursoeducativoController {
 	@Autowired
 	private UploadFileService uploadfile;
 	
+	@Autowired
+	private IOdsService odsserv;
+	
+	@Autowired
+	private IDistritoService distServ;
+	
 	ListaparticipanteDto dto;
+	
+	ListaDocenteInscritos listadocentesinscritos;
 	
 	@PostMapping(value="/registrarconcurso")
 	public String registrarconcurso(@Valid @RequestBody Postulacionconcurso dto)  {
@@ -135,7 +149,7 @@ public class ConcursoeducativoController {
 			
 			Docente d =  docenteService.registrar(docente);
 			if(d!=null) {
-				cl.setId(d.getProgramaeducativo().getId());
+				cl.setId(d.getId());
 				cl.setValor(d.getProgramaeducativo().getNomie());
 				return cl;
 			}
@@ -288,6 +302,67 @@ public class ConcursoeducativoController {
 			docente.add(ld);
 		});			
 		return new ResponseEntity<List<ListaDocente>>(docente, HttpStatus.OK) ;
+	}
+	
+	@GetMapping("/listadocentesinscritos")
+	public ResponseEntity<List<ListaDocenteInscritos>> listadocentesinscritos(HttpSession ses) {
+		
+		List<ListaDocenteInscritos> arrayie = new ArrayList<ListaDocenteInscritos>();
+		Object ob = ses.getAttribute("odsid");
+		if(Integer.parseInt(ob.toString()) == 0) {
+			docenteService.listarTodoshabilitados().forEach(obj->{
+				listadocentesinscritos= new ListaDocenteInscritos();
+				
+				listadocentesinscritos.setAnio(obj.getAnhio());
+				
+				if(obj.getProgramaeducativo().getDistrito().getOdsid()!=null) {
+					Ods ods = odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid());
+					listadocentesinscritos.setOds(ods.getDescripcion());
+				}
+				else{
+					listadocentesinscritos.setOds("");
+				}
+				listadocentesinscritos.setAnio(obj.getAnhio());
+				listadocentesinscritos.setCodigo_ie(obj.getProgramaeducativo().getCodmod());
+				listadocentesinscritos.setNombre_ie(obj.getProgramaeducativo().getNomie());
+				Postulacionconcurso pc = postulacionconcursoServ.getByIdAnio(obj.getProgramaeducativo().getId(), obj.getAnhio());
+				listadocentesinscritos.setInscrito_ie(pc!=null?"Si":"No");
+				listadocentesinscritos.setDocente(obj.getNombre() + " " + obj.getAppaterno() + " " + obj.getApmaterno());
+				listadocentesinscritos.setTipodocumento(obj.getTipodocumento().getDescripcion());
+				listadocentesinscritos.setNrodocumento(obj.getNrodocumento());
+				listadocentesinscritos.setCorreoelectronico(obj.getCorreoelectronico());
+				listadocentesinscritos.setNrotelefono(obj.getNrotelefono());
+				listadocentesinscritos.setGenero(obj.getGenero().getDescripcion());
+				listadocentesinscritos.setFecha_registro(obj.getFecha_registro());
+				arrayie.add(listadocentesinscritos);
+			});				
+		}
+		else {	
+			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(distrito->{
+				progeducService.listar(distrito.getId()).forEach(pe->{					
+					docenteService.listarhabilitados(pe.getId()).forEach(docente->{
+						listadocentesinscritos= new ListaDocenteInscritos();
+						
+						listadocentesinscritos.setAnio(docente.getAnhio());
+						Ods ods = odsserv.byOds(distrito.getOdsid());
+						listadocentesinscritos.setOds(ods.getDes_ods());
+						listadocentesinscritos.setCodigo_ie(docente.getProgramaeducativo().getCodmod());
+						listadocentesinscritos.setNombre_ie(docente.getProgramaeducativo().getNomie());
+						Postulacionconcurso pc = postulacionconcursoServ.getByIdAnio(docente.getProgramaeducativo().getId(), docente.getAnhio());
+						listadocentesinscritos.setInscrito_ie(pc!=null?"Si":"No");
+						listadocentesinscritos.setDocente(docente.getNombre() + " " + docente.getAppaterno() + " " + docente.getApmaterno());
+						listadocentesinscritos.setTipodocumento(docente.getTipodocumento().getDescripcion());
+						listadocentesinscritos.setNrodocumento(docente.getNrodocumento());
+						listadocentesinscritos.setCorreoelectronico(docente.getCorreoelectronico());
+						listadocentesinscritos.setNrotelefono(docente.getNrotelefono());
+						listadocentesinscritos.setGenero(docente.getGenero().getDescripcion());
+						listadocentesinscritos.setFecha_registro(docente.getFecha_registro());
+						arrayie.add(listadocentesinscritos);
+					});
+				});
+			});		
+		}			
+		return new ResponseEntity<List<ListaDocenteInscritos>>(arrayie, HttpStatus.OK);
 	}
 
 }

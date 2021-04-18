@@ -97,7 +97,7 @@ $(document).ready(function(){
 						table_lista_docentes.cell(celdaseleccionada,6).data(respuesta.nrotelefono).draw();
 						table_lista_docentes.cell(celdaseleccionada,7).data(respuesta.correoelectronico).draw();
 						
-						$("#textoexitoeditar").html("Usted modificó exitosamente los datos del Docente");
+						$("#textoexitoeditar").html("Usted modificó exitosamente los datos del docente");
 						$('#modalexitoeditar').modal({
 							show : true,
 							backdrop : 'static',

@@ -23,8 +23,8 @@ $(document).ready(function(){
 		});
 		
 	$("#quitararchivoeditar").click(function(){
-	
-		$("#fichaparticipanteeditareditar").prop("disabled",false);	
+		console.log("quitar");
+		$("#fichaparticipanteeditar").prop("disabled",false);
 		bandera = true;
 	});
 	

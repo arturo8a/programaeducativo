@@ -111,6 +111,7 @@ $(document).ready(function(){
 					else {						
 						$("#modalimagencargando").modal('hide');
 						table_lista_docentes.row.add({
+							"id" : respuesta.id,
 					        "appaterno": appaternodocente,
 					        "apmaterno": apmaternodocente,
 					        "nombre": nombredocente,
@@ -123,7 +124,7 @@ $(document).ready(function(){
 					        "defaultContent" : '<img src="./images/svg/edit-regular.svg" class="editar" style="width:20px; cursor:pointer" />',
 					        "defaultContent" : '<img src="./images/svg/eliminar-alt-regular.svg" class="eliminar" style="width:20px; cursor:pointer" />'
 					    }).draw();
-					    $("#textoExitoDocente").html("Usted agregó exitosamente a un nuevo Docente");
+					    $("#textoExitoDocente").html("Usted agregó exitosamente a un nuevo docente");
 						$('#modalExitoDocente').modal({
 							show : true,
 							backdrop : 'static',
@@ -177,6 +178,18 @@ function validarCampos(){
 	if(nrodocumentodocente.trim()==""){
 		mensajeValidacion += "Debe ingresar Número de documento de Docente"+"<br>";
 	}
+	
+	if(tipodocumentodocente==1){
+		if(nrodocumentodocente.trim().length!=8){
+			mensajeValidacion += "El número de documento debe tener 8 digitos"+"<br>";
+		}
+	}
+	else if(tipodocumentodocente==2){
+		if(nrodocumentodocente.trim().length!=12){
+			mensajeValidacion += "El número de documento debe tener 12 digitos"+"<br>";
+		}
+	}
+	
 	if(generodocente==0){
 		mensajeValidacion += "Debe seleccionar Género de Docente"+"<br>";
 	}
@@ -187,7 +200,7 @@ function validarCampos(){
 		mensajeValidacion += "Debe ingresar Correo Electrónico de Docente"+"<br>";
 	}
 	if(!(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(correoelectronicodocente))){		
-		mensajeValidacion += "Debe ingresar Correctamente el Correo Electrónico del Padre , Madre o Tutor"+"<br>";
+		mensajeValidacion += "Debe ingresar Correctamente el Correo Electrónico de Docente"+"<br>";
 	}
 	
 	if(mensajeValidacion!=""){

@@ -75,14 +75,16 @@
 </head>
 <body>
 	<div class="container-fluid">
+		<div style="width:100%" class="text-right"><input type="button" value="Ir a inicio" id="inicio" class="btn btn-primary"  style="margin-top:-60px" /></div>
+		<br>
 		<div class="row">
-			<div class="col text-center" style="background-color:#007bff; color:white;margin-top:8px">
+			<div class="col text-center" style="background-color:#007bff; color:white;margin-top:-40px">
 				<h3>Registro Docentes</h3>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col text-right">
-				<input type="button" value="Agregar" id="btnFormAgregarDocente" name="btnFormAgregarDocente" class="btn btn-primary" style="margin-top:10px"/>
+				<input type="button" value="Agregar docente" id="btnFormAgregarDocente" name="btnFormAgregarDocente" class="btn btn-success" style="margin-top:10px"/>
 			</div>
 		</div>
 		<div class="row pt-2 pb-4 m-0">
@@ -97,7 +99,7 @@
 				            <th>Tipo de documento</th>			            
 				            <th>N&deg; de documento</th>
 				            <th>Teléfono</th>
-				            <th>Correo Electrónico</th>
+				            <th>Correo electrónico</th>
 				            <th>Fecha de registro</th>
 				            <th>I.E inscrita al C.E</th>
 				            <th>Editar</th>
@@ -105,6 +107,11 @@
 				        </tr>   
 				    </thead>
 				</table>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col text-right">
+				<input type="button" value="Ir al aula virtual" id="btnIrAulaVirtual" name="btnIrAulaVirtual" class="btn btn-success" style="margin-top:10px"/>
 			</div>
 		</div>
 	</div>
@@ -117,7 +124,7 @@
 	
 	<div class="modal fade" tabindex="-1" role="dialog" id="modalAgregarDocente" aria-labelledby="myLargeModalLabel" >
 	  <div class="modal-dialog modal-lg" role="document">
-	    <div class="modal-content" style="overflow-y: scroll; height:550px">
+	    <div class="modal-content" style="overflow-y: scroll; height:550px;width:1000px">
 	      <div class="modal-header">
 	        <strong class="pt-1">AGREGAR DOCENTE</strong>
 	      </div>
@@ -130,7 +137,7 @@
 	
 	<div class="modal fade" tabindex="-1" role="dialog" id="modalEditarDocente" aria-labelledby="myLargeModalLabel" >
 	  <div class="modal-dialog modal-lg" role="document">
-	    <div class="modal-content" style="overflow-y: scroll; height:550px">
+	    <div class="modal-content" style="overflow-y: scroll; height:550px;width:1000px">
 	      <div class="modal-header">
 	        <strong class="pt-1">EDITAR DOCENTE</strong>
 	      </div>
@@ -157,6 +164,24 @@
 		
 		listar();
 		
+		$("#inicio").click(function(){
+			$("#modalimagencargando").modal({
+				show : true,
+				backdrop : 'static',
+				keyboard:false
+			});
+			$.ajax({
+				url: url_base + "pedesa/menu_concurso",
+				success: function(respuesta) {
+					$("#modalimagencargando").modal('hide');
+					$("#container").html(respuesta);					
+				},
+				error: function() {
+			        console.log("No se ha podido obtener la información");
+			    }
+			});
+		});
+		
 		$("#btnFormAgregarDocente").click(function(){
 			
 			$("#modalimagencargando").modal({
@@ -181,6 +206,10 @@
 			    }
 			});
 		});	
+		
+		$("#btnIrAulaVirtual").click(function(){
+			var win = window.open("https://aulavirtual.sunass.gob.pe/", '_blank');
+		});
 	});
 	
 	var listar = function (){

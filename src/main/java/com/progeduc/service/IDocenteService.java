@@ -10,4 +10,5 @@ public interface IDocenteService extends ICRUD<Docente,Integer>{
 	List<Docente> listByProgeduc(Integer programaeducativoid);
 	int updateestado(Integer id, Integer estado);
 	List<Docente> listarhabilitados(Integer programaeducativoid);
+	List<Docente> listarTodoshabilitados();
 }

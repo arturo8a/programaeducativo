@@ -86,6 +86,14 @@
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <a href="#pageSubmenuConcursoEducativo" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle bg-white">Concurso Educativo</a>
+                    <ul class="collapse list-unstyled" id="pageSubmenuConcursoEducativo">
+                        <li >
+                            <input type="button" class="btn btn-link" id="consulta_docentes" value="Consulta Aula Virtual"/>                            
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </nav>
         <div id="content" class="m-0 p-0">
@@ -168,6 +176,20 @@
 	    		setTimeout(() => {        		  
 	    			$.ajax({
 		    			url: url_base + "pedesa/programaconsulta",
+		    			success: function(respuesta) {
+		    				$("#contenedor_consulta").html(respuesta);
+		    			}
+		    		});
+	        	}, 200);
+	    	});
+	    	
+	    	$("#consulta_docentes").click(function(){
+	    		$("#consulta_menu").prop("disabled",true);
+	        	$("#btnbuscar").prop("disabled",true);
+	    		$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
+	    		setTimeout(() => {        		  
+	    			$.ajax({
+		    			url: url_base + "pedesa/docenteconsulta",
 		    			success: function(respuesta) {
 		    				$("#contenedor_consulta").html(respuesta);    				
 		    			}

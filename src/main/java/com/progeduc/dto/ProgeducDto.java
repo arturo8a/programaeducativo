@@ -9,6 +9,7 @@ public class ProgeducDto {
 	private String departamento;	
 	private String provincia;	
 	private String distrito;	
+	private String inscrito_ce;
 	private String insteduc;	
 	private String codlocalie;	
 	private Timestamp fecharegistro;
@@ -35,6 +36,7 @@ public class ProgeducDto {
 	private String nrodocidentdir;	
 	private String apedir;	
 	private String nomdir;	
+	private String generodir;
 	private String teldir;	
 	private String celdir;	
 	private String correodir;	
@@ -42,6 +44,7 @@ public class ProgeducDto {
 	private String nrodocidentprof;	
 	private String apeprof;	
 	private String nomprof;	
+	private String generoprof;
 	private String telprof;	
 	private String celprof;	
 	private String correoprof;
@@ -78,6 +81,14 @@ public class ProgeducDto {
 
 	public void setDistrito(String distrito) {
 		this.distrito = distrito;
+	}
+
+	public String getInscrito_ce() {
+		return inscrito_ce;
+	}
+
+	public void setInscrito_ce(String inscrito_ce) {
+		this.inscrito_ce = inscrito_ce;
 	}
 
 	public String getInsteduc() {
@@ -382,6 +393,22 @@ public class ProgeducDto {
 
 	public void setFecharegistro1(Date fecharegistro1) {
 		this.fecharegistro1 = fecharegistro1;
+	}
+
+	public String getGenerodir() {
+		return generodir;
+	}
+
+	public void setGenerodir(String generodir) {
+		this.generodir = generodir;
+	}
+
+	public String getGeneroprof() {
+		return generoprof;
+	}
+
+	public void setGeneroprof(String generoprof) {
+		this.generoprof = generoprof;
 	}
 	
 }

@@ -308,8 +308,12 @@ public class IndexController {
 	@GetMapping("/programaconsulta")
 	public String programaconsulta(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
 		model.addAttribute("departamento",depaServ.listar());
-		//return "contenido_consulta";
 		return "programaconsulta";
+	}
+	
+	@GetMapping("/docenteconsulta")
+	public String docenteconsulta(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
+		return "docenteconsulta";
 	}
 	
 	@GetMapping("/aperturar_anio")

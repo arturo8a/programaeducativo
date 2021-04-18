@@ -58,8 +58,8 @@ public class ProgramaeducativoServiceImpl implements IProgramaeducativoService{
 	}
 	
 	@Override
-	public List<Programaeducativo> listar(Integer iddepartamento){
-		return progeducRepo.listar(iddepartamento);
+	public List<Programaeducativo> listar(Integer iddistrito){
+		return progeducRepo.listar(iddistrito);
 	}
 	
 	@Override
@@ -185,5 +185,10 @@ public class ProgramaeducativoServiceImpl implements IProgramaeducativoService{
 	@Override
 	public Programaeducativo getActualByCodmod(String codmod) {
 		return progeducRepo.getActualByCodmod(codmod);
+	}
+	
+	@Override
+	public List<Programaeducativo> listarAprobados(){
+		return progeducRepo.listarAprobados();
 	}
 }

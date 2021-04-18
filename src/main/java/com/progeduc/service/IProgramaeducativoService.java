@@ -32,7 +32,9 @@ public interface IProgramaeducativoService extends ICRUD<Programaeducativo,Integ
 	
 	String buscarMotivoPrograma(Integer id);
 	
-	List<Programaeducativo> listar(Integer iddepartamento);
+	List<Programaeducativo> listar(Integer iddistrito);
+	
+	List<Programaeducativo> listarAprobados();
 	
 	List<ListaInstitucionEducativa> listar1();
 	

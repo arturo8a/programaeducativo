@@ -64,4 +64,10 @@ public class DocenteServiceImpl implements IDocenteService{
 	public List<Docente> listByProgeduc(Integer programaeducativoid){
 		return docenteRepo.listByProgeduc(programaeducativoid);
 	}
+	
+	@Override
+	public List<Docente> listarTodoshabilitados(){
+		return docenteRepo.listarTodoshabilitados();
+	}
+	
 }

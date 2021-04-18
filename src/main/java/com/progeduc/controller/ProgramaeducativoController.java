@@ -57,6 +57,7 @@ import com.progeduc.service.IDocenteService;
 import com.progeduc.service.IDocentetutorService;
 import com.progeduc.service.IOdsService;
 import com.progeduc.service.IParticipanteService;
+import com.progeduc.service.IPostulacionconcursoService;
 import com.progeduc.service.IProgeducNivelService;
 import com.progeduc.service.IProgeducTurnoService;
 import com.progeduc.service.IProgramaeducativoService;
@@ -88,6 +89,9 @@ public class ProgramaeducativoController {
 	
 	@Autowired
 	IProgeducTurnoService progeducTurnoService;	
+	
+	@Autowired
+	private IPostulacionconcursoService postulacionconcursoServ;
 	
 	@Autowired
 	ICategoriaService categoriaService;
@@ -229,7 +233,7 @@ public class ProgramaeducativoController {
 		pedto = new ProgeducDto();
 		progeducTurno = new ProgramaeducativoTurno();
 		
-		progeducService.listar().forEach(obj->{
+		progeducService.listarAprobados().forEach(obj->{
 			turno = "";
 			nivel = "";
 			suministro="";
@@ -240,8 +244,11 @@ public class ProgramaeducativoController {
 				pedto.setProvincia((obj.getDistrito()!=null? (obj.getDistrito().getProvincia()!=null?(obj.getDistrito().getProvincia().getDescripcion()):""):""));
 				pedto.setDistrito((obj.getDistrito()!=null? (obj.getDistrito().getDescripcion()):""));
 				pedto.setInsteduc(obj.getNomie());
+				
+				pedto.setInscrito_ce(postulacionconcursoServ.getByIdAnio(obj.getId(), obj.getAnhio())!=null?"Si":"No");		
+				
 				pedto.setFecharegistro(obj.getFecha_registro());
-				pedto.setConcurso(obj.getConcurso()==1?"Inscrito al Concurso del P.E":"Inscrito al P.E");
+				//pedto.setConcurso(obj.getConcurso()==1?"Inscrito al Concurso del P.E":"Inscrito al P.E");
 				pedto.setCodlocalie(obj.getCodmod());
 				pedto.setEstado(null);
 				pedto.setAmbito(obj.getAmbito()!=null?obj.getAmbito().getDescripcion():"");
@@ -280,6 +287,7 @@ public class ProgramaeducativoController {
 				pedto.setNrodocidentdir(obj.getDocdir());
 				pedto.setApedir(obj.getApedir());
 				pedto.setNomdir(obj.getNomdir());
+				pedto.setGenerodir(obj.getGenerodir()!=null?obj.getGenerodir().getDescripcion():"");				
 				pedto.setTeldir(obj.getTelfdir());
 				pedto.setCeldir(obj.getCeldir());
 				pedto.setCorreodir(obj.getMaildir());
@@ -288,6 +296,7 @@ public class ProgramaeducativoController {
 				pedto.setNrodocidentprof(obj.getDocprof());
 				pedto.setApeprof(obj.getApeprof());
 				pedto.setNomprof(obj.getNomprof());
+				pedto.setGeneroprof(obj.getGeneroprof()!=null?obj.getGeneroprof().getDescripcion():"");
 				pedto.setTelprof(obj.getTelfprof());
 				pedto.setCelprof(obj.getCelprof());
 				pedto.setCorreoprof(obj.getMailprof());
@@ -301,7 +310,7 @@ public class ProgramaeducativoController {
 	
 	
 	@GetMapping("/listacolegiosinscritos")
-	public ResponseEntity<List<ListaInstitucionEducativa>> listacolegiosinscritos(HttpSession ses) {		
+	public ResponseEntity<List<ListaInstitucionEducativa>> listacolegiosinscritos(HttpSession ses) {
 		
 		List<ListaInstitucionEducativa> arrayie = new ArrayList<ListaInstitucionEducativa>();
 		Object ob = ses.getAttribute("odsid");

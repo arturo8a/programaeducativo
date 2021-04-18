@@ -49,9 +49,7 @@ public class LoginController {
         		return uo.getNombres();
         	}
         	else {
-        		
-        		Programaeducativo pe = progeducService.getCodmodByAnioActual(obj.getUsuario());
-        		if(pe!=null) {
+        		if(obj.getTipousuario().getId()==2) {/*usuario admin*/
         			ses.setAttribute("usuario", obj.getUsuario());
             		ses.setAttribute("perfil", obj.getTipousuario().getDescripcion());
             		ses.setAttribute("odsid", 0);
@@ -59,8 +57,19 @@ public class LoginController {
             		return obj.getNombre();
         		}
         		else {
-        			return "-2";
-        		}        		
+        			Programaeducativo pe = progeducService.getCodmodByAnioActual(obj.getUsuario());
+            		if(pe!=null) {
+            			ses.setAttribute("usuario", obj.getUsuario());
+                		ses.setAttribute("perfil", obj.getTipousuario().getDescripcion());
+                		ses.setAttribute("odsid", 0);
+                		ses.setAttribute("tipousuarioid", obj.getTipousuario().getId());
+                		return obj.getNombre();
+            		}
+            		else {
+            			return "-2";
+            		}
+        		}
+        		      		
         	} 		
     	} catch (Exception ex) {
     		System.out.println("login: " + ex);

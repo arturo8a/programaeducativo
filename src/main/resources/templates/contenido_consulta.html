@@ -44,11 +44,11 @@
      			</select>
      		</div>
      		<div class="col-xs-12 col-sm-6 col-md-4 pt-1">
-     			<label>Estado</label>
+     			<label>Inscrito C.E</label>
      			<select class="form-control" id="estado" name="estado">
      				<option value='Todos'>Todos</option>
-     				<option value='Inscrito al P.E'>Inscrito al P.E</option>
-     				<option value='Inscrito al Concurso del P.E'>Inscrito al Concurso del P.E</option>
+     				<option value='Si'>Si</option>
+     				<option value='No'>No</option>
      			</select>
      		</div>
      		<div class="col-xs-12 col-sm-6 col-md-4">
@@ -57,7 +57,7 @@
 	<div class="col-xs-4 col-md-4 pt-1 pb-2">
 		<label>&nbsp;</label><br>
 		<input type="button" name="btnbuscar" id="btnbuscar" class="btn btn-primary" value="Buscar"/>
-		<input type="button" name="btnlimpiar" id="btnlimpiar" class="btn btn-primary" value="Limpiar"/>
+		<input type="button" name="btnlimpiar" id="btnlimpiar" class="btn btn-primary" value="Limpiar" style="margin-left:10px"/>
 	</div>
 </div>
 
@@ -74,9 +74,9 @@
 			            <th>Provincia</th>
 			            <th>Distrito</th>
 			            <th>Institución Educativa</th>
-			            <th>Código local I.E</th>
-			            <th>Fecha de registro</th>
-			            <th>Estado</th>
+			            <th>Código local I.E</th>			            
+			            <th>Fecha de registro</th>		
+			            <th>Inscrito al C.E</th>
 			            <th>Nivel-N°Secciones-N°Docentes-N°Alumnos-N°varones-N°Mujeres</th>
 			            <th>Ambito</th>
 			            <th style="display:none;">Modalidad de Enseñanza</th>
@@ -99,6 +99,7 @@
 			            <th style="display:none;">N° Doc. Director</th>
 			            <th style="display:none;">Apellidos Director</th>
 			            <th style="display:none;">Nombres Director</th>
+			            <th style="display:none;">Genero Director</th>
 			            <th style="display:none;">Telefono Director</th>
 			            <th style="display:none;">Celular Director</th>
 			            <th style="display:none;">Correo Director</th>
@@ -106,6 +107,7 @@
 			            <th style="display:none;">N° Doc. Profesor</th>
 			            <th style="display:none;">Apellidos Profesor</th>
 			            <th style="display:none;">Nombres Profesor</th>
+			            <th style="display:none;">Genero Profesor</th>
 			            <th style="display:none;">Telefono Profesor</th>
 			            <th style="display:none;">Celular Profesor</th>
 			            <th style="display:none;">Correo Profesor</th>
@@ -126,16 +128,16 @@
 		
 		$("#btnlimpiar").click(function(){
 			
-			$("#fecha_desde").val()
-			$("#fecha_hasta").val()
-			$("#nomie").val()
+			$("#fecha_desde").val("")
+			$("#fecha_hasta").val("");
+			$("#nomie").val("");
 			$("#departamento").val("Todos");
 			$("#provincia").val("Todos");
 			$("#distrito").val("Todos");
 			$("#estado").val("Todos");
 			setTimeout(() => {        		  
 				table_ie.draw();
-	      	}, 200);
+	      	}, 100);
 		});
 		
 		$("#btnbuscar").click(function(){	
@@ -249,7 +251,7 @@
                 "loadingRecords": "Cargando Registros...",
                 "processing": "Procesando...",
                 "search": "Buscar:",
-                "zeroRecords": " ",//No existen registros
+                "zeroRecords": "No existen registros",//No existen registros
                 "paginate": {
                     "first": "Primero",
                     "last": "Ultimo",
@@ -270,9 +272,9 @@
                 { 'data' : 'provincia' },
                 { 'data' : 'distrito' },
                 { 'data' : 'insteduc' },
-                { 'data' : 'codlocalie' },
+                { 'data' : 'codlocalie' },                
                 { 'data' : 'fecharegistro' },
-                { 'data' : 'concurso'},
+                { 'data' : 'inscrito_ce' },
                 { 'data' : 'nivel'},
                 { 'data' : 'ambito'},
                 { 'data' : 'modensenianza','searchable': false},
@@ -295,6 +297,7 @@
                 { 'data' : 'nrodocidentdir','searchable': false},
                 { 'data' : 'apedir','searchable': false},
                 { 'data' : 'nomdir','searchable': false},
+                { 'data' : 'generodir','searchable': false},
                 { 'data' : 'teldir','searchable': false},
                 { 'data' : 'celdir','searchable': false},
                 { 'data' : 'correodir','searchable': false},
@@ -302,6 +305,7 @@
                 { 'data' : 'nrodocidentprof','searchable': false},
                 { 'data' : 'apeprof','searchable': false},
                 { 'data' : 'nomprof','searchable': false},
+                { 'data' : 'generoprof','searchable': false},
                 { 'data' : 'telprof','searchable': false},
                 { 'data' : 'celprof','searchable': false},
                 { 'data' : 'correoprof','searchable': false}
@@ -313,8 +317,8 @@
 	   		      		return moment(data).format('DD/MM/YYYY HH:mm');
    		      		}
    		    	},
-            	{ "visible": false, "targets": 10 },
-   		     	{ "visible": false, "targets": 11 },
+   		    	{ "visible": false, "targets": 10 },
+   		    	{ "visible": false, "targets": 11 },
    		  		{ "visible": false, "targets": 12 },
    		  		{ "visible": false, "targets": 13 },
 		     	{ "visible": false, "targets": 14 },
@@ -342,7 +346,9 @@
    		  		{ "visible": false, "targets": 36 },
    		  		{ "visible": false, "targets": 37 },
 		     	{ "visible": false, "targets": 38 },
-		  		{ "visible": false, "targets": 39 }
+		  		{ "visible": false, "targets": 39 },
+		  		{ "visible": false, "targets": 40 },
+		  		{ "visible": false, "targets": 41 }
             ],
             "fnPreDrawCallback": function(oSettings) {
             	console.log("inicio carga");
@@ -382,7 +388,6 @@
         });
 		
 		$('#table_ie').DataTable().on("draw", function(){
-			console.log("draw");
 			$("#consulta_menu").prop("disabled",false);
         	$("#btnbuscar").prop("disabled",false);
 		});
