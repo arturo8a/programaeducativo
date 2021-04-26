@@ -33,6 +33,7 @@ import com.progeduc.service.IGenerodirService;
 import com.progeduc.service.IGeneroprofService;
 import com.progeduc.service.IGradoparticipanteService;
 import com.progeduc.service.INivelparticipanteService;
+import com.progeduc.service.IOdsService;
 import com.progeduc.service.IParentescoService;
 import com.progeduc.service.IParticipanteService;
 import com.progeduc.service.IPostulacionconcursoService;
@@ -114,6 +115,9 @@ public class IndexController {
 	
 	@Autowired
 	IParentescoService parentescoService;
+	
+	@Autowired
+	private IOdsService odsserv;
 	
 	@Autowired
 	IParticipanteService participanteService;
@@ -314,6 +318,12 @@ public class IndexController {
 	@GetMapping("/docenteconsulta")
 	public String docenteconsulta(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
 		return "docenteconsulta";
+	}
+	
+	@GetMapping("/reportes")
+	public String reportes(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
+		model.addAttribute("ods",odsserv.listarAll());
+		return "reportes";
 	}
 	
 	@GetMapping("/aperturar_anio")

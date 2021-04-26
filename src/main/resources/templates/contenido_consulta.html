@@ -3,6 +3,7 @@
 
 <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
 <link href="../static/css/gijgo.min.css" rel="stylesheet" th:href="@{/css/gijgo.min.css}" >
+<link href="../static/css/font-awesome.min.css" rel="stylesheet" th:href="@{/css/font-awesome.min.css}" >
 <script type="text/javascript" th:src="@{/js/gijgo.min.js}" ></script>
 <script type="text/javascript" th:src="@{/js/messages.es-es.js}"></script>
 <script type="text/javascript" th:src="@{/js/datetime-moment-order.js}"></script>
@@ -57,7 +58,7 @@
 	<div class="col-xs-4 col-md-4 pt-1 pb-2">
 		<label>&nbsp;</label><br>
 		<input type="button" name="btnbuscar" id="btnbuscar" class="btn btn-primary" value="Buscar"/>
-		<input type="button" name="btnlimpiar" id="btnlimpiar" class="btn btn-primary" value="Limpiar" style="margin-left:10px"/>
+		<input type="button" name="btnlimpiar" id="btnlimpiar" class="btn btn-danger" value="Limpiar" style="margin-left:10px"/>
 	</div>
 </div>
 
@@ -357,8 +358,8 @@
             },
             buttons: [
             	{
-            		extend: 'excel',
-            		text:'Descargar en Excel',
+            		extend: 'excelHtml5',
+            		text:'<i class="far fa-file-excel"></i>',
                     title: 'INSTITUCIONES EDUCATIVAS DEL PROGRAMA EDUCATIVO',
                     messageTop: function(){
                     	return '[ Fecha desde: ' + $("#fecha_desde").val() + ']            [ Fecha hasta: '+ $("#fecha_hasta").val() + ']           [ Nombre: ' + $("#nomie").val() + ']           [ Departamento: ' + $("#departamento option:selected").text() + ']           [ Provincia: '+$("#provincia option:selected").text()+' ]          [ Distrito: '+$("#distrito option:selected").text()+']     [ Estado: '+$("#estado option:selected").text()+ ']';

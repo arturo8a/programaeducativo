@@ -29,17 +29,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.progeduc.dto.ActualizarContraseniaDto;
 import com.progeduc.dto.DatocorreoDto;
 import com.progeduc.dto.ListaCategoriaDto;
-import com.progeduc.dto.ListaDocente;
 import com.progeduc.dto.ListaInstitucionEducativa;
+import com.progeduc.dto.ListaparticipantereporteDto;
 import com.progeduc.dto.ProgeducDto;
 import com.progeduc.dto.ProgeducTurnoNivelDto;
 import com.progeduc.dto.ProgeducUpdateTurnoNivelDto;
+import com.progeduc.dto.ReporteparticipantesinscritosDto;
 import com.progeduc.dto.UpdateAprobarProgramaDto;
 import com.progeduc.dto.UpdateObservarProgramaDto;
 import com.progeduc.dto.Usuarioemail;
 import com.progeduc.model.Aperturaranio;
 import com.progeduc.model.Distrito;
-import com.progeduc.model.Docente;
 import com.progeduc.model.Docentetutor;
 import com.progeduc.model.Nivel;
 import com.progeduc.model.Participante;
@@ -74,6 +74,7 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @RestController
 @RequestMapping("")
@@ -316,28 +317,27 @@ public class ProgramaeducativoController {
 		Object ob = ses.getAttribute("odsid");
 		if(Integer.parseInt(ob.toString()) == 0) {
 			progeducService.listar().forEach(obj->{
-				listaie= new ListaInstitucionEducativa();
-				Distrito dist;
-				if(obj.getDistrito()!=null) {
-					dist = distServ.getById(obj.getDistrito().getId());
-					if(dist.getOdsid()!=null) {
-						listaie.setOds(odsserv.byOds(dist.getOdsid()).getDescripcion());
-					}
-					else{
-						listaie.setOds("");
-					}
-				}
-				else{
-					listaie.setOds("");
-				}
-				listaie.setAnhio(obj.getAnhio());
-				listaie.setNomie(obj.getNomie());
-				listaie.setCodmod(obj.getCodmod());
-				listaie.setEstado(obj.getEstado());
-				listaie.setId(obj.getId());
-				listaie.setMotivoobservacion(obj.getMotivoobservacion());
-				arrayie.add(listaie);
-			});				
+				if(obj!=null) {
+					listaie= new ListaInstitucionEducativa();
+					if(obj.getDistrito()!=null){
+						Distrito dist = distServ.getById(obj.getDistrito().getId());
+						if(dist!=null) {
+							if(dist.getOdsid()!=null) {
+								if(odsserv.byOds(dist.getOdsid()) !=null) {
+									listaie.setOds(odsserv.byOds(dist.getOdsid()).getDescripcion());
+									listaie.setAnhio(obj.getAnhio());
+									listaie.setNomie(obj.getNomie());
+									listaie.setCodmod(obj.getCodmod());
+									listaie.setEstado(obj.getEstado());
+									listaie.setId(obj.getId());
+									listaie.setMotivoobservacion(obj.getMotivoobservacion());
+									arrayie.add(listaie);
+								}
+							}
+						}
+					}					
+				}		
+			});			
 		}
 		else {
 			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(obj->{
@@ -615,7 +615,7 @@ public class ProgramaeducativoController {
 	@GetMapping(value="/fichaautorizacionpdf/{id}")
 	public String fichaautorizacionpdf(@PathVariable("id") Integer id, Model model) throws FileNotFoundException, JRException  {
 		
-		return "upload_participantes/"+ id.toString() + "/"+ uploadfile.buscarArchivo(id);
+		return "../alfresco_programaeducativo/pedesa/upload_participantes/"+ id.toString() + "/"+ uploadfile.buscarArchivo(id);
 	}
 	
 	
@@ -640,8 +640,7 @@ public class ProgramaeducativoController {
 			return 1;
 		return 0;
 		
-	}
-	
+	}	
 	
 	public String crearparticipantePdf(Participante pe) throws FileNotFoundException, JRException {
 		
@@ -697,11 +696,11 @@ public class ProgramaeducativoController {
         parameters.put("correoelectronicopmt", pe.getCorreoelectronicopmt()!=null? pe.getCorreoelectronicopmt() : "") ;
         
 		JasperPrint jp = JasperFillManager.fillReport(jr, parameters, new JREmptyDataSource(1));
-		String path = "/opt/apache-tomcat-8.0.27/webapps/pedesa/reportes_participantes/";
+		String path = "/opt/apache-tomcat-8.0.27/webapps/alfresco_programaeducativo/pedesa/reportes_participantes/";
 		//String path = "D:/Edwin/ProyectosSunass/ProgEducativo/reportes/";
 		String archivo = pe.getId() + "_"+ dateFormat.format(date) + hourFormat.format(date);
-		JasperExportManager.exportReportToPdfFile(jp,path + archivo + ".pdf");			
-		return "/pedesa/reportes_participantes/"+archivo+".pdf";			
+		JasperExportManager.exportReportToPdfFile(jp,path + archivo + ".pdf");
+		return "/alfresco_programaeducativo/pedesa/reportes_participantes/"+archivo+".pdf";			
 	}
 	
 
@@ -828,11 +827,11 @@ public class ProgramaeducativoController {
 	        parameters.put("profcorreo", pe.getMailprof());
 	        
 	        JasperPrint jp = JasperFillManager.fillReport(jr, parameters, new JREmptyDataSource(1));
-			String path = "/opt/apache-tomcat-8.0.27/webapps/pedesa/reportes/";
+			String path = "/opt/apache-tomcat-8.0.27/webapps/alfresco_programaeducativo/pedesa/reportes/";
 			//String path = "D:/Edwin/ProyectosSunass/ProgEducativo/reportes/";
 			String archivo = pe.getCodmod() + "_"+ dateFormat.format(date) + hourFormat.format(date);
 			JasperExportManager.exportReportToPdfFile(jp,path + archivo + ".pdf");			
-			return "/pedesa/reportes/"+archivo+".pdf";			
+			return "/alfresco_programaeducativo/pedesa/reportes/"+archivo+".pdf";			
 	}
 	
 	

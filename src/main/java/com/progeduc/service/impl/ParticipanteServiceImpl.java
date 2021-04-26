@@ -56,5 +56,15 @@ public class ParticipanteServiceImpl implements IParticipanteService{
 	public List<Participante> listarhabilitados(Integer programaeducativoid){
 		return repo.listarhabilitados(programaeducativoid);
 	}
+	
+	@Override
+	public List<Participante> listarReporte(String filtro_categoria,String filtro_modalidad,String filtro_nivel_participante){
+		return repo.listarReporte(filtro_categoria,filtro_modalidad,filtro_nivel_participante);
+	}
+	
+	@Override
+	public List<Participante> listarhabilitados(){
+		return repo.listarhabilitados();
+	}
 
 }

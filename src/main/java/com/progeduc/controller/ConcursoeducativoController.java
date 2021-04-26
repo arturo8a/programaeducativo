@@ -150,7 +150,9 @@ public class ConcursoeducativoController {
 			Docente d =  docenteService.registrar(docente);
 			if(d!=null) {
 				cl.setId(d.getId());
-				cl.setValor(d.getProgramaeducativo().getNomie());
+				//cl.setValor(d.getProgramaeducativo().getNomie());				
+				Postulacionconcurso pc = postulacionconcursoServ.getByIdAnio(d.getProgramaeducativo().getId(), d.getProgramaeducativo().getAnhio());
+				cl.setValor(pc!=null?"Si":"No");
 				return cl;
 			}
 			cl.setId(0);

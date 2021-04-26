@@ -29,7 +29,7 @@ public class DocentetutorServiceImpl implements IDocentetutorService{
 	@Override
 	public List<Docentetutor> listar() {
 		// TODO Auto-generated method stub
-		return null;
+		return (List<Docentetutor>) docentetutorRepo.findAll();
 	}
 
 	@Override

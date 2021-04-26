@@ -17,7 +17,7 @@ public class Nivelparticipante {
 	
 	@Column(name="DESCRIPCION" ,length=150)
 	private String descripcion;
-
+	
 	public Integer getId() {
 		return id;
 	}

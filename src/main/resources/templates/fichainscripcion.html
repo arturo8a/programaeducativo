@@ -189,7 +189,7 @@
 		  	</div>		
 			<div class="tab-pane fade" id="participante" role="tabpanel" aria-labelledby="participante-tab">
 				<div id="container_participante">
-					<!-- label>Esta opción aún no se encuentra disponible, pronto se habilitará esta sección para el ingreso de datos de sus estudiantes participantes del Concurso, recuerda que debes adjuntar además la autorización de cada padre de familia junto con el registro. Descarga el formato de autorización <a href="/pedesa/reportes/AUTORIZACIÓNDEPADREPARAPARTICIPACIONVIIICONCURSO.docx" download style="color:blue">Aqu&iacute;</a></label-->
+					<!-- label>Esta opción aún no se encuentra disponible, pronto se habilitará esta sección para el ingreso de datos de sus estudiantes participantes del Concurso, recuerda que debes adjuntar además la autorización de cada padre de familia junto con el registro. Descarga el formato de autorización <a href="/alfresco_programaeducativo/pedesa/reportes/AUTORIZACIÓNDEPADREPARAPARTICIPACIONVIIICONCURSO.docx" download style="color:blue">Aqu&iacute;</a></label-->
 					<br>
 					<div class="row">
 						<div class="col text-right">
@@ -604,7 +604,7 @@
 			    		"text" : "Descargar el formato de autorización Aqu&iacute;",
 			    		"titleAttr" : "descargar",
 			    		"action" : function(){
-			    			window.open('/pedesa/reportes/AUTORIZACIÓNDEPADREPARAPARTICIPACIONVIIICONCURSO.docx', '_blank');		    			
+			    			window.open('/alfresco_programaeducativo/pedesa/reportes/AUTORIZACIÓNDEPADREPARAPARTICIPACIONVIIICONCURSO.docx', '_blank');		    			
 			    		}
 			    	}
 			    ]
@@ -812,7 +812,7 @@
 		var key = window.Event ? evt.which : evt.keyCode;    
 	    var chark = String.fromCharCode(key);
 	    var tempValue = input.value+chark;
-	    if((key >= 65 && key <= 90) || (key >= 97 && key <= 122) || (key ==32)){    
+	    if((key >= 65 && key <= 90) || (key >= 97 && key <= 122) || (key ==32)   || (key ==241) || (key ==209) || (key ==225) || (key ==233) || (key ==237) || (key ==243) || (key ==250)  || (key ==193) || (key ==201) || (key ==205) || (key ==211) || (key ==218)   ){    
 	        return true;
 	    }
 	    else{

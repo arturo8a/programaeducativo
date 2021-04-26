@@ -79,8 +79,7 @@ $(document).ready(function(){
 			}
 			var anio = hoy.getFullYear();
 			var fecha = anio + "/"  + mes + "/" + dia;		
-			console.log("fecha : " + fecha);	
-			/*var hora = hoy.getHours() + ':' + hoy.getMinutes() + ':' + hoy.getFullYear();*/
+			var hora = " " + hoy.getHours() + ':' + hoy.getMinutes();
 			
 			$.ajax({
 				type : "POST",
@@ -109,7 +108,7 @@ $(document).ready(function(){
 						});
 					}
 					else {						
-						$("#modalimagencargando").modal('hide');
+						$("#modalimagencargando").modal('hide');	
 						table_lista_docentes.row.add({
 							"id" : respuesta.id,
 					        "appaterno": appaternodocente,
@@ -119,11 +118,12 @@ $(document).ready(function(){
 					        "nrodocumento": nrodocumentodocente,
 					        "nrotelefono" : nrotelefonodocente,
 					        "correoelectronico" : correoelectronicodocente,
-					        "fecha_registro" : fecha,
+					        "fecha_registro" : fecha + hora,
 					        "nomie" : respuesta.valor,
 					        "defaultContent" : '<img src="./images/svg/edit-regular.svg" class="editar" style="width:20px; cursor:pointer" />',
 					        "defaultContent" : '<img src="./images/svg/eliminar-alt-regular.svg" class="eliminar" style="width:20px; cursor:pointer" />'
 					    }).draw();
+					    table_lista_docentes.ajax.reload(null, false);
 					    $("#textoExitoDocente").html("Usted agregó exitosamente a un nuevo docente");
 						$('#modalExitoDocente').modal({
 							show : true,
@@ -266,7 +266,7 @@ function filterCadena(evt,input){
 	var key = window.Event ? evt.which : evt.keyCode;    
     var chark = String.fromCharCode(key);
     var tempValue = input.value+chark;
-    if((key >= 65 && key <= 90) || (key >= 97 && key <= 122) || (key ==32)){    
+    if((key >= 65 && key <= 90) || (key >= 97 && key <= 122) || (key ==32)    || (key ==241) || (key ==209) || (key ==225) || (key ==233) || (key ==237) || (key ==243) || (key ==250)  || (key ==193) || (key ==201) || (key ==205) || (key ==211) || (key ==218)   ){    
         return true;
     }
     else{

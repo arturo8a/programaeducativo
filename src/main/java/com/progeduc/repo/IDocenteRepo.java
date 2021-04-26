@@ -26,9 +26,9 @@ public interface IDocenteRepo  extends CrudRepository<Docente,Integer> {
 	@Query(value="SELECT TB1.* FROM docente TB1 WHERE TB1.programaeducativoid = ?1 and TB1.ANHIO = EXTRACT(YEAR FROM sysdate) ",nativeQuery = true)
 	List<Docente> listByProgeduc(Integer programaeducativoid);
 	
-	@Query(value="SELECT TB1.* FROM Docente TB1 where TB1.programaeducativoid=?1 and tb1.estado=1",nativeQuery = true)
+	@Query(value="SELECT TB1.* FROM Docente TB1 where TB1.programaeducativoid=?1 and tb1.estado=1 order by fecha_registro desc",nativeQuery = true)
 	List<Docente> listarhabilitados(Integer programaeducativoid);
 	
-	@Query(value="SELECT TB1.* FROM Docente TB1 where tb1.estado=1",nativeQuery = true)
+	@Query(value="SELECT TB1.* FROM Docente TB1 where tb1.estado=1 order by fecha_registro desc",nativeQuery = true)
 	List<Docente> listarTodoshabilitados();
 }

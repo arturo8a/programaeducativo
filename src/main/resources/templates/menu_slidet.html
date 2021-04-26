@@ -11,7 +11,7 @@
 	</script>
 
     <!-- Bootstrap CSS CDN -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
     <!-- Our Custom CSS -->
     <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
 	
@@ -64,9 +64,9 @@
                 <img th:src="@{./images/logo_sunass01.png}" width="155px" height="69px" alt="">
             </div>
             <ul class="list-unstyled components">
-            	<li >
-                    <a href="#pageSubmenuAdministracion" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle bg-white">Administración</a>
-                    <ul class="collapse list-unstyled" id="pageSubmenuAdministracion">
+            	<li class="active">
+                    <a id="a_pageSubmenuAdministracion" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" style="cursor:pointer">Administración</a>
+                    <ul class="collapse multi-collapse list-unstyled" id="pageSubmenuAdministracion">
                         <li >
                             <input type="button" class="btn btn-link" id="consulta_usuarios" value="Usuarios"/>                            
                         </li>
@@ -75,22 +75,25 @@
                         </li>
                     </ul>
                 </li>
-                <li>
-                    <a href="#pageSubmenuProgramaEducativo" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle bg-white">Programa Educativo</a>
-                    <ul class="collapse list-unstyled" id="pageSubmenuProgramaEducativo">
-                        <li >
-                            <input type="button" class="btn btn-link" id="consulta" value="Consulta"/>                            
+                <li class="active">
+                    <a id="a_pageSubmenuProgramaEducativo" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" style="cursor:pointer">Programa Educativo</a>
+                    <ul class="collapse multi-collapse list-unstyled" id="pageSubmenuProgramaEducativo">
+                        <li>
+                            <input type="button" class="btn btn-link" id="consulta" value="Consulta"/>
                         </li>
-                        <li >
+                        <li>
                             <input type="button" class="btn btn-link" id="consulta_pe" value="Aprobación de Inscripciones"/>
                         </li>
                     </ul>
                 </li>
-                <li>
-                    <a href="#pageSubmenuConcursoEducativo" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle bg-white">Concurso Educativo</a>
-                    <ul class="collapse list-unstyled" id="pageSubmenuConcursoEducativo">
+                <li class="active">
+                    <a id="a_pageSubmenuConcursoEducativo" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" style="cursor:pointer">Concurso Educativo</a>
+                    <ul class="collapse multi-collapse list-unstyled" id="pageSubmenuConcursoEducativo">
                         <li >
                             <input type="button" class="btn btn-link" id="consulta_docentes" value="Consulta Aula Virtual"/>                            
+                        </li>
+                        <li >
+                            <input type="button" class="btn btn-link" id="reportes" value="Reportes"/>                            
                         </li>
                     </ul>
                 </li>
@@ -131,7 +134,23 @@
 	    
 	    $(document).ready(function(){		
 			
-			$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
+	    	$("#pageSubmenuAdministracion").hide();
+	    	$("#pageSubmenuProgramaEducativo").hide();
+	    	$("#pageSubmenuConcursoEducativo").hide();
+	    	
+	    	$("#a_pageSubmenuAdministracion").click(function() {
+    		  	$("#pageSubmenuAdministracion").slideToggle("slow");
+    		});
+	    	
+	    	$("#a_pageSubmenuProgramaEducativo").click(function() {
+    		  	$("#pageSubmenuProgramaEducativo").slideToggle("slow");
+    		});
+	    	
+	    	$("#a_pageSubmenuConcursoEducativo").click(function() {
+    		  	$("#pageSubmenuConcursoEducativo").slideToggle("slow");
+    		});
+	    	
+	    	$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
 			$.ajax({
     			//url: url_base + "pedesa/contenidoconsulta",
     			url: url_base + "pedesa/programaconsulta",
@@ -190,6 +209,20 @@
 	    		setTimeout(() => {        		  
 	    			$.ajax({
 		    			url: url_base + "pedesa/docenteconsulta",
+		    			success: function(respuesta) {
+		    				$("#contenedor_consulta").html(respuesta);    				
+		    			}
+		    		});
+	        	}, 200);
+	    	});
+	    	
+	    	$("#reportes").click(function(){
+	    		$("#consulta_menu").prop("disabled",true);
+	        	$("#btnbuscar").prop("disabled",true);
+	    		$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
+	    		setTimeout(() => {        		  
+	    			$.ajax({
+		    			url: url_base + "pedesa/reportes",
 		    			success: function(respuesta) {
 		    				$("#contenedor_consulta").html(respuesta);    				
 		    			}

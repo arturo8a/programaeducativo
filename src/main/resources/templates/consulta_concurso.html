@@ -115,7 +115,7 @@
 			</div>
 		</div>
 	</div>
-	
+	<br><br>	
 	<div class="modal" tabindex="-1" role="dialog" id="modalimagencargando">
 	  <center>
 	  	<img th:src="@{./images/cargando.gif}" style="line-height: 200px;"/>
@@ -247,6 +247,7 @@
 			            "previous": "Anterior"
 			        }
 			    },
+			    "order": [ 8, 'desc' ],
 			    'ajax' : {
 			        "url" : url_base + 'pedesa/listadocentes',
 			        "type" : "GET",
@@ -257,7 +258,7 @@
 			    	{
 		                type: 'date-euro',"targets": 8,
 		                "render": function(data, type, row, meta){
-		                    return moment(data).format('DD/MM/YYYY');
+		                    return moment(data).format('DD/MM/YYYY HH:mm');
 		                }
 	            	}	
 			    ],
@@ -277,6 +278,7 @@
 			        { 'defaultContent' : '<img src="./images/svg/edit-regular.svg" class="editar" style="width:20px; cursor:pointer " />'},
 			        { 'defaultContent' : '<img src="./images/svg/eliminar-alt-regular.svg" class="eliminar" style="width:20px; cursor:pointer " />'}
 			    ],
+			    "order": [ 8, 'desc' ],
 			    buttons: []
 			});
 			obtener_data_editar("#table_lista_docentes tbody",table_lista_docentes);
