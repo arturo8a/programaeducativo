@@ -19,6 +19,7 @@
               <div class="container-fluid">
                   <div>
                   	  <input type="hidden" id="cargainicialtabla"  th:value="*{cargainicialtabla}" >
+                  	  <input type="hidden" id="cargainicialtablatrabajos"  th:value="*{cargainicialtablatrabajos}" >
 					  <h5 class="text-white">&nbsp;Sistema del Concurso Escolar</h5>
 				  </div>
                   <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -50,7 +51,7 @@
 					<div class="col-4">
 						<img th:src="@{/images/imagen2.PNG}" style="padding:10px; border:1px solid #C9C9C9"  width="430px"/>
 						<h4 class="pt-2"><a id="item_aula_virtual" style="cursor:pointer; color:#2E2D2D">Aula virtual</a></h4>
-						<label style="color:#2E2D2D"><i>Aqu&iacute; podras encontrar los diversos recursos compartidos en las charlas y talleres, para acceder a ellos debes registrarte tus datos en el sistema</i></label>
+						<label style="color:#2E2D2D"><i>Aqu&iacute; podras encontrar los diversos recursos compartidos en las charlas y talleres, para acceder a ellos debes registrar tus datos en el sistema</i></label>
 					</div>
 				</div>
           </div>
@@ -67,6 +68,7 @@
 	    
     	var url_base = location.origin + "/";
     	var cargainicial= $("#cargainicialtabla").val();
+    	var cargainicialtrabajos= $("#cargainicialtablatrabajos").val();
 	    
 	    $(document).ready(function(){		
 			

@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class ProgeducDto {
 	
-	private Integer ods;	
+	private String ods;		
 	private String departamento;	
 	private String provincia;	
 	private String distrito;	
@@ -51,11 +51,11 @@ public class ProgeducDto {
 	private String concurso;
 	private Date fecharegistro1;
 	
-	public Integer getOds() {
+	public String getOds() {
 		return ods;
 	}
 
-	public void setOds(Integer ods) {
+	public void setOds(String ods) {
 		this.ods = ods;
 	}
 

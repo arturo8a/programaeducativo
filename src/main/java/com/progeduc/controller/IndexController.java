@@ -1,7 +1,12 @@
 package com.progeduc.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -23,7 +28,9 @@ import com.progeduc.model.Programaeducativo;
 import com.progeduc.model.ProgramaeducativoNivel;
 import com.progeduc.model.ProgramaeducativoTurno;
 import com.progeduc.model.Suministro;
+import com.progeduc.model.Trabajosfinales;
 import com.progeduc.service.IAperturaranioService;
+import com.progeduc.service.ICategoriatrabajoService;
 import com.progeduc.service.IDepartamentoService;
 import com.progeduc.service.IDistritoService;
 import com.progeduc.service.IDocenteService;
@@ -32,6 +39,7 @@ import com.progeduc.service.IGeneroService;
 import com.progeduc.service.IGenerodirService;
 import com.progeduc.service.IGeneroprofService;
 import com.progeduc.service.IGradoparticipanteService;
+import com.progeduc.service.IModalidadtrabajoService;
 import com.progeduc.service.INivelparticipanteService;
 import com.progeduc.service.IOdsService;
 import com.progeduc.service.IParentescoService;
@@ -43,6 +51,8 @@ import com.progeduc.service.IProgramaeducativoService;
 import com.progeduc.service.IProvinciaService;
 import com.progeduc.service.IResponsableregistroService;
 import com.progeduc.service.ITipodocumentoService;
+import com.progeduc.service.ITrabajosfinalesParticipanteService;
+import com.progeduc.service.ITrabajosfinalesService;
 import com.progeduc.service.LenguaService;
 import com.progeduc.service.ProveedorService;
 import com.progeduc.service.TipodocService;
@@ -126,7 +136,24 @@ public class IndexController {
 	IDocenteService docenteService;
 	
 	@Autowired
+	ICategoriatrabajoService categoriatrabajoService;
+	
+	@Autowired
+	IModalidadtrabajoService modalidadtrabajoService;
+	
+	@Autowired
+	ITrabajosfinalesService trabajosfinalesService;
+	
+	@Autowired
+	ITrabajosfinalesParticipanteService trabajosfinalesparticipanteService;
+	
+	
+	@Autowired
 	private UploadFileService uploadfile;
+	
+	String participanteid;
+	
+	int contador;
 	
 	@GetMapping("/inicio")
 	public String inicio(@RequestParam(name="name",required=false,defaultValue="world") String name, Model model) {
@@ -149,6 +176,84 @@ public class IndexController {
 		model.addAttribute("tipo", "us");
 		model.addAttribute("id", id);
 		return "actualizarcontrasenia";
+	}
+	
+	@GetMapping("/formeditartrabajos/{id}")
+	public String formeditartrabajos(@PathVariable("id") Integer id, Model model) {
+		
+		Trabajosfinales tf  = trabajosfinalesService.ListarporId(id);
+		model.addAttribute("tf", tf);
+		model.addAttribute("categoriatrabajo",categoriatrabajoService.listar());
+		model.addAttribute("modalidadtrabajo",modalidadtrabajoService.listar());
+		model.addAttribute("tipodoc",tipodocserv.findAll());
+		model.addAttribute("genero",generoprofserv.listar());
+		
+		
+		model.addAttribute("chconversacion", tf.getConversacion()==1 ? true : false);
+		model.addAttribute("chvaloracionagua", tf.getValoracionagua()==1 ? true : false);
+		model.addAttribute("chvaloracionalcantarillado", tf.getValoracionalcantarillado() == 1 ? true : false);
+		model.addAttribute("chbuenuso", tf.getBuenuso()==1 ? true : false);
+		model.addAttribute("chimportancia", tf.getImportancia()==1 ? true : false);
+		model.addAttribute("chvinculo", tf.getVinculo()==1 ? true : false);
+		model.addAttribute("chcarencias", tf.getCarencias()==1 ? true : false);
+		
+		participanteid = "";
+		trabajosfinalesparticipanteService.listar(id).forEach(obj->{
+			participanteid += (obj.getParticipante().getId()).toString() + ",";
+		});
+		
+		model.addAttribute("participanteid", participanteid);
+		
+		model.addAttribute("nombretrabajos",uploadfile.buscarArchivo(id, "upload_trabajos"));
+		model.addAttribute("nombreevidencias",uploadfile.buscarEvidencias(id, "upload_evidencias"));
+		
+		contador = 1;
+		uploadfile.buscarEvidencias(id, "upload_evidencias").forEach(obj->{
+			model.addAttribute("evidencia" + contador,obj);
+			contador ++;
+		});
+		
+		model.addAttribute("nroevidencias",uploadfile.buscarEvidencias(id, "upload_evidencias").size());
+		return "formeditartrabajo";
+	}
+	
+	@GetMapping("/formvertrabajos/{id}")
+	public String formvertrabajos(@PathVariable("id") Integer id, Model model) {
+		
+		Trabajosfinales tf  = trabajosfinalesService.ListarporId(id);
+		model.addAttribute("tf", tf);
+		model.addAttribute("categoriatrabajo",categoriatrabajoService.listar());
+		model.addAttribute("modalidadtrabajo",modalidadtrabajoService.listar());
+		model.addAttribute("tipodoc",tipodocserv.findAll());
+		model.addAttribute("genero",generoprofserv.listar());
+		
+		
+		model.addAttribute("chconversacion", tf.getConversacion()==1 ? true : false);
+		model.addAttribute("chvaloracionagua", tf.getValoracionagua()==1 ? true : false);
+		model.addAttribute("chvaloracionalcantarillado", tf.getValoracionalcantarillado() == 1 ? true : false);
+		model.addAttribute("chbuenuso", tf.getBuenuso()==1 ? true : false);
+		model.addAttribute("chimportancia", tf.getImportancia()==1 ? true : false);
+		model.addAttribute("chvinculo", tf.getVinculo()==1 ? true : false);
+		model.addAttribute("chcarencias", tf.getCarencias()==1 ? true : false);
+		
+		participanteid = "";
+		trabajosfinalesparticipanteService.listar(id).forEach(obj->{
+			participanteid += (obj.getParticipante().getId()).toString() + ",";
+		});
+		
+		model.addAttribute("participanteid", participanteid);
+		
+		model.addAttribute("nombretrabajos",uploadfile.buscarArchivo(id, "upload_trabajos"));
+		model.addAttribute("nombreevidencias",uploadfile.buscarEvidencias(id, "upload_evidencias"));
+		
+		contador = 1;
+		uploadfile.buscarEvidencias(id, "upload_evidencias").forEach(obj->{
+			model.addAttribute("evidencia" + contador,obj);
+			contador ++;
+		});
+		
+		model.addAttribute("nroevidencias",uploadfile.buscarEvidencias(id, "upload_evidencias").size());
+		return "formvertrabajo";
 	}
 	
 	@GetMapping("/actualizarcontrasenia/uo/{id}")
@@ -341,6 +446,7 @@ public class IndexController {
 				Calendar fecha = Calendar.getInstance();
 				model.addAttribute("nombre_concurso",aperturaranioService.buscar(fecha.get(Calendar.YEAR)).getNombreconcurso());
 				model.addAttribute("cargainicialtabla", 1);
+				model.addAttribute("cargainicialtablatrabajos", 1);
 				return "menu_concurso";
 			}
 			else { /*El admin u ODS*/
@@ -361,11 +467,12 @@ public class IndexController {
 		Calendar fecha = Calendar.getInstance();
 		model.addAttribute("nombre_concurso",aperturaranioService.buscar(fecha.get(Calendar.YEAR)).getNombreconcurso());
 		model.addAttribute("cargainicialtabla", 1);
+		model.addAttribute("cargainicialtablatrabajos", 1);
 		return "opciones_concurso";
     }	
 	
 	@GetMapping("/fichainscripcion/{id}")
-	public String fichainscripcion(@PathVariable("id") Integer id,  Model model) {
+	public String fichainscripcion(@PathVariable("id") Integer id,  Model model,HttpSession ses) {
 		
 		model.addAttribute("idprogramaeducativo", id);
 		model.addAttribute("codmod",progeducService.ListarporId(id).getCodmod());
@@ -374,7 +481,28 @@ public class IndexController {
 		model.addAttribute("tipodoc",tipodocserv.findAll());
 		model.addAttribute("genero",generoprofserv.listar());
 		model.addAttribute("nivel",nivelparticipanteService.listar());
-		model.addAttribute("parentesco",parentescoService.listar());	
+		model.addAttribute("parentesco",parentescoService.listar());
+		
+		int activar_trabajos_finales = 0;		
+		Calendar fecha = Calendar.getInstance();
+		Date date = Calendar.getInstance().getTime();
+		DateFormat formato = new SimpleDateFormat("dd/MM/yy");
+        String today = formato.format(date);
+        Aperturaranio ap = aperturaranioService.buscar(fecha.get(Calendar.YEAR));
+    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
+    	LocalDate fechaactual = LocalDate.parse(today, formatter);
+    	//LocalDate fechaactual = LocalDate.parse("20/04/21", formatter);
+    	
+    	String codmod = ses.getAttribute("usuario").toString();
+		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
+    	
+    	Postulacionconcurso postconc = postulacionconcursoService.getByIdAnio(pe.getId(), fecha.get(Calendar.YEAR));	    	
+    	model.addAttribute("finalizaparticipaciontrabajo",postconc.getFinalizarparticipaciontrabajo());
+    	
+        if(fechaactual.compareTo(ap.getCuartaetapadesde())>=0 && fechaactual.compareTo(ap.getCuartaetapahasta())<=0)
+        	activar_trabajos_finales = 1;
+        model.addAttribute("activar_trabajos_finales",activar_trabajos_finales);
+		
 		if(docentetutor!=null) {
 			model.addAttribute("docentetutor", docentetutor);
 			return "fichainscripcion_update";
@@ -388,13 +516,35 @@ public class IndexController {
 		model.addAttribute("id",id);
 		Postulacionconcurso pc = postulacionconcursoService.getById(id);
 		if( pc!= null) {
+			
 			model.addAttribute("codmod",progeducService.ListarporId(id).getCodmod());						
 			Docentetutor docentetutor = docentetutorService.getByProgeduc(id);
 			model.addAttribute("responsableregistro", responsableregistroserv.listar());
 			model.addAttribute("tipodoc",tipodocserv.findAll());
 			model.addAttribute("genero",generoprofserv.listar());
 			model.addAttribute("nivel",nivelparticipanteService.listar());
-			model.addAttribute("parentesco",parentescoService.listar());			
+			model.addAttribute("parentesco",parentescoService.listar());
+			
+			int activar_trabajos_finales = 0;		
+			Calendar fecha = Calendar.getInstance();
+			Date date = Calendar.getInstance().getTime();
+			DateFormat formato = new SimpleDateFormat("dd/MM/yy");
+	        String today = formato.format(date);
+	        Aperturaranio ap = aperturaranioService.buscar(fecha.get(Calendar.YEAR));        	
+	    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
+	    	LocalDate fechaactual = LocalDate.parse(today, formatter);
+	    	//LocalDate fechaactual = LocalDate.parse("20/04/21", formatter);
+	    	
+	    	String codmod = ses.getAttribute("usuario").toString();
+			Programaeducativo pe = progeducService.getActualByCodmod(codmod);
+	    	
+	    	Postulacionconcurso postconc = postulacionconcursoService.getByIdAnio(pe.getId(), fecha.get(Calendar.YEAR));	    	
+	    	model.addAttribute("finalizaparticipaciontrabajo",postconc.getFinalizarparticipaciontrabajo());
+	    	
+	        if(fechaactual.compareTo(ap.getCuartaetapadesde())>=0 && fechaactual.compareTo(ap.getCuartaetapahasta())<=0)
+	        	activar_trabajos_finales = 1;        
+	        model.addAttribute("activar_trabajos_finales",activar_trabajos_finales);		
+			
 			if(docentetutor!=null) {
 				model.addAttribute("docentetutor", docentetutor);
 				return "fichainscripcion_update";
@@ -411,6 +561,15 @@ public class IndexController {
 		model.addAttribute("nivel",nivelparticipanteService.listar());
 		model.addAttribute("parentesco",parentescoService.listar());
 		return "formregistrarparticipante";
+	}
+	
+	@GetMapping("/formagregartrabajo")
+	public String formagregartrabajo( Model model) {
+		model.addAttribute("categoriatrabajo",categoriatrabajoService.listar());
+		model.addAttribute("modalidadtrabajo",modalidadtrabajoService.listar());
+		model.addAttribute("tipodoc",tipodocserv.findAll());
+		model.addAttribute("genero",generoprofserv.listar());
+		return "formagregartrabajo";
 	}
 	
 	@GetMapping("/listarparticipante")
@@ -434,7 +593,7 @@ public class IndexController {
 		model.addAttribute("nivel",nivelparticipanteService.listar());
 		model.addAttribute("grado",gradoparticipanteService.listargradopornivel(pa.getGradoestudiante().getNivelparticipante().getId()));
 		model.addAttribute("parentesco",parentescoService.listar());
-		model.addAttribute("nombrearchivo",uploadfile.buscarArchivo(pa.getId()));
+		model.addAttribute("nombrearchivo",uploadfile.buscarArchivo(pa.getId(),"upload_participantes"));
 		return "formeditarparticipante";
 	}
 	

@@ -71,6 +71,7 @@
 			    <thead>
 			        <tr>
 			        	<th>Nº</th>
+						<th>ODS</th>
 			            <th>Departamento</th>
 			            <th>Provincia</th>
 			            <th>Distrito</th>
@@ -269,6 +270,7 @@
             	{ 
             		"data": null, "render": function (data, type, full, meta) { return meta.row + 1; }
             	},
+				{ 'data' : 'ods'},
             	{ 'data' : 'departamento' },
                 { 'data' : 'provincia' },
                 { 'data' : 'distrito' },
@@ -318,38 +320,38 @@
 	   		      		return moment(data).format('DD/MM/YYYY HH:mm');
    		      		}
    		    	},
-   		    	{ "visible": false, "targets": 10 },
    		    	{ "visible": false, "targets": 11 },
-   		  		{ "visible": false, "targets": 12 },
+   		    	{ "visible": false, "targets": 12 },
    		  		{ "visible": false, "targets": 13 },
-		     	{ "visible": false, "targets": 14 },
-		  		{ "visible": false, "targets": 15 },
+   		  		{ "visible": false, "targets": 14 },
+		     	{ "visible": false, "targets": 15 },
 		  		{ "visible": false, "targets": 16 },
-   		     	{ "visible": false, "targets": 17 },
-   		  		{ "visible": false, "targets": 18 },
+		  		{ "visible": false, "targets": 17 },
+   		     	{ "visible": false, "targets": 18 },
    		  		{ "visible": false, "targets": 19 },
-		     	{ "visible": false, "targets": 20 },
-		  		{ "visible": false, "targets": 21 },
+   		  		{ "visible": false, "targets": 20 },
+		     	{ "visible": false, "targets": 21 },
 		  		{ "visible": false, "targets": 22 },
-   		     	{ "visible": false, "targets": 23 },
-   		  		{ "visible": false, "targets": 24 },
+		  		{ "visible": false, "targets": 23 },
+   		     	{ "visible": false, "targets": 24 },
    		  		{ "visible": false, "targets": 25 },
-		     	{ "visible": false, "targets": 26 },
-		  		{ "visible": false, "targets": 27 },
+   		  		{ "visible": false, "targets": 26 },
+		     	{ "visible": false, "targets": 27 },
 		  		{ "visible": false, "targets": 28 },
-   		     	{ "visible": false, "targets": 29 },
-   		  		{ "visible": false, "targets": 30 },
+		  		{ "visible": false, "targets": 29 },
+   		     	{ "visible": false, "targets": 30 },
    		  		{ "visible": false, "targets": 31 },
-		     	{ "visible": false, "targets": 32 },
-		  		{ "visible": false, "targets": 33 },
+   		  		{ "visible": false, "targets": 32 },
+		     	{ "visible": false, "targets": 33 },
 		  		{ "visible": false, "targets": 34 },
-   		     	{ "visible": false, "targets": 35 },
-   		  		{ "visible": false, "targets": 36 },
+		  		{ "visible": false, "targets": 35 },
+   		     	{ "visible": false, "targets": 36 },
    		  		{ "visible": false, "targets": 37 },
-		     	{ "visible": false, "targets": 38 },
-		  		{ "visible": false, "targets": 39 },
+   		  		{ "visible": false, "targets": 38 },
+		     	{ "visible": false, "targets": 39 },
 		  		{ "visible": false, "targets": 40 },
-		  		{ "visible": false, "targets": 41 }
+		  		{ "visible": false, "targets": 41 },
+		  		{ "visible": false, "targets": 42 }
             ],
             "fnPreDrawCallback": function(oSettings) {
             	console.log("inicio carga");
@@ -409,17 +411,17 @@
     	    	var distrito = $("#distrito option:selected").text();
     	    	var estado = $("#estado option:selected").val();
     	    	
-    	    	if(!filtraUbigeo(departamento,data[1]))
+    	    	if(!filtraUbigeo(departamento,data[2]))
     	    		return false;
-    	    	if(!filtraUbigeo(provincia,data[2]))
+    	    	if(!filtraUbigeo(provincia,data[3]))
     	    		return false;
-    	    	if(!filtraUbigeo(distrito,data[3]))
+    	    	if(!filtraUbigeo(distrito,data[4]))
     	    		return false;	    	
-    	    	if(!filtraNombre(nombre,data[4]))
+    	    	if(!filtraNombre(nombre,data[5]))
     	    		return false;
-    	    	if(!filtraFecha(fecha_desde,fecha_hasta,data[6]))
+    	    	if(!filtraFecha(fecha_desde,fecha_hasta,data[7]))
     	    		return false;
-    	    	if(!filtraConcurso(estado,data[7]))
+    	    	if(!filtraConcurso(estado,data[8]))
     	    		return false;
    	    		return true;
     	    }

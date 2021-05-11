@@ -1,6 +1,6 @@
 package com.progeduc.dto;
 
-public class ListaparticipantereporteDto {
+public class ListaparticipantereporteDto  implements Comparable{
 	
 	String ods;
 	String codigoie;
@@ -179,4 +179,15 @@ public class ListaparticipantereporteDto {
 		this.anio = anio;
 	}
 	
+	@Override
+	public int compareTo(Object o) {
+		
+		ListaparticipantereporteDto otro = (ListaparticipantereporteDto) o;
+		int comparacionPorTipo = ods.compareTo(otro.getOds());
+		if(comparacionPorTipo!=0)
+			return comparacionPorTipo;
+		int rpta = nomie.compareTo(otro.getNomie());
+		return rpta;
+		
+	}
 }

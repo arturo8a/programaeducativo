@@ -241,6 +241,8 @@ public class ProgramaeducativoController {
 			//if(obj!=null) {
 				pedto = new ProgeducDto();
 				//pedto.setOds(obj.getOds());
+				
+				pedto.setOds(odsserv.byOds(obj.getDistrito().getOdsid()).getDescripcion());
 				pedto.setDepartamento((obj.getDistrito()!=null? (obj.getDistrito().getProvincia()!=null?(obj.getDistrito().getProvincia().getDepartamento()!=null?obj.getDistrito().getProvincia().getDepartamento().getDescripcion():""):""):""));
 				pedto.setProvincia((obj.getDistrito()!=null? (obj.getDistrito().getProvincia()!=null?(obj.getDistrito().getProvincia().getDescripcion()):""):""));
 				pedto.setDistrito((obj.getDistrito()!=null? (obj.getDistrito().getDescripcion()):""));
@@ -615,7 +617,7 @@ public class ProgramaeducativoController {
 	@GetMapping(value="/fichaautorizacionpdf/{id}")
 	public String fichaautorizacionpdf(@PathVariable("id") Integer id, Model model) throws FileNotFoundException, JRException  {
 		
-		return "../alfresco_programaeducativo/pedesa/upload_participantes/"+ id.toString() + "/"+ uploadfile.buscarArchivo(id);
+		return "../alfresco_programaeducativo/pedesa/upload_participantes/"+ id.toString() + "/"+ uploadfile.buscarArchivo(id,"upload_participantes");
 	}
 	
 	

@@ -30,16 +30,20 @@ import org.springframework.web.multipart.MultipartFile;
 import com.progeduc.dto.ClaveValor;
 import com.progeduc.dto.ListaDocente;
 import com.progeduc.dto.ListaDocenteInscritos;
-import com.progeduc.dto.ListaInstitucionEducativa;
 import com.progeduc.dto.ListaparticipanteDto;
+import com.progeduc.dto.ListaparticipantetrabajoDto;
+import com.progeduc.dto.ListatrabajosfinalesDto;
+import com.progeduc.dto.ParticipanteVerDto;
+import com.progeduc.dto.TrabajofinalesEnviadoDto;
+import com.progeduc.dto.TrabajosfinalesParticipanteDto;
 import com.progeduc.model.Aperturaranio;
-import com.progeduc.model.Distrito;
 import com.progeduc.model.Docente;
 import com.progeduc.model.Gradoparticipante;
 import com.progeduc.model.Ods;
 import com.progeduc.model.Participante;
 import com.progeduc.model.Postulacionconcurso;
 import com.progeduc.model.Programaeducativo;
+import com.progeduc.model.Trabajosfinales;
 import com.progeduc.service.IAperturaranioService;
 import com.progeduc.service.IDistritoService;
 import com.progeduc.service.IDocenteService;
@@ -48,6 +52,8 @@ import com.progeduc.service.IOdsService;
 import com.progeduc.service.IParticipanteService;
 import com.progeduc.service.IPostulacionconcursoService;
 import com.progeduc.service.IProgramaeducativoService;
+import com.progeduc.service.ITrabajosfinalesParticipanteService;
+import com.progeduc.service.ITrabajosfinalesService;
 import com.progeduc.service.impl.UploadFileService;
 
 @RestController
@@ -81,9 +87,27 @@ public class ConcursoeducativoController {
 	@Autowired
 	private IDistritoService distServ;
 	
+	@Autowired
+	private ITrabajosfinalesService trabajosfinalesServ;
+	
+	@Autowired
+	private ITrabajosfinalesParticipanteService trabajosfinalesparticipanteServ;
+	
 	ListaparticipanteDto dto;
 	
+	ListatrabajosfinalesDto dtotf;
+	
+	ListaparticipantetrabajoDto ptdto;
+	
 	ListaDocenteInscritos listadocentesinscritos;
+	
+	String miparticipante = "";
+	
+	boolean banderaUpdate;
+	
+	Mail mail;	
+	
+	String participantes, msj2;
 	
 	@PostMapping(value="/registrarconcurso")
 	public String registrarconcurso(@Valid @RequestBody Postulacionconcurso dto)  {
@@ -95,6 +119,28 @@ public class ConcursoeducativoController {
 		return respuesta;
 	}
 	
+	@PostMapping(value = "/savetrabajosfinalesparticipante")
+	public Integer savetrabajosfinalesparticipante(@Valid @RequestBody TrabajosfinalesParticipanteDto dto,HttpSession ses){
+		
+		Date date= new Date();
+		long time = date.getTime();
+		Timestamp ts = new Timestamp(time);
+		dto.getTrabajosfinales().setFecha_registro(ts);
+		dto.getTrabajosfinales().setAnio(ts.toLocalDateTime().getYear());
+		
+		String codmod = ses.getAttribute("usuario").toString();
+		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
+		
+		dto.getTrabajosfinales().setProgramaeducativo(pe);
+		
+		Trabajosfinales tf = trabajosfinalesServ.saveTrabajofinaParticipante(dto);
+		
+		if( tf !=null) {
+			return tf.getId();
+		}		
+		return 0;
+	}
+	
 	@GetMapping(value="/listargradopornivel/{id}")
 	public ResponseEntity<List<Gradoparticipante>> listargradopornivel(@PathVariable("id") Integer id){
 		return new ResponseEntity<List<Gradoparticipante>>(gradoparticipanteServ.listargradopornivel(id),HttpStatus.OK);
@@ -103,6 +149,21 @@ public class ConcursoeducativoController {
 	@GetMapping(value="/eliminarparticipanteid/{id}")
 	public Integer eliminarparticipanteid(@PathVariable("id") Integer id) {
 		return participanteService.updateestado(id, 0);
+	}
+	
+	@GetMapping(value="/eliminartrabajoid/{id}")
+	public Integer eliminartrabajoid(@PathVariable("id") Integer id,HttpSession ses) {
+		String codmod = ses.getAttribute("usuario").toString();
+		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
+		return trabajosfinalesServ.updateestado(id, 0,pe.getId());
+	}
+	
+	@GetMapping(value="/enviartrabajoid/{id}")
+	public Integer enviartrabajoid(@PathVariable("id") Integer id,HttpSession ses) {
+		
+		String codmod = ses.getAttribute("usuario").toString();
+		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
+		return trabajosfinalesServ.updateenviado(id, 1,pe.getId());
 	}
 	
 	@GetMapping(value="/eliminardocenteid/{id}")
@@ -150,7 +211,6 @@ public class ConcursoeducativoController {
 			Docente d =  docenteService.registrar(docente);
 			if(d!=null) {
 				cl.setId(d.getId());
-				//cl.setValor(d.getProgramaeducativo().getNomie());				
 				Postulacionconcurso pc = postulacionconcursoServ.getByIdAnio(d.getProgramaeducativo().getId(), d.getProgramaeducativo().getAnhio());
 				cl.setValor(pc!=null?"Si":"No");
 				return cl;
@@ -194,7 +254,96 @@ public class ConcursoeducativoController {
 		if(file.isEmpty())
 			return 0;
 		try {
-			uploadfile.saveFile(file,id);
+			uploadfile.saveFile(file,id,"upload_participantes");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return 1; 
+	}
+	
+	
+	@PostMapping(value="/updateTrabajosFinalesEnviados")
+	public Integer updateTrabajosFinalesEnviados(@Valid @RequestBody List<TrabajofinalesEnviadoDto> dto,HttpSession ses) {
+		
+		String codmod = ses.getAttribute("usuario").toString();
+		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
+		banderaUpdate = true;
+		
+		dto.forEach(dato->{
+			if(trabajosfinalesServ.updateenviado(dato.getId(), 1,pe.getId()) != 1)
+				banderaUpdate = false;
+		});
+		if(!banderaUpdate)
+			return 0;
+		
+		if(postulacionconcursoServ.updatefinalizarparticipaciontrabajo(pe.getId()) !=1)
+			return 0;		
+		
+		/*enviar correo*/
+		String msj = "<img src='./images/logo_login.PNG' style='width:400px' /><img src='./images/imagen1.PNG' style='width:400px' />";
+		String msj1 = "<p>Estimado(a) docente,Por medio de la presente reciba a nombre de la Superindencia Nacionalde Servicios de Saneamiento nuestro Saludos de Bienvenida al “VIII Concurso Escolar Nacional de Buenas prácticas para el Ahorro del Agua Potable”, a través de este mensaje le hacemos llegar el siguiente cuadro con el consolidado de estudiantes inscritos y datos de sus trabajos finales presentados a esta edición del Concurso Escolar:</p>";
+		msj2 = "<br><table><tr><td>Categoria</td><td>Modalidad</td><td>Título de trabajo</td><td>Participantes</td></tr>";
+		String msj3 = "<p>Cabe resaltar que tanto las evidencias como trabajos finales subidos a través del Sistema del Concurso Escolar, serán evaluador según cronograma por nuestro Comité Evaluador. En caso que alguno de sus estudiantes haya alcanzado algún puesto en nuestro cuadro de mérito nos pondremos en contacto con usted a través del correo electrónico y números personales registrados por usted en el sistema. Aprovechamos esta oportunidad para agradecer su compromiso y dedicación demostrados a lo largo de todo este certamen, los cuales sin duda contribuyen a la formación de la una cultura valorativa de los servicios de agua y saneamiento entre sus estudiantes. Atentamente. PROGRAMA EDUCATIVO SUNASS</p>";
+		
+		trabajosfinalesServ.listarhabilitados(pe.getId()).forEach(obj->{			
+			participantes = "";			
+			msj2 += "<tr><td>"+ obj.getCategoriatrabajo().getDescripcion() + "</td>";
+			msj2 += "<td>"+ obj.getModalidadtrabajo().getDescripcion() + "</td>";
+			msj2 += "<td>"+ obj.getTitulotrabajo() + "</td>";
+			
+			trabajosfinalesparticipanteServ.listar(obj.getId()).forEach(obj1->{
+				participantes += obj1.getParticipante().getNombreestudiante() + " " + obj1.getParticipante().getAppaternoestudiante() + " " + obj1.getParticipante().getApmaternoestudiante() + "/";
+			});
+			msj2 += "<td>" + participantes + "</td></tr>";
+		});
+		msj2 += "</table>";
+		
+		mail = new Mail();
+		if( mail.enviarCorreoTrabajosFinalesConcursoEscolar("Confirmación de registro de trabajos finales al Concurso Escolar",msj+msj1+msj2+msj3,pe.getMailie())) {
+			return 1;
+		}
+		return 0;
+	}
+	
+	@PostMapping(value="/subirtrabajoarchivoevidencia")
+	public Integer subirtrabajoarchivoevidencia(@RequestParam("file") MultipartFile file,@RequestParam("id") Integer id, @RequestParam("files") ArrayList<MultipartFile> files) {
+		
+		if(file.isEmpty())
+			return 0;
+		try {
+			uploadfile.saveFile(file,id,"upload_trabajos");
+			for(int i=0;i<files.size();i++) {
+				uploadfile.saveFile(files.get(i),id,"upload_evidencias");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return 1; 
+	}
+	
+	@PostMapping(value="/subiractualizartrabajoarchivoevidencia")
+	public Integer subiractualizartrabajoarchivoevidencia(@RequestParam("file") MultipartFile file,@RequestParam("id") Integer id, @RequestParam("files") ArrayList<MultipartFile> files,@RequestParam("array_evidencias_eliminadas") String array_evidencias_eliminadas) {
+		
+		try {
+			if(file != null) {
+				if(uploadfile.borrarArchivo(id,"upload_trabajos")) {
+					uploadfile.saveFile(file,id,"upload_trabajos");
+				}
+			}
+			
+			String [] eliminados = array_evidencias_eliminadas.split(",");
+			
+			for(int i=0;i<eliminados.length;i++) {
+				System.out.println("obj :" + eliminados[i]);
+				uploadfile.eliminarArchivoCreado(id, eliminados[i]);
+			}
+			
+			if(files!= null) {
+				for(int i=0;i<files.size();i++) {
+					uploadfile.saveFile(files.get(i),id,"upload_evidencias");
+				}
+			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -207,7 +356,7 @@ public class ConcursoeducativoController {
 		if(file.isEmpty())
 			return 0;
 		try {
-			if(uploadfile.borrarArchivo(id)) {
+			if(uploadfile.borrarArchivo(id,"upload_participantes")) {
 				uploadfile.saveNuevoFile(file,id);
 			}
 			else {
@@ -281,6 +430,103 @@ public class ConcursoeducativoController {
 		}		
 		return new ResponseEntity<List<ListaparticipanteDto>>(lista, HttpStatus.OK) ;
 	}
+	
+	
+	
+	@GetMapping(value = "/listatrabajosfinales")
+	public ResponseEntity<List<ListatrabajosfinalesDto>> listatrabajosfinales(HttpSession ses){
+		
+		String codmod = ses.getAttribute("usuario").toString();
+		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
+		
+		List<ListatrabajosfinalesDto> lista = new ArrayList<ListatrabajosfinalesDto>();
+		List<Trabajosfinales> listaTrabajosfinales =  trabajosfinalesServ.listarhabilitados(pe.getId());
+		if(listaTrabajosfinales!=null) {
+			listaTrabajosfinales.forEach(obj->{		
+				
+				String archivos = "";
+				miparticipante = "";
+				
+				dtotf =new ListatrabajosfinalesDto();
+				
+				dtotf.setId(obj.getId());
+				
+				dtotf.setCategoria(obj.getCategoriatrabajo().getDescripcion());
+				dtotf.setTitulo(obj.getTitulotrabajo());
+				dtotf.setModalidad(obj.getModalidadtrabajo().getDescripcion());
+				
+				trabajosfinalesparticipanteServ.listar(obj.getId()).forEach(obj1->{
+					miparticipante += obj1.getParticipante().getNombreestudiante() + " " + obj1.getParticipante().getAppaternoestudiante() + " " + obj1.getParticipante().getApmaternoestudiante() + "/";
+					//System.out.println(obj1.getParticipante().getNombreestudiante() + " " + obj1.getParticipante().getAppaternoestudiante() + " " + obj1.getParticipante().getApmaternoestudiante());
+				});
+				
+				dtotf.setParticipantes(miparticipante);
+				
+				archivos = uploadfile.nroArchivos(obj.getId(), "upload_evidencias").toString() + " evidencias " + uploadfile.nroArchivos(obj.getId(), "upload_trabajos").toString() + " final";
+				
+				dtotf.setArchivos(archivos);
+				dtotf.setEnviado(obj.getEnviado());
+				
+				lista.add(dtotf);
+			});
+		}		
+		return new ResponseEntity<List<ListatrabajosfinalesDto>>(lista, HttpStatus.OK) ;
+	}
+	
+	@GetMapping(value = "/listaparticipantes_trabajo")
+	public ResponseEntity<List<ListaparticipantetrabajoDto>> listaparticipantes_trabajo(HttpSession ses){
+		
+		String codmod = ses.getAttribute("usuario").toString();
+		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
+		
+		List<ListaparticipantetrabajoDto> lista = new ArrayList<ListaparticipantetrabajoDto>();
+		List<Participante> listaParticipante = participanteService.listarhabilitados(pe.getId());
+		if(listaParticipante!=null) {
+			listaParticipante.forEach(obj->{
+				
+				ptdto =new ListaparticipantetrabajoDto();
+				ptdto.setId(obj.getId());
+				ptdto.setAppaterno(obj.getAppaternoestudiante());
+				ptdto.setApmaterno(obj.getApmaternoestudiante());
+				ptdto.setNombre(obj.getNombreestudiante());
+				ptdto.setTipodocumento(obj.getTipodocumentoestudiante().getDescripcion());
+				ptdto.setNrodocumento(obj.getNrodocumentoestudiante());
+				ptdto.setComposicionmusical(obj.getCategoriacomposicionmusical());
+				ptdto.setCuento(obj.getCategoriacuento());
+				ptdto.setPoesia(obj.getCategoriapoesia());
+				ptdto.setDibujopintura(obj.getCategoriadibujopintura());
+				ptdto.setAhorraragua(obj.getCategoriaahorroagua());
+				ptdto.setModalidadindividual(obj.getModalidadpostulacionindividual());
+				ptdto.setModalidadgrupal(obj.getModalidadpostulaciongrupal());
+				ptdto.setNivel(obj.getGradoestudiante().getNivelgradopartdesc());
+				lista.add(ptdto);
+			});
+		}		
+		return new ResponseEntity<List<ListaparticipantetrabajoDto>>(lista, HttpStatus.OK) ;
+	}
+	
+	
+	
+	
+	
+	@GetMapping(value = "/listaparticipantesver_trabajo/{id}")
+	public ResponseEntity<List<ParticipanteVerDto>> listaparticipantesver_trabajo(@PathVariable("id") Integer id){
+		
+		List<ParticipanteVerDto> lista = new ArrayList<ParticipanteVerDto>();
+		trabajosfinalesparticipanteServ.listar(id).forEach(obj->{
+			ParticipanteVerDto dto = new ParticipanteVerDto();
+			dto.setApellidopaterno(obj.getParticipante().getAppaternoestudiante());
+			dto.setApellidomaterno(obj.getParticipante().getApmaternoestudiante());
+			dto.setNombres(obj.getParticipante().getNombreestudiante());
+			dto.setTipodocumento(obj.getParticipante().getTipodocumentoestudiante().getDescripcion());
+			dto.setNrodocumento(obj.getParticipante().getNrodocumentoestudiante());
+			dto.setNivel(obj.getParticipante().getGradoestudiante().getNivelparticipante().getDescripcion());
+			lista.add(dto);
+		});
+		return new ResponseEntity<List<ParticipanteVerDto>>(lista, HttpStatus.OK) ;
+	}
+	
+	
 	
 	@GetMapping("/listadocentes")
 	public ResponseEntity<List<ListaDocente>> listadocentes(HttpSession ses) {		

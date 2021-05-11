@@ -33,6 +33,9 @@ public class Postulacionconcurso {
 	@Column(name="categoria5")
 	private Integer categoria5;
 	
+	@Column(name="FINALIZARPARTICIPACIONTRABAJO",nullable=true)
+	private Integer finalizarparticipaciontrabajo;
+	
 	@ManyToOne
 	@JoinColumn(name="programaeducativoid",nullable=false,foreignKey=@ForeignKey(name="FK_programaeducativo_id"))
 	private Programaeducativo progeduc;
@@ -106,6 +109,14 @@ public class Postulacionconcurso {
 
 	public void setCategoria5(Integer categoria5) {
 		this.categoria5 = categoria5;
+	}
+
+	public Integer getFinalizarparticipaciontrabajo() {
+		return finalizarparticipaciontrabajo;
+	}
+
+	public void setFinalizarparticipaciontrabajo(Integer finalizarparticipaciontrabajo) {
+		this.finalizarparticipaciontrabajo = finalizarparticipaciontrabajo;
 	}
 	
 }

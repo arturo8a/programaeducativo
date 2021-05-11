@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,18 +15,37 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class UploadFileService {
 
-    private String upload_folder = "/opt/apache-tomcat-8.0.27/webapps/alfresco_programaeducativo/pedesa/upload_participantes/";
-	//private String upload_folder = ".//src//main//resources//files//";
+    //private String upload_folder = "/opt/apache-tomcat-8.0.27/webapps/alfresco_programaeducativo/pedesa/";
+	private String upload_folder = ".//src//main//resources//";
 
-    public void saveFile(MultipartFile file,Integer id) throws IOException {
+    public void saveFile(MultipartFile file,Integer id,String ruta) throws IOException {
         if(!file.isEmpty()){
             byte[] bytes = file.getBytes();            
-            File directorio = new File(upload_folder+ "//"+id+"//");
+            File directorio = new File(upload_folder+ ruta+ "//"+id+"//");
             if(directorio.mkdirs()) {
-            	Path path = Paths.get(upload_folder + "//"+id+"//" + file.getOriginalFilename());
+            	System.out.println("name :" + file.getOriginalFilename());
+            	Path path = Paths.get(upload_folder + ruta+ "//"+id+"//" + file.getOriginalFilename());
+            	Files.write(path,bytes);
+            }
+            else {
+            	System.out.println("name :" + file.getOriginalFilename());
+            	Path path = Paths.get(upload_folder + ruta+ "//"+id+"//" + file.getOriginalFilename());
             	Files.write(path,bytes);
             }
         }
+    }
+    
+    public void saveFile(List<MultipartFile> file,Integer id,String ruta) throws IOException {
+    	
+    	File directorio = new File(upload_folder+ ruta+ "//"+id+"//");
+    	System.out.println("file length :" + file.size());
+        if(directorio.mkdirs()) {
+        	for(int i=0;i<file.size();i++) {
+        		byte[] bytes = file.get(i).getBytes();
+            	Path path = Paths.get(upload_folder+ ruta + "//"+id+"//" + file.get(i).getOriginalFilename());
+            	Files.write(path,bytes);
+        	}
+        }    	
     }
     
     public void saveNuevoFile(MultipartFile file,Integer id) throws IOException {
@@ -35,15 +56,38 @@ public class UploadFileService {
         }
     }
     
-    public String buscarArchivo(int id) {
-    	File carpeta = new File(upload_folder + "//" + id + "//");
+    public String buscarArchivo(int id, String ruta) {
+    	File carpeta = new File(upload_folder + "//" + ruta + "//" + id + "//");
     	String[] listado = carpeta.list();
     	return listado[0];
     }
     
-    public boolean borrarArchivo(Integer id) {
-    	String nombreArchivoAntiguo = buscarArchivo(id);
-    	File archivoAntiguo = new File(upload_folder+"//"+id+"//"+nombreArchivoAntiguo);
+    public List<String> buscarEvidencias(int id,String  ruta) {
+    	List<String> mi_array = new ArrayList<String>();
+    	File carpeta = new File(upload_folder + "//" + ruta + "//" + id + "//");
+    	String[] listado = carpeta.list();
+    	for(int i=0;i<listado.length;i++) {
+    		mi_array.add(listado[i]);
+        }
+    	return mi_array;
+    }
+    
+    
+    public Integer nroArchivos(int id, String ruta) {
+    	File carpeta = new File(upload_folder + "//" + ruta + "//" + id + "//");
+    	String[] listado = carpeta.list();
+    	return listado == null ? 0 : listado.length;
+    }
+    
+    public boolean borrarArchivo(Integer id,String ruta) {
+    	String nombreArchivoAntiguo = buscarArchivo(id,ruta);
+    	File archivoAntiguo = new File(upload_folder+"//"+ ruta +"//"+id+"//"+nombreArchivoAntiguo);
     	return archivoAntiguo.delete();    	
     }
+    
+    public boolean eliminarArchivoCreado(Integer id,String nombrearchivo) {
+    	File archivoAntiguo = new File(upload_folder+"//"+"upload_evidencias"+"//"+id+"//"+nombrearchivo);
+    	return archivoAntiguo.delete();
+    }
+    
 }
