@@ -1,5 +1,7 @@
 package com.progeduc.repo;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -10,4 +12,7 @@ public interface ITipousuarioRepo extends CrudRepository<Tipousuario,Integer>{
 	
 	@Query(value="SELECT U.* FROM TIPOUSUARIO U WHERE U.ID=?1",nativeQuery = true)
 	Tipousuario byTipousuario(@Param("id") int id);
+	
+	@Query(value="SELECT U.* FROM TIPOUSUARIO U order by orden asc",nativeQuery = true)
+	List<Tipousuario> lista();
 }

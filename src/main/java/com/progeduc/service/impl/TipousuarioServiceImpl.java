@@ -1,5 +1,7 @@
 package com.progeduc.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,11 @@ public class TipousuarioServiceImpl implements ITipousuarioService{
 	@Override
 	public Tipousuario byTipousuario(int id) {
 		return repo.byTipousuario(id);
+	}
+	
+	@Override
+	public List<Tipousuario> lista(){
+		return repo.lista();
 	}
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.progeduc.model.Nivelparticipacion;
 import com.progeduc.model.Nivelparticipante;
 import com.progeduc.repo.INivelparticipanteRepo;
 import com.progeduc.service.INivelparticipanteService;

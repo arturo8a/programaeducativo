@@ -1,5 +1,7 @@
 package com.progeduc.model;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -9,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="POSTULACIONCONCURSO")
@@ -43,6 +47,18 @@ public class Postulacionconcurso {
 	@Column(name="anio")
 	private Integer anio;
 	
+	@JsonIgnore
+	@Column(name="FECHA_REGISTRO",nullable=true)
+	private Timestamp fecha_registro;	
+	
+	public Timestamp getFecha_registro() {
+		return fecha_registro;
+	}
+
+	public void setFecha_registro(Timestamp fecha_registro) {
+		this.fecha_registro = fecha_registro;
+	}
+
 	public Postulacionconcurso() {
 		
 	}

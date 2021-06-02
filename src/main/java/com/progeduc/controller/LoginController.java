@@ -1,5 +1,7 @@
 package com.progeduc.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +13,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.progeduc.componente.Ldap;
 import com.progeduc.model.Programaeducativo;
 import com.progeduc.model.Usuario;
-import com.progeduc.model.UsuarioOds;
+import com.progeduc.model.UsuarioLdap;
+import com.progeduc.model.Usuario_Ods;
+import com.progeduc.service.IOdsService;
 import com.progeduc.service.IProgramaeducativoService;
+import com.progeduc.service.ITipousuarioService;
 import com.progeduc.service.IUsuarioService;
-import com.progeduc.service.IUsuarioodsService;
+import com.progeduc.service.IUsuario_odsService;
 
 @Controller
 @RequestMapping("")
@@ -27,18 +33,24 @@ public class LoginController {
 	IUsuarioService usuarioServ;
 	
 	@Autowired
-	IUsuarioodsService usuarioodsServ;
+	IUsuario_odsService usuario_odsServ;
 	
 	@Autowired
 	IProgramaeducativoService progeducService;
-
+	
+	@Autowired
+	private IOdsService odsserv;
+	
+	@Autowired
+	private ITipousuarioService tipousuarioServ;
+	
 	@RequestMapping(value="/login", method = RequestMethod.POST, produces="text/plain")	
     public @ResponseBody String loginUsuario(@RequestParam("usuario") String usuario, @RequestParam("password") String password,HttpSession ses){
     	
 		try {
     		Usuario obj = usuarioServ.login(usuario, password);    		
         	if(obj==null) {
-        		UsuarioOds uo = usuarioodsServ.login(usuario, password);
+        		Usuario_Ods uo = usuario_odsServ.login(usuario, password);
         		if(uo == null) {
         			return "-1";
         		}
@@ -85,6 +97,16 @@ public class LoginController {
 		ses.removeAttribute("flag");
 		System.out.println("/cerrar_session :"+ses.getAttribute("usuario"));		
 		return "login";
+	}
+	
+	@GetMapping("/formnuevousuario")
+	public String formnuevousuario(Model model) throws Exception {
+		model.addAttribute("listaods",odsserv.listarAll());		
+		Ldap mildap = new Ldap();
+		List<UsuarioLdap> lista = mildap.listarTodosUsuariosLDAP();
+		model.addAttribute("usuarios", lista);
+		model.addAttribute("tipousuarios", tipousuarioServ.lista());
+		return "formnuevousuario";
 	}
 	
 	

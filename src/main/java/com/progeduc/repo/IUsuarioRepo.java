@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.progeduc.model.Usuario;
-import com.progeduc.model.UsuarioOds;
+import com.progeduc.model.Usuario_Ods;
 
 @Repository
 @Transactional(readOnly = true)

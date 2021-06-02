@@ -6,6 +6,9 @@ var codigo_seleccionado = "";
 var textoValidarControles = "";
 var bandera=true;
 
+var clickeable = false;
+var focounico = false;
+
 $(document).ready(function(){
 	
 	var fechaactual = new Date();
@@ -37,9 +40,14 @@ $(document).ready(function(){
 	    }
 	});
 	
-	$("#codmod").val("");
+	$("#codmod").val("");	
 	limpiarControles();
-	$("#codmod").focus();
+	
+	if(!focounico){
+		$("#codmod").focus();
+		focounico = true;
+	}	
+	
 	$("#docprof").prop("disabled",true);
 	$("#docdir").prop("disabled",true);
 	//uncheckPostularConcurso();
@@ -363,258 +371,226 @@ $(document).ready(function(){
 	
 	$("#btnconfirmarprogeduc").click(function(){
 		
-		/*cat1.checked =null;
-		cat2.checked =null;
-	    cat3.checked =null;
-	    cat4.checked =null;*/
-		$("#modalcargando").modal('hide');
-		/*$('#modalpostular').modal({
-			backdrop: 'static'
-		});*/
-		$("#modalimagencargando").modal({
-			show : true,
-			backdrop : 'static',
-			keyboard:false
-		});
+		if(!clickeable){
+				clickeable = true;
 		
-		
-		
-		/*registrar programa educativo*/
-		
-		var codmod = $("#codmod").val();
-		var nomie = $("#nomie").val();
-		var tipoieid = $("#tipoieid").val() 
-		var distritoid = $("#distritoid").val();
-		var dirie = $("#dirie").val();
-		var dre = $("#dre").val();
-		var ugel = $("#ugel").val();
-		var telfie = $("#telfie").val();
-		var mailie = $("#mailie").val();
-		var facebook = $("#facebook").val();
-		var lenguaid = $("#lengua").val();
-		var ambitoid = $('input:radio[name=ambradio]:checked').val();
-		var modensenianzaid = $('input:radio[name=modensradio]:checked').val();
-		var generoid = $('input:radio[name=genradio]:checked').val();
-		var proveedorid = $("#proveedor").val();		
-		var abastecimiento = $("#abastecimiento").val();
-		var piscinaid = $('input:radio[name=piscina]:checked').val();
-		var tipodocidentdirid = $("#tipodocdir").val();
-		var docdir = $("#docdir").val();
-		var apedir = $("#apedir").val();
-		var nomdir = $("#nomdir").val();
-		var generodir = $("#generodir").val();
-		var telfdir = $("#telfdir").val();
-		var celdir = $("#celdir").val();
-		var maildir = $("#maildir").val();
-		var tipodocidentprofid = $("#tipodocprof").val();
-		var docprof = $("#docprof").val();
-		var apeprof = $("#apeprof").val();
-		var nomprof = $("#nomprof").val();
-		var generoprof = $("#generoprof").val();
-		var telfprof = $("#telfprof").val();
-		var celprof = $("#celprof").val();
-		var mailprof = $("#mailprof").val();	
-		
-		var listSuministro = new Array();;
-		for(var i=0;i<arraysuministro.length;i++){
-			listSuministro.push({
-				numero : arraysuministro[i]
-			});
-		}
-		
-		var progeduc = {
-			codmod : codmod,
-			nomie : nomie,
-			tipoie : {
-				id: tipoieid
-			},
-			distrito:{
-				id: distritoid
-			},
-			dirie : dirie,
-			dre : dre,
-			ugel : ugel,
-			telfie : telfie,
-			mailie : mailie,
-			facebook : facebook,
-			lengua : {
-				id : lenguaid
-			},
-			ambito : {
-				id: ambitoid
-			},
-			modensenianza: {
-				id: modensenianzaid
-			},
-			genero : {
-				id: generoid,
-			},
-			piscina: {
-				id : piscinaid
-			},
-			proveedor:{
-				id : proveedorid
-			},
-			abastecimiento: abastecimiento,
-			tipodocidentdir:{
-				id: tipodocidentdirid
-			},
-			docdir : docdir,
-			apedir : apedir,
-			nomdir : nomdir,
-			generodir : {
-				id:generodir
-			},
-			telfdir : telfdir,
-			celdir : celdir,
-			maildir: maildir,			
-			tipodocidentprof : {
-				id: tipodocidentprofid
-			},
-			docprof : docprof,
-			apeprof : apeprof,
-			nomprof : nomprof,
-			generoprof : {
-				id:generoprof
-			},
-			telfprof : telfprof,
-			celprof : celprof,
-			mailprof : mailprof	,
-			suministro: listSuministro,
-			dep : $("#departamentoid").val(),
-			prov : $("#provinciaid").val(),
-			concurso: 0,
-			estado : 'Pendiente'
-		};
-		
-		var listNivel = new Array();
-		
-		if($("#nini").is(':checked')) {            
-			var datai = {
-				nrosecciones: $("#nseci").val(),
-				nrodocentes: $("#ndoci").val(),
-				nroalumnos: $("#nalui").val(),
-				nrovarones: $("#nvari").val(),
-				nromujeres: $("#nmuji").val(),
-				tiponivel: {
-					id :1
-				}
-			};
-			listNivel.push(datai);
-	    }
-		
-		if($("#ninp").is(':checked')) {  
-			var datap = {
-					nrosecciones: $("#nsecp").val(),
-					nrodocentes: $("#ndocp").val(),
-					nroalumnos: $("#nalup").val(),
-					nrovarones: $("#nvarp").val(),
-					nromujeres: $("#nmujp").val(),
-					tiponivel: {
-						id: 2
-					}
-				};
-			listNivel.push(datap);
-	    }
-		
-		if($("#nins").is(':checked')) {  
-			
-			var datas = {
-					nrosecciones: $("#nsecs").val(),
-					nrodocentes: $("#ndocs").val(),
-					nroalumnos: $("#nalus").val(),
-					nrovarones: $("#nvars").val(),
-					nromujeres: $("#nmujs").val(),
-					tiponivel: {
-						id: 3
-					}
-				};
-			listNivel.push(datas);
-	    }
-		
-		var listTurno = new Array();
-		
-		if($("#turradio1").is(':checked')) {  
-			listTurno.push({
-				id: 1
-			});
-	    }
-		if($("#turradio2").is(':checked')) {  
-			listTurno.push({
-				id: 2
-			});
-	    }
-		if($("#turradio3").is(':checked')) {  
-			listTurno.push({
-				id : 3
-			});
-	    }
-		
-		var fechaactual = new Date();
-		var anioactual = fechaactual. getFullYear();
-		/*var contenido_correo = 'Bienvenido (a) Al Programa Educativo "Aprendiendo a usar responsablemente el agua potable" de la Sunass, pronto recibir\u00E1s informaci\u00F3n relevante sobre nuestras charlas y talleres dedicados a fortalecer las capacidades de los docentes. Asimismo, te recordamos que puedes desarrollar tus clases con la ayuda de nuestra Gu\u00EDa Metodol\u00F3gica, la misma que puedes descargar' +'<a href="https://drive.google.com/drive/folders/1hqzhZomsgA4J8JEIKxbk3JUmn44spn3N?usp=sharing">aqu\u00ED</a>';*/
-		/*var contenido_correo = 'Bienvenido (a) Al Programa Educativo "Apendiendo a usar responsablemente el agua potable" de la Sunass en unos momentos recibira un correo de nuestros especialistas confirmando su participación';
-		var objUsuarioEmail  = {
-				usuario : {
-					usuario : $("#mailie").val().split("@")[0],
-					password: "Sunass"+anioactual,
-					nombre : $("#nomie").val(),
-					email:$("#mailie").val(),
-					dni:$("#docdir").val(),
-					ciudad: $("#distritoid option:selected").text(),
-					tipousuario: {
-						id: 3
-					},
-					estado: 'HABILITADO',
-					ods: {
-						id: 0
-					},
-					ciclo: 0
-				},
-				emailbody: {
-					email1 : $("#maildir").val(),
-					email2 : $("#mailprof").val(),
-					content: contenido_correo ,
-					subject: "Confirmación de inscripción al Programa Educativo"
-				}
-			};	*/	
-			
-		var obj = {
-				progeduc : progeduc,
-				listNivel : listNivel,
-				listTurno : listTurno
-			};
-		
-		
-		$.ajax({
-			type : "POST",
-		    contentType : "application/json",
-		    url : url_base + "pedesa/saveturnonivel",
-		    data : JSON.stringify(obj),
-		    dataType : 'json',
-			success: function(respuesta) {
-				if(respuesta){
-					$("#modalimagencargando").modal('hide');
-					/*$("#textoexito").html("Se registro exitosamente en el Programa Educativo.<br>Revise su bandeja de entrada del correo <strong>"+$("#mailie").val()+"</strong>, se envió usuario y contraseña para el acceso al sistema del Programa Educativo");*/
-					$("#textoexito").html("Registro exitoso, pronto recibirá un correo de confirmación a la dirección electrónica registrada.");
-					$('#modalexito').modal({
-						show : true,
-						backdrop : 'static',
-						keyboard:false
+				$("#modalcargando").modal('hide');
+				$("#modalimagencargando").modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+				
+				/*registrar programa educativo*/
+				
+				var codmod = $("#codmod").val();
+				var nomie = $("#nomie").val();
+				var tipoieid = $("#tipoieid").val() 
+				var distritoid = $("#distritoid").val();
+				var dirie = $("#dirie").val();
+				var dre = $("#dre").val();
+				var ugel = $("#ugel").val();
+				var telfie = $("#telfie").val();
+				var mailie = $("#mailie").val();
+				var facebook = $("#facebook").val();
+				var lenguaid = $("#lengua").val();
+				var ambitoid = $('input:radio[name=ambradio]:checked').val();
+				var modensenianzaid = $('input:radio[name=modensradio]:checked').val();
+				var generoid = $('input:radio[name=genradio]:checked').val();
+				var proveedorid = $("#proveedor").val();		
+				var abastecimiento = $("#abastecimiento").val();
+				var piscinaid = $('input:radio[name=piscina]:checked').val();
+				var tipodocidentdirid = $("#tipodocdir").val();
+				var docdir = $("#docdir").val();
+				var apedir = $("#apedir").val();
+				var nomdir = $("#nomdir").val();
+				var generodir = $("#generodir").val();
+				var telfdir = $("#telfdir").val();
+				var celdir = $("#celdir").val();
+				var maildir = $("#maildir").val();
+				var tipodocidentprofid = $("#tipodocprof").val();
+				var docprof = $("#docprof").val();
+				var apeprof = $("#apeprof").val();
+				var nomprof = $("#nomprof").val();
+				var generoprof = $("#generoprof").val();
+				var telfprof = $("#telfprof").val();
+				var celprof = $("#celprof").val();
+				var mailprof = $("#mailprof").val();	
+				
+				var listSuministro = new Array();;
+				for(var i=0;i<arraysuministro.length;i++){
+					listSuministro.push({
+						numero : arraysuministro[i]
 					});
 				}
-				else{
-					$("#modalimagencargando").modal('hide');
-					$("#textoexito").html("Se registro correctamente en el Programa Educativo, pero hubo problemas al enviar las credenciales al correo institucional. Comuníquese con la Oficina de Tecnologías de Información de Sunass.");
-					$("#codmod").val("");
-					limpiarControles();
+				
+				var progeduc = {
+					codmod : codmod,
+					nomie : nomie,
+					tipoie : {
+						id: tipoieid
+					},
+					distrito:{
+						id: distritoid
+					},
+					dirie : dirie,
+					dre : dre,
+					ugel : ugel,
+					telfie : telfie,
+					mailie : mailie,
+					facebook : facebook,
+					lengua : {
+						id : lenguaid
+					},
+					ambito : {
+						id: ambitoid
+					},
+					modensenianza: {
+						id: modensenianzaid
+					},
+					genero : {
+						id: generoid,
+					},
+					piscina: {
+						id : piscinaid
+					},
+					proveedor:{
+						id : proveedorid
+					},
+					abastecimiento: abastecimiento,
+					tipodocidentdir:{
+						id: tipodocidentdirid
+					},
+					docdir : docdir,
+					apedir : apedir,
+					nomdir : nomdir,
+					generodir : {
+						id:generodir
+					},
+					telfdir : telfdir,
+					celdir : celdir,
+					maildir: maildir,			
+					tipodocidentprof : {
+						id: tipodocidentprofid
+					},
+					docprof : docprof,
+					apeprof : apeprof,
+					nomprof : nomprof,
+					generoprof : {
+						id:generoprof
+					},
+					telfprof : telfprof,
+					celprof : celprof,
+					mailprof : mailprof	,
+					suministro: listSuministro,
+					dep : $("#departamentoid").val(),
+					prov : $("#provinciaid").val(),
+					concurso: 0,
+					estado : 'Pendiente'
+				};
+				
+				var listNivel = new Array();
+				
+				if($("#nini").is(':checked')) {            
+					var datai = {
+						nrosecciones: $("#nseci").val(),
+						nrodocentes: $("#ndoci").val(),
+						nroalumnos: $("#nalui").val(),
+						nrovarones: $("#nvari").val(),
+						nromujeres: $("#nmuji").val(),
+						tiponivel: {
+							id :1
+						}
+					};
+					listNivel.push(datai);
 				}
-			},
-			error: function() {
-				$("#modalimagencargando").modal('hide');
-				alert("Error al Registrarse en el Programa Educativo. Comunicarse con la Oficina de Tecnología de Información de Sunass");
-		    }
-		});		
+				
+				if($("#ninp").is(':checked')) {  
+					var datap = {
+							nrosecciones: $("#nsecp").val(),
+							nrodocentes: $("#ndocp").val(),
+							nroalumnos: $("#nalup").val(),
+							nrovarones: $("#nvarp").val(),
+							nromujeres: $("#nmujp").val(),
+							tiponivel: {
+								id: 2
+							}
+						};
+					listNivel.push(datap);
+				}
+				
+				if($("#nins").is(':checked')) {  
+					
+					var datas = {
+							nrosecciones: $("#nsecs").val(),
+							nrodocentes: $("#ndocs").val(),
+							nroalumnos: $("#nalus").val(),
+							nrovarones: $("#nvars").val(),
+							nromujeres: $("#nmujs").val(),
+							tiponivel: {
+								id: 3
+							}
+						};
+					listNivel.push(datas);
+				}
+				
+				var listTurno = new Array();
+				
+				if($("#turradio1").is(':checked')) {  
+					listTurno.push({
+						id: 1
+					});
+				}
+				if($("#turradio2").is(':checked')) {  
+					listTurno.push({
+						id: 2
+					});
+				}
+				if($("#turradio3").is(':checked')) {  
+					listTurno.push({
+						id : 3
+					});
+				}
+				
+				var fechaactual = new Date();
+				var anioactual = fechaactual. getFullYear();
+					
+				var obj = {
+						progeduc : progeduc,
+						listNivel : listNivel,
+						listTurno : listTurno
+					};
+				
+				$.ajax({
+					type : "POST",
+					contentType : "application/json",
+					url : url_base + "pedesa/saveturnonivel",
+					data : JSON.stringify(obj),
+					dataType : 'json',
+					success: function(respuesta) {
+						if(respuesta){
+							$("#modalimagencargando").modal('hide');
+							$("#textoexito").html("Registro exitoso, pronto recibirá un correo de confirmación a la dirección electrónica registrada.");
+							$('#modalexito').modal({
+								show : true,
+								backdrop : 'static',
+								keyboard:false								
+							});
+							clickeable = false;
+						}
+						else{
+							$("#modalimagencargando").modal('hide');
+							$("#textoexito").html("Se registro correctamente en el Programa Educativo, pero hubo problemas al enviar las credenciales al correo institucional. Comuníquese con la Oficina de Tecnologías de Información de Sunass.");
+							$("#codmod").val("");
+							limpiarControles();
+						}
+					},
+					error: function() {
+						$("#modalimagencargando").modal('hide');
+						alert("Error al Registrarse en el Programa Educativo. Comunicarse con la Oficina de Tecnología de Información de Sunass");
+					}
+				});		
+		}
 	});
 	
 	$("#btncancelarprogeduc").click(function(){		
@@ -793,7 +769,7 @@ function fncPostular(indicador){
 	
 	var valorConcurso = 0;
 	
-	var codmod = $("#codmod").val();
+	var codmod = $("#codmod").val().trim();
 	var nomie = $("#nomie").val();
 	var tipoieid = $("#tipoieid").val() 
 	var distritoid = $("#distritoid").val();
@@ -1290,7 +1266,7 @@ function buscarCodmod(codmod){
 								}
 								$("#lblTotalVarones").html("Total Varones "+totalVarones);
 								$("#lblTotalMujeres").html("Total Mujeres "+totalMujeres);
-								$("#codmod").focus();
+								/*("#codmod").focus();*/
 							}					
 						}
 						else{
@@ -1646,6 +1622,7 @@ function filterInt(evt,input){
     }
 }
 
+
 function filterCadena(evt,input){
 	
 	var key = window.Event ? evt.which : evt.keyCode;    
@@ -1658,6 +1635,22 @@ function filterCadena(evt,input){
         return false;
     }	
 }
+
+
+
+function filterCadenaNombreApellido(evt,input){
+	
+	var key = window.Event ? evt.which : evt.keyCode;    
+    var chark = String.fromCharCode(key);
+    var tempValue = input.value+chark;
+    if((key >= 65 && key <= 90) || (key >= 97 && key <= 122) || (key ==32) ||  (key==225) || (key == 233) || (key==237) || (key==243) || (key==250)  ){    
+        return true;
+    }
+    else{
+        return false;
+    }	
+}
+
 
 /*function validarEmail(elemento,mensaje){
 	  if (!(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test($("#"+elemento).val()))){
@@ -1753,7 +1746,7 @@ function validarControles(){
 		textoValidarControles  += "<label style='color:red'>Debe Ingresar Correo institucional</label><br>";
 		bandera=false;
 	}
-	if(!(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test($("#mailie").val()))){		
+	if(! /^([da-z_.-]+)@([da-z.-]+).([a-z.]{2,6})$/.test($("#mailie").val())){		
 		$("#mailie").css({"color":"red","border":"1px solid red"});
 		textoValidarControles  += "<label style='color:red'>Debe Ingresar Correctamente el Correo Institucional</label><br>"; 
 		bandera=false;  
@@ -1862,7 +1855,7 @@ function validarControles(){
 		textoValidarControles  += "<label style='color:red'>Debe Ingresar Email del Director</label><br>"; 
 		bandera=false; 	  
 	}
-	if(!(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test($("#maildir").val()))){		
+	if(! /^([da-z_.-]+)@([da-z.-]+).([a-z.]{2,6})$/.test($("#maildir").val())){		
 		$("#maildir").css({"color":"red","border":"1px solid red"});
 		textoValidarControles  += "<label style='color:red'>Debe Ingresar Correctamente el Email del Director</label><br>"; 
 		bandera=false;  	  
@@ -1917,12 +1910,20 @@ function validarControles(){
 		textoValidarControles  += "<label style='color:red'>Debe Ingresar Email del Profesor</label><br>"; 
 		bandera=false;    	  
 	}
-	if(!(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test($("#mailprof").val()))){		
+	if(! /^([da-z_.-]+)@([da-z.-]+).([a-z.]{2,6})$/.test($("#mailprof").val())){		
 		$("#mailprof").css({"color":"red","border":"1px solid red"});
 		textoValidarControles  += "<label style='color:red'>Debe Ingresar Correctamente el Email del Profesor</label><br>"; 
 		bandera=false;    	  
 	}
 	return bandera;
+}
+
+function filterCorreo(evt,input){
+	var key = window.Event ? evt.which : evt.keyCode; 
+	if(key==225 || key == 233 || key==237 || key==243 || key==250 ){
+		return false;
+	}
+	return true;
 }
 
 function filterIntNroDocIdentidadDirector(evt,input){

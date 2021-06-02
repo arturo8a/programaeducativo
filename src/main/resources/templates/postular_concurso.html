@@ -156,7 +156,8 @@
 	    
 	  	var url_base = location.origin + "/";
 	  	var idpe=0;
-	   
+	    var clicando = false;
+	    
 		$(document).ready(function(){	
 			
 			
@@ -180,70 +181,74 @@
 			
 			$("#postular").click(function(){
 				
-				var cat1 =0, cat2=0,cat3=0,cat4=0,cat5=0;
-				
-				if($('#categoria1').prop('checked')){
-				    cat1=1;
+				if(!clicando){
+					clicando = true;
+					
+					var cat1 =0, cat2=0,cat3=0,cat4=0,cat5=0;
+					
+					if($('#categoria1').prop('checked')){
+					    cat1=1;
+					}
+					if($('#categoria2').prop('checked')){
+					    cat2=1;
+					}
+					if($('#categoria3').prop('checked')){
+					    cat3=1;
+					}
+					if($('#categoria4').prop('checked')){
+					    cat4=1;
+					}
+					if($('#categoria5').prop('checked')){
+					    cat5=1;
+					}
+					idpe = $("#id").val();
+			   		
+					var fecha = new Date();
+					var anio = fecha.getFullYear();
+					
+			   		var data = {
+			   			categoria1 :  cat1,
+			   			categoria2 : cat2,
+			   			categoria3 : cat3,
+			   			categoria4 : cat4,
+			   			categoria5 : cat5,
+			   			progeduc: {
+			   				id : idpe
+			   			},
+			   			anio : anio,
+			   			finalizarparticipaciontrabajo : 0
+			   		};
+			   		
+			   		$.ajax({
+			   			type : "POST",
+					    contentType : "application/json",
+					    url : url_base + "pedesa/registrarconcurso",
+					    data : JSON.stringify(data),
+						success: function(respuesta) {
+							switch(respuesta){
+								case "0" :  
+									$("#textoerror").html("Error al registrarse en el concurso");
+									$('#modalerror').modal({
+										show : true,
+										backdrop : 'static',
+										keyboard:false
+									});								
+									break;
+								default:   
+									$("#textoexito").html("Su IE se registr&oacute; exitosamente al '"+ respuesta +"'");
+									$('#modalexito').modal({
+										show : true,
+										backdrop : 'static',
+										keyboard:false
+									});	
+									break;
+							}
+						},
+						error: function() {
+					        console.log("No se ha podido obtener la información");
+					    }
+					});					
 				}
-				if($('#categoria2').prop('checked')){
-				    cat2=1;
-				}
-				if($('#categoria3').prop('checked')){
-				    cat3=1;
-				}
-				if($('#categoria4').prop('checked')){
-				    cat4=1;
-				}
-				if($('#categoria5').prop('checked')){
-				    cat5=1;
-				}
-				idpe = $("#id").val();
-		   		
-				var fecha = new Date();
-				var anio = fecha.getFullYear();
-				
-		   		var data = {
-		   			categoria1 :  cat1,
-		   			categoria2 : cat2,
-		   			categoria3 : cat3,
-		   			categoria4 : cat4,
-		   			categoria5 : cat5,
-		   			progeduc: {
-		   				id : idpe
-		   			},
-		   			anio : anio,
-		   			finalizarparticipaciontrabajo : 0
-		   		};
-		   		
-		   		$.ajax({
-		   			type : "POST",
-				    contentType : "application/json",
-				    url : url_base + "pedesa/registrarconcurso",
-				    data : JSON.stringify(data),
-					success: function(respuesta) {
-						switch(respuesta){
-							case "0" :  
-								$("#textoerror").html("Error al registrarse en el concurso");
-								$('#modalerror').modal({
-									show : true,
-									backdrop : 'static',
-									keyboard:false
-								});								
-								break;
-							default:   
-								$("#textoexito").html("Su IE se registr&oacute; exitosamente al '"+ respuesta +"'");
-								$('#modalexito').modal({
-									show : true,
-									backdrop : 'static',
-									keyboard:false
-								});	
-								break;
-						}
-					},
-					error: function() {
-				        console.log("No se ha podido obtener la información");
-				    }
-				});
 		   	});
 			
 			$("#btncerrarmensajeexito").click(function(){

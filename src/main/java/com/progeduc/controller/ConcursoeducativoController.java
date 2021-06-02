@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +28,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.progeduc.componente.Ldap;
 import com.progeduc.dto.ClaveValor;
+import com.progeduc.dto.EvaluacionDto;
+import com.progeduc.dto.EvaluacionRubricaQuestionarioDto;
 import com.progeduc.dto.ListaDocente;
 import com.progeduc.dto.ListaDocenteInscritos;
 import com.progeduc.dto.ListaparticipanteDto;
@@ -38,15 +42,18 @@ import com.progeduc.dto.TrabajofinalesEnviadoDto;
 import com.progeduc.dto.TrabajosfinalesParticipanteDto;
 import com.progeduc.model.Aperturaranio;
 import com.progeduc.model.Docente;
+import com.progeduc.model.Evaluacion;
 import com.progeduc.model.Gradoparticipante;
 import com.progeduc.model.Ods;
 import com.progeduc.model.Participante;
 import com.progeduc.model.Postulacionconcurso;
 import com.progeduc.model.Programaeducativo;
 import com.progeduc.model.Trabajosfinales;
+import com.progeduc.model.UsuarioLdap;
 import com.progeduc.service.IAperturaranioService;
 import com.progeduc.service.IDistritoService;
 import com.progeduc.service.IDocenteService;
+import com.progeduc.service.IEvaluacionService;
 import com.progeduc.service.IGradoparticipanteService;
 import com.progeduc.service.IOdsService;
 import com.progeduc.service.IParticipanteService;
@@ -93,24 +100,26 @@ public class ConcursoeducativoController {
 	@Autowired
 	private ITrabajosfinalesParticipanteService trabajosfinalesparticipanteServ;
 	
-	ListaparticipanteDto dto;
+	@Autowired
+	private IEvaluacionService evaluacionServ;
 	
-	ListatrabajosfinalesDto dtotf;
-	
-	ListaparticipantetrabajoDto ptdto;
-	
-	ListaDocenteInscritos listadocentesinscritos;
-	
-	String miparticipante = "";
-	
-	boolean banderaUpdate;
-	
+	ListaparticipanteDto dto;	
+	ListatrabajosfinalesDto dtotf;	
+	ListaparticipantetrabajoDto ptdto;	
+	ListaDocenteInscritos listadocentesinscritos;	
+	String miparticipante = "";	
+	boolean banderaUpdate;	
 	Mail mail;	
-	
 	String participantes, msj2;
+	UsuarioLdap usuarioldap = null;
 	
 	@PostMapping(value="/registrarconcurso")
 	public String registrarconcurso(@Valid @RequestBody Postulacionconcurso dto)  {
+		
+		Date date= new Date();
+		long time = date.getTime();
+		Timestamp ts = new Timestamp(time);
+		dto.setFecha_registro(ts);
 		
 		Postulacionconcurso pc = postulacionconcursoServ.registrar(dto);
 		String respuesta="0";
@@ -149,6 +158,11 @@ public class ConcursoeducativoController {
 	@GetMapping(value="/eliminarparticipanteid/{id}")
 	public Integer eliminarparticipanteid(@PathVariable("id") Integer id) {
 		return participanteService.updateestado(id, 0);
+	}
+	
+	@GetMapping(value="/eliminarevaluacionid/{id}")
+	public Integer eliminarevaluacionid(@PathVariable("id") Integer id) {
+		return evaluacionServ.updateestado(id, 0);
 	}
 	
 	@GetMapping(value="/eliminartrabajoid/{id}")
@@ -222,6 +236,16 @@ public class ConcursoeducativoController {
 		cl.setId(-1);
 		cl.setValor("");
 		return cl;		
+	}
+	
+	@PostMapping(value="/registrarevaluacion")
+	public Evaluacion registrarevalrubquest(@Valid @RequestBody EvaluacionRubricaQuestionarioDto dto) {
+		return evaluacionServ.saveEvalRubQuest(dto);
+	}
+	
+	@PostMapping(value="/actualizarevaluacion")
+	public Evaluacion actualizarevaluacion(@Valid @RequestBody EvaluacionRubricaQuestionarioDto dto) {
+		return evaluacionServ.updateEvalRubQuest(dto);
 	}
 	
 	@PostMapping(value="/actualizardocente")
@@ -322,7 +346,7 @@ public class ConcursoeducativoController {
 	}
 	
 	@PostMapping(value="/subiractualizartrabajoarchivoevidencia")
-	public Integer subiractualizartrabajoarchivoevidencia(@RequestParam("file") MultipartFile file,@RequestParam("id") Integer id, @RequestParam("files") ArrayList<MultipartFile> files,@RequestParam("array_evidencias_eliminadas") String array_evidencias_eliminadas) {
+	public Integer subiractualizartrabajoarchivoevidencia(@RequestParam(name="file",required=false) MultipartFile file,@RequestParam(name="id",required=false) Integer id, @RequestParam(name="files",required=false) ArrayList<MultipartFile> files,@RequestParam("array_evidencias_eliminadas") String array_evidencias_eliminadas) {
 		
 		try {
 			if(file != null) {
@@ -333,9 +357,11 @@ public class ConcursoeducativoController {
 			
 			String [] eliminados = array_evidencias_eliminadas.split(",");
 			
-			for(int i=0;i<eliminados.length;i++) {
-				System.out.println("obj :" + eliminados[i]);
-				uploadfile.eliminarArchivoCreado(id, eliminados[i]);
+			if(array_evidencias_eliminadas.length()>0) {
+				for(int i=0;i<eliminados.length;i++) {
+					System.out.println("obj :" + eliminados[i]);
+					uploadfile.eliminarArchivoCreado(id, eliminados[i]);
+				}
 			}
 			
 			if(files!= null) {
@@ -386,7 +412,7 @@ public class ConcursoeducativoController {
             	if(pe!=null) {
             		return pe.getId().toString();
             	}
-            	return "c";
+            	return "c";/*inscripcion al pe no ha sido aprobada*/
             }        	
         	return "b"; /*esta fuera de las fechas - fecha desde segunda y fecha hasta cuarta*/
         }
@@ -431,7 +457,21 @@ public class ConcursoeducativoController {
 		return new ResponseEntity<List<ListaparticipanteDto>>(lista, HttpStatus.OK) ;
 	}
 	
-	
+	@GetMapping(value = "/listaevaluaciones")
+	public ResponseEntity<List<EvaluacionDto>> listaevaluaciones(HttpSession ses){
+		
+		List<EvaluacionDto> lista = new ArrayList<EvaluacionDto>();
+		evaluacionServ.listar().forEach(obj->{
+			EvaluacionDto midto = new EvaluacionDto();
+			midto.setId(obj.getId());
+			midto.setAnio(obj.getAnio());
+			midto.setCategoriaevaluacion(obj.getCategoriaevaluacion().getDescripcion());
+			midto.setNivelparticipacion(obj.getNivelparticipacion().getDescripcion());
+			midto.setEstado(obj.getEstadoevaluacion().getDescripcion());
+			lista.add(midto);
+		});	
+		return new ResponseEntity<List<EvaluacionDto>>(lista, HttpStatus.OK) ;
+	}
 	
 	@GetMapping(value = "/listatrabajosfinales")
 	public ResponseEntity<List<ListatrabajosfinalesDto>> listatrabajosfinales(HttpSession ses){
@@ -611,6 +651,19 @@ public class ConcursoeducativoController {
 			});		
 		}			
 		return new ResponseEntity<List<ListaDocenteInscritos>>(arrayie, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/datosusuario/{usuario}")
+	public ResponseEntity<UsuarioLdap> datosusuario(@PathVariable("usuario") String usuario , Model model) throws Exception{
+		
+		Ldap mildap = new Ldap();
+		List<UsuarioLdap> lista = mildap.listarTodosUsuariosLDAP();
+		lista.forEach(obj->{
+			if(obj.getCuenta().equals( usuario))
+				usuarioldap = obj;
+		});
+		System.out.println("usuario :" + usuario);
+		return new ResponseEntity<UsuarioLdap>(usuarioldap, HttpStatus.OK) ;
 	}
 
 }

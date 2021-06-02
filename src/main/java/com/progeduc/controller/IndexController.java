@@ -22,24 +22,33 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.progeduc.model.Aperturaranio;
 import com.progeduc.model.Docente;
 import com.progeduc.model.Docentetutor;
+import com.progeduc.model.Evaluacion;
 import com.progeduc.model.Participante;
 import com.progeduc.model.Postulacionconcurso;
 import com.progeduc.model.Programaeducativo;
 import com.progeduc.model.ProgramaeducativoNivel;
 import com.progeduc.model.ProgramaeducativoTurno;
+import com.progeduc.model.Questionario;
+import com.progeduc.model.Rubrica;
 import com.progeduc.model.Suministro;
 import com.progeduc.model.Trabajosfinales;
 import com.progeduc.service.IAperturaranioService;
+import com.progeduc.service.ICategoriaevaluacionService;
 import com.progeduc.service.ICategoriatrabajoService;
 import com.progeduc.service.IDepartamentoService;
 import com.progeduc.service.IDistritoService;
 import com.progeduc.service.IDocenteService;
 import com.progeduc.service.IDocentetutorService;
+import com.progeduc.service.IEstadoevaluacionService;
+import com.progeduc.service.IEvaluacionQuestionarioService;
+import com.progeduc.service.IEvaluacionRubricaService;
+import com.progeduc.service.IEvaluacionService;
 import com.progeduc.service.IGeneroService;
 import com.progeduc.service.IGenerodirService;
 import com.progeduc.service.IGeneroprofService;
 import com.progeduc.service.IGradoparticipanteService;
 import com.progeduc.service.IModalidadtrabajoService;
+import com.progeduc.service.INivelparticipacionService;
 import com.progeduc.service.INivelparticipanteService;
 import com.progeduc.service.IOdsService;
 import com.progeduc.service.IParentescoService;
@@ -51,6 +60,7 @@ import com.progeduc.service.IProgramaeducativoService;
 import com.progeduc.service.IProvinciaService;
 import com.progeduc.service.IResponsableregistroService;
 import com.progeduc.service.ITipodocumentoService;
+import com.progeduc.service.ITipousuarioService;
 import com.progeduc.service.ITrabajosfinalesParticipanteService;
 import com.progeduc.service.ITrabajosfinalesService;
 import com.progeduc.service.LenguaService;
@@ -58,6 +68,8 @@ import com.progeduc.service.ProveedorService;
 import com.progeduc.service.TipodocService;
 import com.progeduc.service.TipoieService;
 import com.progeduc.service.impl.UploadFileService;
+
+import net.bytebuddy.matcher.ModifierMatcher.Mode;
 
 @Controller
 @RequestMapping("")
@@ -147,13 +159,35 @@ public class IndexController {
 	@Autowired
 	ITrabajosfinalesParticipanteService trabajosfinalesparticipanteService;
 	
+	@Autowired
+	INivelparticipacionService nivelparticipacionService;
+	
+	@Autowired
+	ICategoriaevaluacionService categoriaevaluacionService;
+	
+	@Autowired
+	IEstadoevaluacionService estadoevaluacionService;
+	
+	@Autowired
+	IEvaluacionService evaluacionService;
 	
 	@Autowired
 	private UploadFileService uploadfile;
 	
+	@Autowired
+	private IEvaluacionRubricaService evaluacionrubricaServ;
+	
+	@Autowired
+	private IEvaluacionQuestionarioService evaluacionquestionarioServ;
+	
+	@Autowired
+	private ITipousuarioService tipousuarioServ;
+	
 	String participanteid;
 	
 	int contador;
+	
+	String id_rubrica,id_questionario;
 	
 	@GetMapping("/inicio")
 	public String inicio(@RequestParam(name="name",required=false,defaultValue="world") String name, Model model) {
@@ -425,15 +459,70 @@ public class IndexController {
 		return "docenteconsulta";
 	}
 	
+	@GetMapping("/listaformrevaluaciones")
+	public String rubricaevaluacionconsulta(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
+		Calendar fecha = Calendar.getInstance();
+		model.addAttribute("anio",fecha.get(Calendar.YEAR));
+		List<Integer> lista = new ArrayList<Integer>();
+		int anio = fecha.get(Calendar.YEAR);
+		for(int i = anio-5;i<=anio;i++) {
+			lista.add(i);
+		}
+		model.addAttribute("listanivelparticipacion",nivelparticipacionService.listar());
+		model.addAttribute("anios", lista);
+		model.addAttribute("listacategoriaevaluacion", categoriaevaluacionService.listar());
+		model.addAttribute("listaestadoevaluacion", estadoevaluacionService.listar());
+		return "listaevaluaciones";
+	}
+	
+	
+	@GetMapping("/formcrearevaluacion")
+	public String formcrearevaluacion(Model model) {
+		Calendar fecha = Calendar.getInstance();
+		model.addAttribute("anio",fecha.get(Calendar.YEAR));
+		List<Integer> lista = new ArrayList<Integer>();
+		int anio = fecha.get(Calendar.YEAR);
+		for(int i = anio-5;i<=anio;i++) {
+			lista.add(i);
+		}
+		model.addAttribute("listanivelparticipacion",nivelparticipacionService.listar());
+		model.addAttribute("anios", lista);
+		model.addAttribute("listacategoriaevaluacion", categoriaevaluacionService.listar());
+		return "formcrearevaluacion";
+	}
+	
+	
+	
 	@GetMapping("/reportes")
 	public String reportes(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
 		model.addAttribute("ods",odsserv.listarAll());
 		return "reportes";
 	}
 	
+	@GetMapping("/formregistrarrubrica")
+	public String formregistrarrubrica(Model model) {
+		return "formregistrarrubrica";
+	}
+	
 	@GetMapping("/aperturar_anio")
 	public String contenido_aperturar_anio(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
 		return "contenido_aperturar_anio";
+	}
+	
+	@GetMapping("/consulta_usuarios")
+	public String consulta_usuarios(Model model) {
+		Calendar fecha = Calendar.getInstance();
+		model.addAttribute("anio",fecha.get(Calendar.YEAR));
+		List<Integer> lista = new ArrayList<Integer>();
+		int anio = fecha.get(Calendar.YEAR);
+		for(int i = anio-5;i<=anio;i++) {
+			lista.add(i);
+		}
+		model.addAttribute("anios", lista);
+		model.addAttribute("ods",odsserv.listarAll());		
+		model.addAttribute("tipousuarios", tipousuarioServ.lista());
+		
+		return "consulta_usuarios";
 	}
 	
 	@GetMapping("/menu")	
@@ -595,6 +684,57 @@ public class IndexController {
 		model.addAttribute("parentesco",parentescoService.listar());
 		model.addAttribute("nombrearchivo",uploadfile.buscarArchivo(pa.getId(),"upload_participantes"));
 		return "formeditarparticipante";
+	}
+	
+	@GetMapping("/editarviewevaluacionid/{id}")
+	public String editarviewevaluacionid(@PathVariable("id") Integer id,  Model model,HttpSession ses) {
+		
+		id_rubrica = "";
+		id_questionario ="";
+		
+		Evaluacion eval = evaluacionService.ListarporId(id);
+		model.addAttribute("evaluacion", eval);
+		
+		List<Rubrica> listaRubrica = new ArrayList<Rubrica>();
+        evaluacionrubricaServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
+        	listaRubrica.add(obj.getRubrica());
+        	id_rubrica += obj.getRubrica().getId().toString() + "-";
+        });
+        
+        List<Questionario> listaQuestionario = new ArrayList<Questionario>();
+        evaluacionquestionarioServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
+        	listaQuestionario.add(obj.getQuestionario());
+        	id_questionario += obj.getQuestionario().getId().toString() + "-";
+        });    
+        
+        model.addAttribute("id_rubrica", id_rubrica);
+        model.addAttribute("id_questionario", id_questionario);
+        model.addAttribute("id_evaluacion", eval.getId());
+        
+        List<Integer> listanro = new ArrayList<Integer>();
+        listanro.add(1);
+        listanro.add(2);
+        listanro.add(3);
+        listanro.add(4);
+        listanro.add(5);
+        model.addAttribute("listanro", listanro);
+        
+        
+        Calendar fecha = Calendar.getInstance();
+		model.addAttribute("anio",fecha.get(Calendar.YEAR));
+		List<Integer> lista = new ArrayList<Integer>();
+		int anio = fecha.get(Calendar.YEAR);
+		for(int i = anio-5;i<=anio;i++) {
+			lista.add(i);
+		}
+		
+        model.addAttribute("listarubrica", listaRubrica);
+        model.addAttribute("listaquestionario", listaQuestionario);      
+        
+        model.addAttribute("listanivelparticipacion",nivelparticipacionService.listar());
+		model.addAttribute("anios", lista);
+		model.addAttribute("listacategoriaevaluacion", categoriaevaluacionService.listar());
+		return "formeditarevaluacion";
 	}
 	
 	@GetMapping("/editarviewdocenteid/{id}")

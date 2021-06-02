@@ -30,23 +30,24 @@ import com.progeduc.dto.ActualizarContraseniaDto;
 import com.progeduc.dto.DatocorreoDto;
 import com.progeduc.dto.ListaCategoriaDto;
 import com.progeduc.dto.ListaInstitucionEducativa;
-import com.progeduc.dto.ListaparticipantereporteDto;
 import com.progeduc.dto.ProgeducDto;
 import com.progeduc.dto.ProgeducTurnoNivelDto;
 import com.progeduc.dto.ProgeducUpdateTurnoNivelDto;
-import com.progeduc.dto.ReporteparticipantesinscritosDto;
 import com.progeduc.dto.UpdateAprobarProgramaDto;
 import com.progeduc.dto.UpdateObservarProgramaDto;
 import com.progeduc.dto.Usuarioemail;
 import com.progeduc.model.Aperturaranio;
 import com.progeduc.model.Distrito;
 import com.progeduc.model.Docentetutor;
+import com.progeduc.model.Evaluacion;
 import com.progeduc.model.Nivel;
 import com.progeduc.model.Participante;
 import com.progeduc.model.ProgeducfiltroDto;
 import com.progeduc.model.Programaeducativo;
 import com.progeduc.model.ProgramaeducativoNivel;
 import com.progeduc.model.ProgramaeducativoTurno;
+import com.progeduc.model.Questionario;
+import com.progeduc.model.Rubrica;
 import com.progeduc.model.Turno;
 import com.progeduc.model.Usuario;
 import com.progeduc.service.IAperturaranioService;
@@ -55,6 +56,9 @@ import com.progeduc.service.IDepartamentoService;
 import com.progeduc.service.IDistritoService;
 import com.progeduc.service.IDocenteService;
 import com.progeduc.service.IDocentetutorService;
+import com.progeduc.service.IEvaluacionQuestionarioService;
+import com.progeduc.service.IEvaluacionRubricaService;
+import com.progeduc.service.IEvaluacionService;
 import com.progeduc.service.IOdsService;
 import com.progeduc.service.IParticipanteService;
 import com.progeduc.service.IPostulacionconcursoService;
@@ -64,7 +68,7 @@ import com.progeduc.service.IProgramaeducativoService;
 import com.progeduc.service.IProvinciaService;
 import com.progeduc.service.ITipousuarioService;
 import com.progeduc.service.IUsuarioService;
-import com.progeduc.service.IUsuarioodsService;
+import com.progeduc.service.IUsuario_odsService;
 import com.progeduc.service.impl.UploadFileService;
 
 import net.sf.jasperreports.engine.JREmptyDataSource;
@@ -101,7 +105,7 @@ public class ProgramaeducativoController {
 	IAperturaranioService aperturaranioService;
 	
 	@Autowired
-	IUsuarioodsService usuarioodsService;
+	IUsuario_odsService usuarioodsService;
 	
 	@Autowired
 	IUsuarioService usuarioService;
@@ -129,6 +133,15 @@ public class ProgramaeducativoController {
 	
 	@Autowired
 	private IParticipanteService participanteServ;
+	
+	@Autowired
+	private IEvaluacionService evaluacionServ;
+	
+	@Autowired
+	private IEvaluacionRubricaService evaluacionrubricaServ;
+	
+	@Autowired
+	private IEvaluacionQuestionarioService evaluacionquestionarioServ;
 	
 	ProgeducTurnoNivelDto dto;
 	List<Nivel> listNivel;
@@ -454,14 +467,14 @@ public class ProgramaeducativoController {
 			if(us!=null) {
 				dni = us.getPassword();
 			}			
+			if(usuarioService.byUsuario(codmod)==null) {						
+				Usuario user = new Usuario(codmod,dni,pe.getDirie(),pe.getMailie(),"","",tipousuarioserv.byTipousuario(3),"HABILITADO",null ,"");
+				usuarioService.registrar(user);
+			}
 			String mensaje = "<p>Sistema del Programa Educativo Sunass</p>Estimado (a) docente, le damos la bienvenida al Programa Educativo<br>'Aprendiendo a Usar Responsablemente el Agua Potable' de la Sunass. Si desea participar de nuestro Concurso Escolar confirme su inscripción <a href='http://prometeo.sunass.gob.pe/pedesa/'>Aquí</a>, ingresando el usuario y contraseña que le brindamos a continuación :<br><br>Usuario :"+ codmod+"<br>Contraseña :" + dni + "<br><br>Muchas gracias por su participación";                                        
 			mail = new Mail();		
 			if( mail.enviarCorreoIE(mensaje,pe.getMaildir())) {
-				if( mail.enviarCorreoIE(mensaje,pe.getMailprof())) {
-					if(usuarioService.byUsuario(codmod)==null) {						
-						Usuario user = new Usuario(codmod,dni,pe.getDirie(),pe.getMailie(),"","",tipousuarioserv.byTipousuario(3),"HABILITADO",null ,"");
-						usuarioService.registrar(user);
-					}
+				if( mail.enviarCorreoIE(mensaje,pe.getMailprof())) {					
 					return true;
 				}
 			}	
@@ -614,6 +627,13 @@ public class ProgramaeducativoController {
 		return crearparticipantePdf(part);
 	}
 	
+	@GetMapping(value="/descargarevaluacionpdf/{id}")
+	public String descargarevaluacionpdf(@PathVariable("id") Integer id, Model model) throws FileNotFoundException, JRException  {
+		
+		Evaluacion eval = evaluacionServ.ListarporId(id);
+		return crearEvaluacionPdf(eval);
+	}
+	
 	@GetMapping(value="/fichaautorizacionpdf/{id}")
 	public String fichaautorizacionpdf(@PathVariable("id") Integer id, Model model) throws FileNotFoundException, JRException  {
 		
@@ -643,6 +663,42 @@ public class ProgramaeducativoController {
 		return 0;
 		
 	}	
+	
+	public String crearEvaluacionPdf(Evaluacion eval) throws FileNotFoundException, JRException {
+		
+		Date date = new Date();
+		DateFormat hourFormat = new SimpleDateFormat("HHmmss");
+		DateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
+	
+	 	File file = ResourceUtils.getFile("classpath:ficha_evaluacion.jrxml" );
+		JasperReport jr = JasperCompileManager.compileReport(file.getAbsolutePath());
+		
+		Map parameters = new HashMap();
+		
+		parameters.put("anio", eval.getAnio());
+		parameters.put("categoria", eval.getCategoriaevaluacion().getDescripcion());
+		parameters.put("nivelparticipacion", eval.getNivelparticipacion().getDescripcion());
+		parameters.put("estado", eval.getEstadoevaluacion().getDescripcion());
+        
+		List<Rubrica> listaRubrica = new ArrayList<Rubrica>();
+        evaluacionrubricaServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{        	
+        	listaRubrica.add(obj.getRubrica());
+        });
+        
+        List<Questionario> listaQuestionario = new ArrayList<Questionario>();
+        evaluacionquestionarioServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
+        	listaQuestionario.add(obj.getQuestionario());
+        });        
+        
+        JRBeanCollectionDataSource datasource = new JRBeanCollectionDataSource(listaRubrica);
+		JasperPrint jp = JasperFillManager.fillReport(jr, parameters, datasource);
+		String path = "/opt/apache-tomcat-8.0.27/webapps/alfresco_programaeducativo/pedesa/reportes_evaluacion/";
+		//String path = "D:/Edwin/ProyectosSunass/ProgEducativo/reportes/";
+		String archivo = eval.getId() + "_"+ dateFormat.format(date) + hourFormat.format(date);
+		JasperExportManager.exportReportToPdfFile(jp,path + archivo + ".pdf");
+		return "/alfresco_programaeducativo/pedesa/reportes_evaluacion/"+archivo+".pdf";			
+	}
+	
 	
 	public String crearparticipantePdf(Participante pe) throws FileNotFoundException, JRException {
 		
@@ -809,7 +865,7 @@ public class ProgramaeducativoController {
 	        parameters.put("mujs", nsmuj);
 	        
 	        parameters.put("provedorserv", pe.getProveedor()!=null?pe.getProveedor().getDescripcion():"");
-	        parameters.put("horasabact", pe.getAbastecimiento());
+	        parameters.put("horasabact", pe.getAbastecimiento()!=null?pe.getAbastecimiento():0);
 	        parameters.put("piscina", pe.getPiscina()!=null?pe.getPiscina().getDescripcion():"");
 	        parameters.put("dirtipodocident", pe.getTipodocidentdir()!= null? pe.getTipodocidentdir().getDescripcion() : "");
 	        parameters.put("dirnrodocident", pe.getDocdir());

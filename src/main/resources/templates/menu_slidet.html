@@ -93,6 +93,9 @@
                             <input type="button" class="btn btn-link" id="consulta_docentes" value="Consulta Aula Virtual"/>                            
                         </li>
                         <li >
+                            <input type="button" class="btn btn-link" id="rubrica_evaluacion" value="Rubrica de evaluación"/>                            
+                        </li>
+                        <li >
                             <input type="button" class="btn btn-link" id="reportes" value="Reportes"/>                            
                         </li>
                     </ul>
@@ -172,7 +175,21 @@
 		    			}
 		    		});
 	        	}, 200);	    		
-	    	});	    	
+	    	});	  
+	    	
+	    	$("#consulta_usuarios").click(function(){
+	    		$("#consulta_menu").prop("disabled",true);
+	        	$("#btnbuscar").prop("disabled",true);
+	    		$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
+	    		setTimeout(() => {        		  
+	    			$.ajax({
+		    			url: url_base + "pedesa/consulta_usuarios",
+		    			success: function(respuesta) {
+		    				$("#contenedor_consulta").html(respuesta);    				
+		    			}
+		    		});
+	        	}, 200);
+	    	});
 	    	
 	    	$("#consulta_aperturar_anio").click(function(){
 	    		$("#consulta_menu").prop("disabled",true);
@@ -209,6 +226,20 @@
 	    		setTimeout(() => {        		  
 	    			$.ajax({
 		    			url: url_base + "pedesa/docenteconsulta",
+		    			success: function(respuesta) {
+		    				$("#contenedor_consulta").html(respuesta);    				
+		    			}
+		    		});
+	        	}, 200);
+	    	});
+	    	
+	    	$("#rubrica_evaluacion").click(function(){
+	    		$("#consulta_menu").prop("disabled",true);
+	        	$("#btnbuscar").prop("disabled",true);
+	    		$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
+	    		setTimeout(() => {        		  
+	    			$.ajax({
+		    			url: url_base + "pedesa/listaformrevaluaciones",
 		    			success: function(respuesta) {
 		    				$("#contenedor_consulta").html(respuesta);    				
 		    			}

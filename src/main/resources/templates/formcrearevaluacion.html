@@ -1,0 +1,542 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>ProgramaEducativo</title>
+    <script type="text/javascript">
+		window.history.forward();
+	</script>
+
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+	
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+	
+	<script type="text/javascript" th:src="@{/js/jquery-3.3.1.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/bootstrapv4.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/fontawesomev5.0.6.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
+	
+	<script type="text/javascript" th:src="@{/js/bootstrap-select.min.js}"></script>
+	
+	<link rel="shortcut icon" th:href="@{/images/logo_login.ico}" />
+	
+	<script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
+	
+	<link rel="stylesheet" href="../static/css/style.css" th:href ="@{/css/style.css}">
+	<!-- script type="text/javascript" th:src="@{/js/btnagregartrabajo.js}"></script-->  
+	
+</head>
+<body>
+	<form id="formcrearevaluacion">
+		<div class="row">
+			<div class="col-xs-12 col-sm-4 text-left">
+				<label for="categoriatrabajo">Año</label>
+				<select class="form-control" id="anioce_add" name="anioce_add">
+					<option value="">Todos</option>
+					<option th:each="dato:${anios}" th:value="${dato}" th:utext="${dato}"/>
+				</select>
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left">
+				<label for="modalidadpostulaciontrabajo">Categoría</label>
+				<select class="form-control" id="categoriace_add" name="categoriace_add">
+					<option value="">Todos</option>
+					<option th:each="len:${listacategoriaevaluacion}" th:value="${len.id}" th:utext="${len.descripcion}"/>
+				</select>
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left">
+				<label for="titulotrabajo">Nivel de participación</label>
+				<select class="form-control" id="nivelparticipacionce_add" name="nivelparticipacionce_add">
+					<option value="">Todos</option>
+					<option th:each="len:${listanivelparticipacion}" th:value="${len.id}" th:utext="${len.descripcion}"/>       				
+				</select>
+			</div>
+		</div>
+		<br>
+		<div id="contenido_evaluacion">
+			<div class="row" style="background-color:#EFEFEF">
+				<div class="col-xs-12 col-sm-12 text-center">
+					<label>Seleccione tipo de cuestionario</label>
+					<input type="radio" name="cuestionario1" value="1" id="r1" onchange="handleChange(this,'1','1');" checked> Rubrica
+	    			<input type="radio" name="cuestionario1" value="2" id="c1" onchange="handleChange(this,'1','1');" > Cuestionario
+				</div>				
+			</div>
+					<div id="contenido_rubrica1">
+						<div class="row" style="background-color:#EFEFEF">
+							<div class="col-xs-12 col-sm-6">
+								&nbsp;
+							</div>		
+							<div class="col-xs-12 col-sm-6 text-right">
+								<table style="width:100%">
+									<tr>
+										<td>
+											<label style="margin:5px">Rubrica</label>
+										</td>
+										<td>
+											<input type="text" name="rubrica1" id="rubrica1" class="form-control">
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-3">
+								<label>Criterio</label>
+								<input type="text" id="criterio11" name="criterio11" class="form-control" />
+								<br>
+								<textarea rows="3" style="width:100%" name="descripcion11" id="descripcion11" class="form-control">
+								</textarea>
+								<br>
+								<table>
+									<tr>
+										<td>
+											<label>Puntaje</label>
+										</td>
+										<td>
+											<select name="puntaje11" id="puntaje11" class="form-control">
+												<option value="0">Seleccione</option>
+												<option value="1">1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+												<option value="5">5</option>
+											</select>
+										</td>
+									</tr>
+								</table>				
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-3">
+								<label>Criterio</label>
+								<input type="text" id="criterio12" name="criterio12" class="form-control" />
+								<br>
+								<textarea rows="3" style="width:100%" name="descripcion12" id="descripcion12" class="form-control">
+								</textarea>
+								<br>
+								<table>
+									<tr>
+										<td>
+											<label>Puntaje</label>
+										</td>
+										<td>
+											<select name="puntaje12" id="puntaje12" class="form-control">
+												<option value="0">Seleccione</option>
+												<option value="1">1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+												<option value="5">5</option>
+											</select>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-3">
+								<label>Criterio</label>
+								<input type="text" id="criterio13" name="criterio13" class="form-control" />
+								<br>
+								<textarea rows="3" style="width:100%" name="descripcion13" id="descripcion13" class="form-control">
+								</textarea>
+								<br>
+								<table>
+									<tr>
+										<td>
+											<label>Puntaje</label>
+										</td>
+										<td>
+											<select name="puntaje13" id="puntaje13" class="form-control">
+												<option value="0">Seleccione</option>
+												<option value="1">1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+												<option value="5">5</option>
+											</select>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-3">
+								<label>Criterio</label>
+								<input type="text" id="criterio14" name="criterio14" class="form-control" />
+								<br>
+								<textarea rows="3" style="width:100%" name="descripcion14" id="descripcion14" class="form-control">
+								</textarea>
+								<br>
+								<table>
+									<tr>
+										<td>
+											<label>Puntaje</label>
+										</td>
+										<td>
+											<select name="puntaje14" id="puntaje14" class="form-control">
+												<option value="0">Seleccione</option>
+												<option value="1">1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+												<option value="5">5</option>
+											</select>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>			
+		
+					<div id="contenido_questionario1" style="display:none">
+						<div class="row" style="background-color:#EFEFEF">
+							<div class="col-xs-12 col-sm-12">
+								<table style="width:100%">
+									<tr>
+										<td>
+											<label>Ingrese pregunta</label>
+											<input type="text" class="form-control" id="pregunta11" name="pregunta11" />
+										</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td>
+											<label>Respuesta</label>
+											<input type="text" class="form-control" id="respuesta11" name="respuesta11"/>
+										</td>
+										<td>
+											<label>Puntaje</label>
+											<select class="form-control" id="puntajeq11" name="puntajeq11">
+												<option value="0">Seleccione</option>
+												<option value="1">1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+												<option value="5">5</option>
+											</select>
+										</td>
+									</tr>							
+								</table>						
+							</div>
+						</div>
+					</div>
+		
+		</div>
+		<br>
+		<div class="row text-right">
+			<div class="col-xs-6 col-sm-6">
+				&nbsp;
+			</div>
+			<div class="col-xs-6 col-sm-6">
+				<!-- a class="btn btn-warning" name="btnagregarpregunta" id="btnagregarpregunta">agregar pregunta</a-->
+				<input type="button" name="btnagregarpregunta" id="btnagregarpregunta" value="Agregar pregunta"  class="btn btn-warning" />
+			</div>
+		</div>
+		<br>
+		<div class="row text-right">
+			<div class="col-xs-6 col-sm-6">
+				&nbsp;
+			</div>
+			<div class="col-xs-6 col-sm-6">
+				<input type="button" name="btnguardarevaluacion" id="btnguardarevaluacion" value="Guardar" class="btn btn-primary"/>
+				<input type="button" name="btnhabilitarevaluacion" id="btnhabilitarevaluacion" value="Habilitar evaluación" class="btn btn-success"/>
+				<input type="button" name="btncerrarevaluacion" id="btncerrarevaluacion" value="Cerrar" class="btn btn-danger"/>
+			</div>
+		</div>
+	</form>
+		
+	<div class="modal" tabindex="-1" role="dialog" id="modalimagencargando">
+	  <center>
+	  	<img th:src="@{./images/cargando.gif}" style="line-height: 200px;"/>
+	  </center>	  
+	</div>	
+	
+	
+	
+	<div class="modal" tabindex="-1" role="dialog" id="modalexitocrearevaluacion">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <img th:src="@{./images/imagen_exito5.png}"/>&nbsp;&nbsp; <strong class="pt-1">Registro exitoso</strong>
+	      </div>
+	      <div class="modal-body" id="textoexitocrearevaluacion">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary rounded-0" id="btncerrarmensajeexitocrearevaluacion" name="btncerrarmensajeexitocrearevaluacion">Aceptar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	
+	<div class="modal" tabindex="-1" role="dialog" id="modalerrorcrearevaluacion">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <img th:src="@{./images/imagen_informacion11.png}"/>&nbsp;&nbsp; <strong class="pt-1">Error</strong>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>	          
+	        </button>
+	      </div>
+	      <div class="modal-body" id="textoerrorcrearevaluacion">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-danger rounded-0" id="btncerrarmensajeerrorcrearevaluacion" name="btncerrarmensajeerrorcrearevaluacion">Cerrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="modal" tabindex="-1" role="dialog" id="modalinformacioncrearevaluacion">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <img th:src="@{./images/imagen_informacion11.png}" />&nbsp;&nbsp; <label class="pt-1" style="padding-right:380px">Alerta</label>
+	        <!-- button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button-->
+	      </div>
+	      <div class="modal-body" id="textoinformacioncrearevaluacion">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-danger rounded-0" id="btncerrarmensajeinformacioncrearevaluacion" name="btncerrarmensajeinformacioncrearevaluacion">Cerrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+		
+
+</body>
+</html>
+
+<script type="text/javascript">
+
+	var anio="", categoria="",nivelparticipacion="";
+	var rubrica, criterio1, criterio2, criterio3, criterio4, criterio5, descripcion1, descripcion2, descripcion3, descripcion4, descripcion5,puntaje1, puntaje2, puntaje3, puntaje4, puntaje5;
+	var pregunta, respuesta, puntaje;
+	var array_rubrica , array_cuestionario;
+	
+	var rows_selected;
+	var indice_cuestionario = 1;	
+	var contador_rubrica = 0;
+	var contador_cuestionario = 0;
+	
+	function handleChange(src,a,b){
+		if(src.value == 1){			
+			$("#contenido_rubrica"+a).show();
+			$("#contenido_questionario"+b).hide();
+			$("#r"+a).attr("checked", true );
+			$("#c"+b).attr("checked", false);
+			contador_rubrica ++;
+		}
+		else{			
+			$("#contenido_rubrica"+a).hide();
+			$("#contenido_questionario"+b).show();
+			$("#r"+a).attr("checked", false);
+			$("#c"+b).attr("checked", true);
+			contador_cuestionario ++;
+		}		
+	}	
+	
+	$("#btncerrarmensajeexitocrearevaluacion").click(function(){			
+		$("#modalexitocrearevaluacion").modal('hide');
+		$("#modalagregarEvaluacion").modal('hide');
+	});
+	
+	$("#btncerrarmensajeerrorcrearevaluacion").click(function(){			
+		$("#modalerrorcrearevaluacion").modal('hide');
+	});
+	
+	$("#btncerrarmensajeinformacioncrearevaluacion").click(function(){			
+		$("#modalinformacioncrearevaluacion").modal('hide');
+	});	
+	
+	$("#btncerrarevaluacion").click(function(){
+		$("#modalagregarEvaluacion").modal('hide');
+	});	
+		
+	$("#btnagregarpregunta").click(function(){
+		indice_cuestionario ++;		
+		var mi_rubrica = 'contenido_rubrica' + indice_cuestionario;
+		var mi_questionario = 'contenido_questionario' + indice_cuestionario;
+		var mihtml = "<br><div class='row' style='background-color:#EFEFEF'><div class='col-xs-12 col-sm-12 text-center'><label>Seleccione tipo de cuestionario</label><input type='radio' name='cuestionario"+indice_cuestionario+"' id='r"+indice_cuestionario+"' value='1' onchange='handleChange(this,"+'`'+indice_cuestionario+'`'+","+'`'+indice_cuestionario+'`'+");' checked> Rubrica	<input type='radio' name='cuestionario"+indice_cuestionario+"' id='c"+indice_cuestionario+"' value='2' onchange='handleChange(this,"+'`'+indice_cuestionario+'`'+","+'`'+indice_cuestionario+'`'+");' > Cuestionario </div></div><div id='"+mi_rubrica+"'><div class='row' style='background-color:#EFEFEF'><div class='col-xs-12 col-sm-6'>&nbsp;</div><div class='col-xs-12 col-sm-6 text-right'><table style='width:100%'><tr><td><label style='margin:5px'>Rubrica</label></td><td><input type='text' name='rubrica"+indice_cuestionario+"' id='rubrica"+indice_cuestionario+"' class='form-control'></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario+"1' name='criterio"+indice_cuestionario+"1' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario+"1' id='descripcion"+indice_cuestionario+"1' class='form-control'></textarea><br><table><tr><td><label>Puntaje</label></td><td><select name='puntaje"+indice_cuestionario+"1' id='puntaje"+indice_cuestionario+"1' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario+"2' name='criterio"+indice_cuestionario+"2' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario+"2' id='descripcion"+indice_cuestionario+"2' class='form-control'></textarea><br><table><tr><td><label>Puntaje</label></td><td><select name='puntaje"+indice_cuestionario+"2' id='puntaje"+indice_cuestionario+"2' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario+"3' name='criterio"+indice_cuestionario+"3' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario+"3' id='descripcion"+indice_cuestionario+"3' class='form-control'></textarea><br><table><tr><td><label>Puntaje</label></td><td><select name='puntaje"+indice_cuestionario+"3' id='puntaje"+indice_cuestionario+"3' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario+"4' name='criterio"+indice_cuestionario+"4' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario+"4' id='descripcion"+indice_cuestionario+"4' class='form-control'></textarea><br><table><tr><td><label>Puntaje</label></td><td><select name='puntaje"+indice_cuestionario+"4' id='puntaje"+indice_cuestionario+"4' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div></div></div><div id='"+mi_questionario+"' style='display:none'><div class='row' style='background-color:#EFEFEF'><div class='col-xs-12 col-sm-12'><table style='width:100%'><tr><td><label>Ingrese pregunta</label><input type='text' class='form-control' id='pregunta"+indice_cuestionario+"1' name='pregunta"+indice_cuestionario+"1' /></td><td>&nbsp;</td></tr><tr><td><label>Respuesta</label><input type='text' class='form-control' id='respuesta"+indice_cuestionario+"1' name='respuesta"+indice_cuestionario+"1'/></td><td><label>Puntaje</label><select class='form-control' id='puntajeq"+indice_cuestionario+"1' name='puntaje"+indice_cuestionario+"1'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div></div></div>";
+		$("#contenido_evaluacion").html($("#contenido_evaluacion").html() + mihtml);
+	});
+		
+	$("#btnguardarevaluacion").click(function(){	
+		
+		$("#modalimagencargando").modal({
+			show : true,
+			backdrop : 'static',
+			keyboard:false
+		});
+		
+		if(validarCampos()){
+			
+			array_rubrica = new Array();
+			array_cuestionario = new Array();
+			anio = $("#anioce_add").val();
+			categoria = $("#categoriace_add").val();
+			nivelparticipacion = $("#nivelparticipacionce_add").val();
+			
+			for(var i=1; i<= indice_cuestionario;i++){
+				if($("#r"+i).is(":checked")){
+					rubrica = $("#rubrica"+i).val();
+					criterio1 = $("#criterio"+i+"1").val();
+					criterio2 = $("#criterio"+i+"2").val();
+					criterio3 = $("#criterio"+i+"3").val();
+					criterio4 = $("#criterio"+i+"4").val();
+					criterio5 = $("#criterio"+i+"5").val();
+					descripcion1 = $("#descripcion"+i+"1").val();
+					descripcion2 = $("#descripcion"+i+"2").val();
+					descripcion3 = $("#descripcion"+i+"3").val();
+					descripcion4 = $("#descripcion"+i+"4").val();
+					descripcion5 = $("#descripcion"+i+"5").val();
+					puntaje1 = $("#puntaje"+i+"1").val();
+					puntaje2 = $("#puntaje"+i+"2").val();
+					puntaje3 = $("#puntaje"+i+"3").val();
+					puntaje4 = $("#puntaje"+i+"4").val();
+					puntaje5 = $("#puntaje"+i+"5").val();
+					
+					array_rubrica.push({
+						rubrica : rubrica,
+						criterio1 : criterio1,
+						criterio2 : criterio2,
+						criterio3 : criterio3,
+						criterio4 : criterio4,
+						criterio5 : criterio5,
+						descripcion1 : descripcion1,
+						descripcion2 : descripcion2,
+						descripcion3 : descripcion3,
+						descripcion4 : descripcion4,
+						descripcion5 : descripcion5,
+						puntaje1 : puntaje1,
+						puntaje2 : puntaje2,
+						puntaje3 : puntaje3,
+						puntaje4 : puntaje4,
+						puntaje5 : puntaje5
+					});
+				}
+				else{
+					pregunta = $("#pregunta"+i+"1").val();
+					respuesta = $("#respuesta"+i+"1").val();
+					puntaje = $("#puntajeq"+i+"1").val();
+					
+					array_cuestionario.push({
+						pregunta : pregunta,
+						respuesta : respuesta, 
+						puntaje : puntaje
+					});
+				}				
+			}
+			
+			var evaluaciondto = {
+				evaluacion : {
+					anio : anio,
+					categoriaevaluacion : {
+						id : categoria
+					},
+					nivelparticipacion : {
+						id : nivelparticipacion
+					},
+					estadoevaluacion : {
+						id : 1
+					},
+					estado : 1
+				},
+				listarubrica: array_rubrica,
+				listaquestionario : array_cuestionario
+			};
+			
+			$.ajax({
+				type : "POST",
+			    contentType : "application/json",
+			    url : url_base + "pedesa/registrarevaluacion",
+			    data : JSON.stringify(evaluaciondto),
+			    dataType : 'json',
+				success: function(respuesta) {
+					if(respuesta.id>0){
+						
+						$("#modalimagencargando").modal('hide');
+						
+						table_lista_evaluacion.row.add({
+					        "id": respuesta.id,
+					        "anio": anio,
+					        "nivelparticipacion":  $("#nivelparticipacionce_add option:selected").html(),
+					        "categoriaevaluacion": $("#categoriace_add option:selected").html(),
+					        "estado": "Editando",
+					        "defaultContent" : '<img src="./images/svg/file-pdf-regular.svg" class="archivo" style="width:20px; cursor:pointer"/>',
+					        "defaultContent" : '<img src="./images/svg/edit-regular.svg" class="editar" style="width:20px; cursor:pointer" />',
+					        "defaultContent" : '<img src="./images/svg/eliminar-alt-regular.svg" class="eliminar" style="width:20px; cursor:pointer" />'
+					    }).draw();	
+						
+						limpiarControles();
+						$("#textoexitocrearevaluacion").html("Se registro evaluación");
+						$('#modalexitocrearevaluacion').modal({
+							show : true,
+							backdrop : 'static',
+							keyboard:false
+						});
+						
+						
+					}
+					else{
+						$("#modalimagencargando").modal('hide');
+						$("#textoerrorcrearevaluacion").html("Error al registrar evaluación");
+						$('#modalerrorcrearevaluacion').modal({
+							show : true,
+							backdrop : 'static',
+							keyboard:false
+						});
+					}
+				},
+				error: function() {
+					$("#textoerrorcrearevaluacion").html("Excepción al registrar evaluación");
+					$('#modalerrorcrearevaluacion').modal({
+						show : true,
+						backdrop : 'static',
+						keyboard:false
+					});
+			    }
+			});
+		}
+		else{
+			$("#modalimagencargando").modal('hide');
+			$("#textoinformacioncrearevaluacion").html("<div style='color:red' class='text-left'>"+mensajeValidacion+"</div>");
+			$('#modalinformacioncrearevaluacion').modal({
+				show : true,
+				backdrop : 'static',
+				keyboard:false
+			});
+		}
+	});
+	
+	function limpiarControles(){
+		$("#anioce_add").val("");
+		$("#categoriace_add").val("");
+		$("#nivelparticipacionce_add").val("");
+	}
+	
+	function validarCampos(){
+		
+		/*arrayParticipante = new Array()*/
+		
+		mensajeValidacion = "";
+		anio = $("#anioce_add").val();
+		categoria = $("#categoriace_add").val();
+		nivelparticipacion = $("#nivelparticipacionce_add").val();
+		
+		if(anio == ""){
+			mensajeValidacion += "Debe seleccionar Año"+"<br>";
+		}
+		
+		if(categoria==""){
+			mensajeValidacion += "Debe seleccionar Categoria"+"<br>";
+		}
+		
+		if(nivelparticipacion==""){
+			mensajeValidacion += "Debe seleccionar Nivel de participación"+"<br>";
+		}
+		if(mensajeValidacion!=""){
+			return false;
+		}
+		return true;
+	}
+
+</script>

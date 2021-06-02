@@ -15,7 +15,10 @@ public class Tipousuario {
 	
 	@Column(name="DESCRIPCION",nullable=false,length=80)
 	private String descripcion;
-
+	
+	@Column(name="ORDEN",nullable=true)
+	private Integer orden;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -30,5 +33,13 @@ public class Tipousuario {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+
+	public Integer getOrden() {
+		return orden;
+	}
+
+	public void setOrden(Integer orden) {
+		this.orden = orden;
 	}
 }

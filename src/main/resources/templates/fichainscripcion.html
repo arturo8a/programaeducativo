@@ -1339,6 +1339,9 @@ function editartrabajos(id){
 		if($("#responsable").val().trim()==""){
 			mensajeValidacion += "Debe ingresar Responsable"+"<br>";
 		}
+		if($("#curso").val().trim()==""){
+			mensajeValidacion += "Debe ingresar Curso"+"<br>";
+		}
 		
 		if(mensajeValidacion!=""){
 			return false;
