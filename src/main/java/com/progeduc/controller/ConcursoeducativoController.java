@@ -665,5 +665,11 @@ public class ConcursoeducativoController {
 		System.out.println("usuario :" + usuario);
 		return new ResponseEntity<UsuarioLdap>(usuarioldap, HttpStatus.OK) ;
 	}
+        
+        
+        @GetMapping("/listtrabajospendientes")
+	public List<String> listTrabajosPendientes(){
+		return  progeducService.listCentrosEducativosGroupbyCodmod();
+	}
 
 }

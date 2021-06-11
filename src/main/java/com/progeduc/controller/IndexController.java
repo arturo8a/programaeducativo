@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.progeduc.model.Aperturaranio;
+import com.progeduc.model.Categoriatrabajo;
 import com.progeduc.model.Docente;
 import com.progeduc.model.Docentetutor;
 import com.progeduc.model.Evaluacion;
@@ -457,6 +458,30 @@ public class IndexController {
 	@GetMapping("/docenteconsulta")
 	public String docenteconsulta(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
 		return "docenteconsulta";
+	}
+        
+        @GetMapping("/trabajospendientes")
+	public String trabajospendientes(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
+            Calendar fecha = Calendar.getInstance();
+            model.addAttribute("anio",fecha.get(Calendar.YEAR));
+            List<Integer> lista = new ArrayList<Integer>();
+            int anio = fecha.get(Calendar.YEAR);
+            for(int i = anio-5;i<=anio;i++) {
+                    lista.add(i);
+            }
+            categoriatrabajoService.listar();
+            for (Categoriatrabajo categoriatrabajo : categoriatrabajoService.listar()) {
+                System.out.println("listado: "+categoriatrabajo.getId());
+                System.out.println("listado: "+categoriatrabajo.getDescripcion());
+            }
+		
+            model.addAttribute("ods",odsserv.listarAll());
+            model.addAttribute("anios", lista);
+            model.addAttribute("departamento",depaServ.listar());
+            model.addAttribute("categoriatrabajo",categoriaevaluacionService.listar());//categoriatrabajoService.listar());
+            model.addAttribute("modalidadtrabajo",modalidadtrabajoService.listar());
+            model.addAttribute("nivelparticipacion",nivelparticipacionService.listar());
+            return "trabajospendientes";
 	}
 	
 	@GetMapping("/listaformrevaluaciones")
