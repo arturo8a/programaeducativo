@@ -19,12 +19,8 @@
     <script type="text/javascript" th:src="@{/js/fontawesomev5.0.6.js}" ></script>
     <script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
 	
-	<script type="text/javascript" th:src="@{/js/bootstrap-select.min.js}"></script>
-	
-	<link rel="shortcut icon" th:href="@{/images/logo_login.ico}" />
-	
-	<script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
-	
+	<script type="text/javascript" th:src="@{/js/bootstrap-select.min.js}"></script>	
+	<link rel="shortcut icon" th:href="@{/images/logo_login.ico}" />	
 	<link rel="stylesheet" href="../static/css/style.css" th:href ="@{/css/style.css}">
 </head>
 <body>	
@@ -34,7 +30,7 @@
 				<label>Perfil</label>
 				<select class="form-control" id="perfil_usuario" name="perfil_usuario">
 					<option value="0">Seleccionar</option>
-					<option th:each="len:${tipousuarios}" th:value="${len.descripcion}" th:utext="${len.descripcion}"/>
+					<option th:each="len:${tipousuarios}" th:value="${len.id}" th:utext="${len.descripcion}"/>
 				</select>	
 			</div>
 			<div class="col-xs-12 col-sm-3">
@@ -44,15 +40,8 @@
 					<option th:each="len:${usuarios}" th:value="${len.cuenta}" th:utext="${len.cuenta}"/>
 				</select>
 			</div>
-			<div class="col-xs-12 col-sm-3">
-				<label>Dirección oficina</label>
-				<input type="text" name="oficina" id="oficina" class="form-control" disabled/>
-			</div>
-			<div class="col-xs-12 col-sm-3">
-				<label>Oficina desconcentrada</label>
-				<input type="text" name="oficinadesconcentrada" id="oficinadesconcentrada" class="form-control" disabled/>
-			</div>
 		</div>
+		<br>
 		<div class="row">
 			<div class="col-xs-12 col-sm-3">
 				<label>Nombres</label>
@@ -72,13 +61,13 @@
 		<h6>ODS</h6>		
 		<div class="row">
 			<div class="col-xs-12 col-sm-12">
-				<input type="checkbox" name="" id="" style="margin:5px" />Marcar todos
+				<input type="checkbox" name="check-1" id="check-1" style="margin:5px" /><label for="check-1">Marcar todos</label>
 			</div>
 		</div>
 		
 		<div class="row" >
 			<div class="col-xs-12 col-sm-3" th:each="ods : ${listaods}">
-				<input type="checkbox" th:name="'chkods'+${ods.id}" th:id="'chkods'+${ods.id}" style="margin:5px"/> <label th:for="'chkods'+${ods.id}" th:text="${ods.descripcion}"></label>
+				<input type="checkbox" class="case" th:name="chk_usuario" th:id="${ods.id}" style="margin:5px"/> <label th:for="${ods.id}" th:text="${ods.descripcion}"></label>
 			</div>
 		</div>
 		<br>
@@ -89,22 +78,33 @@
 			<div class="col-xs-6 col-sm-6 text-left">
 				<input type="button" name="btnregistrarusuario" id="btnregistrarusuario" value="Registrar" class="btn btn-primary"/>
 			</div>
-		</div>
-		
+		</div>		
 </body>
 </html>
 <script type="text/javascript">
 
-		$(document).ready(function(){
+		var usuario;
+		var perfil;
+		var array_ods;
+		var mensajeValidacionusuario;
+
+		$(document).ready(function(){			
 			
-			var usuario;
+			$("#check-1").click(function(){
+				if($("#check-1").is(":checked")){
+					$(".case").prop("checked",true);
+				}
+				else{
+					$(".case").prop("checked",false);
+				}
+			});
 			
 			$("#btncancelarusuario").click(function(){
-				$("#modalagregarusuario").hide();
+				$("#modalagregarusuario").modal('hide');
 			});			
 			
 			$("#usuario").change(function(){
-				$("#nombresusuario").val("");							
+				$("#nombresusuario").val("");
 				$("#apellidosusuario").val("");
 				usuario = $("#usuario").val();
 				
@@ -116,6 +116,7 @@
 						if(respuesta!=null){
 							$("#nombresusuario").val(respuesta.nombre);							
 							$("#apellidosusuario").val(respuesta.usuario);
+							$("#correoelectronico").val(usuario+"@sunass.gob.pe");
 						}
 						else{
 							$("#textoinformacionusuario").html("No existe usuario");
@@ -138,9 +139,125 @@
 			});
 			
 			$("#btnregistrarusuario").click(function(){
+				$("#modalimagencargando").modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
 				
+				if(validarCampos()){
+					
+					var data = {
+						usuario:{
+							usuario : usuario,
+							tipousuario : {
+								id : perfil
+							},
+							estado : 1
+						},
+						ods: array_ods
+					};
+					
+					$.ajax({
+						type : "POST",
+					    contentType : "application/json",
+					    url : url_base + "pedesa/registrarusuarioods",
+					    data : JSON.stringify(data),
+					    dataType : 'json',
+						success: function(respuesta) {
+							$("#modalimagencargando").modal('hide');
+							if(respuesta==0){
+								console.log("error al registrar usuario");
+								$("#textoerrorusuario").html("Error al registrar Usuario");
+								$('#modalerrorusuario').modal({
+									show : true,
+									backdrop : 'static',
+									keyboard:false
+								});
+							}
+							else if (respuesta == 1){
+								/*console.log("usuario registrado");*/
+								$("#textoexitocrearusuario").html("Se registro Usuario");
+								$('#modalexitocrearusuario').modal({
+									show : true,
+									backdrop : 'static',
+									keyboard:false
+								});
+							}
+							else if(respuesta==2){
+								$("#textoinformacionusuario").html("Usuario ya existe");
+								$('#modalinformacionusuario').modal({
+									show : true,
+									backdrop : 'static',
+									keyboard:false
+								});
+							}
+						},
+						error: function() {
+							alert("excepcion al registrar usuario");
+					    }
+					});
+					
+				}
+				else{
+					$("#modalimagencargando").modal('hide');
+					$("#textoinformacionusuario").html("<div style='color:red' class='text-left'>"+mensajeValidacionusuario+"</div>");
+					$("#modalinformacionusuario").modal({
+						show : true,
+						backdrop : 'static',
+						keyboard:false
+					});
+				}
+				
+			});			
+			
+			$("#btncerrarmensajeexitocrearusuario").click(function(){
+				$("#modalexitocrearusuario").modal('hide');
+				$("#modalagregarusuario").modal('hide');
 			});
+			
+			$("#btncerrarmensajeinformacionusuario").click(function(){
+				$("#modalinformacionusuario").modal('hide');
+			});
+			
+			$("#btncerrarmensajeerrorusuario").click(function(){
+				$("#modalerrorusuario").modal('hide');
+			});
+			
 		});		
+		
+		function validarCampos(){
+			
+			mensajeValidacionusuario = "";
+			usuario = $("#usuario").val();
+			perfil = $("#perfil_usuario").val();
+			array_ods = new Array();
+			
+			if(perfil==0){
+				mensajeValidacionusuario += "Debe seleccionar Perfil"+"<br>";
+			}
+			
+			if(usuario == 0){
+				mensajeValidacionusuario += "Debe seleccionar Usuario"+"<br>";
+			}
+			
+			$("input[name=chk_usuario]").each(function(index){
+				if($(this).is(":checked")){
+					array_ods.push(this.id);
+				}
+			});
+			
+			if(array_ods.length == 0){
+				mensajeValidacionusuario += "Debe seleccionar por lo menos una ODS"+"<br>";
+			}
+			
+			console.log("mensajeValidacionusuario :" + mensajeValidacionusuario);
+			
+			if(mensajeValidacionusuario!=""){
+				return false;
+			}
+			return true;
+		}
 		
 </script>
 

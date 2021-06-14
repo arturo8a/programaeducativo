@@ -330,7 +330,8 @@ public class ProgramaeducativoController {
 		
 		List<ListaInstitucionEducativa> arrayie = new ArrayList<ListaInstitucionEducativa>();
 		Object ob = ses.getAttribute("odsid");
-		if(Integer.parseInt(ob.toString()) == 0) {
+		//if(Integer.parseInt(ob.toString()) == 0) {
+		if(true) {
 			progeducService.listar().forEach(obj->{
 				if(obj!=null) {
 					listaie= new ListaInstitucionEducativa();
@@ -339,7 +340,8 @@ public class ProgramaeducativoController {
 						if(dist!=null) {
 							if(dist.getOdsid()!=null) {
 								if(odsserv.byOds(dist.getOdsid()) !=null) {
-									listaie.setOds(odsserv.byOds(dist.getOdsid()).getDescripcion());
+									//listaie.setOds(odsserv.byOds(dist.getOdsid()).getDescripcion());
+									listaie.setOds("");
 									listaie.setAnhio(obj.getAnhio());
 									listaie.setNomie(obj.getNomie());
 									listaie.setCodmod(obj.getCodmod());
@@ -358,7 +360,8 @@ public class ProgramaeducativoController {
 			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(obj->{
 				progeducService.listar(obj.getId()).forEach(obj1->{
 					listaie= new ListaInstitucionEducativa();
-					listaie.setOds(odsserv.byOds(obj1.getDistrito().getOdsid()).getDescripcion());
+					//listaie.setOds(odsserv.byOds(obj1.getDistrito().getOdsid()).getDescripcion());
+					listaie.setOds("");
 					listaie.setAnhio(obj1.getAnhio());
 					listaie.setNomie(obj1.getNomie());
 					listaie.setCodmod(obj1.getCodmod());
@@ -468,7 +471,7 @@ public class ProgramaeducativoController {
 				dni = us.getPassword();
 			}			
 			if(usuarioService.byUsuario(codmod)==null) {						
-				Usuario user = new Usuario(codmod,dni,pe.getDirie(),pe.getMailie(),"","",tipousuarioserv.byTipousuario(3),"HABILITADO",null ,"");
+				Usuario user = new Usuario(codmod,tipousuarioserv.byTipousuario(3),1);
 				usuarioService.registrar(user);
 			}
 			String mensaje = "<p>Sistema del Programa Educativo Sunass</p>Estimado (a) docente, le damos la bienvenida al Programa Educativo<br>'Aprendiendo a Usar Responsablemente el Agua Potable' de la Sunass. Si desea participar de nuestro Concurso Escolar confirme su inscripción <a href='http://prometeo.sunass.gob.pe/pedesa/'>Aquí</a>, ingresando el usuario y contraseña que le brindamos a continuación :<br><br>Usuario :"+ codmod+"<br>Contraseña :" + dni + "<br><br>Muchas gracias por su participación";                                        

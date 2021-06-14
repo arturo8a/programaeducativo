@@ -2,6 +2,7 @@
 <meta charset="utf-8" />
 
 <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+<link rel="stylesheet" href="../static/css/nuevo_disenio.css" th:href="@{/css/nuevo_disenio.css}">
 <link href="../static/css/gijgo.min.css" rel="stylesheet" th:href="@{/css/gijgo.min.css}" >
 
 
@@ -17,138 +18,104 @@
 
 <script type="text/javascript" th:src="@{/js/bootstrapv4.js}" ></script>
 
-<div id="containerListaRegistros">
-	<div class="row p-0 m-0">
-		<div class="col-xs-12 col-sm-4" >
-			<table style="width:100%">
-				<tr>
-					<td style="width:20%">
-						<label>ODS</label>
-					</td>
-					<td style="width:80%">
-						<select id="cbods" name="cbods" class="form-control">
-							<option value="Todos">Todos</option>
-							<option value="Amazonas">Amazonas</option>
-							<option value="Ancash - Huaraz">Ancash - Huaraz</option>
-							<option value="Ancash - Chimbote">Ancash - Chimbote</option>
-							<option value="Apurimac">Apurimac</option>
-							<option value="Arequipa">Arequipa</option>
-							<option value="Ayacucho">Ayacucho</option>
-							<option value="Cajamarca">Cajamarca</option>							
-							<option value="Cusco">Cusco</option>
-							<option value="Huancavelica">Huancavelica</option>
-							<option value="Huanuco">Huanuco</option>
-							<option value="Ica">Ica</option>
-							<option value="Junin">Junin</option>
-							<option value="Libertad">La libertad</option>
-							<option value="Lambayeque">Lambayeque</option>
-							<option value="Lima provincias">Lima provincias</option>
-							<option value="Loreto">Loreto</option>
-							<option value="Madre de dios">Madre de dios</option>
-							<option value="Moquegua">Moquegua</option>
-							<option value="OAU Callao">OAU Callao</option>
-							<option value="OAU cañete">OAU cañete</option>
-							<option value="OAU comas">OAU comas</option>
-							<option value="OAU huacho">OAU huacho</option>							
-							<option value="OAU SJL">OAU SJL</option>
-							<option value="OAU VES">OAU VES</option>	
-							<option value="Pasco">Pasco</option>
-							<option value="Piura">Piura</option>
-							<option value="Puno">Puno</option>
-							<option value="San martin">San martin</option>
-							<option value="Sede central">Sede central</option>
-							<option value="Tacna">Tacna</option>
-							<option value="Tumbes">Tumbes</option>
-							<option value="Ucayali">Ucayali</option>
-						</select>
-					</td>
-				</tr>
-			</table>	
-		</div>
-		<div class="col-xs-12 col-sm-4">
-			<table style="width:100%">
-				<tr>
-					<td style="width:40%">
-						<label>Año de inscripción</label>
-					</td>
-					<td style="width:60%">
-						<select id="cbanio" name="cbanio" class="form-control">
-							<option value="Todos">Todos</option>
-							<option value="2017">2017</option >
-							<option value="2018">2018</option>
-							<option value="2019">2019</option>
-							<option value="2020">2020</option>
-							<option value="2021">2021</option>
-						</select>
-					</td>
-				</tr>
-			</table>
-		</div>
-		<div class="col-xs-12 col-sm-4" >	
-			<table style="width:100%">
-				<tr>
-					<td style="width:20%">
-						<label>Inscrito al IE</label>
-					</td>
-					<td style="width:80%">
-						<select id="cbinscrito" name="cbinscrito" class="form-control">
-							<option value="Todos">Todos</option>
-							<option value="Si">Si</option >
-							<option value="No">No</option>
-						</select>
-					</td>
-				</tr>
-			</table>			
-		</div>
-	</div>
-	<div class="row pt-2 m-0">
-		<div class="col-xs-12 col-sm-4">
-			<table style="width:100%">
-				<tr>
-					<td style="width:20%">
-						<label>Nombre IE</label>
-					</td>
-					<td style="width:80%">
-						<input type="text" class="form-control rounded-0" id="txtnombre" name="txtnombre" >
-					</td>
-				</tr>
-			</table>
-		</div>
-		<div class="col-xs-12 col-sm-4">
-   			<label>&nbsp;</label>
-   		</div>
-		<div class="col-xs-12 col-sm-4">			
-			<input type="button" name="btnbuscardocente" id="btnbuscardocente" class="btn btn-primary" value="Buscar"/>
-			<input type="button" name="btnlimpiardocente" id="btnlimpiardocente" class="btn btn-danger" value="Limpiar" style="margin-left:10px"/>
-		</div>
-	</div>
-	<hr>
-	<div class="p-0 m-0" style="background:#ECFBF4" >
-		<h5 class="p-2 m-0 bg-info text-white">Listado de Registros de Docentes</h5>
-		<div class="row pt-2 pb-4 m-0">
-			<div class="col-xs-12 col-sm-12">
-				<table id="table_docentes"  class="table table-striped table-bordered display nowrap" style="width:100%">
-					<thead>
-				        <tr>
-				        	<th> <input type="checkbox" id="seleccionarTodo"/> </th>
-				        	<th>Nº</th>
-				        	<th>Año</th>
-				            <th>ODS</th>
-				            <th>Código de la II.EE</th>
-				            <th>Nombre de II.EE</th>
-				            <th>II. inscrito al C.E</th>
-				            <th>Docente</th>
-				            <th>Tipo de documento</th>
-				            <th>N° de documento</th>		            
-				            <th>Correo electrónico</th>
-				            <th>Teléfono</th>
-				            <th>Género</th>
-				            <th style="display:none;">Fecha de registro</th>
-				        </tr>   
-				    </thead>
-				</table>
+<div id="containerListaRegistros" class="pl-3 pr-3">
+	<div class="div_filtro">
+		<div class="row">
+			<div class="col-xs-12 col-sm-4">
+				<select id="cbods" name="cbods" class="form-control">
+					<option value="Todos">ODS</option>
+					<option value="Amazonas">Amazonas</option>
+					<option value="Ancash - Huaraz">Ancash - Huaraz</option>
+					<option value="Ancash - Chimbote">Ancash - Chimbote</option>
+					<option value="Apurimac">Apurimac</option>
+					<option value="Arequipa">Arequipa</option>
+					<option value="Ayacucho">Ayacucho</option>
+					<option value="Cajamarca">Cajamarca</option>
+					<option value="Cusco">Cusco</option>
+					<option value="Huancavelica">Huancavelica</option>
+					<option value="Huanuco">Huanuco</option>
+					<option value="Ica">Ica</option>
+					<option value="Junin">Junin</option>
+					<option value="Libertad">La libertad</option>
+					<option value="Lambayeque">Lambayeque</option>
+					<option value="Lima provincias">Lima provincias</option>
+					<option value="Loreto">Loreto</option>
+					<option value="Madre de dios">Madre de dios</option>
+					<option value="Moquegua">Moquegua</option>
+					<option value="OAU Callao">OAU Callao</option>
+					<option value="OAU cañete">OAU cañete</option>
+					<option value="OAU comas">OAU comas</option>
+					<option value="OAU huacho">OAU huacho</option>							
+					<option value="OAU SJL">OAU SJL</option>
+					<option value="OAU VES">OAU VES</option>	
+					<option value="Pasco">Pasco</option>
+					<option value="Piura">Piura</option>
+					<option value="Puno">Puno</option>
+					<option value="San martin">San martin</option>
+					<option value="Sede central">Sede central</option>
+					<option value="Tacna">Tacna</option>
+					<option value="Tumbes">Tumbes</option>
+					<option value="Ucayali">Ucayali</option>
+				</select>
 			</div>
-			<br><br>
+			<div class="col-xs-12 col-sm-4">
+				<select id="cbanio" name="cbanio" class="form-control">
+					<option value="Todos">Año de inscripción</option>
+					<option value="2017">2017</option >
+					<option value="2018">2018</option>
+					<option value="2019">2019</option>
+					<option value="2020">2020</option>
+					<option value="2021">2021</option>
+				</select>
+			</div>
+			<div class="col-xs-12 col-sm-4" >	
+				<select id="cbinscrito" name="cbinscrito" class="form-control">
+					<option value="Todos">Inscrito al IE</option>
+					<option value="Si">Si</option >
+					<option value="No">No</option>
+				</select>		
+			</div>
+			<div class="col-xs-12 col-sm-4 pt-1">
+				<input placeholder="Nombre IE" type="text" class="form-control rounded-0" id="txtnombre" name="txtnombre" >
+			</div>
+			<div class="col-xs-12 col-sm-4">
+	   			<label>&nbsp;</label>
+	   		</div>
+			<div class="col-xs-12 col-sm-4 pt-1">			
+				<input type="button" name="btnbuscardocente" id="btnbuscardocente" class="btn btn-primary" value="Buscar"/>
+				<input type="button" name="btnlimpiardocente" id="btnlimpiardocente" class="btn btn-danger" value="Limpiar" style="margin-left:10px"/>
+			</div>
+		</div>
+	</div>
+	<br>
+	<div class="div_filtro">	
+		<div class="p-0 m-0">
+			<label class="p-2 m-0">CONSULTA AULA VIRTUAL</label>
+			<div class="row pt-2 pb-4 m-0">
+				<div class="col-xs-12 col-sm-12">
+					<table id="table_docentes"  class="table table-striped display nowrap" style="width:100%">
+						<thead class="cabecera_tabla">
+					        <tr>
+					        	<th> <input type="checkbox" id="seleccionarTodo"/> </th>
+					        	<th>Nº</th>
+					        	<th>Año</th>
+					            <th>ODS</th>
+					            <th>Código de la II.EE</th>
+					            <th>Nombre de II.EE</th>
+					            <th>II. inscrito al C.E</th>
+					            <th>Docente</th>
+					            <th>Tipo de documento</th>
+					            <th>N° de documento</th>		            
+					            <th>Correo electrónico</th>
+					            <th>Teléfono</th>
+					            <th>Género</th>
+					            <th style="display:none;">Fecha de registro</th>
+					        </tr>   
+					    </thead>
+					</table>
+				</div>
+				<br><br>
+			</div>
 		</div>
 	</div>
 </div>

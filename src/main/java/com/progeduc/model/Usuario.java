@@ -1,5 +1,7 @@
 package com.progeduc.model;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -9,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="USUARIO")
@@ -21,52 +25,38 @@ public class Usuario {
 	@Column(name="USUARIO",length=50)
 	private String usuario;
 	
-	@Column(name="PASSWORD",length=50)
+	@JsonIgnore
+	@Column(name="PASSWORD",length=50,nullable=true)
 	private String password;
-	
-	@Column(name="NOMBRE",length=200)
-	private String nombre;
-	
-	@Column(name="EMAIL",length=200)
-	private String email;
-	
-	@Column(name="DNI",length=12)
-	private String dni;
-	
-	@Column(name="CIUDAD",length=100)
-	private String ciudad;
 	
 	@ManyToOne
 	@JoinColumn(name="tipousuarioid",foreignKey=@ForeignKey(name="FK_usuario_tipo"))
 	private Tipousuario tipousuario;
 	
-	@Column(name="ESTADO",length=50)
-	private String estado;
+	@Column(name="ESTADO")
+	private Integer estado;
 	
-	@ManyToOne
-	@JoinColumn(name="odsid",foreignKey=@ForeignKey(name="FK_usuario_ods"))
-	private Ods ods;
+	@Column(name="ODSID")
+	private Integer odsid;
 	
-	@Column(name="CICLO",length=5)
-	private String ciclo;
+	@JsonIgnore
+	@Column(name="ANIO",nullable=true)
+	private Integer anio;
+	
+	@JsonIgnore
+	@Column(name="FECHA_REGISTRO",nullable=true)
+	private Timestamp fecha_registro;
 	
 	public Usuario() {
 		
 	}
 	
-	public Usuario(String usuario,String password,String nombre,String email,String dni,String ciudad,Tipousuario tu,String estado,Ods ods,String ciclo) {
-		this.usuario=usuario;
-		this.password = password;
-		this.nombre = nombre;
-		this.email = email;
-		this.dni = dni;
-		this.ciudad = ciudad;
-		this.tipousuario=tu;
+	public Usuario(String usuario, Tipousuario tipo, Integer estado) {
+		this.usuario = usuario;
+		this.tipousuario = tipo;
 		this.estado = estado;
-		this.ods = ods;
-		this.ciclo = ciclo;
 	}
-
+	
 	public Integer getId() {
 		return id;
 	}
@@ -91,38 +81,6 @@ public class Usuario {
 		this.password = password;
 	}
 
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getDni() {
-		return dni;
-	}
-
-	public void setDni(String dni) {
-		this.dni = dni;
-	}
-
-	public String getCiudad() {
-		return ciudad;
-	}
-
-	public void setCiudad(String ciudad) {
-		this.ciudad = ciudad;
-	}
-
 	public Tipousuario getTipousuario() {
 		return tipousuario;
 	}
@@ -131,27 +89,35 @@ public class Usuario {
 		this.tipousuario = tipousuario;
 	}
 
-	public String getEstado() {
+	public Integer getEstado() {
 		return estado;
 	}
 
-	public void setEstado(String estado) {
+	public void setEstado(Integer estado) {
 		this.estado = estado;
 	}
 
-	public Ods getOds() {
-		return ods;
+	public Integer getAnio() {
+		return anio;
 	}
 
-	public void setOds(Ods ods) {
-		this.ods = ods;
+	public void setAnio(Integer anio) {
+		this.anio = anio;
 	}
 
-	public String getCiclo() {
-		return ciclo;
+	public Timestamp getFecha_registro() {
+		return fecha_registro;
 	}
 
-	public void setCiclo(String ciclo) {
-		this.ciclo = ciclo;
-	}	
+	public void setFecha_registro(Timestamp fecha_registro) {
+		this.fecha_registro = fecha_registro;
+	}
+
+	public Integer getOdsid() {
+		return odsid;
+	}
+
+	public void setOdsid(Integer odsid) {
+		this.odsid = odsid;
+	}
 }

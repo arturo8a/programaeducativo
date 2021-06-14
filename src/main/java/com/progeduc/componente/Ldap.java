@@ -86,7 +86,7 @@ public class Ldap {
     public Attributes obtenerUsuarioLDAP(DirContext dirContext, String userCN) throws Exception {
         Attributes attrs = null;
         SearchControls constraints = new SearchControls();
-        constraints.setReturningAttributes(new String[] {"sn", "givenName", "SAMAccountName"});
+        constraints.setReturningAttributes(new String[] {"sn", "givenName", "SAMAccountName","userPrincipalName","l","streetAddress"});
         constraints.setSearchScope(SearchControls.SUBTREE_SCOPE);
         String filter = "(&(objectCategory=person)(objectClass=user))";
         NamingEnumeration<SearchResult> userLDAP = dirContext.search(userCN, filter, constraints);
@@ -108,12 +108,14 @@ public class Ldap {
             while (gruposLDAP.hasMore()) {
                 String userCN = gruposLDAP.next().toString();
                 Attributes attrs = this.obtenerUsuarioLDAP(dirContext, userCN);
-                if (attrs != null && attrs.size() == 3) {
+                if (attrs != null && attrs.size() == 6) {
                     UsuarioLdap userLdap=new UsuarioLdap();
                     userLdap.setCuenta( (String) attrs.get("SAMAccountName").get() );
                     userLdap.setNombre( ((String) attrs.get("givenName").get()).toUpperCase().trim() );
                     userLdap.setUsuario( ((String) attrs.get("sn").get()).toUpperCase().trim() );
-
+                    userLdap.setCorreo( ((String) attrs.get("userPrincipalName").get()).toUpperCase().trim() );
+                    userLdap.setOds( ((String) attrs.get("l").get()).toUpperCase().trim() );
+                    userLdap.setDireccion( ((String) attrs.get("streetAddress").get()).toUpperCase().trim() );
                     listaUsuario.add(userLdap);
                 }
             }
@@ -184,11 +186,14 @@ public class Ldap {
             while (gruposLDAP.hasMore()) {
                 String userCN = gruposLDAP.next().toString();
                 Attributes attrs = this.obtenerUsuarioLDAP(dirContext, userCN);
-                if (attrs != null && attrs.size() == 3) {
+                if (attrs != null && attrs.size() == 6) {
                     UsuarioLdap userLdap = new UsuarioLdap();
                     userLdap.setCuenta((String) attrs.get("SAMAccountName").get());
                     userLdap.setNombre(((String) attrs.get("givenName").get()).toUpperCase().trim());
                     userLdap.setUsuario(((String) attrs.get("sn").get()).toUpperCase().trim());
+                    userLdap.setCorreo(((String) attrs.get("userPrincipalName").get()).toUpperCase().trim());
+                    userLdap.setOds( ((String) attrs.get("l").get()).toUpperCase().trim() );
+                    userLdap.setDireccion( ((String) attrs.get("streetAddress").get()).toUpperCase().trim() );
 
                     listaUsuario.add(userLdap);
                 }
@@ -206,7 +211,7 @@ public class Ldap {
         DirContext ldapContext = conectarLDAP(props);
         
         SearchControls searchCtls = new SearchControls();
-        String returnedAtts[]={"sn","givenName", "samAccountName"};
+        String returnedAtts[]={"sn","givenName", "samAccountName","userPrincipalName","l","streetAddress"};
         searchCtls.setReturningAttributes(returnedAtts);
         searchCtls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         String searchFilter = "(&(objectClass=user))";
@@ -226,6 +231,9 @@ public class Ldap {
             userLdap.setCuenta((String) (attrs.get("SAMAccountName")==null?"":attrs.get("SAMAccountName").get()) );
             userLdap.setNombre(((String) (attrs.get("givenName")==null?"":attrs.get("givenName").get()) ).toUpperCase().trim());
             userLdap.setUsuario(((String) (attrs.get("sn")==null?"":attrs.get("sn").get()) ).toUpperCase().trim());
+            userLdap.setCorreo(((String) (attrs.get("userPrincipalName")==null?"":attrs.get("userPrincipalName").get()) ).toUpperCase().trim());
+            userLdap.setDireccion(((String) (attrs.get("streetAddress")==null?"":attrs.get("streetAddress").get()) ).toUpperCase().trim());
+            userLdap.setOds(((String) (attrs.get("l")==null?"":attrs.get("l").get()) ).toUpperCase().trim());
             listaUsuario.add(userLdap);
         }
 
@@ -236,6 +244,9 @@ public class Ldap {
             userLdap.setCuenta((String) (attrs.get("SAMAccountName")==null?"":attrs.get("SAMAccountName").get()) );
             userLdap.setNombre(((String) (attrs.get("givenName")==null?"":attrs.get("givenName").get()) ).toUpperCase().trim());
             userLdap.setUsuario(((String) (attrs.get("sn")==null?"":attrs.get("sn").get()) ).toUpperCase().trim());
+            userLdap.setCorreo(((String) (attrs.get("userPrincipalName")==null?"":attrs.get("userPrincipalName").get()) ).toUpperCase().trim());
+            userLdap.setDireccion(((String) (attrs.get("streetAddress")==null?"":attrs.get("streetAddress").get()) ).toUpperCase().trim());
+            userLdap.setOds(((String) (attrs.get("l")==null?"":attrs.get("l").get()) ).toUpperCase().trim());
             listaUsuario.add(userLdap);
         }
         

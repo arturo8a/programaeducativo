@@ -13,6 +13,6 @@ public interface ITipousuarioRepo extends CrudRepository<Tipousuario,Integer>{
 	@Query(value="SELECT U.* FROM TIPOUSUARIO U WHERE U.ID=?1",nativeQuery = true)
 	Tipousuario byTipousuario(@Param("id") int id);
 	
-	@Query(value="SELECT U.* FROM TIPOUSUARIO U order by orden asc",nativeQuery = true)
+	@Query(value="SELECT U.* FROM TIPOUSUARIO U where id in(1,2,11) order by orden asc",nativeQuery = true)
 	List<Tipousuario> lista();
 }

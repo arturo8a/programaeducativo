@@ -28,5 +28,16 @@ public interface IUsuarioRepo extends CrudRepository<Usuario,Integer>{
 	@Modifying	
 	@Query("update Usuario p set p.password = ?2 WHERE p.id = ?1")
 	int updatecontrasenia(@Param("id") Integer id, @Param("password") String password);
+	
+
+	@Transactional
+	@Modifying	
+	@Query("update Usuario p set p.estado = 0 WHERE p.usuario = ?1")
+	int estadoEliminar(@Param("usuario") String usuario);
+	
+	@Transactional
+	@Modifying	
+	@Query("update Usuario p set p.estado = 1 WHERE p.usuario = ?1")
+	int estadoActivar(@Param("usuario") String usuario);
 
 }

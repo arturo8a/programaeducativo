@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.progeduc.componente.Ldap;
 import com.progeduc.model.Aperturaranio;
 import com.progeduc.model.Docente;
 import com.progeduc.model.Docentetutor;
@@ -32,6 +33,8 @@ import com.progeduc.model.Questionario;
 import com.progeduc.model.Rubrica;
 import com.progeduc.model.Suministro;
 import com.progeduc.model.Trabajosfinales;
+import com.progeduc.model.Usuario;
+import com.progeduc.model.UsuarioLdap;
 import com.progeduc.service.IAperturaranioService;
 import com.progeduc.service.ICategoriaevaluacionService;
 import com.progeduc.service.ICategoriatrabajoService;
@@ -63,13 +66,13 @@ import com.progeduc.service.ITipodocumentoService;
 import com.progeduc.service.ITipousuarioService;
 import com.progeduc.service.ITrabajosfinalesParticipanteService;
 import com.progeduc.service.ITrabajosfinalesService;
+import com.progeduc.service.IUsuarioOdsService;
+import com.progeduc.service.IUsuarioService;
 import com.progeduc.service.LenguaService;
 import com.progeduc.service.ProveedorService;
 import com.progeduc.service.TipodocService;
 import com.progeduc.service.TipoieService;
 import com.progeduc.service.impl.UploadFileService;
-
-import net.bytebuddy.matcher.ModifierMatcher.Mode;
 
 @Controller
 @RequestMapping("")
@@ -183,11 +186,17 @@ public class IndexController {
 	@Autowired
 	private ITipousuarioService tipousuarioServ;
 	
+	@Autowired
+	IUsuarioService usuarioService;
+	
+	@Autowired
+	IUsuarioOdsService usuarioodsService; 
+	
 	String participanteid;
 	
 	int contador;
 	
-	String id_rubrica,id_questionario;
+	String id_rubrica,id_questionario,ods;
 	
 	@GetMapping("/inicio")
 	public String inicio(@RequestParam(name="name",required=false,defaultValue="world") String name, Model model) {
@@ -684,6 +693,26 @@ public class IndexController {
 		model.addAttribute("parentesco",parentescoService.listar());
 		model.addAttribute("nombrearchivo",uploadfile.buscarArchivo(pa.getId(),"upload_participantes"));
 		return "formeditarparticipante";
+	}
+	
+	@GetMapping("/editarviewusuarioid/{miusuario}")
+	public String editarviewusuarioid(@PathVariable("miusuario") String miusuario,  Model model,HttpSession ses) throws Exception {
+		
+		Usuario usuario = usuarioService.byUsuario(miusuario);
+		model.addAttribute("usuario", usuario);
+		model.addAttribute("id", usuario.getId());
+		ods = "";
+		usuarioodsService.listarByUsuario(usuario.getId()).forEach(obj->{
+			ods += obj.getOds().getId().toString() + ",";
+		});
+		
+		model.addAttribute("ods",ods);
+		model.addAttribute("listaods",odsserv.listarAll());		
+		Ldap mildap = new Ldap();
+		List<UsuarioLdap> lista = mildap.listarTodosUsuariosLDAP();
+		model.addAttribute("usuarios", lista);
+		model.addAttribute("tipousuarios", tipousuarioServ.lista());
+		return "formeditarusuario";
 	}
 	
 	@GetMapping("/editarviewevaluacionid/{id}")

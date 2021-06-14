@@ -40,6 +40,7 @@ import com.progeduc.dto.ListatrabajosfinalesDto;
 import com.progeduc.dto.ParticipanteVerDto;
 import com.progeduc.dto.TrabajofinalesEnviadoDto;
 import com.progeduc.dto.TrabajosfinalesParticipanteDto;
+import com.progeduc.dto.UsuarioOdsDto;
 import com.progeduc.model.Aperturaranio;
 import com.progeduc.model.Docente;
 import com.progeduc.model.Evaluacion;
@@ -49,6 +50,7 @@ import com.progeduc.model.Participante;
 import com.progeduc.model.Postulacionconcurso;
 import com.progeduc.model.Programaeducativo;
 import com.progeduc.model.Trabajosfinales;
+import com.progeduc.model.Usuario;
 import com.progeduc.model.UsuarioLdap;
 import com.progeduc.service.IAperturaranioService;
 import com.progeduc.service.IDistritoService;
@@ -61,6 +63,7 @@ import com.progeduc.service.IPostulacionconcursoService;
 import com.progeduc.service.IProgramaeducativoService;
 import com.progeduc.service.ITrabajosfinalesParticipanteService;
 import com.progeduc.service.ITrabajosfinalesService;
+import com.progeduc.service.IUsuarioService;
 import com.progeduc.service.impl.UploadFileService;
 
 @RestController
@@ -102,6 +105,8 @@ public class ConcursoeducativoController {
 	
 	@Autowired
 	private IEvaluacionService evaluacionServ;
+	
+	
 	
 	ListaparticipanteDto dto;	
 	ListatrabajosfinalesDto dtotf;	
@@ -596,8 +601,9 @@ public class ConcursoeducativoController {
 	public ResponseEntity<List<ListaDocenteInscritos>> listadocentesinscritos(HttpSession ses) {
 		
 		List<ListaDocenteInscritos> arrayie = new ArrayList<ListaDocenteInscritos>();
-		Object ob = ses.getAttribute("odsid");
-		if(Integer.parseInt(ob.toString()) == 0) {
+		//Object ob = ses.getAttribute("odsid");
+		//if(Integer.parseInt(ob.toString()) == 0) {
+		if(true) {
 			docenteService.listarTodoshabilitados().forEach(obj->{
 				listadocentesinscritos= new ListaDocenteInscritos();
 				
@@ -626,7 +632,8 @@ public class ConcursoeducativoController {
 			});				
 		}
 		else {	
-			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(distrito->{
+			//distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(distrito->{
+			distServ.listByOdsid(19).forEach(distrito->{
 				progeducService.listar(distrito.getId()).forEach(pe->{					
 					docenteService.listarhabilitados(pe.getId()).forEach(docente->{
 						listadocentesinscritos= new ListaDocenteInscritos();
@@ -662,8 +669,8 @@ public class ConcursoeducativoController {
 			if(obj.getCuenta().equals( usuario))
 				usuarioldap = obj;
 		});
-		System.out.println("usuario :" + usuario);
 		return new ResponseEntity<UsuarioLdap>(usuarioldap, HttpStatus.OK) ;
 	}
-
+	
+	
 }

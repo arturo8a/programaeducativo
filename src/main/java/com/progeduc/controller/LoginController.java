@@ -57,25 +57,25 @@ public class LoginController {
         		ses.setAttribute("usuario", uo.getOds());
         		ses.setAttribute("perfil", uo.getOds());
         		ses.setAttribute("tipousuarioid", 0);
-        		ses.setAttribute("odsid", uo.getOdsid());
+        		/*ses.setAttribute("odsid", uo.getOdsid());*/
         		return uo.getNombres();
         	}
         	else {
         		if(obj.getTipousuario().getId()==2) {/*usuario admin*/
         			ses.setAttribute("usuario", obj.getUsuario());
             		ses.setAttribute("perfil", obj.getTipousuario().getDescripcion());
-            		ses.setAttribute("odsid", 0);
+            		/*ses.setAttribute("odsid", 0);*/
             		ses.setAttribute("tipousuarioid", obj.getTipousuario().getId());
-            		return obj.getNombre();
+            		return obj.getUsuario();
         		}
         		else {
         			Programaeducativo pe = progeducService.getCodmodByAnioActual(obj.getUsuario());
             		if(pe!=null) {
             			ses.setAttribute("usuario", obj.getUsuario());
                 		ses.setAttribute("perfil", obj.getTipousuario().getDescripcion());
-                		ses.setAttribute("odsid", 0);
+                		/*ses.setAttribute("odsid", 0);*/
                 		ses.setAttribute("tipousuarioid", obj.getTipousuario().getId());
-                		return obj.getNombre();
+                		return obj.getUsuario();
             		}
             		else {
             			return "-2";

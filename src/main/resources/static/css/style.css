@@ -4,16 +4,19 @@
 
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 
+@import "https://fonts.googleapis.com/css?family=Montserrat:400,500,700,900|Ubuntu:400,500,700";
+
 html {
-  font-family: sans-serif;
+  /*font-family: sans-serif;*/
   line-height: 0.5;
   -webkit-text-size-adjust: 8%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0); 
 }
   
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     background: #fafafa;
+    font-size:12px;
 }
 
 p {
@@ -37,8 +40,9 @@ a:focus {
     background: #fff;
     border: none;
     border-radius: 0;
-    margin-bottom: 40px;
-    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    /*margin-bottom: 40px;*/
+    /*box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);*/
+    background:#F4F7FA;
 }
 
 .navbar-btn {
@@ -86,7 +90,7 @@ a:focus {
 
 #sidebar .sidebar-header {
     padding: 20px;
-    background: #6d7fcc;
+    /*background: #6d7fcc;*/
 }
 
 #sidebar ul p {
@@ -108,7 +112,7 @@ a:focus {
 #sidebar ul li.active>a,
 a[aria-expanded="true"] {
     color: #000;
-    background: #D6F0EE;
+    /*background: #D6F0EE;*/
 }
 
 a[data-toggle="collapse"] {
@@ -125,8 +129,6 @@ a[data-toggle="collapse"] {
 
 ul ul a {
     font-size: 0.9em !important;
-    padding-left: 30px !important;
-    background: #D6F0EE;
 }
 
 ul.CTAs {
