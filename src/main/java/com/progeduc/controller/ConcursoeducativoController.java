@@ -671,6 +671,16 @@ public class ConcursoeducativoController {
 		});
 		return new ResponseEntity<UsuarioLdap>(usuarioldap, HttpStatus.OK) ;
 	}
+<<<<<<< HEAD
 	
 	
+=======
+        
+        
+        @GetMapping("/listtrabajospendientes")
+	public List<String> listTrabajosPendientes(){
+		return  progeducService.listCentrosEducativosGroupbyCodmod();
+	}
+
+>>>>>>> f53bde292fbed42ec5f057cc766e7a591b49181a
 }
