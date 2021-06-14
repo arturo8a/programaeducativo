@@ -48,8 +48,8 @@ public class LoginController {
     public @ResponseBody String loginUsuario(@RequestParam("usuario") String usuario, @RequestParam("password") String password,HttpSession ses){
     	
 		try {
-    		Usuario obj = usuarioServ.login(usuario, password);    		
-        	if(obj==null) {
+    		Usuario obj = usuarioServ.login(usuario, password);
+    		if(obj==null) {
         		Usuario_Ods uo = usuario_odsServ.login(usuario, password);
         		if(uo == null) {
         			return "-1";
@@ -57,14 +57,12 @@ public class LoginController {
         		ses.setAttribute("usuario", uo.getOds());
         		ses.setAttribute("perfil", uo.getOds());
         		ses.setAttribute("tipousuarioid", 0);
-        		/*ses.setAttribute("odsid", uo.getOdsid());*/
         		return uo.getNombres();
         	}
         	else {
-        		if(obj.getTipousuario().getId()==2) {/*usuario admin*/
+        		if(obj.getTipousuario().getId()==12) {
         			ses.setAttribute("usuario", obj.getUsuario());
             		ses.setAttribute("perfil", obj.getTipousuario().getDescripcion());
-            		/*ses.setAttribute("odsid", 0);*/
             		ses.setAttribute("tipousuarioid", obj.getTipousuario().getId());
             		return obj.getUsuario();
         		}
@@ -73,21 +71,18 @@ public class LoginController {
             		if(pe!=null) {
             			ses.setAttribute("usuario", obj.getUsuario());
                 		ses.setAttribute("perfil", obj.getTipousuario().getDescripcion());
-                		/*ses.setAttribute("odsid", 0);*/
                 		ses.setAttribute("tipousuarioid", obj.getTipousuario().getId());
                 		return obj.getUsuario();
             		}
             		else {
             			return "-2";
             		}
-        		}
-        		      		
-        	} 		
+        		}        		      		
+        	}
     	} catch (Exception ex) {
     		System.out.println("login: " + ex);
             return "error";
-    	}
-    	
+    	}    	
     }
 	
 	@GetMapping("/cerrar_sesion")

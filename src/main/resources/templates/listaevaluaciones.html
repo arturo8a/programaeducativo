@@ -246,11 +246,25 @@
 		            	{ 'data' : 'nivelparticipacion' },
 		                { 'data' : 'categoriaevaluacion' },
 		                { 'data' : 'estado' },
-		                { 'defaultContent' : '<img src="./images/svg/file-pdf-regular.svg" class="ver" style="width:20px; cursor:pointer"/>' },
-				        { 'defaultContent' : '<img src="./images/svg/edit-regular.svg" class="editar" style="width:20px; cursor:pointer " />'},
-				        { 'defaultContent' : '<img src="./images/svg/eliminar-alt-regular.svg" class="eliminar" style="width:20px; cursor:pointer " />'}
+		                { 'defaultContent' : '<img src="./images/iconos_nd/pdf1.svg" class="ver" style="width:20px; cursor:pointer"/>' },
+				        { 'defaultContent' : '<img src="./images/iconos_nd/lapiz.svg" class="editar" style="width:20px; cursor:pointer " />'},
+				        { 'defaultContent' : '<img src="./images/iconos_nd/eliminar.svg" class="eliminar" style="width:20px; cursor:pointer " />'}
 		            ],
-		            buttons: []
+		            'columnDefs': [
+		            	 {
+		            	      "targets": 5,
+		            	      "className": "text-center"
+		            	 },
+		            	 {
+		            	      "targets": 6,
+		            	      "className": "text-center"
+		            	 },
+		            	 {
+		            	      "targets": 7,
+		            	      "className": "text-center"
+		            	 }
+		             ],
+		             buttons: []
 		        });
 				obtener_data_verPdf("#table_lista_evaluacion tbody",table_lista_evaluacion);
 				obtener_data_editar("#table_lista_evaluacion tbody",table_lista_evaluacion);

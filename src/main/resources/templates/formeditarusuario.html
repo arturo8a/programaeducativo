@@ -44,18 +44,11 @@
 			</div>
 			<div class="col-xs-12 col-sm-3">
 				<label>Nombres</label>
-				<input type="text" name="nombresusuario_edit" id="nombresusuario_edit" class="form-control" disabled/>
+				<input type="text" name="nombresusuario_edit"  th:field="*{datosusuario.nombre}" id="nombresusuario_edit" class="form-control" disabled/>
 			</div>
-			<div class="col-xs-12 col-sm-3">
-				<label>Apellidos</label>
-				<input type="text" name="apellidosusuario_edit" id="apellidosusuario_edit" class="form-control" disabled/>
-			</div>
-		</div>
-		<br>
-		<div class="row">			
 			<div class="col-xs-12 col-sm-3">
 				<label>Correo electrónico</label>
-				<input type="text" name="correoelectronico_edit" id="correoelectronico_edit" class="form-control" disabled/>
+				<input type="text" name="correoelectronico_edit" th:field="*{datosusuario.correo}" id="correoelectronico_edit" class="form-control" disabled/>
 			</div>
 		</div>
 		<hr>

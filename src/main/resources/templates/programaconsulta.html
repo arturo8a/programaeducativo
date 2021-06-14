@@ -455,7 +455,7 @@
 	            	{ 'data' : 'codmod' },
 	            	{ 'data' : 'nomie' },
 	                { 'data' : 'anhio' },
-	                { 'defaultContent' : '<img src="./images/svg/file-pdf-regular.svg" class="descargar" style="width:20px; cursor:pointer"/>' },
+	                { 'defaultContent' : '<img src="./images/iconos_nd/pdf1.svg" class="descargar" style="width:20px; cursor:pointer"/>' },
 	                { 'data' : 'estado' ,
 	                   render: function(data, type) { 
 	                   		var x = '';
@@ -478,13 +478,13 @@
 	                   		var x = '';
 	                        switch (data) {
 	                            case 'Aprobado':
-	                                x = '<img src="./images/svg/edit-regular.svg" style="width:20px; filter: invert(70%)" />';
+	                                x = '<img src="./images/iconos_nd/lapiz.svg" style="width:20px; filter: invert(70%)" />';
 	                                break;
 	                            case 'Observado':
-	                                x = '<img src="./images/svg/edit-regular.svg" style="width:20px; filter: invert(70%)" />';
+	                                x = '<img src="./images/iconos_nd/lapiz.svg" style="width:20px; filter: invert(70%)" />';
 	                                break;
 	                            default:
-	                                x = '<img src="./images/svg/edit-regular.svg" class="editar" id="editarficha" style="width:20px; cursor:pointer"/>';
+	                                x = '<img src="./images/iconos_nd/lapiz.svg" class="editar" id="editarficha" style="width:20px; cursor:pointer"/>';
 	                                break;
                             }
                             return x;
@@ -492,6 +492,20 @@
 	                },
 	                { 'data' : 'estado' },
 	                { 'defaultContent' : '<img src="./images/svg/eye-solid.svg" class="motivo" style="width:20px; cursor:pointer"/>' }
+	            ],
+	            'columnDefs': [
+	            	  {
+	            	      "targets": 5,
+	            	      "className": "text-center"
+	            	  },
+	            	  {
+	            	      "targets": 7,
+	            	      "className": "text-center"
+	             	  },
+	             	  {
+	            	      "targets": 9,
+	            	      "className": "text-center"
+	             	  }
 	            ],
 	            "fnPreDrawCallback": function(oSettings) {
 	            	$("#btnbuscarpe").prop("disabled",true);
