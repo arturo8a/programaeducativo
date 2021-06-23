@@ -31,7 +31,7 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
 	@Query(value="update Trabajosfinales p set p.enviado = ?2 WHERE p.id = ?1 and p.programaeducativoid=?3  and p.anio = EXTRACT(YEAR FROM sysdate) ",nativeQuery = true)
 	int updateenviado(Integer id, Integer estado, Integer peid);
        
-        @Query(value="update Trabajosfinales p set p.enviado = ?2 WHERE p.id = ?1 and p.programaeducativoid=?3  and p.anio = EXTRACT(YEAR FROM sysdate) ",nativeQuery = true)
-	List<Trabajosfinales> TrabajosfinaleslistarTarabajosPendientes(Integer programaeducativoid);
+    @Query(value="SELECT * FROM Trabajosfinales WHERE enviado=1",nativeQuery = true)
+	List<Trabajosfinales> listarTrabajosPendientesAsignados();
 
 }

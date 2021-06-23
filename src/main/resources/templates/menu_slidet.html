@@ -111,6 +111,9 @@
                         <li >
                             <input type="button" class="btn btn-link" id="trabajos_pendientes" value="Trabajos Pendientes"/>                            
                         </li>
+                        <li >
+                            <input type="button" class="btn btn-link" id="trabajos_finales_evaluados" value="Trabajos Evaluados"/>                            
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -415,6 +418,20 @@
    	    		document.getElementById("rubrica_evaluacion").style.color = "";
    	    		document.getElementById("reportes").style.color = "";
    	    		document.getElementById("trabajos_pendientes").style.color = "#0083C9";
+	    		$("#consulta_menu").prop("disabled",true);
+	        	$("#btnbuscar").prop("disabled",true);
+	    		$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
+	    		setTimeout(() => {        		  
+	    			$.ajax({
+		    			url: url_base + "pedesa/trabajospendientes",
+		    			success: function(respuesta) {
+		    				$("#contenedor_consulta").html(respuesta);    				
+		    			}
+		    		});
+	        	}, 200);
+	    	});
+	    	
+	    	$("#trabajos_finales_evaluados").click(function(){
 	    		$("#consulta_menu").prop("disabled",true);
 	        	$("#btnbuscar").prop("disabled",true);
 	    		$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");

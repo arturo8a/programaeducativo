@@ -13,7 +13,7 @@
 <script type="text/javascript" th:src="@{/js/date-uk.js}"></script>
 <script type="text/javascript" th:src="@{/js/date-euro.js}"></script>
 
-<!--script type="text/javascript" th:src="@{/js/evaluar.js}"></script>-->
+<script type="text/javascript" th:src="@{/js/evaluar.js}"></script>
 <div id="containerListaRegistros" class="pl-3 pr-3">
 	<div class="div_filtro">
 		<div class="row p-0 m-0">
@@ -32,9 +32,7 @@
 			<div class="col-xs-4 col-sm-4">
 		            <select class="form-control" id="modalidad" name="modalidad">
 		                <option value="Todos">Modalidad</option>	
-		                <!-- <option th:each="modalidad:${modalidadtrabajo}" th:value="${modalidad.id}" th:utext="${modalidad.descripcion}"/>-->
-		                <option value="1">Individual</option>
-		                <option value="2">Grupal</option>                
+		                <option th:each="modalidad:${modalidadtrabajo}" th:value="${modalidad.id}" th:utext="${modalidad.descripcion}"/>               
 		            </select>
 			</div>
 			<div class="col-xs-12 col-sm-6 col-md-4 pt-1">
@@ -42,20 +40,20 @@
 		                    <option value="Todos">Categoría</option>	
 		                    <option th:each="cate:${categoriatrabajo}" th:value="${cate.id}" th:utext="${cate.descripcion}"/>       				
 		            </select>
-		        </div>
-		        <div class="col-xs-12 col-sm-6 col-md-4 pt-1">
-		            <select class="form-control" id="nivel" name="nivel">
-		                    <option value="Todos">Nivel de participación</option>
-		                    <option th:each="nivel:${nivelparticipacion}" th:value="${nivel.id}" th:utext="${nivel.descripcion}"/>    
-		            </select>
-		        </div>
-		        <div class="col-xs-12 col-sm-6 col-md-4 pt-1">
-		            <input type="text" placeholder="Nombre de la II.EE" class="form-control rounded-0" id="txtnombreIE" name="txtnombreIE">
-		        </div>
+	        </div>
+	        <div class="col-xs-12 col-sm-6 col-md-4 pt-1">
+	            <select class="form-control" id="nivel" name="nivel">
+	                    <option value="Todos">Nivel de participación</option>
+	                    <option th:each="nivel:${nivelparticipacion}" th:value="${nivel.id}" th:utext="${nivel.descripcion}"/>    
+	            </select>
+	        </div>
+	        <div class="col-xs-12 col-sm-6 col-md-4 pt-1">
+	            <input type="text" placeholder="Nombre de la II.EE" class="form-control rounded-0" id="txtnombreIE" name="txtnombreIE">
+	        </div>
 		
-		        <div class="col-xs-12 col-sm-6 col-md-4">
-		                <label>&nbsp;</label>
-		        </div>
+	        <div class="col-xs-12 col-sm-6 col-md-4">
+	                <label>&nbsp;</label>
+	        </div>
 			<div class="col-xs-4 col-md-4 pt-1 pb-2">
 				<label>&nbsp;</label><br>
 				<!-- input type="button" name="btnbuscar" id="btnbuscar" class="btn btn-primary" value="Buscar"/-->
@@ -70,7 +68,7 @@
 			<label class="p-2 m-0">LISTADO DE REGISTROS</label>
 			<div class="row pt-2 pb-4 m-0">
 				<div class="col-xs-12 col-sm-12">
-					<table id="table_ie"  class="table table-striped table-bordered display nowrap" style="width:100%">
+					<table id="table_trabajos_pendientes"  class="table table-striped table-bordered display nowrap" style="width:100%">
 					<!-- table cellpadding="1" cellspacing="1" id="table_ie"-->
 					    <thead class="cabecera_tabla">
 					        <tr>
@@ -97,6 +95,7 @@
 		</div>
 	</div>
 </div>
+<<<<<<< HEAD
 </html>
 <script type="text/javascript">
     $(document).ready(function(){
@@ -451,39 +450,19 @@
 				return false;
 			}
 		}
+=======
+>>>>>>> df17c640c8b80a31e7f2913e5c9c4ebbd3c108dc
 
-		function validarFormatoFecha(campo) {
-			var RegExPattern = /^\d{1,2}\/\d{1,2}\/\d{2,4}$/;
-			if ((campo.match(RegExPattern)) && (campo!='')) {
-				return true;
-			} 
-			else {
-				return false;
-			}
-		}
+<div class="modal fade" tabindex="-1" role="dialog" id="modaleEvaluarTrabajoPendientes" aria-labelledby="myLargeModalLabel" >
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" style="overflow-y: scroll; height:750px">
+      <div class="modal-header">
+        <strong class="pt-1">Evaluar Trabajos Pendeintes</strong>
+      </div>
+      <div class="modal-body" id="contenidoevaluartrabajospendientes">      	
+      </div>
+    </div>
+  </div>
+</div>
 
-		function existeFecha(fecha){
-			var fechaf = fecha.split("/");
-			var day = fechaf[0];
-			var month = fechaf[1];
-			var year = fechaf[2];
-			var date = new Date(year,month,'0');
-			if((day-0)>(date.getDate()-0)){
-				return false;
-			}
-			return month > 0 && month < 13 && year > 0 && year < 32768 && day > 0 && day <= (new Date(year, month, 0)).getDate();;
-		}
-		
-		function filterInt(evt,input){
-		    var key = window.Event ? evt.which : evt.keyCode;    
-		    var chark = String.fromCharCode(key);
-		    var tempValue = input.value+chark;
-		    if(key >= 47 && key <= 57){    
-		        return true;
-		    }
-		    else{
-		        return false;
-		    }
-		}
-		
-</script>
+</html>

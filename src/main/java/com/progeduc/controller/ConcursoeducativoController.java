@@ -35,6 +35,7 @@ import com.progeduc.dto.EvaluacionDto;
 import com.progeduc.dto.EvaluacionRubricaQuestionarioDto;
 import com.progeduc.dto.ListaDocente;
 import com.progeduc.dto.ListaDocenteInscritos;
+import com.progeduc.dto.ListaTrabajosFinalesPendientes;
 import com.progeduc.dto.ListaparticipanteDto;
 import com.progeduc.dto.ListaparticipantetrabajoDto;
 import com.progeduc.dto.ListatrabajosfinalesDto;
@@ -50,6 +51,11 @@ import com.progeduc.model.Participante;
 import com.progeduc.model.Postulacionconcurso;
 import com.progeduc.model.Programaeducativo;
 import com.progeduc.model.Trabajosfinales;
+<<<<<<< HEAD
+=======
+import com.progeduc.model.TrabajosfinalesParticipante;
+import com.progeduc.model.Usuario;
+>>>>>>> df17c640c8b80a31e7f2913e5c9c4ebbd3c108dc
 import com.progeduc.model.UsuarioLdap;
 import com.progeduc.service.IAperturaranioService;
 import com.progeduc.service.IDistritoService;
@@ -109,7 +115,8 @@ public class ConcursoeducativoController {
 	ListaparticipanteDto dto;	
 	ListatrabajosfinalesDto dtotf;	
 	ListaparticipantetrabajoDto ptdto;	
-	ListaDocenteInscritos listadocentesinscritos;	
+	ListaDocenteInscritos listadocentesinscritos;
+	ListaTrabajosFinalesPendientes listaTrabajosFinalesPendientes;
 	String miparticipante = "";	
 	boolean banderaUpdate;	
 	Mail mail;	
@@ -695,8 +702,39 @@ public class ConcursoeducativoController {
 		return new ResponseEntity<UsuarioLdap>(usuarioldap, HttpStatus.OK) ;
 	}
 	
-	@GetMapping("/listtrabajospendientes")
-	public List<String> listTrabajosPendientes(){
-		return  progeducService.listCentrosEducativosGroupbyCodmod();
+	@GetMapping("/listatrabpendientesasignados")
+	public ResponseEntity<List<ListaTrabajosFinalesPendientes>>listTrabajosPendientesAsignados(HttpSession ses){
+		
+		List<ListaTrabajosFinalesPendientes> lista = new ArrayList<ListaTrabajosFinalesPendientes>();
+		List<Trabajosfinales> listaTrabajos = trabajosfinalesServ.listarTrabajosPendientes();
+		listaTrabajos.forEach(data->{
+			List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteServ.listar(data.getId());
+			Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
+			
+			String strOds = "";
+			if(data.getProgramaeducativo().getOds()!=null) {
+				Ods ods = odsserv.byOds(data.getProgramaeducativo().getDistrito().getOdsid());
+				strOds = ods.getDes_ods();
+			}
+			
+			listaTrabajosFinalesPendientes = new ListaTrabajosFinalesPendientes();
+			listaTrabajosFinalesPendientes.setAnio(data.getAnio());
+			listaTrabajosFinalesPendientes.setCodigo(data.getId());
+			listaTrabajosFinalesPendientes.setOds(strOds);
+			listaTrabajosFinalesPendientes.setIiee(data.getProgramaeducativo().getCodmod());
+			listaTrabajosFinalesPendientes.setCategoria(data.getCategoriatrabajo().getDescripcion());
+			listaTrabajosFinalesPendientes.setModalidad(data.getModalidadtrabajo().getDescripcion());
+			listaTrabajosFinalesPendientes.setTitulotrabajo(data.getTitulotrabajo());
+			listaTrabajosFinalesPendientes.setNivelparticipacion(participante.getGradoestudiante().getNivelgradopartdesc());
+			listaTrabajosFinalesPendientes.setFichatrabajo("ficha trabajo");
+			listaTrabajosFinalesPendientes.setEvaluacion("ficha trabajo");
+			listaTrabajosFinalesPendientes.setTrabajo("ficha trabajo");
+			listaTrabajosFinalesPendientes.setFichatrabajo("ficha trabajo");
+			lista.add(listaTrabajosFinalesPendientes);
+		});
+		
+		
+		
+		return new ResponseEntity<List<ListaTrabajosFinalesPendientes>>(lista, HttpStatus.OK) ;
 	}
 }

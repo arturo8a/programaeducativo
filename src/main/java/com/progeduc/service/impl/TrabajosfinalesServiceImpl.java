@@ -85,9 +85,9 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 		return false;
 	}
 
-    @Override
-    public List<Trabajosfinales> listarTarabajosPendientes(TrabajosfinalesParticipanteDto dto) {
-        return trabajosfinalesRepo.listarhabilitados(Integer.MAX_VALUE);
-    }
+	@Override
+	public List<Trabajosfinales> listarTrabajosPendientes() {
+		return trabajosfinalesRepo.listarTrabajosPendientesAsignados();
+	}
 
 }
