@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,10 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.progeduc.componente.Ldap;
+import com.progeduc.dto.ArchivoEvidenciaDto;
 import com.progeduc.dto.UsuarioDto;
 import com.progeduc.dto.UsuarioOdsDto;
 import com.progeduc.model.UsuarioLdap;
 import com.progeduc.service.IUsuarioService;
+import com.progeduc.service.impl.UploadFileService;
 
 @RestController
 @RequestMapping("")
@@ -34,6 +37,9 @@ public class UsuarioController {
 	
 	@Autowired
 	private IUsuarioService usuarioServ;
+	
+	@Autowired
+	private UploadFileService uploadfile;
 	
 	int contador;
 	
@@ -101,6 +107,15 @@ public class UsuarioController {
 	@GetMapping(value="/activarusuario/{usuario}")
 	public Integer activarusuario(@PathVariable("usuario") String usuario) {
 		return usuarioServ.estadoActivar(usuario);
+	}
+	
+	@GetMapping("/vertrabajosevidencias/{id}")
+	public ArchivoEvidenciaDto vertrabajosevidencias(@PathVariable("id") Integer id, Model model) {
+		
+		String archivo = uploadfile.buscarArchivo(id, "upload_trabajos");
+		List<String> evidencia = uploadfile.buscarEvidencias(id, "upload_evidencias");
+		ArchivoEvidenciaDto dto = new ArchivoEvidenciaDto(archivo,evidencia);
+		return dto;		
 	}
 
 }

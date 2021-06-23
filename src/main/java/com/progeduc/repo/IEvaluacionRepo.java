@@ -1,5 +1,7 @@
 package com.progeduc.repo;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -15,4 +17,8 @@ public interface IEvaluacionRepo extends CrudRepository<Evaluacion,Integer>{
 	@Modifying	
 	@Query("update Evaluacion p set p.estado = ?2 WHERE p.id = ?1")
 	int updateestado(Integer id, Integer estado);	
+	
+	
+	@Query(value="SELECT tb.* FROM Evaluacion tb WHERE tb.anio=?1  and tb.estado=1",nativeQuery = true)
+	Evaluacion getPorAnio(Integer anio);
 }

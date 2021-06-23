@@ -53,12 +53,12 @@
      			<label>&nbsp;</label>
      		</div>
 			<div class="col-xs-4 col-md-4 pt-1 pb-2">
-				<input type="button" name="btnbuscar" id="btnbuscar" class="btn btn-primary" value="Buscar"/>
-				<input type="button" name="btnlimpiar" id="btnlimpiar" class="btn btn-danger" value="Limpiar" style="margin-left:10px"/>
+				<!-- input type="button" name="btnbuscar" id="btnbuscar" class="btn btn-primary" value="Buscar"/-->
+				<input type="image" id="btnbuscar"  src="./images/iconos_nd/botonbuscar.svg" width="140px" style="padding-bottom:16px" />
+				<input type="image" id="btnlimpiar"  src="./images/iconos_nd/botonrefrescar.svg" width="45px" style="padding-left:10px;padding-bottom:16px" />
 			</div>
 		</div>
 	</div>
-	<br>
 	<div class="div_filtro">			
 		<div class="p-0 m-0">
 			<label class="p-2 m-0">CONSULTA</label>
@@ -69,15 +69,15 @@
 					        <tr>
 					        	<th>Nº</th>
 								<th>ODS</th>
-					            <th>Departamento</th>
-					            <th>Provincia</th>
-					            <th>Distrito</th>
-					            <th>Institución Educativa</th>
-					            <th>Código local I.E</th>			            
-					            <th>Fecha de registro</th>		
-					            <th>Inscrito al C.E</th>
-					            <th>Nivel-N°Secciones-N°Docentes-N°Alumnos-N°varones-N°Mujeres</th>
-					            <th>Ambito</th>
+					            <th>DEPARTAMENTO</th>
+					            <th>PROVINCIA</th>
+					            <th>DISTRITO</th>
+					            <th>INSTITUCIÓN EDUCATIVA</th>
+					            <th>CÓDIGO LOCAL I.E</th>			            
+					            <th>FECHA DE REGISTRO</th>		
+					            <th>INSCRITO al C.E</th>
+					            <th>NIVEL-N°SECCIONES-N°DOCENTES-N°ALUMNOS-N°VARONES-N°MUJERES</th>
+					            <th>AMBITO</th>
 					            <th style="display:none;">Modalidad de Enseñanza</th>
 					            <th style="display:none;">Código Local</th>
 					            <th style="display:none;">Tipo I.E.</th>
@@ -251,7 +251,8 @@
                 "lengthMenu": "Mostrar _MENU_ Entradas",
                 "loadingRecords": "Cargando Registros...",
                 "processing": "Procesando...",
-                "search": "Buscar:",
+                "search": "_INPUT_",
+		        "searchPlaceholder": "Busqueda General",
                 "zeroRecords": "No existen registros",//No existen registros
                 "paginate": {
                     "first": "Primero",
@@ -353,14 +354,13 @@
 		  		{ "visible": false, "targets": 42 }
             ],
             "fnPreDrawCallback": function(oSettings) {
-            	console.log("inicio carga");
             	$("#consulta_menu").prop("disabled",true);
             	$("#btnbuscar").prop("disabled",true);
             },
             buttons: [
             	{
             		extend: 'excelHtml5',
-            		text:'<i class="far fa-file-excel"></i>',
+            		text:"<img src='./images/iconos_nd/excel1.svg' style='size:15px;margin:0px;padding:0px'/>",
                     title: 'INSTITUCIONES EDUCATIVAS DEL PROGRAMA EDUCATIVO',
                     messageTop: function(){
                     	return '[ Fecha desde: ' + $("#fecha_desde").val() + ']            [ Fecha hasta: '+ $("#fecha_hasta").val() + ']           [ Nombre: ' + $("#nomie").val() + ']           [ Departamento: ' + $("#departamento option:selected").text() + ']           [ Provincia: '+$("#provincia option:selected").text()+' ]          [ Distrito: '+$("#distrito option:selected").text()+']     [ Estado: '+$("#estado option:selected").text()+ ']';

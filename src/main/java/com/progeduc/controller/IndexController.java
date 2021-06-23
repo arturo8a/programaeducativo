@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.progeduc.componente.Ldap;
+import com.progeduc.dto.ArchivoEvidenciaDto;
 import com.progeduc.model.Aperturaranio;
 import com.progeduc.model.Categoriatrabajo;
 import com.progeduc.model.Docente;
@@ -259,7 +260,7 @@ public class IndexController {
 		
 		model.addAttribute("nroevidencias",uploadfile.buscarEvidencias(id, "upload_evidencias").size());
 		return "formeditartrabajo";
-	}
+	}	
 	
 	@GetMapping("/formvertrabajos/{id}")
 	public String formvertrabajos(@PathVariable("id") Integer id, Model model) {
@@ -468,8 +469,33 @@ public class IndexController {
 	public String docenteconsulta(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
 		return "docenteconsulta";
 	}
-        
-        @GetMapping("/trabajospendientes")
+    
+	@GetMapping("/listaformconcurso")
+	public String listaconcurso(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
+		model.addAttribute("ods",odsserv.listarAll());
+		Calendar fecha = Calendar.getInstance();
+        List<Integer> lista = new ArrayList<Integer>();
+        int anio = fecha.get(Calendar.YEAR);
+        for(int i = anio-5;i<=anio;i++) {
+                lista.add(i);
+        }
+        model.addAttribute("anios", lista);
+        model.addAttribute("modalidadtrabajo",modalidadtrabajoService.listar());
+        model.addAttribute("listaestadoevaluacion", estadoevaluacionService.listar());
+        model.addAttribute("categoriatrabajo",categoriaevaluacionService.listar());//categoriatrabajoService.listar());
+        model.addAttribute("nivelparticipacion",nivelparticipacionService.listar());
+		return "listaformconcurso";
+	}
+	
+	@GetMapping("/formasignarevaluador")
+	public String formasignarevaluador(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
+		model.addAttribute("ods",odsserv.listarAll());
+		model.addAttribute("nivelparticipacion",nivelparticipacionService.listar());
+		model.addAttribute("categoriatrabajo",categoriaevaluacionService.listar());
+		return "formasignarevaluador";
+	}
+	
+    @GetMapping("/trabajospendientes")
 	public String trabajospendientes(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
             Calendar fecha = Calendar.getInstance();
             model.addAttribute("anio",fecha.get(Calendar.YEAR));

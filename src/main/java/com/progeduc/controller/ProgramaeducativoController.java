@@ -30,6 +30,7 @@ import com.progeduc.dto.ActualizarContraseniaDto;
 import com.progeduc.dto.DatocorreoDto;
 import com.progeduc.dto.ListaCategoriaDto;
 import com.progeduc.dto.ListaInstitucionEducativa;
+import com.progeduc.dto.ParticipanteTrabajosfinalesDto;
 import com.progeduc.dto.ProgeducDto;
 import com.progeduc.dto.ProgeducTurnoNivelDto;
 import com.progeduc.dto.ProgeducUpdateTurnoNivelDto;
@@ -48,6 +49,7 @@ import com.progeduc.model.ProgramaeducativoNivel;
 import com.progeduc.model.ProgramaeducativoTurno;
 import com.progeduc.model.Questionario;
 import com.progeduc.model.Rubrica;
+import com.progeduc.model.Trabajosfinales;
 import com.progeduc.model.Turno;
 import com.progeduc.model.Usuario;
 import com.progeduc.service.IAperturaranioService;
@@ -67,6 +69,8 @@ import com.progeduc.service.IProgeducTurnoService;
 import com.progeduc.service.IProgramaeducativoService;
 import com.progeduc.service.IProvinciaService;
 import com.progeduc.service.ITipousuarioService;
+import com.progeduc.service.ITrabajosfinalesParticipanteService;
+import com.progeduc.service.ITrabajosfinalesService;
 import com.progeduc.service.IUsuarioService;
 import com.progeduc.service.IUsuario_odsService;
 import com.progeduc.service.impl.UploadFileService;
@@ -143,6 +147,12 @@ public class ProgramaeducativoController {
 	@Autowired
 	private IEvaluacionQuestionarioService evaluacionquestionarioServ;
 	
+	@Autowired
+	private ITrabajosfinalesService trabajosfinalesServ;
+	
+	@Autowired
+	private ITrabajosfinalesParticipanteService trabajosfinalesparticipanteServ;
+	
 	ProgeducTurnoNivelDto dto;
 	List<Nivel> listNivel;
 	List<Turno> listTurno;
@@ -165,6 +175,7 @@ public class ProgramaeducativoController {
 	private UploadFileService uploadfile;
 	
 	Mail mail ;	
+	String ejestematicos;
 	
 	@GetMapping("/searchid/{id}")
 	public ResponseEntity<ProgeducTurnoNivelDto> searchId(@PathVariable("id") Integer id){
@@ -637,6 +648,14 @@ public class ProgramaeducativoController {
 		return crearEvaluacionPdf(eval);
 	}
 	
+	@GetMapping(value="/descargarfichatrabajoconcursopdf/{id}")
+	public String descargarFichaTrabajoConcursoPdf(@PathVariable("id") Integer id, Model model) throws FileNotFoundException, JRException  {
+		
+		//Evaluacion eval = evaluacionServ.ListarporId(id);
+		Trabajosfinales trabajosFinales = trabajosfinalesServ.ListarporId(id);
+		return crearFichaTrabajoConcursoPdf(trabajosFinales);
+	}
+	
 	@GetMapping(value="/fichaautorizacionpdf/{id}")
 	public String fichaautorizacionpdf(@PathVariable("id") Integer id, Model model) throws FileNotFoundException, JRException  {
 		
@@ -700,6 +719,74 @@ public class ProgramaeducativoController {
 		String archivo = eval.getId() + "_"+ dateFormat.format(date) + hourFormat.format(date);
 		JasperExportManager.exportReportToPdfFile(jp,path + archivo + ".pdf");
 		return "/alfresco_programaeducativo/pedesa/reportes_evaluacion/"+archivo+".pdf";			
+	}
+	
+	public String crearFichaTrabajoConcursoPdf(Trabajosfinales eval) throws FileNotFoundException, JRException {
+		
+		Date date = new Date();
+		DateFormat hourFormat = new SimpleDateFormat("HHmmss");
+		DateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
+	
+	 	File file = ResourceUtils.getFile("classpath:ficha_trabajofinales.jrxml");
+		JasperReport jr = JasperCompileManager.compileReport(file.getAbsolutePath());
+		
+		Map parameters = new HashMap();
+		
+		parameters.put("categoria", eval.getCategoriatrabajo().getDescripcion());
+		parameters.put("modalidad", eval.getModalidadtrabajo().getDescripcion());
+		parameters.put("titulotrabajo", eval.getTitulotrabajo());
+		parameters.put("linkvideo", eval.getLinkvideo());
+		
+		ejestematicos = ""; 
+		if(eval.getConversacion() == 1)
+			ejestematicos = "Conversación de las fuentes de agua/";
+		if(eval.getValoracionagua() == 1)
+			ejestematicos = "Valoración de los servicios de agua potable/";
+		if(eval.getValoracionalcantarillado() == 1)
+			ejestematicos = "Valoración del servicio de alcantarillado";
+		if(eval.getBuenuso() == 1)
+			ejestematicos = "Buen uso y reúso del agua potable";
+		if(eval.getImportancia() == 1)
+			ejestematicos = "";
+		if(eval.getVinculo() == 1)
+			ejestematicos = "El vínculo estratégico entre ek agua segura y la salud";
+		if(eval.getCarencias() == 1)
+			ejestematicos = "Las carencias que ponen en riesgo la vida";
+		
+		parameters.put("ejestematicos", ejestematicos);
+		
+		
+		List<ParticipanteTrabajosfinalesDto> listadto  = new ArrayList<ParticipanteTrabajosfinalesDto>();
+		
+		trabajosfinalesparticipanteServ.listar(eval.getId()).forEach(obj->{
+			
+			ParticipanteTrabajosfinalesDto dto = new ParticipanteTrabajosfinalesDto();
+			dto.setAppaternopart(obj.getParticipante().getAppaternoestudiante());
+			dto.setApmaternopart(obj.getParticipante().getApmaternoestudiante());
+			dto.setNombrepart(obj.getParticipante().getNombreestudiante());
+			dto.setTipodocumentopart(obj.getParticipante().getTipodocumentoestudiante().getDescripcion());
+			dto.setNrodocumentopart(obj.getParticipante().getNrodocumentoestudiante());
+			dto.setNivelpart(obj.getParticipante().getGradoestudiante().getNivelgradopartdesc());
+			listadto.add(dto);
+		});		
+        
+		/*List<Rubrica> listaRubrica = new ArrayList<Rubrica>();
+        evaluacionrubricaServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{        	
+        	listaRubrica.add(obj.getRubrica());
+        });
+        
+        List<Questionario> listaQuestionario = new ArrayList<Questionario>();
+        evaluacionquestionarioServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
+        	listaQuestionario.add(obj.getQuestionario());
+        });*/     
+        
+        JRBeanCollectionDataSource datasource = new JRBeanCollectionDataSource(listadto);
+		JasperPrint jp = JasperFillManager.fillReport(jr, parameters, datasource);
+		String path = "/opt/apache-tomcat-8.0.27/webapps/alfresco_programaeducativo/pedesa/reportes_trabajosfinales/";
+		//String path = "D:/Edwin/ProyectosSunass/ProgEducativo/reportes/";
+		String archivo = eval.getId() + "_"+ dateFormat.format(date) + hourFormat.format(date);
+		JasperExportManager.exportReportToPdfFile(jp,path + archivo + ".pdf");
+		return "/alfresco_programaeducativo/pedesa/reportes_trabajosfinales/"+archivo+".pdf";			
 	}
 	
 	

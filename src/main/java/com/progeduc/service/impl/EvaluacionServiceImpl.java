@@ -60,6 +60,11 @@ public class EvaluacionServiceImpl implements IEvaluacionService{
 		Optional<Evaluacion> eval = evaluacionrepo.findById(id);
 		return eval.isPresent() ? eval.get() : new Evaluacion();
 	}
+	
+	@Override
+	public Evaluacion getPorAnio(Integer anio) {
+		return evaluacionrepo.getPorAnio(anio);
+	}
 
 	@Override
 	public boolean Eliminar(Integer id) {

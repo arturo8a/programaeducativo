@@ -8,7 +8,9 @@
 
 .div_filtro{
 	background:white;
-	padding-top:5px;
+	padding:4px;
+	border-radius: 10px 10px 10px 10px;
+	margin:2px;
 }
 
 #content{
@@ -16,5 +18,16 @@
 }
 
 .cabecera_tabla{
-	background:#088CFF;
+	background:#0083C9;
+	color: white;
+	border-radius: 2px 2px 2px 2px;
+}
+
+.btn_refresh{
+	fill: white;
+	margin-left: 20px;
+}
+
+.btn_refresh svg{
+	fill: white;
 }

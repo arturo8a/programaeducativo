@@ -25,7 +25,7 @@
 						</tr>
 					</table>
 				</div-->
-				<div class="col-xs-12 col-3">
+				<div class="col-xs-12 col-4">
 					<table style="width:100%">
 						<tr>
 							<td>
@@ -37,7 +37,7 @@
 						</tr>
 					</table>
 				</div>
-				<div class="col-xs-12 col-3">
+				<div class="col-xs-12 col-4">
 					<table style="width:100%">
 						<tr>
 							<td>
@@ -50,32 +50,30 @@
 						</tr>
 					</table>
 				</div>
-				<div class="col-sx-12 col-sm-6">
-					<input type="button" name="btnagregarusuario" id="btnagregarusuario" class="btn btn-success" value="Nuevo usuario"/>
-					<button name="btnbuscarusuario" id="btnbuscarusuario" class="btn btn-primary" value="Buscar">
-					    <img src="./images/iconos_nd/BusquedaGeneral.svg" width="50px">
-					</button>
-					<input type="button" name="btnlimpiarusuario" id="btnlimpiarusuario" class="btn btn-danger" value="Limpiar" style="margin-left:10px"/>
+				<div class="col-sx-12 col-sm-4">					
+					<!-- input type="button" name="btnbuscarusuario" id="btnbuscarusuario" class="btn btn-primary" value="Buscar" style="margin-left:10px"/-->
+					<!-- input type="button" name="btnlimpiarusuario" id="btnlimpiarusuario" class="btn btn-success" value="Limpiar" style="margin-left:10px"/-->
+					<input type="image" id="btnbuscarusuario" src="./images/iconos_nd/botonbuscar.svg" width="140px" style="padding-bottom:16px" />
+					<input type="image" id="btnlimpiarusuario"  src="./images/iconos_nd/botonrefrescar.svg" width="45px" style="padding-left:10px;padding-bottom:16px" />
 				</div>
 			</div>
 		</div>
-		<br>
 		<div class="div_filtro">
 			<div class="p-0 m-0">
 				<label class="p-2 m-0">ADMINISTRACIÓN DE USUARIOS</label>
 				<div class="row pt-2 pb-4 m-0">
 					<div class="col-xs-12 col-sm-12">
-						<table id="table_lista_usuario"  class="table table-striped table-bordered display nowrap" style="width:100%">
+						<table id="table_lista_usuario"  class="table table-striped display nowrap" style="width:100%">
 							<thead class="cabecera_tabla">
 						        <tr>
 						        	<th><input type="checkbox" id="seleccionarTodo"/></th>
-						            <th>Perfil</th>
-						            <th>Nombre</th>
-						            <th>Apellido</th>
-						            <th>Usuario</th>
-						            <th>Correo</th>
-						            <th>Editar</th>
-						            <th>Activar/Inactivar</th>
+						            <th>PERFIL</th>
+						            <th>NOMBRE</th>
+						            <th>APELLIDO</th>
+						            <th>USUARIO</th>
+						            <th>CORREO</th>
+						            <th>EDITAR</th>
+						            <th>ACTIVAR/INACTIVAR</th>
 						            <th style="display:none">Estado</th>
 						        </tr>   
 						    </thead>
@@ -83,6 +81,12 @@
 					</div>
 					<br><br>
 				</div>
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 text-right">
+				<input type="button" name="btnagregarusuario" id="btnagregarusuario" class="btn btn-primary" value="Agregar"/>
 			</div>
 		</div>
 </div>
@@ -181,6 +185,14 @@
 		
 		$(document).ready(function(){
 			
+			$("#btnlimpiarusuario").click(function(){
+				$("#cbperfilusuario").val("Todos");
+				$("#cbestadousuario").val("Todos");
+				setTimeout(() => {        		  
+					table_lista_usuario.draw();
+		      	}, 200);
+			});
+			
 			$("#btnbuscarusuario").click(function(){	
 				/*$("#consulta_menu").prop("disabled",true);
 	        	$("#btnbuscarpe").prop("disabled",true);
@@ -235,8 +247,9 @@
 			        "lengthMenu": "Mostrar _MENU_ Entradas",
 			        "loadingRecords": "Cargando Registros...",
 			        "processing": "Procesando...",
-			        "search": "Buscar:",
-			        "zeroRecords": " ",//No existen registros
+			        "search": "_INPUT_",
+			        "searchPlaceholder": "Busqueda General",
+			        "zeroRecords": " ",
 			        "paginate": {
 			            "first": "Primero",
 			            "last": "Ultimo",

@@ -82,12 +82,13 @@
 	   			<label>&nbsp;</label>
 	   		</div>
 			<div class="col-xs-12 col-sm-4 pt-1">			
-				<input type="button" name="btnbuscardocente" id="btnbuscardocente" class="btn btn-primary" value="Buscar"/>
-				<input type="button" name="btnlimpiardocente" id="btnlimpiardocente" class="btn btn-danger" value="Limpiar" style="margin-left:10px"/>
+				<!-- input type="button" name="btnbuscardocente" id="btnbuscardocente" class="btn btn-primary" value="Buscar"/-->
+				<!-- input type="button" name="btnlimpiardocente" id="btnlimpiardocente" class="btn btn-danger" value="Limpiar" style="margin-left:10px"/-->
+				<input type="image" id="btnbuscardocente"  src="./images/iconos_nd/botonbuscar.svg" width="140px" style="padding-bottom:16px" />
+				<input type="image" id="btnlimpiardocente" src="./images/iconos_nd/botonrefrescar.svg" width="45px" style="padding-left:10px;padding-bottom:16px" />
 			</div>
 		</div>
 	</div>
-	<br>
 	<div class="div_filtro">	
 		<div class="p-0 m-0">
 			<label class="p-2 m-0">CONSULTA AULA VIRTUAL</label>
@@ -98,17 +99,17 @@
 					        <tr>
 					        	<th> <input type="checkbox" id="seleccionarTodo"/> </th>
 					        	<th>Nº</th>
-					        	<th>Año</th>
+					        	<th>AÑO</th>
 					            <th>ODS</th>
-					            <th>Código de la II.EE</th>
-					            <th>Nombre de II.EE</th>
-					            <th>II. inscrito al C.E</th>
-					            <th>Docente</th>
-					            <th>Tipo de documento</th>
-					            <th>N° de documento</th>		            
-					            <th>Correo electrónico</th>
-					            <th>Teléfono</th>
-					            <th>Género</th>
+					            <th>CÓDIGO DE II.EE</th>
+					            <th>NOMBRE DE II.EE</th>
+					            <th>II. INSCRITO AL C.E</th>
+					            <th>DOCENTE</th>
+					            <th>TIPO DE DOCUMENTO</th>
+					            <th>N° DE DOCUMENTO</th>		            
+					            <th>CORREO ELECTRÓNICO</th>
+					            <th>TELÉFONO</th>
+					            <th>GÉNERO</th>
 					            <th style="display:none;">Fecha de registro</th>
 					        </tr>   
 					    </thead>
@@ -177,8 +178,9 @@
 	                "lengthMenu": "Mostrar _MENU_ Entradas",
 	                "loadingRecords": "Cargando Registros...",
 	                "processing": "Procesando...",
-	                "search": "Buscar:",
-	                "zeroRecords": " ",
+	                "search": "_INPUT_",
+			        "searchPlaceholder": "Busqueda General",
+	                "zeroRecords": "No existen registros",
 	                "paginate": {
 	                    "first": "Primero",
 	                    "last": "Ultimo",
@@ -234,7 +236,7 @@
 	            "buttons": [
 	            	{
 	            		extend: 'excelHtml5',
-	            		text:   '<i class="far fa-file-excel"></i>',
+	            		text:"<img src='./images/iconos_nd/excel1.svg' style='size:15px;margin:0px;padding:0px'/>",
 	                    titleAttr : 'LISTA DE DOCENTES - AULA VIRTUAL',
 	                    messageTop: function(){
 	                    	return '[ ODS: ' + $("#cbods").val() + ']            [ Año de inscripción: '+ $("#cbanio").val() + ']           [ Inscrito al IE: ' + $("#cbinscrito").val() + ']           [ Nombre de la IE: ' + $("#txtnombre").val() + ']' ;

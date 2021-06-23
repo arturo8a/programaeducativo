@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.progeduc.dto.TrabajosfinalesParticipanteDto;
-import com.progeduc.model.Programaeducativo;
 import com.progeduc.model.Trabajosfinales;
 import com.progeduc.repo.ITrabajosfinalesParticipanteRepo;
 import com.progeduc.repo.ITrabajosfinalesRepo;
@@ -46,8 +45,14 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 		return trabajosfinalesRepo.updateenviado(id, estado,peid);
 	}
 	
+	@Override
 	public List<Trabajosfinales> listarhabilitados(Integer programaeducativoid){
 		return trabajosfinalesRepo.listarhabilitados(programaeducativoid);
+	}
+	
+	@Override
+	public List<Trabajosfinales> listarhabilitados(){
+		return trabajosfinalesRepo.listarhabilitados();
 	}
 	
 	@Override

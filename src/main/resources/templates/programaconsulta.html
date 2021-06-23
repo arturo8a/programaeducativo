@@ -80,12 +80,13 @@
 	   			<label>&nbsp;</label>
 	   		</div>
 			<div class="col-xs-12 col-sm-4 col-md-4 pt-1 pb-2">			
-				<input type="button" name="btnbuscarpe" id="btnbuscarpe" class="btn btn-primary" value="Buscar"/>
-				<input type="button" name="btnlimpiar" id="btnlimpiar" class="btn btn-danger" value="Limpiar" style="margin-left:10px"//>
+				<!-- input type="button" name="btnbuscarpe" id="btnbuscarpe" class="btn btn-primary" value="Buscar"/-->
+				<!-- input type="button" name="btnlimpiar" id="btnlimpiar" class="btn btn-danger" value="Limpiar" style="margin-left:10px"/-->
+				<input type="image" id="btnbuscarpe"  src="./images/iconos_nd/botonbuscar.svg" width="140px" style="padding-bottom:16px" />
+				<input type="image" id="btnlimpiar"  src="./images/iconos_nd/botonrefrescar.svg" width="45px" style="padding-left:10px;padding-bottom:16px" />
 			</div>
 		</div>
 	</div>
-	<br>
 	<div class="div_filtro">
 		<div class="p-0 m-0">
 			<label class="p-2 m-0">APROBACIÓN DE INSCRIPCIONES</label>
@@ -96,14 +97,14 @@
 					        <tr>
 					        	<th>Nº</th>
 					        	<th>Ods</th>
-					            <th>Código IE</th>
-					            <th>Nombre IE</th>
-					            <th>Año de Inscripción</th>
-					            <th>Ficha de Inscripción</th>
-					            <th>Participación</th>
-					            <th>Editar Ficha</th>
-					            <th>Estado</th>		            
-					            <th>Motivo</th>
+					            <th>CÓDIGO IE</th>
+					            <th>NOMBRE IE</th>
+					            <th>AÑO DE INSCRIPCIÓN</th>
+					            <th>FICHA DE INSCRIPCIÓN</th>
+					            <th>PARTICIPACIÓN</th>
+					            <th>EDITAR FICHA</th>
+					            <th>ESTADO</th>		            
+					            <th>MOTIVO</th>
 					        </tr>   
 					    </thead>
 					</table>
@@ -433,7 +434,8 @@
 	                "thousands": ",",
 	                "lengthMenu": "Mostrar _MENU_ Entradas",
 	                "processing": "Procesando...",
-	                "search": "Buscar:",
+	                "search": "_INPUT_",
+			        "searchPlaceholder": "Busqueda General",
 	                "zeroRecords": " ",//No existen registros
 	                "paginate": {
 	                    "first": "Primero",

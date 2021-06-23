@@ -30,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.progeduc.componente.Ldap;
 import com.progeduc.dto.ClaveValor;
+import com.progeduc.dto.ConcursoDto;
 import com.progeduc.dto.EvaluacionDto;
 import com.progeduc.dto.EvaluacionRubricaQuestionarioDto;
 import com.progeduc.dto.ListaDocente;
@@ -40,7 +41,6 @@ import com.progeduc.dto.ListatrabajosfinalesDto;
 import com.progeduc.dto.ParticipanteVerDto;
 import com.progeduc.dto.TrabajofinalesEnviadoDto;
 import com.progeduc.dto.TrabajosfinalesParticipanteDto;
-import com.progeduc.dto.UsuarioOdsDto;
 import com.progeduc.model.Aperturaranio;
 import com.progeduc.model.Docente;
 import com.progeduc.model.Evaluacion;
@@ -50,7 +50,6 @@ import com.progeduc.model.Participante;
 import com.progeduc.model.Postulacionconcurso;
 import com.progeduc.model.Programaeducativo;
 import com.progeduc.model.Trabajosfinales;
-import com.progeduc.model.Usuario;
 import com.progeduc.model.UsuarioLdap;
 import com.progeduc.service.IAperturaranioService;
 import com.progeduc.service.IDistritoService;
@@ -63,7 +62,6 @@ import com.progeduc.service.IPostulacionconcursoService;
 import com.progeduc.service.IProgramaeducativoService;
 import com.progeduc.service.ITrabajosfinalesParticipanteService;
 import com.progeduc.service.ITrabajosfinalesService;
-import com.progeduc.service.IUsuarioService;
 import com.progeduc.service.impl.UploadFileService;
 
 @RestController
@@ -460,6 +458,31 @@ public class ConcursoeducativoController {
 			});
 		}		
 		return new ResponseEntity<List<ListaparticipanteDto>>(lista, HttpStatus.OK) ;
+	}
+	
+	@GetMapping(value = "/listaconcurso")
+	public ResponseEntity<List<ConcursoDto>> listarconcurso(HttpSession ses){
+		
+		List<ConcursoDto> listadto  = new ArrayList<ConcursoDto>();
+		List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarhabilitados();
+		listaTrabajoFinales.forEach(obj->{
+			ConcursoDto dto = new ConcursoDto();
+			dto.setId(obj.getId());
+			dto.setAnio(obj.getAnio());
+			dto.setCodigotrabajo(obj.getProgramaeducativo().getId() + "_" + obj.getId());
+			dto.setOds(odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+			dto.setCodigoie(obj.getProgramaeducativo().getCodmod());
+			dto.setNombreie(obj.getProgramaeducativo().getNomie());
+			dto.setCategoria(obj.getCategoriatrabajo().getDescripcion());
+			dto.setModalidad(obj.getModalidadtrabajo().getDescripcion());
+			dto.setTitulotrabajo(obj.getTitulotrabajo());
+			dto.setNivelparticipacion(evaluacionServ.getPorAnio(obj.getAnio()).getNivelparticipacion().getDescripcion());
+			dto.setEstado(evaluacionServ.getPorAnio(obj.getAnio()).getEstadoevaluacion().getDescripcion());
+			dto.setCalificacion(0);
+			dto.setPuesto(0);
+			listadto.add(dto);
+		});		
+		return new ResponseEntity<List<ConcursoDto>>(listadto, HttpStatus.OK) ;
 	}
 	
 	@GetMapping(value = "/listaevaluaciones")

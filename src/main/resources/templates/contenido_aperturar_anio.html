@@ -13,6 +13,7 @@
     <!-- link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous"-->
     <!-- Our Custom CSS -->
     <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="../static/css/nuevo_disenio.css" th:href="@{/css/nuevo_disenio.css}">
 	
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
@@ -113,51 +114,47 @@
 				</table>
 			</div>
 			<div class="col-xs-12 col-4">
-				<table style="width:100%">
-					<tr>
-						<td style="width:30%">
-							<input type="button" value="Buscar" id="btnbuscarapertura" class="btn btn-primary text-white rounded-0"/>
-						</td>
-						<td style="width:30%">
-							<input type="button" value="Limpiar" id="btnlimpiar" class="btn btn-primary text-white rounded-0"/>
-						</td>
-						<td style="width:40%">
-							<input type="button" value="Nuevo Periodo" id="btnnuevoregistro" class="btn btn-primary text-white rounded-0"/>
-						</td>
-					</tr>
-				</table>
+				<!-- input type="button" value="Buscar" id="btnbuscarapertura" class="btn btn-primary text-white"/-->
+				<!-- input type="button" value="Limpiar" id="btnlimpiar" class="btn btn-primary text-white"/-->
+				<input type="image" id="btnbuscarapertura" src="./images/iconos_nd/botonbuscar.svg" width="140px" style="padding-bottom:16px"  />
+				<input type="image" id="btnlimpiar" src="./images/iconos_nd/botonrefrescar.svg" width="45px" style="padding-left:10px;padding-bottom:16px" />
 			</div>
 		</div>		
 	</div>
-	<br>
-		<div class="div_filtro">	
-			<div class="p-0 m-0">
-				<label class="p-2 m-0">APERTURAR AÑO</label>
-				<div class="row pt-2 pb-4 m-0">
-					<div class="col-xs-12 col-sm-12">
-						<table id="table_lista_aperturar_anio"  class="table table-striped table-bordered display nowrap" style="width:100%">
-							<thead class="cabecera_tabla">
-						        <tr>
-						        	<th>Nº</th>
-						            <th>Año</th>
-						            <th>Nombre del concurso</th>
-						            <th>1° Etapa</th>
-						            <th>2° Etapa</th>
-						            <th>3° Etapa</th>
-						            <th>4° Etapa</th>
-						            <th>5° Etapa</th>
-						            <th>6° Etapa</th>
-						            <th>7° Etapa</th>
-						            <th>Estado</th>
-						            <th>Editar</th>
-						        </tr>   
-						    </thead>
-						</table>
-					</div>
-					<br><br>
+	<div class="div_filtro">	
+		<div class="p-0 m-0">
+			<label class="p-2 m-0">APERTURAR AÑO</label>
+			<div class="row pt-2 pb-4 m-0">
+				<div class="col-xs-12 col-sm-12">
+					<table id="table_lista_aperturar_anio"  class="table table-striped display nowrap" style="width:100%">
+						<thead class="cabecera_tabla">
+					        <tr>
+					        	<th>Nº</th>
+					            <th>AÑO</th>
+					            <th>NOMBRE DEL CONCURSO</th>
+					            <th>1° ETAPA</th>
+					            <th>2° ETAPA</th>
+					            <th>3° ETAPA</th>
+					            <th>4° ETAPA</th>
+					            <th>5° ETAPA</th>
+					            <th>6° ETAPA</th>
+					            <th>7° ETAPA</th>
+					            <th>ESTADO</th>
+					            <th>EDITAR</th>
+					        </tr>   
+					    </thead>
+					</table>
 				</div>
+				<br><br>
 			</div>
 		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 text-right">
+			<input type="button" value="Agregar" id="btnnuevoregistro" class="btn btn-primary text-white"/>
+		</div>
+	</div>
 </div>
 
 
@@ -333,7 +330,8 @@
 		        "lengthMenu": "Mostrar _MENU_ Entradas",
 		        "loadingRecords": "Cargando Registros...",
 		        "processing": "Procesando...",
-		        "search": "Buscar:",
+		        "search": "_INPUT_",
+		        "searchPlaceholder": "Busqueda General",
 		        "zeroRecords": " ",//No existen registros
 		        "paginate": {
 		            "first": "Primero",
@@ -391,7 +389,11 @@
 	                "render": function(data, type, row, meta){
 	                    return moment(data).format('DD/MM/YYYY');
 	                }
-            	}
+            	},
+            	{
+                	"targets": 11, 
+                    "className": "text-center"
+                }
 		    ],
 		    'columns' : [
 		    	{ 
@@ -407,7 +409,7 @@
 		        { 'data' : 'sextaetapahasta' },
 		        { 'data' : 'septimaetapahasta' },
 		        { 'data' : 'estado' },
-		        { 'defaultContent' : "<button type='button' class='editar btn btn-primary'>Editar</button>"}
+		        { 'defaultContent' : "<img src='./images/iconos_nd/lapiz.svg' class='editar' style='width:20px; cursor:pointer' />"}
 		    ],
 		    buttons: []
 		});

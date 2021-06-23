@@ -40,10 +40,11 @@
 			<div class="col-xs-12 col-sm-4 pt-1">
 				&nbsp;
 			</div>
-			<div class="col-xs-12 col-sm-4 pt-1 pb-2">
-				<input type="button" value="Crear evaluación" id="btncrearevaluacion" name="btncrearevaluacion" class="btn btn-success" />
-				<input type="button" name="btnbuscarce" id="btnbuscarce" class="btn btn-primary" value="Buscar"/>
-				<input type="button" name="btnlimpiarce" id="btnlimpiarce" class="btn btn-danger" value="Limpiar" style="margin-left:10px"/>
+			<div class="col-xs-12 col-sm-4 pt-1 pb-2">				
+				<!-- input type="button" name="btnbuscarce" id="btnbuscarce" class="btn btn-primary" value="Buscar"/-->
+				<!-- input type="button" name="btnlimpiarce" id="btnlimpiarce" class="btn btn-danger" value="Limpiar" style="margin-left:10px"/-->
+				<input type="image" id="btnbuscarce"  src="./images/iconos_nd/botonbuscar.svg" width="140px" style="padding-bottom:16px" />
+				<input type="image" id="btnlimpiarce"  src="./images/iconos_nd/botonrefrescar.svg" width="45px" style="padding-left:10px;padding-bottom:16px" />
 			</div>
 		</div>
 	</div>
@@ -57,13 +58,13 @@
 						<thead class="cabecera_tabla">
 					        <tr>
 					        	<th>Nº</th>
-								<th>Año</th>
-					            <th>Nivel de participación</th>
-					            <th>Categoría</th>
-					            <th>Estado</th>
-					            <th>Ficha</th>
-					            <th>Editar</th>
-					            <th>Eliminar</th>
+								<th>AÑO</th>
+					            <th>NIVEL DE PARTICIPACIÓN</th>
+					            <th>CATEGORÍA</th>
+					            <th>ESTADO</th>
+					            <th>FICHA</th>
+					            <th>EDITAR</th>
+					            <th>ELIMINAR</th>
 					        </tr>   
 					    </thead>
 					</table>
@@ -72,6 +73,12 @@
 			</div>
 		</div>
 	</div>
+	<br>
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 text-right">
+			<input type="button" value="Agregar" id="btncrearevaluacion" name="btncrearevaluacion" class="btn btn-primary" />
+		</div>
+	</div>	
 </div>
 		
 
@@ -224,7 +231,8 @@
 		                "lengthMenu": "Mostrar _MENU_ Entradas",
 		                "loadingRecords": "Cargando Registros...",
 		                "processing": "Procesando...",
-		                "search": "Buscar:",
+		                "search": "_INPUT_",
+				        "searchPlaceholder": "Busqueda General",
 		                "zeroRecords": "No existen registros",//No existen registros
 		                "paginate": {
 		                    "first": "Primero",
@@ -248,7 +256,7 @@
 		                { 'data' : 'estado' },
 		                { 'defaultContent' : '<img src="./images/iconos_nd/pdf1.svg" class="ver" style="width:20px; cursor:pointer"/>' },
 				        { 'defaultContent' : '<img src="./images/iconos_nd/lapiz.svg" class="editar" style="width:20px; cursor:pointer " />'},
-				        { 'defaultContent' : '<img src="./images/iconos_nd/eliminar.svg" class="eliminar" style="width:20px; cursor:pointer " />'}
+				        { 'defaultContent' : '<img src="./images/iconos_nd/eliminar.svg" class="eliminar" style="width:15px; cursor:pointer " />'}
 		            ],
 		            'columnDefs': [
 		            	 {
