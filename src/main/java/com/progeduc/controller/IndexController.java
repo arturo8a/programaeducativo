@@ -34,6 +34,7 @@ import com.progeduc.model.Questionario;
 import com.progeduc.model.Rubrica;
 import com.progeduc.model.Suministro;
 import com.progeduc.model.Trabajosfinales;
+import com.progeduc.model.TrabajosfinalesParticipante;
 import com.progeduc.model.Usuario;
 import com.progeduc.model.UsuarioLdap;
 import com.progeduc.service.IAperturaranioService;
@@ -469,7 +470,7 @@ public class IndexController {
 		return "docenteconsulta";
 	}
         
-        @GetMapping("/trabajospendientes")
+    @GetMapping("/trabajospendientes")
 	public String trabajospendientes(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
             Calendar fecha = Calendar.getInstance();
             model.addAttribute("anio",fecha.get(Calendar.YEAR));
@@ -478,16 +479,30 @@ public class IndexController {
             for(int i = anio-5;i<=anio;i++) {
                     lista.add(i);
             }
-            categoriatrabajoService.listar();
-            for (Categoriatrabajo categoriatrabajo : categoriatrabajoService.listar()) {
-                System.out.println("listado: "+categoriatrabajo.getId());
-                System.out.println("listado: "+categoriatrabajo.getDescripcion());
+		
+            model.addAttribute("ods",odsserv.listarAll());
+            model.addAttribute("anios", lista);
+            model.addAttribute("departamento",depaServ.listar());
+            model.addAttribute("categoriatrabajo",categoriatrabajoService.listar());//categoriatrabajoService.listar());
+            model.addAttribute("modalidadtrabajo",modalidadtrabajoService.listar());
+            model.addAttribute("nivelparticipacion",nivelparticipacionService.listar());
+            return "trabajospendientes";
+	}
+    
+    @GetMapping("/trabajospendientesevaluados")
+	public String trabajospendientesEvaluados(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
+            Calendar fecha = Calendar.getInstance();
+            model.addAttribute("anio",fecha.get(Calendar.YEAR));
+            List<Integer> lista = new ArrayList<Integer>();
+            int anio = fecha.get(Calendar.YEAR);
+            for(int i = anio-5;i<=anio;i++) {
+                    lista.add(i);
             }
 		
             model.addAttribute("ods",odsserv.listarAll());
             model.addAttribute("anios", lista);
             model.addAttribute("departamento",depaServ.listar());
-            model.addAttribute("categoriatrabajo",categoriaevaluacionService.listar());//categoriatrabajoService.listar());
+            model.addAttribute("categoriatrabajo",categoriatrabajoService.listar());//categoriatrabajoService.listar());
             model.addAttribute("modalidadtrabajo",modalidadtrabajoService.listar());
             model.addAttribute("nivelparticipacion",nivelparticipacionService.listar());
             return "trabajospendientes";
@@ -820,6 +835,65 @@ public class IndexController {
 		model.addAttribute("tipodoc",tipodocumentoserv.listar());
 		model.addAttribute("genero",generoprofserv.listar());
 		return "formregistrardocente";
+	}
+	
+	@GetMapping("/formregistrarevaluacion/{id}")
+	public String formregistrarevaluacion(@PathVariable("id") Integer id,  Model model,HttpSession ses) {
+		id_rubrica = "";
+		id_questionario ="";
+		
+		Evaluacion eval = evaluacionService.ListarporId(id);
+		Trabajosfinales trabajosfinales = trabajosfinalesService.ListarporId(id);
+		model.addAttribute("evaluacion", eval);
+		
+		List<Rubrica> listaRubrica = new ArrayList<Rubrica>();
+        evaluacionrubricaServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
+        	listaRubrica.add(obj.getRubrica());
+        	id_rubrica += obj.getRubrica().getId().toString() + "-";
+        });
+        
+        List<Questionario> listaQuestionario = new ArrayList<Questionario>();
+        evaluacionquestionarioServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
+        	listaQuestionario.add(obj.getQuestionario());
+        	id_questionario += obj.getQuestionario().getId().toString() + "-";
+        });    
+        
+        model.addAttribute("id_rubrica", id_rubrica);
+        model.addAttribute("id_questionario", id_questionario);
+        model.addAttribute("id_evaluacion", eval.getId());
+        
+        List<Integer> listanro = new ArrayList<Integer>();
+        listanro.add(1);
+        listanro.add(2);
+        listanro.add(3);
+        listanro.add(4);
+        listanro.add(5);
+        model.addAttribute("listanro", listanro);
+        
+        
+        Calendar fecha = Calendar.getInstance();
+		model.addAttribute("anio",fecha.get(Calendar.YEAR));
+		List<Integer> lista = new ArrayList<Integer>();
+		int anio = fecha.get(Calendar.YEAR);
+		for(int i = anio-5;i<=anio;i++) {
+			lista.add(i);
+		}
+
+		List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteService.listar(trabajosfinales.getId());
+		Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
+		
+		model.addAttribute("nombretrabajo", trabajosfinales.getTitulotrabajo());
+		model.addAttribute("categoria", trabajosfinales.getCategoriatrabajo().getDescripcion());
+		model.addAttribute("nivel", participante.getGradoestudiante().getNivelgradopartdesc());
+		model.addAttribute("modalidad", trabajosfinales.getModalidadtrabajo().getDescripcion());
+		
+        model.addAttribute("listarubrica", listaRubrica);
+        model.addAttribute("listaquestionario", listaQuestionario);
+        
+        model.addAttribute("listanivelparticipacion",nivelparticipacionService.listar());
+		model.addAttribute("anios", lista);
+		model.addAttribute("listacategoriaevaluacion", categoriaevaluacionService.listar());
+		return "formregistrarevaluacion";
 	}
 	
 }
