@@ -470,8 +470,7 @@ public class IndexController {
 	public String docenteconsulta(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
 		return "docenteconsulta";
 	}
-<<<<<<< HEAD
-    
+
 	@GetMapping("/listaformconcurso")
 	public String listaconcurso(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
 		model.addAttribute("ods",odsserv.listarAll());
@@ -497,9 +496,6 @@ public class IndexController {
 		return "formasignarevaluador";
 	}
 	
-=======
-        
->>>>>>> df17c640c8b80a31e7f2913e5c9c4ebbd3c108dc
     @GetMapping("/trabajospendientes")
 	public String trabajospendientes(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
             Calendar fecha = Calendar.getInstance();

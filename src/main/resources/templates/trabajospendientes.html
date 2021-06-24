@@ -95,364 +95,6 @@
 		</div>
 	</div>
 </div>
-<<<<<<< HEAD
-</html>
-<script type="text/javascript">
-    $(document).ready(function(){
-        $('.dt-buttons').hide();
-    });
-		
-		var objarray="";
-		var hhmmss="" ;
-		var arrayfecha="" ;
-		var fecha=""; 
-		
-		$("#btnlimpiar").click(function(){
-			
-			$("#fecha_desde").val("")
-			$("#fecha_hasta").val("");
-			$("#nomie").val("");
-			$("#departamento").val("Todos");
-			$("#provincia").val("Todos");
-			$("#distrito").val("Todos");
-			$("#estado").val("Todos");
-			setTimeout(() => {        		  
-				table_ie.draw();
-	      	}, 100);
-		});
-		
-		$("#btnbuscar").click(function(){	
-			
-			$("#consulta_menu").prop("disabled",true);
-        	$("#btnbuscar").prop("disabled",true);
-			
-        	setTimeout(() => {        		  
-        		if(validarFecha($("#fecha_desde").val(),'campo fecha Desde') && validarFecha($("#fecha_hasta").val(),'campo fecha Hasta')){				
-    				if($("#fecha_desde").val()!="" && $("#fecha_hasta").val()!=""){
-    					var fecha_desde= $("#fecha_desde").val();
-    					var fecha_hasta= $("#fecha_hasta").val();					
-    					fecha_desde = fecha_desde.split('/');
-    		    		fecha_desde = fecha_desde[2]+'/'+fecha_desde[1]+'/'+fecha_desde[0];
-    		    	    fecha_desde = moment(fecha_desde).format("YYYY/MM/DD");		    	    
-    		    	    fecha_hasta = fecha_hasta.split('/');
-    		    	    fecha_hasta = fecha_hasta[2]+'/'+fecha_hasta[1]+'/'+fecha_hasta[0];
-    		    	    fecha_hasta = moment(fecha_hasta).format('YYYY/MM/DD');			    	
-    			    	if(fecha_desde>fecha_hasta){
-    			    		alert("FECHA DESDE debe ser menor que FECHA HASTA");
-    			    	}	
-    					else{
-    			    		table_ie.draw();
-    					}
-    				}
-    				else{
-    					table_ie.draw();
-    				}					
-    			}
-        	}, 200); 		
-		});	    
-
-		$("#fecha_desde").datepicker({
-			locale: 'es-es',
-		    format: 'dd/mm/yyyy',
-		    uiLibrary: 'bootstrap4'
-		});
-		$("#fecha_hasta").datepicker({
-			locale: 'es-es',
-		    format: 'dd/mm/yyyy',
-		    uiLibrary: 'bootstrap4'
-		});
-		$("#departamento").on("change",function(){
-    		
-    		if($("#departamento").val()!="Todos"){
-    			$("#provincia").html("");
-    			$.ajax({
-    				url: url_base + "pedesa/provincias/bydepa/"+$("#departamento").val(),
-    				success: function(respuesta) {
-    					var contenido = "<option value='Todos'>Todos</option>";
-    					for(var i=0;i<respuesta.length;i++){
-    						contenido = contenido + "<option value="+respuesta[i].id+">"+respuesta[i].descripcion+"</option>";
-    					}
-    					$("#provincia").html(contenido);
-    				},
-    				error: function() {
-    			        console.log("No se ha podido obtener la información");
-    			    }
-    			});
-    		}
-    		else{
-    			$("#provincia").html("<option value='Todos'>Todos</option>");
-    		}
-    		$("#distrito").html("<option value='Todos'>Todos</option>");
-    	});	
-		
-		$("#provincia").on("change",function(){
-    		if($("#provincia").val()!="Todos"){
-    			$.ajax({
-    				url: url_base + "/pedesa/distritos/byprovincia/"+$("#provincia").val(),
-    				success: function(respuesta) {
-    					var contenido = "<option value='Todos'>Todos</option>";
-    					for(var i=0;i<respuesta.length;i++){
-    						contenido = contenido + "<option value="+respuesta[i].id+">"+respuesta[i].descripcion+"</option>";
-    					}
-    					$("#distrito").html(contenido);
-    				},
-    				error: function() {
-    			        console.log("No se ha podido obtener la información");
-    			    }
-    			});
-    		}
-    		else{
-    			$("#distrito").html("<option value='Todos'>Todos</option>");
-    		}    		
-    	});
-		
-		$("#table_ie").dataTable().fnDestroy();
-		$.fn.dataTable.moment('DD/MM/YYYY hh:mm:ss');
-		var table_ie = $('#table_ie').DataTable({
-			dom: 'Bfrtip',
-            "scrollX": true,
-            "searching": true,
-            lengthMenu: [
-                [ 10, 15, 25, -1 ],
-                [ '10 filas', '15 filas', '25 filas', 'Mostrar todas' ]
-            ],
-            "processing":true,
-            language: {
-                buttons: {
-                  pageLength: 'Mostrar'
-                },
-                "decimal": "",
-                "emptyTable": "No hay información",
-                "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-                "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
-                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-                "infoPostFix": "",
-                "thousands": ",",
-                "lengthMenu": "Mostrar _MENU_ Entradas",
-                "loadingRecords": "Cargando Registros...",
-                "processing": "Procesando...",
-                "search": "_INPUT_",
-		        "searchPlaceholder": "Busqueda General",
-                "zeroRecords": "No existen registros",//No existen registros
-                "paginate": {
-                    "first": "Primero",
-                    "last": "Ultimo",
-                    "next": "Siguiente",
-                    "previous": "Anterior"
-                }
-            },
-            'ajax' : {
-                "url" : url_base + 'pedesa/listatrabpendientes',
-                "type" : "GET",
-                "dataSrc" : ""
-            },
-            'columns' : [
-            	{ 'data' : null, "render": function (data, type, full, meta) { return meta.row + 1; }},
-        { 'data' : 'anio'},
-        { 'data' : 'codigotrabajo' },
-        { 'data' : 'ods' },
-        { 'data' : 'codigo_ie' },
-        { 'data' : 'nombre_ie' },
-        { 'data' : 'categoria' },                
-        { 'data' : 'modalidad' },
-        { 'data' : 'titulo_trabajo' },
-        { 'data' : 'nivel'},
-        { 'data' : 'ficha','searchable': false},
-        { 'data' : 'evidencia','searchable': false},
-        { 'data' : 'trabajo','searchable': false},
-        { 'data' : 'permiso','searchable': false},
-        { 'data' : 'accion','searchable': false}
-            ],
-            columnDefs: [
-            	{
-	            	type: 'date-euro',"targets": 20,
-	   		      	"render": function(data, type, row, meta){
-	   		      		return moment(data).format('DD/MM/YYYY HH:mm');
-   		      		}
-   		    	},/*
-   		    	{ "visible": false, "targets": 11 },
-   		    	{ "visible": false, "targets": 12 },
-   		  		{ "visible": false, "targets": 13 },
-   		  		{ "visible": false, "targets": 14 },
-		     	{ "visible": false, "targets": 15 },
-		  		{ "visible": false, "targets": 16 },
-		  		{ "visible": false, "targets": 17 },
-   		     	{ "visible": false, "targets": 18 },
-   		  		{ "visible": false, "targets": 19 },
-   		  		{ "visible": false, "targets": 20 },
-		     	{ "visible": false, "targets": 21 },
-		  		{ "visible": false, "targets": 22 },
-		  		{ "visible": false, "targets": 23 },
-   		     	{ "visible": false, "targets": 24 },
-   		  		{ "visible": false, "targets": 25 },
-   		  		{ "visible": false, "targets": 26 },
-		     	{ "visible": false, "targets": 27 },
-		  		{ "visible": false, "targets": 28 },
-		  		{ "visible": false, "targets": 29 },
-   		     	{ "visible": false, "targets": 30 },
-   		  		{ "visible": false, "targets": 31 },
-   		  		{ "visible": false, "targets": 32 },
-		     	{ "visible": false, "targets": 33 },
-		  		{ "visible": false, "targets": 34 },
-		  		{ "visible": false, "targets": 35 },
-   		     	{ "visible": false, "targets": 36 },
-   		  		{ "visible": false, "targets": 37 },
-   		  		{ "visible": false, "targets": 38 },
-		     	{ "visible": false, "targets": 39 },*/
-		  		{ "visible": false, "targets": 40 },
-		  		{ "visible": false, "targets": 41 },
-		  		{ "visible": false, "targets": 42 }
-            ],
-            "fnPreDrawCallback": function(oSettings) {
-            	console.log("inicio carga");
-            	$("#consulta_menu").prop("disabled",true);
-            	$("#btnbuscar").prop("disabled",true);
-            },
-            buttons: [
-            	{
-            		extend: 'excelHtml5',
-            		text:'<i class="far fa-file-excel"></i>',
-                    title: 'INSTITUCIONES EDUCATIVAS DEL PROGRAMA EDUCATIVO',
-                    messageTop: function(){
-                    	return '[ Fecha desde: ' + $("#fecha_desde").val() + ']            [ Fecha hasta: '+ $("#fecha_hasta").val() + ']           [ Nombre: ' + $("#nomie").val() + ']           [ Departamento: ' + $("#departamento option:selected").text() + ']           [ Provincia: '+$("#provincia option:selected").text()+' ]          [ Distrito: '+$("#distrito option:selected").text()+']     [ Estado: '+$("#estado option:selected").text()+ ']';
-                    },
-                    filename : function(){
-                    	var hoy = new Date();
-                    	var dia = String(hoy.getDate());
-                    	if(dia.length==1){
-                    		dia = "0"+dia;
-                    	}
-                    	var mes = String(hoy.getMonth()+1);
-                    	if(mes.length==1){
-                    		mes = "0"+mes;
-                    	}
-                    	var hora = String(hoy.getHours());
-                    	if(hora.length==1){
-                    		hora = "0"+hora;
-                    	}
-                    	var minuto = String(hoy.getMinutes());
-                    	if(minuto.length==1){
-                    		minuto = "0"+minuto;
-                    	}
-            	    	return "PE"+hoy.getFullYear()+'_'+dia+'-'+mes+'-'+hoy.getFullYear()+'_'+hora + minuto;
-                    }
-            	}
-            ]
-        });
-		
-		$('#table_ie').DataTable().on("draw", function(){
-			$("#consulta_menu").prop("disabled",false);
-        	$("#btnbuscar").prop("disabled",false);
-		});
-		
-		$.fn.dataTable.ext.search.push(
-    	    function( settings, data, dataIndex ) {
-    	    	
-    	    	console.log("settings.nTable.id :" + settings.nTable.id);
-    	    	if ( settings.nTable.id !== 'table_ie' ) {
-    	            return true;
-    	          }
-    	    	
-    	    	var fecha_desde = $("#fecha_desde").val();
-    	    	var fecha_hasta = $("#fecha_hasta").val();
-    	    	var nombre = $("#nomie").val();
-    	    	var departamento = $("#departamento option:selected").text();
-    	    	var provincia = $("#provincia option:selected").text();
-    	    	var distrito = $("#distrito option:selected").text();
-    	    	var estado = $("#estado option:selected").val();
-    	    	
-    	    	if(!filtraUbigeo(departamento,data[2]))
-    	    		return false;
-    	    	if(!filtraUbigeo(provincia,data[3]))
-    	    		return false;
-    	    	if(!filtraUbigeo(distrito,data[4]))
-    	    		return false;	    	
-    	    	if(!filtraNombre(nombre,data[5]))
-    	    		return false;
-    	    	if(!filtraFecha(fecha_desde,fecha_hasta,data[7]))
-    	    		return false;
-    	    	if(!filtraConcurso(estado,data[8]))
-    	    		return false;
-   	    		return true;
-    	    }
-    	);
-    	
-    	function filtraUbigeo(dato,campo){
-	    	if(dato==="Todos")
-	    		return true;
-	    	return dato===campo;
-	    }
-	
-	    function filtraNombre(nombre,campo){
-	    	if(nombre==="" || nombre === undefined)
-	    		return true;
-	    	var posicion = (campo.toLowerCase()).indexOf(nombre.toLowerCase()); 
-	    	if(posicion != -1)
-	    		return  true;
-	    	return false;
-	    }	
-	
-	    function filtraFecha(fecha_desde,fecha_hasta,fecha_registro){
-	    	objarray = fecha_registro.split(" ");
-	    	hhmmss = objarray[1];
-	    	arrayfecha = objarray[0].split("/");
-	    	fecha = arrayfecha[2] + "/" + arrayfecha[1] + "/" + arrayfecha[0] + " "+ hhmmss; 
-	    		
-	    	momentFechaRegistro = moment(fecha).format("YYYY/MM/DD");
-	    	if(fecha_desde==="" && fecha_hasta===""){
-	    		return true;
-	    	}
-	    	if(fecha_desde!="" && fecha_hasta===""){
-	    		fecha_desde = fecha_desde.split('/');
-	    		fecha_desde = fecha_desde[2]+'/'+fecha_desde[1]+'/'+fecha_desde[0];
-	    	    let momentFechaDesde = moment(fecha_desde).format("YYYY/MM/DD");
-	    	    return momentFechaRegistro>=fecha_desde;
-	    	}
-	    	else if(fecha_desde===""  && fecha_hasta!=""){
-	    		fecha_hasta = fecha_hasta.split('/');
-	    	    fecha_hasta = fecha_hasta[2]+'/'+fecha_hasta[1]+'/'+fecha_hasta[0];
-	    	    fecha_hasta = moment(fecha_hasta).format('YYYY/MM/DD');
-	    	    return momentFechaRegistro<=fecha_hasta;
-	    	}
-	    	else{
-	    		fecha_desde = fecha_desde.split('/');
-	    		fecha_desde = fecha_desde[2]+'/'+fecha_desde[1]+'/'+fecha_desde[0];
-	    	    fecha_desde = moment(fecha_desde).format("YYYY/MM/DD");
-	    	    
-	    	    fecha_hasta = fecha_hasta.split('/');
-	    	    fecha_hasta = fecha_hasta[2]+'/'+fecha_hasta[1]+'/'+fecha_hasta[0];
-	    	    fecha_hasta = moment(fecha_hasta).format('YYYY/MM/DD');
-	    	    
-	    	    return momentFechaRegistro>=fecha_desde && momentFechaRegistro<=fecha_hasta;
-	    	}
-	    	return true;
-	    } 
-	
-	    function filtraConcurso(dato,campo){
-	    	if(dato==="Todos")
-	    		return true;
-	    	return dato===campo;	
-	    }
-	    
-	    function validarFecha(fecha,mensaje){
-			if(fecha=="")
-				return true;
-	    	if(validarFormatoFecha(fecha)){
-				if(existeFecha(fecha)){
-					return true;
-				}else{
-					alert("La fecha del "+ mensaje +" introducida no existe.");
-					return false;
-				}
-			}
-			else{
-				alert("El formato del "+ mensaje +" es incorrecto.");
-				return false;
-			}
-		}
-=======
->>>>>>> df17c640c8b80a31e7f2913e5c9c4ebbd3c108dc
-
 <div class="modal fade" tabindex="-1" role="dialog" id="modaleEvaluarTrabajoPendientes" aria-labelledby="myLargeModalLabel" >
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content" style="overflow-y: scroll; height:750px">
@@ -464,5 +106,51 @@
     </div>
   </div>
 </div>
+<center>
+	<div class="modal fade" tabindex="-1" role="dialog" id="modalArchivosEvidencias" aria-labelledby="myLargeModalLabel" >
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content" style="overflow-y: scroll; height:350px; width:90%">
+	      <div class="modal-header">
+	        <strong class="pt-1">EVIDENCIAS</strong>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body" id="contenidoEvidencias">
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</center>	
 
+<center>
+	<div class="modal fade" tabindex="-1" role="dialog" id="modalasignarevaluador" aria-labelledby="myLargeModalLabel" >
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content" style="overflow-y: scroll; height:750px; width:80%">
+	      <div class="modal-header">
+	        <strong class="pt-1">ASIGNAR EVALUADOR</strong>
+	      </div>
+	      <div class="modal-body" id="contenidoasignarevaluador">
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</center>
+
+<center>
+	<div class="modal fade" tabindex="-1" role="dialog" id="modalArchivoTrabajo" aria-labelledby="myLargeModalLabel" >
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content" style="overflow-y: scroll; height:450px; width:70%">
+	      <div class="modal-header">
+	        <strong class="pt-1">TRABAJO</strong>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body" id="contenidoTrabajo">
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</center>
 </html>

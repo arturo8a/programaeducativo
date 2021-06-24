@@ -51,11 +51,8 @@ import com.progeduc.model.Participante;
 import com.progeduc.model.Postulacionconcurso;
 import com.progeduc.model.Programaeducativo;
 import com.progeduc.model.Trabajosfinales;
-<<<<<<< HEAD
-=======
 import com.progeduc.model.TrabajosfinalesParticipante;
 import com.progeduc.model.Usuario;
->>>>>>> df17c640c8b80a31e7f2913e5c9c4ebbd3c108dc
 import com.progeduc.model.UsuarioLdap;
 import com.progeduc.service.IAperturaranioService;
 import com.progeduc.service.IDistritoService;
