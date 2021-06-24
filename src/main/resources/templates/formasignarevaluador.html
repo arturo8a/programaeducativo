@@ -79,7 +79,7 @@
 		<div class="row">
 			<div class="col-xs-12 col-sm-3 text-left pt-1">
 				<label for="anioasignarevaluador">Año</label>
-				<input type="text" id="anioasignarevaluador" name="anioasignarevaluador" class="form-control" onKeyPress="return filterCadena(event,this)"/> 	
+				<input type="text" id="anioasignarevaluador" name="anioasignarevaluador" class="form-control" th:value="${anio}" disabled/> 	
 			</div>
 			<div class="col-xs-12 col-sm-3 text-left pt-1">
 				<label for="odsasignarevaluador">ODS</label>
@@ -106,13 +106,15 @@
 				<label for="nombreieasignarevaluador">Nombre de la II.EE</label>
 				<select class="form-control" id="nombreieasignarevaluador" name="nombreieasignarevaluador">
 					<option value="0">Seleccione</option>
-					<option th:each="len:${parentesco}" th:value="${len.id}" th:utext="${len.descripcion}"/>
+					<option th:each="len:${colegios}" th:value="${len.codmod}" th:utext="${len.nomie}"/>
 				</select>
 			</div>
 			<div class="col-xs-12 col-sm-6 text-left pt-4">
 				<label for="fechanacimientoestudiante">Tiene evaluadores asignados</label>
 				<select class="form-control" id="tieneevaluadorasignado" name="tieneevaluadorasignado">
 					<option value="0">Seleccione</option>
+					<option value="1">Si</option>
+					<option value="2">No</option>
 				</select>
 			</div>
 		</div>
@@ -125,6 +127,7 @@
 			 	<table id="table_lista_trabajos_evaluados"  class="table table-striped display nowrap" style="width:100%">
 					<thead class="cabecera_tabla">
 				        <tr>
+				        	<th><input type="checkbox" id="seleccionarTodotrabajosevaluados"/></th>
 				        	<th>ODS</th>
 							<th>CATEGORIA</th>
 				            <th>NIVEL DE PARTICIPACION</th>
@@ -148,6 +151,7 @@
 			 	<table id="table_lista_evaluadores"  class="table table-striped display nowrap" style="width:100%">
 					<thead class="cabecera_tabla">
 				        <tr>
+				        	<th><input type="checkbox" id="seleccionarTodoevaluadores"/></th>
 				        	<th>ODS</th>
 							<th>ROL DE ENTIDAD</th>
 				            <th>ENTIDAD</th>
@@ -185,7 +189,9 @@
 	var url_base = location.origin+"/";		
 	var celdaseleccionada;
 	var id;
-	var table_lista_concurso;
+	var table_lista_trabajos_evaluados,table_lista_evaluadores;
+	var anio, idods,idnivelparticipacion,idcategoria,idcodmod,tieneevaluadoresasignados;
+	var mensajeValidacionAsignarEvaluador;
 	
 	$(document).ready(function(){
 		
@@ -194,58 +200,264 @@
 			$("#modalasignarevaluador").modal('hide');
 		});
 		
-		/*$("#btnbuscarconcurso").click(function(){
-	    	
-	    	setTimeout(() => {        		  
-	    		table_lista_concurso.draw();
-	    	}, 100);	
-		});
-		
-		$('#seleccionarTodo').click(function(){
+		$('#seleccionarTodotrabajosevaluados').click(function(){
 			if ($(this).is(":checked")) {
-				table_lista_concurso.rows().select();        
+				table_lista_trabajos_evaluados.rows().select();        
 		    }
 			else{
-				table_lista_concurso.rows().deselect(); 
+				table_lista_trabajos_evaluados.rows().deselect(); 
 		    }
-	    });	
+        });	
 		
-		$("#btncancelarasignarevaluador").click(function(){
-			$("#odsconcurso").val("Todos");
-			$("#anioconcurso").val("Todos");
-			$("#modalidadconcurso").val("Todos");
-			$("#estadoconcurso").val("Todos");
-			$("#categoriaconcurso").val("Todos");
-			$("#participacionconcurso").val("Todos");
-			$("#nombreieconcurso").val("Todos");
-			setTimeout(() => {        		  
-				table_lista_concurso.draw();
-	      	}, 100);
+		$('#seleccionarTodoevaluadores').click(function(){
+			if ($(this).is(":checked")) {
+				table_lista_evaluadores.rows().select();        
+		    }
+			else{
+				table_lista_evaluadores.rows().deselect(); 
+		    }
+        });	
+		
+		$("#btncerrarmensajeerrorasignarevaluador").click(function(){
+			$("#modalerrorasignarevaluador").modal('hide');
 		});
 		
-		listar();
+		listarTrabajosEvaluados();
+		listarEvaluadores();
 		
-		
-		$("#btnasignar").click(function(){
+		$("#btnaceptarasignarevaluador").click(function(){
 			
-			$.ajax({
-				type : "GET",
-			    contentType : "application/json",
-			    url : url_base + "pedesa/formasignarevaluador",
-				success: function(respuesta) {
-					$("#contenidoasignarevaluador").html(respuesta);
-					$('#modalasignarevaluador').modal({
-						show : true,
-						backdrop : 'static',
-						keyboard:false
-					});
-				},
-				error: function() {
-					console.log("error al cargar modal asignar evaluador");
-			    }
+			/*anio = $("#anioasignarevaluador").val();
+			idods = $("#odsasignarevaluador").val();
+			idnivelparticipacion = $("#nivelparticipacionasignarevaluador").val();
+			idcategoria = $("#categoriaasignarevaluador").val();
+			idcodmod = $("#nombreieasignarevaluador").val();
+			tieneevaluadoresasignados = $("#tieneevaluadorasignado").val();*/
+			
+			$("#modalimagencargando").modal({
+				show : true,
+				backdrop : 'static',
+				keyboard:false
 			});
-		});*/
+			
+			if(validarCamposAsignarEvaluador()){
+				
+				var evaluadortmp = {
+					anio : anio,
+					ods : {
+						id : idods
+					},
+					nivelparticipacion : {
+						id : idnivelparticipacion
+					},
+					categoria : {
+						id : idcategoria
+					},
+					codmod : idcodmod,
+					evaluadorasignado : tieneevaluadoresasignados
+				};
+				
+				var array = table_lista_trabajos_evaluados.rows(".selected").data();	
+				var idx="";
+				for(i=0;i<array.length;i++){
+					/*array_nivel.push(array[i].nivel);
+					arrayParticipante.push({id : (array[i].id)});*/
+					idx = array[i].id;
+					console.log("id :" + idx);
+				}
+				
+				/*var trabajosevaluados = {
+						
+				}
+				var evaluadores = {
+						
+				}*/
+				
+			}
+			else{
+				$("#modalimagencargando").modal('hide');
+				$("#textoerrorasignarevaluador").html("<div style='color:red' class='text-left'>"+mensajeValidacionAsignarEvaluador+"</div>");
+				$('#modalerrorasignarevaluador').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+			}			
+		});
 	});
+	
+	var listarTrabajosEvaluados = function(){
+		
+		$("#table_lista_trabajos_evaluados").dataTable().fnDestroy();				
+	    
+		table_lista_trabajos_evaluados = $('#table_lista_trabajos_evaluados').DataTable({
+			"dom": 'Bfrtip',
+	        "scrollX": true,
+	        "searching": true,
+	        "lengthMenu": [
+	            [ 10, 15, 25, -1 ],
+	            [ '10 filas', '15 filas', '25 filas', 'Mostrar todas' ]
+	        ],
+	        "processing":true,
+	        "language": {
+	            buttons: {
+	              pageLength: 'Mostrar'
+	            },
+	            "decimal": "",
+	            "emptyTable": "No hay información",
+	            "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+	            "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
+	            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+	            "infoPostFix": "",
+	            "thousands": ",",
+	            "lengthMenu": "Mostrar _MENU_ Entradas",
+	            "loadingRecords": "Cargando Registros...",
+	            "processing": "Procesando...",
+	            "search": "_INPUT_",
+		        "searchPlaceholder": "Busqueda General",
+	            "zeroRecords": "No existen registros",
+	            "paginate": {
+	                "first": "Primero",
+	                "last": "Ultimo",
+	                "next": "Siguiente",
+	                "previous": "Anterior"
+	            }
+	        },
+	        "ajax" : {
+	            "url" : url_base + 'pedesa/listaTrabajoEvaluado',
+	            "type" : "GET",
+	            "dataSrc" : ""
+	        },
+	        "columns" : [
+	        	{
+	        		"data":null, render:function(){return "";}
+	        	},
+	        	{ 'data' : 'ods' },
+	        	{ 'data' : 'categoria' },
+	        	{ 'data' : 'nivel_participacion' },
+	        	{ 'data' : 'codigoie' },
+	            { 'data' : 'nombreie' },
+	            { 'data' : 'codigo_trabajo' },
+	        	{ 'data' : 'modalidad' },
+	        	{ 'data' : 'titulo' },
+	            { 'data' : 'evaluadores_asignados' }
+	        ],
+	        columnDefs: [
+	        	{
+                    orderable: false,
+                    className: 'select-checkbox',
+                    targets:   0
+                }
+	        ],
+	        select: {
+	            style:    'multi', 
+	            selector: 'td:first-child'
+	        },
+	        "buttons": []
+	    });
+	}
+	
+	var listarEvaluadores = function(){
+		
+		$("#table_lista_evaluadores").dataTable().fnDestroy();				
+	    
+		table_lista_evaluadores = $('#table_lista_evaluadores').DataTable({
+			"dom": 'Bfrtip',
+	        "scrollX": true,
+	        "searching": true,
+	        "lengthMenu": [
+	            [ 10, 15, 25, -1 ],
+	            [ '10 filas', '15 filas', '25 filas', 'Mostrar todas' ]
+	        ],
+	        "processing":true,
+	        "language": {
+	            buttons: {
+	              pageLength: 'Mostrar'
+	            },
+	            "decimal": "",
+	            "emptyTable": "No hay información",
+	            "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+	            "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
+	            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+	            "infoPostFix": "",
+	            "thousands": ",",
+	            "lengthMenu": "Mostrar _MENU_ Entradas",
+	            "loadingRecords": "Cargando Registros...",
+	            "processing": "Procesando...",
+	            "search": "_INPUT_",
+		        "searchPlaceholder": "Busqueda General",
+	            "zeroRecords": "No existen registros",
+	            "paginate": {
+	                "first": "Primero",
+	                "last": "Ultimo",
+	                "next": "Siguiente",
+	                "previous": "Anterior"
+	            }
+	        },
+	        "ajax" : {
+	            "url" : url_base + 'pedesa/listaevaluador',
+	            "type" : "GET",
+	            "dataSrc" : ""
+	        },
+	        "columns" : [
+	        	{
+	        		"data":null, render:function(){return "";}
+	        	},
+	        	{ 'data' : 'ods' },
+	        	{ 'data' : 'rol_entidad' },
+	        	{ 'data' : 'entidad' },
+	        	{ 'data' : 'apellido_paterno' },
+	            { 'data' : 'apellido_materno' },
+	            { 'data' : 'nombres' },
+	        	{ 'data' : 'tipo_documento' },
+	        	{ 'data' : 'nro_documento' }
+	        ],
+	        columnDefs: [
+	        	{
+                    orderable: false,
+                    className: 'select-checkbox',
+                    targets:   0
+                }
+	        ],
+	        select: {
+	            style:    'multi', 
+	            selector: 'td:first-child'
+	        },
+	        "buttons": []
+	    });
+	}
+	
+	function validarCamposAsignarEvaluador(){
+		
+		mensajeValidacionAsignarEvaluador = "";
+		anio = $("#anioasignarevaluador").val();
+		idods = $("#odsasignarevaluador").val();
+		idnivelparticipacion = $("#nivelparticipacionasignarevaluador").val();
+		idcategoria = $("#categoriaasignarevaluador").val();
+		idcodmod = $("#nombreieasignarevaluador").val();
+		tieneevaluadoresasignados = $("#tieneevaluadorasignado").val();
+		
+		if(idods == "0"){
+			mensajeValidacionAsignarEvaluador += "Debe seleccionar ODS"+"<br>";
+		}
+		if(idnivelparticipacion=="0"){
+			mensajeValidacionAsignarEvaluador += "Debe seleccionar nivel de participación"+"<br>";
+		}
+		if(idcategoria=="0"){
+			mensajeValidacionAsignarEvaluador += "Debe seleccionar categoria"+"<br>";
+		}
+		if(idcodmod=="0"){
+			mensajeValidacionAsignarEvaluador += "Debe seleccionar II.EE"+"<br>";
+		}
+		if(tieneevaluadoresasignados=="0"){
+			mensajeValidacionAsignarEvaluador += "Debe seleccionar tiene evaluadores asignados"+"<br>";
+		}
+		if(mensajeValidacionAsignarEvaluador!=""){
+			return false;
+		}
+		return true;
+	}
+	
 	
 	function limpiar(){
 		$("#odsasignarevaluador").val("0");

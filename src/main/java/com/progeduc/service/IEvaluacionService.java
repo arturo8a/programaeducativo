@@ -5,11 +5,15 @@ import com.progeduc.model.Evaluacion;
 
 public interface IEvaluacionService extends ICRUD<Evaluacion,Integer>{
 	
-	Evaluacion saveEvalRubQuest(EvaluacionRubricaQuestionarioDto dto);
+	Integer saveEvalRubQuest(EvaluacionRubricaQuestionarioDto dto);
 	
 	int updateestado(Integer id, Integer estado);
 	
 	Evaluacion updateEvalRubQuest(EvaluacionRubricaQuestionarioDto dto);
 	
 	Evaluacion getPorAnio(Integer anio);
+	
+	Evaluacion getPorAnioCategoriaNivelparticipacion(Integer anio,Integer idcategoria,Integer idnivelparticipacion);
+	
+	Evaluacion getPorAnioNivelparticipacion(Integer anio,Integer nivelparticipacion);
 }

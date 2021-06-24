@@ -35,6 +35,10 @@ public class EvaluacionServiceImpl implements IEvaluacionService{
 	
 	@Autowired
 	IEvaluacionQuestionarioRepo evaluacionquestionariorepo;
+	
+	Integer anio;
+	Integer idcategoria;
+	Integer idnivelparticipacion; 
 
 	@Override
 	public Evaluacion registrar(Evaluacion obj) {
@@ -65,6 +69,16 @@ public class EvaluacionServiceImpl implements IEvaluacionService{
 	public Evaluacion getPorAnio(Integer anio) {
 		return evaluacionrepo.getPorAnio(anio);
 	}
+	
+	@Override
+	public Evaluacion getPorAnioNivelparticipacion(Integer anio,Integer nivelparticipacion) {
+		return evaluacionrepo.getPorAnioNivelparticipacion(anio,nivelparticipacion);
+	}
+	
+	@Override
+	public Evaluacion getPorAnioCategoriaNivelparticipacion(Integer anio,Integer idcategoria,Integer idnivelparticipacion) {
+		return evaluacionrepo.getPorAnioCategoriaNivelparticipacion(anio, idcategoria, idnivelparticipacion);
+	}
 
 	@Override
 	public boolean Eliminar(Integer id) {
@@ -73,8 +87,20 @@ public class EvaluacionServiceImpl implements IEvaluacionService{
 	}
 	
 	@Override
-	public Evaluacion saveEvalRubQuest(EvaluacionRubricaQuestionarioDto dto) {
+	public Integer saveEvalRubQuest(EvaluacionRubricaQuestionarioDto dto) {
 		
+		anio = dto.getEvaluacion().getAnio();
+		idcategoria = dto.getEvaluacion().getCategoriaevaluacion().getId();
+		idnivelparticipacion = dto.getEvaluacion().getNivelparticipacion().getId();
+		System.out.println("anio : " + anio);
+		System.out.println("idcategoria : " + idcategoria);
+		System.out.println("idnivelparticipacion : " + idnivelparticipacion);
+		
+		if(getPorAnioCategoriaNivelparticipacion(anio, idcategoria, idnivelparticipacion) !=null) {
+			System.out.println("IF");
+			return 0;
+		}
+		System.out.println("ELSE");
 		evaluacionrepo.save(dto.getEvaluacion());
 		dto.getListarubrica().forEach(obj->{
 			rubricarepo.save(obj);			
@@ -85,7 +111,7 @@ public class EvaluacionServiceImpl implements IEvaluacionService{
 			questionariorepo.save(obj);
 			evaluacionquestionariorepo.guardar(dto.getEvaluacion().getId(), obj.getId());
 		});
-		return dto.getEvaluacion();
+		return dto.getEvaluacion().getId();
 	}
 	
 	@Override

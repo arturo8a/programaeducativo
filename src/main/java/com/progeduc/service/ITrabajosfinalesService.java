@@ -17,10 +17,7 @@ public interface ITrabajosfinalesService extends ICRUD<Trabajosfinales,Integer>{
 	
 	int updateenviado(Integer id, Integer estado,Integer peid);	
         
-        
-<<<<<<< HEAD
     List<Trabajosfinales> listarTarabajosPendientes(TrabajosfinalesParticipanteDto dto);
-=======
+    
     List<Trabajosfinales> listarTrabajosPendientes();
->>>>>>> df17c640c8b80a31e7f2913e5c9c4ebbd3c108dc
 }

@@ -172,7 +172,7 @@
 							<table id="table_lista_asignacion"  class="table table-striped display nowrap" style="width:100%">
 								<thead class="cabecera_tabla">
 							        <tr>
-							        	<th><input type="checkbox" id="seleccionarTodo"/></th>
+							        	<th><input type="checkbox" id="seleccionarTodoListaAsignacion"/></th>
 							        	<th>Nº</th>
 										<th>AÑO</th>
 							            <th>ODS</th>
@@ -256,13 +256,32 @@
 	</div>
 </center>	
 
+<div class="modal" tabindex="-1" role="dialog" id="modalerrorasignarevaluador">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <img th:src="@{./images/imagen_informacion11.png}"/>&nbsp;&nbsp; <strong class="pt-1">Error</strong>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>	          
+        </button>
+      </div>
+      <div class="modal-body" id="textoerrorasignarevaluador">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger rounded-0" id="btncerrarmensajeerrorasignarevaluador" name="btncerrarmensajeerrorasignarevaluador">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 </html>
 <script type="text/javascript">
 		
 		var url_base = location.origin+"/";		
 		var celdaseleccionada;
 		var id;
-		var table_lista_concurso;
+		var table_lista_concurso, table_lista_asignacion;
 		
 		$(document).ready(function(){	
 			
@@ -296,6 +315,7 @@
 			});
 			
 			listar();
+			listarasignacion();
 			
 			
 			$("#btnasignar").click(function(){
@@ -452,6 +472,115 @@
 			obtener_evidencia("#table_lista_concurso tbody",table_lista_concurso);
 			obtener_trabajos("#table_lista_concurso tbody",table_lista_concurso);
 		}
+		
+		
+		
+		
+		var listarasignacion = function(){
+			
+			$("#table_lista_asignacion").dataTable().fnDestroy();				
+		    
+			table_lista_asignacion = $('#table_lista_asignacion').DataTable({
+				"dom": 'Bfrtip',
+	            "scrollX": true,
+	            "searching": true,
+	            "lengthMenu": [
+	                [ 10, 15, 25, -1 ],
+	                [ '10 filas', '15 filas', '25 filas', 'Mostrar todas' ]
+	            ],
+	            "processing":true,
+	            "language": {
+	                buttons: {
+	                  pageLength: 'Mostrar'
+	                },
+	                "decimal": "",
+	                "emptyTable": "No hay información",
+	                "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+	                "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
+	                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+	                "infoPostFix": "",
+	                "thousands": ",",
+	                "lengthMenu": "Mostrar _MENU_ Entradas",
+	                "loadingRecords": "Cargando Registros...",
+	                "processing": "Procesando...",
+	                "search": "_INPUT_",
+			        "searchPlaceholder": "Busqueda General",
+	                "zeroRecords": "No existen registros",
+	                "paginate": {
+	                    "first": "Primero",
+	                    "last": "Ultimo",
+	                    "next": "Siguiente",
+	                    "previous": "Anterior"
+	                }
+	            },
+	            "ajax" : {
+	                "url" : url_base + 'pedesa/listaasignacion',
+	                "type" : "GET",
+	                "dataSrc" : ""
+	            },
+	            "columns" : [
+	            	{
+	            		 "data":null, render:function(){return "";}
+	            	},
+	            	{	            	
+	            		"data": null, "render": function (data, type, full, meta) { return meta.row + 1; }
+	            	},
+	            	{ 'data' : 'anio' },
+	            	{ 'data' : 'ods' },
+	            	{ 'data' : 'codigoiiee' },
+	            	{ 'data' : 'nombreiiee' },
+	                { 'data' : 'codigotrabajo' },
+	                { 'data' : 'categoria' },
+	            	{ 'data' : 'modalidad' },
+	            	{ 'data' : 'nivelparticipacion' },
+	                { 'data' : 'rolentidad' },
+	                { 'data' : 'entidad' },
+	                { 'data' : 'evaluadorasignado' }                
+	            ],
+	            columnDefs: [
+	            	{
+	                    orderable: false,
+	                    className: 'select-checkbox',
+	                    targets:   0
+	                }
+	            ],
+	            select: {
+	                style:    'multi', 
+	                selector: 'td:first-child'
+	            },
+	            "buttons": [
+	            	{
+	            		extend: 'excelHtml5',
+	            		text:"<img src='./images/iconos_nd/excel1.svg' style='size:15px;margin:0px;padding:0px'/>",
+	                    titleAttr : 'LISTA DE ASIGNACION',
+	                    messageTop: function(){
+	                    	return '[ ODS: ' + $("#odsasignacion").val() + ']            [ Año de inscripción: '+ $("#anioasignacion").val() + ']';
+	                    },
+	                    filename : function(){
+	                    	var hoy = new Date();
+	                    	var dia = String(hoy.getDate());
+	                    	if(dia.length==1){
+	                    		dia = "0"+dia;
+	                    	}
+	                    	var mes = String(hoy.getMonth()+1);
+	                    	if(mes.length==1){
+	                    		mes = "0"+mes;
+	                    	}
+	                    	var hora = String(hoy.getHours());
+	                    	if(hora.length==1){
+	                    		hora = "0"+hora;
+	                    	}
+	                    	var minuto = String(hoy.getMinutes());
+	                    	if(minuto.length==1){
+	                    		minuto = "0"+minuto;
+	                    	}
+	            	    	return "ListaAsignacion_"+dia+mes+hoy.getFullYear()+'_'+hora + minuto;
+	                    }
+	            	}
+	            ]
+	        });
+		}
+		
 		
 		var obtener_fichatrabajo = function(tbody,table){
 			$(tbody).on("click","img.fichatrabajo",function(){
