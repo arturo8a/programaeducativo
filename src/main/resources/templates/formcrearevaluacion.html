@@ -451,12 +451,21 @@
 			    data : JSON.stringify(evaluaciondto),
 			    dataType : 'json',
 				success: function(respuesta) {
-					if(respuesta.id>0){
+					console.log("respuesta :" + respuesta);		
+					if(respuesta==0){
+						$("#modalimagencargando").modal('hide');
+						$("#textoerrorcrearevaluacion").html("No puede registrar una evaluación con el mismo año, nivel y categoria");
+						$('#modalerrorcrearevaluacion').modal({
+							show : true,
+							backdrop : 'static',
+							keyboard:false
+						});
+					}
+					else if(respuesta>0){
 						
 						$("#modalimagencargando").modal('hide');
-						
 						table_lista_evaluacion.row.add({
-					        "id": respuesta.id,
+					        "id": respuesta,
 					        "anio": anio,
 					        "nivelparticipacion":  $("#nivelparticipacionce_add option:selected").html(),
 					        "categoriaevaluacion": $("#categoriace_add option:selected").html(),
@@ -464,17 +473,14 @@
 					        "defaultContent" : '<img src="./images/svg/file-pdf-regular.svg" class="archivo" style="width:20px; cursor:pointer"/>',
 					        "defaultContent" : '<img src="./images/svg/edit-regular.svg" class="editar" style="width:20px; cursor:pointer" />',
 					        "defaultContent" : '<img src="./images/svg/eliminar-alt-regular.svg" class="eliminar" style="width:20px; cursor:pointer" />'
-					    }).draw();	
-						
+					    }).draw();						
 						limpiarControles();
 						$("#textoexitocrearevaluacion").html("Se registro evaluación");
 						$('#modalexitocrearevaluacion').modal({
 							show : true,
 							backdrop : 'static',
 							keyboard:false
-						});
-						
-						
+						});						
 					}
 					else{
 						$("#modalimagencargando").modal('hide');

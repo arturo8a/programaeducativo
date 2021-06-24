@@ -29,10 +29,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.progeduc.componente.Ldap;
+import com.progeduc.dto.AsignacionDto;
+import com.progeduc.dto.AsignarEvaluadorDto;
 import com.progeduc.dto.ClaveValor;
 import com.progeduc.dto.ConcursoDto;
 import com.progeduc.dto.EvaluacionDto;
 import com.progeduc.dto.EvaluacionRubricaQuestionarioDto;
+import com.progeduc.dto.EvaluadorDto;
 import com.progeduc.dto.ListaDocente;
 import com.progeduc.dto.ListaDocenteInscritos;
 import com.progeduc.dto.ListaTrabajosFinalesPendientes;
@@ -42,6 +45,7 @@ import com.progeduc.dto.ListatrabajosfinalesDto;
 import com.progeduc.dto.ParticipanteVerDto;
 import com.progeduc.dto.TrabajofinalesEnviadoDto;
 import com.progeduc.dto.TrabajosfinalesParticipanteDto;
+import com.progeduc.dto.trabajoEvaluadoDto;
 import com.progeduc.model.Aperturaranio;
 import com.progeduc.model.Docente;
 import com.progeduc.model.Evaluacion;
@@ -105,13 +109,12 @@ public class ConcursoeducativoController {
 	private ITrabajosfinalesParticipanteService trabajosfinalesparticipanteServ;
 	
 	@Autowired
-	private IEvaluacionService evaluacionServ;
-	
-	
+	private IEvaluacionService evaluacionServ;	
 	
 	ListaparticipanteDto dto;	
 	ListatrabajosfinalesDto dtotf;	
 	ListaparticipantetrabajoDto ptdto;	
+	ListaDocenteInscritos listadocentesinscritos;	
 	ListaDocenteInscritos listadocentesinscritos;
 	ListaTrabajosFinalesPendientes listaTrabajosFinalesPendientes;
 	String miparticipante = "";	
@@ -119,6 +122,9 @@ public class ConcursoeducativoController {
 	Mail mail;	
 	String participantes, msj2;
 	UsuarioLdap usuarioldap = null;
+	String nivelparticipacion;
+	Integer idnivelparticipacion;
+	String estado;
 	
 	@PostMapping(value="/registrarconcurso")
 	public String registrarconcurso(@Valid @RequestBody Postulacionconcurso dto)  {
@@ -246,7 +252,7 @@ public class ConcursoeducativoController {
 	}
 	
 	@PostMapping(value="/registrarevaluacion")
-	public Evaluacion registrarevalrubquest(@Valid @RequestBody EvaluacionRubricaQuestionarioDto dto) {
+	public Integer registrarevalrubquest(@Valid @RequestBody EvaluacionRubricaQuestionarioDto dto) {
 		return evaluacionServ.saveEvalRubQuest(dto);
 	}
 	
@@ -277,6 +283,12 @@ public class ConcursoeducativoController {
 		midocente.setTipodocumento(docente.getTipodocumento());
 		docenteService.registrar(midocente);
 		return midocente;
+	}
+	
+	@PostMapping(value="/registrarasignarevaluador")
+	public AsignarEvaluadorDto registrarasignarevaluador(@Valid @RequestBody AsignarEvaluadorDto asignarevaluadordto, HttpSession ses) {
+		
+		return null;
 	}
 	
 	@PostMapping(value="/subirarchivoparticipante")
@@ -464,8 +476,147 @@ public class ConcursoeducativoController {
 		return new ResponseEntity<List<ListaparticipanteDto>>(lista, HttpStatus.OK) ;
 	}
 	
+	@GetMapping("/listaTrabajoEvaluado")
+	public ResponseEntity<List<trabajoEvaluadoDto>> listaTrabajoEvaluado(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
+		
+		List<trabajoEvaluadoDto> lista = new ArrayList<trabajoEvaluadoDto>();		
+		for(int i=1;i<=8;i++) {
+			trabajoEvaluadoDto dto = new trabajoEvaluadoDto();		
+			dto.setOds("Piura");
+			dto.setCategoria("Canto");
+			dto.setNivel_participacion("Primer Nivel");
+			dto.setCodigoie("234444");
+			dto.setNombreie("Los laureles");
+			dto.setCodigo_trabajo("234444-01");
+			dto.setModalidad("Grupal");
+			dto.setTitulo("Gotita de amor");
+			dto.setEvaluadores_asignados(i);
+			dto.setId(i);
+			lista.add(dto);
+		}
+		return new ResponseEntity<List<trabajoEvaluadoDto>>(lista, HttpStatus.OK);
+	}
+	
+	@GetMapping("/listaevaluador")
+	public ResponseEntity<List<EvaluadorDto>> listaEvaluador(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
+		
+		List<EvaluadorDto> lista = new ArrayList<EvaluadorDto>();		
+		
+		EvaluadorDto dto = new EvaluadorDto();	
+		
+		dto.setOds("Piura");
+		dto.setRol_entidad("Ministerio");
+		dto.setEntidad("Ministerio de justicia");
+		dto.setApellido_paterno("Lopez");
+		dto.setApellido_materno("Perez");
+		dto.setNombres("Juan");
+		dto.setTipo_documento("DNI");
+		dto.setNro_documento("12345678");
+		dto.setId(1);
+		lista.add(dto);
+		
+		dto.setOds("Piura");
+		dto.setRol_entidad("Ministerio");
+		dto.setEntidad("Ministerio de justicia");
+		dto.setApellido_paterno("Lopez");
+		dto.setApellido_materno("Perez");
+		dto.setNombres("Maria");
+		dto.setTipo_documento("CE");
+		dto.setNro_documento("123456789A");
+		dto.setId(2);
+		lista.add(dto);
+		
+		dto.setOds("Piura");
+		dto.setRol_entidad("Ministerio");
+		dto.setEntidad("Ministerio de justicia");
+		dto.setApellido_paterno("Lopez");
+		dto.setApellido_materno("Perez");
+		dto.setNombres("Laura");
+		dto.setTipo_documento("DNI");
+		dto.setNro_documento("12349865");
+		dto.setId(3);
+		lista.add(dto);
+		
+		dto.setOds("Piura");
+		dto.setRol_entidad("Ministerio");
+		dto.setEntidad("Ministerio de justicia");
+		dto.setApellido_paterno("Lopez");
+		dto.setApellido_materno("Perez");
+		dto.setNombres("Juan");
+		dto.setTipo_documento("DNI");
+		dto.setNro_documento("12345678");
+		dto.setId(4);
+		lista.add(dto);
+		
+		dto.setOds("Piura");
+		dto.setRol_entidad("Ministerio");
+		dto.setEntidad("Ministerio de justicia");
+		dto.setApellido_paterno("Lopez");
+		dto.setApellido_materno("Perez");
+		dto.setNombres("Juan");
+		dto.setTipo_documento("DNI");
+		dto.setNro_documento("12345678");
+		dto.setId(5);
+		lista.add(dto);
+		
+		return new ResponseEntity<List<EvaluadorDto>>(lista, HttpStatus.OK);
+	}
+	
 	@GetMapping(value = "/listaconcurso")
 	public ResponseEntity<List<ConcursoDto>> listarconcurso(HttpSession ses){
+		
+		List<ConcursoDto> listadto  = new ArrayList<ConcursoDto>();
+		List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarhabilitados();
+		listaTrabajoFinales.forEach(obj->{
+			ConcursoDto dto = new ConcursoDto();
+			dto.setId(obj.getId());
+			dto.setAnio(obj.getAnio());
+			dto.setCodigotrabajo(obj.getProgramaeducativo().getId() + "_" + obj.getId());
+			dto.setOds(odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+			dto.setCodigoie(obj.getProgramaeducativo().getCodmod());
+			dto.setNombreie(obj.getProgramaeducativo().getNomie());
+			dto.setCategoria(obj.getCategoriatrabajo().getDescripcion());
+			dto.setModalidad(obj.getModalidadtrabajo().getDescripcion());
+			dto.setTitulotrabajo(obj.getTitulotrabajo());
+			nivelparticipacion = "";
+			trabajosfinalesparticipanteServ.listar(obj.getId()).forEach(obj1->{
+				nivelparticipacion = obj1.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+				idnivelparticipacion = obj1.getParticipante().getGradoestudiante().getNivelgradopartid();
+			});
+			dto.setNivelparticipacion(nivelparticipacion);
+			//dto.setEstado(evaluacionServ.getPorAnio(obj.getAnio()).getEstadoevaluacion().getDescripcion());
+			dto.setEstado(evaluacionServ.getPorAnioNivelparticipacion(obj.getAnio(),idnivelparticipacion)!=null?evaluacionServ.getPorAnioNivelparticipacion(obj.getAnio(),idnivelparticipacion).getEstadoevaluacion().getDescripcion():"");
+			dto.setCalificacion(0);
+			dto.setPuesto(0);
+			listadto.add(dto);
+		});		
+		return new ResponseEntity<List<ConcursoDto>>(listadto, HttpStatus.OK) ;
+	}
+	
+	@GetMapping(value="/listaasignacion")
+	public ResponseEntity<List<AsignacionDto>> listaasignacion(HttpSession ses){
+		
+		List<AsignacionDto> lista = new ArrayList<AsignacionDto>();
+		/*AsignacionDto dto = new AsignacionDto();
+		dto.setAnio(0);
+		dto.setCategoria("");
+		dto.setCodigoiiee("");
+		dto.setCodigotrabajo("");
+		dto.setEntidad("");
+		dto.setEvaluadorasignado("");
+		dto.setModalidad("");
+		dto.setNivelparticipacion("");
+		dto.setNombreiiee("");
+		dto.setOds("");
+		dto.setRolentidad("");
+		lista.add(dto);*/
+		AsignacionDto dto = new AsignacionDto();
+		lista.add(dto);
+		return new ResponseEntity<List<AsignacionDto>>(lista, HttpStatus.OK) ;
+	}
+	
+	@GetMapping(value = "/listarTrabajosEvaluados")
+	public ResponseEntity<List<ConcursoDto>> listarTrabajosEvaluados(HttpSession ses){
 		
 		List<ConcursoDto> listadto  = new ArrayList<ConcursoDto>();
 		List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarhabilitados();
@@ -699,6 +850,9 @@ public class ConcursoeducativoController {
 		return new ResponseEntity<UsuarioLdap>(usuarioldap, HttpStatus.OK) ;
 	}
 	
+	@GetMapping("/listtrabajospendientes")
+	public List<String> listTrabajosPendientes(){
+		return  progeducService.listCentrosEducativosGroupbyCodmod();
 	@GetMapping("/listatrabpendientesasignados")
 	public ResponseEntity<List<ListaTrabajosFinalesPendientes>>listTrabajosPendientesAsignados(HttpSession ses){
 		

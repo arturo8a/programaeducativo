@@ -2,6 +2,7 @@ package com.progeduc.dto;
 
 public class trabajoEvaluadoDto {
 	
+	Integer id;
 	String ods;
 	String categoria;
 	String nivel_participacion;
@@ -12,6 +13,12 @@ public class trabajoEvaluadoDto {
 	String titulo;
 	Integer evaluadores_asignados;
 	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public String getOds() {
 		return ods;
 	}

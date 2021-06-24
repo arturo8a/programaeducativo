@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.progeduc.dto.ColegioDto;
 import com.progeduc.dto.ListaInstitucionEducativa;
 import com.progeduc.dto.ProgeducTurnoNivelDto;
 import com.progeduc.dto.ProgeducUpdateTurnoNivelDto;
@@ -149,6 +150,11 @@ public class ProgramaeducativoServiceImpl implements IProgramaeducativoService{
 	public List<String> listCentrosEducativosGroupbyCodmod() {
 		// TODO Auto-generated method stub
 		return progeducRepo.listCentrosEducativosGroupbyCodmod();
+	}
+	
+	@Override
+	public List<ColegioDto> listCentrosEducativosGroupbyNomie(){
+		return progeducRepo.listCentrosEducativosGroupbyNomie();
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.progeduc.dto.ColegioDto;
 import com.progeduc.dto.ListaInstitucionEducativa;
 import com.progeduc.model.Programaeducativo;
 
@@ -32,8 +33,11 @@ public interface IProgramaeducativoRepo extends CrudRepository<Programaeducativo
 	@Query(value="SELECT TB1.* FROM PROGRAMAEDUCATIVO TB1 WHERE TB1.CODMOD = ?1 and anhio is not null order by anhio desc FETCH FIRST 1 ROWS ONLY",nativeQuery = true)
 	Programaeducativo getActualByCodmod(String codmod);
 	
-	@Query(value="SELECT CODMOD FROM Programaeducativo p WHERE CODMOD IS NOT NULL GROUP BY CODMOD",nativeQuery = true)
+	@Query(value="SELECT CODMOD FROM Programaeducativo WHERE CODMOD IS NOT NULL GROUP BY CODMOD",nativeQuery = true)
 	List<String> listCentrosEducativosGroupbyCodmod();
+	
+	@Query(value="SELECT CODMOD as codmod,NOMIE as nomie FROM Programaeducativo p WHERE CODMOD IS NOT NULL GROUP BY CODMOD,NOMIE order by nomie",nativeQuery = true)
+	List<ColegioDto> listCentrosEducativosGroupbyNomie();
 	
 	@Query(value="SELECT TB1.*,TB1.ANHIO FROM Programaeducativo TB1",nativeQuery = true)
 	List<Programaeducativo> listCentrosEducativosInscritos();

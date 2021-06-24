@@ -2,6 +2,7 @@ package com.progeduc.service;
 
 import java.util.List;
 
+import com.progeduc.dto.ColegioDto;
 import com.progeduc.dto.ListaInstitucionEducativa;
 import com.progeduc.dto.ProgeducTurnoNivelDto;
 import com.progeduc.dto.ProgeducUpdateTurnoNivelDto;
@@ -15,6 +16,8 @@ public interface IProgramaeducativoService extends ICRUD<Programaeducativo,Integ
 	Programaeducativo getCodmodByAnioActual(String codmod);
 	
 	Programaeducativo getCodmod(String codmod);
+	
+	List<ColegioDto> listCentrosEducativosGroupbyNomie();
 	
 	Programaeducativo save(Programaeducativo pe);
 	
