@@ -926,5 +926,12 @@ public class IndexController {
 		return "formregistrarevaluacion";
 	}
 	
+	@GetMapping("/formregistrarusuario")
+	public String formregistrarusuario(Model model,HttpSession ses) {
+		model.addAttribute("odsregusu",odsserv.listarAll());
+		model.addAttribute("categoriaregusu",categoriaevaluacionService.listar());
+		return "formregistrarusuario";
+	}
+	
 }
 

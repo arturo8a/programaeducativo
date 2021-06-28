@@ -115,7 +115,72 @@
 		</div>		
 	</div>
 	<div class="tab-pane fade" id="nav-alianzaestrategica" role="tabpanel" aria-labelledby="alianzaestrategica">
-	  	alianzaestrategica
+	  	<div id="containerListaRegistros" class="pl-3 pr-3">
+	  		<div class="div_filtro">
+	  			<div class="row pt-2 m-0">
+	  				<div class="col-xs-4 col-sm-2">
+	  					<select class="form-control" id="odsalianza" name="odsalianza">
+							<option value="Todos">ODS</option>			
+							<option th:each="dato:${ods}" th:value="${dato.descripcion}" th:utext="${dato.descripcion}"/>   				    				
+						</select>
+	  				</div>
+	  				<div class="col-xs-4 col-sm-2">
+						<select class="form-control" id="anioalianza" name="anioalianza">
+							<option value="Todos">Año</option>
+							<option th:each="dato:${anios}" th:value="${dato}" th:utext="${dato}"/>
+						</select>
+					</div>
+					<div class="col-xs-4 col-sm-2">
+						<select class="form-control" id="rolentidadalianza" name="rolentidadalianza">
+							<option value="Todos">Rol de la entidad</option>					       				
+						</select>
+					</div>
+					<div class="col-xs-12 col-sm-2">
+						<select class="form-control" id="estadoalianza" name="estadoalianza">
+							<option value="Todos">Estado</option> 
+							<option value="1">Activo</option> 
+							<option value="2">Inactivo</option> 
+						</select>
+					</div>
+					<div class="col-xs-12 col-sm-3 pt-1">
+						<input type="image" id="btnbuscaralianza"  src="./images/iconos_nd/botonbuscar.svg" width="140px" style="padding-bottom:16px" />
+						<input type="image" id="btnlimpiaralianza"  src="./images/iconos_nd/botonrefrescar.svg" width="45px" style="padding-left:10px;padding-bottom:16px" />
+					</div>
+	  			</div>
+	  		</div>
+	  		<div class="div_filtro">
+				<div class="p-0 m-0">
+					<div class="row pt-2 pb-4 m-0">
+						<div class="col-xs-12 col-sm-12">
+							<table id="table_lista_usuarios"  class="table table-striped display nowrap" style="width:100%">
+								<thead class="cabecera_tabla">
+							        <tr>
+							        	<th><input type="checkbox" id="seleccionarTodo"/></th>
+							        	<th>Nº</th>
+										<th>AÑO</th>
+							            <th>ODS</th>
+							            <th>CATEGORIA</th>
+							            <th>ENTIDAD</th>
+							            <th>COMITE TECNICO</th>
+							            <th>COMITE EVALUADOR</th>
+							            <th>AUSPICIADOR</th>
+							            <th>ALIADO</th>
+							            <th>EDITAR</th>
+							            <th>INACTIVAR</th>
+							        </tr>   
+							    </thead>
+							</table>
+						</div>
+						<br><br>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 text-right">
+					<input type="button" id="btnAgregarUsuario" name="btnAgregarUsuario" class="btn btn-primary text-right" value="Agregar"/>
+				</div>
+			</div>	 
+	  	</div>
 	</div>
 	<div class="tab-pane fade" id="nav-asignacion" role="tabpanel" aria-labelledby="asignacion">
 	  	<div id="containerListaRegistros" class="pl-3 pr-3">		  		
@@ -240,6 +305,20 @@
 </center>
 
 <center>
+	<div class="modal fade" tabindex="-1" role="dialog" id="modalAlianzaEstrategica" aria-labelledby="myLargeModalLabel" >
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content" style="overflow-y: scroll; height:750px; width:80%">
+	      <div class="modal-header">
+	        <strong class="pt-1">ASIGNAR EVALUADOR</strong>
+	      </div>
+	      <div class="modal-body" id="contenidoAlianzaEstrategicar">
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</center>
+
+<center>
 	<div class="modal fade" tabindex="-1" role="dialog" id="modalArchivoTrabajo" aria-labelledby="myLargeModalLabel" >
 	  <div class="modal-dialog modal-lg" role="document">
 	    <div class="modal-content" style="overflow-y: scroll; height:450px; width:70%">
@@ -334,6 +413,25 @@
 					},
 					error: function() {
 						console.log("error al cargar modal asignar evaluador");
+				    }
+				});
+			});
+			
+			$("#btnAgregarUsuario").click(function(){
+				$.ajax({
+					type : "GET",
+				    contentType : "application/json",
+				    url : url_base + "pedesa/formregistrarusuario",
+					success: function(respuesta) {
+						$("#contenidoAlianzaEstrategicar").html(respuesta);
+						$('#modalAlianzaEstrategica').modal({
+							show : true,
+							backdrop : 'static',
+							keyboard:false
+						});
+					},
+					error: function() {
+						console.log("error al cargar modal alianza estrategica");
 				    }
 				});
 			});

@@ -114,7 +114,6 @@ public class ConcursoeducativoController {
 	ListaparticipanteDto dto;	
 	ListatrabajosfinalesDto dtotf;	
 	ListaparticipantetrabajoDto ptdto;	
-	ListaDocenteInscritos listadocentesinscritos;	
 	ListaDocenteInscritos listadocentesinscritos;
 	ListaTrabajosFinalesPendientes listaTrabajosFinalesPendientes;
 	String miparticipante = "";	
@@ -853,6 +852,8 @@ public class ConcursoeducativoController {
 	@GetMapping("/listtrabajospendientes")
 	public List<String> listTrabajosPendientes(){
 		return  progeducService.listCentrosEducativosGroupbyCodmod();
+	}
+	
 	@GetMapping("/listatrabpendientesasignados")
 	public ResponseEntity<List<ListaTrabajosFinalesPendientes>>listTrabajosPendientesAsignados(HttpSession ses){
 		
@@ -888,4 +889,14 @@ public class ConcursoeducativoController {
 		
 		return new ResponseEntity<List<ListaTrabajosFinalesPendientes>>(lista, HttpStatus.OK) ;
 	}
+	
+	@PostMapping(value="/registrarusuarioalianza")
+	public Integer registrarusuarioalianza(@Valid @RequestBody EvaluacionRubricaQuestionarioDto dto) {
+		return evaluacionServ.saveEvalRubQuest(dto);
+	}
+	
+	/*@PostMapping(value="/actualizarevaluacion")
+	public Evaluacion actualizarevaluacion(@Valid @RequestBody EvaluacionRubricaQuestionarioDto dto) {
+		return evaluacionServ.updateEvalRubQuest(dto);
+	}*/
 }
