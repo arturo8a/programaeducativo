@@ -35,22 +35,27 @@ $(document).ready(function(){
 		$("#section-datos-auspicio").append(html);
 	});
 	
-	$("#btnaceptarRegistro").on("click",function(){
-        
-        $("#btnaceptarRegistro").prop("disabled",true);
-        
-        setTimeout(() => {
-			table_lista_aperturar_anio.draw();
-		});
-        
-    });
-	
+	$("#fecha_oficio").datepicker({
+		locale: 'es-es',
+	    format: 'dd/mm/yyyy',
+	    uiLibrary: 'bootstrap4'
+	});
+
 });
 
-
-
-function saveUsuarioAlianza(){
-	
+function armarAuspicio(){
+	var array = [];
+	$.each($("[id*=tipocodauspiciador]"), function( index, value ) {
+		var i = index + 1;
+	  	var tipoDoc = $('#tipocodauspiciador'+i).val();
+	  	var cantidad = $('#tipocodauspiciador'+i).val();
+	  	var descripcion = $('#descripcionauspiciador'+i).val();
+	  	var montounitario = $('#montounitarioauspiciador'+i).val();
+	  	var montototal = $('#montototalauspiciador'+i).val();
+	  	
+	  	array.push({tipoDoc,cantidad,descripcion,montounitario,montototal});
+	});
+	return array;
 }
 
 function armarData(){
@@ -100,10 +105,9 @@ function armarData(){
 		sendOficio = $('#sendOficioNo').val();
 	}
 	var numoficioautoridad = $('#numoficioautoridad').val();
-	var fecha_oficio = $('#fecha_oficio').val();
+	var fecha_oficio = formatoFecha($('#fecha_oficio').val());
 	
-	var arrayAuspicio = [];
-	
+	var arrayAuspicio = armarAuspicio();
 	
 	var data = {
 		id : idUsuario,
@@ -149,8 +153,95 @@ function armarData(){
 
 	}
 	console.log(data);
+	return data;
 }
 
+
+$("#btnaceptarRegistro").on("click",function(){ console.log(armarData());
+    
+    $("#btnaceptarRegistro").prop("disabled",true);
+    
+    $("#modalimagencargando").modal({
+		show : true,
+		backdrop : 'static',
+		keyboard:false
+	});
+    
+    $.ajax({
+		type : "POST",
+	    contentType : "application/json",
+	    url : url_base + "pedesa/saveusuarioalianza",
+	    data : JSON.stringify(armarData()),
+	    dataType : 'json',
+		success: function(respuesta) {
+			if(respuesta>0){
+				
+			}
+			
+			$("#btnaceptarRegistro").prop("disabled",false);
+			$("#modalimagencargando").modal('hide');
+		},
+		error: function() {
+				$("#modalimagencargando").modal('hide');
+				alert("Exception al registrar");
+		    }
+		});
+   
+    
+});
+
+
+function formatoFecha(fecha){
+	var date = fecha.split("/");
+	return date[2] +'-'+ date[1] +'-'+ date[0];
+}
+
+function getUsuario(idUsuario){
+	$("#modalimagencargando").modal({
+		show : true,
+		backdrop : 'static',
+		keyboard:false
+	});
+	
+	$.ajax({
+		type : "GET",
+	    contentType : "application/json",
+	    url : url_base + "pedesa/saveusuarioalianza/"+idUsuario,
+	    dataType : 'json',
+		success: function(respuesta) {console.log(respuesta);
+			
+			$("#idAlianzaEstrategica").val(respuesta.id);
+			$("#odsresgusu").val(respuesta.ods.id);
+			$("#anioregusu").val(respuesta.anio);
+			$("#categoriaregusu").val(respuesta.categoria.id);
+			$("#entidadregusu").val(respuesta.entidad);
+			$("#direccionregusu").val(respuesta.direccion);
+			/*var comitetecnico = "0";
+			if($('#perfilregusuComiteTecnico').is(':checked') ) {
+			    comitetecnico = "1";
+			}
+			var comiteevaluador = "0";
+			if($('#perfilregusuComiteEvaluador').is(':checked') ) {
+			    comiteevaluador = "1";
+			}
+			var auspiciador = "0";
+			if($('#perfilregusuAuspiciador').is(':checked') ) {
+			    auspiciador = "1";
+			}
+			var aliado = "0";
+			if($('#perfilregusuAliado').is(':checked') ) {
+			    aliado = "1";
+			}*/
+			
+
+			$("#modalimagencargando").modal('hide');
+		},
+		error: function() {
+				$("#modalimagencargando").modal('hide');
+				alert("Exception al registrar");
+	    }
+	});
+}
 
 /*
 var listar = function (){ console.log('listar()');

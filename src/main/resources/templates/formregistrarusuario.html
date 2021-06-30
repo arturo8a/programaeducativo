@@ -74,7 +74,7 @@
 </head>
 <body>
 	<form id="formparticipanteajax">
-		<input type="hidden" name="idAlianzaEstrategica" id="idAlianzaEstrategica" class="form-control"/>
+		<input type="hidden" name="idAlianzaEstrategica" id="idAlianzaEstrategica" class="form-control" th:value="${idAlianzaEstrategica}"/>
 		<div class="row">
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
 				<select class="form-control" id="odsresgusu" name="odsresgusu">
@@ -212,7 +212,7 @@
 				<input type="text" name="numoficioautoridad" id="numoficioautoridad" class="form-control" placeholder="N° Oficio"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" placeholder="Fecha de oficio" class="form-control rounded-0" id="fecha_oficio" name="fecha_oficio" onKeyPress="return filterInt(event,this)">
+				<input type="text" placeholder="Fecha de oficio" class="form-control rounded-0" id="fecha_oficio" name="fecha_oficio" disabled >
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
 				<label>Adjuntar Documento: 
@@ -226,7 +226,7 @@
 				<u>Datos del Auspiciador</u>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<select class="form-control" id="tipocodauspiciador" name="tipocodauspiciador">
+				<select class="form-control" id="tipocodauspiciador1" name="tipocodauspiciador1">
 					<option value="0">Tipo de documento</option>
 				    <option value="1">DNI</option>
 				    <option value="2">Pasaporte</option>
@@ -234,16 +234,16 @@
 				</select>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="cantidadauspiciador" id="cantidadauspiciador" class="form-control" placeholder="Cantidad"/>
+				<input type="text" name="cantidadauspiciador1" id="cantidadauspiciador1" class="form-control" placeholder="Cantidad"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="descripcionauspiciador" id="descripcionauspiciador" class="form-control" placeholder="Descripcion"/>
+				<input type="text" name="descripcionauspiciador1" id="descripcionauspiciador1" class="form-control" placeholder="Descripcion"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="montounitarioauspiciador" id="montounitarioauspiciador" class="form-control" placeholder="Monto Unitario"/>
+				<input type="text" name="montounitarioauspiciador1" id="montounitarioauspiciador1" class="form-control" placeholder="Monto Unitario"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="montototalauspiciador" id="montototalauspiciador" class="form-control" placeholder="Monto Total"/>
+				<input type="text" name="montototalauspiciador1" id="montototalauspiciador1" class="form-control" placeholder="Monto Total"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left">
 				<input type="button" id="btnAgregarAuspiciador" name="btnAgregarAuspiciador" class="btn btn-primary" />

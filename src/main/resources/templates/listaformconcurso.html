@@ -395,7 +395,7 @@
 			
 			listar();
 			listarasignacion();
-			
+			listarAlianzaEstrategica();
 			
 			$("#btnasignar").click(function(){
 				
@@ -417,7 +417,7 @@
 				});
 			});
 			
-			$("#btnAgregarUsuario").click(function(){
+			$("#btnAgregarUsuario").on("click", function(){
 				$.ajax({
 					type : "GET",
 				    contentType : "application/json",
@@ -435,6 +435,9 @@
 				    }
 				});
 			});
+			
+			
+			
 		});		
 		
 		var listar = function(){
@@ -571,7 +574,204 @@
 			obtener_trabajos("#table_lista_concurso tbody",table_lista_concurso);
 		}
 		
-		
+		var listarAlianzaEstrategica = function(){
+				
+				$("#table_lista_usuarios").dataTable().fnDestroy();				
+			    
+				table_lista_concurso = $('#table_lista_usuarios').DataTable({
+				"dom": 'Bfrtip',
+	            "scrollX": true,
+	            "searching": true,
+	            "lengthMenu": [
+	                [ 10, 15, 25, -1 ],
+	                [ '10 filas', '15 filas', '25 filas', 'Mostrar todas' ]
+	            ],
+	            "processing":true,
+	            "language": {
+	                buttons: {
+	                  pageLength: 'Mostrar'
+	                },
+	                "decimal": "",
+	                "emptyTable": "No hay información",
+	                "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+	                "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
+	                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+	                "infoPostFix": "",
+	                "thousands": ",",
+	                "lengthMenu": "Mostrar _MENU_ Entradas",
+	                "loadingRecords": "Cargando Registros...",
+	                "processing": "Procesando...",
+	                "search": "_INPUT_",
+			        "searchPlaceholder": "Busqueda General",
+	                "zeroRecords": "No existen registros",
+	                "paginate": {
+	                    "first": "Primero",
+	                    "last": "Ultimo",
+	                    "next": "Siguiente",
+	                    "previous": "Anterior"
+	                }
+	            },
+	            "ajax" : {
+	                "url" : url_base + 'pedesa/listaalianzaestrategica',
+	                "type" : "GET",
+	                "dataSrc" : ""
+	            },
+	            "columns" : [
+	            	{
+	            		 "data":null, render:function(){return "";}
+	            	},
+	            	{	            	
+	            		"data": null, "render": function (data, type, full, meta) { return meta.row + 1; }
+	            	},
+	            	{ 'data' : 'anio' },
+	            	{ 'data' : 'ods' },
+	            	{ 'data' : 'categoria' },
+	                { 'data' : 'entidad' },
+	                { 'data' : 'comiteTecnico' ,
+	                   render: function(data, type) {
+	                   	   var x = '';
+                           switch (data) {
+	                            case '1':
+	                                x = '<img src="./images/svg/eye-solid.svg" class="evidencia" style="width:20px; cursor:pointer"/>';
+	                                break;
+	                            case '0':
+	                            	x = "";
+	                                break;
+                            }
+                            return x;
+                        }
+                	},
+	            	{ 'data' : 'comiteEvaluador' ,
+	                   render: function(data, type) {
+	                   	   var x = '';
+                           switch (data) {
+	                            case '1':
+	                                x = '<img src="./images/svg/eye-solid.svg" class="evidencia" style="width:20px; cursor:pointer"/>';
+	                                break;
+	                            case '0':
+	                            	x = "";
+	                                break;
+                            }
+                            return x;
+                        }
+	            	},
+	                { 'data' : 'auspiciador' ,
+	                	render: function(data, type) {
+	                   	   var x = '';
+                           switch (data) {
+	                            case '1':
+	                                x = '<img src="./images/svg/eye-solid.svg" class="evidencia" style="width:20px; cursor:pointer"/>';
+	                                break;
+	                            case '0':
+	                            	x = "";
+	                                break;
+                            }
+                            return x;
+                        }
+	                },
+	                { 'data' : 'aliado' ,
+	                	render: function(data, type) {
+	                   	   var x = '';
+                           switch (data) {
+	                            case '1':
+	                                x = '<img src="./images/svg/eye-solid.svg" class="evidencia" style="width:20px; cursor:pointer"/>';
+	                                break;
+	                            case '0':
+	                            	x = "";
+	                                break;
+                            }
+                            return x;
+                        }
+	                },
+	                { 'data' : 'id' ,
+	                	render: function(data, type) {
+	                   	   var x = '<img src="./images/svg/edit-regular.svg" class="btnEditarUsuario" data-id="'+data+'" style="width:20px; cursor:pointer"/>';
+                            return x;
+                        }
+	                },
+	                { 'data' : 'estado' ,
+	                	render: function(data, type) {
+	                   	   var x = '';
+                           switch (data) {
+	                            case '1':
+	                                x = '<img src="./images/svg/eliminar-alt-regular.svg" class="evidencia" style="width:20px; cursor:pointer"/>';
+	                                break;
+	                            case '0':
+	                            	x = "";
+	                                break;
+                            }
+                            return x;
+                        }
+	                },
+	            ],
+	            columnDefs: [
+	            	{
+	                    orderable: false,
+	                    className: 'select-checkbox',
+	                    targets:   0
+	                },
+	                {
+	            	      "targets": 6,
+	            	      "className": "text-center"
+	                },
+	                {
+	            	      "targets": 7,
+	            	      "className": "text-center"
+	                },
+	                {
+	            	      "targets": 8,
+	            	      "className": "text-center"
+	                },
+	                {
+	            	      "targets": 9,
+	            	      "className": "text-center"
+	                },
+	                {
+	            	      "targets": 10,
+	            	      "className": "text-center"
+	                },
+	                {
+	            	      "targets": 11,
+	            	      "className": "text-center"
+	                }
+	            ],
+	            select: {
+	                style:    'multi', 
+	                selector: 'td:first-child'
+	            },
+	            "buttons": [
+	            	{
+	            		extend: 'excelHtml5',
+	            		text:"<img src='./images/iconos_nd/excel1.svg' style='size:15px;margin:0px;padding:0px'/>",
+	                    titleAttr : 'LISTA DE TRABAJOS FINALES - CONCURSO',
+	                    messageTop: function(){
+	                    	return '[ ODS: ' + $("#odsconcurso").val() + ']            [ Año de inscripción: '+ $("#anioconcurso").val() + ']';
+	                    },
+	                    filename : function(){
+	                    	/*var hoy = new Date();
+	                    	var dia = String(hoy.getDate());
+	                    	if(dia.length==1){
+	                    		dia = "0"+dia;
+	                    	}
+	                    	var mes = String(hoy.getMonth()+1);
+	                    	if(mes.length==1){
+	                    		mes = "0"+mes;
+	                    	}
+	                    	var hora = String(hoy.getHours());
+	                    	if(hora.length==1){
+	                    		hora = "0"+hora;
+	                    	}
+	                    	var minuto = String(hoy.getMinutes());
+	                    	if(minuto.length==1){
+	                    		minuto = "0"+minuto;
+	                    	}
+	            	    	return "Listatrabajosfinales_"+dia+mes+hoy.getFullYear()+'_'+hora + minuto;*/
+	                    }
+	            	}
+	            ]
+	        });		
+			cargarEditarUsuario();
+		}
 		
 		
 		var listarasignacion = function(){
@@ -913,4 +1113,27 @@
 		function verdocumentotrabajo(id,link){
 			window.open("../alfresco_programaeducativo/pedesa/upload_trabajos/"+id+"/"+link, '_blank');
 		}
+		
+		function cargarEditarUsuario(){ console.log('cargarEditarUsuario');
+			$(document).on("click",".btnEditarUsuario",function(){ console.log('.btnEditarUsuario');
+				var id = $(this).attr('data-id');
+				$.ajax({
+					type : "GET",
+				    contentType : "application/json",
+				    url : url_base + "pedesa/formeditarusuario/"+id,
+					success: function(respuesta) {
+						$("#contenidoAlianzaEstrategicar").html(respuesta);
+						$('#modalAlianzaEstrategica').modal({
+							show : true,
+							backdrop : 'static',
+							keyboard:false
+						});
+					},
+					error: function() {
+						console.log("error al cargar modal alianza estrategica");
+				    }
+				});
+			});
+		}
+		
 </script>

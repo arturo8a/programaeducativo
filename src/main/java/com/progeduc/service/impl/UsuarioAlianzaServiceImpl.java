@@ -25,20 +25,23 @@ public class UsuarioAlianzaServiceImpl implements IUsuarioAlianzaService{
 
 	@Override
 	public UsuarioAlianza registrar(UsuarioAlianza obj) {
-		// TODO Auto-generated method stub
-		return null;
+		return usuarioRepo.save(obj);
 	}
 
 	@Override
 	public UsuarioAlianza modificar(UsuarioAlianza obj) {
-		// TODO Auto-generated method stub
-		return null;
+		return usuarioRepo.save(obj);
 	}
 
 	@Override
 	public UsuarioAlianza ListarporId(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<UsuarioAlianza> optionalEntity =  usuarioRepo.findById(id);
+		if(optionalEntity.isPresent()) {
+			return optionalEntity.get();
+		}else {
+			return null;
+		}
+
 	}
 
 	@Override
@@ -49,8 +52,7 @@ public class UsuarioAlianzaServiceImpl implements IUsuarioAlianzaService{
 
 	@Override
 	public List<UsuarioAlianza> listar() {
-		// TODO Auto-generated method stub
-		return null;
+		return (List<UsuarioAlianza>) usuarioRepo.findAll();
 	}
 
 	@Override

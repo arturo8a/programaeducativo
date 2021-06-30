@@ -69,6 +69,7 @@ import com.progeduc.service.ITipodocumentoService;
 import com.progeduc.service.ITipousuarioService;
 import com.progeduc.service.ITrabajosfinalesParticipanteService;
 import com.progeduc.service.ITrabajosfinalesService;
+import com.progeduc.service.IUsuarioAlianzaService;
 import com.progeduc.service.IUsuarioOdsService;
 import com.progeduc.service.IUsuarioService;
 import com.progeduc.service.LenguaService;
@@ -194,6 +195,9 @@ public class IndexController {
 	
 	@Autowired
 	IUsuarioOdsService usuarioodsService; 
+	
+	@Autowired
+	private IUsuarioAlianzaService usuAlianzaserv;
 	
 	String participanteid;
 	
@@ -867,7 +871,7 @@ public class IndexController {
 		return "formregistrardocente";
 	}
 	
-	@GetMapping("/formregistrarevaluacion/{id}")
+	@GetMapping("/formregistrarevaluacion")
 	public String formregistrarevaluacion(@PathVariable("id") Integer id,  Model model,HttpSession ses) {
 		id_rubrica = "";
 		id_questionario ="";
@@ -930,6 +934,15 @@ public class IndexController {
 	public String formregistrarusuario(Model model,HttpSession ses) {
 		model.addAttribute("odsregusu",odsserv.listarAll());
 		model.addAttribute("categoriaregusu",categoriaevaluacionService.listar());
+		model.addAttribute("idAlianzaEstrategica","0");
+		return "formregistrarusuario";
+	}
+	
+	@GetMapping("/formeditarusuario/{id}")
+	public String formeditarusuario(@PathVariable("id") Integer id,Model model,HttpSession ses) {
+		model.addAttribute("odsregusu",odsserv.listarAll());
+		model.addAttribute("categoriaregusu",categoriaevaluacionService.listar());
+		model.addAttribute("idAlianzaEstrategica",id);
 		return "formregistrarusuario";
 	}
 	

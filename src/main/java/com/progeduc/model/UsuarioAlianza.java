@@ -119,9 +119,8 @@ public class UsuarioAlianza {
 	@Column(name="DOC_OFICIO")
 	private String docoficio;
 	
-	/*@ManyToOne
-	@JoinColumn(name="AUSPICIOID",nullable=true,foreignKey=@ForeignKey(name="FK_usuarioalianza_auspicio"))
-	private Auspicio auspicioid;*/
+	@Column(name="ESTADO")
+	private String estado;
 	
 	@OneToMany(mappedBy = "usuario_alianza", cascade = CascadeType.ALL,orphanRemoval=true)
 	private List<Auspicio> auspicios;
@@ -391,6 +390,14 @@ public class UsuarioAlianza {
 
 	public void setAuspicios(List<Auspicio> auspicios) {
 		this.auspicios = auspicios;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 
 	/*public Auspicio getAuspicioid() {

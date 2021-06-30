@@ -33,6 +33,7 @@ import com.progeduc.dto.AsignacionDto;
 import com.progeduc.dto.AsignarEvaluadorDto;
 import com.progeduc.dto.ClaveValor;
 import com.progeduc.dto.ConcursoDto;
+import com.progeduc.dto.DetalleUsuarioAlianzaEstrategica;
 import com.progeduc.dto.EvaluacionDto;
 import com.progeduc.dto.EvaluacionRubricaQuestionarioDto;
 import com.progeduc.dto.EvaluadorDto;
@@ -45,6 +46,7 @@ import com.progeduc.dto.ListatrabajosfinalesDto;
 import com.progeduc.dto.ParticipanteVerDto;
 import com.progeduc.dto.TrabajofinalesEnviadoDto;
 import com.progeduc.dto.TrabajosfinalesParticipanteDto;
+import com.progeduc.dto.UsuarioAlianzaDto;
 import com.progeduc.dto.trabajoEvaluadoDto;
 import com.progeduc.model.Aperturaranio;
 import com.progeduc.model.Docente;
@@ -57,6 +59,7 @@ import com.progeduc.model.Programaeducativo;
 import com.progeduc.model.Trabajosfinales;
 import com.progeduc.model.TrabajosfinalesParticipante;
 import com.progeduc.model.Usuario;
+import com.progeduc.model.UsuarioAlianza;
 import com.progeduc.model.UsuarioLdap;
 import com.progeduc.service.IAperturaranioService;
 import com.progeduc.service.IDistritoService;
@@ -69,6 +72,7 @@ import com.progeduc.service.IPostulacionconcursoService;
 import com.progeduc.service.IProgramaeducativoService;
 import com.progeduc.service.ITrabajosfinalesParticipanteService;
 import com.progeduc.service.ITrabajosfinalesService;
+import com.progeduc.service.IUsuarioAlianzaService;
 import com.progeduc.service.impl.UploadFileService;
 
 @RestController
@@ -110,6 +114,9 @@ public class ConcursoeducativoController {
 	
 	@Autowired
 	private IEvaluacionService evaluacionServ;	
+	
+	@Autowired
+	private IUsuarioAlianzaService usuAlianzaserv;
 	
 	ListaparticipanteDto dto;	
 	ListatrabajosfinalesDto dtotf;	
@@ -890,13 +897,116 @@ public class ConcursoeducativoController {
 		return new ResponseEntity<List<ListaTrabajosFinalesPendientes>>(lista, HttpStatus.OK) ;
 	}
 	
-	@PostMapping(value="/registrarusuarioalianza")
-	public Integer registrarusuarioalianza(@Valid @RequestBody EvaluacionRubricaQuestionarioDto dto) {
-		return evaluacionServ.saveEvalRubQuest(dto);
+	@PostMapping(value="/saveusuarioalianza")
+	public Integer registrarusuarioalianza(@Valid @RequestBody UsuarioAlianzaDto dto) {
+		System.out.println(dto.getId());
+		UsuarioAlianza usu = usuAlianzaserv.ListarporId(dto.getId());
+		Calendar cal= Calendar.getInstance();
+		if(usu != null) {
+			usu.setOds(dto.getOds());
+			//usu.setAnio(dto.getAnio());
+			usu.setCategoria(dto.getCategoria());
+			usu.setEntidad(dto.getEntidad());
+			usu.setDireccion(dto.getEntidad());
+			usu.setComitetecnico(dto.getComitetecnico());
+			usu.setComiteevaluador(dto.getComiteevaluador());
+			usu.setAuspiciador(dto.getAuspiciador());
+			usu.setAliado(dto.getAliado());
+			usu.setNumcontaccto(dto.getNumcontaccto());
+			usu.setApepatcontacto(dto.getApepatcontacto());
+			usu.setApematcontacto(dto.getApematcontacto());
+			usu.setNombrecontacto(dto.getNombrecontacto());
+			usu.setTipodocumento(dto.getTipodocumento());
+			usu.setNumdocumento(dto.getNumdocumento());
+			usu.setTelefonouno(dto.getTelefonouno());
+			usu.setTelefonodos(dto.getTelefonodos());
+			usu.setCorreocontato(dto.getCorreocontato());
+			usu.setCargocontacto(dto.getCargocontacto());
+			usu.setApepatautoridad(dto.getApepatautoridad());
+			usu.setApematautoridad(dto.getApematautoridad());
+			usu.setNombresautoridad(dto.getNombresautoridad());
+			usu.setCorreoautoridad(dto.getCorreoautoridad());
+			usu.setCargoautoridad(dto.getCargoautoridad());
+			usu.setUsuarioautoridad(dto.getUsuarioautoridad());
+			usu.setPasswordautoridad(dto.getPasswordautoridad());
+			usu.setEnviaroficio(dto.getEnviaroficio());
+			usu.setNumoficio(dto.getNumoficio());
+			usu.setFecha_oficio(dto.getFecha_oficio());
+			usu.setDocoficio(dto.getDocoficio());
+			//usu.setAuspicios(dto.getAuspicios());
+			usuAlianzaserv.modificar(usu);
+			
+		}else {
+			usu = new UsuarioAlianza();
+			usu.setOds(dto.getOds());
+			usu.setAnio(cal.get(Calendar.YEAR));
+			usu.setCategoria(dto.getCategoria());
+			usu.setEntidad(dto.getEntidad());
+			usu.setDireccion(dto.getEntidad());
+			usu.setComitetecnico(dto.getComitetecnico());
+			usu.setComiteevaluador(dto.getComiteevaluador());
+			usu.setAuspiciador(dto.getAuspiciador());
+			usu.setAliado(dto.getAliado());
+			usu.setNumcontaccto(dto.getNumcontaccto());
+			usu.setApepatcontacto(dto.getApepatcontacto());
+			usu.setApematcontacto(dto.getApematcontacto());
+			usu.setNombrecontacto(dto.getNombrecontacto());
+			usu.setTipodocumento(dto.getTipodocumento());
+			usu.setNumdocumento(dto.getNumdocumento());
+			usu.setTelefonouno(dto.getTelefonouno());
+			usu.setTelefonodos(dto.getTelefonodos());
+			usu.setCorreocontato(dto.getCorreocontato());
+			usu.setCargocontacto(dto.getCargocontacto());
+			usu.setApepatautoridad(dto.getApepatautoridad());
+			usu.setApematautoridad(dto.getApematautoridad());
+			usu.setNombresautoridad(dto.getNombresautoridad());
+			usu.setCorreoautoridad(dto.getCorreoautoridad());
+			usu.setCargoautoridad(dto.getCargoautoridad());
+			usu.setUsuarioautoridad(dto.getUsuarioautoridad());
+			usu.setPasswordautoridad(dto.getPasswordautoridad());
+			usu.setEnviaroficio(dto.getEnviaroficio());
+			usu.setNumoficio(dto.getNumoficio());
+			usu.setFecha_oficio(dto.getFecha_oficio());
+			usu.setDocoficio(dto.getDocoficio());
+			usu.setAuspicios(dto.getAuspicios());
+			usu.setFecha_registro(new Timestamp(new Date().getTime()));
+			usu.setEstado("1");
+			usuAlianzaserv.registrar(usu);
+			return 1; 
+		}
+
+		
+		return 0;
 	}
 	
-	/*@PostMapping(value="/actualizarevaluacion")
-	public Evaluacion actualizarevaluacion(@Valid @RequestBody EvaluacionRubricaQuestionarioDto dto) {
-		return evaluacionServ.updateEvalRubQuest(dto);
-	}*/
+	@GetMapping("/formactualizarusuario/{id}")
+	public ResponseEntity<UsuarioAlianza> formactualizarusuario(@PathVariable("id") Integer id) {
+		return new ResponseEntity<UsuarioAlianza>(usuAlianzaserv.ListarporId(id), HttpStatus.OK) ;
+	}
+	
+	
+	@GetMapping(value="/listaalianzaestrategica")
+	public ResponseEntity<List<DetalleUsuarioAlianzaEstrategica>> listausuariosAlianza(HttpSession ses){
+		
+		List<DetalleUsuarioAlianzaEstrategica> lista = new ArrayList<DetalleUsuarioAlianzaEstrategica>();
+		
+		List<UsuarioAlianza> listaUsu= usuAlianzaserv.listar();
+		
+		listaUsu.forEach(obj->{
+			DetalleUsuarioAlianzaEstrategica dto = new DetalleUsuarioAlianzaEstrategica();
+			dto.setId(obj.getId());
+			dto.setAnio(obj.getAnio());
+			dto.setOds(obj.getOds().getDescripcion());
+			dto.setCategoria(obj.getCategoria().getDescripcion());
+			dto.setEntidad(obj.getEntidad());
+			dto.setComiteTecnico(obj.getComitetecnico());
+			dto.setComiteEvaluador(obj.getComiteevaluador());
+			dto.setAuspiciador(obj.getAuspiciador());
+			dto.setAliado(obj.getAliado());
+			dto.setEstado(obj.getEstado());
+			lista.add(dto);
+		});
+
+		return new ResponseEntity<List<DetalleUsuarioAlianzaEstrategica>>(lista, HttpStatus.OK) ;
+	}
 }
