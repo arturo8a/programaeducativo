@@ -60,7 +60,7 @@ public class LoginController {
         		return uo.getNombres();
         	}
         	else {
-        		if(obj.getTipousuario().getId()==12) {
+        		if(obj.getTipousuario().getId()==2) {
         			ses.setAttribute("usuario", obj.getUsuario());
             		ses.setAttribute("perfil", obj.getTipousuario().getDescripcion());
             		ses.setAttribute("tipousuarioid", obj.getTipousuario().getId());
