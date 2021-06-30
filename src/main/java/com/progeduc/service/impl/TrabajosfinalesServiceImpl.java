@@ -90,10 +90,4 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 		return trabajosfinalesRepo.listarTrabajosPendientesAsignados();
 	}
 
-	@Override
-	public List<Trabajosfinales> listarTarabajosPendientes(TrabajosfinalesParticipanteDto dto) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
