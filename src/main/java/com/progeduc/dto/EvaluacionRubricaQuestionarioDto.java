@@ -30,7 +30,5 @@ public class EvaluacionRubricaQuestionarioDto {
 	public void setListaquestionario(List<Questionario> listaquestionario) {
 		this.listaquestionario = listaquestionario;
 	}
-	
-	
 
 }

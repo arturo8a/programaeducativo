@@ -114,8 +114,6 @@
 				</table>
 			</div>
 			<div class="col-xs-12 col-4">
-				<!-- input type="button" value="Buscar" id="btnbuscarapertura" class="btn btn-primary text-white"/-->
-				<!-- input type="button" value="Limpiar" id="btnlimpiar" class="btn btn-primary text-white"/-->
 				<input type="image" id="btnbuscarapertura" src="./images/iconos_nd/botonbuscar.svg" width="140px" style="padding-bottom:16px"  />
 				<input type="image" id="btnlimpiar" src="./images/iconos_nd/botonrefrescar.svg" width="45px" style="padding-left:10px;padding-bottom:16px" />
 			</div>
@@ -417,8 +415,12 @@
 	}
 	
 	var obtener_data_editar = function(tbody,table){
-		$(tbody).on("click","button.editar",function(){
-			$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
+		$(tbody).on("click","img.editar",function(){
+			$('#modalimagencargando').modal({
+				show : true,
+				backdrop : 'static',
+				keyboard:false
+			});
 			celdaseleccionada = table.row($(this).parents("tr")).index();
 			var data = table.row($(this).parents("tr")).data();
 			var id = data.id;
@@ -426,6 +428,7 @@
 				type : "GET",
 			    url : url_base + "pedesa/editarviewaperturaanio/"+ id,
 				success: function(respuesta) {
+					$("#modalimagencargando").modal('hide');
 					$("#contenedor_consulta").html(respuesta);
 				},
 				error: function() {

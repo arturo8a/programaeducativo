@@ -1,11 +1,15 @@
 package com.progeduc.model;
 
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -16,14 +20,11 @@ public class Questionario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(name="pregunta")
+	@Column(name="pregunta",nullable=true,length=250)
 	private String pregunta;
 	
-	@Column(name="respuesta",nullable=true,length=250)
-	private String respuesta;
-	
-	@Column(name="puntaje")
-	private Integer puntaje;
+	@OneToMany(mappedBy="questionario", cascade= {CascadeType.ALL}, orphanRemoval=true)
+	private List<QuestionarioRespuesta> questionariorespuesta;
 
 	public Integer getId() {
 		return id;
@@ -41,19 +42,11 @@ public class Questionario {
 		this.pregunta = pregunta;
 	}
 
-	public String getRespuesta() {
-		return respuesta;
+	public List<QuestionarioRespuesta> getQuestionariorespuesta() {
+		return questionariorespuesta;
 	}
 
-	public void setRespuesta(String respuesta) {
-		this.respuesta = respuesta;
+	public void setQuestionariorespuesta(List<QuestionarioRespuesta> questionariorespuesta) {
+		this.questionariorespuesta = questionariorespuesta;
 	}
-
-	public Integer getPuntaje() {
-		return puntaje;
-	}
-
-	public void setPuntaje(Integer puntaje) {
-		this.puntaje = puntaje;
-	}		
 }

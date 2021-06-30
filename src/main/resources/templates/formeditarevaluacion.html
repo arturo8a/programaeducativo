@@ -26,13 +26,11 @@
 		<input type="hidden" id="id_rubrica" name="id_rubrica" th:value="${id_rubrica}" />
 		<input type="hidden" id="id_questionario" name="id_questionario" th:value="${id_questionario}" />
 		<input type="hidden" id="id_evaluacion" name="id_evaluacion" th:value="${id_evaluacion}" />
+		<input type="hidden" id="id_pregunta_respuesta" name="id_pregunta_respuesta" th:value="${id_pregunta_respuesta}" />
 		<div class="row">
 			<div class="col-xs-12 col-sm-4 text-left">
 				<label for="categoriatrabajo">Año</label>
-				<select class="form-control" id="anioce_edit" name="anioce_edit" th:field="*{evaluacion.anio}">
-					<option value="">Todos</option>
-					<option th:each="dato:${anios}" th:value="${dato}" th:utext="${dato}"/>
-				</select>
+				<input type="text" class="form-control" id="anioce_edit" name="anioce_edit" th:value="*{anio}" disabled />				
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left">
 				<label for="modalidadpostulaciontrabajo">Categoría</label>
@@ -52,7 +50,7 @@
 		<br>
 		<div th:each="objeto : ${listarubrica}">
 					<div>
-						<div class="row" style="background-color:#EFEFEF">
+						<div class="row" style="background-color:#9E9E9E;padding:10px">
 							<div class="col-xs-12 col-sm-6">
 								&nbsp;
 							</div>		
@@ -60,7 +58,7 @@
 								<table style="width:100%">
 									<tr>
 										<td>
-											<label style="margin:5px">Rubrica</label>
+											<strong style="margin:5px">Rubrica</strong>
 										</td>
 										<td>
 											<input type="text" th:id="'rubrica' + ${objeto.id}" th:value="${objeto.rubrica}" class="form-control">
@@ -81,9 +79,9 @@
 											<label>Puntaje</label>
 										</td>
 										<td>
-											<select name="puntaje11" th:id="'puntaje' + ${objeto.id} + '1'" class="form-control" >
+											<select th:id="'puntaje' + ${objeto.id} + '1'" class="form-control" >
 												<option value="0">Seleccione</option>
-												<option th:each="len:${listanro}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje1}"/>
+												<option th:each="len:${listapuntaje}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje1}"/>
 											</select>
 										</td>
 									</tr>
@@ -104,7 +102,7 @@
 										<td>
 											<select th:id="'puntaje' + ${objeto.id} + '2'" class="form-control" >
 												<option value="0">Seleccione</option>
-												<option th:each="len:${listanro}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje2}"/>
+												<option th:each="len:${listapuntaje}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje2}"/>
 											</select>
 										</td>
 									</tr>
@@ -125,7 +123,7 @@
 										<td>
 											<select th:id="'puntaje' + ${objeto.id} + '3'" class="form-control" >
 												<option value="0">Seleccione</option>
-												<option th:each="len:${listanro}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje3}"/>
+												<option th:each="len:${listapuntaje}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje3}"/>
 											</select>
 										</td>
 									</tr>
@@ -146,7 +144,7 @@
 										<td>
 											<select th:id="'puntaje' + ${objeto.id} + '4'" class="form-control">
 												<option value="0">Seleccione</option>
-												<option th:each="len:${listanro}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje4}"/>
+												<option th:each="len:${listapuntaje}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje4}"/>
 											</select>
 										</td>
 									</tr>
@@ -156,33 +154,31 @@
 					</div>			
 					<br>
 		</div>
-		<div th:each="objeto : ${listaquestionario}">					
-					<div class="row" style="background-color:#EFEFEF">
-						<div class="col-xs-12 col-sm-12">
-							<table style="width:100%">
-								<tr>
-									<td>
-										<label>Ingrese pregunta</label>
-										<input type="text" class="form-control" th:id="'pregunta'+ ${objeto.id} + '1'" th:value="${objeto.pregunta}"/>
-									</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td>
-										<label>Respuesta</label>
-										<input type="text" class="form-control" th:id="'respuesta'+ ${objeto.id} + '1'" th:value="${objeto.respuesta}"/>
-									</td>
-									<td>
-										<label>Puntaje</label>
-										<select class="form-control" th:id="'puntajeq'+ ${objeto.id} + '1'">
-											<option value="0">Seleccione</option>
-											<option th:each="len:${listanro}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje}"/>
-										</select>
-									</td>
-								</tr>							
-							</table>						
-						</div>
-					</div>
+		<div th:each="objeto : ${listaquestionario}">
+			<div class="row" style="background-color:#9E9E9E;padding:10px">
+				<table style="width:100%">
+					<tr>
+						<td>
+							<strong>Ingrese pregunta</strong>
+							<input type="text" class="form-control" th:id="'pregunta'+ ${objeto.id}" th:value="${objeto.pregunta}"/>
+						</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr th:each="qr : ${objeto.questionariorespuesta}">
+						<td>
+							<label>Respuesta</label>
+							<input type="text" class="form-control" th:id="'respuesta'+ ${qr.id}" th:value="${qr.respuesta}"/>
+						</td>
+						<td>
+							<label>Puntaje</label>
+							<select th:id="'puntajeq'+ ${qr.id}" class="form-control">
+								<option value="0">Seleccione</option>
+								<option th:each="len:${listapuntaje}" th:value="${len}" th:utext="${len}" th:selected="${len == qr.puntaje}"/>
+							</select>
+						</td>
+					</tr>
+				</table>						
+			</div>
 		</div>
 		<br>
 		<div class="row text-right">
@@ -260,10 +256,10 @@
 		var categoriaedit;
 		var nivelparticipacionedit;
 		var id_evaluacionedit;
-		var array_rubricaedit , array_cuestionarioedit;
+		var array_rubricaedit , array_cuestionarioedit,array_respuesta_puntajeedit;
 		var rubricaedit, criterio1edit, criterio2edit, criterio3edit, criterio4edit, criterio5edit, descripcion1edit, descripcion2edit, descripcion3edit, descripcion4edit, descripcion5edit,puntaje1edit, puntaje2edit, puntaje3edit, puntaje4edit, puntaje5edit;
-		var preguntaedit, respuestaedit, puntajeedit;
-		var id_rubricaedit , id_questionarioedit;
+		var preguntaidedit,preguntaedit, respuestaedit, puntajeedit,respuesta_puntaje_edit="";
+		var id_rubricaedit , id_questionarioedit,id_pregunta_respuesta_edit;
 
 		
 		$("#btncerrarmensajeexitoeditevaluacion").click(function(){			
@@ -285,22 +281,23 @@
 		
 		$("#btneditarevaluacion").click(function(){	
 			
-			$("#modalimagencargando").modal({
+			/*$("#modalimagencargando").modal({
 				show : true,
 				backdrop : 'static',
 				keyboard:false
-			});
+			});*/
 			
 			if(validarCamposedit()){
 				
+				id_evaluacionedit = $("#id_evaluacion").val();
 				id_rubricaedit = $("#id_rubrica").val();
 				id_questionarioedit = $("#id_questionario").val();
-				id_evaluacionedit = $("#id_evaluacion").val();
-				
-				id_rubricaedit = id_rubricaedit.split("-");
 				
 				array_rubricaedit = new Array();
 				array_cuestionarioedit = new Array();
+				array_respuesta_puntajeedit = new Array();
+				
+				id_rubricaedit = id_rubricaedit.split("-");
 				
 				for(var i=0;i<id_rubricaedit.length-1;i++){					
 					rubrica = $("#rubrica"+id_rubrica[i]).val();
@@ -339,22 +336,66 @@
 						puntaje4 : puntaje4edit,
 						puntaje5 : puntaje5edit
 					});
+				}				
+				
+				var j = 0;
+				var x = 0;
+				var bandera_j = true;
+				var bandera_x = true;
+				var array_id_pregunta_respuesta_edit= new Array();
+				id_pregunta_respuesta_edit = $("#id_pregunta_respuesta").val();
+				array_id_pregunta_respuesta_edit = id_pregunta_respuesta_edit.split('');
+				console.log("id_pregunta_respuesta_edit :" + id_pregunta_respuesta_edit);
+				for(var i=0;i<id_pregunta_respuesta_edit.length-1;i++){
+					j = i+1;
+					if(id_pregunta_respuesta_edit[i] == "("){
+						bandera_j = true;
+						while(bandera_j){
+							if(array_id_pregunta_respuesta_edit[j] == "*"){
+								console.log("i : " + i + " - " + array_id_pregunta_respuesta_edit[i]);
+								console.log("j : " + j + " - " + array_id_pregunta_respuesta_edit[j]);
+								preguntaidedit = id_pregunta_respuesta_edit.substring(i+1,j);
+								console.log("preguntaidedit :" + preguntaidedit);
+								preguntaedit = $("#pregunta"+preguntaidedit).val();								
+								console.log("preguntaedit :" + preguntaedit);
+								x = j+1;
+								bandera_x = true;
+								while(bandera_x){
+									if(array_id_pregunta_respuesta_edit[x] == ")"){
+										respuesta_puntaje_edit = id_pregunta_respuesta_edit.substring(j+1,x);
+										respuesta_puntaje_edit = respuesta_puntaje_edit.split("-"); 
+										console.log("respuesta_puntaje_edit :" + respuesta_puntaje_edit);
+										for(var z = 0;z<respuesta_puntaje_edit.length;z++){
+											respuestaedit = $("#respuesta"+respuesta_puntaje_edit[z]).val();
+											puntajeedit = $("#puntajeq"+respuesta_puntaje_edit[z]).val();
+											array_respuesta_puntajeedit.push({
+												id : respuesta_puntaje_edit[z],
+												respuesta : respuestaedit,
+												puntaje : puntajeedit
+											});
+										}
+										console.log('i : ' + i);
+										console.log('j : ' + j);
+										console.log('x : ' + x);
+										console.log('z : ' + z);
+										array_cuestionarioedit.push({
+											id : preguntaidedit,
+											pregunta : preguntaedit,
+											questionariorespuesta : array_respuesta_puntajeedit
+										});
+										i=x;
+										bandera_x = false;
+									}
+									x++;
+								}
+								bandera_j = false;      
+							}							
+							j++;
+						}
+					}
 				}
 				
-				
-				id_questionarioedit = id_questionarioedit.split("-");
-				for(var i=0; i<id_questionarioedit.length-1;i++){					
-					preguntaedit = $("#pregunta"+id_questionarioedit[i]+"1").val();
-					respuestaedit = $("#respuesta"+id_questionarioedit[i]+"1").val();
-					puntajeedit = $("#puntajeq"+id_questionarioedit[i]+"1").val();
-					
-					array_cuestionarioedit.push({
-						id : id_questionarioedit[i],
-						pregunta : preguntaedit,
-						respuesta : respuestaedit, 
-						puntaje : puntajeedit
-					});			
-				}
+				console.log("arraypuntahe :" + array_respuesta_puntajeedit);
 				
 				var evaluaciondtoedit = {
 					evaluacion : {
@@ -374,8 +415,8 @@
 					listarubrica: array_rubricaedit,
 					listaquestionario : array_cuestionarioedit
 				};
-				
-				$.ajax({
+				console.log(evaluaciondtoedit);
+				/*$.ajax({
 					type : "POST",
 				    contentType : "application/json",
 				    url : url_base + "pedesa/actualizarevaluacion",
@@ -386,26 +427,11 @@
 							
 							$("#modalimagencargando").modal('hide');
 							
-							/*table_lista_evaluacion.row.add({
-						        "id": respuesta.id,
-						        "anio": anio,
-						        "nivelparticipacion":  $("#nivelparticipacionce_edit option:selected").html(),
-						        "categoriaevaluacion": $("#categoriace_edit option:selected").html(),
-						        "estado": "Editando",
-						        "defaultContent" : '<img src="./images/svg/file-pdf-regular.svg" class="archivo" style="width:20px; cursor:pointer"/>',
-						        "defaultContent" : '<img src="./images/svg/edit-regular.svg" class="editar" style="width:20px; cursor:pointer" />',
-						        "defaultContent" : '<img src="./images/svg/eliminar-alt-regular.svg" class="eliminar" style="width:20px; cursor:pointer" />'
-						    }).draw();	*/
-						    
-						    table_lista_evaluacion.cell(celdaseleccionada,1).data(anioedit).draw();
+							table_lista_evaluacion.cell(celdaseleccionada,1).data(anioedit).draw();
 						    table_lista_evaluacion.cell(celdaseleccionada,2).data($("#nivelparticipacionce_edit option:selected").html()).draw();
 						    table_lista_evaluacion.cell(celdaseleccionada,3).data($("#categoriace_edit option:selected").html()).draw();
 						    table_lista_evaluacion.cell(celdaseleccionada,4).data("Editando").draw();
-						    /*table_lista_evaluacion.cell(celdaseleccionada,5).data().draw();
-						    table_lista_evaluacion.cell(celdaseleccionada,6).data().draw();
-						    table_lista_evaluacion.cell(celdaseleccionada,7).data().draw();*/
-							
-							limpiarControlesedit();
+						    limpiarControlesedit();
 							$("#textoexitoeditevaluacion").html("Se actualizó evaluación");
 							$('#modalexitoeditevaluacion').modal({
 								show : true,
@@ -426,14 +452,15 @@
 						}
 					},
 					error: function() {
-						$("#textoerroreditevaluacion").html("Excepción al registrar evaluación");
+						$("#modalimagencargando").modal('hide');
+						$("#textoerroreditevaluacion").html("Excepción al actualizar evaluación");
 						$('#modalerroreditevaluacion').modal({
 							show : true,
 							backdrop : 'static',
 							keyboard:false
 						});
 				    }
-				});
+				});*/
 			}
 			else{
 				$("#modalimagencargando").modal('hide');

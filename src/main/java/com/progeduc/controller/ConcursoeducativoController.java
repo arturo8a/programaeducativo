@@ -416,19 +416,29 @@ public class ConcursoeducativoController {
 		DateFormat formato = new SimpleDateFormat("dd/MM/yy");
         String today = formato.format(date);
         Aperturaranio ap = aperturaranioService.buscar(fecha.get(Calendar.YEAR));
-        if(ap != null) {        	
-        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
-        	LocalDate fechaactual = LocalDate.parse(today, formatter);
-        	//LocalDate fechaactual = LocalDate.parse("20/04/21", formatter);
-            if(fechaactual.compareTo(ap.getSegundaetapadesde())>=0 && fechaactual.compareTo(ap.getCuartaetapahasta())<=0) {
-            	String codmod = ses.getAttribute("usuario").toString();
-            	Programaeducativo pe = progeducService.verificarEstadoAnio(codmod,fecha.get(Calendar.YEAR), "Aprobado");  
-            	if(pe!=null) {
-            		return pe.getId().toString();
-            	}
-            	return "c";/*inscripcion al pe no ha sido aprobada*/
-            }        	
-        	return "b"; /*esta fuera de las fechas - fecha desde segunda y fecha hasta cuarta*/
+        if(ap != null) {
+        	String codmod = ses.getAttribute("usuario").toString();
+        	Programaeducativo pe = progeducService.verificarEstadoAnio(codmod,fecha.get(Calendar.YEAR), "Aprobado");  
+        	if(pe!=null) {
+        		//return pe.getId().toString();//pe ah sido aprobado
+        		Postulacionconcurso pc = postulacionconcursoServ.getById(pe.getId());
+        		if(pc!=null) {
+        			return pe.getId().toString(); //ya se encuentra registrado en el concurso
+        		}
+        		else {
+        			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
+                	LocalDate fechaactual = LocalDate.parse(today, formatter);
+        			if(fechaactual.compareTo(ap.getSegundaetapadesde())>=0 && fechaactual.compareTo(ap.getCuartaetapahasta())<=0) {
+        				return pe.getId().toString();
+        			}
+        			else {
+        				return "b"; /*esta fuera de las fechas - fecha desde segunda y fecha hasta cuarta*/
+        			}
+        		}
+        	}
+        	else {
+        		return "c";/*inscripcion al pe no ha sido aprobada*/
+        	}
         }
 		return "a";/*no esta aperturado el año*/
 	}	

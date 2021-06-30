@@ -369,11 +369,17 @@
 		$("#btnatrasaperturarperiodo").click(function(){
 			$("#consulta_menu").prop("disabled",true);
         	$("#btnbuscar").prop("disabled",true);
-    		$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
+    		//$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
+    		$('#modalimagencargando').modal({
+				show : true,
+				backdrop : 'static',
+				keyboard:false
+			});
     		setTimeout(() => {        		  
     			$.ajax({
 	    			url: url_base + "pedesa/aperturar_anio",
 	    			success: function(respuesta) {
+	    				$("#modalimagencargando").modal('hide');
 	    				$("#contenedor_consulta").html(respuesta);    				
 	    			}
 	    		});

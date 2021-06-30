@@ -199,7 +199,7 @@ public class IndexController {
 	
 	int contador;
 	
-	String id_rubrica,id_questionario,ods;
+	String id_rubrica,id_questionario,ods,id_pregunta_respuesta,id_pr;
 	
 	@GetMapping("/inicio")
 	public String inicio(@RequestParam(name="name",required=false,defaultValue="world") String name, Model model) {
@@ -558,14 +558,8 @@ public class IndexController {
 	@GetMapping("/formcrearevaluacion")
 	public String formcrearevaluacion(Model model) {
 		Calendar fecha = Calendar.getInstance();
-		model.addAttribute("anio",fecha.get(Calendar.YEAR));
-		List<Integer> lista = new ArrayList<Integer>();
-		int anio = fecha.get(Calendar.YEAR);
-		for(int i = anio-5;i<=anio;i++) {
-			lista.add(i);
-		}
 		model.addAttribute("listanivelparticipacion",nivelparticipacionService.listar());
-		model.addAttribute("anios", lista);
+		model.addAttribute("anio",fecha.get(Calendar.YEAR));
 		model.addAttribute("listacategoriaevaluacion", categoriaevaluacionService.listar());
 		return "formcrearevaluacion";
 	}
@@ -683,8 +677,7 @@ public class IndexController {
 		
 		model.addAttribute("id",id);
 		Postulacionconcurso pc = postulacionconcursoService.getById(id);
-		if( pc!= null) {
-			
+		if( pc!= null) {			
 			model.addAttribute("codmod",progeducService.ListarporId(id).getCodmod());						
 			Docentetutor docentetutor = docentetutorService.getByProgeduc(id);
 			model.addAttribute("responsableregistro", responsableregistroserv.listar());
@@ -692,27 +685,22 @@ public class IndexController {
 			model.addAttribute("genero",generoprofserv.listar());
 			model.addAttribute("nivel",nivelparticipanteService.listar());
 			model.addAttribute("parentesco",parentescoService.listar());
-			
 			int activar_trabajos_finales = 0;		
 			Calendar fecha = Calendar.getInstance();
 			Date date = Calendar.getInstance().getTime();
 			DateFormat formato = new SimpleDateFormat("dd/MM/yy");
 	        String today = formato.format(date);
-	        Aperturaranio ap = aperturaranioService.buscar(fecha.get(Calendar.YEAR));        	
+	        Aperturaranio ap = aperturaranioService.buscar(fecha.get(Calendar.YEAR));
 	    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
 	    	LocalDate fechaactual = LocalDate.parse(today, formatter);
-	    	//LocalDate fechaactual = LocalDate.parse("20/04/21", formatter);
-	    	
+	    	//LocalDate fechaactual = LocalDate.parse("20/04/21", formatter);	    	
 	    	String codmod = ses.getAttribute("usuario").toString();
-			Programaeducativo pe = progeducService.getActualByCodmod(codmod);
-	    	
+			Programaeducativo pe = progeducService.getActualByCodmod(codmod);	    	
 	    	Postulacionconcurso postconc = postulacionconcursoService.getByIdAnio(pe.getId(), fecha.get(Calendar.YEAR));	    	
-	    	model.addAttribute("finalizaparticipaciontrabajo",postconc.getFinalizarparticipaciontrabajo());
-	    	
+	    	model.addAttribute("finalizaparticipaciontrabajo",postconc.getFinalizarparticipaciontrabajo());	    	
 	        if(fechaactual.compareTo(ap.getCuartaetapadesde())>=0 && fechaactual.compareTo(ap.getCuartaetapahasta())<=0)
 	        	activar_trabajos_finales = 1;        
-	        model.addAttribute("activar_trabajos_finales",activar_trabajos_finales);		
-			
+	        model.addAttribute("activar_trabajos_finales",activar_trabajos_finales);			
 			if(docentetutor!=null) {
 				model.addAttribute("docentetutor", docentetutor);
 				return "fichainscripcion_update";
@@ -800,6 +788,8 @@ public class IndexController {
 		
 		id_rubrica = "";
 		id_questionario ="";
+		id_pr="";
+		id_pregunta_respuesta="";
 		
 		Evaluacion eval = evaluacionService.ListarporId(id);
 		model.addAttribute("evaluacion", eval);
@@ -813,34 +803,31 @@ public class IndexController {
         List<Questionario> listaQuestionario = new ArrayList<Questionario>();
         evaluacionquestionarioServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
         	listaQuestionario.add(obj.getQuestionario());
-        	id_questionario += obj.getQuestionario().getId().toString() + "-";
-        });    
-        
+        	id_pr = "";
+        	obj.getQuestionario().getQuestionariorespuesta().forEach(pr->{
+        		id_pr += pr.getId() + "-";
+        	});
+        	id_pregunta_respuesta += "(" + obj.getQuestionario().getId().toString() + "*" + (id_pr.substring(0,id_pr.length()-1)) + ")";
+        	System.out.println("id_pregunta_respuesta :" + id_pregunta_respuesta);
+        });
+       
+        model.addAttribute("id_evaluacion", eval.getId()); 
         model.addAttribute("id_rubrica", id_rubrica);
         model.addAttribute("id_questionario", id_questionario);
-        model.addAttribute("id_evaluacion", eval.getId());
-        
-        List<Integer> listanro = new ArrayList<Integer>();
-        listanro.add(1);
-        listanro.add(2);
-        listanro.add(3);
-        listanro.add(4);
-        listanro.add(5);
-        model.addAttribute("listanro", listanro);
-        
+        model.addAttribute("id_pregunta_respuesta", id_pregunta_respuesta);
+        List<Integer> listapuntaje = new ArrayList<Integer>();
+        listapuntaje.add(1);
+        listapuntaje.add(2);
+        listapuntaje.add(3);
+        listapuntaje.add(4);
+        listapuntaje.add(5);
+        model.addAttribute("listapuntaje", listapuntaje);
         
         Calendar fecha = Calendar.getInstance();
-		model.addAttribute("anio",fecha.get(Calendar.YEAR));
-		List<Integer> lista = new ArrayList<Integer>();
-		int anio = fecha.get(Calendar.YEAR);
-		for(int i = anio-5;i<=anio;i++) {
-			lista.add(i);
-		}
-		
-        model.addAttribute("listaquestionario", listaQuestionario);      
-        
+		model.addAttribute("anio",fecha.get(Calendar.YEAR));		
+        model.addAttribute("listaquestionario", listaQuestionario);
+		model.addAttribute("listarubrica", listaRubrica);
         model.addAttribute("listanivelparticipacion",nivelparticipacionService.listar());
-		model.addAttribute("anios", lista);
 		model.addAttribute("listacategoriaevaluacion", categoriaevaluacionService.listar());
 		return "formeditarevaluacion";
 	}

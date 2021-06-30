@@ -3,18 +3,16 @@ package com.progeduc.service.impl;
 import java.util.List;
 import java.util.Optional;
 
-import javax.tools.DocumentationTool;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.progeduc.dto.EvaluacionRubricaQuestionarioDto;
 import com.progeduc.model.Evaluacion;
-import com.progeduc.model.Programaeducativo;
 import com.progeduc.repo.IEvaluacionQuestionarioRepo;
 import com.progeduc.repo.IEvaluacionRepo;
 import com.progeduc.repo.IEvaluacionRubricaRepo;
 import com.progeduc.repo.IQuestionarioRepo;
+import com.progeduc.repo.IQuestionarioRespuestaRepo;
 import com.progeduc.repo.IRubricaRepo;
 import com.progeduc.service.IEvaluacionService;
 
@@ -29,6 +27,9 @@ public class EvaluacionServiceImpl implements IEvaluacionService{
 	
 	@Autowired
 	IQuestionarioRepo questionariorepo;
+	
+	@Autowired
+	IQuestionarioRespuestaRepo questionariorespuestarepo;
 	
 	@Autowired
 	IEvaluacionRubricaRepo evaluacionrubricarepo;
@@ -92,22 +93,21 @@ public class EvaluacionServiceImpl implements IEvaluacionService{
 		anio = dto.getEvaluacion().getAnio();
 		idcategoria = dto.getEvaluacion().getCategoriaevaluacion().getId();
 		idnivelparticipacion = dto.getEvaluacion().getNivelparticipacion().getId();
-		System.out.println("anio : " + anio);
-		System.out.println("idcategoria : " + idcategoria);
-		System.out.println("idnivelparticipacion : " + idnivelparticipacion);
 		
 		if(getPorAnioCategoriaNivelparticipacion(anio, idcategoria, idnivelparticipacion) !=null) {
-			System.out.println("IF");
 			return 0;
 		}
-		System.out.println("ELSE");
+		
 		evaluacionrepo.save(dto.getEvaluacion());
 		dto.getListarubrica().forEach(obj->{
 			rubricarepo.save(obj);			
 			evaluacionrubricarepo.guardar(dto.getEvaluacion().getId(), obj.getId());
 		});
 		
-		dto.getListaquestionario().forEach(obj->{
+		dto.getListaquestionario().forEach(obj->{			
+			obj.getQuestionariorespuesta().forEach(obj1->{
+				obj1.setQuestionario(obj);
+			});
 			questionariorepo.save(obj);
 			evaluacionquestionariorepo.guardar(dto.getEvaluacion().getId(), obj.getId());
 		});
@@ -123,6 +123,9 @@ public class EvaluacionServiceImpl implements IEvaluacionService{
 		});
 		
 		dto.getListaquestionario().forEach(obj->{
+			obj.getQuestionariorespuesta().forEach(obj1->{
+				obj1.setQuestionario(obj);
+			});
 			questionariorepo.save(obj);
 		});
 		return dto.getEvaluacion();
