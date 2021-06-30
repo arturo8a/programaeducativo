@@ -661,13 +661,15 @@ public class ConcursoeducativoController {
 		
 		List<EvaluacionDto> lista = new ArrayList<EvaluacionDto>();
 		evaluacionServ.listar().forEach(obj->{
-			EvaluacionDto midto = new EvaluacionDto();
-			midto.setId(obj.getId());
-			midto.setAnio(obj.getAnio());
-			midto.setCategoriaevaluacion(obj.getCategoriaevaluacion().getDescripcion());
-			midto.setNivelparticipacion(obj.getNivelparticipacion().getDescripcion());
-			midto.setEstado(obj.getEstadoevaluacion().getDescripcion());
-			lista.add(midto);
+			if(obj.getEstado()==1) {
+				EvaluacionDto midto = new EvaluacionDto();
+				midto.setId(obj.getId());
+				midto.setAnio(obj.getAnio());
+				midto.setCategoriaevaluacion(obj.getCategoriaevaluacion().getDescripcion());
+				midto.setNivelparticipacion(obj.getNivelparticipacion().getDescripcion());
+				midto.setEstado(obj.getEstadoevaluacion().getDescripcion());
+				lista.add(midto);
+			}
 		});	
 		return new ResponseEntity<List<EvaluacionDto>>(lista, HttpStatus.OK) ;
 	}
