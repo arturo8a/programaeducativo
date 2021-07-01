@@ -681,7 +681,7 @@ public class IndexController {
 		
 		model.addAttribute("id",id);
 		Postulacionconcurso pc = postulacionconcursoService.getById(id);
-		if( pc!= null) {			
+		if( pc!= null) {
 			model.addAttribute("codmod",progeducService.ListarporId(id).getCodmod());						
 			Docentetutor docentetutor = docentetutorService.getByProgeduc(id);
 			model.addAttribute("responsableregistro", responsableregistroserv.listar());
@@ -704,7 +704,9 @@ public class IndexController {
 	    	model.addAttribute("finalizaparticipaciontrabajo",postconc.getFinalizarparticipaciontrabajo());	    	
 	        if(fechaactual.compareTo(ap.getCuartaetapadesde())>=0 && fechaactual.compareTo(ap.getCuartaetapahasta())<=0)
 	        	activar_trabajos_finales = 1;        
-	        model.addAttribute("activar_trabajos_finales",activar_trabajos_finales);			
+	        model.addAttribute("activar_trabajos_finales",activar_trabajos_finales);
+	        model.addAttribute("cuarta_etapa_desde", ap.getCuartaetapadesde());
+	        model.addAttribute("cuarta_etapa_hasta", ap.getCuartaetapahasta());
 			if(docentetutor!=null) {
 				model.addAttribute("docentetutor", docentetutor);
 				return "fichainscripcion_update";

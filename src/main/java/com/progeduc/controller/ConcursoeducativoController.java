@@ -432,20 +432,14 @@ public class ConcursoeducativoController {
         	Programaeducativo pe = progeducService.verificarEstadoAnio(codmod,fecha.get(Calendar.YEAR), "Aprobado");  
         	if(pe!=null) {
         		//return pe.getId().toString();//pe ah sido aprobado
-        		Postulacionconcurso pc = postulacionconcursoServ.getById(pe.getId());
-        		if(pc!=null) {
-        			return pe.getId().toString(); //ya se encuentra registrado en el concurso
-        		}
-        		else {
-        			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
-                	LocalDate fechaactual = LocalDate.parse(today, formatter);
-        			if(fechaactual.compareTo(ap.getSegundaetapadesde())>=0 && fechaactual.compareTo(ap.getCuartaetapahasta())<=0) {
-        				return pe.getId().toString();
-        			}
-        			else {
-        				return "b"; /*esta fuera de las fechas - fecha desde segunda y fecha hasta cuarta*/
-        			}
-        		}
+        		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
+            	LocalDate fechaactual = LocalDate.parse(today, formatter);
+    			if(fechaactual.compareTo(ap.getSegundaetapadesde())>=0 && fechaactual.compareTo(ap.getSegundaetapahasta())<=0) {
+    				return pe.getId().toString();
+    			}
+    			else {
+    				return "b"; /*esta fuera de las fechas - fecha desde segunda y fecha hasta segunda*/
+    			}
         	}
         	else {
         		return "c";/*inscripcion al pe no ha sido aprobada*/

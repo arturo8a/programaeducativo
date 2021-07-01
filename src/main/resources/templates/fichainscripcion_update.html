@@ -114,6 +114,8 @@
 					  		<div class="col-12 text-left">
 					  			<strong>Código de local I.E.</strong>	
 					  			<div class="ui-widget">
+					  				<input type="hidden" th:value="${cuarta_etapa_desde}" id="cuarta_etapa_desde" />
+					  				<input type="hidden" th:value="${cuarta_etapa_hasta}" id="cuarta_etapa_hasta" />
 					  				<input type="hidden" th:value="${docentetutor.programaeducativo.id}" id="idprogramaeducativo" />
 					  				<input type="hidden" th:value="${docentetutor.id}" id="id" />
 					  				<input type="hidden" th:value="${docentetutor.anio}" id="anio" />
@@ -526,14 +528,15 @@
 			setTimeout(function(){ listar_trabajos_finales(); }, 100);
 		});
 		
-		
-		
 		if($("#codmod").val().trim()!="" && $("#appaterno").val().trim()!="" && $("#apmaterno").val().trim()!="" && $("#nombre").val().trim()!="" && $("#tipodocumento").val().trim()!="" && $("#nrodocumento").val().trim()!="" && $("#genero").val().trim()!="" && $("#nrotelefono").val().trim()!="" && $("#correoelectronico").val().trim()!="" && $("#responsable").val().trim()!="" && $("#curso").val().trim()!="" ){
 			$("#participante-tab").removeClass("nav-link disabled");
 			$("#participante-tab").addClass("nav-link");	
 			if($("#activar_trabajos_finales").val() == 1){
 				$("#trabajosfinales-tab").removeClass("nav-link disabled");
 				$("#trabajosfinales-tab").addClass("nav-link");
+			}
+			else{
+				alert("La carga de trabajos finales se podrá realizar en las siguientes fechas: " + $("#cuarta_etapa_desde").val() + " - " + $("#cuarta_etapa_hasta").val());
 			}
 		}
 		
