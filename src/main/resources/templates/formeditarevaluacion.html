@@ -345,52 +345,54 @@
 				var array_id_pregunta_respuesta_edit= new Array();
 				id_pregunta_respuesta_edit = $("#id_pregunta_respuesta").val();
 				array_id_pregunta_respuesta_edit = id_pregunta_respuesta_edit.split('');
-				console.log("id_pregunta_respuesta_edit :" + id_pregunta_respuesta_edit);
-				for(var i=0;i<id_pregunta_respuesta_edit.length-1;i++){
+				for(var i=0;i<array_id_pregunta_respuesta_edit.length-1;i++){
 					j = i+1;
-					if(id_pregunta_respuesta_edit[i] == "("){
-						bandera_j = true;
-						while(bandera_j){
-							if(array_id_pregunta_respuesta_edit[j] == "*"){
-								console.log("i : " + i + " - " + array_id_pregunta_respuesta_edit[i]);
-								console.log("j : " + j + " - " + array_id_pregunta_respuesta_edit[j]);
-								preguntaidedit = id_pregunta_respuesta_edit.substring(i+1,j);
-								console.log("preguntaidedit :" + preguntaidedit);
-								preguntaedit = $("#pregunta"+preguntaidedit).val();								
-								console.log("preguntaedit :" + preguntaedit);
-								x = j+1;
-								bandera_x = true;
-								while(bandera_x){
-									if(array_id_pregunta_respuesta_edit[x] == ")"){
-										respuesta_puntaje_edit = id_pregunta_respuesta_edit.substring(j+1,x);
-										respuesta_puntaje_edit = respuesta_puntaje_edit.split("-"); 
-										console.log("respuesta_puntaje_edit :" + respuesta_puntaje_edit);
-										for(var z = 0;z<respuesta_puntaje_edit.length;z++){
-											respuestaedit = $("#respuesta"+respuesta_puntaje_edit[z]).val();
-											puntajeedit = $("#puntajeq"+respuesta_puntaje_edit[z]).val();
-											array_respuesta_puntajeedit.push({
-												id : respuesta_puntaje_edit[z],
-												respuesta : respuestaedit,
-												puntaje : puntajeedit
+					if(array_id_pregunta_respuesta_edit[i] == "("){
+							bandera_j = true;
+							while(bandera_j){
+								if(array_id_pregunta_respuesta_edit[j] == "*"){
+									console.log("i : " + i + " - " + array_id_pregunta_respuesta_edit[i]);
+									console.log("j : " + j + " - " + array_id_pregunta_respuesta_edit[j]);
+									preguntaidedit = id_pregunta_respuesta_edit.substring(i+1,j);
+									console.log("preguntaidedit :" + preguntaidedit);
+									preguntaedit = $("#pregunta"+preguntaidedit).val();								
+									console.log("preguntaedit :" + preguntaedit);
+									x = j+1;
+									bandera_x = true;
+									while(bandera_x){
+										if(array_id_pregunta_respuesta_edit[x] == ")"){
+											respuesta_puntaje_edit = id_pregunta_respuesta_edit.substring(j+1,x);
+											respuesta_puntaje_edit = respuesta_puntaje_edit.split("-"); 
+											console.log("respuesta_puntaje_edit :" + respuesta_puntaje_edit);
+											for(var z = 0;z<respuesta_puntaje_edit.length;z++){
+												respuestaedit = $("#respuesta"+respuesta_puntaje_edit[z]).val();
+												puntajeedit = $("#puntajeq"+respuesta_puntaje_edit[z]).val();
+												array_respuesta_puntajeedit.push({
+													id : respuesta_puntaje_edit[z],
+													respuesta : respuestaedit,
+													puntaje : puntajeedit
+												});
+											}
+											console.log('i : ' + i);
+											console.log('j : ' + j);
+											console.log('x : ' + x);
+											console.log('z : ' + z);
+											array_cuestionarioedit.push({
+												id : preguntaidedit,
+												pregunta : preguntaedit,
+												questionariorespuesta : array_respuesta_puntajeedit
 											});
+											i=x;
+											bandera_x = false;
 										}
-										console.log('i : ' + i);
-										console.log('j : ' + j);
-										console.log('x : ' + x);
-										console.log('z : ' + z);
-										array_cuestionarioedit.push({
-											id : preguntaidedit,
-											pregunta : preguntaedit,
-											questionariorespuesta : array_respuesta_puntajeedit
-										});
-										i=x;
-										bandera_x = false;
+										x++;
 									}
-									x++;
-								}
-								bandera_j = false;      
-							}							
-							j++;
+									bandera_j = false;      							
+								j++;
+							}
+							else{
+								j++;
+							}
 						}
 					}
 				}
@@ -462,7 +464,7 @@
 				    }
 				});*/
 			}
-			else{
+			/*else{
 				$("#modalimagencargando").modal('hide');
 				$("#textoinformacioneditevaluacion").html("<div style='color:red' class='text-left'>"+mensajeValidacion+"</div>");
 				$('#modalinformacioneditrevaluacion').modal({
@@ -470,7 +472,7 @@
 					backdrop : 'static',
 					keyboard:false
 				});
-			}
+			}*/
 		});
 		
 		function limpiarControlesedit(){
