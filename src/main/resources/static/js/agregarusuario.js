@@ -2,38 +2,35 @@ $(document).ready(function(){
 	
 	$("#btncancelRegistro").on("click",function(){
 		$("#modalAlianzaEstrategica").modal('hide');
-		 $("#btnaceptarRegistro").prop("disabled",false);
+		$("#btnaceptarRegistro").prop("disabled",false);
 	});
 	
-	$("#btnAgregarAuspiciador").on("click",function(){
-		var cont = $("[id*=tipocodauspiciador]").length;
-		cont = cont+1; 
-		html = '';
-		html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
-		html += '		<select class="form-control" id="tipocodauspiciador'+cont+'" name="tipocodauspiciador'+cont+'">';
-		html += '			<option value="0">Tipo de documento</option>';
-		html += '		    <option value="1">DNI</option>';
-		html += '		    <option value="2">Pasaporte</option>';
-		html += '		    <option value="3">Carnet de Extranjería</option>';
-		html += '		</select>';
-		html += '	</div>';
-		html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
-		html += '		<input type="text" name="cantidadauspiciador'+cont+'" id="cantidadauspiciador'+cont+'" class="form-control" placeholder="Cantidad"/>';
-		html += '	</div>';
-		html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
-		html += '		<input type="text" name="descripcionauspiciador'+cont+'" id="descripcionauspiciador'+cont+'" class="form-control" placeholder="Descripcion"/>';
-		html += '	</div>';
-		html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
-		html += '		<input type="text" name="montounitarioauspiciador'+cont+'" id="montounitarioauspiciador'+cont+'" class="form-control" placeholder="Monto Unitario"/>';
-		html += '	</div>';
-		html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
-		html += '		<input type="text" name="montototalauspiciador'+cont+'" id="montototalauspiciador'+cont+'" class="form-control" placeholder="Monto Total"/>';
-		html += '	</div>';
-		html += '	<div class="col-xs-12 col-sm-4 text-left">';
-		html += '	</div>';
-		
-		$("#section-datos-auspicio").append(html);
+	$("#btncerrarmensajeerror").on("click",function(){
+		$("#modalerror").modal('hide');
 	});
+	
+	$("#perfilregusuComiteEvaluador").on("click",function(){
+		if($('#perfilregusuComiteEvaluador').is(':checked') ) {
+	    	$("#section-datos-autoridad").show();
+		}else{
+			$("#section-datos-autoridad").hide();
+		}
+	});
+	
+	$("#perfilregusuAuspiciador").on("click",function(){
+		if($('#perfilregusuAuspiciador').is(':checked') ) {
+	    	$("#section-datos-auspicio").show();
+		}else{
+			$("#section-datos-auspicio").hide();
+		}
+	});
+	
+	$("#btnAgregarAuspiciador").on("click",function(evt){
+		evt.preventDefault();
+		htmlAuspicicador();
+	});
+	
+	getUsuario($("#idAlianzaEstrategica").val());
 	
 	$("#fecha_oficio").datepicker({
 		locale: 'es-es',
@@ -43,18 +40,54 @@ $(document).ready(function(){
 
 });
 
+function htmlAuspicicador(){
+	var cont = $("[id*=tipocodauspiciador]").length;
+	cont = cont+1; 
+	html = '';
+	html += '   <input type="hidden" name="idauspiciador'+cont+'" id="idauspiciador'+cont+'" value="0"/>';
+	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
+	html += '		<select class="form-control" id="tipocodauspiciador'+cont+'" name="tipocodauspiciador'+cont+'">';
+	html += '			<option value="0">Tipo de documento</option>';
+	html += '		    <option value="1">DNI</option>';
+	html += '		    <option value="2">CE</option>';
+	html += '		</select>';
+	html += '	</div>';
+	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
+	html += '		<input type="text" name="cantidadauspiciador'+cont+'" id="cantidadauspiciador'+cont+'" class="form-control" placeholder="Cantidad" onKeyPress="return filterIntInput(event,this)"/>';
+	html += '	</div>';
+	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
+	html += '		<input type="text" name="descripcionauspiciador'+cont+'" id="descripcionauspiciador'+cont+'" class="form-control" placeholder="Descripcion" onKeyPress="return filterFloat(event,this)"/>';
+	html += '	</div>';
+	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
+	html += '		<input type="text" name="montounitarioauspiciador'+cont+'" id="montounitarioauspiciador'+cont+'" class="form-control" placeholder="Monto Unitario" onKeyPress="return filterFloat(event,this)"/>';
+	html += '	</div>';
+	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
+	html += '		<input type="text" name="montototalauspiciador'+cont+'" id="montototalauspiciador'+cont+'" class="form-control" placeholder="Monto Total"/>';
+	html += '	</div>';
+	html += '	<div class="col-xs-12 col-sm-4 text-left">';
+	html += '	</div>';
+	
+	$("#section-datos-auspicio").append(html);
+}
+
 function armarAuspicio(){
 	var array = [];
-	$.each($("[id*=tipocodauspiciador]"), function( index, value ) {
-		var i = index + 1;
-	  	var tipoDoc = $('#tipocodauspiciador'+i).val();
-	  	var cantidad = $('#tipocodauspiciador'+i).val();
-	  	var descripcion = $('#descripcionauspiciador'+i).val();
-	  	var montounitario = $('#montounitarioauspiciador'+i).val();
-	  	var montototal = $('#montototalauspiciador'+i).val();
-	  	
-	  	array.push({tipoDoc,cantidad,descripcion,montounitario,montototal});
-	});
+	if($("#section-datos-autoridad").is(":visible")){
+		$.each($("[id*=tipocodauspiciador]"), function( index, value ) {
+			var i = index + 1;
+		  	var tipoDoc = $('#tipocodauspiciador'+i).val();
+		  	var tipodocumento = {id : tipoDoc};
+		  	var cantidad = $('#cantidadauspiciador'+i).val();
+		  	var descripcion = $('#descripcionauspiciador'+i).val();
+		  	var montounitario = $('#montounitarioauspiciador'+i).val();
+		  	var montototal = $('#montototalauspiciador'+i).val();
+		  	var id = $('#idauspiciador'+i).val();
+		  	
+		  	array.push({id,tipodocumento,cantidad,descripcion,montounitario,montototal});
+		});
+	}else{
+		//array = null;
+	}
 	return array;
 }
 
@@ -107,6 +140,12 @@ function armarData(){
 	var numoficioautoridad = $('#numoficioautoridad').val();
 	var fecha_oficio = formatoFecha($('#fecha_oficio').val());
 	
+	var filenamedocaut = "";
+	
+	if(fileautoridad.files.length > 0){
+		filenamedocaut = fileautoridad.files[0].name;
+	}
+	
 	var arrayAuspicio = armarAuspicio();
 	
 	var data = {
@@ -146,10 +185,8 @@ function armarData(){
 		enviaroficio : sendOficio,
 		numoficio : numoficioautoridad,
 		fecha_oficio : fecha_oficio,
-		docoficio : null,
-		auspicioid : {
-			lista : arrayAuspicio
-		}
+		docoficio : filenamedocaut,
+		auspicios : armarAuspicio()
 
 	}
 	console.log(data);
@@ -166,6 +203,14 @@ $("#btnaceptarRegistro").on("click",function(){ console.log(armarData());
 		backdrop : 'static',
 		keyboard:false
 	});
+	
+	if(!validarCampos()){
+		$("#textoerror").html("<div style='color:red' class='text-left'>"+contentMensajeError+"</div>");
+		$("#modalerror").modal();
+		$("#modalimagencargando").modal('hide');
+		$("#btnaceptarRegistro").prop("disabled",false);
+		return true;
+	}
     
     $.ajax({
 		type : "POST",
@@ -176,13 +221,23 @@ $("#btnaceptarRegistro").on("click",function(){ console.log(armarData());
 		success: function(respuesta) {
 			if(respuesta>0){
 				
+				if(fileautoridad.files.length > 0){
+					subirDocumento(respuesta);
+				}else{
+					$("#btnaceptarRegistro").prop("disabled",false);
+					$("#modalimagencargando").modal('hide');
+					$("#modalAlianzaEstrategica").modal('hide');
+				}
+				//listarAlianzaEstrategica();
+			}else{
+				$("#btnaceptarRegistro").prop("disabled",false);
+				$("#modalimagencargando").modal('hide');
+				alert("Exception al registrar");
 			}
-			
-			$("#btnaceptarRegistro").prop("disabled",false);
-			$("#modalimagencargando").modal('hide');
 		},
 		error: function() {
 				$("#modalimagencargando").modal('hide');
+				$("#btnaceptarRegistro").prop("disabled",false);
 				alert("Exception al registrar");
 		    }
 		});
@@ -192,6 +247,7 @@ $("#btnaceptarRegistro").on("click",function(){ console.log(armarData());
 
 
 function formatoFecha(fecha){
+	if(fecha == "") fecha = "01/01/2020";
 	var date = fecha.split("/");
 	return date[2] +'-'+ date[1] +'-'+ date[0];
 }
@@ -206,34 +262,75 @@ function getUsuario(idUsuario){
 	$.ajax({
 		type : "GET",
 	    contentType : "application/json",
-	    url : url_base + "pedesa/saveusuarioalianza/"+idUsuario,
+	    url : url_base + "pedesa/formactualizarusuario/"+idUsuario,
 	    dataType : 'json',
 		success: function(respuesta) {console.log(respuesta);
 			
-			$("#idAlianzaEstrategica").val(respuesta.id);
-			$("#odsresgusu").val(respuesta.ods.id);
-			$("#anioregusu").val(respuesta.anio);
-			$("#categoriaregusu").val(respuesta.categoria.id);
-			$("#entidadregusu").val(respuesta.entidad);
-			$("#direccionregusu").val(respuesta.direccion);
-			/*var comitetecnico = "0";
-			if($('#perfilregusuComiteTecnico').is(':checked') ) {
-			    comitetecnico = "1";
+			if(respuesta.id != null){
+				$("#idAlianzaEstrategica").val(respuesta.id);
+				$("#odsresgusu").val(respuesta.ods.id);
+				$("#anioregusu").val(respuesta.anio);
+				$("#categoriaregusu").val(respuesta.categoria.id);
+				$("#entidadregusu").val(respuesta.entidad);
+				$("#direccionregusu").val(respuesta.direccion);
+				
+				if(respuesta.comitetecnico == "1"){
+					$('#perfilregusuComiteTecnico').prop("checked",true);
+				}
+				
+				if(respuesta.comiteevaluador == "1"){
+					$('#perfilregusuComiteEvaluador').prop("checked",true);
+					$("#section-datos-autoridad").show();
+					$("#apepatautoridad").val(respuesta.apepatautoridad);
+					$("#apematautoridad").val(respuesta.apematautoridad);
+					$("#nombreautoridad").val(respuesta.nombresautoridad);
+					$("#correoautoridad").val(respuesta.correoautoridad);
+					$("#cargoautoridad").val(respuesta.cargoautoridad);
+					$("#usuarioautoridad").val(respuesta.usuarioautoridad);
+					$("#passwordautoridad").val(respuesta.passwordautoridad);
+					if(respuesta.enviaroficio == "0"){
+						$('#sendOficioSi').prop("checked",false);
+						$('#sendOficioNo').prop("checked",true);
+					}
+					$("#numoficioautoridad").val(respuesta.numoficio);
+					$("#fecha_oficio").val(respuesta.fechadocformat);
+					//$("#fileautoridad").val(respuesta.docoficio);
+				}
+				
+				if(respuesta.auspiciador == "1"){
+					$('#perfilregusuAuspiciador').prop("checked",true);
+					$("#section-datos-auspicio").show();
+					$.each(respuesta.auspicios, function( index, value ) {
+						if(index > 0){
+							htmlAuspicicador();
+						}
+						var i = index+1; 
+						$('#tipocodauspiciador'+i).val(value.tipodocumento.id);
+		  				$('#cantidadauspiciador'+i).val(value.cantidad);
+		  				$('#descripcionauspiciador'+i).val(value.descripcion);
+		  				$('#montounitarioauspiciador'+i).val(value.montounitario);
+		  				$('#montototalauspiciador'+i).val(value.montototal);
+		  				$('#idauspiciador'+i).val(value.id);
+					});
+					
+				}
+				
+				if(respuesta.aliado == "1"){
+					$('#perfilregusuAliado').prop("checked",true);
+				}
+				
+				$('#numcontactoresgusu').val(respuesta.numcontaccto);
+				$("#apepatcontactoregusu").val(respuesta.apepatcontacto);
+				$("#apematcontactoregusu").val(respuesta.apematcontacto);
+				$("#nombrecontactoregusu").val(respuesta.nombrecontacto);
+				$("#tipocodcontactoresgusu").val(respuesta.tipodocumento.id);
+				$("#numdoccontactoregusu").val(respuesta.numdocumento);
+				$("#numtelcontactoregusu").val(respuesta.telefonouno);
+				$("#numtel2contactoregusu").val(respuesta.telefonodos);
+				$("#correocontactoregusu").val(respuesta.correocontato);
+				$("#cargocontactoregusu").val(respuesta.cargocontacto);
+				
 			}
-			var comiteevaluador = "0";
-			if($('#perfilregusuComiteEvaluador').is(':checked') ) {
-			    comiteevaluador = "1";
-			}
-			var auspiciador = "0";
-			if($('#perfilregusuAuspiciador').is(':checked') ) {
-			    auspiciador = "1";
-			}
-			var aliado = "0";
-			if($('#perfilregusuAliado').is(':checked') ) {
-			    aliado = "1";
-			}*/
-			
-
 			$("#modalimagencargando").modal('hide');
 		},
 		error: function() {
@@ -241,6 +338,260 @@ function getUsuario(idUsuario){
 				alert("Exception al registrar");
 	    }
 	});
+}
+
+var contentMensajeError ="";
+
+function validarCampos(){
+	
+	var status = true;
+	contentMensajeError = "";
+	if($("#odsresgusu").val() == "0"){
+		contentMensajeError += "Debe seleccionar ODS"+"</br>";
+		status = false;
+	}
+	if($("#categoriaregusu").val() == "0"){
+		contentMensajeError += "Debe seleccionar Categoría"+"</br>";
+		status = false;
+	}
+	if($("#entidadregusu").val() == "0"){
+		contentMensajeError += "Debe ingresar Entidad"+"</br>";
+		status = false;
+	}
+	if($("#direccionregusu").val() == "0"){
+		contentMensajeError += "Debe ingresar Dirección"+"</br>";
+		status = false;
+	}
+	if($('#numcontactoresgusu').val() == "0"){
+		contentMensajeError += "Debe seleccionar la cantidad de contactos"+"</br>";
+		status = false;
+	}
+	if($('#apepatcontactoregusu').val() == ""){
+		contentMensajeError += "Debe ingresar Apellido Paterno de Contacto"+"</br>";
+		status = false;
+	}
+	if($('#apematcontactoregusu').val() == ""){
+		contentMensajeError += "Debe ingresar Apellido Materno de Contacto"+"</br>";
+		status = false;
+	}
+	if($('#nombrecontactoregusu').val() == ""){
+		contentMensajeError += "Debe ingresar Nombres de Contacto"+"</br>";
+		status = false;
+	}
+	if($('#tipocodcontactoresgusu').val() == "0"){
+		contentMensajeError += "Debe seleccionar Tipo de Documento de Contacto"+"</br>";
+		status = false;
+	}
+	if($('#numdoccontactoregusu').val() == ""){
+		contentMensajeError += "Debe ingresar N° Documento de Contacto"+"</br>";
+		status = false;
+	}
+	if($('#numtelcontactoregusu').val() == ""){
+		contentMensajeError += "Debe ingresar N° de teléfono 1 de Contacto"+"</br>";
+		status = false;
+	}
+	if($('#numtel2contactoregusu').val() == ""){
+		contentMensajeError += "Debe ingresar N° de teléfono 2 de Contacto"+"</br>";
+		status = false;
+	}
+	if($('#correocontactoregusu').val() == ""){
+		contentMensajeError += "Debe ingresar Correo Institucional de Contacto"+"</br>";
+		status = false;
+	}
+	if($('#cargocontactoregusu').val() == ""){
+		contentMensajeError += "Debe ingresar Cargo de Contacto"+"</br>";
+		status = false;
+	}
+	if($("#section-datos-autoridad").is(":visible")){
+		if($('#apepatautoridad').val() == ""){
+			contentMensajeError += "Debe ingresar Apellido Paterno de Autoridad/Representante"+"</br>";
+			status = false;
+		}
+		if($('#apematautoridad').val() == ""){
+			contentMensajeError += "Debe ingresar Apellido Materno de Autoridad/Representante"+"</br>";
+			status = false;
+		}
+		if($('#nombreautoridad').val() == ""){
+			contentMensajeError += "Debe ingresar Nombres de Autoridad/Representante"+"</br>";
+			status = false;
+		}
+		if($('#correoautoridad').val() == ""){
+			contentMensajeError += "Debe ingresar Correo Institucional de Autoridad/Representante"+"</br>";
+			status = false;
+		}
+		if($('#cargoautoridad').val() == ""){
+			contentMensajeError += "Debe ingresar Cargo de Autoridad/Representante"+"</br>";
+			status = false;
+		}
+		if($('#usuarioautoridad').val() == ""){
+			contentMensajeError += "Debe ingresar Usuario de Autoridad/Representante"+"</br>";
+			status = false;
+		}
+		if($('#passwordautoridad').val() == ""){
+			contentMensajeError += "Debe ingresar COntraseña de Autoridad/Representante"+"</br>";
+			status = false;
+		}
+		/*if($('#sendOficioSi').is(':checked') || $('#sendOficioNo').is(':checked')){
+			contentMensajeError += "Debe ingresar Cargo de Contacto"+"</br>";
+			status = false;
+		}*/
+		if($('#numoficioautoridad').val() == ""){
+			contentMensajeError += "Debe ingresar N° Oficio de Autoridad/Representante"+"</br>";
+			status = false;
+		}
+		if($('#fecha_oficio').val() == ""){
+			contentMensajeError += "Debe ingresar Fecha de Oficio de Autoridad/Representante"+"</br>";
+			status = false;
+		}
+		if($('#fileautoridad').val() == ""){
+			contentMensajeError += "Debe ingresar Documento de Autoridad/Representante"+"</br>";
+			status = false;
+		}
+	}
+	
+	if($("#section-datos-auspicio").is(":visible")){
+		$.each($("[id*=tipocodauspiciador]"), function( index, value ) {
+			if($(value).val() == "0"){
+				contentMensajeError += "Debe seleccionar Tipo de Documento del Auspiciador"+"</br>";
+				status = false;
+			}
+		});
+		$.each($("[id*=cantidadauspiciador]"), function( index, value ) {
+			if($(value).val() == ""){
+				contentMensajeError += "Debe ingresar Cantidad del Auspiciador"+"</br>";
+				status = false;
+			}
+		});
+		$.each($("[id*=descripcionauspiciador]"), function( index, value ) {
+			if($(value).val() == ""){
+				contentMensajeError += "Debe ingresar Descripcion del Auspiciador"+"</br>";
+				status = false;
+			}
+		});
+		$.each($("[id*=montounitarioauspiciador]"), function( index, value ) {
+			if($(value).val() == ""){
+				contentMensajeError += "Debe ingresar el Monto Unitario del Auspiciador"+"</br>";
+				status = false;
+			}
+		});
+		$.each($("[id*=montototalauspiciador]"), function( index, value ) {
+			if($(value).val() == ""){
+				contentMensajeError += "Debe ingresar Monto Final del Auspiciador"+"</br>";
+				status = false;
+			}
+		});
+		
+	}
+	
+	return status;
+}
+
+
+function filterCadena(evt,input){
+	
+	var key = window.Event ? evt.which : evt.keyCode;    
+    var chark = String.fromCharCode(key);
+    var tempValue = input.value+chark;
+    if((key >= 65 && key <= 90) || (key >= 97 && key <= 122) || (key ==32)   || (key ==241) || (key ==209) || (key ==225) || (key ==233) || (key ==237) || (key ==243) || (key ==250)  || (key ==193) || (key ==201) || (key ==205) || (key ==211) || (key ==218)   ){    
+        return true;
+    }
+    else{
+        return false;
+    }	
+}
+
+function filterIntInput(evt,input){
+	var key = window.Event ? evt.which : evt.keyCode;    
+    var chark = String.fromCharCode(key);
+    var tempValue = input.value+chark;
+    if((key >= 48 && key <= 57) || key==45){    
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+function filterIntNroDocIdentidad(evt,input){
+	console.log($(input).val());
+	if($(input).val()=="1"){
+	    var key = window.Event ? evt.which : evt.keyCode;    
+	    var chark = String.fromCharCode(key);
+	    var tempValue = input.value+chark;
+	    if(key >= 48 && key <= 57){
+	    	if($(input).val() == 1){
+				if($(input).val().trim().length<8)
+					return true;
+				return false;
+			}
+	    	else{
+	    		return true;
+	    	}
+	    }
+	    else{
+	        return false;
+	    }
+	}
+	else if($(input).val()=="2"){
+		if($(input).val().trim().length<12)
+			return true;
+		return false;
+	}
+}
+
+function filterFloat(evt,input) {
+    var charCode = (evt.which) ? evt.which : event.keyCode;
+    var number = input.value.split('.');
+    if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    //just one dot
+    if(number.length>1 && charCode == 46){
+         return false;
+    }
+    //get the carat position
+    var caratPos = getSelectionStart(input);
+    var dotPos = input.value.indexOf(".");
+    if( caratPos > dotPos && dotPos>-1 && (number[1].length > 1)){
+        return false;
+    }
+    return true;
+}
+
+function getSelectionStart(o) {
+    if (o.createTextRange) {
+        var r = document.selection.createRange().duplicate()
+        r.moveEnd('character', o.value.length)
+        if (r.text == '') return o.value.length
+        return o.value.lastIndexOf(r.text)
+    } else return o.selectionStart
+}
+
+function subirDocumento(id){
+	/*Subiendo documento*/
+	var data = new FormData();
+	data.append('file',fileautoridad.files[0]);
+	data.append('id',id);
+	$.ajax({
+        type: "POST",
+        enctype: 'multipart/form-data',
+        url: url_base + "pedesa/subirarchivousuarios",
+        data: data,
+        processData: false, 
+        contentType: false,
+        cache: false,
+        timeout: 600000,
+        success: function (respuesta) {		console.log(respuesta);
+        	console.log("Se cargo el archivo");
+        	$("#btnaceptarRegistro").prop("disabled",false);
+			$("#modalimagencargando").modal('hide');
+			$("#modalAlianzaEstrategica").modal('hide');
+        },
+        error: function (e) {
+            console.log("ERROR : ", e);
+            $("#modalimagencargando").modal('hide');
+        }
+    });	
 }
 
 /*
@@ -364,45 +715,6 @@ $.fn.dataTable.ext.search.push(
 		return true;
 	}
 );
-
-function filtraNombre(nombre,campo){
-	if(nombre==="" || nombre === undefined)
-		return true;
-	var posicion = (campo.toLowerCase()).indexOf(nombre.toLowerCase()); 
-	if(posicion != -1)
-		return  true;
-	return false;
-}
-
-function filtraSelect(dato,campo){
-	if(dato==="Todos")
-		return true;
-	return dato===campo;
-}
-
-var obtener_data_form = function(tbody,table){
-	$(tbody).on("click","button.registrarEvaliacion",function(){
-		registarEvaliacionTrabajosPendientes($(this).attr('data-id'));
-	});
-};
-
-var obtener_fichatrabajo = function(tbody,table){
-	$(tbody).on("click","img.fichatrabajo",function(){
-		verfichatrabajo($(this).attr('data-id'));
-	});
-};
-
-var obtener_evidencia = function(tbody,table){
-	$(tbody).on("click","img.evidencia",function(){
-		verevidencia($(this).attr('data-id'));
-	});
-};
-
-var obtener_trabajos = function(tbody,table){
-	$(tbody).on("click","img.trabajo",function(){
-		vertrabajo($(this).attr('data-id'));
-	});
-};
 
 function registarEvaliacionTrabajosPendientes(id){ console.log('-->registarEvaliacionTrabajosPendientes');
 	

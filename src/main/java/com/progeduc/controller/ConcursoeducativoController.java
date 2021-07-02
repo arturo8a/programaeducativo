@@ -49,6 +49,7 @@ import com.progeduc.dto.TrabajosfinalesParticipanteDto;
 import com.progeduc.dto.UsuarioAlianzaDto;
 import com.progeduc.dto.trabajoEvaluadoDto;
 import com.progeduc.model.Aperturaranio;
+import com.progeduc.model.Auspicio;
 import com.progeduc.model.Docente;
 import com.progeduc.model.Evaluacion;
 import com.progeduc.model.Gradoparticipante;
@@ -58,10 +59,10 @@ import com.progeduc.model.Postulacionconcurso;
 import com.progeduc.model.Programaeducativo;
 import com.progeduc.model.Trabajosfinales;
 import com.progeduc.model.TrabajosfinalesParticipante;
-import com.progeduc.model.Usuario;
 import com.progeduc.model.UsuarioAlianza;
 import com.progeduc.model.UsuarioLdap;
 import com.progeduc.service.IAperturaranioService;
+import com.progeduc.service.IAuspicioService;
 import com.progeduc.service.IDistritoService;
 import com.progeduc.service.IDocenteService;
 import com.progeduc.service.IEvaluacionService;
@@ -117,6 +118,9 @@ public class ConcursoeducativoController {
 	
 	@Autowired
 	private IUsuarioAlianzaService usuAlianzaserv;
+	
+	@Autowired
+	private IAuspicioService auspicioServ;
 	
 	ListaparticipanteDto dto;	
 	ListatrabajosfinalesDto dtotf;	
@@ -912,12 +916,13 @@ public class ConcursoeducativoController {
 		System.out.println(dto.getId());
 		UsuarioAlianza usu = usuAlianzaserv.ListarporId(dto.getId());
 		Calendar cal= Calendar.getInstance();
+		int respuesta = 0;
 		if(usu != null) {
 			usu.setOds(dto.getOds());
 			//usu.setAnio(dto.getAnio());
 			usu.setCategoria(dto.getCategoria());
 			usu.setEntidad(dto.getEntidad());
-			usu.setDireccion(dto.getEntidad());
+			usu.setDireccion(dto.getDireccion());
 			usu.setComitetecnico(dto.getComitetecnico());
 			usu.setComiteevaluador(dto.getComiteevaluador());
 			usu.setAuspiciador(dto.getAuspiciador());
@@ -932,27 +937,58 @@ public class ConcursoeducativoController {
 			usu.setTelefonodos(dto.getTelefonodos());
 			usu.setCorreocontato(dto.getCorreocontato());
 			usu.setCargocontacto(dto.getCargocontacto());
-			usu.setApepatautoridad(dto.getApepatautoridad());
-			usu.setApematautoridad(dto.getApematautoridad());
-			usu.setNombresautoridad(dto.getNombresautoridad());
-			usu.setCorreoautoridad(dto.getCorreoautoridad());
-			usu.setCargoautoridad(dto.getCargoautoridad());
-			usu.setUsuarioautoridad(dto.getUsuarioautoridad());
-			usu.setPasswordautoridad(dto.getPasswordautoridad());
-			usu.setEnviaroficio(dto.getEnviaroficio());
-			usu.setNumoficio(dto.getNumoficio());
-			usu.setFecha_oficio(dto.getFecha_oficio());
-			usu.setDocoficio(dto.getDocoficio());
-			//usu.setAuspicios(dto.getAuspicios());
-			usuAlianzaserv.modificar(usu);
+			if(!dto.getApepatautoridad().equals("")) {
+				usu.setApepatautoridad(dto.getApepatautoridad());
+				usu.setApematautoridad(dto.getApematautoridad());
+				usu.setNombresautoridad(dto.getNombresautoridad());
+				usu.setCorreoautoridad(dto.getCorreoautoridad());
+				usu.setCargoautoridad(dto.getCargoautoridad());
+				usu.setUsuarioautoridad(dto.getUsuarioautoridad());
+				usu.setPasswordautoridad(dto.getPasswordautoridad());
+				usu.setEnviaroficio(dto.getEnviaroficio());
+				usu.setNumoficio(dto.getNumoficio());
+				usu.setFecha_oficio(dto.getFecha_oficio());
+				usu.setDocoficio(dto.getDocoficio());
+			}
 			
+			
+			
+			if(dto.getAuspicios().size() > 0) {
+				List<Auspicio> listAus = dto.getAuspicios();
+				for (Auspicio auspicio : listAus) {
+					Auspicio aus = auspicioServ.ListarporId(auspicio.getId());
+					if(aus != null) {
+						aus.setTipodocumento(auspicio.getTipodocumento());
+						aus.setCantidad(auspicio.getCantidad());
+						aus.setDescripcion(auspicio.getDescripcion());
+						aus.setMontounitario(auspicio.getMontounitario());
+						aus.setMontototal(auspicio.getMontototal());
+						aus.setUsuario_alianza(usu);
+						aus.setFecha_registro(new Timestamp(new Date().getTime()));
+						auspicioServ.registrar(aus);
+					}else {
+						aus = new Auspicio();
+						aus.setTipodocumento(auspicio.getTipodocumento());
+						aus.setCantidad(auspicio.getCantidad());
+						aus.setDescripcion(auspicio.getDescripcion());
+						aus.setMontounitario(auspicio.getMontounitario());
+						aus.setMontototal(auspicio.getMontototal());
+						aus.setUsuario_alianza(usu);
+						aus.setFecha_registro(new Timestamp(new Date().getTime()));
+						auspicioServ.registrar(aus);
+					}
+				}
+			}
+			
+			usuAlianzaserv.modificar(usu);
+			respuesta = usu.getId();
 		}else {
 			usu = new UsuarioAlianza();
 			usu.setOds(dto.getOds());
 			usu.setAnio(cal.get(Calendar.YEAR));
 			usu.setCategoria(dto.getCategoria());
 			usu.setEntidad(dto.getEntidad());
-			usu.setDireccion(dto.getEntidad());
+			usu.setDireccion(dto.getDireccion());
 			usu.setComitetecnico(dto.getComitetecnico());
 			usu.setComiteevaluador(dto.getComiteevaluador());
 			usu.setAuspiciador(dto.getAuspiciador());
@@ -967,31 +1003,83 @@ public class ConcursoeducativoController {
 			usu.setTelefonodos(dto.getTelefonodos());
 			usu.setCorreocontato(dto.getCorreocontato());
 			usu.setCargocontacto(dto.getCargocontacto());
-			usu.setApepatautoridad(dto.getApepatautoridad());
-			usu.setApematautoridad(dto.getApematautoridad());
-			usu.setNombresautoridad(dto.getNombresautoridad());
-			usu.setCorreoautoridad(dto.getCorreoautoridad());
-			usu.setCargoautoridad(dto.getCargoautoridad());
-			usu.setUsuarioautoridad(dto.getUsuarioautoridad());
-			usu.setPasswordautoridad(dto.getPasswordautoridad());
-			usu.setEnviaroficio(dto.getEnviaroficio());
-			usu.setNumoficio(dto.getNumoficio());
-			usu.setFecha_oficio(dto.getFecha_oficio());
-			usu.setDocoficio(dto.getDocoficio());
+			
+			if(!dto.getApepatautoridad().equals("")) {
+				usu.setApepatautoridad(dto.getApepatautoridad());
+				usu.setApematautoridad(dto.getApematautoridad());
+				usu.setNombresautoridad(dto.getNombresautoridad());
+				usu.setCorreoautoridad(dto.getCorreoautoridad());
+				usu.setCargoautoridad(dto.getCargoautoridad());
+				usu.setUsuarioautoridad(dto.getUsuarioautoridad());
+				usu.setPasswordautoridad(dto.getPasswordautoridad());
+				usu.setEnviaroficio(dto.getEnviaroficio());
+				usu.setNumoficio(dto.getNumoficio());
+				usu.setFecha_oficio(dto.getFecha_oficio());
+				usu.setDocoficio(dto.getDocoficio());
+			}
+			
+			
+			
 			usu.setAuspicios(dto.getAuspicios());
 			usu.setFecha_registro(new Timestamp(new Date().getTime()));
 			usu.setEstado("1");
-			usuAlianzaserv.registrar(usu);
-			return 1; 
+			UsuarioAlianza usu2 = usuAlianzaserv.registrar(usu);
+			
+			
+			if(dto.getAuspicios().size() > 0) {
+				List<Auspicio> listAus = dto.getAuspicios();
+				for (Auspicio auspicio : listAus) {
+					Auspicio aus = new Auspicio();
+					aus.setTipodocumento(auspicio.getTipodocumento());
+					aus.setCantidad(auspicio.getCantidad());
+					aus.setDescripcion(auspicio.getDescripcion());
+					aus.setMontounitario(auspicio.getMontounitario());
+					aus.setMontototal(auspicio.getMontototal());
+					aus.setUsuario_alianza(usu2);
+					aus.setFecha_registro(new Timestamp(new Date().getTime()));
+					auspicioServ.registrar(aus);
+				}
+			}
+			
+			
+			respuesta = usu2.getId();
 		}
 
 		
-		return 0;
+		return respuesta;
 	}
 	
 	@GetMapping("/formactualizarusuario/{id}")
 	public ResponseEntity<UsuarioAlianza> formactualizarusuario(@PathVariable("id") Integer id) {
-		return new ResponseEntity<UsuarioAlianza>(usuAlianzaserv.ListarporId(id), HttpStatus.OK) ;
+		UsuarioAlianza usu = usuAlianzaserv.ListarporId(id);
+		if(usu == null) {
+			usu = new UsuarioAlianza();
+		}else {
+			if(usu.getFecha_oficio() != null) {
+				usu.setFechadocformat(new SimpleDateFormat("dd/MM/yyyy").format(usu.getFecha_oficio()));
+			}else {
+				usu.setFechadocformat("");
+			}
+			usuAlianzaserv.registrar(usu);
+		}
+		
+		return new ResponseEntity<UsuarioAlianza>(usu, HttpStatus.OK) ;
+	}
+	
+	@PostMapping(value="/cambiarestado")
+	public Integer editarEstado(@RequestParam("id") Integer id) {
+		int result = 0;
+		UsuarioAlianza usu = usuAlianzaserv.ListarporId(id);
+		if(usu != null) {
+			if(usu.getEstado().equals("1")) {
+				usu.setEstado("0");
+			}else {
+				usu.setEstado("1");
+			}
+			result = 1;
+		}
+		
+		return result;
 	}
 	
 	
@@ -1018,5 +1106,18 @@ public class ConcursoeducativoController {
 		});
 
 		return new ResponseEntity<List<DetalleUsuarioAlianzaEstrategica>>(lista, HttpStatus.OK) ;
+	}
+	
+	@PostMapping(value="/subirarchivousuarios")
+	public Integer subirarchivousuarios(@RequestParam("file") MultipartFile file,@RequestParam("id") Integer id) {
+		
+		if(file.isEmpty())
+			return 0;
+		try {
+			uploadfile.saveFile(file,id,"upload_usuarios_documentos");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return 1; 
 	}
 }

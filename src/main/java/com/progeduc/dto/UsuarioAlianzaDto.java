@@ -39,6 +39,7 @@ public class UsuarioAlianzaDto {
 	private String enviaroficio;
 	private String numoficio;
 	private Timestamp fecha_oficio;
+	//private String fecha_oficio;
 	private String docoficio;
 	private List<Auspicio> auspicios;
 	
@@ -225,6 +226,12 @@ public class UsuarioAlianzaDto {
 	public String getDocoficio() {
 		return docoficio;
 	}
+	/*public String getFecha_oficio() {
+		return fecha_oficio;
+	}
+	public void setFecha_oficio(String fecha_oficio) {
+		this.fecha_oficio = fecha_oficio;
+	}*/
 	public void setDocoficio(String docoficio) {
 		this.docoficio = docoficio;
 	}
