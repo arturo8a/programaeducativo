@@ -186,8 +186,8 @@
 				&nbsp;
 			</div>
 			<div class="col-xs-6 col-sm-6">
-				<input type="button" name="btneditarevaluacion" id="btneditarevaluacion" value="Actualizar" class="btn btn-primary"/>
-				<input type="button" name="btneditarhabilitarevaluacion" id="btneditarhabilitarevaluacion" value="Habilitar evaluación" class="btn btn-success"/>
+				<input type="button" name="btneditarevaluacion_edit" id="btneditarevaluacion_edit" value="Actualizar" class="btn btn-primary"/>
+				<input type="button" name="btneditarhabilitarevaluacion_edit" id="btneditarhabilitarevaluacion_edit" value="Habilitar evaluación" class="btn btn-success"/>
 				<input type="button" name="btncerrarevaluacionedit" id="btncerrarevaluacionedit" value="Cerrar" class="btn btn-danger"/>
 			</div>
 		</div>
@@ -260,47 +260,53 @@
 		var rubricaedit, criterio1edit, criterio2edit, criterio3edit, criterio4edit, criterio5edit, descripcion1edit, descripcion2edit, descripcion3edit, descripcion4edit, descripcion5edit,puntaje1edit, puntaje2edit, puntaje3edit, puntaje4edit, puntaje5edit;
 		var preguntaidedit,preguntaedit, respuestaedit, puntajeedit,respuesta_puntaje_edit="";
 		var id_rubricaedit , id_questionarioedit,id_pregunta_respuesta_edit;
-
 		
-		$("#btncerrarmensajeexitoeditevaluacion").click(function(){			
-			$("#modalexitoeditevaluacion").modal('hide');
-			$("#modaleditarEvaluacion").modal('hide');
-		});
-		
-		$("#btncerrarmensajeerroreditevaluacion").click(function(){			
-			$("#modalerroreditevaluacion").modal('hide');
-		});
-		
-		$("#btncerrarmensajeinformacioneditevaluacion").click(function(){			
-			$("#modalinformacioneditevaluacion").modal('hide');
-		});	
-		
-		$("#btncerrarevaluacionedit").click(function(){
-			$("#modaleditarEvaluacion").modal('hide');
-		});	
-		
-		$("#btneditarevaluacion").click(function(){	
+		$(document).ready(function(){
 			
-			/*$("#modalimagencargando").modal({
+			$("#btncerrarmensajeexitoeditevaluacion").click(function(){			
+				$("#modalexitoeditevaluacion").modal('hide');
+				$("#modaleditarEvaluacion").modal('hide');
+			});
+			
+			$("#btncerrarmensajeerroreditevaluacion").click(function(){			
+				$("#modalerroreditevaluacion").modal('hide');
+			});
+			
+			$("#btncerrarmensajeinformacioneditevaluacion").click(function(){			
+				$("#modalinformacioneditevaluacion").modal('hide');
+			});	
+			
+			$("#btncerrarevaluacionedit").click(function(){
+				$("#modaleditarEvaluacion").modal('hide');
+			});	
+			
+			$("#btneditarevaluacion_edit").click(function(){	
+				actualiza_habilitar_edit_evaluacion(1);
+			});
+			
+			$("#btneditarhabilitarevaluacion_edit").click(function(){	
+				actualiza_habilitar_edit_evaluacion(2);
+			});
+		});
+		
+		function actualiza_habilitar_edit_evaluacion(estadoevaluacion){
+			
+			$("#modalimagencargando").modal({
 				show : true,
 				backdrop : 'static',
 				keyboard:false
-			});*/
+			});
 			
-			if(validarCamposedit()){
-				
+			if(validarCamposedit()){					
 				id_evaluacionedit = $("#id_evaluacion").val();
 				id_rubricaedit = $("#id_rubrica").val();
-				id_questionarioedit = $("#id_questionario").val();
-				
+				id_questionarioedit = $("#id_questionario").val();					
 				array_rubricaedit = new Array();
 				array_cuestionarioedit = new Array();
-				array_respuesta_puntajeedit = new Array();
-				
-				id_rubricaedit = id_rubricaedit.split("-");
-				
+				array_respuesta_puntajeedit = new Array();					
+				id_rubricaedit = id_rubricaedit.split("-");					
 				for(var i=0;i<id_rubricaedit.length-1;i++){					
-					rubrica = $("#rubrica"+id_rubrica[i]).val();
+					rubricaedit = $("#rubrica"+id_rubricaedit[i]).val();
 					criterio1edit = $("#criterio"+id_rubricaedit[i]+"1").val();
 					criterio2edit = $("#criterio"+id_rubricaedit[i]+"2").val();
 					criterio3edit = $("#criterio"+id_rubricaedit[i]+"3").val();
@@ -351,19 +357,16 @@
 							bandera_j = true;
 							while(bandera_j){
 								if(array_id_pregunta_respuesta_edit[j] == "*"){
-									console.log("i : " + i + " - " + array_id_pregunta_respuesta_edit[i]);
-									console.log("j : " + j + " - " + array_id_pregunta_respuesta_edit[j]);
 									preguntaidedit = id_pregunta_respuesta_edit.substring(i+1,j);
-									console.log("preguntaidedit :" + preguntaidedit);
 									preguntaedit = $("#pregunta"+preguntaidedit).val();								
-									console.log("preguntaedit :" + preguntaedit);
 									x = j+1;
 									bandera_x = true;
 									while(bandera_x){
 										if(array_id_pregunta_respuesta_edit[x] == ")"){
+											var indice_rp_i = respuesta_puntaje_edit.length ;
+											var indice_rp_f = respuesta_puntaje_edit.length ;
 											respuesta_puntaje_edit = id_pregunta_respuesta_edit.substring(j+1,x);
 											respuesta_puntaje_edit = respuesta_puntaje_edit.split("-"); 
-											console.log("respuesta_puntaje_edit :" + respuesta_puntaje_edit);
 											for(var z = 0;z<respuesta_puntaje_edit.length;z++){
 												respuestaedit = $("#respuesta"+respuesta_puntaje_edit[z]).val();
 												puntajeedit = $("#puntajeq"+respuesta_puntaje_edit[z]).val();
@@ -372,15 +375,12 @@
 													respuesta : respuestaedit,
 													puntaje : puntajeedit
 												});
+												indice_rp_f ++;
 											}
-											console.log('i : ' + i);
-											console.log('j : ' + j);
-											console.log('x : ' + x);
-											console.log('z : ' + z);
 											array_cuestionarioedit.push({
 												id : preguntaidedit,
 												pregunta : preguntaedit,
-												questionariorespuesta : array_respuesta_puntajeedit
+												questionariorespuesta : array_respuesta_puntajeedit.slice(indice_rp_i,indice_rp_f)
 											});
 											i=x;
 											bandera_x = false;
@@ -397,8 +397,6 @@
 					}
 				}
 				
-				console.log("arraypuntahe :" + array_respuesta_puntajeedit);
-				
 				var evaluaciondtoedit = {
 					evaluacion : {
 						id: id_evaluacionedit,
@@ -410,38 +408,34 @@
 							id : nivelparticipacionedit
 						},
 						estadoevaluacion : {
-							id : 1
+							id : estadoevaluacion
 						},
 						estado : 1
 					},
 					listarubrica: array_rubricaedit,
 					listaquestionario : array_cuestionarioedit
 				};
-				console.log(evaluaciondtoedit);
-				/*$.ajax({
+				$.ajax({
 					type : "POST",
 				    contentType : "application/json",
 				    url : url_base + "pedesa/actualizarevaluacion",
 				    data : JSON.stringify(evaluaciondtoedit),
 				    dataType : 'json',
 					success: function(respuesta) {
-						if(respuesta.id>0){
-							
-							$("#modalimagencargando").modal('hide');
-							
+						if(respuesta.id>0){								
+							$("#modalimagencargando").modal('hide');								
 							table_lista_evaluacion.cell(celdaseleccionada,1).data(anioedit).draw();
 						    table_lista_evaluacion.cell(celdaseleccionada,2).data($("#nivelparticipacionce_edit option:selected").html()).draw();
 						    table_lista_evaluacion.cell(celdaseleccionada,3).data($("#categoriace_edit option:selected").html()).draw();
-						    table_lista_evaluacion.cell(celdaseleccionada,4).data("Editando").draw();
+						    table_lista_evaluacion.cell(celdaseleccionada,4).data(estadoevaluacion==1?"Editando":"Asignado").draw();
+						    table_lista_evaluacion.cell(celdaseleccionada,6).data(estadoevaluacion).draw();
 						    limpiarControlesedit();
-							$("#textoexitoeditevaluacion").html("Se actualizó evaluación");
+							$("#textoexitoeditevaluacion").html(estadoevaluacion==1?"Se actualizó evaluación":"Se habilitó evaluación");
 							$('#modalexitoeditevaluacion').modal({
 								show : true,
 								backdrop : 'static',
 								keyboard:false
-							});
-							
-							
+							});								
 						}
 						else{
 							$("#modalimagencargando").modal('hide');
@@ -462,9 +456,9 @@
 							keyboard:false
 						});
 				    }
-				});*/
+				});
 			}
-			/*else{
+			else{
 				$("#modalimagencargando").modal('hide');
 				$("#textoinformacioneditevaluacion").html("<div style='color:red' class='text-left'>"+mensajeValidacion+"</div>");
 				$('#modalinformacioneditrevaluacion').modal({
@@ -472,8 +466,9 @@
 					backdrop : 'static',
 					keyboard:false
 				});
-			}*/
-		});
+			}
+			
+		}
 		
 		function limpiarControlesedit(){
 			$("#anioce_edit").val("");

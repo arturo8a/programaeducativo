@@ -48,9 +48,7 @@
     <script type="text/javascript" th:src="@{/js/dataTables.editor.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/datetime.js}"></script>
     <script type="text/javascript" th:src="@{/js/moment.min.js}"></script>
-	<script type="text/javascript" th:src="@{/js/datetime-moment.js}"></script>	
-	
-	<link rel="shortcut icon" th:href="@{/images/logo_login.ico}" />
+	<script type="text/javascript" th:src="@{/js/datetime-moment.js}"></script>
 	
 	<script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
 	
@@ -136,7 +134,7 @@
 						<td><label>¿Qué ejes temáticos aborda tu trabajo?</label></td>
 					</tr>
 					<tr>
-						<td><input type="checkbox" id="conversacion" /><label style="padding-left:5px" for="conversacion">Conversación de las fuentes de agua</label></td>
+						<td><input type="checkbox" id="conversacion" /><label style="padding-left:5px" for="conversacion">Conservación de las fuentes de agua</label></td>
 					</tr>
 					<tr>
 						<td><input type="checkbox" id="valoracionagua" /><label style="padding-left:5px" for="valoracionagua">Valoración de los servicios de agua potable</label></td>
@@ -503,7 +501,6 @@
 								data.append('files',evidenciastrabajo.files[i]);
 							}
 							
-							/*Subiendo trabajo final y evidencias*/
 							$.ajax({
 						        type: "POST",
 						        enctype: 'multipart/form-data',
@@ -518,7 +515,6 @@
 						        	$("#modalimagencargando").modal('hide');
 						        	var nombreparticipante = "";
 						        	for(var i=0;i<arrayNombreParticipante.length;i++){
-						        		console.log("arrayNombreParticipante[i] :" + arrayNombreParticipante[i]);
 						        		nombreparticipante += arrayNombreParticipante[i]  + "/";
 						        	}
 						        	
@@ -535,7 +531,7 @@
 						        	}).draw();
 						        	
 								    limpiarControles();
-								    $("#textoexitotrabajo").html("Usted agregó exitosamente a un nuevo participante");
+								    $("#textoexitotrabajo").html("Usted registro exitosamente un nuevo trabajo");
 									$('#modalexitotrabajo').modal({
 										show : true,
 										backdrop : 'static',
@@ -549,6 +545,15 @@
 						        }
 						    });
 							
+						}
+						else if(respuesta == -1){
+							$("#modalimagencargando").modal('hide');
+							$("#textoerror").html("No esta permitido registrar dos trabajos con la misma modalidad,categoria y participantes");
+							$('#modalerror').modal({
+								show : true,
+								backdrop : 'static',
+								keyboard:false
+							});
 						}
 						else{
 							$("#modalimagencargando").modal('hide');
@@ -710,7 +715,7 @@
 	
 	function validarCamposTrabajo(){
 		
-		arrayParticipante = new Array()
+		arrayParticipante = new Array();
 		array_nivel = new Array();
 		arrayNombreParticipante = new Array();
 		
@@ -719,7 +724,7 @@
 		categoriatrabajo = $("#categoriatrabajo").val();
 		modalidadtrabajo = $("#modalidadpostulaciontrabajo").val();
 		titulotrabajo = $("#titulotrabajo").val();
-		linkvideo = $("#linkvideo").val();
+		linkvideotrabajo = $("#linkvideo").val();
 		apellidopaternotrabajo = $("#appaternodocentetrabajo").val();	
 		apellidomaternotrabajo = $("#apmaternodocentetrabajo").val();
 		nombretrabajo = $("#nombredocentetrabajo").val();
@@ -751,10 +756,6 @@
 			if( modalidadtrabajo == 2 && celdas_seleccionadas < 2 ) {
 				mensajeValidacion += "Debe seleccionar mínimo 2 celdas de la tabla"+"<br>";
 			}
-		}
-		
-		if(modalidadtrabajo=="0"){
-			mensajeValidacion += "Debe seleccionar modalidad"+"<br>";
 		}
 		
 		if(titulotrabajo.trim()==""){
@@ -819,6 +820,7 @@
 		var nombre="";
 		for(i=0;i<array.length;i++){
 			array_nivel.push(array[i].nivel);
+			console.log("(array[i].id) :" + (array[i].id));
 			arrayParticipante.push({id : (array[i].id)});
 			nombre = array[i].nombre + " " + array[i].appaterno + " " + array[i].apmaterno;
 			arrayNombreParticipante.push(nombre);
@@ -857,7 +859,7 @@
 		}
 		
 		if(nrodoctrabajo.trim()==""){
-			mensajeValidacion += "Debe ingresar número de documento de Docente"+"<br>";
+			mensajeValidacion += "Debe ingresar número de documento de docente"+"<br>";
 		}
 		
 		if(correotrabajo.trim()==""){

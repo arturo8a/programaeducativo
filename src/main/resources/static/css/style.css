@@ -127,6 +127,10 @@ a[data-toggle="collapse"] {
     transform: translateY(-50%);
 }
 
+table{
+	font-size:12px;
+}
+
 ul ul a {
     font-size: 0.9em !important;
 }

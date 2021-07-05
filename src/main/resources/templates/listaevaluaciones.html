@@ -85,6 +85,9 @@
 	    <div class="modal-content" style="overflow-y: scroll; height:600px;width:90%">
 	      <div class="modal-header">
 	        <strong class="pt-1">CREAR EVALUACIÓN</strong>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>	          
+	        </button>
 	      </div>
 	      <div class="modal-body" id="contenidocrearevaluacion">      	
 	      </div>
@@ -99,8 +102,28 @@
 	    <div class="modal-content" style="overflow-y: scroll; height:750px;width:90%">
 	      <div class="modal-header">
 	        <strong class="pt-1">EDITAR EVALUACIÓN</strong>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>	          
+	        </button>
 	      </div>
 	      <div class="modal-body" id="contenidoeditarevaluacion">      	
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</center>
+
+<center>
+	<div class="modal fade" tabindex="-1" role="dialog" id="modalverEvaluacion" aria-labelledby="myLargeModalLabel" >
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content" style="overflow-y: scroll; height:750px;width:90%">
+	      <div class="modal-header">
+	        <strong class="pt-1">VER EVALUACIÓN</strong>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>	          
+	        </button>
+	      </div>
+	      <div class="modal-body" id="contenidoverevaluacion">      	
 	      </div>
 	    </div>
 	  </div>
@@ -256,7 +279,20 @@
 		                { 'data' : 'categoriaevaluacion' },
 		                { 'data' : 'estado' },
 		                { 'defaultContent' : '<img src="./images/iconos_nd/pdf1.svg" class="ver" style="width:20px; cursor:pointer"/>' },
-				        { 'defaultContent' : '<img src="./images/iconos_nd/lapiz.svg" class="editar" style="width:20px; cursor:pointer " />'},
+		                { 'data' : 'estadoevaluacion' ,
+		                   render: function(data, type) { 
+		                   		var x = '';
+		                        switch (data) {
+		                            case 1:
+		                                x = '<img src="./images/iconos_nd/lapiz.svg" class="editar" style="width:20px; cursor:pointer" />';
+		                                break;
+		                            case 2:
+		                            	x = '<img src="./images/svg/eye-solid.svg" class="verevaluacion" style="width:20px; cursor:pointer"/>' ;
+		                                break;
+	                            }
+	                            return x;
+	                        }
+		                },
 				        { 'defaultContent' : '<img src="./images/iconos_nd/eliminar.svg" class="eliminar" style="width:15px; cursor:pointer " />'}
 		            ],
 		            'columnDefs': [
@@ -277,7 +313,8 @@
 		        });
 				obtener_data_verPdf("#table_lista_evaluacion tbody",table_lista_evaluacion);
 				obtener_data_editar("#table_lista_evaluacion tbody",table_lista_evaluacion);
-				obtener_data_eliminar("#table_lista_evaluacion tbody",table_lista_evaluacion);
+				obtener_data_ver("#table_lista_evaluacion tbody",table_lista_evaluacion);
+				obtener_data_eliminar("#table_lista_evaluacion tbody",table_lista_evaluacion);				
 		}
 		
 		var obtener_data_verPdf = function(tbody,table){
@@ -295,6 +332,15 @@
 				var data = table.row($(this).parents("tr")).data();
 				id = data.id;
 				editarevaluacion(id);
+			});
+		};
+		
+		var obtener_data_ver = function(tbody,table){
+			$(tbody).on("click","img.verevaluacion",function(){
+				celdaseleccionada = table.row($(this).parents("tr")).index();
+				var data = table.row($(this).parents("tr")).data();
+				id = data.id;
+				verevaluacion(id);
 			});
 		};
 		
@@ -341,8 +387,13 @@
 				type : "GET",
 			    url : url_base + "pedesa/editarviewevaluacionid/"+ id,
 				success: function(respuesta) {
+					$("#modalimagencargando").modal('hide');
 					$("#contenidoeditarevaluacion").html(respuesta);
-					$("#modaleditarEvaluacion").modal();
+					$("#modaleditarEvaluacion").modal({
+						show : true,
+						backdrop : 'static',
+						keyboard:false
+					});
 				},
 				error: function() {
 					$("#modalimagencargando").modal('hide');
@@ -354,7 +405,40 @@
 					});
 			    }
 			});		
-		}
+		}		
+		
+		
+		function verevaluacion(id){
+			
+			$("#modalimagencargando").modal({
+				show : true,
+				backdrop : 'static',
+				keyboard:false
+			});
+			
+			$.ajax({
+				type : "GET",
+			    url : url_base + "pedesa/verviewevaluacionid/"+ id,
+				success: function(respuesta) {
+					$("#modalimagencargando").modal('hide');
+					$("#contenidoverevaluacion").html(respuesta);
+					$("#modalverEvaluacion").modal({
+						show : true,
+						backdrop : 'static',
+						keyboard:false
+					});
+				},
+				error: function() {
+					$("#modalimagencargando").modal('hide');
+					$("#textoerror").html("Excepcion al cargar vista ver evaluacion");
+					$('#modalerror').modal({
+						show : true,
+						backdrop : 'static',
+						keyboard:false
+					});
+			    }
+			});		
+		}	
 		
 		
 		function eliminarevaluacion(id){

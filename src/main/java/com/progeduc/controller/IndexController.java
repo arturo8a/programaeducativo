@@ -838,6 +838,60 @@ public class IndexController {
 		return "formeditarevaluacion";
 	}
 	
+	
+	
+	
+	
+	
+	@GetMapping("/verviewevaluacionid/{id}")
+	public String verviewevaluacionid(@PathVariable("id") Integer id,  Model model,HttpSession ses) {
+		
+		id_rubrica = "";
+		id_questionario ="";
+		id_pr="";
+		id_pregunta_respuesta="";
+		
+		Evaluacion eval = evaluacionService.ListarporId(id);
+		model.addAttribute("evaluacion", eval);
+		
+		List<Rubrica> listaRubrica = new ArrayList<Rubrica>();
+        evaluacionrubricaServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
+        	listaRubrica.add(obj.getRubrica());
+        	id_rubrica += obj.getRubrica().getId().toString() + "-";
+        });
+        
+        List<Questionario> listaQuestionario = new ArrayList<Questionario>();
+        evaluacionquestionarioServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
+        	listaQuestionario.add(obj.getQuestionario());
+        	id_pr = "";
+        	obj.getQuestionario().getQuestionariorespuesta().forEach(pr->{
+        		id_pr += pr.getId() + "-";
+        	});
+        	id_pregunta_respuesta += "(" + obj.getQuestionario().getId().toString() + "*" + (id_pr.substring(0,id_pr.length()-1)) + ")";
+        	System.out.println("id_pregunta_respuesta :" + id_pregunta_respuesta);
+        });
+       
+        model.addAttribute("id_evaluacion", eval.getId()); 
+        model.addAttribute("id_rubrica", id_rubrica);
+        model.addAttribute("id_questionario", id_questionario);
+        model.addAttribute("id_pregunta_respuesta", id_pregunta_respuesta);
+        List<Integer> listapuntaje = new ArrayList<Integer>();
+        listapuntaje.add(1);
+        listapuntaje.add(2);
+        listapuntaje.add(3);
+        listapuntaje.add(4);
+        listapuntaje.add(5);
+        model.addAttribute("listapuntaje", listapuntaje);
+        
+        Calendar fecha = Calendar.getInstance();
+		model.addAttribute("anio",fecha.get(Calendar.YEAR));		
+        model.addAttribute("listaquestionario", listaQuestionario);
+		model.addAttribute("listarubrica", listaRubrica);
+        model.addAttribute("listanivelparticipacion",nivelparticipacionService.listar());
+		model.addAttribute("listacategoriaevaluacion", categoriaevaluacionService.listar());
+		return "formverevaluacion";
+	}
+	
 	@GetMapping("/editarviewdocenteid/{id}")
 	public String editarviewdocenteid(@PathVariable("id") Integer id,  Model model,HttpSession ses) {
 		

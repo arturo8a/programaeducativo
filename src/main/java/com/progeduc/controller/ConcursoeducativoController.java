@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -58,7 +59,6 @@ import com.progeduc.model.Postulacionconcurso;
 import com.progeduc.model.Programaeducativo;
 import com.progeduc.model.Trabajosfinales;
 import com.progeduc.model.TrabajosfinalesParticipante;
-import com.progeduc.model.Usuario;
 import com.progeduc.model.UsuarioAlianza;
 import com.progeduc.model.UsuarioLdap;
 import com.progeduc.service.IAperturaranioService;
@@ -131,6 +131,7 @@ public class ConcursoeducativoController {
 	String nivelparticipacion;
 	Integer idnivelparticipacion;
 	String estado;
+	String registro_validar;
 	
 	@PostMapping(value="/registrarconcurso")
 	public String registrarconcurso(@Valid @RequestBody Postulacionconcurso dto)  {
@@ -150,6 +151,29 @@ public class ConcursoeducativoController {
 	@PostMapping(value = "/savetrabajosfinalesparticipante")
 	public Integer savetrabajosfinalesparticipante(@Valid @RequestBody TrabajosfinalesParticipanteDto dto,HttpSession ses){
 		
+		Integer categoria_dto = dto.getTrabajosfinales().getCategoriatrabajo().getId();
+		Integer modalidad_dto = dto.getTrabajosfinales().getModalidadtrabajo().getId();
+		List<Integer> listaIdDto = new ArrayList<Integer>();
+ 		dto.getListaparticipante().forEach(obj->{
+ 			listaIdDto.add(obj.getId());
+ 		});
+		List<Trabajosfinales> listaTrabajosFinales = trabajosfinalesServ.listarhabilitados();
+		List<Integer> listaIdParticipante = new ArrayList<Integer>();
+		listaTrabajosFinales.forEach(obj->{
+			if(obj.getCategoriatrabajo().getId().equals(categoria_dto)	&& obj.getModalidadtrabajo().getId().equals(modalidad_dto)){
+				trabajosfinalesparticipanteServ.listar(obj.getId()).forEach(obj1->{
+					listaIdParticipante.add(obj1.getParticipante().getId());
+				});
+			}
+		});	
+		
+		if(listaIdDto.size() ==  listaIdParticipante.size()) {
+			Collections.sort(listaIdDto);
+			Collections.sort(listaIdParticipante);
+			if(listaIdDto.equals(listaIdParticipante)) {
+				return -1;
+			}	
+		}
 		Date date= new Date();
 		long time = date.getTime();
 		Timestamp ts = new Timestamp(time);
@@ -158,7 +182,6 @@ public class ConcursoeducativoController {
 		
 		String codmod = ses.getAttribute("usuario").toString();
 		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
-		
 		dto.getTrabajosfinales().setProgramaeducativo(pe);
 		
 		Trabajosfinales tf = trabajosfinalesServ.saveTrabajofinaParticipante(dto);
@@ -662,6 +685,7 @@ public class ConcursoeducativoController {
 				midto.setCategoriaevaluacion(obj.getCategoriaevaluacion().getDescripcion());
 				midto.setNivelparticipacion(obj.getNivelparticipacion().getDescripcion());
 				midto.setEstado(obj.getEstadoevaluacion().getDescripcion());
+				midto.setEstadoevaluacion(obj.getEstadoevaluacion().getId());
 				lista.add(midto);
 			}
 		});	
