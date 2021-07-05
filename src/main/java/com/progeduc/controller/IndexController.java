@@ -978,6 +978,7 @@ public class IndexController {
 		model.addAttribute("odsregusu",odsserv.listarAll());
 		model.addAttribute("categoriaregusu",categoriaevaluacionService.listar());
 		model.addAttribute("idAlianzaEstrategica","0");
+		model.addAttribute("tipodoc",tipodocumentoserv.listar());
 		return "formregistrarusuario";
 	}
 	
@@ -986,6 +987,7 @@ public class IndexController {
 		model.addAttribute("odsregusu",odsserv.listarAll());
 		model.addAttribute("categoriaregusu",categoriaevaluacionService.listar());
 		model.addAttribute("idAlianzaEstrategica",id);
+		model.addAttribute("tipodoc",tipodocumentoserv.listar());
 		return "formregistrarusuario";
 	}
 	

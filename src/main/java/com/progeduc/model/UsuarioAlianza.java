@@ -14,8 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="USUARIO_ALIANZA")
@@ -103,7 +102,6 @@ public class UsuarioAlianza {
 	@Column(name="USUARIO_AUTORIDAD")
 	private String usuarioautoridad;
 	
-	@JsonIgnore
 	@Column(name="PASSWORD_AUTORIDAD")
 	private String passwordautoridad;
 	
@@ -127,7 +125,10 @@ public class UsuarioAlianza {
 	
 	@Column(name="FECHA_REGISTRO",nullable=true)
 	private Timestamp fecha_registro;
-
+	
+	@Transient
+	private String fechadocformat;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -398,6 +399,14 @@ public class UsuarioAlianza {
 
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+
+	public String getFechadocformat() {
+		return fechadocformat;
+	}
+
+	public void setFechadocformat(String fechadocformat) {
+		this.fechadocformat = fechadocformat;
 	}
 
 	/*public Auspicio getAuspicioid() {
