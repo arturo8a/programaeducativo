@@ -914,7 +914,7 @@ public class IndexController {
 		return "formregistrardocente";
 	}
 	
-	@GetMapping("/formregistrarevaluacion")
+	@GetMapping("/formregistrarevaluacion/{id}")
 	public String formregistrarevaluacion(@PathVariable("id") Integer id,  Model model,HttpSession ses) {
 		id_rubrica = "";
 		id_questionario ="";
