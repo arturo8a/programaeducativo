@@ -30,6 +30,11 @@ $(document).ready(function(){
 		htmlAuspicicador();
 	});
 	
+	$("#btnQuitararchivo").on("click",function(){
+		$("#fileautoridad").prop("disabled",false);
+		$("#fileautoridad").show();
+	});
+	
 	getUsuario($("#idAlianzaEstrategica").val());
 	
 	$("#fecha_oficio").datepicker({
@@ -146,7 +151,7 @@ function armarData(){
 		filenamedocaut = fileautoridad.files[0].name;
 	}
 	
-	var arrayAuspicio = armarAuspicio();
+	//var arrayAuspicio = armarAuspicio();
 	
 	var data = {
 		id : idUsuario,
@@ -294,7 +299,8 @@ function getUsuario(idUsuario){
 					}
 					$("#numoficioautoridad").val(respuesta.numoficio);
 					$("#fecha_oficio").val(respuesta.fechadocformat);
-					//$("#fileautoridad").val(respuesta.docoficio);
+					$("#fileautoridad").prop("disabled",true);
+					$("#textArchivoFile").text(respuesta.docoficio);
 				}
 				
 				if(respuesta.auspiciador == "1"){
@@ -330,6 +336,9 @@ function getUsuario(idUsuario){
 				$("#correocontactoregusu").val(respuesta.correocontato);
 				$("#cargocontactoregusu").val(respuesta.cargocontacto);
 				
+			}else{
+				$('.alert').alert('close');
+				$("#fileautoridad").show();
 			}
 			$("#modalimagencargando").modal('hide');
 		},
@@ -428,7 +437,7 @@ function validarCampos(){
 			status = false;
 		}
 		if($('#passwordautoridad').val() == ""){
-			contentMensajeError += "Debe ingresar COntraseña de Autoridad/Representante"+"</br>";
+			contentMensajeError += "Debe ingresar Contraseña de Autoridad/Representante"+"</br>";
 			status = false;
 		}
 		/*if($('#sendOficioSi').is(':checked') || $('#sendOficioNo').is(':checked')){
@@ -443,9 +452,21 @@ function validarCampos(){
 			contentMensajeError += "Debe ingresar Fecha de Oficio de Autoridad/Representante"+"</br>";
 			status = false;
 		}
-		if($('#fileautoridad').val() == ""){
+		if($('.alert').length == 0){
 			contentMensajeError += "Debe ingresar Documento de Autoridad/Representante"+"</br>";
 			status = false;
+		}else{
+			if(fileautoridad.files.length > 0){
+				if(fileautoridad.files[0].size >5000000){
+					contentMensajeError += "El archivo no debe superar los 5MB"+"<br>";
+				}
+				var ext = fileautoridad.files[0].name.split('.').pop();
+				ext = ext.toLowerCase();
+				switch(ext){
+					case 'pdf': break;
+					default: mensajeValidacion += "El archivo debe tener extensión pdf"+"<br>";	
+				}
+			}
 		}
 	}
 	

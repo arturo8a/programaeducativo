@@ -126,7 +126,7 @@
 		var hhmmss="" ;
 		var arrayfecha="" ;
 		var fecha=""; 
-		
+$(document).ready(function(){		
 		$("#btnlimpiar").click(function(){
 			
 			$("#fecha_desde").val("")
@@ -315,7 +315,7 @@
             ],
             columnDefs: [
             	{
-	            	type: 'date-euro',"targets": 6,
+	            	type: 'date-euro',"targets": 7,
 	   		      	"render": function(data, type, row, meta){
 	   		      		return moment(data).format('DD/MM/YYYY HH:mm');
    		      		}
@@ -425,7 +425,7 @@
    	    		return true;
     	    }
     	);
-    	
+});    	
     	function filtraUbigeo(dato,campo){
 	    	if(dato==="Todos")
 	    		return true;

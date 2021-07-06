@@ -202,8 +202,7 @@
 			});
 			
 			$("#btnbuscarce").click(function(){	
-				
-					
+				table_lista_evaluacion.draw();
 			});			
 		});
 		
@@ -401,26 +400,43 @@
     	            return true;
     	          }
     	    	
-    	    	/*var nombre = $("#nomie").val();
-    	    	var departamento = $("#departamento option:selected").text();
-    	    	var provincia = $("#provincia option:selected").text();
-    	    	var distrito = $("#distrito option:selected").text();
-    	    	var estado = $("#estado option:selected").val();
-    	    	
-    	    	if(!filtraUbigeo(departamento,data[2]))
-    	    		return false;
-    	    	if(!filtraUbigeo(provincia,data[3]))
-    	    		return false;
-    	    	if(!filtraUbigeo(distrito,data[4]))
-    	    		return false;	    	
-    	    	if(!filtraNombre(nombre,data[5]))
-    	    		return false;
-    	    	if(!filtraFecha(fecha_desde,fecha_hasta,data[7]))
-    	    		return false;
-    	    	if(!filtraConcurso(estado,data[8]))
-    	    		return false;*/
+    	    	var anio = $("#anioce option:selected").text();
+    	    	var nivelparticipacionce = $("#nivelparticipacionce option:selected").text();
+    	    	var categoriace = $("#categoriace option:selected").text();
+    	    	var estado = $("#estadoce option:selected").text();
+    	    	console.log(anio+"-"+nivelparticipacionce+"-"+categoriace+"-"+estado);
+    	    	console.log(data[1]+"-"+data[2]+"-"+data[3]+"-"+data[4]);
+    	    	if(!filtraAnio(anio,data[1])) return false;
+    	    	if(!filtraNivel(nivelparticipacionce,data[2])) return false;
+    	    	if(!filtraCategoria(categoriace,data[3])) return false;
+    	    	if(!filtraEstado(estado,data[4])) return false;
+
    	    		return true;
     	    }
     	);
 	    
+	    
+	    function filtraAnio(dato,campo){
+	    	if(dato==="Año")
+	    		return true;
+	    	return dato===campo;
+	    }
+	    
+	    function filtraNivel(dato,campo){
+	    	if(dato==="Nivel de participación")
+	    		return true;
+	    	return dato===campo;
+	    }
+	    
+	    function filtraCategoria(dato,campo){
+	    	if(dato==="Categoría")
+	    		return true;
+	    	return dato===campo;
+	    }
+	    
+	    function filtraEstado(dato,campo){
+	    	if(dato==="Estado")
+	    		return true;
+	    	return dato===campo;
+	    }
 </script>
