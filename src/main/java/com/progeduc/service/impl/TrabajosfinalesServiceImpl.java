@@ -25,10 +25,9 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 	@Override
 	public Trabajosfinales saveTrabajofinaParticipante(TrabajosfinalesParticipanteDto dto) {
 		
-		System.out.println("id :" + dto.getTrabajosfinales().getId());
 		trabajosfinalesRepo.save(dto.getTrabajosfinales());		
+		trabajosfinalesparticipanteRepo.eliminar(dto.getTrabajosfinales().getId());
 		dto.getListaparticipante().forEach(partitipanteid->{
-				trabajosfinalesparticipanteRepo.eliminar(dto.getTrabajosfinales().getId());
 				trabajosfinalesparticipanteRepo.guardar(dto.getTrabajosfinales().getId(), partitipanteid.getId());
 			}
 		);

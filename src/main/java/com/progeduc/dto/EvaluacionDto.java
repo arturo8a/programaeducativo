@@ -7,6 +7,7 @@ public class EvaluacionDto {
 	String nivelparticipacion;
 	String categoriaevaluacion;
 	String estado;
+	Integer estadoevaluacion;
 	
 	public Integer getId() {
 		return id;
@@ -37,6 +38,12 @@ public class EvaluacionDto {
 	}
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+	public Integer getEstadoevaluacion() {
+		return estadoevaluacion;
+	}
+	public void setEstadoevaluacion(Integer estadoevaluacion) {
+		this.estadoevaluacion = estadoevaluacion;
 	}
 
 }
