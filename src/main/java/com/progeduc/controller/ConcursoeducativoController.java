@@ -969,7 +969,9 @@ public class ConcursoeducativoController {
 				usu.setEnviaroficio(dto.getEnviaroficio());
 				usu.setNumoficio(dto.getNumoficio());
 				usu.setFecha_oficio(dto.getFecha_oficio());
-				usu.setDocoficio(dto.getDocoficio());
+				if(!dto.getDocoficio().isEmpty()) {
+					usu.setDocoficio(dto.getDocoficio());
+				}
 			}
 			
 			

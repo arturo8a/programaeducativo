@@ -8,9 +8,9 @@
     <script type="text/javascript">
 		window.history.forward();
 	</script>    
-    <link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
+    <!--<link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
     <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
-	
+	<link rel="stylesheet" href="../static/css/select2.min.css" th:href="@{/css/select2.min.css}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 	
@@ -18,9 +18,9 @@
     <script type="text/javascript" th:src="@{/js/bootstrapv4.js}" ></script>
     <script type="text/javascript" th:src="@{/js/fontawesomev5.0.6.js}" ></script>
     <script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
-	
+	<script type="text/javascript" th:src="@{/js/select2.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/bootstrap-select.min.js}"></script>
-	<link rel="stylesheet" href="../static/css/style.css" th:href ="@{/css/style.css}">
+	<link rel="stylesheet" href="../static/css/style.css" th:href ="@{/css/style.css}">-->
 </head>
 <body>	
 		<h6 class="text-left">Datos del especialista</h6>
@@ -34,7 +34,7 @@
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left">
 				<label>Usuario</label>
-				<select class="form-control" id="usuario" name="usuario">
+				<select class="form-control select2" id="usuario" name="usuario" style="width: 100%" data-live-search="true">
 					<option value="0">Seleccionar</option>
 					<option th:each="len:${usuarios}" th:value="${len.cuenta}" th:utext="${len.cuenta}"/>
 				</select>
@@ -87,7 +87,7 @@
 		var mensajeValidacionusuario;
 
 		$(document).ready(function(){			
-			
+			$('.select2').select2();
 			$("#check-1").click(function(){
 				if($("#check-1").is(":checked")){
 					$(".case").prop("checked",true);

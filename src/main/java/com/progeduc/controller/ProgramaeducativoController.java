@@ -42,6 +42,7 @@ import com.progeduc.model.Distrito;
 import com.progeduc.model.Docentetutor;
 import com.progeduc.model.Evaluacion;
 import com.progeduc.model.Nivel;
+import com.progeduc.model.Ods;
 import com.progeduc.model.Participante;
 import com.progeduc.model.ProgeducfiltroDto;
 import com.progeduc.model.Programaeducativo;
@@ -350,9 +351,10 @@ public class ProgramaeducativoController {
 						Distrito dist = distServ.getById(obj.getDistrito().getId());
 						if(dist!=null) {
 							if(dist.getOdsid()!=null) {
-								if(odsserv.byOds(dist.getOdsid()) !=null) {
-									//listaie.setOds(odsserv.byOds(dist.getOdsid()).getDescripcion());
-									listaie.setOds("");
+								Ods ods = odsserv.byOds(dist.getOdsid());
+								if(ods !=null) {
+									listaie.setOds(ods.getDescripcion());
+									//listaie.setOds("");
 									listaie.setAnhio(obj.getAnhio());
 									listaie.setNomie(obj.getNomie());
 									listaie.setCodmod(obj.getCodmod());

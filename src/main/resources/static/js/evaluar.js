@@ -43,8 +43,9 @@ var listar = function (){ console.log('listar()');
 		        "lengthMenu": "Mostrar _MENU_ Entradas",
 		        "loadingRecords": "Cargando Registros...",
 		        "processing": "Procesando...",
-		        "search": "Buscar:",
-		        "zeroRecords": " ",//No existen registros
+		        "search": "_INPUT_",
+		        "searchPlaceholder": "Busqueda General",
+		        "zeroRecords": "No existen registros",//No existen registros
 		        "paginate": {
 		            "first": "Primero",
 		            "last": "Ultimo",
