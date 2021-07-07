@@ -46,7 +46,7 @@ public class UsuarioController {
 	@GetMapping("/listarusuarios")
 	public ResponseEntity<List<UsuarioDto>> listarusuarios() throws Exception {
 		
-		List<UsuarioDto> lista =  new ArrayList<UsuarioDto>();		
+		List<UsuarioDto> lista =  new ArrayList<UsuarioDto>();
 		Ldap mildap = new Ldap();
 		List<UsuarioLdap> listaldap = mildap.listarTodosUsuariosLDAP();
 		usuarioService.listar().forEach(obj->{

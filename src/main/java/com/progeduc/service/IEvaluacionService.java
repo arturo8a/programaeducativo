@@ -15,5 +15,5 @@ public interface IEvaluacionService extends ICRUD<Evaluacion,Integer>{
 	
 	Evaluacion getPorAnioCategoriaNivelparticipacion(Integer anio,Integer idcategoria,Integer idnivelparticipacion);
 	
-	Evaluacion getPorAnioNivelparticipacion(Integer anio,Integer nivelparticipacion);
+	Evaluacion getPorAnioNivelparticipacionCategoria(Integer anio,Integer nivelparticipacion,Integer idcategoria);
 }

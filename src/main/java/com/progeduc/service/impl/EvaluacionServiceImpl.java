@@ -72,8 +72,8 @@ public class EvaluacionServiceImpl implements IEvaluacionService{
 	}
 	
 	@Override
-	public Evaluacion getPorAnioNivelparticipacion(Integer anio,Integer nivelparticipacion) {
-		return evaluacionrepo.getPorAnioNivelparticipacion(anio,nivelparticipacion);
+	public Evaluacion getPorAnioNivelparticipacionCategoria(Integer anio,Integer nivelparticipacion,Integer idcategoria) {
+		return evaluacionrepo.getPorAnioNivelparticipacionCategoria(anio,nivelparticipacion,idcategoria);
 	}
 	
 	@Override

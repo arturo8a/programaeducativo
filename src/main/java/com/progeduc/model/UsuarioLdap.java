@@ -4,6 +4,7 @@ public class UsuarioLdap {
     
     private String cuenta;
     private String nombre;
+    private String apellido;
     private String usuario;
     private String correo;
     private String ods;
@@ -25,7 +26,15 @@ public class UsuarioLdap {
         this.nombre = nombre;
     }
 
-    public String getUsuario() {
+    public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
+	public String getUsuario() {
         return usuario;
     }
 

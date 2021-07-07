@@ -620,10 +620,10 @@ public class ConcursoeducativoController {
 			trabajosfinalesparticipanteServ.listar(obj.getId()).forEach(obj1->{
 				nivelparticipacion = obj1.getParticipante().getGradoestudiante().getNivelgradopartdesc();
 				idnivelparticipacion = obj1.getParticipante().getGradoestudiante().getNivelgradopartid();
-			});
+			});			
 			dto.setNivelparticipacion(nivelparticipacion);
 			//dto.setEstado(evaluacionServ.getPorAnio(obj.getAnio()).getEstadoevaluacion().getDescripcion());
-			dto.setEstado(evaluacionServ.getPorAnioNivelparticipacion(obj.getAnio(),idnivelparticipacion)!=null?evaluacionServ.getPorAnioNivelparticipacion(obj.getAnio(),idnivelparticipacion).getEstadoevaluacion().getDescripcion():"");
+			dto.setEstado(evaluacionServ.getPorAnioNivelparticipacionCategoria(obj.getAnio(),idnivelparticipacion,obj.getCategoriatrabajo().getId())!=null?evaluacionServ.getPorAnioNivelparticipacionCategoria(obj.getAnio(),idnivelparticipacion,obj.getCategoriatrabajo().getId()).getEstadoevaluacion().getDescripcion():"");
 			dto.setCalificacion(0);
 			dto.setPuesto(0);
 			listadto.add(dto);
