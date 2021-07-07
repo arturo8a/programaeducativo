@@ -78,7 +78,7 @@
                             <input type="button" class="btn btn-link" id="consulta" value="Consulta"/>
                         </li>
                         <li>
-                            <input type="button" class="btn btn-link" id="consulta_pe" value="Aprobación de Inscripciones"/>
+                            <input type="button" class="btn btn-link" id="consulta_pe" value="Aprobación de inscripciones"/>
                         </li>
                     </ul>
                 </li>
@@ -88,22 +88,22 @@
                     </a>
                     <ul class="collapse multi-collapse list-unstyled pl-4" id="pageSubmenuConcursoEducativo">
                         <li >
-                            <input type="button" class="btn btn-link" id="consulta_docentes" value="Consulta Aula Virtual"/>                            
+                            <input type="button" class="btn btn-link" id="consulta_docentes" value="Consulta aula virtual"/>                            
                         </li>
                         <li >
-                            <input type="button" class="btn btn-link" id="concurso" value="Concurso"/>                            
+                            <input type="button" class="btn btn-link" id="concurso" value="Concurso educativo"/>                            
                         </li>
                         <li >
-                            <input type="button" class="btn btn-link" id="rubrica_evaluacion" value="Rubrica de evaluación"/>                            
+                            <input type="button" class="btn btn-link" id="rubrica_evaluacion" value="Rúbrica de evaluación"/>                            
                         </li>
                         <li >
                             <input type="button" class="btn btn-link" id="reportes" value="Reportes"/>                            
                         </li>
                         <li >
-                            <input type="button" class="btn btn-link" id="trabajos_pendientes" value="Trabajos Pendientes"/>                            
+                            <input type="button" class="btn btn-link" id="trabajos_pendientes" value="Trabajos pendientes"/>                            
                         </li>
                         <li >
-                            <input type="button" class="btn btn-link" id="trabajos_finales_evaluados" value="Trabajos Evaluados"/>                            
+                            <input type="button" class="btn btn-link" id="trabajos_finales_evaluados" value="Trabajos evaluados"/>                            
                         </li>
                     </ul>
                 </li>
@@ -125,15 +125,15 @@
                             	<table> 
                             		<tr>
                             			<td>
-                            				<img th:src="@{./images/iconos_nd/user-circle-solid.svg}" style="width:25px">
+                            				<img th:src="@{./images/usuario.png}" style="width:35px">
                             			</td>		
                             			<td>
-                            				<strong><label th:text="${usuario}" style="padding-left:7px"></label></strong>
+                            				<strong><label th:text="${usuario}" style="padding-left:7px; margin:0px;color:#0083C9;padding-top:8px"></label></strong>
                             				<br>
                             				<ul class="nav nav-pills">											  
 											  <li class="nav-item dropdown">
 											    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
-											    	<label th:text="${perfil}" style="font-size:10px; padding-right:15px"></label><img th:src="@{./images/iconos_nd/angle-down-solid.svg}" style="width:10px"/>
+											    	<label th:text="${perfil}" style="font-size:10px; padding-right:15px; margin-bottom: 0px;color:#0083C9"></label><img th:src="@{./images/iconos_nd/angle-down-solid.svg}" style="width:10px"/>
 											    </a>
 											    <div class="dropdown-menu">
 											      <a class="dropdown-item" id="btnCerrarSesion" style="cursor:pointer">Cerrar sesión</a>

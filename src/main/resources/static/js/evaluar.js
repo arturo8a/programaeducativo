@@ -24,7 +24,7 @@ var listar = function (){ console.log('listar()');
 		
 		$("#table_trabajos_pendientes").dataTable().fnDestroy();
 		table_lista_aperturar_anio = $('#table_trabajos_pendientes').DataTable({
-			dom: 'Bfrtip',
+			dom: '<B><"rs_concursos_educativos">frtip',
 		    "scrollX": true,
 		    "searching": true,
 		    lengthMenu: [
@@ -108,6 +108,7 @@ var listar = function (){ console.log('listar()');
 		    ],
 		    buttons: []
 		});
+		$("div.rs_concursos_educativos").html("<strong>RESULTADOS DE CONCURSOS EDUCATIVOS</strong>");
 		obtener_data_form("#table_trabajos_pendientes tbody",table_lista_aperturar_anio);
 		obtener_fichatrabajo("#table_trabajos_pendientes tbody",table_lista_aperturar_anio);
 		obtener_evidencia("#table_trabajos_pendientes tbody",table_lista_aperturar_anio);

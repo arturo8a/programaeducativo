@@ -768,22 +768,16 @@ public class IndexController {
 		ods = "";
 		usuarioodsService.listarByUsuario(usuario.getId()).forEach(obj->{
 			ods += obj.getOds().getId().toString() + ",";
-		});
-		
+		});		
 		model.addAttribute("ods",ods);
 		model.addAttribute("listaods",odsserv.listarAll());		
 		Ldap mildap = new Ldap();
 		List<UsuarioLdap> lista = mildap.listarTodosUsuariosLDAP();
-		
 		lista.forEach(obj1->{
-			System.out.println("obj1.getCuenta() : " + obj1.getCuenta().trim());
 			if(obj1.getCuenta().equals(usuario.getUsuario())) {
-				System.out.println("obj1.getCorreo() :" + obj1.getCorreo());
-				System.out.println("usuario.getUsuario() :" + usuario.getUsuario());
 				model.addAttribute("datosusuario",obj1);
 			}
 		});
-		System.out.println("usuario.getUsuario() : " + usuario.getUsuario());
 		model.addAttribute("usuarios", lista);
 		model.addAttribute("tipousuarios", tipousuarioServ.lista());
 		return "formeditarusuario";

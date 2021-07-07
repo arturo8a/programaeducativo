@@ -48,13 +48,13 @@
 			</div>
 		</div>
 		<br>
-		<div th:each="objeto : ${listarubrica}">
-					<div>
-						<div class="row" style="background-color:#9E9E9E;padding:10px">
+		<div th:each="objeto : ${listarubrica}" >
+					<div style='border:1px solid #7DB4FF' class='p-3 m-1'>
+						<div class="row">
 							<div class="col-xs-12 col-sm-6">
 								&nbsp;
 							</div>		
-							<div class="col-xs-12 col-sm-6 text-right">
+							<div class="col-xs-12 col-sm-6 text-left">
 								<table style="width:100%">
 									<tr>
 										<td>
@@ -151,11 +151,11 @@
 								</table>
 							</div>
 						</div>
-					</div>			
-					<br>
+					</div>
+					
 		</div>
-		<div th:each="objeto : ${listaquestionario}">
-			<div class="row" style="background-color:#9E9E9E;padding:10px">
+		<div th:each="objeto : ${listaquestionario}" style='border:1px solid #7DB4FF' class='p-3 m-1'>
+			<div class="row" >
 				<table style="width:100%">
 					<tr>
 						<td>
@@ -188,7 +188,7 @@
 			<div class="col-xs-6 col-sm-6">
 				<input type="button" name="btneditarevaluacion_edit" id="btneditarevaluacion_edit" value="Actualizar" class="btn btn-primary"/>
 				<input type="button" name="btneditarhabilitarevaluacion_edit" id="btneditarhabilitarevaluacion_edit" value="Habilitar evaluación" class="btn btn-success"/>
-				<input type="button" name="btncerrarevaluacionedit" id="btncerrarevaluacionedit" value="Cerrar" class="btn btn-danger"/>
+				<input type="button" name="btncerrarevaluacionedit" id="btncerrarevaluacionedit" value="Cerrar" class="btn btn-outline-primary"/>
 			</div>
 		</div>
 		
@@ -226,7 +226,7 @@
 	      <div class="modal-body" id="textoerroreditevaluacion">
 	      </div>
 	      <div class="modal-footer">
-	        <button type="button" class="btn btn-danger rounded-0" id="btncerrarmensajeerroreditevaluacion" name="btncerrarmensajeerroreditevaluacion">Cerrar</button>
+	        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeerroreditevaluacion" name="btncerrarmensajeerroreditevaluacion">Cerrar</button>
 	      </div>
 	    </div>
 	  </div>

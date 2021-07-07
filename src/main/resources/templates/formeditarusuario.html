@@ -11,51 +11,57 @@
 
 </head>
 <body>	
-		<h5>Datos del especialista</h5>
+		<h6 class="text-left">Datos del especialista</h6>
 		<input type="hidden" th:value="${id}" id="id" />
 		<input type="hidden" th:value="${ods}" id="ods" />
 		<div class="row">
-			<div class="col-xs-12 col-sm-3">
+			<div class="col-xs-12 col-sm-4 text-left">
 				<label>Perfil</label>
 				<select class="form-control" id="perfil_usuario_edit" name="perfil_usuario_edit" th:field="*{usuario.tipousuario.id}">
 					<option value="0">Seleccionar</option>
 					<option th:each="len:${tipousuarios}" th:value="${len.id}" th:utext="${len.descripcion}"/>
 				</select>	
 			</div>
-			<div class="col-xs-12 col-sm-3">
+			<div class="col-xs-12 col-sm-4 text-left">
 				<label>Usuario</label>
 				<select class="form-control" id="usuario_edit" name="usuario_edit" th:field="*{usuario.usuario}" disabled>
 					<option value="0">Seleccionar</option>
 					<option th:each="len:${usuarios}" th:value="${len.cuenta}" th:utext="${len.cuenta}"/>
 				</select>
 			</div>
-			<div class="col-xs-12 col-sm-3">
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-xs-12 col-sm-4 text-left">
 				<label>Nombres</label>
-				<input type="text" name="nombresusuario_edit"  th:field="*{datosusuario.nombre}" id="nombresusuario_edit" class="form-control" disabled/>
+				<input type="text" th:field="*{datosusuario.nombre}" name="nombresusuario_edit"  id="nombresusuario_edit" class="form-control" disabled/>
 			</div>
-			<div class="col-xs-12 col-sm-3">
+			<div class="col-xs-12 col-sm-4 text-left">
+				<label>Apellidos</label>
+				<input type="text" th:field="*{datosusuario.usuario}" name="apellidosusuario_edit"  id="apellidosusuario_edit" class="form-control" disabled/>
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left">
 				<label>Correo electrónico</label>
-				<input type="text" name="correoelectronico_edit" th:field="*{datosusuario.correo}" id="correoelectronico_edit" class="form-control" disabled/>
+				<input type="text" th:field="*{datosusuario.correo}" name="correoelectronico_edit" id="correoelectronico_edit" class="form-control" disabled/>
 			</div>
 		</div>
 		<hr>
-		<h6>Accesos</h6>
-		<h6>ODS</h6>		
+		<h6 class="text-left">Accesos ODS</h6>
 		<div class="row">
-			<div class="col-xs-12 col-sm-12">
+			<div class="col-xs-12 col-sm-12 text-left">
 				<input type="checkbox" name="check-1_edit" id="check-1_edit" style="margin:5px" /><label for="check-1_edit">Marcar todos</label>
 			</div>
 		</div>
 		
 		<div class="row" >
-			<div class="col-xs-12 col-sm-2" th:each="ods : ${listaods}">
-				<input type="checkbox" class="case_edit" th:name="chk_usuario_edit" th:id="${ods.id}" style="margin:5px"/> <label th:for="${ods.id}" th:text="${ods.descripcion}"></label>
+			<div class="col-xs-12 col-sm-2 text-left" th:each="ods : ${listaods}">
+				<input type="checkbox" class="case_edit" th:name="chk_usuario_edit" onclick="desactiva_marcar_todos_edit()" th:id="'x'+${ods.id}" style="margin:5px"/> <label th:for="'x'+${ods.id}" th:text="${ods.descripcion}"></label>
 			</div>
 		</div>
 		<br>
 		<div class="row">
 			<div class="col-xs-6 col-sm-6 text-right">
-				<input type="button" name="btncancelarusuario_edit" id="btncancelarusuario_edit" value="Cancelar" class="btn btn-danger"/>
+				<input type="button" name="btncancelarusuario_edit" id="btncancelarusuario_edit" value="Cancelar" class="btn btn-outline-primary"/>
 			</div>
 			<div class="col-xs-6 col-sm-6 text-left">
 				<input type="button" name="btnregistrarusuario_edit" id="btnregistrarusuario_edit" value="Registrar" class="btn btn-primary"/>
@@ -70,20 +76,18 @@
 		var array_ods;
 		var mensajeValidacionusuario_edit;
 		var ods_seleccionada, array_ods_seleccionada_edit;
+		var id;
 
 		$(document).ready(function(){
 			
 			ods_seleccionada = $("#ods").val();
-			array_ods_seleccionada_edit = ods_seleccionada.split(",");
-			
+			array_ods_seleccionada_edit = ods_seleccionada.split(",");			
 			for(var i=0; i<array_ods_seleccionada_edit.length-1;i++){
-				$("#"+array_ods_seleccionada_edit[i]).prop("checked",true);
+				$("#x"+array_ods_seleccionada_edit[i]).prop("checked",true);
 			}
-			console.log("longitud de checbox seleccionados :"  + array_ods_seleccionada_edit.length);
 			if(array_ods_seleccionada_edit.length-1==40){
 				$("#check-1_edit").prop("checked",true);
-			}
-			
+			}			
 			$("#check-1_edit").click(function(){
 				if($("#check-1_edit").is(":checked")){
 					$(".case_edit").prop("checked",true);
@@ -105,7 +109,6 @@
 				});
 				
 				if(validarCampos_edit()){
-					
 					var data = {
 						usuario:{
 							id : $("#id").val(),
@@ -116,8 +119,7 @@
 							estado : 1
 						},
 						ods: array_ods
-					};
-					
+					};					
 					$.ajax({
 						type : "POST",
 					    contentType : "application/json",
@@ -136,7 +138,11 @@
 								});
 							}
 							else if (respuesta == 1){
-								/*console.log("usuario registrado");*/
+								table_lista_usuario.cell(celdaseleccionada,1).data($("#perfil_usuario_edit option:selected").html()).draw();
+								table_lista_usuario.cell(celdaseleccionada,2).data($("#nombresusuario_edit").val()).draw();
+								table_lista_usuario.cell(celdaseleccionada,3).data($("#apellidosusuario_edit").val()).draw();
+								table_lista_usuario.cell(celdaseleccionada,4).data($("#usuario_edit").val()).draw();
+								table_lista_usuario.cell(celdaseleccionada,5).data($("#correoelectronico_edit").val()).draw();
 								$("#textoexitocrearusuario").html("Se actualizó Usuario");
 								$('#modalexitocrearusuario').modal({
 									show : true,
@@ -149,7 +155,6 @@
 							alert("excepcion al actualizar usuario");
 					    }
 					});
-					
 				}
 				else{
 					$("#modalimagencargando").modal('hide');
@@ -177,6 +182,21 @@
 			
 		});		
 		
+		function desactiva_marcar_todos_edit(){
+			var bandera = true;
+			$("input[name=chk_usuario_edit]").each(function(index){
+				if( ! $(this).is(":checked")){
+					bandera = false;
+				}
+			});
+			if(!bandera){
+				$("#check-1_edit").prop("checked",false);
+			}
+			else{
+				$("#check-1_edit").prop("checked",true);
+			}
+		}
+		
 		function validarCampos_edit(){
 			
 			mensajeValidacionusuario_edit = "";
@@ -194,7 +214,9 @@
 			
 			$("input[name=chk_usuario_edit]").each(function(index){
 				if($(this).is(":checked")){
-					array_ods.push(this.id);
+					id = this.id;
+					id  = id.replace("x","");
+					array_ods.push(id);
 				}
 			});
 			

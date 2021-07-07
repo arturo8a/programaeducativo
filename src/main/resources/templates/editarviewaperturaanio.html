@@ -10,9 +10,10 @@
 	</script>
 
     <!-- Bootstrap CSS CDN -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous"-->
     <!-- Our Custom CSS -->
     <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="../static/css/nuevo_disenio.css" th:href="@{/css/nuevo_disenio.css}">
 	
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
@@ -59,7 +60,6 @@
 	
 	<script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
 	
-	<link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
 	<link href="../static/css/gijgo.min.css" rel="stylesheet" th:href="@{/css/gijgo.min.css}" >
 	<script type="text/javascript" th:src="@{/js/gijgo.min.js}" ></script>
 	<script type="text/javascript" th:src="@{/js/messages.es-es.js}"></script>
@@ -73,7 +73,7 @@
 </head>
 <body>
 
-<h4 style="color:#4698FF; padding-left:5px">Aperturar Periodo</h4>
+<!-- h4 style="color:#4698FF; padding-left:5px">Aperturar Periodo</h4-->
 <hr>
 <div class="row" style="padding-left:20px; width:100%; padding-bottom:3px">
 	<div class="col-2" style="padding-left:20px">
@@ -92,13 +92,13 @@
 </div>
 <br>
 <div class="row" style="padding-left:20px; width:100%; padding-bottom:3px">
-	<div class="col-6" style="padding-left:20px">
+	<div class="col-4" style="padding-left:20px">
 		<strong>Cronograma del Concurso Escolar </strong>
 	</div>
-	<div class="col-3" style="padding-left:20px">
+	<div class="col-3 text-center" style="padding-left:20px">
 		<strong>Desde</strong>
 	</div>
-	<div class="col-3" style="padding-left:20px">
+	<div class="col-3 text-center" style="padding-left:20px">
 		<strong>Hasta </strong>
 	</div>
 </div>
@@ -186,10 +186,10 @@
 		&nbsp;
 	</div>
 	<div class="col-3" style="padding-left:20px">
-		<input type="button" value="Atras" id="btnatrasaperturarperiodo" class="btn btn-danger text-white rounded-0"/>
+		<input type="button" value="Cancelar" id="btnatrasaperturarperiodo" class="btn btn-outline-primary"/>
 	</div>
 	<div class="col-3" style="padding-left:20px">
-		<input type="button" value="Actualizar" id="btnactualizaraperturarperiodo" class="btn btn-primary text-white rounded-0"/>
+		<input type="button" value="Actualizar" id="btnactualizaraperturarperiodo" class="btn btn-primary text-white"/>
 	</div>
 </div>
 
@@ -220,8 +220,8 @@
       <div class="modal-body" id="textoconfirmacion">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary rounded-0" id="btnaceptarmensajeconfirmacion" name="btnaceptarmensajeconfirmacion">Aceptar</button>
-        <button type="button" class="btn btn-danger rounded-0" id="btncerrarmensajeconfirmacion" name="btncerrarmensajeconfirmacion">Cerrar</button>
+        <button type="button" class="btn btn-primary" id="btnaceptarmensajeconfirmacion" name="btnaceptarmensajeconfirmacion">Aceptar</button>
+        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeconfirmacion" name="btncerrarmensajeconfirmacion">Cerrar</button>
       </div>
     </div>
   </div>
@@ -239,7 +239,7 @@
       <div class="modal-body" id="textoinformacion">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger rounded-0" id="btncerrarmensajeinformacion" name="btncerrarmensajeinformacion">Cerrar</button>
+        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeinformacion" name="btncerrarmensajeinformacion">Cerrar</button>
       </div>
     </div>
   </div>
@@ -257,7 +257,7 @@
       <div class="modal-body" id="textoerror">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger rounded-0" id="btncerrarmensajeerror" name="btncerrarmensajeerror">Cerrar</button>
+        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeerror" name="btncerrarmensajeerror">Cerrar</button>
       </div>
     </div>
   </div>
