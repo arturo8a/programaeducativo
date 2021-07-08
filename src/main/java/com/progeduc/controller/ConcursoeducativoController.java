@@ -1005,6 +1005,20 @@ public class ConcursoeducativoController {
 			
 			usuAlianzaserv.modificar(usu);
 			respuesta = usu.getId();
+			
+			/*enviar correo*/
+			if(!dto.getApepatautoridad().equals("")) { System.out.print("enviar correo");
+				String msj = "<img src='./images/logo_login.PNG' style='width:400px' /><img src='./images/imagen1.PNG' style='width:400px' />";
+				msj += "<p>Estimado(a), usted ha sido agregado como evaluador:</p>";
+				msj += "<p>Usuario: "+dto.getUsuarioautoridad()+"</p>";
+				msj += "<p>Contraseña: "+dto.getPasswordautoridad()+"</p>";
+				
+				mail = new Mail();
+				mail.enviarCorreoTrabajosFinalesConcursoEscolar("Credenciales de Usuario", msj, dto.getCorreoautoridad());
+	
+			}
+			
+			
 		}else {
 			usu = new UsuarioAlianza();
 			usu.setOds(dto.getOds());

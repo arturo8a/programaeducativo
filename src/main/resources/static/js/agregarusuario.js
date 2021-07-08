@@ -77,7 +77,7 @@ function htmlAuspicicador(){
 
 function armarAuspicio(){
 	var array = [];
-	if($("#section-datos-autoridad").is(":visible")){
+	if($("#section-datos-auspicio").is(":visible")){
 		$.each($("[id*=tipocodauspiciador]"), function( index, value ) {
 			var i = index + 1;
 		  	var tipoDoc = $('#tipocodauspiciador'+i).val();
@@ -452,7 +452,7 @@ function validarCampos(){
 			contentMensajeError += "Debe ingresar Fecha de Oficio de Autoridad/Representante"+"</br>";
 			status = false;
 		}
-		if($('.alert').length == 0){
+		if($('.alert').length == 0 && fileautoridad.files.length == 0){
 			contentMensajeError += "Debe ingresar Documento de Autoridad/Representante"+"</br>";
 			status = false;
 		}else{
