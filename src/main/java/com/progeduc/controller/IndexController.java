@@ -913,8 +913,12 @@ public class IndexController {
 		id_rubrica = "";
 		id_questionario ="";
 		
-		Evaluacion eval = evaluacionService.ListarporId(id);
 		Trabajosfinales trabajosfinales = trabajosfinalesService.ListarporId(id);
+		List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteService.listar(trabajosfinales.getId());
+		Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
+
+		Evaluacion eval = evaluacionService.getPorAnioCategoriaNivelparticipacion(trabajosfinales.getAnio(), 
+				trabajosfinales.getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
 		model.addAttribute("evaluacion", eval);
 		
 		List<Rubrica> listaRubrica = new ArrayList<Rubrica>();
@@ -950,8 +954,8 @@ public class IndexController {
 			lista.add(i);
 		}
 
-		List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteService.listar(trabajosfinales.getId());
-		Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
+		/*List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteService.listar(trabajosfinales.getId());
+		Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());*/
 		
 		model.addAttribute("nombretrabajo", trabajosfinales.getTitulotrabajo());
 		model.addAttribute("categoria", trabajosfinales.getCategoriatrabajo().getDescripcion());

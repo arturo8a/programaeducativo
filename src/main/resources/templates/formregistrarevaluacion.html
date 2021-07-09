@@ -107,22 +107,19 @@
 							<table style="width:100%">
 								<tr>
 									<td>
-										<label th:text="${objeto.pregunta}">Ingrese pregunta</label>
+										<!--<label th:text="${objeto.pregunta}">Ingrese pregunta</label>-->
+										<input type="text" class="form-control" th:id="'pregunta'+ ${objeto.id}" th:value="${objeto.pregunta}" disabled/>
 									</td>
 									<td>&nbsp;</td>
 								</tr>
-								<tr>
+								<tr th:each="qr : ${objeto.questionariorespuesta}">
 									<td>
-										<label>Respuesta</label>
-										<input type="radio" class="form-control" th:id="'respuesta'+ ${objeto.id} + '1'" th:value="${objeto.puntaje}"/>
+										<input type="text" class="form-control" th:id="'respuesta'+ ${qr.id}" th:value="${qr.respuesta}" disabled/>
 									</td>
-									<!--<td>
+									<td>
 										<label>Puntaje</label>
-										<select class="form-control" th:id="'puntajeq'+ ${objeto.id} + '1'">
-											<option value="0">Seleccione</option>
-											<option th:each="len:${listanro}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje}"/>
-										</select>
-									</td>-->
+										<input type="radio" class="form-control" th:id="'puntajeq'+ ${qr.id}" th:value="${qr.puntaje}"/>
+									</td>
 								</tr>							
 							</table>						
 						</div>
