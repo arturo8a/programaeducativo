@@ -615,7 +615,7 @@ public class IndexController {
 				model.addAttribute("cargainicialtablatrabajos", 1);
 				return "menu_concurso";
 			}
-			else { /*El admin u ODS*/
+			else { /*El admin,espcialista ods, especialista du, ODS*/
 				model.addAttribute("usuario", ses.getAttribute("usuario"));
 				model.addAttribute("perfil", ses.getAttribute("perfil"));
 				model.addAttribute("tipousuarioid", ses.getAttribute("tipousuarioid"));

@@ -141,9 +141,66 @@ public class Ldap {
         env.put(Context.SECURITY_CREDENTIALS, ldapPassword);
         env.put("com.sun.jndi.ldap.connect.timeout", ldapTimeout);
         
-        dirContext = new InitialDirContext(env);
-        
         return dirContext;
+    }
+    
+    public Integer validarUsuario(String usuario,String clave) throws Exception {
+        
+    	Properties props = obtenerParametros();
+        String ldapPrefix = props.getProperty("ldap.prefix");
+        String ldapTimeout = props.getProperty("ldap.timeout");
+        String ldapUrl = props.getProperty("ldap.url");
+        String ldapUser = usuario;
+        String ldapPassword = clave;
+        
+        DirContext dirContext = null;
+        Hashtable env = new Hashtable();
+        env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+        env.put(Context.PROVIDER_URL, ldapUrl);
+        env.put(Context.SECURITY_AUTHENTICATION, "simple");
+        env.put(Context.SECURITY_PRINCIPAL, ldapUser + ldapPrefix);
+        env.put(Context.SECURITY_CREDENTIALS, ldapPassword);
+        env.put("com.sun.jndi.ldap.connect.timeout", ldapTimeout);
+        
+        try {
+        	dirContext = new InitialDirContext(env);
+        	return 1;
+        }
+        catch(Exception exc) {
+        	return 0;
+        }
+    }
+    
+    public List<UsuarioLdap> loginUsuario() throws Exception{
+        
+        Properties props = obtenerParametros();
+
+        List<UsuarioLdap> listaUsuario=new ArrayList<>();
+        DirContext dirContext = this.conectarLDAP(props);
+        NamingEnumeration<?> gruposLDAP = this.obtenerGruposLDAP(dirContext,props);
+
+        if (gruposLDAP != null) {
+            while (gruposLDAP.hasMore()) {
+                String userCN = gruposLDAP.next().toString();
+                Attributes attrs = this.obtenerUsuarioLDAP(dirContext, userCN);
+                if (attrs != null && attrs.size() == 6) {
+                    UsuarioLdap userLdap=new UsuarioLdap();
+                    userLdap.setCuenta( (String) attrs.get("SAMAccountName").get() );
+                    userLdap.setNombre( ((String) attrs.get("givenName").get()).toUpperCase().trim() );
+                    userLdap.setUsuario( ((String) attrs.get("sn").get()).toUpperCase().trim() );
+                    userLdap.setCorreo( ((String) attrs.get("userPrincipalName").get()).toUpperCase().trim() );
+                    userLdap.setOds( ((String) attrs.get("l").get()).toUpperCase().trim() );
+                    userLdap.setDireccion( ((String) attrs.get("streetAddress").get()).toUpperCase().trim() );
+                    System.out.println("Cuenta : " + userLdap.getCuenta());
+                    System.out.println("Nombre : " + userLdap.getNombre());
+                    System.out.println("Usuario : " + userLdap.getUsuario());
+                    System.out.println("Correo : " + userLdap.getCorreo());
+                    System.out.println("Direccion : " + userLdap.getDireccion());
+                    listaUsuario.add(userLdap);
+                }
+            }
+        }
+        return listaUsuario;
     }
     
     

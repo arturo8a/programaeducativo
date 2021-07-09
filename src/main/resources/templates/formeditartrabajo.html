@@ -124,14 +124,8 @@
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-4">
 				<label for="evidenciatrabajo">Subir archivos de evidencias</label>
-				<input type="file" id="evidenciastrabajoeditar" class="form-control" name="file[]"  multiple disabled/>
-				<!-- div id="evidencias"  th:each="evidencia:${nombreevidencias}" -->
-				<div id="divevidencias" style="overflow-y: scroll; height:150px;">
-					<!--div class='alert alert-warning alert-dismissible fade show' name="divevidencia" role='alert'><strong th:text="${evidencia}"></strong>
-						<button type='button' class='close' data-dismiss='alert'id="${evidencia}" aria-label='Close'>
-								<span aria-hidden='true'>&times;</span>
-						</button>
-					</div-->						
+				<input type="file" id="evidenciastrabajoeditar" class="form-control" name="file[]"  multiple disabled/>				
+				<div id="divevidencias" style="overflow-y: scroll; height:150px;">											
 				</div>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-4">
@@ -166,7 +160,7 @@
 				</table>
 			</div>
 			<div class="col-xs-12 col-sm-4">
-				<table>
+				<table class="w-100 ml-2">
 					<tr>
 						<td><label>¿Qué ejes temáticos aborda tu trabajo?</label></td>
 					</tr>
@@ -186,7 +180,7 @@
 						<td><input type="checkbox" id="importanciaeditar" th:checked="${chimportancia}" /><label style="padding-left:5px" for="importancia">Importancia de cerrar la brecha en saneamiento</label></td>
 					</tr>
 					<tr>
-						<td><input type="checkbox" id="vinculoeditar" th:checked="${chvinculo}" /><label style="padding-left:5px" for="vinculo">El vínculo estratégico entre ek agua segura y la salud</label></td>
+						<td><input type="checkbox" id="vinculoeditar" th:checked="${chvinculo}" /><label style="padding-left:5px" for="vinculo">El vínculo estratégico entre el agua segura y la salud</label></td>
 					</tr>
 					<tr>
 						<td><input type="checkbox" id="carenciaseditar" th:checked="${chcarencias}" /><label style="padding-left:5px" for="carencias">Las carencias que ponen en riesgo la vida</label></td>

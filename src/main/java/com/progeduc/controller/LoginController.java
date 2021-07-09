@@ -21,6 +21,7 @@ import com.progeduc.model.Usuario_Ods;
 import com.progeduc.service.IOdsService;
 import com.progeduc.service.IProgramaeducativoService;
 import com.progeduc.service.ITipousuarioService;
+import com.progeduc.service.IUsuarioOdsService;
 import com.progeduc.service.IUsuarioService;
 import com.progeduc.service.IUsuario_odsService;
 
@@ -42,9 +43,59 @@ public class LoginController {
 	private IOdsService odsserv;
 	
 	@Autowired
+	private IUsuarioOdsService usuarioodsServ;
+	
+	@Autowired
 	private ITipousuarioService tipousuarioServ;
 	
-	@RequestMapping(value="/login", method = RequestMethod.POST, produces="text/plain")	
+	//@PostMapping(value="/loginUser")
+	@RequestMapping(value="/loginUser", method = RequestMethod.POST, produces="text/plain")	
+	public @ResponseBody String loginUser(@RequestParam("usuario") String usuario, @RequestParam("password") String password,HttpSession ses) throws Exception {
+		
+		if(usuario.equals("admin") && password.equals("Sunass2020")) {
+			ses.setAttribute("usuario", "admin");/*adminpro*/
+    		ses.setAttribute("perfil", "admin");
+    		ses.setAttribute("tipousuarioid", 30);
+    		return "admin";
+		}
+		
+		Ldap mildap = new Ldap();
+		Integer rpta = mildap.validarUsuario(usuario, password);
+		
+		if(rpta == 1){
+			Usuario obj = usuarioServ.byUsuario(usuario);
+			if(obj.getTipousuario().getId() == 1 || obj.getTipousuario().getId() == 2 || obj.getTipousuario().getId() == 11 || obj.getTipousuario().getId() == 12 ) {
+				ses.setAttribute("usuario", obj.getUsuario());/*admin,espcialista ods, especialista du*/
+        		ses.setAttribute("perfil", obj.getTipousuario().getDescripcion());
+        		ses.setAttribute("tipousuarioid", obj.getTipousuario().getId());
+        		return obj.getUsuario();
+			}
+		}
+		else {
+			Usuario obj = usuarioServ.login(usuario, password);
+			if(obj == null) {
+				Usuario_Ods uo = usuario_odsServ.login(usuario, password);
+        		if(uo == null) {
+        			return "-1";
+        		}
+        		ses.setAttribute("usuario", uo.getOds());/*ODS*/
+        		ses.setAttribute("perfil", uo.getOds());
+        		ses.setAttribute("tipousuarioid", 0);
+        		ses.setAttribute("odsid", uo.getOdsid());
+        		return uo.getNombres();
+    		}
+			Programaeducativo pe = progeducService.getCodmodByAnioActual(obj.getUsuario());
+    		if(pe!=null) { /*IIEE*/
+    			ses.setAttribute("usuario", obj.getUsuario());
+        		ses.setAttribute("perfil", obj.getTipousuario().getDescripcion());
+        		ses.setAttribute("tipousuarioid", obj.getTipousuario().getId());
+        		return obj.getUsuario();
+    		}
+		}
+		return "-2";
+	}
+	
+	/*@RequestMapping(value="/login", method = RequestMethod.POST, produces="text/plain")	
     public @ResponseBody String loginUsuario(@RequestParam("usuario") String usuario, @RequestParam("password") String password,HttpSession ses){
     	
 		try {
@@ -83,7 +134,7 @@ public class LoginController {
     		System.out.println("login: " + ex);
             return "error";
     	}    	
-    }
+    }*/
 	
 	@GetMapping("/cerrar_sesion")
 	public String  cerrarsesion(@RequestParam(name="name",required=false,defaultValue="") String name, Model model,HttpSession ses) {

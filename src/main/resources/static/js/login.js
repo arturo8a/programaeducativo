@@ -38,7 +38,7 @@ function validarUsuario(){
 		var data_json = { usuario : usuario, password:password};
 		$.ajax({
 			type: "POST",
-			url: url_base + "pedesa/login",
+			url: url_base + "pedesa/loginUser",
 			data: data_json,
 			success: function(respuesta) {
 				if(respuesta=="-1"){

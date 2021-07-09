@@ -90,12 +90,12 @@
 				<input type="text" id="titulotrabajo" name="titulotrabajo" class="form-control"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-4">
-				<label for="archivotrabajo">Subir archivo de trabajo final</label>
+				<label>Subir archivo de trabajo final</label>
 				<input type="file" id="archivotrabajo" name="archivotrabajo" class="form-control" />
 				
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-4">
-				<label for="evidenciatrabajo">Subir archivos de evidencias</label>
+				<label>Subir archivos de evidencias</label>
 				<input type="file" id="evidenciastrabajo" class="form-control" name="file[]"  multiple/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-4">
@@ -129,7 +129,7 @@
 				</table>
 			</div>
 			<div class="col-xs-12 col-sm-4">
-				<table>
+				<table class="w-100 ml-2">
 					<tr>
 						<td><label>¿Qué ejes temáticos aborda tu trabajo?</label></td>
 					</tr>
@@ -149,7 +149,7 @@
 						<td><input type="checkbox" id="importancia" /><label style="padding-left:5px" for="importancia">Importancia de cerrar la brecha en saneamiento</label></td>
 					</tr>
 					<tr>
-						<td><input type="checkbox" id="vinculo" /><label style="padding-left:5px" for="vinculo">El vínculo estratégico entre ek agua segura y la salud</label></td>
+						<td><input type="checkbox" id="vinculo" /><label style="padding-left:5px" for="vinculo">El vínculo estratégico entre el agua segura y la salud</label></td>
 					</tr>
 					<tr>
 						<td><input type="checkbox" id="carencias" /><label style="padding-left:5px" for="carencias">Las carencias que ponen en riesgo la vida</label></td>
@@ -812,7 +812,7 @@
 			}	
 		}
 		
-		if(linkvideo.trim()=="" &&  (categoriatrabajo == "1" || categoriatrabajo == "3") ){
+		if(linkvideotrabajo.trim()=="" &&  (categoriatrabajo == "1" || categoriatrabajo == "3") ){
 			mensajeValidacion += "Debe ingresar link de video"+"<br>";
 		}
 		
@@ -860,6 +860,10 @@
 		
 		if(nrodoctrabajo.trim()==""){
 			mensajeValidacion += "Debe ingresar número de documento de docente"+"<br>";
+		}
+		
+		if(nrotelefonotrabajo.trim()==""){
+			mensajeValidacion += "Debe ingresar número de teléfono de docente"+"<br>";
 		}
 		
 		if(correotrabajo.trim()==""){

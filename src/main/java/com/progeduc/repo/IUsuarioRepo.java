@@ -15,7 +15,7 @@ import com.progeduc.model.Usuario_Ods;
 @Transactional(readOnly = true)
 public interface IUsuarioRepo extends CrudRepository<Usuario,Integer>{
 	
-	@Query(value="SELECT U.* FROM USUARIO U WHERE U.USUARIO=?1 AND U.PASSWORD=?2",nativeQuery = true)
+	@Query(value="SELECT U.* FROM USUARIO U WHERE U.USUARIO=?1 AND U.PASSWORD=?2 and u.estado=1",nativeQuery = true)
 	Usuario login(@Param("usuario") String usuario,@Param("password") String password);	
 	
 	@Query(value="SELECT U.* FROM USUARIO U WHERE U.USUARIO=?1",nativeQuery = true)

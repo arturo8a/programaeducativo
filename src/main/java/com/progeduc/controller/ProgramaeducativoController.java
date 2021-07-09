@@ -72,6 +72,7 @@ import com.progeduc.service.IProvinciaService;
 import com.progeduc.service.ITipousuarioService;
 import com.progeduc.service.ITrabajosfinalesParticipanteService;
 import com.progeduc.service.ITrabajosfinalesService;
+import com.progeduc.service.IUsuarioOdsService;
 import com.progeduc.service.IUsuarioService;
 import com.progeduc.service.IUsuario_odsService;
 import com.progeduc.service.impl.UploadFileService;
@@ -111,6 +112,9 @@ public class ProgramaeducativoController {
 	
 	@Autowired
 	IUsuario_odsService usuarioodsService;
+	
+	@Autowired
+	IUsuarioOdsService usuarioodsServ;
 	
 	@Autowired
 	IUsuarioService usuarioService;
@@ -340,10 +344,75 @@ public class ProgramaeducativoController {
 	@GetMapping("/listacolegiosinscritos")
 	public ResponseEntity<List<ListaInstitucionEducativa>> listacolegiosinscritos(HttpSession ses) {
 		
+		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
 		List<ListaInstitucionEducativa> arrayie = new ArrayList<ListaInstitucionEducativa>();
-		Object ob = ses.getAttribute("odsid");
-		//if(Integer.parseInt(ob.toString()) == 0) {
-		if(true) {
+		if(tipousuarioid == 0){			
+			Object ob = ses.getAttribute("odsid");
+			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(obj->{
+				progeducService.listar(obj.getId()).forEach(obj1->{
+					listaie= new ListaInstitucionEducativa();
+					listaie.setOds(odsserv.byOds(obj1.getDistrito().getOdsid()).getDescripcion());
+					listaie.setAnhio(obj1.getAnhio());
+					listaie.setNomie(obj1.getNomie());
+					listaie.setCodmod(obj1.getCodmod());
+					listaie.setEstado(obj1.getEstado());
+					listaie.setId(obj1.getId());
+					listaie.setMotivoobservacion(obj1.getMotivoobservacion());
+					arrayie.add(listaie);
+				});
+			});		
+		}
+		else if (tipousuarioid==30){
+			progeducService.listar().forEach(obj->{
+				if(obj!=null) {
+					listaie= new ListaInstitucionEducativa();
+					if(obj.getDistrito()!=null){
+						Distrito dist = distServ.getById(obj.getDistrito().getId());
+						if(dist!=null) {
+							if(dist.getOdsid()!=null) {
+								Ods ods = odsserv.byOds(dist.getOdsid());
+								if(ods !=null) {
+									listaie.setOds(ods.getDescripcion());
+									listaie.setAnhio(obj.getAnhio());
+									listaie.setNomie(obj.getNomie());
+									listaie.setCodmod(obj.getCodmod());
+									listaie.setEstado(obj.getEstado());
+									listaie.setId(obj.getId());
+									listaie.setMotivoobservacion(obj.getMotivoobservacion());
+									arrayie.add(listaie);
+								}
+							}
+						}
+					}					
+				}		
+			});		
+		}
+		else {
+			String usuario = ses.getAttribute("usuario").toString();
+			Usuario user = usuarioServ.byUsuario(usuario);
+			usuarioodsServ.listarByUsuario(user.getId()).forEach(obj->{
+				distServ.listByOdsid(obj.getOds().getId()).forEach(dist->{
+					if(dist.getOdsid()!=null) {
+						Ods ods = odsserv.byOds(dist.getOdsid());
+						if(ods !=null) {
+							progeducService.listar(dist.getId()).forEach(obj1->{
+								listaie= new ListaInstitucionEducativa();
+								listaie.setOds(ods.getDescripcion());
+								listaie.setAnhio(obj1.getAnhio());
+								listaie.setNomie(obj1.getNomie());
+								listaie.setCodmod(obj1.getCodmod());
+								listaie.setEstado(obj1.getEstado());
+								listaie.setId(obj1.getId());
+								listaie.setMotivoobservacion(obj1.getMotivoobservacion());
+								arrayie.add(listaie);
+							});
+						}
+					}
+				});
+			});
+		}
+		return new ResponseEntity<List<ListaInstitucionEducativa>>(arrayie, HttpStatus.OK);
+		/*if(true) {
 			progeducService.listar().forEach(obj->{
 				if(obj!=null) {
 					listaie= new ListaInstitucionEducativa();
@@ -385,7 +454,7 @@ public class ProgramaeducativoController {
 				});	
 			});			
 		}			
-		return new ResponseEntity<List<ListaInstitucionEducativa>>(arrayie, HttpStatus.OK) ;
+		return new ResponseEntity<List<ListaInstitucionEducativa>>(arrayie, HttpStatus.OK) ;*/
 	}
 	
 	@PostMapping(value = "/save")
@@ -751,7 +820,7 @@ public class ProgramaeducativoController {
 		if(eval.getImportancia() == 1)
 			ejestematicos = "";
 		if(eval.getVinculo() == 1)
-			ejestematicos = "El vínculo estratégico entre ek agua segura y la salud";
+			ejestematicos = "El vínculo estratégico entre el agua segura y la salud";
 		if(eval.getCarencias() == 1)
 			ejestematicos = "Las carencias que ponen en riesgo la vida";
 		

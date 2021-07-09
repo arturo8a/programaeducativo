@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.naming.directory.DirContext;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -44,6 +45,7 @@ import com.progeduc.dto.ListaTrabajosFinalesPendientes;
 import com.progeduc.dto.ListaparticipanteDto;
 import com.progeduc.dto.ListaparticipantetrabajoDto;
 import com.progeduc.dto.ListatrabajosfinalesDto;
+import com.progeduc.dto.LoginUsuarioDto;
 import com.progeduc.dto.ParticipanteVerDto;
 import com.progeduc.dto.TrabajofinalesEnviadoDto;
 import com.progeduc.dto.TrabajosfinalesParticipanteDto;
@@ -123,6 +125,7 @@ public class ConcursoeducativoController {
 	@Autowired
 	private IAuspicioService auspicioServ;
 	
+	
 	ListaparticipanteDto dto;	
 	ListatrabajosfinalesDto dtotf;	
 	ListaparticipantetrabajoDto ptdto;	
@@ -134,8 +137,8 @@ public class ConcursoeducativoController {
 	String participantes, msj2;
 	UsuarioLdap usuarioldap = null;
 	String nivelparticipacion;
-	Integer idnivelparticipacion;
-	String estado;
+	Integer idnivelparticipacion, nro_evidencias;
+	String estado, texto_evidencias;
 	String registro_validar;
 	
 	@PostMapping(value="/registrarconcurso")
@@ -339,6 +342,8 @@ public class ConcursoeducativoController {
 	}
 	
 	
+	
+	
 	@PostMapping(value="/updateTrabajosFinalesEnviados")
 	public Integer updateTrabajosFinalesEnviados(@Valid @RequestBody List<TrabajofinalesEnviadoDto> dto,HttpSession ses) {
 		
@@ -455,19 +460,33 @@ public class ConcursoeducativoController {
 		DateFormat formato = new SimpleDateFormat("dd/MM/yy");
         String today = formato.format(date);
         Aperturaranio ap = aperturaranioService.buscar(fecha.get(Calendar.YEAR));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
+    	LocalDate fechaactual = LocalDate.parse(today, formatter);
         if(ap != null) {
         	String codmod = ses.getAttribute("usuario").toString();
         	Programaeducativo pe = progeducService.verificarEstadoAnio(codmod,fecha.get(Calendar.YEAR), "Aprobado");  
         	if(pe!=null) {
+        		
+        		Postulacionconcurso pc = postulacionconcursoServ.getById(pe.getId());
+        		if(pc!=null) {
+        			if(fechaactual.compareTo(ap.getCuartaetapadesde())>=0 && fechaactual.compareTo(ap.getCuartaetapahasta())<=0) {
+        				return pe.getId().toString();//pe ah sido aprobado
+        			}
+        			else {
+        				return "d"; /*esta fuera de las fechas - fecha desde cuarta y fecha hasta cuarta*/
+        			}
+        		}
+        		else {
+        			if(fechaactual.compareTo(ap.getSegundaetapadesde())>=0 && fechaactual.compareTo(ap.getSegundaetapahasta())<=0) {
+        				return pe.getId().toString(); //pe ah sido aprobado
+        			}
+        			else {
+        				return "b"; /*esta fuera de las fechas - fecha desde segunda y fecha hasta segunda*/
+        			}
+        		}
+        		
         		//return pe.getId().toString();//pe ah sido aprobado
-        		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
-            	LocalDate fechaactual = LocalDate.parse(today, formatter);
-    			if(fechaactual.compareTo(ap.getSegundaetapadesde())>=0 && fechaactual.compareTo(ap.getSegundaetapahasta())<=0) {
-    				return pe.getId().toString();
-    			}
-    			else {
-    				return "b"; /*esta fuera de las fechas - fecha desde segunda y fecha hasta segunda*/
-    			}
+        		
         	}
         	else {
         		return "c";/*inscripcion al pe no ha sido aprobada*/
@@ -721,12 +740,17 @@ public class ConcursoeducativoController {
 				
 				trabajosfinalesparticipanteServ.listar(obj.getId()).forEach(obj1->{
 					miparticipante += obj1.getParticipante().getNombreestudiante() + " " + obj1.getParticipante().getAppaternoestudiante() + " " + obj1.getParticipante().getApmaternoestudiante() + "/";
-					//System.out.println(obj1.getParticipante().getNombreestudiante() + " " + obj1.getParticipante().getAppaternoestudiante() + " " + obj1.getParticipante().getApmaternoestudiante());
 				});
 				
 				dtotf.setParticipantes(miparticipante);
 				
-				archivos = uploadfile.nroArchivos(obj.getId(), "upload_evidencias").toString() + " evidencias " + uploadfile.nroArchivos(obj.getId(), "upload_trabajos").toString() + " final";
+				nro_evidencias = uploadfile.nroArchivos(obj.getId(), "upload_evidencias");
+				if(nro_evidencias == 1)
+					texto_evidencias = " evidencia ";
+				else
+					texto_evidencias = " evidencias ";
+				
+				archivos = nro_evidencias.toString() + texto_evidencias + uploadfile.nroArchivos(obj.getId(), "upload_trabajos").toString() + " final";
 				
 				dtotf.setArchivos(archivos);
 				dtotf.setEnviado(obj.getEnviado());

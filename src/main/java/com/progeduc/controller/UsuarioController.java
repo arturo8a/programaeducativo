@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.naming.directory.DirContext;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.progeduc.componente.Ldap;
 import com.progeduc.dto.ArchivoEvidenciaDto;
+import com.progeduc.dto.LoginUsuarioDto;
 import com.progeduc.dto.UsuarioDto;
 import com.progeduc.dto.UsuarioOdsDto;
 import com.progeduc.model.UsuarioLdap;
