@@ -20,8 +20,10 @@ $(document).ready(function(){
 	$("#perfilregusuAuspiciador").on("click",function(){
 		if($('#perfilregusuAuspiciador').is(':checked') ) {
 	    	$("#section-datos-auspicio").show();
+	    	$(".section-datos-auspicio").show();
 		}else{
 			$("#section-datos-auspicio").hide();
+			$(".section-datos-auspicio").hide();
 		}
 	});
 	
@@ -33,6 +35,16 @@ $(document).ready(function(){
 	$("#btnQuitararchivo").on("click",function(){
 		$("#fileautoridad").prop("disabled",false);
 		$("#fileautoridad").show();
+	});
+	
+	$(document).on("keyup","[id*=montototalauspiciador]",function(){
+		var monto = 0;
+		$.each($("[id*=montototalauspiciador]"), function( i, value ) {
+			if(!isNaN(parseFloat($(value).val()))){
+				monto += parseFloat($(value).val());
+			}
+		});
+		$("#montototalform").val(monto);
 	});
 	
 	getUsuario($("#idAlianzaEstrategica").val());
@@ -306,6 +318,7 @@ function getUsuario(idUsuario){
 				if(respuesta.auspiciador == "1"){
 					$('#perfilregusuAuspiciador').prop("checked",true);
 					$("#section-datos-auspicio").show();
+					$(".section-datos-auspicio").show();
 					$.each(respuesta.auspicios, function( index, value ) {
 						if(index > 0){
 							htmlAuspicicador();
@@ -535,12 +548,12 @@ function filterIntInput(evt,input){
 
 function filterIntNroDocIdentidad(evt,input){
 	console.log($(input).val());
-	if($(input).val()=="1"){
+	if($("#tipocodcontactoresgusu").val()=="1"){
 	    var key = window.Event ? evt.which : evt.keyCode;    
 	    var chark = String.fromCharCode(key);
 	    var tempValue = input.value+chark;
 	    if(key >= 48 && key <= 57){
-	    	if($(input).val() == 1){
+	    	if($("#tipocodcontactoresgusu").val() == 1){
 				if($(input).val().trim().length<8)
 					return true;
 				return false;
@@ -553,7 +566,7 @@ function filterIntNroDocIdentidad(evt,input){
 	        return false;
 	    }
 	}
-	else if($(input).val()=="2"){
+	else if($("#tipocodcontactoresgusu").val()=="2"){
 		if($(input).val().trim().length<12)
 			return true;
 		return false;

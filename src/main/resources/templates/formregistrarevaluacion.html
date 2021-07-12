@@ -26,6 +26,7 @@
 		<input type="hidden" id="id_rubrica" name="id_rubrica" th:value="${id_rubrica}" />
 		<input type="hidden" id="id_questionario" name="id_questionario" th:value="${id_questionario}" />
 		<input type="hidden" id="id_evaluacion" name="id_evaluacion" th:value="${id_evaluacion}" />
+		<input type="hidden" id="id_trabajofinal" name="id_trabajofinal" th:value="${id_trabajofinal}" />
 		<div class="row">
 			<div class="col-xs-12 col-sm-3 text-left">
 				<label for="nommbretrabajo">Nombre de Trabajo:</label>
@@ -54,8 +55,8 @@
 		</div>
 		<br>
 		<div th:each="objeto : ${listarubrica}">
-					<div>
-						<div class="row" style="background-color:#EFEFEF">
+					<div style="border:1px solid #7DB4FF" class="p-3" th:attr="data-rubrica=${objeto.id}">
+						<div class="row">
 							<div class="col-xs-12 col-sm-10 text-right">
 								<table>
 									<tr>
@@ -102,7 +103,8 @@
 					<br>
 		</div>
 		<div th:each="objeto : ${listaquestionario}">					
-					<div class="row" style="background-color:#EFEFEF">
+				<div style="border:1px solid #7DB4FF" class="p-3" th:attr="data-cuestionario=${objeto.id}">
+					<div class="row">
 						<div class="col-xs-12 col-sm-12">
 							<table style="width:100%">
 								<tr>
@@ -117,13 +119,13 @@
 										<input type="text" class="form-control" th:id="'respuesta'+ ${qr.id}" th:value="${qr.respuesta}" disabled/>
 									</td>
 									<td>
-										<label>Puntaje</label>
-										<input type="radio" class="form-control" th:id="'puntajeq'+ ${qr.id}" th:value="${qr.puntaje}"/>
+										<input type="radio" class="form-control" th:id="'puntajeq'+ ${qr.id}" th:value="${qr.puntaje}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${qr.id}"/>
 									</td>
 								</tr>							
 							</table>						
 						</div>
 					</div>
+				</div>	
 		</div>
 		<br>
 		<div class="row text-right">
@@ -131,7 +133,7 @@
 				&nbsp;
 			</div>
 			<div class="col-xs-6 col-sm-6">
-				<input type="button" name="btneditarevaluacion" id="btneditarevaluacion" value="Enviar" class="btn btn-primary"/>
+				<input type="button" name="btnRegistrarEvaluacion" id="btnRegistrarEvaluacion" value="Enviar" class="btn btn-primary"/>
 				<input type="button" name="btncerrarevaluacion" id="btncerrarevaluacion" value="Cerrar" class="btn btn-outline-primary"/>
 			</div>
 		</div>
@@ -204,7 +206,7 @@
 		var rubricaedit, criterio1edit, criterio2edit, criterio3edit, criterio4edit, criterio5edit, descripcion1edit, descripcion2edit, descripcion3edit, descripcion4edit, descripcion5edit,puntaje1edit, puntaje2edit, puntaje3edit, puntaje4edit, puntaje5edit;
 		var preguntaedit, respuestaedit, puntajeedit;
 		var id_rubricaedit , id_questionarioedit;
-
+		var listaRespuestas = [];
 		
 		$("#btncerrarmensajeexitoeditevaluacion").click(function(){			
 			$("#modalexitoeditevaluacion").modal('hide');
@@ -223,7 +225,60 @@
 			$("#modaleEvaluarTrabajoPendientes").modal('hide');
 		});
 		
-		$("#btneditarevaluacion").click(function(){	
+		 $("#btnRegistrarEvaluacion").on("click",function(){
+			registarRespuestasEvaluacion();
+		});
+		
+		
+		function registarRespuestasEvaluacion(){
+			$("#modalimagencargando").modal({
+				show : true,
+				backdrop : 'static',
+				keyboard:false
+			});
+			
+			if(validarCamposRespuesta){
+				
+			}
+		}
+		
+		
+		function validarCamposRespuesta(){
+			listaRespuestas = [];
+			
+			mensajeValidacionedit ="";
+			$.each($("[data-rubrica]"), function( i, value ) { console.log($(this).attr('data-rubrica'));
+				var preguntaName = $("input[name='pregunta"+$(this).attr('data-rubrica')+"']");
+				console.log(preguntaName);
+				if(!$(preguntaName).is(':checked')){ console.log('complete rubrica');
+					mensajeValidacionedit += "Complete todas las respuestas"+"<br>";
+				}else{
+					var idtrabajo = $("#id_trabajofinal").val();
+					var trabajoid = {id:idtrabajo};
+					var preguntaid = $(this).attr('data-rubrica');
+					var respuestaid = $("input[name='pregunta"+$(this).attr('data-rubrica')+"']:checked").val();
+					var tipo = "1";
+					listaRespuestas.push({trabajoid,preguntaid,respuestaid,tipo});
+				}
+				
+			});
+			$.each($("[data-cuestionario]"), function( i, value ) {
+				var preguntaName = $("input[name='pregunta"+$(this).attr('data-cuestionario')+"']");
+				console.log(preguntaName);
+				if(!$(preguntaName).is(':checked')){ console.log('complete cuertionario');
+					mensajeValidacionedit += "Complete todas las respuestas"+"<br>";
+				}else{
+					var idtrabajo = $("#id_trabajofinal").val();
+					var trabajoid = {id:idtrabajo};
+					var preguntaid = $(this).attr('data-rubrica');
+					var respuestaid = $("input[name='pregunta"+$(this).attr('data-rubrica')+"']:checked").attr('data-idresp');
+					var tipo = "2";
+					listaRespuestas.push({trabajoid,preguntaid,respuestaid,tipo});
+				}
+			});
+		}
+		
+		/*$("#btneditarevaluacion").click(function(){	
 			
 			$("#modalimagencargando").modal({
 				show : true,
@@ -326,25 +381,12 @@
 							
 							$("#modalimagencargando").modal('hide');
 							
-							/*table_lista_evaluacion.row.add({
-						        "id": respuesta.id,
-						        "anio": anio,
-						        "nivelparticipacion":  $("#nivelparticipacionce_edit option:selected").html(),
-						        "categoriaevaluacion": $("#categoriace_edit option:selected").html(),
-						        "estado": "Editando",
-						        "defaultContent" : '<img src="./images/svg/file-pdf-regular.svg" class="archivo" style="width:20px; cursor:pointer"/>',
-						        "defaultContent" : '<img src="./images/svg/edit-regular.svg" class="editar" style="width:20px; cursor:pointer" />',
-						        "defaultContent" : '<img src="./images/svg/eliminar-alt-regular.svg" class="eliminar" style="width:20px; cursor:pointer" />'
-						    }).draw();	*/
-						    
+
 						    table_lista_evaluacion.cell(celdaseleccionada,1).data(anioedit).draw();
 						    table_lista_evaluacion.cell(celdaseleccionada,2).data($("#nivelparticipacionce_edit option:selected").html()).draw();
 						    table_lista_evaluacion.cell(celdaseleccionada,3).data($("#categoriace_edit option:selected").html()).draw();
 						    table_lista_evaluacion.cell(celdaseleccionada,4).data("Editando").draw();
-						    /*table_lista_evaluacion.cell(celdaseleccionada,5).data().draw();
-						    table_lista_evaluacion.cell(celdaseleccionada,6).data().draw();
-						    table_lista_evaluacion.cell(celdaseleccionada,7).data().draw();*/
-							
+
 							limpiarControlesedit();
 							$("#textoexitoeditevaluacion").html("Se actualizó evaluación");
 							$('#modalexitoeditevaluacion').modal({
@@ -384,7 +426,7 @@
 					keyboard:false
 				});
 			}
-		});
+		});*/
 		
 		function limpiarControlesedit(){
 			$("#anioce_edit").val("");

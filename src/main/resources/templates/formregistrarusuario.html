@@ -90,10 +90,10 @@
 				</select>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="entidadregusu" id="entidadregusu" class="form-control" placeholder="Entidad"/>
+				<input type="text" name="entidadregusu" id="entidadregusu" class="form-control" placeholder="Entidad" maxlength="60"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="direccionregusu" id="direccionregusu" class="form-control" placeholder="Dirección"/>
+				<input type="text" name="direccionregusu" id="direccionregusu" class="form-control" placeholder="Dirección" maxlength="60"/>
 			</div>
 		</div>
 		<hr>
@@ -140,13 +140,13 @@
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="apepatcontactoregusu" id="apepatcontactoregusu" class="form-control" placeholder="Apellido Paterno"/>
+				<input type="text" name="apepatcontactoregusu" id="apepatcontactoregusu" class="form-control" placeholder="Apellido Paterno" maxlength="60"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="apematcontactoregusu" id="apematcontactoregusu" class="form-control" placeholder="Apellido Materno"/>
+				<input type="text" name="apematcontactoregusu" id="apematcontactoregusu" class="form-control" placeholder="Apellido Materno" maxlength="60"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="nombrecontactoregusu" id="nombrecontactoregusu" class="form-control" placeholder="Nombres"/>
+				<input type="text" name="nombrecontactoregusu" id="nombrecontactoregusu" class="form-control" placeholder="Nombres" maxlength="60"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
 				<select class="form-control" id="tipocodcontactoresgusu" name="tipocodcontactoresgusu">
@@ -155,19 +155,19 @@
 				</select>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="numdoccontactoregusu" id="numdoccontactoregusu" class="form-control" placeholder="N° de documento" onKeyPress="return filterIntInput(event,this)"/>
+				<input type="text" name="numdoccontactoregusu" id="numdoccontactoregusu" class="form-control" placeholder="N° de documento" onKeyPress="return filterIntNroDocIdentidad(event,this)"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="numtelcontactoregusu" id="numtelcontactoregusu" class="form-control" placeholder="N° de teléfono 1"  onKeyPress="return filterIntInput(event,this)"/>
+				<input type="text" name="numtelcontactoregusu" id="numtelcontactoregusu" class="form-control" placeholder="N° de teléfono 1"  onKeyPress="return filterIntInput(event,this)" maxlength="10"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="numtel2contactoregusu" id="numtel2contactoregusu" class="form-control" placeholder="N° de teléfono 2"  onKeyPress="return filterIntInput(event,this)"/>
+				<input type="text" name="numtel2contactoregusu" id="numtel2contactoregusu" class="form-control" placeholder="N° de teléfono 2"  onKeyPress="return filterIntInput(event,this)" maxlength="10"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="correocontactoregusu" id="correocontactoregusu" class="form-control" placeholder="Correo Intitucional"/>
+				<input type="text" name="correocontactoregusu" id="correocontactoregusu" class="form-control" placeholder="Correo Intitucional" maxlength="60"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="cargocontactoregusu" id="cargocontactoregusu" class="form-control" placeholder="Cargo"/>
+				<input type="text" name="cargocontactoregusu" id="cargocontactoregusu" class="form-control" placeholder="Cargo" maxlength="60"/>
 			</div>
 		</div>	
 		<hr>
@@ -176,27 +176,27 @@
 				<u>Datos de la Autoridad/Representante</u>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="apepatautoridad" id="apepatautoridad" class="form-control" placeholder="Apellido Paterno"/>
+				<input type="text" name="apepatautoridad" id="apepatautoridad" class="form-control" placeholder="Apellido Paterno" maxlength="60"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="apematautoridad" id="apematautoridad" class="form-control" placeholder="Apellido Materno"/>
+				<input type="text" name="apematautoridad" id="apematautoridad" class="form-control" placeholder="Apellido Materno" maxlength="60"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="nombreautoridad" id="nombreautoridad" class="form-control" placeholder="Nombres"/>
+				<input type="text" name="nombreautoridad" id="nombreautoridad" class="form-control" placeholder="Nombres" maxlength="60"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="correoautoridad" id="correoautoridad" class="form-control" placeholder="Correo Institucional"/>
+				<input type="text" name="correoautoridad" id="correoautoridad" class="form-control" placeholder="Correo Institucional" maxlength="60"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="cargoautoridad" id="cargoautoridad" class="form-control" placeholder="Cargo"/>
+				<input type="text" name="cargoautoridad" id="cargoautoridad" class="form-control" placeholder="Cargo" maxlength="60"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="usuarioautoridad" id="usuarioautoridad" class="form-control" placeholder="Usuario"/>
+				<input type="text" name="usuarioautoridad" id="usuarioautoridad" class="form-control" placeholder="Usuario" maxlength="60"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="password" name="passwordautoridad" id="passwordautoridad" class="form-control" placeholder="Contraseña"/>
+				<input type="password" name="passwordautoridad" id="passwordautoridad" class="form-control" placeholder="Contraseña" maxlength="60"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
 				<label>Enviar Oficio: 
@@ -205,10 +205,10 @@
 				</label>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="numoficioautoridad" id="numoficioautoridad" class="form-control" placeholder="N° Oficio"/>
+				<input type="text" name="numoficioautoridad" id="numoficioautoridad" class="form-control" placeholder="N° Oficio" maxlength="60"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" placeholder="Fecha de oficio" class="form-control rounded-0" id="fecha_oficio" name="fecha_oficio" disabled >
+				<input type="text" placeholder="Fecha de oficio" class="form-control rounded-0" id="fecha_oficio" name="fecha_oficio" disabled maxlength="60">
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
 				<label>Adjuntar Documento: 
@@ -234,26 +234,26 @@
 				</select>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="cantidadauspiciador1" id="cantidadauspiciador1" class="form-control" placeholder="Cantidad" onKeyPress="return filterIntInput(event,this)"/>
+				<input type="text" name="cantidadauspiciador1" id="cantidadauspiciador1" class="form-control" placeholder="Cantidad" onKeyPress="return filterIntInput(event,this)" maxlength="10"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="descripcionauspiciador1" id="descripcionauspiciador1" class="form-control" placeholder="Descripcion"/>
+				<input type="text" name="descripcionauspiciador1" id="descripcionauspiciador1" class="form-control" placeholder="Descripcion" maxlength="60"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="montounitarioauspiciador1" id="montounitarioauspiciador1" class="form-control" placeholder="Monto Unitario" onKeyPress="return filterFloat(event,this)"/>
+				<input type="text" name="montounitarioauspiciador1" id="montounitarioauspiciador1" class="form-control" placeholder="Monto Unitario" onKeyPress="return filterFloat(event,this)" maxlength="60"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
-				<input type="text" name="montototalauspiciador1" id="montototalauspiciador1" class="form-control" placeholder="Monto Total" onKeyPress="return filterFloat(event,this)"/>
+				<input type="text" name="montototalauspiciador1" id="montototalauspiciador1" class="form-control" placeholder="Monto Total" onKeyPress="return filterFloat(event,this)" maxlength="60"/>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left">
 				<input type="image" id="btnAgregarAuspiciador" name="btnAgregarAuspiciador" src="./images/svg/add-regular.svg" class="btn btn-primary" width="45px"/>
 			</div>
 		</div>
 		<br>
-		<div class="row">
+		<div class="row section-datos-auspicio" style="display:none;">
 			<div class="col-xs-12 col-sm-9 text-right pt-1">
 				<label>Total 
-					<input type="text" id="montototalform" name="montototalform" class="form-control"/>
+					<input type="text" id="montototalform" name="montototalform" class="form-control" disabled/>
 				</label>
 			</div>
 		</div>

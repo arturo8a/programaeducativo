@@ -55,6 +55,7 @@ import com.progeduc.model.Aperturaranio;
 import com.progeduc.model.Auspicio;
 import com.progeduc.model.Docente;
 import com.progeduc.model.Evaluacion;
+import com.progeduc.model.EvaluacionResultado;
 import com.progeduc.model.Gradoparticipante;
 import com.progeduc.model.Ods;
 import com.progeduc.model.Participante;
@@ -68,6 +69,7 @@ import com.progeduc.service.IAperturaranioService;
 import com.progeduc.service.IAuspicioService;
 import com.progeduc.service.IDistritoService;
 import com.progeduc.service.IDocenteService;
+import com.progeduc.service.IEvaluacionRespuestaService;
 import com.progeduc.service.IEvaluacionService;
 import com.progeduc.service.IGradoparticipanteService;
 import com.progeduc.service.IOdsService;
@@ -124,6 +126,9 @@ public class ConcursoeducativoController {
 	
 	@Autowired
 	private IAuspicioService auspicioServ;
+	
+	@Autowired
+	private IEvaluacionRespuestaService evaluacionRespuestaServ;
 	
 	
 	ListaparticipanteDto dto;	
@@ -1127,8 +1132,8 @@ public class ConcursoeducativoController {
 		return new ResponseEntity<UsuarioAlianza>(usu, HttpStatus.OK) ;
 	}
 	
-	@PostMapping(value="/cambiarestado")
-	public Integer editarEstado(@RequestParam("id") Integer id) {
+	@GetMapping("/cambiarestado/{id}")
+	public Integer editarEstado(@PathVariable("id") Integer id) {
 		int result = 0;
 		UsuarioAlianza usu = usuAlianzaserv.ListarporId(id);
 		if(usu != null) {
@@ -1137,6 +1142,7 @@ public class ConcursoeducativoController {
 			}else {
 				usu.setEstado("1");
 			}
+			usuAlianzaserv.registrar(usu);
 			result = 1;
 		}
 		
@@ -1180,5 +1186,23 @@ public class ConcursoeducativoController {
 			e.printStackTrace();
 		}
 		return 1; 
+	}
+	
+	@PostMapping(value="/registrarRespuestasEvaluacion")
+	public Integer registrarRespuestasEvaluacion(@Valid @RequestBody List<EvaluacionResultado> lista) {
+		
+		try {
+			lista.forEach(obj->{
+				EvaluacionResultado resultado = new EvaluacionResultado();
+				resultado.setPreguntaid(obj.getPreguntaid());
+				resultado.setRespuestaid(obj.getRespuestaid());
+				resultado.setTrabajosfinales(obj.getTrabajosfinales());
+				evaluacionRespuestaServ.registrar(resultado);
+			});
+		} catch (Exception e) {
+			return 0;
+		}
+		
+		return 1;
 	}
 }
