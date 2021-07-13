@@ -107,13 +107,17 @@
 					<option th:each="len:${colegios}" th:value="${len.codmod}" th:utext="${len.nomie}"/>
 				</select>
 			</div>
-			<div class="col-xs-12 col-sm-6 text-left pt-4">
+			<div class="col-xs-12 col-sm-3 text-left pt-4">
 				<label for="fechanacimientoestudiante">Tiene evaluadores asignados</label>
 				<select class="form-control" id="tieneevaluadorasignado" name="tieneevaluadorasignado">
 					<option value="0">Seleccione</option>
 					<option value="1">Si</option>
 					<option value="2">No</option>
 				</select>
+			</div>
+			<div class="col-xs-12 col-sm-3 text-left pt-4 text-right">
+				<br>
+				<input type="button" id="btnfiltrarasignarevaluador" name="btnfiltrarasignarevaluador" class="btn btn-primary" value="Buscar" style="padding:10px"/>
 			</div>
 		</div>
 		<hr>

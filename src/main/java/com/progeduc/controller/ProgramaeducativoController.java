@@ -49,6 +49,7 @@ import com.progeduc.model.Programaeducativo;
 import com.progeduc.model.ProgramaeducativoNivel;
 import com.progeduc.model.ProgramaeducativoTurno;
 import com.progeduc.model.Questionario;
+import com.progeduc.model.QuestionarioRespuesta;
 import com.progeduc.model.Rubrica;
 import com.progeduc.model.Trabajosfinales;
 import com.progeduc.model.Turno;
@@ -763,8 +764,10 @@ public class ProgramaeducativoController {
 		DateFormat hourFormat = new SimpleDateFormat("HHmmss");
 		DateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
 	
-	 	File file = ResourceUtils.getFile("classpath:ficha_evaluacion.jrxml" );
+	 	File file = ResourceUtils.getFile("classpath:ficha_evaluacion_primerav.jrxml" );
+	 	/*File file_sr_questionario_respuesta = ResourceUtils.getFile("classpath:sr_questionario_respuesta.jrxml" );*/
 		JasperReport jr = JasperCompileManager.compileReport(file.getAbsolutePath());
+		/*JasperReport jr_questionario_respuesta = JasperCompileManager.compileReport(file_sr_questionario_respuesta.getAbsolutePath());*/
 		
 		Map parameters = new HashMap();
 		
@@ -772,6 +775,7 @@ public class ProgramaeducativoController {
 		parameters.put("categoria", eval.getCategoriaevaluacion().getDescripcion());
 		parameters.put("nivelparticipacion", eval.getNivelparticipacion().getDescripcion());
 		parameters.put("estado", eval.getEstadoevaluacion().getDescripcion());
+		/*parameters.put("sr_questionario_respuesta", jr_questionario_respuesta);*/
         
 		List<Rubrica> listaRubrica = new ArrayList<Rubrica>();
         evaluacionrubricaServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{        	
@@ -781,15 +785,26 @@ public class ProgramaeducativoController {
         List<Questionario> listaQuestionario = new ArrayList<Questionario>();
         evaluacionquestionarioServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
         	listaQuestionario.add(obj.getQuestionario());
-        });        
+        });
+        
+        /*parameters.put("datasourcerubrica", listaRubrica);
+        parameters.put("datasourcequestionario", listaQuestionario);
+        parameters.put("jr_questionario_respuesta" , jr_questionario_respuesta);
+        
+        JRBeanCollectionDataSource datasource = new JRBeanCollectionDataSource(listaQuestionario);
+        JasperPrint jp = JasperFillManager.fillReport(jr, parameters, datasource);
+		String path = "D:/Sunass/ProgramaEducativo_Desarrollo/programaeducativo/src/main/resources/reportes_evaluacion/";
+		String archivo = eval.getId() + "_"+ dateFormat.format(date) + hourFormat.format(date);
+		JasperExportManager.exportReportToPdfFile(jp,path + archivo + ".pdf");		
+		return "D:/Sunass/ProgramaEducativo_Desarrollo/programaeducativo/src/main/resources/reportes_evaluacion/"+archivo+".pdf";*/
         
         JRBeanCollectionDataSource datasource = new JRBeanCollectionDataSource(listaRubrica);
 		JasperPrint jp = JasperFillManager.fillReport(jr, parameters, datasource);
+		//String path = "D:/Sunass/ProgramaEducativo_Desarrollo/programaeducativo/src/main/resources/reportes_evaluacion/";
 		String path = "/opt/apache-tomcat-8.0.27/webapps/alfresco_programaeducativo/pedesa/reportes_evaluacion/";
-		//String path = "D:/Edwin/ProyectosSunass/ProgEducativo/reportes/";
 		String archivo = eval.getId() + "_"+ dateFormat.format(date) + hourFormat.format(date);
 		JasperExportManager.exportReportToPdfFile(jp,path + archivo + ".pdf");
-		return "/alfresco_programaeducativo/pedesa/reportes_evaluacion/"+archivo+".pdf";			
+		return "/alfresco_programaeducativo/pedesa/reportes_evaluacion/"+archivo+".pdf";
 	}
 	
 	public String crearFichaTrabajoConcursoPdf(Trabajosfinales eval) throws FileNotFoundException, JRException {

@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import javax.naming.directory.DirContext;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -45,7 +44,6 @@ import com.progeduc.dto.ListaTrabajosFinalesPendientes;
 import com.progeduc.dto.ListaparticipanteDto;
 import com.progeduc.dto.ListaparticipantetrabajoDto;
 import com.progeduc.dto.ListatrabajosfinalesDto;
-import com.progeduc.dto.LoginUsuarioDto;
 import com.progeduc.dto.ParticipanteVerDto;
 import com.progeduc.dto.TrabajofinalesEnviadoDto;
 import com.progeduc.dto.TrabajosfinalesParticipanteDto;
@@ -76,6 +74,7 @@ import com.progeduc.service.IPostulacionconcursoService;
 import com.progeduc.service.IProgramaeducativoService;
 import com.progeduc.service.ITrabajosfinalesParticipanteService;
 import com.progeduc.service.ITrabajosfinalesService;
+import com.progeduc.service.ITrabajosfinales_UsuarioAlianzaService;
 import com.progeduc.service.IUsuarioAlianzaService;
 import com.progeduc.service.impl.UploadFileService;
 
@@ -125,6 +124,9 @@ public class ConcursoeducativoController {
 	@Autowired
 	private IAuspicioService auspicioServ;
 	
+	@Autowired
+	private ITrabajosfinales_UsuarioAlianzaService trabajosFinales_UsuarioAlianzaServ;
+	
 	
 	ListaparticipanteDto dto;	
 	ListatrabajosfinalesDto dtotf;	
@@ -140,6 +142,8 @@ public class ConcursoeducativoController {
 	Integer idnivelparticipacion, nro_evidencias;
 	String estado, texto_evidencias;
 	String registro_validar;
+	String nivel_participante = "";
+	Integer evaluadores_asignados = 0;
 	
 	@PostMapping(value="/registrarconcurso")
 	public String registrarconcurso(@Valid @RequestBody Postulacionconcurso dto)  {
@@ -189,6 +193,7 @@ public class ConcursoeducativoController {
 		dto.getTrabajosfinales().setAnio(ts.toLocalDateTime().getYear());
 		
 		String codmod = ses.getAttribute("usuario").toString();
+		
 		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
 		dto.getTrabajosfinales().setProgramaeducativo(pe);
 		
@@ -536,85 +541,52 @@ public class ConcursoeducativoController {
 	@GetMapping("/listaTrabajoEvaluado")
 	public ResponseEntity<List<trabajoEvaluadoDto>> listaTrabajoEvaluado(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
 		
-		List<trabajoEvaluadoDto> lista = new ArrayList<trabajoEvaluadoDto>();		
-		for(int i=1;i<=8;i++) {
-			trabajoEvaluadoDto dto = new trabajoEvaluadoDto();		
-			dto.setOds("Piura");
-			dto.setCategoria("Canto");
-			dto.setNivel_participacion("Primer Nivel");
-			dto.setCodigoie("234444");
-			dto.setNombreie("Los laureles");
-			dto.setCodigo_trabajo("234444-01");
-			dto.setModalidad("Grupal");
-			dto.setTitulo("Gotita de amor");
-			dto.setEvaluadores_asignados(i);
-			dto.setId(i);
-			lista.add(dto);
-		}
-		return new ResponseEntity<List<trabajoEvaluadoDto>>(lista, HttpStatus.OK);
+		List<trabajoEvaluadoDto> listadto = new ArrayList<trabajoEvaluadoDto>();		
+		
+		trabajosfinalesServ.listarhabilitados().forEach(tf->{
+			nivel_participante = "";
+			evaluadores_asignados = 0;
+			trabajoEvaluadoDto dto = new trabajoEvaluadoDto();
+			dto.setOds(odsserv.byOds(tf.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+			dto.setCategoria(tf.getCategoriatrabajo().getDescripcion());
+			trabajosfinalesparticipanteServ.listar(tf.getId()).forEach(tfp->{
+				nivel_participante  = tfp.getParticipante().getGradoestudiante().getNivelparticipante().getDescripcion();
+			});
+			dto.setNivel_participacion(nivel_participante);
+			dto.setCodigoie(tf.getProgramaeducativo().getCodmod());
+			dto.setNombreie(tf.getProgramaeducativo().getNomie());
+			dto.setCodigo_trabajo(tf.getProgramaeducativo().getCodmod() + "-" + tf.getId().toString());
+			dto.setModalidad(tf.getModalidadtrabajo().getDescripcion());
+			dto.setTitulo(tf.getTitulotrabajo());
+			
+			trabajosFinales_UsuarioAlianzaServ.listarByTrabajosfinalesId(tf.getId()).forEach(tf_ua->{
+				evaluadores_asignados += 1;
+			});
+			dto.setEvaluadores_asignados(evaluadores_asignados);
+			dto.setId(tf.getId());
+			listadto.add(dto);
+		});
+		return new ResponseEntity<List<trabajoEvaluadoDto>>(listadto, HttpStatus.OK);
 	}
 	
 	@GetMapping("/listaevaluador")
 	public ResponseEntity<List<EvaluadorDto>> listaEvaluador(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
 		
-		List<EvaluadorDto> lista = new ArrayList<EvaluadorDto>();		
+		List<EvaluadorDto> lista = new ArrayList<EvaluadorDto>();
 		
-		EvaluadorDto dto = new EvaluadorDto();	
-		
-		dto.setOds("Piura");
-		dto.setRol_entidad("Ministerio");
-		dto.setEntidad("Ministerio de justicia");
-		dto.setApellido_paterno("Lopez");
-		dto.setApellido_materno("Perez");
-		dto.setNombres("Juan");
-		dto.setTipo_documento("DNI");
-		dto.setNro_documento("12345678");
-		dto.setId(1);
-		lista.add(dto);
-		
-		dto.setOds("Piura");
-		dto.setRol_entidad("Ministerio");
-		dto.setEntidad("Ministerio de justicia");
-		dto.setApellido_paterno("Lopez");
-		dto.setApellido_materno("Perez");
-		dto.setNombres("Maria");
-		dto.setTipo_documento("CE");
-		dto.setNro_documento("123456789A");
-		dto.setId(2);
-		lista.add(dto);
-		
-		dto.setOds("Piura");
-		dto.setRol_entidad("Ministerio");
-		dto.setEntidad("Ministerio de justicia");
-		dto.setApellido_paterno("Lopez");
-		dto.setApellido_materno("Perez");
-		dto.setNombres("Laura");
-		dto.setTipo_documento("DNI");
-		dto.setNro_documento("12349865");
-		dto.setId(3);
-		lista.add(dto);
-		
-		dto.setOds("Piura");
-		dto.setRol_entidad("Ministerio");
-		dto.setEntidad("Ministerio de justicia");
-		dto.setApellido_paterno("Lopez");
-		dto.setApellido_materno("Perez");
-		dto.setNombres("Juan");
-		dto.setTipo_documento("DNI");
-		dto.setNro_documento("12345678");
-		dto.setId(4);
-		lista.add(dto);
-		
-		dto.setOds("Piura");
-		dto.setRol_entidad("Ministerio");
-		dto.setEntidad("Ministerio de justicia");
-		dto.setApellido_paterno("Lopez");
-		dto.setApellido_materno("Perez");
-		dto.setNombres("Juan");
-		dto.setTipo_documento("DNI");
-		dto.setNro_documento("12345678");
-		dto.setId(5);
-		lista.add(dto);
+		usuAlianzaserv.listar().forEach(ua->{
+			EvaluadorDto dto = new EvaluadorDto();
+			dto.setOds(ua.getOds().getDescripcion());
+			dto.setRol_entidad("");
+			dto.setEntidad(ua.getEntidad());
+			dto.setApellido_paterno(ua.getApepatautoridad());
+			dto.setApellido_materno(ua.getApematautoridad());
+			dto.setNombres(ua.getNombresautoridad());
+			dto.setTipo_documento(ua.getTipodocumento().getDescripcion());
+			dto.setNro_documento(ua.getNumdocumento());
+			dto.setId(ua.getId());
+			lista.add(dto);
+		});
 		
 		return new ResponseEntity<List<EvaluadorDto>>(lista, HttpStatus.OK);
 	}

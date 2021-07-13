@@ -74,13 +74,6 @@
 	
 	<style>
 		
-		.table-responsive{
-		  border: 0px;
-		}
-		.table{
-		  border: 1px solid #ddd !important;
-		}
-		
 		.rs_trabajos{
 		  /*width:33%;*/
 		  float:left;
@@ -91,7 +84,22 @@
 		  font-size: 0.75rem;
 		  line-height: 1.5;
 		  justify-content: left;
-	}
+		}
+		
+		table{
+        	overflow-x:auto;
+	    }
+	    table td{
+	        word-wrap: break-word;
+	        max-width: 450px;
+	    }
+	    #table_lista_participantes td{
+	        white-space: inherit;
+	    }
+	    
+	    #table_lista_trabajos_finales td{
+	    	white-space: inherit;
+	    }
 		
 	</style>
 	
@@ -225,7 +233,7 @@
 					</div>
 					<div class="row pt-2 pb-4 m-0">
 						<div class="col-xs-12 col-sm-12">
-							<table id="table_lista_participantes"  class="table table-striped table-bordered display" cellspacing="0" style="width:100%">
+							<table id="table_lista_participantes"  class="table table-striped table-bordered nowrap" cellspacing="0" style="width:100%">
 								<thead>
 							        <tr>
 							        	<th>Nº</th>
@@ -251,7 +259,7 @@
 				<div  id="container_trabajos_finales">
 					<div class="row pt-2 pb-4 m-0">
 						<div class="col-xs-12 col-sm-12 pt-3">
-							<table id="table_lista_trabajos_finales"  class="table table-striped table-bordered display" cellspacing="0" style="width:100%">
+							<table id="table_lista_trabajos_finales"  class="table table-striped table-bordered nowrap" cellspacing="0" style="width:100%">
 								<thead>
 							        <tr>
 							        	<th>Nº</th>
@@ -969,10 +977,6 @@
 			obtener_data_vertrabajos("#table_lista_trabajos_finales tbody",table_lista_trabajos_finales);
 			obtener_data_eliminartrabajos("#table_lista_trabajos_finales tbody",table_lista_trabajos_finales);
 			obtener_data_enviartrabajos("#table_lista_trabajos_finales tbody",table_lista_trabajos_finales);
-			/*obtener_data_archivo("#table_lista_participantes tbody",table_lista_participantes);
-			obtener_data_ver("#table_lista_participantes tbody",table_lista_participantes);
-	        obtener_data_editar("#table_lista_participantes tbody",table_lista_participantes);
-	        obtener_data_eliminar("#table_lista_participantes tbody",table_lista_participantes);*/
 		}			
 	}
 	
@@ -1102,7 +1106,6 @@
 				});
 			},
 			error: function() {
-				//$("#textoerror").html("Excepcion Eliminar trabajo");
 				console.log("Excepcion editar trabajo");
 		    }
 		});

@@ -86,7 +86,7 @@ public class LoginController {
     		}
 			Programaeducativo pe = progeducService.getCodmodByAnioActual(obj.getUsuario());
     		if(pe!=null) { /*IIEE*/
-    			ses.setAttribute("usuario", obj.getUsuario());
+    			ses.setAttribute("usuario", pe.getCodmod());
         		ses.setAttribute("perfil", obj.getTipousuario().getDescripcion());
         		ses.setAttribute("tipousuarioid", obj.getTipousuario().getId());
         		return obj.getUsuario();
