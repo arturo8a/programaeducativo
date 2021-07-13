@@ -8,9 +8,19 @@ $(document).ready(function(){
 		});
         
     });
-
+    
     $(".registrarEvaliacion").on("click",function(){
 		registarEvaliacionTrabajosPendientes($(this).attr('data-id'));
+	});
+
+    $("#btnlimpiar").on("click",function(){
+		$("#ods").val('Todos');
+		$("#anio").val('Todos');
+		$("#txtnombreIE").val('');
+		$("#categoria").val('Todos');
+		$("#nivel").val('Todos');
+		$("#modalidad").val('Todos');
+		table_lista_aperturar_anio.draw();
 	});
     
     
@@ -138,11 +148,11 @@ $.fn.dataTable.ext.search.push(
 			return false;
 		if(!filtraSelect(anio,data[1]))
 			return false;	
-		if(!filtraSelect(modalidad,data[7]))
+		if(!filtraSelect(modalidad,data[6]))
 			return false;
-		if(!filtraSelect(categoria,data[6]))
+		if(!filtraSelect(categoria,data[5]))
 			return false;
-		if(!filtraSelect(nivel,data[9]))
+		if(!filtraSelect(nivel,data[8]))
 			return false;
 		if(!filtraNombre(txtnombreIE,data[4]))
 			return false;

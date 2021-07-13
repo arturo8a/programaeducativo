@@ -127,6 +127,9 @@ public class ConcursoeducativoController {
 	@Autowired
 	private ITrabajosfinales_UsuarioAlianzaService trabajosFinales_UsuarioAlianzaServ;
 	
+	/*@Autowired
+	private IEvaluacionRespuestaService evaluacionRespuestaServ;*/
+	
 	
 	ListaparticipanteDto dto;	
 	ListatrabajosfinalesDto dtotf;	
@@ -512,7 +515,7 @@ public class ConcursoeducativoController {
 			listaParticipante.forEach(obj->{			
 				String categoria = "";
 				String modalidad = "";
-				dto =new ListaparticipanteDto();
+				ListaparticipanteDto dto =new ListaparticipanteDto();
 				dto.setId(obj.getId());
 				dto.setAppaterno(obj.getAppaternoestudiante());
 				dto.setApmaterno(obj.getApmaternoestudiante());
@@ -1099,8 +1102,8 @@ public class ConcursoeducativoController {
 		return new ResponseEntity<UsuarioAlianza>(usu, HttpStatus.OK) ;
 	}
 	
-	@PostMapping(value="/cambiarestado")
-	public Integer editarEstado(@RequestParam("id") Integer id) {
+	@GetMapping("/cambiarestado/{id}")
+	public Integer editarEstado(@PathVariable("id") Integer id) {
 		int result = 0;
 		UsuarioAlianza usu = usuAlianzaserv.ListarporId(id);
 		if(usu != null) {
@@ -1109,6 +1112,7 @@ public class ConcursoeducativoController {
 			}else {
 				usu.setEstado("1");
 			}
+			usuAlianzaserv.registrar(usu);
 			result = 1;
 		}
 		
@@ -1153,4 +1157,22 @@ public class ConcursoeducativoController {
 		}
 		return 1; 
 	}
+	
+	/*@PostMapping(value="/registrarRespuestasEvaluacion")
+	public Integer registrarRespuestasEvaluacion(@Valid @RequestBody List<EvaluacionResultado> lista) {
+		
+		try {
+			lista.forEach(obj->{
+				EvaluacionResultado resultado = new EvaluacionResultado();
+				resultado.setPreguntaid(obj.getPreguntaid());
+				resultado.setRespuestaid(obj.getRespuestaid());
+				resultado.setTrabajosfinales(obj.getTrabajosfinales());
+				evaluacionRespuestaServ.registrar(resultado);
+			});
+		} catch (Exception e) {
+			return 0;
+		}
+		
+		return 1;
+	}*/
 }

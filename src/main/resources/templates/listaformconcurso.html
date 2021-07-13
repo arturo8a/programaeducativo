@@ -182,7 +182,7 @@
 						<select class="form-control" id="estadoalianza" name="estadoalianza">
 							<option value="Todos">Estado</option> 
 							<option value="1">Activo</option> 
-							<option value="2">Inactivo</option> 
+							<option value="0">Inactivo</option> 
 						</select>
 					</div>
 					<div class="col-xs-12 col-sm-3 text-right">
@@ -211,6 +211,7 @@
 							            <th>ALIADO</th>
 							            <th>EDITAR</th>
 							            <th>INACTIVAR</th>
+							            <th style="display:none;">ESTADO</th>
 							        </tr>   
 							    </thead>
 							</table>
@@ -419,13 +420,24 @@
 		var id;
 		var table_lista_concurso, table_lista_asignacion;
 		
+		$(document).off("click",".btnInactivarUsuario");
+		$(document).off("click",".btnEditarUsuario");
+		
 		$(document).ready(function(){	
-			
+			funcionesAlianza();
 			$("#btnbuscarconcurso").click(function(){
 	        	
 	        	setTimeout(() => {        		  
 	        		table_lista_concurso.draw();
 	        	}, 100);	
+			});
+			
+			$("#btnlimpiaralianza").on("click",function(){
+				$('#odsalianza').val('Todos');
+				$('#anioalianza').val('Todos');
+				$('#rolentidadalianza').val('Todos');
+				$('#estadoalianza').val('Todos');
+				table_lista_usuarios.draw();
 			});
 			
 			$('#seleccionarTodo').click(function(){
@@ -643,7 +655,7 @@
 				
 				$("#table_lista_usuarios").dataTable().fnDestroy();				
 			    
-				table_lista_concurso = $('#table_lista_usuarios').DataTable({
+				table_lista_usuarios = $('#table_lista_usuarios').DataTable({
 				"dom": '<"excelHtml5"B><"rs_alianza_estrategica">frtip',
 	            "scrollX": true,
 	            "searching": true,
@@ -767,7 +779,8 @@
                             }
                             return x;
                         }
-	                }
+	                },
+	                { 'data' : 'estado' }
 	            ],
 	            columnDefs: [
 	            	{
@@ -796,8 +809,8 @@
 	            	      "className": "text-center"
 	                },
 	                {
-	            	      "targets": 11,
-	            	      "className": "text-center"
+	            	      "targets": 12,
+	            	      "visible": false
 	                }
 	            ],
 	            select: {
@@ -837,6 +850,44 @@
 	        });		
 			$("div.rs_alianza_estrategica").html("<strong>RESULTADOS DE ALIANZA ESTRATEGICA</strong>");
 			//cargarEditarUsuario();
+		}
+		
+		$("#btnbuscaralianza").on("click",function(){ 
+			table_lista_usuarios.draw();
+		});
+		
+		$('#table_lista_asignacion').DataTable().on("draw", function(){
+			$("#btnbuscaralianza").prop("disabled",false);
+		});
+		
+		$.fn.dataTable.ext.search.push(
+			function( settings, data, dataIndex ) {
+				console.log("settings.nTable.id :" + settings.nTable.id);
+				if ( settings.nTable.id !== 'table_lista_usuarios' ) {
+			        return true;
+			    }
+			    
+			    var ods = $('#odsalianza').val();
+		        var anio = $('#anioalianza').val();
+		       // var rol = $('#').val();
+		        var estado = $('#estadoalianza').val();
+		        
+		        if(!filtraSelect(ods,data[3]))
+					return false;
+				if(!filtraSelect(anio,data[2]))
+					return false;
+				/*if(!filtraSelect(rol,data[7]))
+					return false;*/
+				if(!filtraSelect(estado,data[12]))
+					return false;
+				return true;
+			}
+		);
+		
+		function filtraSelect(dato,campo){console.log(dato+"-"+campo);
+			if(dato==="Todos")
+				return true;
+			return dato===campo;
 		}
 		
 		
@@ -945,7 +996,6 @@
 	        });
 			$("div.rs_asignacion").html("<strong>RESULTADOS DE ASIGNACIÓN</strong>");
 		}
-		
 		
 		var obtener_fichatrabajo = function(tbody,table){
 			$(tbody).on("click","img.fichatrabajo",function(){
@@ -1181,50 +1231,47 @@
 			window.open("../alfresco_programaeducativo/pedesa/upload_trabajos/"+id+"/"+link, '_blank');
 		}
 		
-		
-		$(document).on("click",".btnEditarUsuario",function(){ console.log('.btnEditarUsuario');
-			var id = $(this).attr('data-id');
-			$.ajax({
-				type : "GET",
-			    contentType : "application/json",
-			    url : url_base + "pedesa/formeditarusuario/"+id,
-				success: function(respuesta) {
-					$("#contenidoAlianzaEstrategicar").html(respuesta);
-					$('#modalAlianzaEstrategica').modal({
-						show : true,
-						backdrop : 'static',
-						keyboard:false
-					});
-				},
-				error: function() {
-					console.log("error al cargar modal alianza estrategica");
-			    }
+		function funcionesAlianza(){
+			$(document).on("click",".btnEditarUsuario",function(){ console.log('.btnEditarUsuario');
+				var id = $(this).attr('data-id');
+				$.ajax({
+					type : "GET",
+				    contentType : "application/json",
+				    url : url_base + "pedesa/formeditarusuario/"+id,
+					success: function(respuesta) {
+						$("#contenidoAlianzaEstrategicar").html(respuesta);
+						$('#modalAlianzaEstrategica').modal({
+							show : true,
+							backdrop : 'static',
+							keyboard:false
+						});
+					},
+					error: function() {
+						console.log("error al cargar modal alianza estrategica");
+				    }
+				});
 			});
-		});
-
-		
-		$(document).on("click",".btnInactivarUsuario",function(){ console.log('.btnInactivarUsuario');
-			console.log($(this).parent());
-			console.log($(this).parent().prev());
-			console.log($(this).parent().prev().find('img'));
-			console.log($(this).parent().prev().find('img').attr('data-id'));
-			var id = $(this).parent().prev().find('img').attr('data-id');
-			var dataForm = new FormData();
-			dataForm.append('id',id);
-			$.ajax({
-				type : "POST",
-			    contentType : "application/json",
-			    url : url_base + "pedesa/cambiarestado",
-			    data : dataForm,
-				success: function(respuesta) {
-					//$("#modalimagencargando").modal('hide');
-					//listarAlianzaEstrategica();
-				},
-				error: function() {
-					$("#modalimagencargando").modal('hide');
-					console.log("Error");
-			    }
+	
+			
+			$(document).on("click",".btnInactivarUsuario",function(){ console.log('.btnInactivarUsuario');
+				console.log($(this).parent());
+				console.log($(this).parent().prev());
+				console.log($(this).parent().prev().find('img'));
+				console.log($(this).parent().prev().find('img').attr('data-id'));
+				var id = $(this).parent().prev().find('img').attr('data-id');
+				$.ajax({
+					type : "GET",
+				    contentType : "application/json",
+				    url : url_base + "pedesa/cambiarestado/"+id,
+					success: function(respuesta) {
+						listarAlianzaEstrategica();
+					},
+					error: function() {
+						$("#modalimagencargando").modal('hide');
+						console.log("Error");
+				    }
+				});
 			});
-		});
+		}
 		
 </script>

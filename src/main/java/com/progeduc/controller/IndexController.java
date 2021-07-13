@@ -936,6 +936,7 @@ public class IndexController {
         model.addAttribute("id_rubrica", id_rubrica);
         model.addAttribute("id_questionario", id_questionario);
         model.addAttribute("id_evaluacion", eval.getId());
+        model.addAttribute("id_trabajofinal", trabajosfinales.getId());
         
         List<Integer> listanro = new ArrayList<Integer>();
         listanro.add(1);
