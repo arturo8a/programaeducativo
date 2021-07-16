@@ -13,6 +13,12 @@
 	margin:5px;
 }
 
+.div_titulo{
+	padding:4px;
+	border-radius: 5px 5px 5px 5px;
+	margin:5px;
+}
+
 #content{
 	background:#F4F7FA;
 }

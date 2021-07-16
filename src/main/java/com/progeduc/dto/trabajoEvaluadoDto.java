@@ -12,6 +12,7 @@ public class trabajoEvaluadoDto {
 	String modalidad;
 	String titulo;
 	Integer evaluadores_asignados;
+	String tiene_evaluador_asignado;
 	
 	public Integer getId() {
 		return id;
@@ -72,5 +73,11 @@ public class trabajoEvaluadoDto {
 	}
 	public void setEvaluadores_asignados(Integer evaluadores_asignados) {
 		this.evaluadores_asignados = evaluadores_asignados;
+	}
+	public String getTiene_evaluador_asignado() {
+		return tiene_evaluador_asignado;
+	}
+	public void setTiene_evaluador_asignado(String tiene_evaluador_asignado) {
+		this.tiene_evaluador_asignado = tiene_evaluador_asignado;
 	}	
 }

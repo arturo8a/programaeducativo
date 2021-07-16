@@ -20,12 +20,11 @@
 <script type="text/javascript" th:src="@{/js/bootstrapv4.js}" ></script>
 <style>
 
-	.excelHtml5{
+	.excelHtml5 {
 		float:left;
 	}
 	
 	.rs_concurso_educativo{
-		  /*width:33%;*/
 		  float:left;
 		  text-align:center;
 		  display: inline-flex;
@@ -37,7 +36,6 @@
 	}
 	
 	.rs_alianza_estrategica{
-		  /*width:33%;*/
 		  float:left;
 		  text-align:center;
 		  display: inline-flex;
@@ -263,7 +261,11 @@
 					</div>
 					<div class="col-xs-4 col-sm-3 pt-3">
 						<select class="form-control" id="rolentidadasignacion" name="rolentidadasignacion">
-							<option value="Todos">Rol de la entidad</option>					       				
+							<option value="Todos">Rol de la entidad</option>	
+							<option value="Comite Técnico">Comite Técnico</option>
+							<option value="Comite Evaluador">Comite Evaluador</option>
+							<option value="Auspiciador">Auspiciador</option>
+							<option value="Aliado">Aliado</option>
 						</select>
 					</div>
 					<div class="col-xs-4 col-sm-3 pt-3">
@@ -339,7 +341,7 @@
 <center>
 	<div class="modal fade" tabindex="-1" role="dialog" id="modalasignarevaluador" aria-labelledby="myLargeModalLabel" >
 	  <div class="modal-dialog modal-lg" role="document">
-	    <div class="modal-content" style="overflow-y: scroll; height:750px; width:80%">
+	    <div class="modal-content" style="overflow-y: scroll; height:750px; width:90%">
 	      <div class="modal-header">
 	        <strong class="pt-1">ASIGNAR EVALUADOR</strong>
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -440,6 +442,19 @@
 				table_lista_usuarios.draw();
 			});
 			
+			$("#btnlimpiarasignacion").click(function(){
+				$("#odsasignacion").val("Todos");
+				$("#anioasignacion").val("Todos");
+				$("#categoriaasignacion").val("Todos");				
+				$("#modalidadasignacion").val("Todos");
+				$("#nivelparticipacionasignacion").val("Todos");
+				$("#rolentidadasignacion").val("Todos");
+				$("#nombreieasignacion").val("");
+				setTimeout(() => {        		  
+					table_lista_asignacion.draw();
+		      	}, 100);
+			});
+			
 			$('#seleccionarTodo').click(function(){
 				if ($(this).is(":checked")) {
 					table_lista_concurso.rows().select();        
@@ -465,6 +480,58 @@
 			listar();
 			listarasignacion();
 			listarAlianzaEstrategica();
+			
+			$("#btnbuscarasignacion").click(function(){
+				setTimeout(() => {        		  
+					table_lista_asignacion.draw();
+	        	}, 100);	
+			});
+			
+			$.fn.dataTable.ext.search.push(
+				function( settings, data, dataIndex ) {
+					console.log("settings.nTable.id :" + table_lista_asignacion);
+					if ( settings.nTable.id !== 'table_lista_asignacion' ) {
+				        return true;
+				    }
+				    var ods = $('#odsasignacion').val();
+			        var anio = $('#anioasignacion').val();
+			        var categoria = $('#categoriaasignacion').val();
+			        var modalidad = $('#modalidadasignacion').val();		
+			        var nivel = $('#nivelparticipacionasignacion').val();		
+			        var rolentidad = $('#rolentidadasignacion').val();
+			        var nombreie = $('#nombreieasignacion').val();		
+			        if(!filtraSelect(ods,data[3]))
+						return false;
+					if(!filtraSelect(anio,data[2]))
+						return false;
+					if(!filtraSelect(categoria,data[7]))
+						return false;
+					if(!filtraSelect(modalidad,data[8]))
+						return false;
+					if(!filtraSelect(nivel,data[9]))
+						return false;
+					if(!filtraSelect(rolentidad,data[10]))
+						return false;
+					if(!filtraNombre(nombreie,data[4]))
+	    	    		return false;
+					return true;
+				}
+			);
+			
+			function filtraSelect(dato,campo){console.log(dato+"-"+campo);
+				if(dato==="Todos")
+					return true;
+				return dato===campo;
+			}
+			
+			function filtraNombre(campofiltro,campotabla){
+		    	if(campofiltro==="" || campofiltro===undefined)
+		    		return true;
+		    	var posicion = (campotabla.toLowerCase()).indexOf(campofiltro.toLowerCase()); 
+		    	if(posicion != -1)
+		    		return  true;
+		    	return false;
+		    }
 			
 			$("#btnasignar").click(function(){
 				
@@ -862,7 +929,6 @@
 		
 		$.fn.dataTable.ext.search.push(
 			function( settings, data, dataIndex ) {
-				console.log("settings.nTable.id :" + settings.nTable.id);
 				if ( settings.nTable.id !== 'table_lista_usuarios' ) {
 			        return true;
 			    }
@@ -967,7 +1033,7 @@
 	            	{
 	            		extend: 'excelHtml5',
 	            		text:"<img src='./images/iconos_nd/excel1.svg' style='size:15px;margin:0px;padding:0px'/>",
-	                    titleAttr : 'LISTA DE ASIGNACION',
+	                    titleAttr : 'RESULTADOS DE ASIGNACION',
 	                    messageTop: function(){
 	                    	return '[ ODS: ' + $("#odsasignacion").val() + ']            [ Año de inscripción: '+ $("#anioasignacion").val() + ']';
 	                    },

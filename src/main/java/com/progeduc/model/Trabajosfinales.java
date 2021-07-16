@@ -54,6 +54,9 @@ public class Trabajosfinales {
 	@Column(name="VINCULO",nullable=true)
 	private Integer vinculo;
 	
+	@Column(name="PUESTO",nullable=true)
+	private Integer puesto;
+	
 	@Column(name="CARENCIAS",nullable=true)
 	private Integer carencias;
 	
@@ -187,6 +190,14 @@ public class Trabajosfinales {
 
 	public void setVinculo(Integer vinculo) {
 		this.vinculo = vinculo;
+	}
+
+	public Integer getPuesto() {
+		return puesto;
+	}
+
+	public void setPuesto(Integer puesto) {
+		this.puesto = puesto;
 	}
 
 	public Integer getCarencias() {

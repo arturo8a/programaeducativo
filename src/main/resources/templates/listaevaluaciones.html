@@ -25,6 +25,11 @@
 </style>
 
 <div id="containerListaRegistros" class="pl-3 pr-3">
+	<div class="row  div_titulo">
+		<div class="col-xs-12 col-sm-12 pl-0 bg-primary">
+			<img src="./images/iconos_nd/ConcursoEscolartitulo.svg" class="pt-1 pb-1 pl-3"><strong class="pt-3">EVALUACIONES</strong>
+		</div>
+	</div>
 	<div class="div_filtro">
 		<div class="row p-0 m-0">			
 			<div class="col-xs-4 col-sm-4">
@@ -305,7 +310,22 @@
 	                            return x;
 	                        }
 		                },
-				        { 'defaultContent' : '<img src="./images/iconos_nd/eliminar.svg" class="eliminar" style="width:15px; cursor:pointer " />'}
+		                { 'data' : 'estado',
+		                	render: function(data, type) { 
+		                   		var x = '';
+		                        switch (data) {
+		                            case 'Editando':
+		                                x = '<img src="./images/iconos_nd/eliminar.svg" class="eliminar" style="width:15px; cursor:pointer" />';
+		                                break;
+		                            default:
+		                            	x = '<img src="./images/iconos_nd/eliminar.svg" style="width:15px;filter:invert(70%)"  />' ;
+		                                break;
+	                            }
+	                            return x;
+	                        }	
+		                
+		                }/*
+				        { 'defaultContent' : '<img src="./images/iconos_nd/eliminar.svg" class="eliminar" style="width:15px; cursor:pointer " />'}*/
 		            ],
 		            'columnDefs': [
 		            	 {

@@ -76,6 +76,7 @@ import com.progeduc.service.LenguaService;
 import com.progeduc.service.ProveedorService;
 import com.progeduc.service.TipodocService;
 import com.progeduc.service.TipoieService;
+import com.progeduc.service.impl.OdsServiceImpl;
 import com.progeduc.service.impl.UploadFileService;
 
 @Controller
@@ -202,8 +203,8 @@ public class IndexController {
 	String participanteid;
 	
 	int contador;
-	
 	String id_rubrica,id_questionario,ods,id_pregunta_respuesta,id_pr;
+	Integer odsid;
 	
 	@GetMapping("/inicio")
 	public String inicio(@RequestParam(name="name",required=false,defaultValue="world") String name, Model model) {
@@ -493,14 +494,24 @@ public class IndexController {
 	}
 	
 	@GetMapping("/formasignarevaluador")
-	public String formasignarevaluador(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
+	public String formasignarevaluador(@RequestParam(name="name",required=false,defaultValue="") String name, Model model,HttpSession ses) {
+		
+		if(ses.getAttribute("tipousuarioid").toString().equals("1") || ses.getAttribute("tipousuarioid").toString().equals("11") || ses.getAttribute("tipousuarioid").toString().equals("12") || ses.getAttribute("tipousuarioid").toString().equals("30")) {
+			odsid = 0;
+		}
+		else if(ses.getAttribute("tipousuarioid").toString().equals("2")) {
+			
+			/*odsid = usuarioService.byUsuario(ses.getAttribute("usuario").toString()).getOdsid();*/
+			odsid = 18;
+		}		
+		System.out.println("odsid :" + odsid);
+		model.addAttribute("odsid",odsid);
 		model.addAttribute("ods",odsserv.listarAll());
-		model.addAttribute("nivelparticipacion",nivelparticipacionService.listar());
+		model.addAttribute("nivelparticipacion",nivelparticipanteService.listar());
 		model.addAttribute("categoriatrabajo",categoriaevaluacionService.listar());
 		Calendar fecha = Calendar.getInstance();
-        /*List<Integer> lista = new ArrayList<Integer>();*/
         model.addAttribute("anio", fecha.get(Calendar.YEAR));
-        model.addAttribute("colegios", progeducService.listCentrosEducativosGroupbyNomie());	
+        model.addAttribute("colegios", progeducService.listCentrosEducativosGroupbyNomie());
 		return "formasignarevaluador";
 	}
 	
@@ -511,9 +522,8 @@ public class IndexController {
             List<Integer> lista = new ArrayList<Integer>();
             int anio = fecha.get(Calendar.YEAR);
             for(int i = anio-5;i<=anio;i++) {
-                    lista.add(i);
-            }
-		
+                  lista.add(i);
+            }		
             model.addAttribute("ods",odsserv.listarAll());
             model.addAttribute("anios", lista);
             model.addAttribute("departamento",depaServ.listar());
@@ -831,11 +841,6 @@ public class IndexController {
 		model.addAttribute("listacategoriaevaluacion", categoriaevaluacionService.listar());
 		return "formeditarevaluacion";
 	}
-	
-	
-	
-	
-	
 	
 	@GetMapping("/verviewevaluacionid/{id}")
 	public String verviewevaluacionid(@PathVariable("id") Integer id,  Model model,HttpSession ses) {

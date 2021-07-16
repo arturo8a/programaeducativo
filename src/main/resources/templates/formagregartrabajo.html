@@ -121,6 +121,8 @@
 			<div class="col-xs-12 col-sm-4 text-left pt-4">
 				<label>Subir archivos de evidencias</label>
 				<input type="file" id="evidenciastrabajo" class="form-control" name="file[]"  multiple/>
+				<div id="divevidencias_agregar" style="overflow-y: scroll;overflow-x: scroll; height:120px;">											
+				</div>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-4">
 				<label for="linkvideo">Link de video</label>
@@ -317,6 +319,7 @@
 	var acumulanivel = "", table_lpt;
 	var conversacion,valoracionagua,valoracionalcantarillado,buenuso,importancia,vinculo,carencias;
 	var arrayParticipante , array_nivel, arrayNombreParticipante;
+	var contador_archivos_subidos;
 	
 	var rows_selected;
 	
@@ -353,6 +356,16 @@
 				table_lpt.select.style('multi');
 			table_lpt.rows().deselect();
 			table_lpt.draw();
+		});
+		
+		$("#evidenciastrabajo").change(function(){
+			array_evidencias_eliminadas_agregar = new Array();
+			var data_archivo_subir = "<table><tr>";
+			for(var i=0;i<evidenciastrabajo.files.length;i++){
+				data_archivo_subir += "<td><div class='alert alert-primary alert-dismissible fade show' role='alert' style='width:125px'><strong>"+(evidenciastrabajo.files[i].name)+"</strong><button type='button' class='close' onclick='eliminarEvidenciaAgregar("+'`'+(evidenciastrabajo.files[i].name)+'`'+")' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div></td>";
+			}
+			data_archivo_subir += "</tr></table>";
+			$("#divevidencias_agregar").html(data_archivo_subir);
 		});
 			
 		$("#table_lpt").dataTable().fnDestroy();
@@ -483,6 +496,7 @@
 					buenuso : buenuso,
 					importancia : importancia,
 					vinculo : vinculo,
+					puesto: 0,
 					carencias : carencias,
 					appaterno: apellidopaternotrabajo,
 					apmaterno : apellidomaternotrabajo,
@@ -518,8 +532,18 @@
 							var data = new FormData();
 							data.append('file',archivotrabajo.files[0]);
 							data.append('id',respuesta);
+							contador_archivos_subidos = 0;
 							for(var i=0;i<evidenciastrabajo.files.length;i++){
-								data.append('files',evidenciastrabajo.files[i]);
+								var bandera = true;
+								for(var j=0;j<array_evidencias_eliminadas_agregar.length;j++){
+									if(evidenciastrabajo.files[i].name === array_evidencias_eliminadas_agregar[j]){
+										bandera = false;
+									}
+								}
+								if(bandera){
+									data.append('files',evidenciastrabajo.files[i]);
+									contador_archivos_subidos++;
+								}	
 							}
 							
 							$.ajax({
@@ -545,7 +569,7 @@
 						        		"titulo" : titulotrabajo   ,
 						        		"modalidad" : $("#modalidadpostulaciontrabajo option:selected").html(),
 						        		"participantes" : nombreparticipante,
-						        		"archivos" : evidenciastrabajo.files.length + " evidencias " + archivotrabajo.files.length + " final",
+						        		"archivos" : contador_archivos_subidos + (contador_archivos_subidos>1 ? " evidencias " : " evidencia ") + archivotrabajo.files.length + " final",
 						        		"enviado" : 0,
 						        		"enviado" : 0,
 						        		"enviado" :0
@@ -652,6 +676,11 @@
    	    	return true;
    	    }
    	);
+	
+	function eliminarEvidenciaAgregar(archivo){
+		array_evidencias_eliminadas_agregar.push(archivo);
+		/*$("#evidenciastrabajoeditar").prop("disabled",false);*/
+	}
 	
 	function filtraCategoriaModalidad(campo1, campo2){
 		if(campo1===0)

@@ -22,7 +22,7 @@ public class EvaluacionResultado {
 	
 	//@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name="trabajoid",nullable=false,foreignKey=@ForeignKey(name="fk_trabajos_evaludos_respuestas"))
+	@JoinColumn(name="trabajoid",nullable=false,foreignKey=@ForeignKey(name="fk_trab_evaludos_respuestas"))
 	private Trabajosfinales trabajosfinales;
 	
 	@Column(name="preguntaid" ,length=150)

@@ -60,4 +60,9 @@ public class UsuarioAlianzaServiceImpl implements IUsuarioAlianzaService{
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	@Override
+	public List<UsuarioAlianza> listarByOds(Integer odsid){
+		return usuarioRepo.listarByOds(odsid);
+	}
 }
