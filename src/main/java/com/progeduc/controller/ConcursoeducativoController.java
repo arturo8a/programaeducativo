@@ -53,6 +53,7 @@ import com.progeduc.model.Aperturaranio;
 import com.progeduc.model.Auspicio;
 import com.progeduc.model.Docente;
 import com.progeduc.model.Evaluacion;
+import com.progeduc.model.EvaluacionResultado;
 import com.progeduc.model.Gradoparticipante;
 import com.progeduc.model.Ods;
 import com.progeduc.model.Participante;
@@ -66,6 +67,7 @@ import com.progeduc.service.IAperturaranioService;
 import com.progeduc.service.IAuspicioService;
 import com.progeduc.service.IDistritoService;
 import com.progeduc.service.IDocenteService;
+import com.progeduc.service.IEvaluacionRespuestaService;
 import com.progeduc.service.IEvaluacionService;
 import com.progeduc.service.IGradoparticipanteService;
 import com.progeduc.service.IOdsService;
@@ -127,8 +129,8 @@ public class ConcursoeducativoController {
 	@Autowired
 	private ITrabajosfinales_UsuarioAlianzaService trabajosFinales_UsuarioAlianzaServ;
 	
-	/*@Autowired
-	private IEvaluacionRespuestaService evaluacionRespuestaServ;*/
+	@Autowired
+	private IEvaluacionRespuestaService evaluacionRespuestaServ;
 	
 	
 	ListaparticipanteDto dto;	
@@ -1158,7 +1160,7 @@ public class ConcursoeducativoController {
 		return 1; 
 	}
 	
-	/*@PostMapping(value="/registrarRespuestasEvaluacion")
+	@PostMapping(value="/registrarRespuestasEvaluacion")
 	public Integer registrarRespuestasEvaluacion(@Valid @RequestBody List<EvaluacionResultado> lista) {
 		
 		try {
@@ -1174,5 +1176,5 @@ public class ConcursoeducativoController {
 		}
 		
 		return 1;
-	}*/
+	}
 }
