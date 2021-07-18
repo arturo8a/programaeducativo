@@ -9,18 +9,18 @@
 		window.history.forward();
 	</script>
 
-    <!-- Bootstrap CSS CDN -->
-    <link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
-    <!-- Our Custom CSS -->
-    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
-	
+    <!-- Bootstrap CSS CDN 
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">-->
+    <!-- Our Custom CSS
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}"> -->
+	<!--
 	<script type="text/javascript" th:src="@{/js/jquery-3.3.1.js}" ></script>
     <script type="text/javascript" th:src="@{/js/bootstrapv4.js}" ></script>
     <script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
 	
 	<script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
 	
-	<link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">   
+	<link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">    -->
 </head>
 <body>
 		<input type="hidden" id="id_rubrica" name="id_rubrica" th:value="${id_rubrica}" />
@@ -237,28 +237,48 @@
 				keyboard:false
 			});
 			
-			if(validarCamposRespuesta){
-				
+			if(validarCamposRespuesta()){
+				$.ajax({
+					type : "POST",
+				    contentType : "application/json",
+				    url : url_base + "pedesa/registrarRespuestasEvaluacion",
+				    data : JSON.stringify(listaRespuestas),
+				    dataType : 'json',
+					success: function(respuesta) {
+						alert('Se regitró correctamente.');
+						$('#modaleEvaluarTrabajoPendientes').modal('hide');
+						$("#modalimagencargando").modal('hide');
+					},
+					error: function() {
+						$("#modalimagencargando").modal('hide');
+						$("#textoerroreditevaluacion").html("Excepción al registrar evaluación");
+						$("#modalerroreditevaluacion").modal();
+				    }
+				});
+			}else{
+				mensajeValidacionedit += "Complete todas las respuestas"+"<br>";
+				$("#modalerroreditevaluacion").modal();
 			}
 		}
 		
 		
-		function validarCamposRespuesta(){
+		function validarCamposRespuesta(){console.log('validar respuestas');
 			listaRespuestas = [];
-			
+			var status = true;
 			mensajeValidacionedit ="";
 			$.each($("[data-rubrica]"), function( i, value ) { console.log($(this).attr('data-rubrica'));
 				var preguntaName = $("input[name='pregunta"+$(this).attr('data-rubrica')+"']");
 				console.log(preguntaName);
 				if(!$(preguntaName).is(':checked')){ console.log('complete rubrica');
-					mensajeValidacionedit += "Complete todas las respuestas"+"<br>";
+					//mensajeValidacionedit += "Complete todas las respuestas"+"<br>";
+					status = false;
 				}else{
 					var idtrabajo = $("#id_trabajofinal").val();
-					var trabajoid = {id:idtrabajo};
+					var trabajosfinales = {id:idtrabajo};
 					var preguntaid = $(this).attr('data-rubrica');
 					var respuestaid = $("input[name='pregunta"+$(this).attr('data-rubrica')+"']:checked").val();
 					var tipo = "1";
-					listaRespuestas.push({trabajoid,preguntaid,respuestaid,tipo});
+					listaRespuestas.push({trabajosfinales,preguntaid,respuestaid,tipo});
 				}
 				
 			});
@@ -266,198 +286,26 @@
 				var preguntaName = $("input[name='pregunta"+$(this).attr('data-cuestionario')+"']");
 				console.log(preguntaName);
 				if(!$(preguntaName).is(':checked')){ console.log('complete cuertionario');
-					mensajeValidacionedit += "Complete todas las respuestas"+"<br>";
+					//mensajeValidacionedit += "Complete todas las respuestas"+"<br>";
+					status = false;
 				}else{
 					var idtrabajo = $("#id_trabajofinal").val();
-					var trabajoid = {id:idtrabajo};
+					var trabajosfinales = {id:idtrabajo};
 					var preguntaid = $(this).attr('data-rubrica');
 					var respuestaid = $("input[name='pregunta"+$(this).attr('data-rubrica')+"']:checked").attr('data-idresp');
 					var tipo = "2";
-					listaRespuestas.push({trabajoid,preguntaid,respuestaid,tipo});
+					listaRespuestas.push({trabajosfinales,preguntaid,respuestaid,tipo});
 				}
 			});
+			$("#textoerroreditevaluacion").html(mensajeValidacionedit);
+			console.log("STATUS: "+status);
+			return status;
 		}
-		
-		/*$("#btneditarevaluacion").click(function(){	
-			
-			$("#modalimagencargando").modal({
-				show : true,
-				backdrop : 'static',
-				keyboard:false
-			});
-			
-			if(validarCamposedit()){
-				
-				id_rubricaedit = $("#id_rubrica").val();
-				id_questionarioedit = $("#id_questionario").val();
-				id_evaluacionedit = $("#id_evaluacion").val();
-				
-				id_rubricaedit = id_rubricaedit.split("-");
-				
-				array_rubricaedit = new Array();
-				array_cuestionarioedit = new Array();
-				
-				for(var i=0;i<id_rubricaedit.length-1;i++){					
-					rubrica = $("#rubrica"+id_rubrica[i]).val();
-					criterio1edit = $("#criterio"+id_rubricaedit[i]+"1").val();
-					criterio2edit = $("#criterio"+id_rubricaedit[i]+"2").val();
-					criterio3edit = $("#criterio"+id_rubricaedit[i]+"3").val();
-					criterio4edit = $("#criterio"+id_rubricaedit[i]+"4").val();
-					criterio5edit = $("#criterio"+id_rubricaedit[i]+"5").val();
-					descripcion1edit = $("#descripcion"+id_rubricaedit[i]+"1").val();
-					descripcion2edit = $("#descripcion"+id_rubricaedit[i]+"2").val();
-					descripcion3edit = $("#descripcion"+id_rubricaedit[i]+"3").val();
-					descripcion4edit = $("#descripcion"+id_rubricaedit[i]+"4").val();
-					descripcion5edit = $("#descripcion"+id_rubricaedit[i]+"5").val();
-					puntaje1edit = $("#puntaje"+id_rubricaedit[i]+"1").val();
-					puntaje2edit = $("#puntaje"+id_rubricaedit[i]+"2").val();
-					puntaje3edit = $("#puntaje"+id_rubricaedit[i]+"3").val();
-					puntaje4edit = $("#puntaje"+id_rubricaedit[i]+"4").val();
-					puntaje5edit = $("#puntaje"+id_rubricaedit[i]+"5").val();
-					
-					array_rubricaedit.push({
-						id : id_rubricaedit[i],
-						rubrica : rubricaedit,
-						criterio1 : criterio1edit,
-						criterio2 : criterio2edit,
-						criterio3 : criterio3edit,
-						criterio4 : criterio4edit,
-						criterio5 : criterio5edit,
-						descripcion1 : descripcion1edit,
-						descripcion2 : descripcion2edit,
-						descripcion3 : descripcion3edit,
-						descripcion4 : descripcion4edit,
-						descripcion5 : descripcion5edit,
-						puntaje1 : puntaje1edit,
-						puntaje2 : puntaje2edit,
-						puntaje3 : puntaje3edit,
-						puntaje4 : puntaje4edit,
-						puntaje5 : puntaje5edit
-					});
-				}
-				
-				
-				id_questionarioedit = id_questionarioedit.split("-");
-				for(var i=0; i<id_questionarioedit.length-1;i++){					
-					preguntaedit = $("#pregunta"+id_questionarioedit[i]+"1").val();
-					respuestaedit = $("#respuesta"+id_questionarioedit[i]+"1").val();
-					puntajeedit = $("#puntajeq"+id_questionarioedit[i]+"1").val();
-					
-					array_cuestionarioedit.push({
-						id : id_questionarioedit[i],
-						pregunta : preguntaedit,
-						respuesta : respuestaedit, 
-						puntaje : puntajeedit
-					});			
-				}
-				
-				var evaluaciondtoedit = {
-					evaluacion : {
-						id: id_evaluacionedit,
-						anio : anioedit,
-						categoriaevaluacion : {
-							id : categoriaedit
-						},
-						nivelparticipacion : {
-							id : nivelparticipacionedit
-						},
-						estadoevaluacion : {
-							id : 1
-						},
-						estado : 1
-					},
-					listarubrica: array_rubricaedit,
-					listaquestionario : array_cuestionarioedit
-				};
-				
-				$.ajax({
-					type : "POST",
-				    contentType : "application/json",
-				    url : url_base + "pedesa/actualizarevaluacion",
-				    data : JSON.stringify(evaluaciondtoedit),
-				    dataType : 'json',
-					success: function(respuesta) {
-						if(respuesta.id>0){
-							
-							$("#modalimagencargando").modal('hide');
-							
-
-						    table_lista_evaluacion.cell(celdaseleccionada,1).data(anioedit).draw();
-						    table_lista_evaluacion.cell(celdaseleccionada,2).data($("#nivelparticipacionce_edit option:selected").html()).draw();
-						    table_lista_evaluacion.cell(celdaseleccionada,3).data($("#categoriace_edit option:selected").html()).draw();
-						    table_lista_evaluacion.cell(celdaseleccionada,4).data("Editando").draw();
-
-							limpiarControlesedit();
-							$("#textoexitoeditevaluacion").html("Se actualizó evaluación");
-							$('#modalexitoeditevaluacion').modal({
-								show : true,
-								backdrop : 'static',
-								keyboard:false
-							});
-							
-							
-						}
-						else{
-							$("#modalimagencargando").modal('hide');
-							$("#textoerroreditevaluacion").html("Error al actualizar evaluación");
-							$('#modalerroreditevaluacion').modal({
-								show : true,
-								backdrop : 'static',
-								keyboard:false
-							});
-						}
-					},
-					error: function() {
-						$("#textoerroreditevaluacion").html("Excepción al registrar evaluación");
-						$('#modalerroreditevaluacion').modal({
-							show : true,
-							backdrop : 'static',
-							keyboard:false
-						});
-				    }
-				});
-			}
-			else{
-				$("#modalimagencargando").modal('hide');
-				$("#textoinformacioneditevaluacion").html("<div style='color:red' class='text-left'>"+mensajeValidacion+"</div>");
-				$('#modalinformacioneditrevaluacion').modal({
-					show : true,
-					backdrop : 'static',
-					keyboard:false
-				});
-			}
-		});*/
 		
 		function limpiarControlesedit(){
 			$("#anioce_edit").val("");
 			$("#categoriace_edit").val("");
 			$("#nivelparticipacionce_edit").val("");
-		}
-		
-		function validarCamposedit(){
-			
-			/*arrayParticipante = new Array()*/
-			
-			mensajeValidacionedit = "";
-			anioedit = $("#anioce_edit").val();
-			categoriaedit = $("#categoriace_edit").val();
-			nivelparticipacionedit = $("#nivelparticipacionce_edit").val();
-			
-			if(anioedit == ""){
-				mensajeValidacionedit += "Debe seleccionar Año"+"<br>";
-			}
-			
-			if(categoriaedit==""){
-				mensajeValidacionedit += "Debe seleccionar Categoria"+"<br>";
-			}
-			
-			if(nivelparticipacionedit==""){
-				mensajeValidacionedit += "Debe seleccionar Nivel de participación"+"<br>";
-			}
-			if(mensajeValidacionedit!=""){
-				return false;
-			}
-			return true;
 		}
 		
 </script>

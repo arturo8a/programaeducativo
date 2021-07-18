@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.progeduc.componente.Ldap;
 import com.progeduc.model.Programaeducativo;
 import com.progeduc.model.Usuario;
+import com.progeduc.model.UsuarioAlianza;
 import com.progeduc.model.UsuarioLdap;
 import com.progeduc.model.Usuario_Ods;
 import com.progeduc.service.IOdsService;
 import com.progeduc.service.IProgramaeducativoService;
 import com.progeduc.service.ITipousuarioService;
+import com.progeduc.service.IUsuarioAlianzaService;
 import com.progeduc.service.IUsuarioOdsService;
 import com.progeduc.service.IUsuarioService;
 import com.progeduc.service.IUsuario_odsService;
@@ -48,6 +50,10 @@ public class LoginController {
 	@Autowired
 	private ITipousuarioService tipousuarioServ;
 	
+	@Autowired
+	private IUsuarioAlianzaService usuAlianzaServ;
+	
+	
 	//@PostMapping(value="/loginUser")
 	@RequestMapping(value="/loginUser", method = RequestMethod.POST, produces="text/plain")	
 	public @ResponseBody String loginUser(@RequestParam("usuario") String usuario, @RequestParam("password") String password,HttpSession ses) throws Exception {
@@ -57,6 +63,16 @@ public class LoginController {
     		ses.setAttribute("perfil", "admin");
     		ses.setAttribute("tipousuarioid", 30);
     		return "admin";
+		}
+		
+		UsuarioAlianza usuAlianza = usuAlianzaServ.getUsuarioEvaluador(usuario, password);
+		
+		if(usuAlianza != null) {
+			ses.setAttribute("usuario", usuAlianza.getUsuarioautoridad());
+    		ses.setAttribute("perfil", usuAlianza.getOds().getDescripcion());
+    		ses.setAttribute("tipousuarioid", 0);
+    		ses.setAttribute("odsid", usuAlianza.getOds().getId());
+    		return usuAlianza.getUsuarioautoridad();
 		}
 		
 		Ldap mildap = new Ldap();

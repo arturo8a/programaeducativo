@@ -9,5 +9,6 @@ public interface IUsuarioAlianzaService extends ICRUD<UsuarioAlianza,Integer>{
 	
 	Usuario saveUsuario(UsuarioAlianza dto);
 	List<UsuarioAlianza> listarByOds(Integer odsid);
+	UsuarioAlianza getUsuarioEvaluador(String usuario, String password);
 
 }
