@@ -463,7 +463,7 @@ public class ConcursoeducativoController {
 			return 0;
 		try {
 			if(uploadfile.borrarArchivo(id,"upload_participantes")) {
-				uploadfile.saveNuevoFile(file,id);
+				uploadfile.saveNuevoFile(file,"upload_participantes",id);
 			}
 			else {
 				return 0;
@@ -545,7 +545,7 @@ public class ConcursoeducativoController {
 					categoria = categoria.substring(0,categoria.length()-1);				
 				dto.setCategoria(categoria);
 				modalidad = obj.getModalidadpostulacionindividual()==1?"Individual/":"";
-				modalidad += obj.getModalidadpostulaciongrupal()==1?"Grupal/":"";
+				modalidad += obj.getModalidadpostulaciongrupal()==1?"Grupal/":"";				
 				if(modalidad.length()>0)
 					modalidad = modalidad.substring(0,modalidad.length()-1);
 				dto.setModalidad(modalidad);
@@ -565,71 +565,49 @@ public class ConcursoeducativoController {
 			Object ob = ses.getAttribute("odsid");
 			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(dist->{
 				progeducService.listar(dist.getId()).forEach(pe->{
-					trabajosfinalesServ.listarhabilitados(pe.getId()).forEach(tf->{
-						nivel_participante = "";
-						evaluadores_asignados = 0;
-						trabajoEvaluadoDto dto = new trabajoEvaluadoDto();
-						dto.setOds(odsserv.byOds(tf.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
-						dto.setCategoria(tf.getCategoriatrabajo().getDescripcion());
-						trabajosfinalesparticipanteServ.listar(tf.getId()).forEach(tfp->{
-							nivel_participante  = tfp.getParticipante().getGradoestudiante().getNivelparticipante().getDescripcion();
-						});
-						dto.setNivel_participacion(nivel_participante);
-						dto.setCodigoie(tf.getProgramaeducativo().getCodmod());
-						dto.setNombreie(tf.getProgramaeducativo().getNomie());
-						dto.setCodigo_trabajo(tf.getProgramaeducativo().getCodmod() + "-" + tf.getId().toString());
-						dto.setModalidad(tf.getModalidadtrabajo().getDescripcion());
-						dto.setTitulo(tf.getTitulotrabajo());				
-						trabajosFinales_UsuarioAlianzaServ.listarByTrabajosfinalesId(tf.getId()).forEach(tf_ua->{
-							evaluadores_asignados += 1;
-						});
-						dto.setEvaluadores_asignados(evaluadores_asignados);
-						dto.setTiene_evaluador_asignado(evaluadores_asignados>0? "Si" : "No");
-						dto.setId(tf.getId());
-						listadto.add(dto);
-					});
+					if(postulacionconcursoServ.getById(pe.getId()).getFinalizarparticipaciontrabajo() != null) {
+						if(postulacionconcursoServ.getById(pe.getId()).getFinalizarparticipaciontrabajo() == 1) {
+							trabajosfinalesServ.listarHabilitadosEnviado(pe.getId()).forEach(tf->{							
+								nivel_participante = "";
+								evaluadores_asignados = 0;
+								trabajoEvaluadoDto dto = new trabajoEvaluadoDto();
+								dto.setOds(odsserv.byOds(tf.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+								dto.setCategoria(tf.getCategoriatrabajo().getDescripcion());
+								trabajosfinalesparticipanteServ.listar(tf.getId()).forEach(tfp->{
+									nivel_participante  = tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+								});
+								dto.setNivel_participacion(nivel_participante);
+								dto.setCodigoie(tf.getProgramaeducativo().getCodmod());
+								dto.setNombreie(tf.getProgramaeducativo().getNomie());
+								dto.setCodigo_trabajo(tf.getProgramaeducativo().getCodmod() + "-" + tf.getId().toString());
+								dto.setModalidad(tf.getModalidadtrabajo().getDescripcion());
+								dto.setTitulo(tf.getTitulotrabajo());				
+								trabajosFinales_UsuarioAlianzaServ.listarByTrabajosfinalesId(tf.getId()).forEach(tf_ua->{
+									evaluadores_asignados += 1;
+								});
+								dto.setEvaluadores_asignados(evaluadores_asignados);
+								dto.setTiene_evaluador_asignado(evaluadores_asignados>0? "Si" : "No");
+								dto.setId(tf.getId());
+								listadto.add(dto);
+							});
+						}	
+					}					
 				});
 			});		
 		}
 		else if (tipousuarioid==30){
-			trabajosfinalesServ.listarhabilitados().forEach(tf->{
-				nivel_participante = "";
-				evaluadores_asignados = 0;
-				trabajoEvaluadoDto dto = new trabajoEvaluadoDto();
-				dto.setOds(odsserv.byOds(tf.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
-				dto.setCategoria(tf.getCategoriatrabajo().getDescripcion());
-				trabajosfinalesparticipanteServ.listar(tf.getId()).forEach(tfp->{
-					nivel_participante  = tfp.getParticipante().getGradoestudiante().getNivelparticipante().getDescripcion();
-				});
-				dto.setNivel_participacion(nivel_participante);
-				dto.setCodigoie(tf.getProgramaeducativo().getCodmod());
-				dto.setNombreie(tf.getProgramaeducativo().getNomie());
-				dto.setCodigo_trabajo(tf.getProgramaeducativo().getCodmod() + "-" + tf.getId().toString());
-				dto.setModalidad(tf.getModalidadtrabajo().getDescripcion());
-				dto.setTitulo(tf.getTitulotrabajo());				
-				trabajosFinales_UsuarioAlianzaServ.listarByTrabajosfinalesId(tf.getId()).forEach(tf_ua->{
-					evaluadores_asignados += 1;
-				});
-				dto.setEvaluadores_asignados(evaluadores_asignados);
-				dto.setTiene_evaluador_asignado(evaluadores_asignados>0? "Si" : "No");
-				dto.setId(tf.getId());
-				listadto.add(dto);
-			});
-		}
-		else {
-			String usuario = ses.getAttribute("usuario").toString();
-			Usuario user = usuarioServ.byUsuario(usuario);
-			usuarioodsServ.listarByUsuario(user.getId()).forEach(obj->{
-				distServ.listByOdsid(obj.getOds().getId()).forEach(dist->{					
-					progeducService.listar(dist.getId()).forEach(pe->{
-						trabajosfinalesServ.listarhabilitados(pe.getId()).forEach(tf->{
+			
+			progeducService.getListarHabilitadosAnioActual().forEach(pe->{
+				if(postulacionconcursoServ.getById(pe.getId()).getFinalizarparticipaciontrabajo()!=null) {
+					if(postulacionconcursoServ.getById(pe.getId()).getFinalizarparticipaciontrabajo()== 1) {
+						trabajosfinalesServ.listarHabilitadosEnviado(pe.getId()).forEach(tf->{
 							nivel_participante = "";
 							evaluadores_asignados = 0;
 							trabajoEvaluadoDto dto = new trabajoEvaluadoDto();
 							dto.setOds(odsserv.byOds(tf.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
 							dto.setCategoria(tf.getCategoriatrabajo().getDescripcion());
 							trabajosfinalesparticipanteServ.listar(tf.getId()).forEach(tfp->{
-								nivel_participante  = tfp.getParticipante().getGradoestudiante().getNivelparticipante().getDescripcion();
+								nivel_participante  = tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc();
 							});
 							dto.setNivel_participacion(nivel_participante);
 							dto.setCodigoie(tf.getProgramaeducativo().getCodmod());
@@ -645,6 +623,43 @@ public class ConcursoeducativoController {
 							dto.setId(tf.getId());
 							listadto.add(dto);
 						});
+					}
+				}				
+			});			
+		}
+		else {
+			String usuario = ses.getAttribute("usuario").toString();
+			Usuario user = usuarioServ.byUsuario(usuario);
+			usuarioodsServ.listarByUsuario(user.getId()).forEach(obj->{
+				distServ.listByOdsid(obj.getOds().getId()).forEach(dist->{					
+					progeducService.listar(dist.getId()).forEach(pe->{
+						if(postulacionconcursoServ.getById(pe.getId()).getFinalizarparticipaciontrabajo() != null) {
+							if(postulacionconcursoServ.getById(pe.getId()).getFinalizarparticipaciontrabajo() == 1) {
+								trabajosfinalesServ.listarHabilitadosEnviado(pe.getId()).forEach(tf->{
+									nivel_participante = "";
+									evaluadores_asignados = 0;
+									trabajoEvaluadoDto dto = new trabajoEvaluadoDto();
+									dto.setOds(odsserv.byOds(tf.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+									dto.setCategoria(tf.getCategoriatrabajo().getDescripcion());
+									trabajosfinalesparticipanteServ.listar(tf.getId()).forEach(tfp->{
+										nivel_participante  = tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+									});
+									dto.setNivel_participacion(nivel_participante);
+									dto.setCodigoie(tf.getProgramaeducativo().getCodmod());
+									dto.setNombreie(tf.getProgramaeducativo().getNomie());
+									dto.setCodigo_trabajo(tf.getProgramaeducativo().getCodmod() + "-" + tf.getId().toString());
+									dto.setModalidad(tf.getModalidadtrabajo().getDescripcion());
+									dto.setTitulo(tf.getTitulotrabajo());				
+									trabajosFinales_UsuarioAlianzaServ.listarByTrabajosfinalesId(tf.getId()).forEach(tf_ua->{
+										evaluadores_asignados += 1;
+									});
+									dto.setEvaluadores_asignados(evaluadores_asignados);
+									dto.setTiene_evaluador_asignado(evaluadores_asignados>0? "Si" : "No");
+									dto.setId(tf.getId());
+									listadto.add(dto);
+								});
+							}
+						}						
 					});
 				});
 			});
@@ -661,10 +676,26 @@ public class ConcursoeducativoController {
 		if(tipousuarioid == 0){			
 			Object ob = ses.getAttribute("odsid");			
 			List<UsuarioAlianza> listaUsu = usuAlianzaserv.listarByOds(Integer.parseInt(ob.toString()));
-			listaUsu.forEach(ua->{
+			listaUsu.forEach(ua->{				
 				EvaluadorDto dto = new EvaluadorDto();
 				dto.setOds(ua.getOds().getDescripcion());
-				dto.setRol_entidad("");
+				
+				rol_entidad = "";
+				if(ua.getComitetecnico().equals("1")) {
+					rol_entidad = "Comite Técnico/";
+				}				
+				if(ua.getComitetecnico().equals("1")) {
+					rol_entidad += "Comite Evaluador/";
+				}				
+				if(ua.getComitetecnico().equals("1")) {
+					rol_entidad += "Auspiciador/";
+				}				
+				if(ua.getComitetecnico().equals("1")) {
+					rol_entidad += "Aliado/";
+				}				
+				if(rol_entidad.length()>0)
+					rol_entidad = rol_entidad.substring(0, rol_entidad.length()-1);	
+				dto.setRol_entidad(rol_entidad);
 				dto.setEntidad(ua.getEntidad());
 				dto.setApellido_paterno(ua.getApepatautoridad());
 				dto.setApellido_materno(ua.getApematautoridad());
@@ -679,7 +710,22 @@ public class ConcursoeducativoController {
 			usuAlianzaserv.listar().forEach(ua->{
 				EvaluadorDto dto = new EvaluadorDto();
 				dto.setOds(ua.getOds().getDescripcion());
-				dto.setRol_entidad("");
+				rol_entidad = "";
+				if(ua.getComitetecnico().equals("1")) {
+					rol_entidad = "Comite Técnico/";
+				}				
+				if(ua.getComitetecnico().equals("1")) {
+					rol_entidad += "Comite Evaluador/";
+				}				
+				if(ua.getComitetecnico().equals("1")) {
+					rol_entidad += "Auspiciador/";
+				}				
+				if(ua.getComitetecnico().equals("1")) {
+					rol_entidad += "Aliado/";
+				}				
+				if(rol_entidad.length()>0)
+					rol_entidad = rol_entidad.substring(0, rol_entidad.length()-1);				
+				dto.setRol_entidad(rol_entidad);
 				dto.setEntidad(ua.getEntidad());
 				dto.setApellido_paterno(ua.getApepatautoridad());
 				dto.setApellido_materno(ua.getApematautoridad());
@@ -699,7 +745,22 @@ public class ConcursoeducativoController {
 				listaUsu.forEach(ua->{
 					EvaluadorDto dto = new EvaluadorDto();
 					dto.setOds(ua.getOds().getDescripcion());
-					dto.setRol_entidad("");
+					rol_entidad = "";
+					if(ua.getComitetecnico().equals("1")) {
+						rol_entidad = "Comite Técnico/";
+					}				
+					if(ua.getComitetecnico().equals("1")) {
+						rol_entidad += "Comite Evaluador/";
+					}				
+					if(ua.getComitetecnico().equals("1")) {
+						rol_entidad += "Auspiciador/";
+					}				
+					if(ua.getComitetecnico().equals("1")) {
+						rol_entidad += "Aliado/";
+					}				
+					if(rol_entidad.length()>0)
+						rol_entidad = rol_entidad.substring(0, rol_entidad.length()-1);	
+					dto.setRol_entidad(rol_entidad);
 					dto.setEntidad(ua.getEntidad());
 					dto.setApellido_paterno(ua.getApepatautoridad());
 					dto.setApellido_materno(ua.getApematautoridad());
@@ -724,12 +785,12 @@ public class ConcursoeducativoController {
 			Object ob = ses.getAttribute("odsid");
 			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(obj->{				
 				progeducService.listar(obj.getId()).forEach(obj1->{					
-					List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarhabilitados(obj1.getId());
+					List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarHabilitadosEnviados(obj1.getId());
 					listaTrabajoFinales.forEach(obj2->{
 						ConcursoDto dto = new ConcursoDto();
 						dto.setId(obj2.getId());
 						dto.setAnio(obj2.getAnio());
-						dto.setCodigotrabajo(obj2.getProgramaeducativo().getId() + "_" + obj2.getId());
+						dto.setCodigotrabajo(obj2.getProgramaeducativo().getCodmod() + "_" + obj2.getId());
 						dto.setOds(odsserv.byOds(obj2.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
 						dto.setCodigoie(obj2.getProgramaeducativo().getCodmod());
 						dto.setNombreie(obj2.getProgramaeducativo().getNomie());
@@ -742,7 +803,7 @@ public class ConcursoeducativoController {
 							idnivelparticipacion = obj3.getParticipante().getGradoestudiante().getNivelgradopartid();
 						});			
 						dto.setNivelparticipacion(nivelparticipacion);
-						dto.setEstado(evaluacionServ.getPorAnioNivelparticipacionCategoria(obj2.getAnio(),idnivelparticipacion,obj2.getCategoriatrabajo().getId())!=null?evaluacionServ.getPorAnioNivelparticipacionCategoria(obj2.getAnio(),idnivelparticipacion,obj2.getCategoriatrabajo().getId()).getEstadoevaluacion().getDescripcion():"");
+						dto.setEstado(obj2.getEstadotrabajo().getDescripcion());
 						dto.setCalificacion(0);
 						dto.setPuesto(0);
 						listadto.add(dto);
@@ -756,7 +817,7 @@ public class ConcursoeducativoController {
 				ConcursoDto dto = new ConcursoDto();
 				dto.setId(obj.getId());
 				dto.setAnio(obj.getAnio());
-				dto.setCodigotrabajo(obj.getProgramaeducativo().getId() + "_" + obj.getId());
+				dto.setCodigotrabajo(obj.getProgramaeducativo().getCodmod() + "_" + obj.getId());
 				dto.setOds(odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
 				dto.setCodigoie(obj.getProgramaeducativo().getCodmod());
 				dto.setNombreie(obj.getProgramaeducativo().getNomie());
@@ -769,7 +830,7 @@ public class ConcursoeducativoController {
 					idnivelparticipacion = obj1.getParticipante().getGradoestudiante().getNivelgradopartid();
 				});			
 				dto.setNivelparticipacion(nivelparticipacion);
-				dto.setEstado(evaluacionServ.getPorAnioNivelparticipacionCategoria(obj.getAnio(),idnivelparticipacion,obj.getCategoriatrabajo().getId())!=null?evaluacionServ.getPorAnioNivelparticipacionCategoria(obj.getAnio(),idnivelparticipacion,obj.getCategoriatrabajo().getId()).getEstadoevaluacion().getDescripcion():"");
+				dto.setEstado(obj.getEstadotrabajo().getDescripcion());
 				dto.setCalificacion(0);
 				dto.setPuesto(0);
 				listadto.add(dto);
@@ -786,7 +847,7 @@ public class ConcursoeducativoController {
 							ConcursoDto dto = new ConcursoDto();
 							dto.setId(obj2.getId());
 							dto.setAnio(obj2.getAnio());
-							dto.setCodigotrabajo(obj2.getProgramaeducativo().getId() + "_" + obj2.getId());
+							dto.setCodigotrabajo(obj2.getProgramaeducativo().getCodmod() + "_" + obj2.getId());
 							dto.setOds(odsserv.byOds(obj2.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
 							dto.setCodigoie(obj2.getProgramaeducativo().getCodmod());
 							dto.setNombreie(obj2.getProgramaeducativo().getNomie());
@@ -800,10 +861,7 @@ public class ConcursoeducativoController {
 							});			
 							//System.out.println("idnivelparticipacion :" + idnivelparticipacion);
 							dto.setNivelparticipacion(nivelparticipacion);
-							if(idnivelparticipacion!=null)							
-								dto.setEstado(evaluacionServ.getPorAnioNivelparticipacionCategoria(obj2.getAnio(),idnivelparticipacion,obj2.getCategoriatrabajo().getId())!=null?evaluacionServ.getPorAnioNivelparticipacionCategoria(obj2.getAnio(),idnivelparticipacion,obj2.getCategoriatrabajo().getId()).getEstadoevaluacion().getDescripcion():"");
-							else
-								dto.setEstado("");
+							dto.setEstado(obj2.getEstadotrabajo().getDescripcion());
 							dto.setCalificacion(0);
 							dto.setPuesto(0);
 							listadto.add(dto);
@@ -844,6 +902,8 @@ public class ConcursoeducativoController {
 							if(tf_ua.getUsuarioalianza().getComitetecnico().equals("1")) {
 								rol_entidad += "Aliado/";
 							}
+							if(rol_entidad.length()>0)
+								rol_entidad = rol_entidad.substring(0, rol_entidad.length()-1);	
 							entidad += tf_ua.getUsuarioalianza().getEntidad();
 						});
 						
@@ -856,7 +916,7 @@ public class ConcursoeducativoController {
 							dto.setCategoria(tf.getCategoriatrabajo().getDescripcion());
 							dto.setCodigoiiee(tf.getProgramaeducativo().getCodmod());
 							dto.setCodigotrabajo(tf.getProgramaeducativo().getCodmod() + "_" + tf.getId());
-							dto.setNombreiiee(tf.getNombre());
+							dto.setNombreiiee(tf.getProgramaeducativo().getNomie());
 							dto.setModalidad(tf.getModalidadtrabajo().getDescripcion());
 							
 							nivelparticipacion  = "";
@@ -892,6 +952,8 @@ public class ConcursoeducativoController {
 					if(tf_ua.getUsuarioalianza().getComitetecnico().equals("1")) {
 						rol_entidad += "Aliado/";
 					}
+					if(rol_entidad.length()>0)
+						rol_entidad = rol_entidad.substring(0, rol_entidad.length()-1);	
 					entidad += tf_ua.getUsuarioalianza().getEntidad();
 				});
 				
@@ -904,7 +966,7 @@ public class ConcursoeducativoController {
 					dto.setCategoria(tf.getCategoriatrabajo().getDescripcion());
 					dto.setCodigoiiee(tf.getProgramaeducativo().getCodmod());
 					dto.setCodigotrabajo(tf.getProgramaeducativo().getCodmod() + "_" + tf.getId());
-					dto.setNombreiiee(tf.getNombre());
+					dto.setNombreiiee(tf.getProgramaeducativo().getNomie());
 					dto.setModalidad(tf.getModalidadtrabajo().getDescripcion());
 					
 					nivelparticipacion  = "";
@@ -943,6 +1005,8 @@ public class ConcursoeducativoController {
 								if(tf_ua.getUsuarioalianza().getComitetecnico().equals("1")) {
 									rol_entidad += "Aliado/";
 								}
+								if(rol_entidad.length()>0)
+									rol_entidad = rol_entidad.substring(0, rol_entidad.length()-1);	
 								entidad += tf_ua.getUsuarioalianza().getEntidad();
 							});
 							
@@ -955,7 +1019,7 @@ public class ConcursoeducativoController {
 								dto.setCategoria(tf.getCategoriatrabajo().getDescripcion());
 								dto.setCodigoiiee(tf.getProgramaeducativo().getCodmod());
 								dto.setCodigotrabajo(tf.getProgramaeducativo().getCodmod() + "_" + tf.getId());
-								dto.setNombreiiee(tf.getNombre());
+								dto.setNombreiiee(tf.getProgramaeducativo().getNomie());
 								dto.setModalidad(tf.getModalidadtrabajo().getDescripcion());
 								
 								nivelparticipacion  = "";
@@ -1044,6 +1108,8 @@ public class ConcursoeducativoController {
 				trabajosfinalesparticipanteServ.listar(obj.getId()).forEach(obj1->{
 					miparticipante += obj1.getParticipante().getNombreestudiante() + " " + obj1.getParticipante().getAppaternoestudiante() + " " + obj1.getParticipante().getApmaternoestudiante() + "/";
 				});
+				if(miparticipante.length()>0)
+					miparticipante = miparticipante.substring(0, miparticipante.length()-1);	
 				
 				dtotf.setParticipantes(miparticipante);
 				
@@ -1094,11 +1160,7 @@ public class ConcursoeducativoController {
 			});
 		}		
 		return new ResponseEntity<List<ListaparticipantetrabajoDto>>(lista, HttpStatus.OK) ;
-	}
-	
-	
-	
-	
+	}	
 	
 	@GetMapping(value = "/listaparticipantesver_trabajo/{id}")
 	public ResponseEntity<List<ParticipanteVerDto>> listaparticipantesver_trabajo(@PathVariable("id") Integer id){
@@ -1151,7 +1213,6 @@ public class ConcursoeducativoController {
 		List<ListaDocenteInscritos> arrayie = new ArrayList<ListaDocenteInscritos>();
 		if(tipousuarioid == 0){			
 			Object ob = ses.getAttribute("odsid");
-			System.out.println("odsid :" + Integer.parseInt(ob.toString()));
 			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(dist->{
 				progeducService.listar(dist.getId()).forEach(pe->{
 					docenteService.listarhabilitados(pe.getId()).forEach(obj->{
@@ -1209,17 +1270,11 @@ public class ConcursoeducativoController {
 		}
 		else {
 			String usuario = ses.getAttribute("usuario").toString();
-			System.out.println("usuario :" + usuario);
 			Usuario user = usuarioServ.byUsuario(usuario);
-			System.out.println("user.getId() :" + user.getId());
 			usuarioodsServ.listarByUsuario(user.getId()).forEach(obj1->{
-				System.out.println("obj1.getOds().getId() :" + obj1.getOds().getId());
 				distServ.listByOdsid(obj1.getOds().getId()).forEach(dist->{
-					System.out.println("dist.getId() :" + dist.getId());
 					progeducService.listar(dist.getId()).forEach(pe->{
-						System.out.println("pe.getId() :" + pe.getId());
 						docenteService.listarhabilitados(pe.getId()).forEach(obj->{
-							System.out.println("docente");
 							listadocentesinscritos= new ListaDocenteInscritos();				
 							listadocentesinscritos.setAnio(obj.getAnhio());
 							if(obj.getProgramaeducativo().getDistrito().getOdsid()!=null) {
@@ -1306,7 +1361,6 @@ public class ConcursoeducativoController {
 		int respuesta = 0;
 		if(usu != null) {
 			usu.setOds(dto.getOds());
-			//usu.setAnio(dto.getAnio());
 			usu.setCategoria(dto.getCategoria());
 			usu.setEntidad(dto.getEntidad());
 			usu.setDireccion(dto.getDireccion());
@@ -1377,14 +1431,10 @@ public class ConcursoeducativoController {
 				String msj = "<img src='./images/logo_login.PNG' style='width:400px' /><img src='./images/imagen1.PNG' style='width:400px' />";
 				msj += "<p>Estimado(a), usted ha sido agregado como evaluador:</p>";
 				msj += "<p>Usuario: "+dto.getUsuarioautoridad()+"</p>";
-				msj += "<p>Contraseña: "+dto.getPasswordautoridad()+"</p>";
-				
+				msj += "<p>Contraseña: "+dto.getPasswordautoridad()+"</p>";				
 				mail = new Mail();
-				mail.enviarCorreoTrabajosFinalesConcursoEscolar("Credenciales de Usuario", msj, dto.getCorreoautoridad());
-	
+				mail.enviarCorreoTrabajosFinalesConcursoEscolar("Credenciales de Usuario", msj, dto.getCorreoautoridad());	
 			}
-			
-			
 		}else {
 			usu = new UsuarioAlianza();
 			usu.setOds(dto.getOds());
@@ -1421,13 +1471,10 @@ public class ConcursoeducativoController {
 				usu.setDocoficio(dto.getDocoficio());
 			}
 			
-			
-			
 			usu.setAuspicios(dto.getAuspicios());
 			usu.setFecha_registro(new Timestamp(new Date().getTime()));
 			usu.setEstado("1");
 			UsuarioAlianza usu2 = usuAlianzaserv.registrar(usu);
-			
 			
 			if(dto.getAuspicios().size() > 0) {
 				List<Auspicio> listAus = dto.getAuspicios();
@@ -1443,12 +1490,8 @@ public class ConcursoeducativoController {
 					auspicioServ.registrar(aus);
 				}
 			}
-			
-			
 			respuesta = usu2.getId();
 		}
-
-		
 		return respuesta;
 	}
 	

@@ -10,4 +10,6 @@ public interface IEvaluacionQuestionarioService extends ICRUD<Evaluacionquestion
 	
 	List<Evaluacionquestionario> listarPorEvaluacionId(Integer id);
 	
+	List<Evaluacionquestionario> verificaExiste(Integer evaluacionid, Integer questionarioid);
+	
 }

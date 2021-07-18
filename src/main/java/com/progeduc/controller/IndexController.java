@@ -204,6 +204,7 @@ public class IndexController {
 	
 	int contador;
 	String id_rubrica,id_questionario,ods,id_pregunta_respuesta,id_pr;
+	String id_rubrica_edit,id_questionario_edit,ods_edit,id_pregunta_respuesta_edit,id_pr_edit;
 	Integer odsid;
 	
 	@GetMapping("/inicio")
@@ -507,7 +508,7 @@ public class IndexController {
 		System.out.println("odsid :" + odsid);
 		model.addAttribute("odsid",odsid);
 		model.addAttribute("ods",odsserv.listarAll());
-		model.addAttribute("nivelparticipacion",nivelparticipanteService.listar());
+		model.addAttribute("nivelparticipacion",nivelparticipacionService.listar());
 		model.addAttribute("categoriatrabajo",categoriaevaluacionService.listar());
 		Calendar fecha = Calendar.getInstance();
         model.addAttribute("anio", fecha.get(Calendar.YEAR));
@@ -796,18 +797,18 @@ public class IndexController {
 	@GetMapping("/editarviewevaluacionid/{id}")
 	public String editarviewevaluacionid(@PathVariable("id") Integer id,  Model model,HttpSession ses) {
 		
-		id_rubrica = "";
-		id_questionario ="";
-		id_pr="";
-		id_pregunta_respuesta="";
+		id_rubrica_edit = "";
+		id_questionario_edit ="";
+		id_pr_edit="";
+		id_pregunta_respuesta_edit="";
 		
 		Evaluacion eval = evaluacionService.ListarporId(id);
-		model.addAttribute("evaluacion", eval);
+		model.addAttribute("evaluacion_edit", eval);
 		
 		List<Rubrica> listaRubrica = new ArrayList<Rubrica>();
         evaluacionrubricaServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
         	listaRubrica.add(obj.getRubrica());
-        	id_rubrica += obj.getRubrica().getId().toString() + "-";
+        	id_rubrica_edit += obj.getRubrica().getId().toString() + "-";
         });
         
         List<Questionario> listaQuestionario = new ArrayList<Questionario>();
@@ -817,28 +818,27 @@ public class IndexController {
         	obj.getQuestionario().getQuestionariorespuesta().forEach(pr->{
         		id_pr += pr.getId() + "-";
         	});
-        	id_pregunta_respuesta += "(" + obj.getQuestionario().getId().toString() + "*" + (id_pr.substring(0,id_pr.length()-1)) + ")";
-        	System.out.println("id_pregunta_respuesta :" + id_pregunta_respuesta);
+        	id_pregunta_respuesta_edit += "(" + obj.getQuestionario().getId().toString() + "*" + (id_pr.substring(0,id_pr.length()-1)) + ")";
         });
        
-        model.addAttribute("id_evaluacion", eval.getId()); 
-        model.addAttribute("id_rubrica", id_rubrica);
-        model.addAttribute("id_questionario", id_questionario);
-        model.addAttribute("id_pregunta_respuesta", id_pregunta_respuesta);
+        model.addAttribute("id_evaluacion_edit", eval.getId()); 
+        model.addAttribute("id_rubrica_edit", id_rubrica_edit);
+        model.addAttribute("id_questionario_edit", id_questionario);
+        model.addAttribute("id_pregunta_respuesta_edit", id_pregunta_respuesta_edit);
         List<Integer> listapuntaje = new ArrayList<Integer>();
         listapuntaje.add(1);
         listapuntaje.add(2);
         listapuntaje.add(3);
         listapuntaje.add(4);
         listapuntaje.add(5);
-        model.addAttribute("listapuntaje", listapuntaje);
+        model.addAttribute("listapuntaje_edit", listapuntaje);
         
         Calendar fecha = Calendar.getInstance();
 		model.addAttribute("anio",fecha.get(Calendar.YEAR));		
-        model.addAttribute("listaquestionario", listaQuestionario);
-		model.addAttribute("listarubrica", listaRubrica);
-        model.addAttribute("listanivelparticipacion",nivelparticipacionService.listar());
-		model.addAttribute("listacategoriaevaluacion", categoriaevaluacionService.listar());
+        model.addAttribute("listaquestionario_edit", listaQuestionario);
+		model.addAttribute("listarubrica_edit", listaRubrica);
+        model.addAttribute("listanivelparticipacion_edit",nivelparticipacionService.listar());
+		model.addAttribute("listacategoriaevaluacion_edit", categoriaevaluacionService.listar());
 		return "formeditarevaluacion";
 	}
 	

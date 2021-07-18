@@ -251,6 +251,9 @@ var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="
 				tipodocumento : {
 					id : tipodoctrabajo
 				},
+				estadotrabajo:{
+					id : 1
+				},
 				nrodocumento: nrodoctrabajo,
 				telefono : nrotelefonotrabajo,
 				correo  : correotrabajo,

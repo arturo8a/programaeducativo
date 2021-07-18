@@ -22,5 +22,8 @@ public interface IEvaluacionRubricaRepo extends CrudRepository<Evaluacionrubrica
 	
 	@Query(value="SELECT TB1.* FROM EVALUACIONRUBRICA TB1 where TB1.evaluacionid = ?",nativeQuery = true)
 	List<Evaluacionrubrica> listarPorEvaluacionId(Integer id);
+	
+	@Query(value="SELECT TB1.* FROM EVALUACIONRUBRICA TB1 where TB1.evaluacionid = ?1  and TB1.RUBRICAID=?2",nativeQuery = true)
+	List<Evaluacionrubrica> verificaExiste(Integer evaluacionid, Integer rubricaid);
 
 }

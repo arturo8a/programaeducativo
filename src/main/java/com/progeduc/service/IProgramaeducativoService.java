@@ -17,6 +17,8 @@ public interface IProgramaeducativoService extends ICRUD<Programaeducativo,Integ
 	
 	Programaeducativo getCodmod(String codmod);
 	
+	List<Programaeducativo> getListarHabilitadosAnioActual();
+	
 	List<ColegioDto> listCentrosEducativosGroupbyNomie();
 	
 	Programaeducativo save(Programaeducativo pe);

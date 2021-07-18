@@ -73,6 +73,10 @@ public class Trabajosfinales {
 	@JoinColumn(name="tipodocumentoid",nullable=true,foreignKey=@ForeignKey(name="FK_trabajosfinales_tipodoc"))
 	private Tipodocumento tipodocumento;
 	
+	@ManyToOne
+	@JoinColumn(name="estadotrabajoid",nullable=true,foreignKey=@ForeignKey(name="FK_trabajosfinales_esttrab"))
+	private Estadotrabajo estadotrabajo;
+	
 	@Column(name="NRODOCUMENTO",nullable=true,length=15)
 	private String nrodocumento;	
 	
@@ -238,6 +242,14 @@ public class Trabajosfinales {
 
 	public void setTipodocumento(Tipodocumento tipodocumento) {
 		this.tipodocumento = tipodocumento;
+	}
+
+	public Estadotrabajo getEstadotrabajo() {
+		return estadotrabajo;
+	}
+
+	public void setEstadotrabajo(Estadotrabajo estadotrabajo) {
+		this.estadotrabajo = estadotrabajo;
 	}
 
 	public String getNrodocumento() {

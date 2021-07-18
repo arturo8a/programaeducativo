@@ -100,7 +100,7 @@ public class EvaluacionServiceImpl implements IEvaluacionService{
 		
 		evaluacionrepo.save(dto.getEvaluacion());
 		dto.getListarubrica().forEach(obj->{
-			rubricarepo.save(obj);			
+			rubricarepo.save(obj);
 			evaluacionrubricarepo.guardar(dto.getEvaluacion().getId(), obj.getId());
 		});
 		
@@ -120,6 +120,12 @@ public class EvaluacionServiceImpl implements IEvaluacionService{
 		evaluacionrepo.save(dto.getEvaluacion());
 		dto.getListarubrica().forEach(obj->{
 			rubricarepo.save(obj);
+			System.out.println(" dto.getEvaluacion().getId() : " + dto.getEvaluacion().getId());
+			System.out.println("rubricaid : " + obj.getId());
+			if(evaluacionrubricarepo.verificaExiste(dto.getEvaluacion().getId(), obj.getId()).size()==0) {
+				System.out.println("entro rubrica");
+				evaluacionrubricarepo.guardar(dto.getEvaluacion().getId(), obj.getId());
+			}
 		});
 		
 		dto.getListaquestionario().forEach(obj->{
@@ -127,6 +133,12 @@ public class EvaluacionServiceImpl implements IEvaluacionService{
 				obj1.setQuestionario(obj);
 			});
 			questionariorepo.save(obj);
+			System.out.println(" dto.getEvaluacion().getId() : " + dto.getEvaluacion().getId());
+			System.out.println(" cuestionario : " + obj.getId());
+			if(evaluacionquestionariorepo.verificaExiste(dto.getEvaluacion().getId(), obj.getId()).size()==0) {
+				System.out.println("entro cuestionario");
+				evaluacionquestionariorepo.guardar(dto.getEvaluacion().getId(), obj.getId());
+			}
 		});
 		return dto.getEvaluacion();
 	}

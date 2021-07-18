@@ -22,4 +22,7 @@ public interface IEvaluacionQuestionarioRepo extends CrudRepository<Evaluacionqu
 	
 	@Query(value="SELECT TB1.* FROM EVALUACIONQUESTIONARIO TB1 where TB1.evaluacionid = ?",nativeQuery = true)
 	List<Evaluacionquestionario> listarPorEvaluacionId(Integer id);
+	
+	@Query(value="SELECT TB1.* FROM EVALUACIONQUESTIONARIO TB1 where TB1.EVALUACIONID = ?1  and TB1.QUESTIONARIOID=?2",nativeQuery = true)
+	List<Evaluacionquestionario> verificaExiste(Integer evaluacionid, Integer questionarioid);
 }

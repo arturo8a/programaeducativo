@@ -63,4 +63,8 @@ public class EvaluacionRubricaServiceImpl implements IEvaluacionRubricaService{
 		return evaluacionrubricarepo.listarPorEvaluacionId(evaluacionid);
 	}
 	
+	@Override
+	public List<Evaluacionrubrica> verificaExiste(Integer evaluacionid, Integer rubricaid){
+		return evaluacionrubricarepo.verificaExiste(evaluacionid, rubricaid);
+	}
 }

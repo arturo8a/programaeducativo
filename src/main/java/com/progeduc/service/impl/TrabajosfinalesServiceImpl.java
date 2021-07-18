@@ -50,8 +50,19 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 	}
 	
 	@Override
+	public List<Trabajosfinales> listarHabilitadosEnviado(Integer programaeducativoid){
+		return trabajosfinalesRepo.listarHabilitadosEnviado(programaeducativoid);
+	}
+	
+	
+	@Override
 	public List<Trabajosfinales> listarhabilitados(){
 		return trabajosfinalesRepo.listarhabilitados();
+	}
+	
+	@Override
+	public List<Trabajosfinales> listarHabilitadosEnviados(Integer programaeducativoid){
+		return trabajosfinalesRepo.listarHabilitadosEnviados(programaeducativoid);
 	}
 	
 	@Override
