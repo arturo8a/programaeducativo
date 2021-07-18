@@ -176,7 +176,7 @@ function filtraSelect(dato,campo){
 }
 
 var obtener_data_form = function(tbody,table){
-	$(tbody).on("click","button.registrarEvaliacion",function(){
+	$(tbody).on("click","button.registrarEvaliacion",function(){ console.log('open modal registrar evaluacion');
 		registarEvaliacionTrabajosPendientes($(this).attr('data-id'));
 	});
 };
@@ -212,7 +212,9 @@ function registarEvaliacionTrabajosPendientes(id){ console.log('-->registarEvali
 	    url : url_base + "pedesa/formregistrarevaluacion/"+ id,
 		success: function(respuesta) {
 			$("#contenidoevaluartrabajospendientes").html(respuesta);
+			$("#modalimagencargando").modal('hide');
 			$("#modaleEvaluarTrabajoPendientes").modal();
+			
 		},
 		error: function() {
 			$("#modalimagencargando").modal('hide');

@@ -55,6 +55,7 @@ import com.progeduc.model.Aperturaranio;
 import com.progeduc.model.Auspicio;
 import com.progeduc.model.Docente;
 import com.progeduc.model.Evaluacion;
+import com.progeduc.model.EvaluacionResultado;
 import com.progeduc.model.Gradoparticipante;
 import com.progeduc.model.Ods;
 import com.progeduc.model.Participante;
@@ -69,6 +70,7 @@ import com.progeduc.service.IAperturaranioService;
 import com.progeduc.service.IAuspicioService;
 import com.progeduc.service.IDistritoService;
 import com.progeduc.service.IDocenteService;
+import com.progeduc.service.IEvaluacionRespuestaService;
 import com.progeduc.service.IEvaluacionService;
 import com.progeduc.service.IGradoparticipanteService;
 import com.progeduc.service.IOdsService;
@@ -138,8 +140,11 @@ public class ConcursoeducativoController {
 	@Autowired
 	IUsuarioService usuarioServ;
 	
-	/*@Autowired
-	private IEvaluacionRespuestaService evaluacionRespuestaServ;*/
+	@Autowired
+	IEvaluacionService evaluacionService;
+	
+	@Autowired
+	private IEvaluacionRespuestaService evaluacionRespuestaServ;
 	
 	
 	ListaparticipanteDto dto;	
@@ -1329,26 +1334,33 @@ public class ConcursoeducativoController {
 		List<Trabajosfinales> listaTrabajos = trabajosfinalesServ.listarTrabajosPendientes();
 		listaTrabajos.forEach(data->{
 			List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteServ.listar(data.getId());
-			Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());			
-			String strOds = "";
-			if(data.getProgramaeducativo().getOds()!=null) {
-				Ods ods = odsserv.byOds(data.getProgramaeducativo().getDistrito().getOdsid());
-				strOds = ods.getDes_ods();
+			Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
+			
+			Evaluacion eval = evaluacionService.getPorAnioCategoriaNivelparticipacion(data.getAnio(), 
+					data.getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
+			
+			if(eval != null) {
+				String strOds = "";
+				if(data.getProgramaeducativo().getOds()!=null) {
+					Ods ods = odsserv.byOds(data.getProgramaeducativo().getDistrito().getOdsid());
+					strOds = ods.getDes_ods();
+				}
+				listaTrabajosFinalesPendientes = new ListaTrabajosFinalesPendientes();
+				listaTrabajosFinalesPendientes.setAnio(data.getAnio());
+				listaTrabajosFinalesPendientes.setCodigo(data.getId());
+				listaTrabajosFinalesPendientes.setOds(strOds);
+				listaTrabajosFinalesPendientes.setIiee(data.getProgramaeducativo().getCodmod());
+				listaTrabajosFinalesPendientes.setCategoria(data.getCategoriatrabajo().getDescripcion());
+				listaTrabajosFinalesPendientes.setModalidad(data.getModalidadtrabajo().getDescripcion());
+				listaTrabajosFinalesPendientes.setTitulotrabajo(data.getTitulotrabajo());
+				listaTrabajosFinalesPendientes.setNivelparticipacion(participante.getGradoestudiante().getNivelgradopartdesc());
+				listaTrabajosFinalesPendientes.setFichatrabajo("ficha trabajo");
+				listaTrabajosFinalesPendientes.setEvaluacion("ficha trabajo");
+				listaTrabajosFinalesPendientes.setTrabajo("ficha trabajo");
+				listaTrabajosFinalesPendientes.setFichatrabajo("ficha trabajo");
+				lista.add(listaTrabajosFinalesPendientes);
 			}
-			listaTrabajosFinalesPendientes = new ListaTrabajosFinalesPendientes();
-			listaTrabajosFinalesPendientes.setAnio(data.getAnio());
-			listaTrabajosFinalesPendientes.setCodigo(data.getId());
-			listaTrabajosFinalesPendientes.setOds(strOds);
-			listaTrabajosFinalesPendientes.setIiee(data.getProgramaeducativo().getCodmod());
-			listaTrabajosFinalesPendientes.setCategoria(data.getCategoriatrabajo().getDescripcion());
-			listaTrabajosFinalesPendientes.setModalidad(data.getModalidadtrabajo().getDescripcion());
-			listaTrabajosFinalesPendientes.setTitulotrabajo(data.getTitulotrabajo());
-			listaTrabajosFinalesPendientes.setNivelparticipacion(participante.getGradoestudiante().getNivelgradopartdesc());
-			listaTrabajosFinalesPendientes.setFichatrabajo("ficha trabajo");
-			listaTrabajosFinalesPendientes.setEvaluacion("ficha trabajo");
-			listaTrabajosFinalesPendientes.setTrabajo("ficha trabajo");
-			listaTrabajosFinalesPendientes.setFichatrabajo("ficha trabajo");
-			lista.add(listaTrabajosFinalesPendientes);
+			
 		});		
 		return new ResponseEntity<List<ListaTrabajosFinalesPendientes>>(lista, HttpStatus.OK) ;
 	}
@@ -1629,7 +1641,7 @@ public class ConcursoeducativoController {
 		}
 	}
 	
-	/*@PostMapping(value="/registrarRespuestasEvaluacion")
+	@PostMapping(value="/registrarRespuestasEvaluacion")
 	public Integer registrarRespuestasEvaluacion(@Valid @RequestBody List<EvaluacionResultado> lista) {
 		
 		try {
@@ -1638,6 +1650,7 @@ public class ConcursoeducativoController {
 				resultado.setPreguntaid(obj.getPreguntaid());
 				resultado.setRespuestaid(obj.getRespuestaid());
 				resultado.setTrabajosfinales(obj.getTrabajosfinales());
+				resultado.setTipo(obj.getTipo());
 				evaluacionRespuestaServ.registrar(resultado);
 			});
 		} catch (Exception e) {
@@ -1645,5 +1658,5 @@ public class ConcursoeducativoController {
 		}
 		
 		return 1;
-	}*/
+	}
 }

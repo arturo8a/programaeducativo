@@ -1,6 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <meta charset="utf-8" />
-
+<!--
 <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
 <link rel="stylesheet" href="../static/css/nuevo_disenio.css" th:href="@{/css/nuevo_disenio.css}">
 <link href="../static/css/gijgo.min.css" rel="stylesheet" th:href="@{/css/gijgo.min.css}" >
@@ -12,7 +12,7 @@
 
 <script type="text/javascript" th:src="@{/js/date-uk.js}"></script>
 <script type="text/javascript" th:src="@{/js/date-euro.js}"></script>
-
+-->
 <style>
 	.rs_concursos_educativos{
 		  /*width:33%;*/
@@ -106,17 +106,24 @@
 		</div>
 	</div>
 </div>
-<div class="modal fade" tabindex="-1" role="dialog" id="modaleEvaluarTrabajoPendientes" aria-labelledby="myLargeModalLabel" >
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content" style="overflow-y: scroll; height:600px;width:90%">
-      <div class="modal-header">
-        <strong class="pt-1">Evaluar Trabajos Pendeintes</strong>
-      </div>
-      <div class="modal-body" id="contenidoevaluartrabajospendientes">      	
-      </div>
-    </div>
-  </div>
+<div class="modal" tabindex="-1" role="dialog" id="modalimagencargando">
+  <center>
+  	<img th:src="@{./images/cargando.gif}" style="line-height: 200px;"/>
+  </center>	  
 </div>
+<center>
+	<div class="modal fade" tabindex="-1" role="dialog" id="modaleEvaluarTrabajoPendientes" aria-labelledby="myLargeModalLabel" >
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content" style="overflow-y: scroll; height:600px;width:90%">
+	      <div class="modal-header">
+	        <strong class="pt-1">Evaluar Trabajos Pendeintes</strong>
+	      </div>
+	      <div class="modal-body" id="contenidoevaluartrabajospendientes">      	
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</center>
 <center>
 	<div class="modal fade" tabindex="-1" role="dialog" id="modalArchivosEvidencias" aria-labelledby="myLargeModalLabel" >
 	  <div class="modal-dialog modal-lg" role="document">

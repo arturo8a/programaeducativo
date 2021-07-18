@@ -65,4 +65,9 @@ public class UsuarioAlianzaServiceImpl implements IUsuarioAlianzaService{
 	public List<UsuarioAlianza> listarByOds(Integer odsid){
 		return usuarioRepo.listarByOds(odsid);
 	}
+
+	@Override
+	public UsuarioAlianza getUsuarioEvaluador(String usuario, String password) {
+		return usuarioRepo.getUsuarioEvaluador(usuario, password);
+	}
 }

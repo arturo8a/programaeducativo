@@ -6,6 +6,9 @@ import com.progeduc.model.EvaluacionResultado;
 
 public interface IEvaluacionRespuestaService extends ICRUD<EvaluacionResultado,Integer>{
 	
+	EvaluacionResultado getPorCodigoTrabajoAndCodigoPreginta(Integer idTrabajo, Integer idPregunta);
+	
+	
 	/*Integer saveEvalRubQuest(EvaluacionRubricaQuestionarioDto dto);
 	
 	int updateestado(Integer id, Integer estado);

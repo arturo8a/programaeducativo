@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.progeduc.model.Usuario;
 import com.progeduc.model.UsuarioAlianza;
 
 @Repository
@@ -15,5 +16,8 @@ public interface IUsuarioAlianzaRepo extends CrudRepository<UsuarioAlianza,Integ
 	
 	@Query(value="SELECT TB1.* FROM USUARIO_ALIANZA TB1 WHERE TB1.odsid = ?1 and tb1.estado=1",nativeQuery = true)
 	List<UsuarioAlianza> listarByOds(Integer odsid);
-
+	
+	@Query(value="SELECT U.* FROM USUARIO_ALIANZA U WHERE U.usuario_autoridad = ?1 and U.password_autoridad=?2 and U.estado=1",nativeQuery = true)
+	UsuarioAlianza getUsuarioEvaluador(String usuario, String password);
+	
 }
