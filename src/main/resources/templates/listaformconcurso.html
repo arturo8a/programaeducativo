@@ -426,7 +426,7 @@
 		$(document).off("click",".btnEditarUsuario");
 		
 		$(document).ready(function(){	
-			funcionesAlianza();
+			/*funcionesAlianza();**/
 			$("#btnbuscarconcurso").click(function(){
 	        	
 	        	setTimeout(() => {        		  
@@ -1297,7 +1297,7 @@
 			window.open("../alfresco_programaeducativo/pedesa/upload_trabajos/"+id+"/"+link, '_blank');
 		}
 		
-		function funcionesAlianza(){
+		/*function funcionesAlianza(){*/
 			$(document).on("click",".btnEditarUsuario",function(){ console.log('.btnEditarUsuario');
 				var id = $(this).attr('data-id');
 				$.ajax({
@@ -1318,7 +1318,7 @@
 				});
 			});
 	
-			
+			$(document).off("click",".btnInactivarUsuario");
 			$(document).on("click",".btnInactivarUsuario",function(){ console.log('.btnInactivarUsuario');
 				console.log($(this).parent());
 				console.log($(this).parent().prev());
@@ -1338,6 +1338,6 @@
 				    }
 				});
 			});
-		}
+		/*}*/
 		
 </script>

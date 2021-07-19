@@ -1521,13 +1521,7 @@ public class ConcursoeducativoController {
 			usu.setTelefonodos(dto.getTelefonodos());
 			usu.setCorreocontato(dto.getCorreocontato());
 			usu.setCargocontacto(dto.getCargocontacto());
-			/*enviar correo*/
-			String msj = "<img src='./images/logo_login.PNG' style='width:400px' /><img src='./images/imagen1.PNG' style='width:400px' />";
-			msj += "<p>Estimado(a), usted ha sido agregado como evaluador:</p>";
-			msj += "<p>Usuario: "+dto.getUsuarioautoridad()+"</p>";
-			msj += "<p>Contraseña: "+dto.getPasswordautoridad()+"</p>";				
-			mail = new Mail();
-			mail.enviarCorreoTrabajosFinalesConcursoEscolar("Credenciales de Usuario", msj, dto.getCorreoautoridad());
+			
 			if(!dto.getApepatautoridad().equals("")) {
 				usu.setApepatautoridad(dto.getApepatautoridad());
 				usu.setApematautoridad(dto.getApematautoridad());
@@ -1540,7 +1534,13 @@ public class ConcursoeducativoController {
 				usu.setNumoficio(dto.getNumoficio());
 				usu.setFecha_oficio(dto.getFecha_oficio());
 				usu.setDocoficio(dto.getDocoficio());
-				
+				/*enviar correo*/
+				String msj = "<img src='./images/logo_login.PNG' style='width:400px' /><img src='./images/imagen1.PNG' style='width:400px' />";
+				msj += "<p>Estimado(a), usted ha sido agregado como evaluador:</p>";
+				msj += "<p>Usuario: "+dto.getUsuarioautoridad()+"</p>";
+				msj += "<p>Contraseña: "+dto.getPasswordautoridad()+"</p>";				
+				mail = new Mail();
+				mail.enviarCorreoTrabajosFinalesConcursoEscolar("Credenciales de Usuario", msj, dto.getCorreoautoridad());
 			}
 			
 			usu.setAuspicios(dto.getAuspicios());
