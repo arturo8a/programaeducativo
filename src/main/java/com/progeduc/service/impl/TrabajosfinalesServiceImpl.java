@@ -45,6 +45,11 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 	}
 	
 	@Override
+	public int updateEnviados(Integer estado, Integer id) {
+		return trabajosfinalesRepo.updateEnviados(estado, id);
+	}
+	
+	@Override
 	public int updateEstadoTrabajo(Integer id,Integer estadoTrabajoId) {
 		return trabajosfinalesRepo.updateEstadoTrabajo(id, estadoTrabajoId);
 	}
