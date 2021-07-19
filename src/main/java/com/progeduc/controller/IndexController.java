@@ -625,6 +625,11 @@ public class IndexController {
 				model.addAttribute("cargainicialtabla", 1);
 				model.addAttribute("cargainicialtablatrabajos", 1);
 				return "menu_concurso";
+			}else if(Integer.parseInt(ses.getAttribute("tipousuarioid").toString()) == 5) {
+				model.addAttribute("usuario", ses.getAttribute("usuario"));
+				model.addAttribute("perfil", ses.getAttribute("perfil"));
+				model.addAttribute("tipousuarioid", ses.getAttribute("tipousuarioid"));
+				return "menu_evaluadores";
 			}
 			else { /*El admin,espcialista ods, especialista du, ODS*/
 				model.addAttribute("usuario", ses.getAttribute("usuario"));
