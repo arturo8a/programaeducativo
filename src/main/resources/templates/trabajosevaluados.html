@@ -26,8 +26,7 @@
 		  justify-content: left;
 	}
 </style>
-
-<script type="text/javascript" th:src="@{/js/evaluar.js}"></script>
+<script type="text/javascript" th:src="@{/js/trabajosEvaluados.js}"></script>
 <div id="containerListaRegistros" class="pl-3 pr-3">
 	<div class="row  div_titulo">
 		<div class="col-xs-12 col-sm-12 pl-0 bg-primary">
@@ -116,7 +115,7 @@
 	  <div class="modal-dialog modal-lg" role="document">
 	    <div class="modal-content" style="overflow-y: scroll; height:600px;width:90%">
 	      <div class="modal-header">
-	        <strong class="pt-1">Evaluar Trabajos Pendeintes</strong>
+	        <strong class="pt-1">Trabajos Evaluados</strong>
 	      </div>
 	      <div class="modal-body" id="contenidoevaluartrabajospendientes">      	
 	      </div>
@@ -177,3 +176,5 @@ $('#modaleEvaluarTrabajoPendientes').on('hidden.bs.modal', function () {
 	listar();
 })
 </script>
+<!--script type="text/javascript" th:src="@{/js/jquery-3.1.1.min.js}"></script>-->
+<script type="text/javascript" th:src="@{/js/jspdf.debug.js}"></script>

@@ -23,10 +23,6 @@ public interface IEvaluacionRespuestaRepo extends CrudRepository<EvaluacionResul
 	@Query(value="SELECT tb.* FROM EVALUACIONES_RESPUESTAS tb WHERE tb.TRABAJOID=?1  and tb.PREGUNTAID=?2",nativeQuery = true)
 	EvaluacionResultado getPorCodigoTrabajoAndCodigoPreginta(Integer idTrabajo, Integer idPregunta);
 	
-	/*
-	@Query(value="SELECT tb.* FROM Evaluacion tb WHERE tb.anio=?1  and tb.idcategoriaevaluacion=?2 and tb.idnivelparticipacion=?3 and tb.estado=1",nativeQuery = true)
-	Evaluacion getPorAnioCategoriaNivelparticipacion(Integer anio,Integer idcategoria,Integer idnivelparticipacion);
-	
-	@Query(value="SELECT tb.* FROM Evaluacion tb WHERE tb.anio=?1  and tb.idnivelparticipacion=?2 and tb.idcategoriaevaluacion=?3 and tb.estado=1",nativeQuery = true)
-	Evaluacion getPorAnioNivelparticipacionCategoria(Integer anio,Integer nivelparticipacion,Integer idcategoria);*/
+	@Query(value="SELECT tb.* FROM EVALUACIONES_RESPUESTAS tb WHERE tb.TRABAJOID=?1",nativeQuery = true)
+	List<EvaluacionResultado> getRespuestas(Integer idTrabajo);
 }

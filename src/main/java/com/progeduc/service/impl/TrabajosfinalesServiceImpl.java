@@ -79,7 +79,7 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 	@Override
 	public Trabajosfinales modificar(Trabajosfinales obj) {
 		// TODO Auto-generated method stub
-		return null;
+		return trabajosfinalesRepo.save(obj);
 	}
 
 	@Override
@@ -103,6 +103,12 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 	@Override
 	public List<Trabajosfinales> listarTrabajosPendientes() {
 		return trabajosfinalesRepo.listarTrabajosPendientesAsignados();
+	}
+
+	@Override
+	public List<Trabajosfinales> listarTrabajosEvaluados() {
+		// TODO Auto-generated method stub
+		return trabajosfinalesRepo.listarTrabajosEvaluados();
 	}
 
 }

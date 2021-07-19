@@ -9,9 +9,9 @@ $(document).ready(function(){
         
     });
     
-    $(".registrarEvaliacion").on("click",function(){
+    /*$(".registrarEvaliacion").on("click",function(){
 		registarEvaliacionTrabajosPendientes($(this).attr('data-id'));
-	});
+	});*/
 
     $("#btnlimpiar").on("click",function(){
 		$("#ods").val('Todos');
@@ -31,7 +31,7 @@ $(document).ready(function(){
 console.log('------------> evaluar.js');
 
 var listar = function (){ console.log('listar()');
-		
+		$(document).off("click",".mostrarEvaliacion");
 		$("#table_trabajos_pendientes").dataTable().fnDestroy();
 		table_lista_aperturar_anio = $('#table_trabajos_pendientes').DataTable({
 			dom: '<B><"rs_concursos_educativos">frtip',
@@ -64,7 +64,7 @@ var listar = function (){ console.log('listar()');
 		        }
 		    },
 		    'ajax' : {
-		        "url" : url_base + 'pedesa/listatrabpendientesasignados',
+		        "url" : url_base + 'pedesa/listatrabevaluados',
 		        "type" : "GET",
 		        "dataSrc" : ""
 		    },
@@ -103,7 +103,7 @@ var listar = function (){ console.log('listar()');
 		        { 'data' : 'permisos' },
 		        { 'data' : 'codigo' ,
 	                   render: function(data, type) {
-	                   		var x = "<button type='button' data-id='"+data+"' class='registrarEvaliacion btn btn-primary'>Evaluar</button>";
+	                   		var x = "<button type='button' data-id='"+data+"' class='mostrarEvaliacion btn btn-primary'>Evaluación</button>";
 	                        /*switch (data) {
 	                            case 0:
 	                                x = "<button type='button' id='registrarEvaliacion' data-id='"+data+"' class='editar btn btn-primary'>Evaluar</button>";
@@ -176,7 +176,7 @@ function filtraSelect(dato,campo){
 }
 
 var obtener_data_form = function(tbody,table){
-	$(tbody).on("click","button.registrarEvaliacion",function(){ console.log('open modal registrar evaluacion');
+	$(document).on("click",".mostrarEvaliacion",function(){ console.log('open modal registrar evaluacion');
 		registarEvaliacionTrabajosPendientes($(this).attr('data-id'));
 	});
 };
@@ -199,7 +199,7 @@ var obtener_trabajos = function(tbody,table){
 	});
 };
 
-function registarEvaliacionTrabajosPendientes(id){ console.log('-->registarEvaliacionTrabajosPendientes');
+function registarEvaliacionTrabajosPendientes(id){ console.log('-->mostrarrEvaliacionTrabajosPendientes');
 	
 	$("#modalimagencargando").modal({
 		show : true,
@@ -214,7 +214,7 @@ function registarEvaliacionTrabajosPendientes(id){ console.log('-->registarEvali
 			$("#contenidoevaluartrabajospendientes").html(respuesta);
 			$("#modalimagencargando").modal('hide');
 			$("#modaleEvaluarTrabajoPendientes").modal();
-			
+			getRespuestas(id);
 		},
 		error: function() {
 			$("#modalimagencargando").modal('hide');
@@ -226,6 +226,26 @@ function registarEvaliacionTrabajosPendientes(id){ console.log('-->registarEvali
 			});
 	    }
 	});		
+}
+
+function getRespuestas(id){
+	$.ajax({
+		type : "GET",
+	    contentType : "application/json",
+	    url : url_base + "pedesa/getRespuestas/"+id,
+		success: function(respuesta) {
+			var dataRespuestas = respuesta; console.log(dataRespuestas); 
+			$.each(dataRespuestas, function( i, value ) {
+				if(value.tipo == 1){
+					$("input[name='pregunta"+value.respuestaid+"'][value='"+value.puntaje+"']").prop("checked",true);
+				}else{
+					$("input[id='puntajeq"+value.respuestaid+"']").prop("checked",true);
+				}
+			});
+		},
+		error: function() {
+	    }
+	});    	
 }
 
 function verfichatrabajo(id){
@@ -388,3 +408,12 @@ function verdocumento(id,link){
 function verdocumentotrabajo(id,link){
 	window.open("../alfresco_programaeducativo/pedesa/upload_trabajos/"+id+"/"+link, '_blank');
 }
+
+function exportaPdfEvaluacion(){
+	var doc = new jsPDF();
+	var htmlContenido = $("#contenidoPDF").html();
+	doc.fromHTML(htmlContenido,10,10,{'width':800});
+	doc.save('Evaluacion.pdf');
+}
+
+
