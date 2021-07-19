@@ -22,4 +22,6 @@ public interface ITrabajosfinalesService extends ICRUD<Trabajosfinales,Integer>{
     List<Trabajosfinales> listarTrabajosPendientes();
     
     List<Trabajosfinales> listarHabilitadosEnviados(Integer programaeducativoid);
+    
+    List<Trabajosfinales> listarTrabajosEvaluados();
 }

@@ -34,6 +34,9 @@ public class EvaluacionResultado {
 	@Column(name="tipo" ,length=150)
 	private Integer tipo;
 	
+	@Column(name="puntaje" ,length=150)
+	private Float puntaje;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -72,6 +75,14 @@ public class EvaluacionResultado {
 
 	public void setTipo(Integer tipo) {
 		this.tipo = tipo;
+	}
+
+	public Float getPuntaje() {
+		return puntaje;
+	}
+
+	public void setPuntaje(Float puntaje) {
+		this.puntaje = puntaje;
 	}
 
 }

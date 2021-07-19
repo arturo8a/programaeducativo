@@ -64,6 +64,12 @@ public class EvaluacionRespuestaServiceImpl implements IEvaluacionRespuestaServi
 		// TODO Auto-generated method stub
 		return evaRepo.getPorCodigoTrabajoAndCodigoPreginta(idTrabajo, idPregunta);
 	}
+
+	@Override
+	public List<EvaluacionResultado> getRespuestas(Integer idTrabajo) {
+		// TODO Auto-generated method stub
+		return evaRepo.getRespuestas(idTrabajo);
+	}
 	
 	
 	

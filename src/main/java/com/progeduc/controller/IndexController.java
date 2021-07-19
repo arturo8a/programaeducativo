@@ -534,8 +534,8 @@ public class IndexController {
             return "trabajospendientes";
 	}
     
-    @GetMapping("/trabajospendientesevaluados")
-	public String trabajospendientesEvaluados(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
+    @GetMapping("/trabajosevaluados")
+	public String trabajosevaluados(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
             Calendar fecha = Calendar.getInstance();
             model.addAttribute("anio",fecha.get(Calendar.YEAR));
             List<Integer> lista = new ArrayList<Integer>();
@@ -550,7 +550,7 @@ public class IndexController {
             model.addAttribute("categoriatrabajo",categoriatrabajoService.listar());//categoriatrabajoService.listar());
             model.addAttribute("modalidadtrabajo",modalidadtrabajoService.listar());
             model.addAttribute("nivelparticipacion",nivelparticipacionService.listar());
-            return "trabajospendientes";
+            return "trabajosevaluados";
 	}
 	
 	@GetMapping("/listaformrevaluaciones")

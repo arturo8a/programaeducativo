@@ -27,6 +27,7 @@
 		<input type="hidden" id="id_questionario" name="id_questionario" th:value="${id_questionario}" />
 		<input type="hidden" id="id_evaluacion" name="id_evaluacion" th:value="${id_evaluacion}" />
 		<input type="hidden" id="id_trabajofinal" name="id_trabajofinal" th:value="${id_trabajofinal}" />
+		<div id="contenidoPDF">
 		<div class="row">
 			<div class="col-xs-12 col-sm-3 text-left">
 				<label for="nommbretrabajo">Nombre de Trabajo:</label>
@@ -72,7 +73,7 @@
 								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '1'" th:text="${objeto.descripcion1}" class="form-control" readonly>
 								</textarea> 
 								<br>
-								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '1'" th:value="${objeto.puntaje1}" th:name="'pregunta'+ ${objeto.id}" class="form-control" />				
+								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '1'" th:value="${objeto.puntaje1}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" />				
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-3">
 								<label th:utext="${objeto.criterio2}"></label>
@@ -80,7 +81,7 @@
 								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '2'" th:text="${objeto.descripcion2}" class="form-control" readonly>
 								</textarea>
 								<br>
-								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '2'" th:value="${objeto.puntaje2}" th:name="'pregunta'+ ${objeto.id}" class="form-control" />
+								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '2'" th:value="${objeto.puntaje2}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" />
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-3">
 								<label th:utext="${objeto.criterio3}"></label>								
@@ -88,7 +89,7 @@
 								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '3'" th:text="${objeto.descripcion3}" class="form-control" readonly>
 								</textarea>
 								<br>
-								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '3'" th:value="${objeto.puntaje3}" th:name="'pregunta'+ ${objeto.id}" class="form-control" />
+								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '3'" th:value="${objeto.puntaje3}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" />
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-3">
 								<label th:utext="${objeto.criterio4}"></label>
@@ -96,7 +97,7 @@
 								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '4'" th:text="${objeto.descripcion4}" class="form-control" readonly>
 								</textarea>
 								<br>
-								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '4'" th:value="${objeto.puntaje4}" th:name="'pregunta'+ ${objeto.id}" class="form-control" />
+								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '4'" th:value="${objeto.puntaje4}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" />
 							</div>
 						</div>
 					</div>			
@@ -128,6 +129,7 @@
 				</div>	
 		</div>
 		<br>
+		</div>
 		<div class="row text-right">
 			<div class="col-xs-6 col-sm-6">
 				&nbsp;
@@ -257,6 +259,7 @@
 				});
 			}else{
 				mensajeValidacionedit += "Complete todas las respuestas"+"<br>";
+				$("#textoerroreditevaluacion").html(mensajeValidacionedit);
 				$("#modalerroreditevaluacion").modal();
 			}
 		}
@@ -276,9 +279,10 @@
 					var idtrabajo = $("#id_trabajofinal").val();
 					var trabajosfinales = {id:idtrabajo};
 					var preguntaid = $(this).attr('data-rubrica');
-					var respuestaid = $("input[name='pregunta"+$(this).attr('data-rubrica')+"']:checked").val();
+					var respuestaid = $("input[name='pregunta"+$(this).attr('data-rubrica')+"']:checked").attr('data-idresp');
+					var puntaje = $("input[name='pregunta"+$(this).attr('data-rubrica')+"']:checked").val();
 					var tipo = "1";
-					listaRespuestas.push({trabajosfinales,preguntaid,respuestaid,tipo});
+					listaRespuestas.push({trabajosfinales,preguntaid,respuestaid,tipo,puntaje});
 				}
 				
 			});
@@ -291,10 +295,11 @@
 				}else{
 					var idtrabajo = $("#id_trabajofinal").val();
 					var trabajosfinales = {id:idtrabajo};
-					var preguntaid = $(this).attr('data-rubrica');
-					var respuestaid = $("input[name='pregunta"+$(this).attr('data-rubrica')+"']:checked").attr('data-idresp');
+					var preguntaid = $(this).attr('data-cuestionario');
+					var respuestaid = $("input[name='pregunta"+$(this).attr('data-cuestionario')+"']:checked").attr('data-idresp');
+					var puntaje = $("input[name='pregunta"+$(this).attr('data-cuestionario')+"']:checked").val();
 					var tipo = "2";
-					listaRespuestas.push({trabajosfinales,preguntaid,respuestaid,tipo});
+					listaRespuestas.push({trabajosfinales,preguntaid,respuestaid,tipo,puntaje});
 				}
 			});
 			$("#textoerroreditevaluacion").html(mensajeValidacionedit);
