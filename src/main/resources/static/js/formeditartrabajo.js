@@ -96,8 +96,10 @@ var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="
 		
 	$("#table_lpt_editar").dataTable().fnDestroy();
 	table_lpt_editar = $('#table_lpt_editar').DataTable({
-		dom: 'Bfrtip',
+		dom: '<B><"rs_seleccione_participante_edit">frtip',
 	    "scrollX": true,
+	    "scrollY": "300px",
+	    "scrollCollapse": true,
 	    "paging": false,
 	    fixedHeader: {
             header: true
@@ -173,6 +175,7 @@ var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="
 	    ],
 	    buttons: []
 	});
+	$("div.rs_seleccione_participante").html("<strong>Seleccione participantes</strong>");
 	
 	$('#table_lpt_editar').DataTable().on("draw", function(row, data){
 	
