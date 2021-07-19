@@ -55,7 +55,60 @@
                 <!-- img th:src="@{./images/iconos_nd/Frame3.svg}"alt="" class="ml-2 pt-1"-->
                 <img th:src="@{./images/iconos_nd/logosunass.svg}" alt="" class="ml-2">
             </div>
-            <ul class="list-unstyled components">
+             <ul th:if="${tipousuarioid == 5}" class="list-unstyled components">
+            	<li class="active" style="display: none;">
+                    <a id="a_pageSubmenuAdministracion" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" style="cursor:pointer">
+                    	<img th:src="@{./images/iconos_nd/Administracion.svg}" class="pl-4"/>&nbsp;<strong class="etiqueta_menu_lateral">Administración</strong>
+                    </a>
+                    <ul class="collapse multi-collapse list-unstyled pl-4" id="pageSubmenuAdministracion">
+                        <li >
+                            <input type="button" class="btn btn-link" id="consulta_usuarios" value="Usuarios"/>     
+                        </li>
+                        <li>
+                        	<input type="button" class="btn btn-link" id="consulta_aperturar_anio" value="Aperturar años"/>
+                        </li>
+                    </ul>
+                </li>
+                <li class="active" style="display: none;">
+                    <a id="a_pageSubmenuProgramaEducativo" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" style="cursor:pointer">
+                    	<img th:src="@{./images/iconos_nd/ProgramaEducativo.svg}" class="pl-4"/>&nbsp;<strong class="etiqueta_menu_lateral">Programa Educativo</strong>
+                    </a>
+                    <ul class="collapse multi-collapse list-unstyled pl-4" id="pageSubmenuProgramaEducativo" style="">
+                        <li>
+                            <input type="button" class="btn btn-link" id="consulta" value="Consulta"/>
+                        </li>
+                        <li>
+                            <input type="button" class="btn btn-link" id="consulta_pe" value="Aprobación de inscripciones"/>
+                        </li>
+                    </ul>
+                </li>
+                <li class="active">
+                    <a id="a_pageSubmenuConcursoEducativo" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" style="cursor:pointer">
+                    	<img th:src="@{./images/iconos_nd/ConcursoEscolartitulo.svg}" class="pl-4"/>&nbsp;<strong class="etiqueta_menu_lateral">Concurso Escolar</strong>                    	
+                    </a>
+                    <ul class="collapse multi-collapse list-unstyled pl-4" id="pageSubmenuConcursoEducativo">
+                        <li >
+                            <input type="button" class="btn btn-link" id="consulta_docentes" value="Consulta aula virtual" style="display: none;"/>                            
+                        </li>
+                        <li >
+                            <input type="button" class="btn btn-link" id="concurso" value="Concurso educativo" style="display: none;"/>                            
+                        </li>
+                        <li >
+                            <input type="button" class="btn btn-link" id="rubrica_evaluacion" value="Rúbrica de evaluación" style="display: none;"/>                            
+                        </li>
+                        <li >
+                            <input type="button" class="btn btn-link" id="reportes" value="Reportes" style="display: none;"/>                            
+                        </li>
+                        <li >
+                            <input type="button" class="btn btn-link" id="trabajos_pendientes" value="Trabajos pendientes" />                            
+                        </li>
+                        <li >
+                            <input type="button" class="btn btn-link" id="trabajos_finales_evaluados" value="Trabajos evaluados"/>                            
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <ul th:unless="${tipousuarioid == 5}" class="list-unstyled components">
             	<li class="active">
                     <a id="a_pageSubmenuAdministracion" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" style="cursor:pointer">
                     	<img th:src="@{./images/iconos_nd/Administracion.svg}" class="pl-4"/>&nbsp;<strong class="etiqueta_menu_lateral">Administración</strong>
@@ -99,12 +152,12 @@
                         <li >
                             <input type="button" class="btn btn-link" id="reportes" value="Reportes"/>                            
                         </li>
-                        <li >
+                        <!--li >
                             <input type="button" class="btn btn-link" id="trabajos_pendientes" value="Trabajos pendientes"/>                            
                         </li>
                         <li >
                             <input type="button" class="btn btn-link" id="trabajos_finales_evaluados" value="Trabajos evaluados"/>                            
-                        </li>
+                        </li>-->
                     </ul>
                 </li>
             </ul>

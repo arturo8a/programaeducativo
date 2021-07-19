@@ -70,7 +70,7 @@ public class LoginController {
 		if(usuAlianza != null) {
 			ses.setAttribute("usuario", usuAlianza.getUsuarioautoridad());
     		ses.setAttribute("perfil", usuAlianza.getOds().getDescripcion());
-    		ses.setAttribute("tipousuarioid", 0);
+    		ses.setAttribute("tipousuarioid", 5);
     		ses.setAttribute("odsid", usuAlianza.getOds().getId());
     		return usuAlianza.getUsuarioautoridad();
 		}
