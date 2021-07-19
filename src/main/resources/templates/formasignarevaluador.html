@@ -352,16 +352,17 @@
 				    dataType : 'json',
 					success: function(respuesta) {
 						$("#modalimagencargando").modal('hide');
-						console.log("respuesta :" + respuesta);
 						if(respuesta==1){			
-											
+							
+							table_lista_concurso.ajax.reload();			
+							table_lista_asignacion.ajax.reload();
+							
 							$("#textoexitoagregarasignarevaluador").html("Se asigno trabajo a evaluador");
 							$("#modalexitoagregarasignarevaluador").modal({
 								show : true,
 								backdrop : 'static',
 								keyboard:false
-							});							
-							
+							});
 						}
 						else if(respuesta==2){
 							$("#textoerroragregarasignarevaluador").html("Existen trabajos que ya han sido asignados a evaluador");
@@ -412,6 +413,8 @@
 		table_lista_trabajos_evaluados = $('#table_lista_trabajos_evaluados').DataTable({
 			"dom": '<B><"rs_trabajos_evaluados">frtip',
 	        "scrollX": true,
+	        "scrollY": "300px",
+	        "scrollCollapse": true,
 	        "searching": true,
 	        "lengthMenu": [
 	            [ 10, 15, 25, -1 ],
@@ -481,6 +484,8 @@
 		table_lista_evaluadores = $('#table_lista_evaluadores').DataTable({
 			"dom": '<B><"rs_evaluadores">frtip',
 	        "scrollX": true,
+	        "scrollY": "300px",
+	        "scrollCollapse": true,
 	        "searching": true,
 	        "lengthMenu": [
 	            [ 10, 15, 25, -1 ],

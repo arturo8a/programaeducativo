@@ -29,52 +29,51 @@
 	
 </head>
 <body>
-	<form id="formcrearevaluacion">
-		<div class="row">
-			<div class="col-xs-12 col-sm-4 text-left">
-				<label for="categoriatrabajo">Año</label>
-				<input type="text" class="form-control" id="anioce_add" name="anioce_add" th:value="*{anio}" disabled />				
-			</div>
-			<div class="col-xs-12 col-sm-4 text-left">
-				<label for="modalidadpostulaciontrabajo">Categoría</label>
-				<select class="form-control" id="categoriace_add" name="categoriace_add">
-					<option value="">Todos</option>
-					<option th:each="len:${listacategoriaevaluacion}" th:value="${len.id}" th:utext="${len.descripcion}"/>
-				</select>
-			</div>
-			<div class="col-xs-12 col-sm-4 text-left">
-				<label for="titulotrabajo">Nivel de participación</label>
-				<select class="form-control" id="nivelparticipacionce_add" name="nivelparticipacionce_add">
-					<option value="">Todos</option>
-					<option th:each="len:${listanivelparticipacion}" th:value="${len.id}" th:utext="${len.descripcion}"/>       				
-				</select>
-			</div>
+	<div class="row">
+		<div class="col-xs-12 col-sm-4 text-left">
+			<label for="categoriatrabajo">Año</label>
+			<input type="text" class="form-control" id="anioce_add" name="anioce_add" th:value="*{anio}" disabled />				
 		</div>
-		<br>
+		<div class="col-xs-12 col-sm-4 text-left">
+			<label for="modalidadpostulaciontrabajo">Categoría</label>
+			<select class="form-control" id="categoriace_add" name="categoriace_add">
+				<option value="">Todos</option>
+				<option th:each="len:${listacategoriaevaluacion}" th:value="${len.id}" th:utext="${len.descripcion}"/>
+			</select>
+		</div>
+		<div class="col-xs-12 col-sm-4 text-left">
+			<label for="titulotrabajo">Nivel de participación</label>
+			<select class="form-control" id="nivelparticipacionce_add" name="nivelparticipacionce_add">
+				<option value="">Todos</option>
+				<option th:each="len:${listanivelparticipacion}" th:value="${len.id}" th:utext="${len.descripcion}"/>       				
+			</select>
+		</div>
+	</div>
+	<br>
+	<form id="formcrearevaluacion">
 		<div id="contenido_evaluacion">
 		</div>
-		<br>
-		<div class="row text-right">
-			<div class="col-xs-6 col-sm-6">
-				&nbsp;
-			</div>
-			<div class="col-xs-6 col-sm-6">
-				<input type="button" name="btnagregarpregunta" id="btnagregarpregunta" value="Agregar pregunta"  class="btn btn-warning" />
-			</div>
-		</div>
-		<br>
-		<div class="row text-right">
-			<div class="col-xs-6 col-sm-6">
-				&nbsp;
-			</div>
-			<div class="col-xs-6 col-sm-6">
-				<input type="button" name="btnguardarevaluacion" id="btnguardarevaluacion" value="Guardar" class="btn btn-primary"/>
-				<input type="button" name="btnhabilitarevaluacion" id="btnhabilitarevaluacion" value="Habilitar evaluación" class="btn btn-success"/>
-				<input type="button" name="btncerrarevaluacion" id="btncerrarevaluacion" value="Cerrar" class="btn btn-outline-primary"/>
-			</div>
-		</div>
 	</form>
-		
+	<br>
+	<div class="row text-right">
+		<div class="col-xs-6 col-sm-6">
+			&nbsp;
+		</div>
+		<div class="col-xs-6 col-sm-6">
+			<input type="button" name="btnagregarpregunta" id="btnagregarpregunta" value="Agregar pregunta"  class="btn btn-warning" />
+		</div>
+	</div>
+	<br>
+	<div class="row text-right">
+		<div class="col-xs-6 col-sm-6">
+			&nbsp;
+		</div>
+		<div class="col-xs-6 col-sm-6">
+			<input type="button" name="btnguardarevaluacion" id="btnguardarevaluacion" value="Guardar" class="btn btn-primary"/>
+			<input type="button" name="btnhabilitarevaluacion" id="btnhabilitarevaluacion" value="Habilitar evaluación" class="btn btn-success"/>
+			<input type="button" name="btncerrarevaluacion" id="btncerrarevaluacion" value="Cerrar" class="btn btn-outline-primary"/>
+		</div>
+	</div>
 	<div class="modal" tabindex="-1" role="dialog" id="modalimagencargando">
 	  <center>
 	  	<img th:src="@{./images/cargando.gif}" style="line-height: 200px;"/>
@@ -189,10 +188,60 @@
 			registrarhabilitar_evaluacion(1);
 		});		
 		
-		$("#btnhabilitarevaluacion").click(function(){			
-			registrarhabilitar_evaluacion(2);
+		$("#btnhabilitarevaluacion").click(function(){
+			if(validarTodoFormulario()){
+				registrarhabilitar_evaluacion(2);
+				/*alert("todo correcto");*/
+			}
+			else{
+				$("#modalimagencargando").modal('hide');
+				$("#textoerrorcrearevaluacion").html("Debe llenar todos los datos del formulario");
+				$('#modalerrorcrearevaluacion').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+			}
 		});	
 	});
+	
+	function validarTodoFormulario(){
+		
+		var banderaValidacionCampos = true;
+		var inputs = document.getElementById("formcrearevaluacion").elements;
+		var elemento_type,elemento_id, elemento_val;		
+		for (i = 0; i < inputs.length; i++) {
+			elemento_type = inputs[i].type;
+			elemento_id = inputs[i].id;
+			elemento_val = $("#"+inputs[i].id).val();			
+			if($('#'+elemento_id).is(':visible')){
+				/*console.log("elemento_type : "+ elemento_type);
+				console.log("elemento_id : "+ elemento_id);
+				console.log("elemento_val : "+ elemento_val);*/
+				switch(elemento_type){
+					case 'text'  : 
+						if(elemento_val.trim()==""){
+							/*console.log("dato1");*/
+							banderaValidacionCampos = false;
+						}	
+						break;
+					case 'textarea'  : 
+						if(elemento_val.trim()==""){
+							/*console.log("dato2");*/
+							banderaValidacionCampos = false;
+						}	
+						break;
+					case 'select-one'  : 
+						if(elemento_val=="0"){
+							/*console.log("dato3");*/
+							banderaValidacionCampos = false;
+						}	
+						break;
+				}
+			}			
+		}
+		return banderaValidacionCampos
+	}
 	
 	function registrarhabilitar_evaluacion(estadoevaluacion){
 		

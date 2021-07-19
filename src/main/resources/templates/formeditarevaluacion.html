@@ -48,143 +48,144 @@
 			</div>
 		</div>
 		<br>
-		<div id="contenido_evaluacion_edit">
-			<div th:each="objeto : ${listarubrica_edit}" >
-						<div style='border:1px solid #7DB4FF' class='p-3 m-1'>
-							<div class="row">
-								<div class="col-xs-12 col-sm-6">
-									&nbsp;
-								</div>		
-								<div class="col-xs-12 col-sm-6 text-left">
-									<table style="width:100%">
-										<tr>
-											<td>
-												<strong style="margin:5px">Rubrica</strong>
-											</td>
-											<td>
-												<input type="text" th:id="'rubrica' + ${objeto.id}" th:value="${objeto.rubrica}" class="form-control">
-											</td>
-										</tr>
-									</table>
-								</div>
-								<div class="col-xs-12 col-sm-6 col-md-3">
-									<label>Criterio</label>
-									<input type="text" th:id="'criterio'+ ${objeto.id} + '1'" th:value="${objeto.criterio1}" class="form-control" />
-									<br>
-									<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '1'" th:text="${objeto.descripcion1}" class="form-control">
-									</textarea> 
-									<br>
-									<table>
-										<tr>
-											<td>
-												<label>puntaje</label>
-											</td>
-											<td>
-												<select th:id="'puntaje_edit' + ${objeto.id} + '1'" class="form-control" >
-													<option value="0">Seleccione</option>
-													<option th:each="len:${listapuntaje_edit}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje1}"/>
-												</select>
-											</td>
-										</tr>
-									</table>				
-								</div>
-								<div class="col-xs-12 col-sm-6 col-md-3">
-									<label>Criterio</label>
-									<input type="text" th:id="'criterio'+ ${objeto.id} + '2'" th:value="${objeto.criterio2}"  class="form-control" />
-									<br>
-									<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '2'" th:text="${objeto.descripcion2}" class="form-control">
-									</textarea>
-									<br>
-									<table>
-										<tr>
-											<td>
-												<label>puntaje</label>
-											</td>
-											<td>
-												<select th:id="'puntaje_edit' + ${objeto.id} + '2'" class="form-control" >
-													<option value="0">Seleccione</option>
-													<option th:each="len:${listapuntaje_edit}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje2}"/>
-												</select>
-											</td>
-										</tr>
-									</table>
-								</div>
-								<div class="col-xs-12 col-sm-6 col-md-3">
-									<label>Criterio</label>
-									<input type="text" th:id="'criterio'+ ${objeto.id} + '3'" th:value="${objeto.criterio3}" class="form-control" />
-									<br>
-									<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '3'" th:text="${objeto.descripcion3}" class="form-control">
-									</textarea>
-									<br>
-									<table>
-										<tr>
-											<td>
-												<label>puntaje_edit</label>
-											</td>
-											<td>
-												<select th:id="'puntaje_edit' + ${objeto.id} + '3'" class="form-control" >
-													<option value="0">Seleccione</option>
-													<option th:each="len:${listapuntaje_edit}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje3}"/>
-												</select>
-											</td>
-										</tr>
-									</table>
-								</div>
-								<div class="col-xs-12 col-sm-6 col-md-3">
-									<label>Criterio</label>
-									<input type="text" th:id="'criterio'+ ${objeto.id} + '4'" th:value="${objeto.criterio4}" class="form-control" />
-									<br>
-									<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '4'" th:text="${objeto.descripcion4}" class="form-control">
-									</textarea>
-									<br>
-									<table>
-										<tr>
-											<td>
-												<label>puntaje</label>
-											</td>
-											<td>
-												<select th:id="'puntaje_edit' + ${objeto.id} + '4'" class="form-control">
-													<option value="0">Seleccione</option>
-													<option th:each="len:${listapuntaje_edit}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje4}"/>
-												</select>
-											</td>
-										</tr>
-									</table>
+		
+		<form id="formeditarevaluacion">
+			<div id="contenido_evaluacion_edit">
+				<div th:each="objeto : ${listarubrica_edit}" >
+							<div style='border:1px solid #7DB4FF' class='p-3 m-1'>
+								<div class="row">
+									<div class="col-xs-12 col-sm-6">
+										&nbsp;
+									</div>		
+									<div class="col-xs-12 col-sm-6 text-left">
+										<table style="width:100%">
+											<tr>
+												<td>
+													<strong style="margin:5px">Rubrica</strong>
+												</td>
+												<td>
+													<input type="text" th:id="'rubrica' + ${objeto.id}" th:value="${objeto.rubrica}" class="form-control">
+												</td>
+											</tr>
+										</table>
+									</div>
+									<div class="col-xs-12 col-sm-6 col-md-3">
+										<label>Criterio</label>
+										<input type="text" th:id="'criterio'+ ${objeto.id} + '1'" th:value="${objeto.criterio1}" class="form-control" />
+										<br>
+										<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '1'" th:text="${objeto.descripcion1}" class="form-control">
+										</textarea> 
+										<br>
+										<table>
+											<tr>
+												<td>
+													<label>puntaje</label>
+												</td>
+												<td>
+													<select th:id="'puntaje_edit' + ${objeto.id} + '1'" class="form-control" >
+														<option value="0">Seleccione</option>
+														<option th:each="len:${listapuntaje_edit}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje1}"/>
+													</select>
+												</td>
+											</tr>
+										</table>				
+									</div>
+									<div class="col-xs-12 col-sm-6 col-md-3">
+										<label>Criterio</label>
+										<input type="text" th:id="'criterio'+ ${objeto.id} + '2'" th:value="${objeto.criterio2}"  class="form-control" />
+										<br>
+										<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '2'" th:text="${objeto.descripcion2}" class="form-control">
+										</textarea>
+										<br>
+										<table>
+											<tr>
+												<td>
+													<label>puntaje</label>
+												</td>
+												<td>
+													<select th:id="'puntaje_edit' + ${objeto.id} + '2'" class="form-control" >
+														<option value="0">Seleccione</option>
+														<option th:each="len:${listapuntaje_edit}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje2}"/>
+													</select>
+												</td>
+											</tr>
+										</table>
+									</div>
+									<div class="col-xs-12 col-sm-6 col-md-3">
+										<label>Criterio</label>
+										<input type="text" th:id="'criterio'+ ${objeto.id} + '3'" th:value="${objeto.criterio3}" class="form-control" />
+										<br>
+										<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '3'" th:text="${objeto.descripcion3}" class="form-control">
+										</textarea>
+										<br>
+										<table>
+											<tr>
+												<td>
+													<label>puntaje</label>
+												</td>
+												<td>
+													<select th:id="'puntaje_edit' + ${objeto.id} + '3'" class="form-control" >
+														<option value="0">Seleccione</option>
+														<option th:each="len:${listapuntaje_edit}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje3}"/>
+													</select>
+												</td>
+											</tr>
+										</table>
+									</div>
+									<div class="col-xs-12 col-sm-6 col-md-3">
+										<label>Criterio</label>
+										<input type="text" th:id="'criterio'+ ${objeto.id} + '4'" th:value="${objeto.criterio4}" class="form-control" />
+										<br>
+										<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '4'" th:text="${objeto.descripcion4}" class="form-control">
+										</textarea>
+										<br>
+										<table>
+											<tr>
+												<td>
+													<label>puntaje</label>
+												</td>
+												<td>
+													<select th:id="'puntaje_edit' + ${objeto.id} + '4'" class="form-control">
+														<option value="0">Seleccione</option>
+														<option th:each="len:${listapuntaje_edit}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje4}"/>
+													</select>
+												</td>
+											</tr>
+										</table>
+									</div>
 								</div>
 							</div>
-						</div>
-						
+							
+				</div>
+					<div th:each="objeto : ${listaquestionario_edit}" style='border:1px solid #7DB4FF' class='p-3 m-1'>
+					<div class="row" >
+						<table style="width:100%">
+							<tr>
+								<td>
+									<strong>Ingrese pregunta</strong>
+									<input type="text" class="form-control" th:id="'pregunta_edit'+ ${objeto.id}" th:value="${objeto.pregunta}"/>
+								</td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr th:each="qr : ${objeto.questionariorespuesta}">
+								<td>
+									<label>respuesta</label>
+									<input type="text" class="form-control" th:id="'respuesta_edit'+ ${qr.id}" th:value="${qr.respuesta}"/>
+								</td>
+								<td>
+									<label>puntaje</label>
+									<select th:id="'puntaje_editq'+ ${qr.id}" class="form-control">
+										<option value="0">Seleccione</option>
+										<option th:each="len:${listapuntaje_edit}" th:value="${len}" th:utext="${len}" th:selected="${len == qr.puntaje}"/>
+									</select>
+								</td>
+							</tr>
+						</table>						
+					</div>
+				</div>
 			</div>
-			<div th:each="objeto : ${listaquestionario_edit}" style='border:1px solid #7DB4FF' class='p-3 m-1'>
-			<div class="row" >
-				<table style="width:100%">
-					<tr>
-						<td>
-							<strong>Ingrese pregunta</strong>
-							<input type="text" class="form-control" th:id="'pregunta_edit'+ ${objeto.id}" th:value="${objeto.pregunta}"/>
-						</td>
-						<td>&nbsp;</td>
-					</tr>
-					<tr th:each="qr : ${objeto.questionariorespuesta}">
-						<td>
-							<label>respuesta</label>
-							<input type="text" class="form-control" th:id="'respuesta_edit'+ ${qr.id}" th:value="${qr.respuesta}"/>
-						</td>
-						<td>
-							<label>puntaje</label>
-							<select th:id="'puntaje_editq'+ ${qr.id}" class="form-control">
-								<option value="0">Seleccione</option>
-								<option th:each="len:${listapuntaje_edit}" th:value="${len}" th:utext="${len}" th:selected="${len == qr.puntaje}"/>
-							</select>
-						</td>
-						
-						
-						
-					</tr>
-				</table>						
-			</div>
-		</div>
-		</div>
+		
+		</form>
 		<br>
 		<div class="row text-right">
 			<div class="col-xs-6 col-sm-6">
@@ -313,17 +314,23 @@
 			});
 			
 			$("#btneditarhabilitarevaluacion_edit").click(function(){	
-				actualiza_habilitar_edit_evaluacion(2);
+				if(validarTodoFormularioEdit()){
+					actualiza_habilitar_edit_evaluacion(2);
+				}
+				else{
+					$("#modalimagencargando").modal('hide');
+					$("#textoerroreditevaluacion").html("Debe llenar todos los datos del formulario");
+					$('#modalerroreditevaluacion').modal({
+						show : true,
+						backdrop : 'static',
+						keyboard:false
+					});
+				}
 			});
 			
 			$("#btncerrarevaluacion").click(function(){
 				$("#modalagregarEvaluacion").modal('hide');
 			});	
-			
-			/*var mi_rubrica_edit = 'contenido_rubrica' + indice_cuestionario_edit;
-			var mi_questionario_edit = 'contenido_questionario' + indice_cuestionario_edit;
-			var mihtml_edit = "<div style='border:1px solid #7DB4FF' class='p-3'><div class='row' style=''><div class='col-xs-12 col-sm-12'><table width='40%'><tr><td><strong>Seleccione tipo de cuestionario</strong></td><td><input type='radio' name='cuestionario"+indice_cuestionario_edit+"' id='r"+indice_cuestionario_edit+"' value='1' onchange='mi_questionario_edit(this,"+'`'+indice_cuestionario_edit+'`'+","+'`'+indice_cuestionario_edit+'`'+");' checked> Rubrica </td><td>	<input type='radio' name='cuestionario"+indice_cuestionario_edit+"' id='c"+indice_cuestionario_edit+"' value='2' onchange='mi_questionario_edit(this,"+'`'+indice_cuestionario_edit+'`'+","+'`'+indice_cuestionario_edit+'`'+");' > Cuestionario </td></tr></table> </div></div>  <div id='"+mi_rubrica_edit+"'><div class='row' style=''><div class='col-xs-12 col-sm-6'>&nbsp;</div><div class='col-xs-12 col-sm-6 text-left'><table style='width:100%'><tr><td><label style='margin:5px'>Rubrica</label></td><td><input type='text' name='rubrica"+indice_cuestionario_edit+"' id='rubrica"+indice_cuestionario_edit+"' class='form-control'></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario_edit+"1' name='criterio"+indice_cuestionario_edit+"1' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario_edit+"1' id='descripcion"+indice_cuestionario_edit+"1' class='form-control'></textarea><br><table><tr><td><label>puntaje_edit</label></td><td><select name='puntaje_edit"+indice_cuestionario_edit+"1' id='puntaje_edit"+indice_cuestionario_edit+"1' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario_edit+"2' name='criterio"+indice_cuestionario_edit+"2' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario_edit+"2' id='descripcion"+indice_cuestionario_edit+"2' class='form-control'></textarea><br><table><tr><td><label>puntaje_edit</label></td><td><select name='puntaje_edit"+indice_cuestionario_edit+"2' id='puntaje_edit"+indice_cuestionario_edit+"2' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario_edit+"3' name='criterio"+indice_cuestionario_edit+"3' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario_edit+"3' id='descripcion"+indice_cuestionario_edit+"3' class='form-control'></textarea><br><table><tr><td><label>puntaje_edit</label></td><td><select name='puntaje_edit"+indice_cuestionario_edit+"3' id='puntaje_edit"+indice_cuestionario_edit+"3' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario_edit+"4' name='criterio"+indice_cuestionario_edit+"4' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario_edit+"4' id='descripcion"+indice_cuestionario_edit+"4' class='form-control'></textarea><br><table><tr><td><label>puntaje_edit</label></td><td><select name='puntaje_edit"+indice_cuestionario_edit+"4' id='puntaje_edit"+indice_cuestionario_edit+"4' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div></div></div><div id='"+mi_questionario_edit+"' style='display:none'><div class='row' style=''><div class='col-xs-12 col-sm-12'><table style='width:100%' id='tabla"+indice_cuestionario_edit+"'><tr><td><label>Ingrese pregunta_edit</label><input type='text' class='form-control' id='pregunta_edit"+indice_cuestionario_edit+"1' name='pregunta_edit"+indice_cuestionario_edit+"1' /></td><td>&nbsp;</td></tr>		<tr><td><label>respuesta_edit</label></td><td><label>puntaje_edit</label></td></tr>		<tr id='tr_"+indice_cuestionario_edit+"1'><td><input type='text' class='form-control' id='respuesta_edit"+indice_cuestionario_edit+"1' name='respuesta_edit"+indice_cuestionario_edit+"1'/></td><td><select class='form-control' id='puntaje_editq"+indice_cuestionario_edit+"1' name='puntaje_edit"+indice_cuestionario_edit+"1'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td><td class='text-center'><input type='button' id='btnagregarrespuesta_edit"+indice_cuestionario_edit+"' name='btnagregarrespuesta_edit"+indice_cuestionario_edit+"' value='Agregar' onclick='agregar_fila("+'"'+'tabla'+indice_cuestionario_edit+'"'+','+indice_cuestionario_edit+")' class='btn btn-primary' /></td><td class='text-center'><input type='button' id='btnquitarrespuesta_edit"+indice_cuestionario_edit+"' name='btnquitarrespuesta_edit"+indice_cuestionario_edit+"' value='Quitar' onclick='quitar_fila("+'"'+'tr_'+indice_cuestionario_edit.toString() +'"'+','+indice_cuestionario_edit+")' disabled class='btn btn-outline-primary' /></td></tr></table></div></div></div></div>";
-			document.getElementById("contenido_evaluacion_edit").insertAdjacentHTML('beforebegin',mihtml_edit);*/
 			
 			$("#btnagregarpregunta_edit").click(function(){
 				indice_cuestionario_edit ++;
@@ -334,6 +341,44 @@
 			});
 			
 		});
+		
+		function validarTodoFormularioEdit(){
+			
+			var banderaValidacionCampos = true;
+			var inputs = document.getElementById("formeditarevaluacion").elements;
+			var elemento_type,elemento_id, elemento_val;		
+			for (i = 0; i < inputs.length; i++) {
+				elemento_type = inputs[i].type;
+				elemento_id = inputs[i].id;
+				elemento_val = $("#"+inputs[i].id).val();			
+				if($('#'+elemento_id).is(':visible')){
+					/*console.log("elemento_type : "+ elemento_type);
+					console.log("elemento_id : "+ elemento_id);
+					console.log("elemento_val : "+ elemento_val);*/
+					switch(elemento_type){
+						case 'text'  : 
+							if(elemento_val.trim()==""){
+								/*console.log("dato1");*/
+								banderaValidacionCampos = false;
+							}	
+							break;
+						case 'textarea'  : 
+							if(elemento_val.trim()==""){
+								/*console.log("dato2");*/
+								banderaValidacionCampos = false;
+							}	
+							break;
+						case 'select-one'  : 
+							if(elemento_val=="0"){
+								/*console.log("dato3");*/
+								banderaValidacionCampos = false;
+							}	
+							break;
+					}
+				}			
+			}
+			return banderaValidacionCampos
+		}
 		
 		function fn_questionario_edit(src,a,b){
 			if(src.value == 1){			
@@ -563,7 +608,6 @@
 					listarubrica: array_rubricaedit,
 					listaquestionario : array_cuestionarioedit
 				};
-				console.log("evaluaciondtoedit" + JSON.stringify(evaluaciondtoedit));
 				
 				$.ajax({
 					type : "POST",

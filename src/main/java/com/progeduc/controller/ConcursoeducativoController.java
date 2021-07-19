@@ -789,56 +789,67 @@ public class ConcursoeducativoController {
 		if(tipousuarioid == 0){			
 			Object ob = ses.getAttribute("odsid");
 			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(obj->{				
-				progeducService.listar(obj.getId()).forEach(obj1->{					
-					List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarHabilitadosEnviados(obj1.getId());
-					listaTrabajoFinales.forEach(obj2->{
-						ConcursoDto dto = new ConcursoDto();
-						dto.setId(obj2.getId());
-						dto.setAnio(obj2.getAnio());
-						dto.setCodigotrabajo(obj2.getProgramaeducativo().getCodmod() + "_" + obj2.getId());
-						dto.setOds(odsserv.byOds(obj2.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
-						dto.setCodigoie(obj2.getProgramaeducativo().getCodmod());
-						dto.setNombreie(obj2.getProgramaeducativo().getNomie());
-						dto.setCategoria(obj2.getCategoriatrabajo().getDescripcion());
-						dto.setModalidad(obj2.getModalidadtrabajo().getDescripcion());
-						dto.setTitulotrabajo(obj2.getTitulotrabajo());
-						nivelparticipacion = "";
-						trabajosfinalesparticipanteServ.listar(obj1.getId()).forEach(obj3->{
-							nivelparticipacion = obj3.getParticipante().getGradoestudiante().getNivelgradopartdesc();
-							idnivelparticipacion = obj3.getParticipante().getGradoestudiante().getNivelgradopartid();
-						});			
-						dto.setNivelparticipacion(nivelparticipacion);
-						dto.setEstado(obj2.getEstadotrabajo().getDescripcion());
-						dto.setCalificacion(0);
-						dto.setPuesto(0);
-						listadto.add(dto);
-					});
+				progeducService.listar(obj.getId()).forEach(pe->{					
+					if(postulacionconcursoServ.getById(pe.getId()).getFinalizarparticipaciontrabajo() != null) {
+						if(postulacionconcursoServ.getById(pe.getId()).getFinalizarparticipaciontrabajo() == 1) {							
+							List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarHabilitadosEnviados(pe.getId());
+							listaTrabajoFinales.forEach(obj2->{
+								ConcursoDto dto = new ConcursoDto();
+								dto.setId(obj2.getId());
+								dto.setAnio(obj2.getAnio());
+								dto.setCodigotrabajo(obj2.getProgramaeducativo().getCodmod() + "_" + obj2.getId());
+								dto.setOds(odsserv.byOds(obj2.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+								dto.setCodigoie(obj2.getProgramaeducativo().getCodmod());
+								dto.setNombreie(obj2.getProgramaeducativo().getNomie());
+								dto.setCategoria(obj2.getCategoriatrabajo().getDescripcion());
+								dto.setModalidad(obj2.getModalidadtrabajo().getDescripcion());
+								dto.setTitulotrabajo(obj2.getTitulotrabajo());
+								nivelparticipacion = "";
+								trabajosfinalesparticipanteServ.listar(pe.getId()).forEach(obj3->{
+									nivelparticipacion = obj3.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+									idnivelparticipacion = obj3.getParticipante().getGradoestudiante().getNivelgradopartid();
+								});			
+								dto.setNivelparticipacion(nivelparticipacion);
+								dto.setEstado(obj2.getEstadotrabajo().getDescripcion());
+								dto.setCalificacion(0);
+								dto.setPuesto(0);
+								listadto.add(dto);
+							});
+						}
+					}	
 				});
 			});		
 		}
-		else if (tipousuarioid==30){			
-			List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarhabilitados();
-			listaTrabajoFinales.forEach(obj->{
-				ConcursoDto dto = new ConcursoDto();
-				dto.setId(obj.getId());
-				dto.setAnio(obj.getAnio());
-				dto.setCodigotrabajo(obj.getProgramaeducativo().getCodmod() + "_" + obj.getId());
-				dto.setOds(odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
-				dto.setCodigoie(obj.getProgramaeducativo().getCodmod());
-				dto.setNombreie(obj.getProgramaeducativo().getNomie());
-				dto.setCategoria(obj.getCategoriatrabajo().getDescripcion());
-				dto.setModalidad(obj.getModalidadtrabajo().getDescripcion());
-				dto.setTitulotrabajo(obj.getTitulotrabajo());
-				nivelparticipacion = "";
-				trabajosfinalesparticipanteServ.listar(obj.getId()).forEach(obj1->{
-					nivelparticipacion = obj1.getParticipante().getGradoestudiante().getNivelgradopartdesc();
-					idnivelparticipacion = obj1.getParticipante().getGradoestudiante().getNivelgradopartid();
-				});			
-				dto.setNivelparticipacion(nivelparticipacion);
-				dto.setEstado(obj.getEstadotrabajo().getDescripcion());
-				dto.setCalificacion(0);
-				dto.setPuesto(0);
-				listadto.add(dto);
+		else if (tipousuarioid==30){	
+			
+			progeducService.getListarHabilitadosAnioActual().forEach(pe->{
+				if(postulacionconcursoServ.getById(pe.getId()).getFinalizarparticipaciontrabajo()!=null) {
+					if(postulacionconcursoServ.getById(pe.getId()).getFinalizarparticipaciontrabajo()== 1) {
+						List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarHabilitadosEnviado(pe.getId());
+						listaTrabajoFinales.forEach(obj->{
+							ConcursoDto dto = new ConcursoDto();
+							dto.setId(obj.getId());
+							dto.setAnio(obj.getAnio());
+							dto.setCodigotrabajo(obj.getProgramaeducativo().getCodmod() + "_" + obj.getId());
+							dto.setOds(odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+							dto.setCodigoie(obj.getProgramaeducativo().getCodmod());
+							dto.setNombreie(obj.getProgramaeducativo().getNomie());
+							dto.setCategoria(obj.getCategoriatrabajo().getDescripcion());
+							dto.setModalidad(obj.getModalidadtrabajo().getDescripcion());
+							dto.setTitulotrabajo(obj.getTitulotrabajo());
+							nivelparticipacion = "";
+							trabajosfinalesparticipanteServ.listar(obj.getId()).forEach(obj1->{
+								nivelparticipacion = obj1.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+								idnivelparticipacion = obj1.getParticipante().getGradoestudiante().getNivelgradopartid();
+							});			
+							dto.setNivelparticipacion(nivelparticipacion);
+							dto.setEstado(obj.getEstadotrabajo().getDescripcion());
+							dto.setCalificacion(0);
+							dto.setPuesto(0);
+							listadto.add(dto);
+						});
+					}
+				}
 			});
 		}
 		else {
@@ -846,31 +857,34 @@ public class ConcursoeducativoController {
 			Usuario user = usuarioServ.byUsuario(usuario);
 			usuarioodsServ.listarByUsuario(user.getId()).forEach(obj->{
 				distServ.listByOdsid(obj.getOds().getId()).forEach(dist->{
-					progeducService.listar(dist.getId()).forEach(obj1->{					
-						List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarhabilitados(obj1.getId());
-						listaTrabajoFinales.forEach(obj2->{
-							ConcursoDto dto = new ConcursoDto();
-							dto.setId(obj2.getId());
-							dto.setAnio(obj2.getAnio());
-							dto.setCodigotrabajo(obj2.getProgramaeducativo().getCodmod() + "_" + obj2.getId());
-							dto.setOds(odsserv.byOds(obj2.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
-							dto.setCodigoie(obj2.getProgramaeducativo().getCodmod());
-							dto.setNombreie(obj2.getProgramaeducativo().getNomie());
-							dto.setCategoria(obj2.getCategoriatrabajo().getDescripcion());
-							dto.setModalidad(obj2.getModalidadtrabajo().getDescripcion());
-							dto.setTitulotrabajo(obj2.getTitulotrabajo());
-							nivelparticipacion = "";
-							trabajosfinalesparticipanteServ.listar(obj1.getId()).forEach(obj3->{
-								nivelparticipacion = obj3.getParticipante().getGradoestudiante().getNivelgradopartdesc();
-								idnivelparticipacion = obj3.getParticipante().getGradoestudiante().getNivelgradopartid();
-							});			
-							//System.out.println("idnivelparticipacion :" + idnivelparticipacion);
-							dto.setNivelparticipacion(nivelparticipacion);
-							dto.setEstado(obj2.getEstadotrabajo().getDescripcion());
-							dto.setCalificacion(0);
-							dto.setPuesto(0);
-							listadto.add(dto);
-						});
+					progeducService.listar(dist.getId()).forEach(pe->{		
+						if(postulacionconcursoServ.getById(pe.getId()).getFinalizarparticipaciontrabajo() != null) {
+							if(postulacionconcursoServ.getById(pe.getId()).getFinalizarparticipaciontrabajo() == 1) {
+								List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarhabilitados(pe.getId());
+								listaTrabajoFinales.forEach(obj2->{
+									ConcursoDto dto = new ConcursoDto();
+									dto.setId(obj2.getId());
+									dto.setAnio(obj2.getAnio());
+									dto.setCodigotrabajo(obj2.getProgramaeducativo().getCodmod() + "_" + obj2.getId());
+									dto.setOds(odsserv.byOds(obj2.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+									dto.setCodigoie(obj2.getProgramaeducativo().getCodmod());
+									dto.setNombreie(obj2.getProgramaeducativo().getNomie());
+									dto.setCategoria(obj2.getCategoriatrabajo().getDescripcion());
+									dto.setModalidad(obj2.getModalidadtrabajo().getDescripcion());
+									dto.setTitulotrabajo(obj2.getTitulotrabajo());
+									nivelparticipacion = "";
+									trabajosfinalesparticipanteServ.listar(pe.getId()).forEach(obj3->{
+										nivelparticipacion = obj3.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+										idnivelparticipacion = obj3.getParticipante().getGradoestudiante().getNivelgradopartid();
+									});
+									dto.setNivelparticipacion(nivelparticipacion);
+									dto.setEstado(obj2.getEstadotrabajo().getDescripcion());
+									dto.setCalificacion(0);
+									dto.setPuesto(0);
+									listadto.add(dto);
+								});
+							}
+						}
 					});
 				});
 			});
@@ -1630,6 +1644,7 @@ public class ConcursoeducativoController {
 				dto.getEvaluadores().forEach(ev->{
 					if(trabajosFinales_UsuarioAlianzaServ.buscar(te.getId(),ev.getId()) == null) {
 						trabajosFinales_UsuarioAlianzaServ.guardar(te.getId(),ev.getId());
+						trabajosfinalesServ.updateEstadoTrabajo(te.getId(),2);
 						rpta = 1;
 					}
 				});
