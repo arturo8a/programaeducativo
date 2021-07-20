@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>ProgramaEducativo</title>
+    <script type="text/javascript">
+		window.history.forward();
+	</script>
+
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="../static/css/nuevo_disenio.css" th:href="@{/css/nuevo_disenio.css}">
+	
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+	
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../static/css/dataTables.bootstrap4.min.css" th:href="@{/css/dataTables.bootstrap4.min.css}">
+	<link rel="stylesheet" href="../static/css/responsive.bootstrap4.min.css" th:href="@{/css/responsive.bootstrap4.min.css}">
+	<link rel="stylesheet" href="../static/css/editor.dataTables.min.css" th:href="@{/css/editor.dataTables.min.css}">
+	<link rel="stylesheet" href="../static/css/select.dataTables.min.css" th:href="@{/css/select.dataTables.min.css}">
+	<link rel="stylesheet" href="../static/css/buttons.dataTables.min.css" th:href="@{/css/buttons.dataTables.min.css}">
+	<link rel="stylesheet" href="../static/css/colReorder.dataTables.min.css" th:href="@{/css/colReorder.dataTables.min.css}">
+	
+	<script type="text/javascript" th:src="@{/js/jquery-3.3.1.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap-select.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/fontawesomev5.0.6.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.dataTables.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.editor.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.select.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.colReorder.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.buttons.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jszip.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/pdfmake.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/vfs_fonts.js}"></script>
+    <script type="text/javascript" th:src="@{/js/buttons.html5.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/buttons.print.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.bootstrap4.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.responsive.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/responsive.bootstrap4.min.js}"></script>      
+    <script type="text/javascript" th:src="@{/js/dataTables.editor.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/datetime.js}"></script>
+    <script type="text/javascript" th:src="@{/js/moment.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/datetime-moment.js}"></script>
+	
+</head>
+<body>
+    <div class="wrapper">
+        <nav id="sidebar" class="border-right">
+            <div class="sidebar-header pt-4 pl-5 pb-0 mt-0 mb-5">
+                <!-- img th:src="@{./images/iconos_nd/Frame3.svg}"alt="" class="ml-2 pt-1"-->
+                <img th:src="@{./images/iconos_nd/logosunass.svg}" alt="" class="ml-2">
+            </div>
+             <ul th:if="${tipousuarioid == 5}" class="list-unstyled components">
+            	<li class="active" style="display: none;">
+                    <a id="a_pageSubmenuAdministracion" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" style="cursor:pointer">
+                    	<img th:src="@{./images/iconos_nd/Administracion.svg}" class="pl-4"/>&nbsp;<strong class="etiqueta_menu_lateral">Administración</strong>
+                    </a>
+                    <ul class="collapse multi-collapse list-unstyled pl-4" id="pageSubmenuAdministracion">
+                        <li >
+                            <input type="button" class="btn btn-link" id="consulta_usuarios" value="Usuarios"/>     
+                        </li>
+                        <li>
+                        	<input type="button" class="btn btn-link" id="consulta_aperturar_anio" value="Aperturar años"/>
+                        </li>
+                    </ul>
+                </li>
+                <li class="active" style="display: none;">
+                    <a id="a_pageSubmenuProgramaEducativo" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" style="cursor:pointer">
+                    	<img th:src="@{./images/iconos_nd/ProgramaEducativo.svg}" class="pl-4"/>&nbsp;<strong class="etiqueta_menu_lateral">Programa Educativo</strong>
+                    </a>
+                    <ul class="collapse multi-collapse list-unstyled pl-4" id="pageSubmenuProgramaEducativo" style="">
+                        <li>
+                            <input type="button" class="btn btn-link" id="consulta" value="Consulta"/>
+                        </li>
+                        <li>
+                            <input type="button" class="btn btn-link" id="consulta_pe" value="Aprobación de inscripciones"/>
+                        </li>
+                    </ul>
+                </li>
+                <li class="active">
+                    <a id="a_pageSubmenuConcursoEducativo" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" style="cursor:pointer">
+                    	<img th:src="@{./images/iconos_nd/ConcursoEscolartitulo.svg}" class="pl-4"/>&nbsp;<strong class="etiqueta_menu_lateral">Concurso Escolar</strong>                    	
+                    </a>
+                    <ul class="collapse multi-collapse list-unstyled pl-4" id="pageSubmenuConcursoEducativo">
+                        <li >
+                            <input type="button" class="btn btn-link" id="consulta_docentes" value="Consulta aula virtual" style="display: none;"/>                            
+                        </li>
+                        <li >
+                            <input type="button" class="btn btn-link" id="concurso" value="Concurso educativo" style="display: none;"/>                            
+                        </li>
+                        <li >
+                            <input type="button" class="btn btn-link" id="rubrica_evaluacion" value="Rúbrica de evaluación" style="display: none;"/>                            
+                        </li>
+                        <li >
+                            <input type="button" class="btn btn-link" id="reportes" value="Reportes" style="display: none;"/>                            
+                        </li>
+                        <li >
+                            <input type="button" class="btn btn-link" id="trabajos_pendientes" value="Trabajos pendientes" />                            
+                        </li>
+                        <li >
+                            <input type="button" class="btn btn-link" id="trabajos_finales_evaluados" value="Trabajos evaluados"/>                            
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <ul th:unless="${tipousuarioid == 5}" class="list-unstyled components">
+            	<li class="active">
+                    <a id="a_pageSubmenuAdministracion" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" style="cursor:pointer">
+                    	<img th:src="@{./images/iconos_nd/Administracion.svg}" class="pl-4"/>&nbsp;<strong class="etiqueta_menu_lateral">Administración</strong>
+                    </a>
+                    <ul class="collapse multi-collapse list-unstyled pl-4" id="pageSubmenuAdministracion">
+                        <li >
+                            <input type="button" class="btn btn-link" id="consulta_usuarios" value="Usuarios"/>     
+                        </li>
+                        <li>
+                        	<input type="button" class="btn btn-link" id="consulta_aperturar_anio" value="Aperturar años"/>
+                        </li>
+                    </ul>
+                </li>
+                <li class="active">
+                    <a id="a_pageSubmenuProgramaEducativo" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" style="cursor:pointer">
+                    	<img th:src="@{./images/iconos_nd/ProgramaEducativo.svg}" class="pl-4"/>&nbsp;<strong class="etiqueta_menu_lateral">Programa Educativo</strong>
+                    </a>
+                    <ul class="collapse multi-collapse list-unstyled pl-4" id="pageSubmenuProgramaEducativo" style="">
+                        <li>
+                            <input type="button" class="btn btn-link" id="consulta" value="Consulta"/>
+                        </li>
+                        <li>
+                            <input type="button" class="btn btn-link" id="consulta_pe" value="Aprobación de inscripciones"/>
+                        </li>
+                    </ul>
+                </li>
+                <li class="active">
+                    <a id="a_pageSubmenuConcursoEducativo" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" style="cursor:pointer">
+                    	<img th:src="@{./images/iconos_nd/ConcursoEscolartitulo.svg}" class="pl-4"/>&nbsp;<strong class="etiqueta_menu_lateral">Concurso Escolar</strong>                    	
+                    </a>
+                    <ul class="collapse multi-collapse list-unstyled pl-4" id="pageSubmenuConcursoEducativo">
+                        <li >
+                            <input type="button" class="btn btn-link" id="consulta_docentes" value="Consulta aula virtual"/>                            
+                        </li>
+                        <li >
+                            <input type="button" class="btn btn-link" id="concurso" value="Concurso educativo"/>                            
+                        </li>
+                        <li >
+                            <input type="button" class="btn btn-link" id="rubrica_evaluacion" value="Rúbrica de evaluación"/>                            
+                        </li>
+                        <li >
+                            <input type="button" class="btn btn-link" id="reportes" value="Reportes"/>                            
+                        </li>
+                        <li >
+                            <input type="button" class="btn btn-link" id="trabajos_pendientes" value="Trabajos pendientes" style="display: none;"/>                            
+                        </li>
+                        <li >
+                            <input type="button" class="btn btn-link" id="trabajos_finales_evaluados" value="Trabajos evaluados" style="display: none;"/>                            
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <div id="content" class="m-0 p-0">
+            <nav class="navbar navbar-expand-lg" style="height:50px">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="btn btn-info">
+	                     <i class="fas fa-align-left"></i>
+	                     <span></span>
+	                </button>
+					<div>
+						<h6 class="pt-3 pl-3">&nbsp;CONCURSO ESCOLAR</h6>
+					</div>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav ml-auto" style="padding-right:50px">
+                            <li>
+                            	<table> 
+                            		<tr>
+                            			<td>
+                            				<img th:src="@{./images/iconos_nd/usuario.svg}" style="width:35px">
+                            			</td>		
+                            			<td>
+                            				<strong><label th:text="${usuario}" style="padding-left:7px; margin:0px;color:#0083C9;padding-top:8px"></label></strong>
+                            				<br>
+                            				<ul class="nav nav-pills">											  
+											  <li class="nav-item dropdown">
+											    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+											    	<label th:text="${perfil}" style="font-size:10px; padding-right:15px; margin-bottom: 0px;color:#0083C9"></label><img th:src="@{./images/iconos_nd/flecha.svg}" style="width:10px"/>
+											    </a>
+											    <div class="dropdown-menu">
+											      <a class="dropdown-item" id="btnCerrarSesion" style="cursor:pointer">Cerrar sesión</a>
+											    </div>
+											  </li>											  
+											</ul> 
+                            			</td>                            			
+                            		</tr>
+                            	</table>
+                                <!--small class="p-0 m-0 b-0"><strong>Usuario: </strong></small> / <small class="p-0 m-0 b-0"><strong>Perfil: </strong></small> <input class="btn btn-info" type="button" value="Cerrar Sesión" id="btnCerrarSesion" -->
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div id="contenedor_consulta">
+            	
+            </div>
+            <br><br>
+	    </div>
+	</div>
+    <script type="text/javascript">    	
+	    
+    var url_base = location.origin + "/";
+	    
+	    $(document).ready(function(){
+	    	
+	    	document.getElementById("a_pageSubmenuProgramaEducativo").style.background = "#0083C9";
+	    	document.getElementById("consulta_pe").style.color = "#0083C9";
+			
+	    	$("#pageSubmenuAdministracion").hide();
+	    	$("#pageSubmenuProgramaEducativo").hide();
+	    	$("#pageSubmenuConcursoEducativo").hide();
+	    	
+	    	$("#a_pageSubmenuAdministracion").click(function() {
+    		  	$("#pageSubmenuAdministracion").slideToggle("slow");
+    		});
+	    	
+	    	$("#a_pageSubmenuProgramaEducativo").click(function() {
+    		  	$("#pageSubmenuProgramaEducativo").slideToggle("slow");
+    		});
+	    	
+	    	$("#a_pageSubmenuConcursoEducativo").click(function() {
+    		  	$("#pageSubmenuConcursoEducativo").slideToggle("slow");
+    		});
+	    	
+	    	$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
+			$.ajax({
+    			url: url_base + "pedesa/programaconsulta",
+    			success: function(respuesta) {
+    				$("#contenedor_consulta").html(respuesta);
+    			}
+    		});
+	    	
+	    	$("#consulta").click(function(e){
+	    		document.getElementById("a_pageSubmenuAdministracion").style.background = "";
+	    		document.getElementById("a_pageSubmenuProgramaEducativo").style.background = "#0083C9";
+	    		document.getElementById("a_pageSubmenuConcursoEducativo").style.background = "";
+	    		document.getElementById("consulta_usuarios").style.color = "";
+   	    		document.getElementById("consulta_aperturar_anio").style.color = "";
+   	    		document.getElementById("consulta").style.color = "#0083C9";
+   	    		document.getElementById("consulta_pe").style.color = "";
+   	    		document.getElementById("consulta_docentes").style.color = "";
+   	    		document.getElementById("concurso").style.color = "";
+   	    		document.getElementById("rubrica_evaluacion").style.color = "";
+   	    		document.getElementById("reportes").style.color = "";
+   	    		/*document.getElementById("trabajos_pendientes").style.color = "";*/
+	    		$("#consulta_menu").prop("disabled",true);
+	        	$("#btnbuscar").prop("disabled",true);
+	    		$('#modalimagencargando').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+	    		setTimeout(() => {        		  
+	    			$.ajax({
+		    			url: url_base + "pedesa/contenidoconsulta",
+		    			success: function(respuesta) {
+		    				$('#modalimagencargando').modal('hide');
+		    				$("#contenedor_consulta").html(respuesta);
+		    			}
+		    		});
+	        	}, 200);	    		
+	    	});	  
+	    	
+	    	$("#consulta_usuarios").click(function(){
+	    		document.getElementById("a_pageSubmenuAdministracion").style.background = "#0083C9";
+	    		document.getElementById("a_pageSubmenuProgramaEducativo").style.background = "";
+	    		document.getElementById("a_pageSubmenuConcursoEducativo").style.background = "";
+	    		document.getElementById("consulta_usuarios").style.color = "#0083C9";
+   	    		document.getElementById("consulta_aperturar_anio").style.color = "";
+   	    		document.getElementById("consulta").style.color = "";
+   	    		document.getElementById("consulta_pe").style.color = "";
+   	    		document.getElementById("consulta_docentes").style.color = "";
+   	    		document.getElementById("concurso").style.color = "";
+   	    		document.getElementById("rubrica_evaluacion").style.color = "";
+   	    		document.getElementById("reportes").style.color = "";
+   	    		/*document.getElementById("trabajos_pendientes").style.color = "";*/
+	    		$("#consulta_menu").prop("disabled",true);
+	        	$("#btnbuscar").prop("disabled",true);
+	    		//$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
+	    		$('#modalimagencargando').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+	    		setTimeout(() => {        		  
+	    			$.ajax({
+		    			url: url_base + "pedesa/consulta_usuarios",
+		    			success: function(respuesta) {
+		    				$('#modalimagencargando').modal('hide');
+		    				$("#contenedor_consulta").html(respuesta);    				
+		    			}
+		    		});
+	        	}, 200);
+	    	});
+	    	
+	    	$("#consulta_aperturar_anio").click(function(){
+	    		document.getElementById("a_pageSubmenuAdministracion").style.background = "#0083C9";
+	    		document.getElementById("a_pageSubmenuProgramaEducativo").style.background = "";
+	    		document.getElementById("a_pageSubmenuConcursoEducativo").style.background = "";
+	    		document.getElementById("consulta_usuarios").style.color = "";
+   	    		document.getElementById("consulta_aperturar_anio").style.color = "#0083C9";
+   	    		document.getElementById("consulta").style.color = "";
+   	    		document.getElementById("consulta_pe").style.color = "";
+   	    		document.getElementById("consulta_docentes").style.color = "";
+   	    		document.getElementById("concurso").style.color = "";
+   	    		document.getElementById("rubrica_evaluacion").style.color = "";
+   	    		document.getElementById("reportes").style.color = "";
+   	    		/*document.getElementById("trabajos_pendientes").style.color = "";*/
+	    		$("#consulta_menu").prop("disabled",true);
+	        	$("#btnbuscar").prop("disabled",true);
+	    		//$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
+	    		$('#modalimagencargando').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+	    		setTimeout(() => {        		  
+	    			$.ajax({
+		    			url: url_base + "pedesa/aperturar_anio",
+		    			success: function(respuesta) {
+		    				$('#modalimagencargando').modal('hide');
+		    				$("#contenedor_consulta").html(respuesta);    				
+		    			}
+		    		});
+	        	}, 200);
+	    	});
+	    	
+	    	$("#consulta_pe").click(function(){
+	    		document.getElementById("a_pageSubmenuAdministracion").style.background = "";
+	    		document.getElementById("a_pageSubmenuProgramaEducativo").style.background = "#0083C9";
+	    		document.getElementById("a_pageSubmenuConcursoEducativo").style.background = "";
+	    		document.getElementById("consulta_usuarios").style.color = "";
+   	    		document.getElementById("consulta_aperturar_anio").style.color = "";
+   	    		document.getElementById("consulta").style.color = "";
+   	    		document.getElementById("consulta_pe").style.color = "#0083C9";
+   	    		document.getElementById("consulta_docentes").style.color = "";
+   	    		document.getElementById("concurso").style.color = "";
+   	    		document.getElementById("rubrica_evaluacion").style.color = "";
+   	    		document.getElementById("reportes").style.color = "";
+   	    		/*document.getElementById("trabajos_pendientes").style.color = "";*/
+	    		$("#consulta_menu").prop("disabled",true);
+	        	$("#btnbuscar").prop("disabled",true);
+	    		//$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
+	    		$('#modalimagencargando').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+	    		setTimeout(() => {        		  
+	    			$.ajax({
+		    			url: url_base + "pedesa/programaconsulta",
+		    			success: function(respuesta) {
+		    				$('#modalimagencargando').modal('hide');
+		    				$("#contenedor_consulta").html(respuesta);
+		    			}
+		    		});
+	        	}, 200);
+	    	});
+	    	
+	    	$("#consulta_docentes").click(function(){
+	    		document.getElementById("a_pageSubmenuAdministracion").style.background = "";
+	    		document.getElementById("a_pageSubmenuProgramaEducativo").style.background = "";
+	    		document.getElementById("a_pageSubmenuConcursoEducativo").style.background = "#0083C9";
+	    		document.getElementById("consulta_usuarios").style.color = "";
+   	    		document.getElementById("consulta_aperturar_anio").style.color = "";
+   	    		document.getElementById("consulta").style.color = "";
+   	    		document.getElementById("consulta_pe").style.color = "";
+   	    		document.getElementById("consulta_docentes").style.color = "#0083C9";
+   	    		document.getElementById("concurso").style.color = "";
+   	    		document.getElementById("rubrica_evaluacion").style.color = "";
+   	    		document.getElementById("reportes").style.color = "";
+   	    		/*document.getElementById("trabajos_pendientes").style.color = "";*/
+	    		$("#consulta_menu").prop("disabled",true);
+	        	$("#btnbuscar").prop("disabled",true);
+	    		//$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
+	    		$('#modalimagencargando').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+	    		setTimeout(() => {        		  
+	    			$.ajax({
+		    			url: url_base + "pedesa/docenteconsulta",
+		    			success: function(respuesta) {
+		    				$('#modalimagencargando').modal('hide');
+		    				$("#contenedor_consulta").html(respuesta);    				
+		    			}
+		    		});
+	        	}, 200);
+	    	});
+	    	
+	    	$("#concurso").click(function(){
+	    		document.getElementById("a_pageSubmenuAdministracion").style.background = "";
+	    		document.getElementById("a_pageSubmenuProgramaEducativo").style.background = "";
+	    		document.getElementById("a_pageSubmenuConcursoEducativo").style.background = "#0083C9";
+	    		document.getElementById("consulta_usuarios").style.color = "";
+   	    		document.getElementById("consulta_aperturar_anio").style.color = "";
+   	    		document.getElementById("consulta").style.color = "";
+   	    		document.getElementById("consulta_pe").style.color = "";
+   	    		document.getElementById("consulta_docentes").style.color = "";
+   	    		document.getElementById("concurso").style.color = "#0083C9";
+   	    		document.getElementById("rubrica_evaluacion").style.color = "";
+   	    		document.getElementById("reportes").style.color = "";
+   	    		/*document.getElementById("trabajos_pendientes").style.color = "";*/
+	    		$("#consulta_menu").prop("disabled",true);
+	        	$("#btnbuscar").prop("disabled",true);
+	    		//$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
+	    		$('#modalimagencargando').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+	    		setTimeout(() => {        		  
+	    			$.ajax({
+		    			url: url_base + "pedesa/listaformconcurso",
+		    			success: function(respuesta) {
+		    				$('#modalimagencargando').modal('hide');
+		    				$("#contenedor_consulta").html(respuesta);    				
+		    			}
+		    		});
+	        	}, 200);
+	    	});
+	    	
+	    	$("#rubrica_evaluacion").click(function(){
+	    		document.getElementById("a_pageSubmenuAdministracion").style.background = "";
+	    		document.getElementById("a_pageSubmenuProgramaEducativo").style.background = "";
+	    		document.getElementById("a_pageSubmenuConcursoEducativo").style.background = "#0083C9";
+	    		document.getElementById("consulta_usuarios").style.color = "";
+   	    		document.getElementById("consulta_aperturar_anio").style.color = "";
+   	    		document.getElementById("consulta").style.color = "";
+   	    		document.getElementById("consulta_pe").style.color = "";
+   	    		document.getElementById("consulta_docentes").style.color = "";
+   	    		document.getElementById("concurso").style.color = "";
+   	    		document.getElementById("rubrica_evaluacion").style.color = "#0083C9";
+   	    		document.getElementById("reportes").style.color = "";
+   	    		/*document.getElementById("trabajos_pendientes").style.color = "";*/
+	    		$("#consulta_menu").prop("disabled",true);
+	        	$("#btnbuscar").prop("disabled",true);
+	    		//$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
+	    		$('#modalimagencargando').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+	    		setTimeout(() => {        		  
+	    			$.ajax({
+		    			url: url_base + "pedesa/listaformrevaluaciones",
+		    			success: function(respuesta) {
+		    				$('#modalimagencargando').modal('hide');
+		    				$("#contenedor_consulta").html(respuesta);    				
+		    			}
+		    		});
+	        	}, 200);
+	    	});
+	    	
+	    	$("#reportes").click(function(){
+	    		document.getElementById("a_pageSubmenuAdministracion").style.background = "";
+	    		document.getElementById("a_pageSubmenuProgramaEducativo").style.background = "";
+	    		document.getElementById("a_pageSubmenuConcursoEducativo").style.background = "#0083C9";
+	    		document.getElementById("consulta_usuarios").style.color = "";
+   	    		document.getElementById("consulta_aperturar_anio").style.color = "";
+   	    		document.getElementById("consulta").style.color = "";
+   	    		document.getElementById("consulta_pe").style.color = "";
+   	    		document.getElementById("consulta_docentes").style.color = "";
+   	    		document.getElementById("concurso").style.color = "";
+   	    		document.getElementById("rubrica_evaluacion").style.color = "";
+   	    		document.getElementById("reportes").style.color = "#0083C9";
+   	    		/*document.getElementById("trabajos_pendientes").style.color = "";*/
+	    		$("#consulta_menu").prop("disabled",true);
+	        	$("#btnbuscar").prop("disabled",true);
+	    		//$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
+	    		$('#modalimagencargando').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+	    		setTimeout(() => {        		  
+	    			$.ajax({
+		    			url: url_base + "pedesa/reportes",
+		    			success: function(respuesta) {
+		    				$('#modalimagencargando').modal('hide');
+		    				$("#contenedor_consulta").html(respuesta);    				
+		    			}
+		    		});
+	        	}, 200);
+	    	});
+                
+           $("#trabajos_pendientes").click(function(){
+               	document.getElementById("a_pageSubmenuAdministracion").style.background = "";
+   	    		document.getElementById("a_pageSubmenuProgramaEducativo").style.background = "";
+   	    		document.getElementById("a_pageSubmenuConcursoEducativo").style.background = "#0083C9";
+   	    		document.getElementById("consulta_usuarios").style.color = "";
+   	    		document.getElementById("consulta_aperturar_anio").style.color = "";
+   	    		document.getElementById("consulta").style.color = "";
+   	    		document.getElementById("consulta_pe").style.color = "";
+   	    		document.getElementById("consulta_docentes").style.color = "";
+   	    		document.getElementById("concurso").style.color = "";
+   	    		document.getElementById("rubrica_evaluacion").style.color = "";
+   	    		document.getElementById("reportes").style.color = "";
+   	    		/*document.getElementById("trabajos_pendientes").style.color = "#0083C9";*/
+	    		$("#consulta_menu").prop("disabled",true);
+	        	$("#btnbuscar").prop("disabled",true);
+	    		//$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
+	    		$('#modalimagencargando').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+	    		setTimeout(() => {        		  
+	    			$.ajax({
+		    			url: url_base + "pedesa/trabajospendientes",
+		    			success: function(respuesta) {
+		    				$('#modalimagencargando').modal('hide');
+		    				$("#contenedor_consulta").html(respuesta);    				
+		    			}
+		    		});
+	        	}, 200);
+	    	});
+	    	
+	    	$("#trabajos_finales_evaluados").click(function(){
+	    		$("#consulta_menu").prop("disabled",true);
+	        	$("#btnbuscar").prop("disabled",true);
+	    		//$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
+	    		$('#modalimagencargando').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+	    		setTimeout(() => {        		  
+	    			$.ajax({
+		    			url: url_base + "pedesa/trabajosevaluados",
+		    			success: function(respuesta) {
+		    				$('#modalimagencargando').modal('hide');
+		    				$("#contenedor_consulta").html(respuesta);
+		    			}
+		    		});
+	        	}, 200);
+	    	});
+	    	
+	    	
+	    	$('#sidebarCollapse').on('click',function(){
+	            $('#sidebar').toggleClass('active');
+	            $('#content').toggleClass('active');
+	        });
+	    	
+	    	$("#btnCerrarSesion").click(function(){
+	    		$.ajax({
+	    			url: url_base + "pedesa/cerrar_sesion",
+	    			success: function(respuesta) {
+	    				window.location.href = url_base+"pedesa/";
+	    			}
+	    		});		
+	    	}); 
+		});		
+    </script>	
+</body>
+</html>

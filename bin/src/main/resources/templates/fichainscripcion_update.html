@@ -1,0 +1,1377 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>ProgramaEducativo</title>
+    <script type="text/javascript">
+		window.history.forward();
+	</script>
+
+    <!-- Bootstrap CSS CDN -->
+    <!-- link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous"-->
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
+    
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+	
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+	
+	<!-- jQuery CDN - Slim version (=without AJAX) -->
+    <!-- script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script-->
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+	
+	<link rel="stylesheet" href="../static/css/dataTables.bootstrap4.min.css" th:href="@{/css/dataTables.bootstrap4.min.css}">
+	<link rel="stylesheet" href="../static/css/responsive.bootstrap4.min.css" th:href="@{/css/responsive.bootstrap4.min.css}">
+	<link rel="stylesheet" href="../static/css/editor.dataTables.min.css" th:href="@{/css/editor.dataTables.min.css}">
+	<link rel="stylesheet" href="../static/css/select.dataTables.min.css" th:href="@{/css/select.dataTables.min.css}">
+	<link rel="stylesheet" href="../static/css/buttons.dataTables.min.css" th:href="@{/css/buttons.dataTables.min.css}">
+	<link rel="stylesheet" href="../static/css/colReorder.dataTables.min.css" th:href="@{/css/colReorder.dataTables.min.css}">
+	
+	<script type="text/javascript" th:src="@{/js/jquery-3.3.1.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/bootstrapv4.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/fontawesomev5.0.6.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/aperturar_anio.js}" ></script>
+	
+	<script type="text/javascript" th:src="@{/js/bootstrap-select.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/fontawesomev5.0.6.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.dataTables.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.editor.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.select.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.colReorder.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.buttons.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jszip.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/pdfmake.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/vfs_fonts.js}"></script>
+    <script type="text/javascript" th:src="@{/js/buttons.html5.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/buttons.print.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.bootstrap4.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.responsive.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/responsive.bootstrap4.min.js}"></script>      
+    <script type="text/javascript" th:src="@{/js/dataTables.editor.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/datetime.js}"></script>
+    <script type="text/javascript" th:src="@{/js/moment.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/datetime-moment.js}"></script>
+	
+	<script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
+	
+	<link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+	<link href="../static/css/gijgo.min.css" rel="stylesheet" th:href="@{/css/gijgo.min.css}" >
+	<script type="text/javascript" th:src="@{/js/gijgo.min.js}" ></script>
+	<script type="text/javascript" th:src="@{/js/messages.es-es.js}"></script>
+	<script type="text/javascript" th:src="@{/js/datetime-moment-order.js}"></script>
+	<script type="text/javascript" th:src="@{/js/moment.js}"></script>
+	
+	<script type="text/javascript" th:src="@{/js/date-uk.js}"></script>
+	<script type="text/javascript" th:src="@{/js/date-euro.js}"></script>
+	
+	<style>
+		
+		.rs_trabajos{
+		  /*width:33%;*/
+		  float:left;
+		  text-align:center;
+		  display: inline-flex;
+		  vertical-align: middle;
+		  padding: 0.375rem 0.75rem;
+		  font-size: 0.75rem;
+		  line-height: 1.5;
+		  justify-content: left;
+		}
+		
+		table{
+        	overflow-x:auto;
+	    }
+	    table td{
+	        word-wrap: break-word;
+	        max-width: 450px;
+	    }
+	    #table_lista_participantes td{
+	        white-space: inherit;
+	    }
+	    
+	    #table_lista_trabajos_finales td{
+	    	white-space: inherit;
+	    }
+		
+	</style>
+	
+</head>
+<body>
+
+<div style="margin-top:-20px">
+	<div class="row w-100">
+		<div class="col-xs-6 col-sm-6 text-center">
+			<h6 style="color:#4698FF;margin-top:10px">FICHA INSCRIPCION AL CONCURSO ESCOLAR NACIONAL </h6>
+		</div>
+		<div class="col-xs-6 col-sm-6 text-right">
+			<input type="button" value="Ir al inicio" id="inicioconcurso1" class="btn btn-primary" style="margin-top:10px" />
+		</div>
+	</div>
+	<div style="margin:15px">
+		
+		<ul class="nav nav-tabs" id="myTab" role="tablist">
+		  <li class="nav-item">
+		    <a class="nav-link active" id="docente-tab" data-toggle="tab" href="#docente" role="tab" aria-controls="home" aria-selected="true">1. Datos del docente</a>
+		  </li>
+		  <li class="nav-item">
+		    <a class="nav-link disabled" id="participante-tab" data-toggle="tab" href="#participante" role="tab" aria-controls="participante" aria-selected="false">2. Datos de los participantes</a>
+		  </li>
+		  <li class="nav-item">
+		    <a class="nav-link disabled" id="trabajosfinales-tab" data-toggle="tab" href="#trabajosfinales" role="tab" aria-controls="trabajosfinales" aria-selected="false">3. Registro de trabajos finales</a>
+		  </li>
+		</ul>
+		
+		<div class="tab-content" id="myTabContent">	
+			<div class="tab-pane fade show active" id="docente" role="tabpanel" aria-labelledby="docente-tab">
+					  	<br><br>
+					  	<div class="row">
+					  		<div class="col-12 text-left">
+					  			<strong>Código de local I.E.</strong>	
+					  			<div class="ui-widget">
+					  				<input type="hidden" th:value="${cuarta_etapa_desde}" id="cuarta_etapa_desde" />
+					  				<input type="hidden" th:value="${cuarta_etapa_hasta}" id="cuarta_etapa_hasta" />
+					  				<input type="hidden" th:value="${docentetutor.programaeducativo.id}" id="idprogramaeducativo" />
+					  				<input type="hidden" th:value="${docentetutor.id}" id="id" />
+					  				<input type="hidden" th:value="${docentetutor.anio}" id="anio" />
+					  				<input type="hidden" th:value="${activar_trabajos_finales}" id="activar_trabajos_finales" />
+					  				<input type="text" id="codmod" style="width:100%" class="form-control" th:value="${codmod}" disabled />
+					  			</div>
+					  		</div>
+					  	</div>
+					  	<br>
+						  <div class="row">
+						  		<div class="col-4 text-left">
+						  			<label>Apellido paterno</label>	
+						  			<input type="text" id="appaterno" class="form-control" style="width:100%" th:field="*{docentetutor.appaterno}" onKeyPress="return filterCadenaupdate(event,this)"/>
+						  		</div>
+						  		<div class="col-4 text-left">
+						  			<label>Apellido materno</label>	
+						  			<input type="text" id="apmaterno" class="form-control" style="width:100%" th:field="*{docentetutor.apmaterno}" onKeyPress="return filterCadenaupdate(event,this)"/>
+						  		</div>
+						  		<div class="col-4 text-left">
+						  			<label>Nombres</label>	
+						  			<input type="text" id="nombre" class="form-control" style="width:100%" th:field="*{docentetutor.nombre}" onKeyPress="return filterCadenaupdate(event,this)" />
+						  		</div>
+						  </div>
+						  <br>
+						  <div class="row">
+						  		<div class="col-4 text-left">
+						  			<label>Tipo de documento</label>	
+						  			<select class="form-control" id="tipodocumento" th:field="*{docentetutor.tipodocumento}">
+						  				<option value="">Seleccione</option>
+				                        <option th:each="len:${tipodoc}" th:value="${len.id}" th:utext="*{len.descripcion}"/>
+						  			</select>
+						  		</div>
+						  		<div class="col-4 text-left">
+						  			<label>N° de documento</label>	
+						  			<input type="text" id="nrodocumento" style="width:100%" class="form-control" th:field="*{docentetutor.nrodocumento}" onKeyPress="return filterIntNroDocIdentidadupdate(event,this)"/>
+						  		</div>
+						  		<div class="col-4 text-left">
+						  			<label>Género</label>	
+						  			<select class="form-control" id="genero" th:field="*{docentetutor.genero}">
+						  				<option value="">Seleccione</option>
+				                        <option th:each="len:${genero}" th:value="${len.id}" th:utext="*{len.descripcion}"/>
+						  			</select>
+						  		</div>
+						  </div>
+						  <br>
+						  <div class="row">
+						  		<div class="col-4 text-left">
+						  			<label>N° de teléfono</label>	
+						  			<input type="text" id="nrotelefono" style="width:100%" class="form-control" th:field="*{docentetutor.nrotelefono}" onKeyPress="return filterIntTelfupdate(event,this)" maxlength="10"/>
+						  		</div>
+						  		<div class="col-4 text-left">
+						  			<label>Correo electrónico</label>	
+						  			<input type="text" id="correoelectronico" style="width:100%" class="form-control" th:field="*{docentetutor.correoelectronico}"/>
+						  		</div>
+						  		<div class="col-4 text-left">
+						  			<label>Responsable de registro</label>	
+						  			<select class="form-control" id="responsable" th:field="*{docentetutor.responsable}">
+						  				<option value="">Seleccione</option>
+				                        <option th:each="len:${responsableregistro}" th:value="${len.id}" th:utext="*{len.descripcion}"/>
+						  			</select>
+						  		</div>
+						  </div>
+					  		<br>
+						  <div class="row">
+						  		<div class="col-4 text-left">
+						  			<label>Curso</label>	
+						  			<input type="text" id="curso" style="width:100%" class="form-control" th:field="*{docentetutor.curso}"/>
+						  		</div>
+						  		<div class="col-4">
+						  			&nbsp;
+						  		</div>
+						  		<div class="col-4">
+						  			&nbsp;
+						  		</div>
+						  </div>
+						  <br>
+						  	<div class="row">
+						  		<div class="col-6 text-right">
+					 				<input type="button" value="Cancelar" id="btncancelarficha" class="btn btn-outline-primary"/>
+								</div>
+								<div class="col-6 text-left">									
+									<input type="button" value="Guardar" id="btnguardardocente" class="btn btn-primary text-white"/>
+						 		</div>
+						  	</div>
+						  	<br><br><br>	  
+			  	</div>
+			<div class="tab-pane fade" id="participante" role="tabpanel" aria-labelledby="participante-tab">
+				<div  id="container_participante">
+					<div class="row">
+						<div class="col text-right">
+							<input type="button" value="Agregar participante" id="agregarparticipante" class="btn btn-primary  mr-3">
+						</div>
+					</div>
+					<div class="row pt-2 pb-4 m-0">
+						<div class="col-xs-12 col-sm-12">
+							<table id="table_lista_participantes"  class="table table-striped table-bordered nowrap" cellspacing="0" style="width:100%">
+								<thead>
+							        <tr>
+							        	<th>Nº</th>
+							            <th>Apellido paterno</th>
+							            <th>Apellido materno</th>
+							            <th>Nombres</th>
+							            <th>Tipo de documento</th>
+							            <th>N° de documento</th>
+							            <th>Categoría(s)</th>
+							            <th>Modalidad(s)</th>
+							            <th>Ficha de autorización</th>
+							            <th>Ver</th>
+							            <th>Editar</th>
+							            <th>Eliminar</th>
+							        </tr>
+							    </thead>
+							</table>
+						</div>
+					</div>	
+				</div>
+			</div>		
+			<div class="tab-pane fade" id="trabajosfinales" role="tabpanel" aria-labelledby="trabajosfinales-tab" >	
+				<div  id="container_trabajos_finales">
+					<div class="row pt-2 pb-4 m-0">
+						<div class="col-xs-12 col-sm-12 pt-3">
+							<table id="table_lista_trabajos_finales"  class="table table-striped table-bordered nowrap" cellspacing="0" style="width:100%">
+								<thead>
+							        <tr>
+							        	<th>Nº</th>
+							            <th>Categoría</th>
+							            <th>Título de trabajo final</th>
+							            <th>Modalidad</th>
+							            <th>Participantes</th>
+							            <th>Archivos</th>
+							            <th>Editar</th>
+							            <th>Eliminar</th>
+							            <th>Enviar trabajo</th>
+							        </tr>   
+							    </thead>
+							</table>
+						</div>
+					</div>	
+					<div class="row">
+						<div class="col text-right">
+							<input type="button" th:if="${finalizaparticipaciontrabajo == 0}" value="Agregar trabajo" id="agregartrabajo" class="btn btn-success mr-3">
+							<input type="button" th:if="${finalizaparticipaciontrabajo == 0}" id="finalizarparticipacion"  value="FINALIZAR PARTICIPACIÓN" class="btn btn-primary mr-3">
+						</div>
+					</div>
+				</div>		
+			</div>
+		</div>
+	</div>
+</div>
+
+<center>
+<div class="modal fade" tabindex="-1" role="dialog" id="modalagregarParticipante" aria-labelledby="myLargeModalLabel" >
+  <div class="modal-dialog modal-lg" role="document"> 
+    <div class="modal-content" style="overflow-y: scroll; height:750px;width:90%">
+      <div class="modal-header">
+        <strong class="pt-1">AGREGAR PARTICIPANTE</strong>
+      </div>
+      <div class="modal-body" id="contenidoagregarparticipante">
+      	
+      </div>
+    </div>
+  </div>
+</div>
+</center>
+
+<center>
+<div class="modal fade" tabindex="-1" role="dialog" id="modaleditarParticipante" aria-labelledby="myLargeModalLabel" >
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" style="overflow-y: scroll; height:750px;width:90%">
+      <div class="modal-header">
+        <strong class="pt-1">EDITAR PARTICIPANTE</strong>
+      </div>
+      <div class="modal-body" id="contenidoeditarparticipante">
+      	
+      </div>
+    </div>
+  </div>
+</div>
+</center>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalexito">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <img th:src="@{./images/imagen_exito5.png}"/>&nbsp;&nbsp; <strong class="pt-1">Registro exitoso</strong>
+      </div>
+      <div class="modal-body" id="textoexito">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary rounded-0" id="btncerrarmensajeexito" name="btncerrarmensajeexito">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalconfirmacion">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <img th:src="@{./images/imagen_informacion11.png}" />&nbsp;&nbsp; <strong class="pt-1">Confirmacion</strong>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="textoconfirmacion">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="btnaceptarmensajeconfirmacion" name="btnaceptarmensajeconfirmacion">Aceptar</button>
+        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeconfirmacion" name="btncerrarmensajeconfirmacion">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalinformacion">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <img th:src="@{./images/imagen_informacion11.png}" />&nbsp;&nbsp; <label class="pt-1" style="padding-right:380px">Alerta</label>
+        <!-- button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button-->
+      </div>
+      <div class="modal-body" id="textoinformacion">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeinformacion" name="btncerrarmensajeinformacion">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalerror">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <img th:src="@{./images/imagen_informacion11.png}"/>&nbsp;&nbsp; <strong class="pt-1">Error</strong>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>	          
+        </button>
+      </div>
+      <div class="modal-body" id="textoerror">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeerror" name="btncerrarmensajeerror">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<center>
+<div class="modal fade" tabindex="-1" role="dialog" id="modalagregartrabajo" aria-labelledby="myLargeModalLabel" >
+  <div class="modal-dialog modal-lg" role="document"> 
+    <div class="modal-content" style="overflow-y: scroll; height:750px; width:90%">
+      <div class="modal-header">
+        <strong class="pt-1">AGREGAR TRABAJO</strong>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>	          
+        </button>
+      </div>
+      <div class="modal-body" id="contenidoagregartrabajo">
+      	
+      </div>
+    </div>
+  </div>
+</div>
+</center>
+
+<center>
+<div class="modal fade" tabindex="-1" role="dialog" id="modaleditartrabajo">
+  <div class="modal-dialog modal-lg" role="document"> 
+    <div class="modal-content" style="overflow-y: scroll; height:750px;width:90%">
+      <div class="modal-header">
+        <strong class="pt-1">EDITAR TRABAJO</strong>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>	          
+        </button>
+      </div>
+      <div class="modal-body" id="contenidoeditartrabajo">
+      	
+      </div>
+    </div>
+  </div>
+</div>
+</center>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modalvertrabajo">
+  <div class="modal-dialog modal-lg" role="document"> 
+    <div class="modal-content" style="overflow-y: scroll; height:750px">
+      <div class="modal-header">
+        <strong class="pt-1">VER TRABAJO</strong>
+      </div>
+      <div class="modal-body" id="contenidovertrabajo">
+      	
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalexitotrabajo">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <img th:src="@{./images/imagen_exito5.png}"/>&nbsp;&nbsp; <strong class="pt-1">Registro exitoso</strong>
+      </div>
+      <div class="modal-body" id="textoexito">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary rounded-0" id="btncerrarmensajeexitotrabajo" name="btncerrarmensajeexitotrabajo">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalconfirmaciontrabajo">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <img th:src="@{./images/imagen_informacion11.png}" />&nbsp;&nbsp; <strong class="pt-1">Confirmacion</strong>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="textoconfirmaciontrabajo">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="btnaceptarmensajeconfirmaciontrabajo" name="btnaceptarmensajeconfirmaciontrabajo">Aceptar</button>
+        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeconfirmaciontrabajo" name="btncerrarmensajeconfirmaciontrabajo">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalinformacion">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <img th:src="@{./images/imagen_informacion11.png}" />&nbsp;&nbsp; <label class="pt-1" style="padding-right:380px">Alerta</label>
+        <!-- button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button-->
+      </div>
+      <div class="modal-body" id="textoinformacion">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeinformacion" name="btncerrarmensajeinformacion">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalerror">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <img th:src="@{./images/imagen_informacion11.png}"/>&nbsp;&nbsp; <strong class="pt-1">Error</strong>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>	          
+        </button>
+      </div>
+      <div class="modal-body" id="textoerror">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeerror" name="btncerrarmensajeerror">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" tabindex="-1" role="dialog" id="modalimagencargando">
+  <center>
+  	<img th:src="@{./images/cargando.gif}" style="line-height: 200px;"/>
+  </center>	  
+</div>	
+</body>
+</html>
+
+<script type="text/javascript">
+	
+	var url_base = location.origin+"/";
+	var table_lista_participantes,table_lista_trabajos_finales,celdaseleccionada,mensajeValidacion;	
+	
+	var data;
+	var appaternoestudiante="",apmaternoestudiante="",nombreestudiante="",tipodocumentoestudiante="",nrodocumentoestudiante="",fechanacimientoestudiante="";
+	var generoestudiante="",nivelestudiante="",gradoestudiante="",seccionestudiante="";
+	var categoriacuento=0, categoriapoesia=0,categoriadibujopintura=0,categoriacomposicionmusical=0,categoriaahorroagua=0,modalidadpostulacionindividual=0,modalidadpostulaciongrupal=0;
+	var appaternopmt="",apmaternopmt="",nombrepmt="",parentesco="",tipodocumentopmt="",nrodocumentopmt="",nrotelefonopmt="",correoelectronicopmt="";
+	var celdaseleccionada,mensajeValidacion=false;
+	
+	
+	
+	$(document).ready(function(){	
+		
+		//listar();
+		$("#participante-tab").click(function(){
+			$('#myTab a[href="#participante"]').tab('show');
+			setTimeout(function(){ listar(); }, 100);
+		});
+		
+		$("#trabajosfinales-tab").click(function(){
+			$('#myTab a[href="#trabajosfinales"]').tab('show');
+			setTimeout(function(){ listar_trabajos_finales(); }, 100);
+		});
+		
+		if($("#codmod").val().trim()!="" && $("#appaterno").val().trim()!="" && $("#apmaterno").val().trim()!="" && $("#nombre").val().trim()!="" && $("#tipodocumento").val().trim()!="" && $("#nrodocumento").val().trim()!="" && $("#genero").val().trim()!="" && $("#nrotelefono").val().trim()!="" && $("#correoelectronico").val().trim()!="" && $("#responsable").val().trim()!="" && $("#curso").val().trim()!="" ){
+			$("#participante-tab").removeClass("nav-link disabled");
+			$("#participante-tab").addClass("nav-link");	
+			if($("#activar_trabajos_finales").val() == 1){
+				$("#trabajosfinales-tab").removeClass("nav-link disabled");
+				$("#trabajosfinales-tab").addClass("nav-link");
+			}
+			else{
+				alert("La carga de trabajos finales se podrá realizar en las siguientes fechas: " + $("#cuarta_etapa_desde").val() + " - " + $("#cuarta_etapa_hasta").val());
+			}
+		}
+		
+		$("#btncerrarmensajeexito").click(function(){			
+			$("#modalexito").modal('hide');
+		});
+			
+		$("#btncerrarmensajeinformacion").click(function(){
+			$("#modalinformacion").modal('hide');
+		});
+		
+		$("#btncerrarmensajeerror").click(function(){
+			$("#modalerror").modal('hide');
+		});
+		
+		$("#finalizarparticipacion").click(function(){
+			 
+			var array_data = table_lista_trabajos_finales.data();
+			var array_seleccion = new Array();
+			
+			var contador = 0;
+			for(i=0;i<array_data.length;i++){				
+				if(array_data[i].enviado==0){
+					array_seleccion.push(i);
+					contador++;
+				}					
+			}
+			
+			var r = confirm("Estimado(a) docente, usted tiene "+ contador + " trabajos pendientes de envío. \n Recuerde que: \n  1. Si no envía estos trabajos estos quedarán inconclusos y no podrán ser evaluados \n 2. Luego de envíar todos los trabajos de sus estudiantes debe hacer click en el botón Finalizar la participación, con lo cual ya no podrá enviar más trabajos y no podrá realizar ninguna otra modificación \n 3. Usted recibira un correo de confirmación de su registro de trabajos finales al VIII Concurso");
+			if (r == true) {
+				
+				$("#modalimagencargando").modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+				
+				var array_enviados = new Array();
+				
+				for(i=0;i<array_data.length;i++){				
+					if(array_data[i].enviado==0){
+						array_enviados.push({
+							id : array_data[i].id
+						});
+					}
+				}
+				
+				$.ajax({
+					type : "POST",
+				    contentType : "application/json",
+				    url : url_base + "pedesa/updateTrabajosFinalesEnviados",
+				    data : JSON.stringify(array_enviados),
+				    dataType : 'json',
+					success: function(respuesta) {
+						
+						if(respuesta>0){							
+							for(var i = 0; i<array_seleccion.length;i++){
+								table_lista_trabajos_finales.cell(array_seleccion[i],6).data(1).draw();
+								table_lista_trabajos_finales.cell(array_seleccion[i],7).data(1).draw();
+								table_lista_trabajos_finales.cell(array_seleccion[i],8).data(1).draw();
+							}
+							$("#agregartrabajo").prop("disabled" , true);
+							$("#finalizarparticipacion").prop("disabled" , true);
+							$("#modalimagencargando").modal('hide');
+						}
+						
+					}
+				});				
+			}
+			
+		});
+		
+		$("#inicioconcurso1").click(function(){
+			$("#modalimagencargando").modal({
+				show : true,
+				backdrop : 'static',
+				keyboard:false
+			});
+			$.ajax({
+				url: url_base + "pedesa/menu_concurso",
+				success: function(respuesta) {
+					$("#modalimagencargando").modal('hide');
+					$("#container").html(respuesta);
+				},
+				error: function() {
+			        console.log("No se ha podido obtener la información");
+			    }
+			});
+		});
+		
+		$("#fechanacimientoestudiante").datepicker({
+			locale: 'es-es',
+		    format: 'dd/mm/yyyy',
+		    uiLibrary: 'bootstrap4'
+		});
+		
+		$("#btnguardardocente").click(function(){
+			
+			if(validarCampos()){	
+				
+				var id = $("#id").val();
+				var anio = $("#anio").val();
+				var appaterno = $("#appaterno").val();
+				var apmaterno = $("#apmaterno").val();
+				var nombre = $("#nombre").val();
+				var tipodocumento = $("#tipodocumento").val();
+				var nrodocumento = $("#nrodocumento").val();
+				var genero =  $("#genero").val();
+				var nrotelefono =  $("#nrotelefono").val();
+				var correoelectronico =  $("#correoelectronico").val();
+				var responsable =  $("#responsable").val();
+				var curso = $("#curso").val();
+				var idprogramaeducativo = $("#idprogramaeducativo").val();
+				
+				var obj = {
+						id: id,
+						appaterno : appaterno,
+						apmaterno : apmaterno,
+						nombre : nombre,
+						tipodocumento : {
+							id :tipodocumento
+						},
+						nrodocumento : nrodocumento,
+						genero : {
+							id :genero 
+						},
+						nrotelefono : nrotelefono,
+						correoelectronico : correoelectronico,
+						responsable : {
+							id :responsable
+						},
+						curso : curso,
+						anio : anio,
+						programaeducativo : {
+							id : idprogramaeducativo
+						}
+				};	
+				
+				$.ajax({
+					type : "POST",
+				    contentType : "application/json",
+				    url : url_base + "pedesa/guardardocentetutor",
+				    data : JSON.stringify(obj),
+				    dataType : 'json',
+					success: function(respuesta) {
+						
+						switch(respuesta){
+							case 0 : 
+									$("#textoerror").html("Error al registrar Docente o tutor");
+									$('#modalerror').modal({
+										show : true,
+										backdrop : 'static',
+										keyboard:false
+									});
+									break;
+							case 1 :  
+								$("#textoexito").html("Se registro al Profesor o tutor exitosamente");
+								$('#modalexito').modal({
+									show : true,
+									backdrop : 'static',
+									keyboard:false
+								});
+								break;
+						}
+					},
+					error: function() {
+						$("#modalimagencargando").modal('hide');
+						alert("Error al Registrarse en el Programa Educativo. Comunicarse con la Oficina de Tecnología de Información de Sunass");
+				    }
+				});
+				
+			}
+			else{
+				$("#textoinformacion").html("<div style='color:red' class='text-left'>"+mensajeValidacion+"</div>");
+				$('#modalinformacion').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+			}
+		});
+		
+		$("#agregarparticipante").click(function(){
+			
+			$("#modalimagencargando").modal({
+				show : true,
+				backdrop : 'static',
+				keyboard:false
+			});
+			
+			$.ajax({
+				url: url_base + "pedesa/formregistrarparticipante",
+				success: function(respuesta) {
+					$("#modalimagencargando").modal('hide');
+					$("#contenidoagregarparticipante").html(respuesta);
+					$("#modalagregarParticipante").modal({
+						show : true,
+						backdrop : 'static',
+						keyboard:false
+					});
+				},
+				error: function() {
+			        console.log("No se ha podido vista del web service");
+			    }
+			});
+		});		
+		
+		$("#agregartrabajo").click(function(){
+			
+			$("#modalimagencargando").modal({
+				show : true,
+				backdrop : 'static',
+				keyboard:false
+			});
+			
+			$.ajax({
+				url: url_base + "pedesa/formagregartrabajo",
+				success: function(respuesta) {
+					$("#modalimagencargando").modal('hide');
+					$("#contenidoagregartrabajo").html(respuesta);
+					$("#modalagregartrabajo").modal({
+						show : true,
+						backdrop : 'static',
+						keyboard:false
+					});
+				},
+				error: function() {
+			        console.log("No se ha podido vista del web service");
+			    }
+			});
+			
+		});
+		
+	});
+	
+	var listar = function (){					
+		if(cargainicial==1){
+			
+			cargainicial = 0;
+			
+			$("#table_lista_participantes").dataTable().fnDestroy();		
+			table_lista_participantes = $('#table_lista_participantes').DataTable({
+				dom: 'Bfrtip',
+			    "scrollX": true,
+			    "searching": true,
+			    fixedHeader: {
+		            header: true,
+		            footer: true
+		        },
+			    lengthMenu: [
+			        [ 10, 15, 25, -1 ],
+			        [ '10 filas', '15 filas', '25 filas', 'Mostrar todas' ]
+			    ],
+			    "processing":true,
+			    language: {
+			        "decimal": "",
+			        "emptyTable": "No se han registrado participantes, para agregar hacer click en el botón 'Agregar participante'",
+			        "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+			        "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
+			        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+			        "infoPostFix": "",
+			        "thousands": ",",
+			        "lengthMenu": "Mostrar _MENU_ Entradas",
+			        "loadingRecords": "Cargando Registros...",
+			        "processing": "Procesando...",
+			        "search": "Buscar:",
+			        "zeroRecords": " ",//No existen registros
+			        "paginate": {
+			            "first": "Primero",
+			            "last": "Ultimo",
+			            "next": "Siguiente",
+			            "previous": "Anterior"
+			        }
+			    },
+			    'ajax' : {
+			        "url" : url_base + 'pedesa/listaparticipantes',
+			        "type" : "GET",
+			        "dataSrc" : ""
+			    },
+			    "deferRender": true,
+			    'columnDefs': [	],
+			    'columns' : [
+			    	{ 
+			    		"data": null, "render": function (data, type, full, meta) { return meta.row + 1; }
+			    	},
+			    	{ 'data' : 'appaterno' },
+			        { 'data' : 'apmaterno' },
+			        { 'data' : 'nombre' },
+			        { 'data' : 'tipodocumento' },
+			        { 'data' : 'nrodocumento' },
+			        { 'data' : 'categoria' },
+			        { 'data' : 'modalidad' },
+			        { 'defaultContent' : '<img src="./images/svg/file-pdf-regular.svg" class="archivo" style="width:20px; cursor:pointer"/>' },
+			        { 'defaultContent' : '<img src="./images/svg/file-pdf-regular.svg" class="ver" style="width:20px; cursor:pointer"/>' },
+			        { 'defaultContent' : '<img src="./images/svg/edit-regular.svg" class="editar" style="width:20px; cursor:pointer" />'},
+			        { 'defaultContent' : '<img src="./images/svg/eliminar-alt-regular.svg" class="eliminar" style="width:20px; cursor:pointer" />'}
+			    ],
+			    buttons: [
+			    	{
+			    		"text" : "Descargar el formato de autorización Aqu&iacute;",
+			    		"titleAttr" : "descargar",
+			    		"action" : function(){
+			    			window.open('/alfresco_programaeducativo/pedesa/reportes/AUTORIZACIÓNDEPADREPARAPARTICIPACIONVIIICONCURSO.docx', '_blank');		    			
+			    		}
+			    	}
+			    ]
+			});
+			obtener_data_archivo("#table_lista_participantes tbody",table_lista_participantes);
+			obtener_data_ver("#table_lista_participantes tbody",table_lista_participantes);
+	        obtener_data_editar("#table_lista_participantes tbody",table_lista_participantes);
+	        obtener_data_eliminar("#table_lista_participantes tbody",table_lista_participantes);
+		}			
+	}
+	
+	var listar_trabajos_finales = function (){					
+		if(cargainicialtrabajos==1){
+			
+			cargainicialtrabajos = 0;
+			
+			$("#table_lista_trabajos_finales").dataTable().fnDestroy();		
+			table_lista_trabajos_finales = $('#table_lista_trabajos_finales').DataTable({
+				dom: '<B><"rs_trabajos">frtip',
+			    "scrollX": true,
+			    "searching": true,
+			    fixedHeader: {
+		            header: true,
+		            footer: true
+		        },
+			    lengthMenu: [
+			        [ 10, 15, 25, -1 ],
+			        [ '10 filas', '15 filas', '25 filas', 'Mostrar todas' ]
+			    ],
+			    "processing":true,
+			    language: {
+			        "decimal": "",
+			        "emptyTable": "No se han registrado trabajos, para agregar hacer click en el botón 'Agregar trabajo'",
+			        "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+			        "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
+			        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+			        "infoPostFix": "",
+			        "thousands": ",",
+			        "lengthMenu": "Mostrar _MENU_ Entradas",
+			        "loadingRecords": "Cargando Registros...",
+			        "processing": "Procesando...",
+			        "search": "Buscar:",
+			        "zeroRecords": " ",//No existen registros
+			        "paginate": {
+			            "first": "Primero",
+			            "last": "Ultimo",
+			            "next": "Siguiente",
+			            "previous": "Anterior"
+			        }
+			    },
+			    'ajax' : {
+			        "url" : url_base + 'pedesa/listatrabajosfinales',
+			        "type" : "GET",
+			        "dataSrc" : ""
+			    },
+			    "deferRender": true,
+			    'columnDefs': [	],
+			    'columns' : [
+			    	{ 
+			    		"data": null, "render": function (data, type, full, meta) { return meta.row + 1; }
+			    	},
+			    	{ 'data' : 'categoria' },
+			        { 'data' : 'titulo' },
+			        { 'data' : 'modalidad' },
+			        { 'data' : 'participantes' },
+			        { 'data' : 'archivos' },
+			        { 'data' : 'enviado' ,
+	                   render: function(data, type) { 
+	                   		var x = '';
+	                        switch (data) {
+	                            case 0:
+	                                x = '<img src="./images/svg/edit-regular.svg" class="editartrabajo" style="width:20px; cursor:pointer" />';
+	                                break;
+	                            case 1:
+	                            	x = '<img src="./images/svg/eye-solid.svg" class="vertrabajo" style="width:20px; cursor:pointer"/>' ;
+	                                break;
+                            }
+                            return x;
+                        }
+	                },
+			        { 'data' : 'enviado' ,
+	                   render: function(data, type) { 
+	                   		var x = '';
+	                        switch (data) {
+	                            case 0:
+	                                x = '<img src="./images/svg/eliminar-alt-regular.svg" class="eliminartrabajo" style="width:20px; cursor:pointer" />';
+	                                break;
+	                            case 1:
+	                            	x = '<img src="./images/svg/eliminar-alt-regular.svg" style="width:20px; filter: invert(70%)" />';
+	                                break;
+                            }
+                            return x;
+                        }
+	                },			        
+			        { 'data' : 'enviado' ,
+	                   render: function(data, type) { 
+	                   		var x = '';
+	                        switch (data) {
+	                            case 0:
+	                                x = "<button type='button' class='enviartrabajo btn btn-primary'>Enviar</button>";
+	                                break;
+	                            case 1:
+	                            	x = "Enviado";
+	                                break;
+                            }
+                            return x;
+                        }
+	                }
+			    ],
+			    buttons: []
+			});
+			
+			$("div.rs_trabajos").html("<strong>LISTA DE TRABAJOS</strong>");
+			obtener_data_editartrabajos("#table_lista_trabajos_finales tbody",table_lista_trabajos_finales);
+			obtener_data_vertrabajos("#table_lista_trabajos_finales tbody",table_lista_trabajos_finales);
+			obtener_data_eliminartrabajos("#table_lista_trabajos_finales tbody",table_lista_trabajos_finales);
+			obtener_data_enviartrabajos("#table_lista_trabajos_finales tbody",table_lista_trabajos_finales);
+		}			
+	}
+	
+	var obtener_data_archivo = function(tbody,table){
+		$(tbody).on("click","img.archivo",function(){
+			celdaseleccionada = table.row($(this).parents("tr")).index();
+			var data = table.row($(this).parents("tr")).data();
+			id = data.id;
+			archivo(id);
+		});
+	};
+	
+	var obtener_data_ver = function(tbody,table){
+		$(tbody).on("click","img.ver",function(){
+			celdaseleccionada = table.row($(this).parents("tr")).index();
+			var data = table.row($(this).parents("tr")).data();
+			id = data.id;
+			verPdf(id);
+		});
+	};
+	
+	var obtener_data_editar = function(tbody,table){
+		$(tbody).on("click","img.editar",function(){
+			celdaseleccionada = table.row($(this).parents("tr")).index();
+			var data = table.row($(this).parents("tr")).data();
+			id = data.id;
+			editar(id);
+		});
+	};
+	
+	var obtener_data_eliminar = function(tbody,table){
+		$(tbody).on("click","img.eliminar",function(){
+			celdaseleccionada = table.row($(this).parents("tr")).index();
+			var data = table.row($(this).parents("tr")).data();
+			id = data.id;
+			eliminar(id);
+		});
+	};
+	
+	var obtener_data_editartrabajos = function(tbody,table){
+		$(tbody).on("click","img.editartrabajo",function(){
+			celdaseleccionada = table.row($(this).parents("tr")).index();
+			var data = table.row($(this).parents("tr")).data();
+			id = data.id;
+			editartrabajos(id);
+		});
+	};
+	
+	var obtener_data_vertrabajos = function(tbody,table){
+		$(tbody).on("click","img.vertrabajo",function(){
+			celdaseleccionada = table.row($(this).parents("tr")).index();
+			var data = table.row($(this).parents("tr")).data();
+			id = data.id;
+			vertrabajos(id);
+		});
+	};
+	
+	var obtener_data_eliminartrabajos = function(tbody,table){
+		$(tbody).on("click","img.eliminartrabajo",function(){
+			celdaseleccionada = table.row($(this).parents("tr")).index();
+			var data = table.row($(this).parents("tr")).data();
+			id = data.id;
+			eliminartrabajos(id);
+		});
+	};
+	
+	var obtener_data_enviartrabajos = function(tbody,table){
+		$(tbody).on("click","button.enviartrabajo",function(){
+			celdaseleccionada = table.row($(this).parents("tr")).index();
+			var data = table.row($(this).parents("tr")).data();
+			id = data.id;
+			enviartrabajos(id);
+		});
+	};
+	
+	
+	function eliminar(id){
+		
+		var r = confirm("¿ Está seguro de eliminar al estudiante ?");
+		if (r == true) {
+			$.ajax({
+				type : "GET",
+			    url : url_base + "pedesa/eliminarparticipanteid/"+ id,
+				success: function(respuesta) {
+					if(respuesta==1){
+						table_lista_participantes.row(celdaseleccionada).remove().draw(false);
+					}
+					else{
+						$("#textoerror").html("No se pudo Eliminar Participante");
+						$('#modalerror').modal({
+							show : true,
+							backdrop : 'static',
+							keyboard:false
+						});
+					}
+				},
+				error: function() {
+					$("#textoerror").html("Excepcion Eliminar Participante");
+					$('#modalerror').modal({
+						show : true,
+						backdrop : 'static',
+						keyboard:false
+					});
+			    }
+			});			
+		}
+	}
+	
+	function editartrabajos(id){
+		
+		$("#modalimagencargando").modal({
+			show : true,
+			backdrop : 'static',
+			keyboard:false
+		});
+		
+		$.ajax({
+			type : "GET",
+		    url : url_base + "pedesa/formeditartrabajos/"+ id,
+			success: function(respuesta) { 
+				$("#modalimagencargando").modal('hide');
+				$("#contenidoeditartrabajo").html(respuesta);
+				$("#modaleditartrabajo").modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+			},
+			error: function() {
+				console.log("Excepcion editar trabajo");
+		    }
+		});
+	}
+	
+	function vertrabajos(id){
+		
+		$("#modalimagencargando").modal({
+			show : true,
+			backdrop : 'static',
+			keyboard:false
+		});
+		
+		$.ajax({
+			type : "GET",
+		    url : url_base + "pedesa/formvertrabajos/"+ id,
+			success: function(respuesta) { 
+				$("#modalimagencargando").modal('hide');
+				$("#contenidovertrabajo").html(respuesta);
+				$("#modalvertrabajo").modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+			},
+			error: function() {
+				console.log("Excepcion ver trabajo");
+		    }
+		});
+	}
+	
+	function eliminartrabajos(id){
+		
+		var r = confirm("¿ Está seguro de eliminar al trabajo ?");
+		if (r == true) {
+			$.ajax({
+				type : "GET",
+			    url : url_base + "pedesa/eliminartrabajoid/"+ id,
+				success: function(respuesta) {
+					if(respuesta==1){
+						table_lista_trabajos_finales.row(celdaseleccionada).remove().draw(false);
+					}
+					else{
+						$("#textoerror").html("No se pudo Eliminar trabajo");
+						$('#modalerror').modal({
+							show : true,
+							backdrop : 'static',
+							keyboard:false
+						});
+					}
+				},
+				error: function() {
+					//$("#textoerror").html("Excepcion Eliminar trabajo");
+					console.log("Excepcion Eliminar trabajo");
+			    }
+			});			
+		}
+	}
+	
+	function enviartrabajos(id){
+		
+		var r = confirm("¿Está seguro que desea enviar el trabajo, al ser enviado ya no podrá ser editado?");
+		if (r == true) {
+			$.ajax({
+				type : "GET",
+			    url : url_base + "pedesa/enviartrabajoid/"+ id,
+				success: function(respuesta) {
+					if(respuesta==1){
+						//table_lista_trabajos_finales.row(celdaseleccionada).remove().draw(false);
+						table_lista_trabajos_finales.cell(celdaseleccionada,6).data(1).draw();
+						table_lista_trabajos_finales.cell(celdaseleccionada,7).data(1).draw();
+						table_lista_trabajos_finales.cell(celdaseleccionada,8).data(1).draw();
+					}
+					else{
+						$("#textoerror").html("No se pudo Eliminar trabajo");
+						$('#modalerror').modal({
+							show : true,
+							backdrop : 'static',
+							keyboard:false
+						});
+					}
+				},
+				error: function() {
+					//$("#textoerror").html("Excepcion Eliminar trabajo");
+					console.log("Excepcion Eliminar trabajo");
+			    }
+			});			
+		}
+	}
+	
+	function archivo(id){
+    	
+		$.ajax({
+			type : "GET",
+		    contentType : "application/json",
+		    url : url_base + "pedesa/fichaautorizacionpdf/"+id,
+			success: function(respuesta) {
+				window.open(respuesta, '_blank');
+			},
+			error: function() {
+				$("#modalimagencargando").modal('hide');
+				$("#textoerror").html("Excepcion al descargar PDF");
+				$('#modalerror').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+		    }
+		});  	
+    }
+	
+	function editar(id){
+		
+		$("#modalimagencargando").modal({
+			show : true,
+			backdrop : 'static',
+			keyboard:false
+		});
+		
+		$.ajax({
+			url: url_base + "pedesa/editarviewparticipanteid/"+ id,
+			success: function(respuesta) {
+				$("#modalimagencargando").modal('hide');
+				$("#contenidoeditarparticipante").html(respuesta);
+				$("#modaleditarParticipante").modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+			},
+			error: function() {
+		        console.log("No se ha podido vista del web service");
+		    }
+		});
+	}
+	
+	function verPdf(id){
+    	
+    	$.ajax({
+			type : "GET",
+		    contentType : "application/json",
+		    url : url_base + "pedesa/descargarparticipantepdf/"+id,
+			success: function(respuesta) {
+				window.open(respuesta, '_blank');
+			},
+			error: function() {
+				$("#modalimagencargando").modal('hide');
+				$("#textoerror").html("Excepcion al descargar PDF");
+				$('#modalerror').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+		    }
+		});    	
+    }
+	
+	function validarCampos(){
+		
+		mensajeValidacion = "";
+		var correoelectronico;
+		
+		if($("#appaterno").val().trim()==""){
+			mensajeValidacion = "Debe ingresar Apellido Paterno"+"<br>";
+		}
+		if($("#apmaterno").val().trim()==""){
+			mensajeValidacion += "Debe ingresar Apellido Materno"+"<br>";
+		}
+		if($("#nombre").val().trim()==""){
+			mensajeValidacion += "Debe ingresar Nombre"+"<br>";
+		}
+		if($("#tipodocumento").val()==""){
+			mensajeValidacion += "Debe seleccionar Tipo Documento"+"<br>";
+		}
+		if($("#nrodocumento").val().trim()==""){
+			mensajeValidacion += "Debe ingresar N° de Documento"+"<br>";
+		}
+		if($("#genero").val()==""){
+			mensajeValidacion += "Debe Seleccionar Genero"+"<br>";
+		}
+		if($("#nrotelefono").val().trim()==""){
+			mensajeValidacion += "Debe ingresar Número de Teléfono"+"<br>";
+		}
+		if($("#correoelectronico").val().trim()==""){
+			mensajeValidacion += "Debe ingresar Correo Eléctronico"+"<br>";
+		}
+		correoelectronico = $("#correoelectronico").val().trim();
+		if(!(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(correoelectronico))){		
+			mensajeValidacion += "Debe ingresar Correctamente el Correo Electrónico "+"<br>";
+		}
+		if($("#responsable").val().trim()==""){
+			mensajeValidacion += "Debe ingresar Responsable"+"<br>";
+		}
+		if($("#curso").val().trim()==""){
+			mensajeValidacion += "Debe ingresar Curso"+"<br>";
+		}
+		
+		if(mensajeValidacion!=""){
+			return false;
+		}
+		return true;
+	}	
+	
+	function filterCadenaupdate(evt,input){
+		
+		var key = window.Event ? evt.which : evt.keyCode;    
+	    var chark = String.fromCharCode(key);
+	    var tempValue = input.value+chark;
+	    if((key >= 65 && key <= 90) || (key >= 97 && key <= 122) || (key ==32)    || (key ==241) || (key ==209) || (key ==225) || (key ==233) || (key ==237) || (key ==243) || (key ==250)  || (key ==193) || (key ==201) || (key ==205) || (key ==211) || (key ==218)     ){    
+	        return true;
+	    }
+	    else{
+	        return false;
+	    }	
+	}
+	
+	$("#tipodocumento").on("change",function(){
+		
+		if($("#tipodocumento").val()!=""){
+			$("#nrodocumento").prop('disabled', false);
+			$("#nrodocumento").val("");
+			$("#nrodocumento").focus();
+		}
+		else{
+			$("#nrodocumento").val("");
+			$("#nrodocumento").prop('disabled', true);
+		}
+	});
+	
+	function filterIntNroDocIdentidadupdate(evt,input){
+		
+		if($("#tipodocumento").val()==1){
+		    var key = window.Event ? evt.which : evt.keyCode;    
+		    var chark = String.fromCharCode(key);
+		    var tempValue = input.value+chark;
+		    if(key >= 48 && key <= 57){
+		    	if($("#tipodocumento").val() == 1){
+					if($("#nrodocumento").val().trim().length<8)
+						return true;
+					return false;
+				}
+		    	else{
+		    		return false;
+		    	}
+		    }
+		    else{
+		        return false;
+		    }
+		}
+		else if($("#tipodocumento").val()==2){
+			if($("#nrodocumento").val().trim().length<12)
+				return true;
+			return false;
+		}
+	}
+	
+	function filterIntTelfupdate(evt,input){
+		var key = window.Event ? evt.which : evt.keyCode;    
+	    var chark = String.fromCharCode(key);
+	    var tempValue = input.value+chark;
+	    if((key >= 48 && key <= 57) || key==45){    
+	        return true;
+	    }
+	    else{
+	        return false;
+	    }
+	}
+	
+</script>

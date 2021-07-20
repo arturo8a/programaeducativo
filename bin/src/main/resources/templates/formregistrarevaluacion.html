@@ -1,0 +1,316 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>ProgramaEducativo</title>
+    <script type="text/javascript">
+		window.history.forward();
+	</script>
+
+    <!-- Bootstrap CSS CDN 
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">-->
+    <!-- Our Custom CSS
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}"> -->
+	<!--
+	<script type="text/javascript" th:src="@{/js/jquery-3.3.1.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/bootstrapv4.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
+	
+	<script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
+	
+	<link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">    -->
+</head>
+<body>
+		<input type="hidden" id="id_rubrica" name="id_rubrica" th:value="${id_rubrica}" />
+		<input type="hidden" id="id_questionario" name="id_questionario" th:value="${id_questionario}" />
+		<input type="hidden" id="id_evaluacion" name="id_evaluacion" th:value="${id_evaluacion}" />
+		<input type="hidden" id="id_trabajofinal" name="id_trabajofinal" th:value="${id_trabajofinal}" />
+		<div id="contenidoPDF">
+		<div class="row">
+			<div class="col-xs-12 col-sm-3 text-left">
+				<label for="nommbretrabajo">Nombre de Trabajo:</label>
+			</div>
+			<div class="col-xs-12 col-sm-3 text-left">
+				<label for="nommbretrabajoDesc" th:utext="${nombretrabajo}"></label>
+			</div>
+			<div class="col-xs-12 col-sm-3 text-left">
+				<label for="categoria">Categoría:</label>
+			</div>
+			<div class="col-xs-12 col-sm-3 text-left">
+				<label for="categoriaDesc" th:utext="${categoria}"></label>
+			</div>
+			<div class="col-xs-12 col-sm-3 text-left">
+				<label for="nivel">Nivel de Participación:</label>
+			</div>
+			<div class="col-xs-12 col-sm-3 text-left">
+				<label for="nivelDesc" th:utext="${nivel}"></label>
+			</div>
+			<div class="col-xs-12 col-sm-3 text-left">
+				<label for="modalidad">Modalidad:</label>
+			</div>
+			<div class="col-xs-12 col-sm-3 text-left">
+				<label for="modalidadDesc" th:utext="${modalidad}"></label>
+			</div>
+		</div>
+		<br>
+		<div th:each="objeto : ${listarubrica}">
+					<div style="border:1px solid #7DB4FF" class="p-3" th:attr="data-rubrica=${objeto.id}">
+						<div class="row">
+							<div class="col-xs-12 col-sm-10 text-right">
+								<table>
+									<tr>
+										<td>
+											<label style="margin:5px" th:utext="${objeto.rubrica}"></label>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-3">
+								<label th:utext="${objeto.criterio1}"></label>
+								<br>
+								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '1'" th:text="${objeto.descripcion1}" class="form-control" readonly>
+								</textarea> 
+								<br>
+								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '1'" th:value="${objeto.puntaje1}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" />				
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-3">
+								<label th:utext="${objeto.criterio2}"></label>
+								<br>
+								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '2'" th:text="${objeto.descripcion2}" class="form-control" readonly>
+								</textarea>
+								<br>
+								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '2'" th:value="${objeto.puntaje2}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" />
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-3">
+								<label th:utext="${objeto.criterio3}"></label>								
+								<br>
+								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '3'" th:text="${objeto.descripcion3}" class="form-control" readonly>
+								</textarea>
+								<br>
+								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '3'" th:value="${objeto.puntaje3}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" />
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-3">
+								<label th:utext="${objeto.criterio4}"></label>
+								<br>
+								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '4'" th:text="${objeto.descripcion4}" class="form-control" readonly>
+								</textarea>
+								<br>
+								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '4'" th:value="${objeto.puntaje4}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" />
+							</div>
+						</div>
+					</div>			
+					<br>
+		</div>
+		<div th:each="objeto : ${listaquestionario}">					
+				<div style="border:1px solid #7DB4FF" class="p-3" th:attr="data-cuestionario=${objeto.id}">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12">
+							<table style="width:100%">
+								<tr>
+									<td>
+										<!--<label th:text="${objeto.pregunta}">Ingrese pregunta</label>-->
+										<input type="text" class="form-control" th:id="'pregunta'+ ${objeto.id}" th:value="${objeto.pregunta}" disabled/>
+									</td>
+									<td>&nbsp;</td>
+								</tr>
+								<tr th:each="qr : ${objeto.questionariorespuesta}">
+									<td>
+										<input type="text" class="form-control" th:id="'respuesta'+ ${qr.id}" th:value="${qr.respuesta}" disabled/>
+									</td>
+									<td>
+										<input type="radio" class="form-control" th:id="'puntajeq'+ ${qr.id}" th:value="${qr.puntaje}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${qr.id}"/>
+									</td>
+								</tr>							
+							</table>						
+						</div>
+					</div>
+				</div>	
+		</div>
+		<br>
+		</div>
+		<div class="row text-right">
+			<div class="col-xs-6 col-sm-6">
+				&nbsp;
+			</div>
+			<div class="col-xs-6 col-sm-6">
+				<input type="button" name="btnRegistrarEvaluacion" id="btnRegistrarEvaluacion" value="Enviar" class="btn btn-primary"/>
+				<input type="button" name="btncerrarevaluacion" id="btncerrarevaluacion" value="Cerrar" class="btn btn-outline-primary"/>
+			</div>
+		</div>
+		
+	<div class="modal" tabindex="-1" role="dialog" id="modalimagencargando">
+	  <center>
+	  	<img th:src="@{./images/cargando.gif}" style="line-height: 200px;"/>
+	  </center>	  
+	</div>	
+	
+	<div class="modal" tabindex="-1" role="dialog" id="modalexitoeditevaluacion">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <img th:src="@{./images/imagen_exito5.png}"/>&nbsp;&nbsp; <strong class="pt-1">Registro exitoso</strong>
+	      </div>
+	      <div class="modal-body" id="textoexitoeditevaluacion">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary rounded-0" id="btncerrarmensajeexitoeditevaluacion" name="btncerrarmensajeexitoeditevaluacion">Aceptar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	
+	<div class="modal" tabindex="-1" role="dialog" id="modalerroreditevaluacion">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <img th:src="@{./images/imagen_informacion11.png}"/>&nbsp;&nbsp; <strong class="pt-1">Error</strong>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>	          
+	        </button>
+	      </div>
+	      <div class="modal-body" id="textoerroreditevaluacion">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeerroreditevaluacion" name="btncerrarmensajeerroreditevaluacion">Cerrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="modal" tabindex="-1" role="dialog" id="modalinformacioneditevaluacion">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <img th:src="@{./images/imagen_informacion11.png}" />&nbsp;&nbsp; <label class="pt-1" style="padding-right:380px">Alerta</label>
+	      </div>
+	      <div class="modal-body" id="textoinformacioneditevaluacion">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeinformacioneditevaluacion" name="btncerrarmensajeinformacioneditevaluacion">Cerrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+</body>
+</html>
+<script type="text/javascript">
+	
+		var mensajeValidacionedit = "";
+		var anioedit;
+		var categoriaedit;
+		var nivelparticipacionedit;
+		var id_evaluacionedit;
+		var array_rubricaedit , array_cuestionarioedit;
+		var rubricaedit, criterio1edit, criterio2edit, criterio3edit, criterio4edit, criterio5edit, descripcion1edit, descripcion2edit, descripcion3edit, descripcion4edit, descripcion5edit,puntaje1edit, puntaje2edit, puntaje3edit, puntaje4edit, puntaje5edit;
+		var preguntaedit, respuestaedit, puntajeedit;
+		var id_rubricaedit , id_questionarioedit;
+		var listaRespuestas = [];
+		
+		$("#btncerrarmensajeexitoeditevaluacion").click(function(){			
+			$("#modalexitoeditevaluacion").modal('hide');
+			$("#modaleditarEvaluacion").modal('hide');
+		});
+		
+		$("#btncerrarmensajeerroreditevaluacion").click(function(){			
+			$("#modalerroreditevaluacion").modal('hide');
+		});
+		
+		$("#btncerrarmensajeinformacioneditevaluacion").click(function(){			
+			$("#modalinformacioneditevaluacion").modal('hide');
+		});	
+		
+		$('#btncerrarevaluacion').click(function(){	
+			$("#modaleEvaluarTrabajoPendientes").modal('hide');
+		});
+		
+		 $("#btnRegistrarEvaluacion").on("click",function(){
+			registarRespuestasEvaluacion();
+		});
+		
+		
+		function registarRespuestasEvaluacion(){
+			$("#modalimagencargando").modal({
+				show : true,
+				backdrop : 'static',
+				keyboard:false
+			});
+			
+			if(validarCamposRespuesta()){
+				$.ajax({
+					type : "POST",
+				    contentType : "application/json",
+				    url : url_base + "pedesa/registrarRespuestasEvaluacion",
+				    data : JSON.stringify(listaRespuestas),
+				    dataType : 'json',
+					success: function(respuesta) {
+						alert('Se regitró correctamente.');
+						$('#modaleEvaluarTrabajoPendientes').modal('hide');
+						$("#modalimagencargando").modal('hide');
+					},
+					error: function() {
+						$("#modalimagencargando").modal('hide');
+						$("#textoerroreditevaluacion").html("Excepción al registrar evaluación");
+						$("#modalerroreditevaluacion").modal();
+				    }
+				});
+			}else{
+				mensajeValidacionedit += "Complete todas las respuestas"+"<br>";
+				$("#textoerroreditevaluacion").html(mensajeValidacionedit);
+				$("#modalerroreditevaluacion").modal();
+			}
+		}
+		
+		
+		function validarCamposRespuesta(){console.log('validar respuestas');
+			listaRespuestas = [];
+			var status = true;
+			mensajeValidacionedit ="";
+			$.each($("[data-rubrica]"), function( i, value ) { console.log($(this).attr('data-rubrica'));
+				var preguntaName = $("input[name='pregunta"+$(this).attr('data-rubrica')+"']");
+				console.log(preguntaName);
+				if(!$(preguntaName).is(':checked')){ console.log('complete rubrica');
+					//mensajeValidacionedit += "Complete todas las respuestas"+"<br>";
+					status = false;
+				}else{
+					var idtrabajo = $("#id_trabajofinal").val();
+					var trabajosfinales = {id:idtrabajo};
+					var preguntaid = $(this).attr('data-rubrica');
+					var respuestaid = $("input[name='pregunta"+$(this).attr('data-rubrica')+"']:checked").attr('data-idresp');
+					var puntaje = $("input[name='pregunta"+$(this).attr('data-rubrica')+"']:checked").val();
+					var tipo = "1";
+					listaRespuestas.push({trabajosfinales,preguntaid,respuestaid,tipo,puntaje});
+				}
+				
+			});
+			$.each($("[data-cuestionario]"), function( i, value ) {
+				var preguntaName = $("input[name='pregunta"+$(this).attr('data-cuestionario')+"']");
+				console.log(preguntaName);
+				if(!$(preguntaName).is(':checked')){ console.log('complete cuertionario');
+					//mensajeValidacionedit += "Complete todas las respuestas"+"<br>";
+					status = false;
+				}else{
+					var idtrabajo = $("#id_trabajofinal").val();
+					var trabajosfinales = {id:idtrabajo};
+					var preguntaid = $(this).attr('data-cuestionario');
+					var respuestaid = $("input[name='pregunta"+$(this).attr('data-cuestionario')+"']:checked").attr('data-idresp');
+					var puntaje = $("input[name='pregunta"+$(this).attr('data-cuestionario')+"']:checked").val();
+					var tipo = "2";
+					listaRespuestas.push({trabajosfinales,preguntaid,respuestaid,tipo,puntaje});
+				}
+			});
+			$("#textoerroreditevaluacion").html(mensajeValidacionedit);
+			console.log("STATUS: "+status);
+			return status;
+		}
+		
+		function limpiarControlesedit(){
+			$("#anioce_edit").val("");
+			$("#categoriace_edit").val("");
+			$("#nivelparticipacionce_edit").val("");
+		}
+		
+</script>

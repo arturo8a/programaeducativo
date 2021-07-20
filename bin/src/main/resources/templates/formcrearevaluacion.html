@@ -1,0 +1,483 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>ProgramaEducativo</title>
+    <script type="text/javascript">
+		window.history.forward();
+	</script>
+
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+	
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+	
+	<script type="text/javascript" th:src="@{/js/jquery-3.3.1.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/bootstrapv4.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/fontawesomev5.0.6.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
+	
+	<script type="text/javascript" th:src="@{/js/bootstrap-select.min.js}"></script>
+	
+	<script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
+	
+	<link rel="stylesheet" href="../static/css/style.css" th:href ="@{/css/style.css}">
+	<!-- script type="text/javascript" th:src="@{/js/btnagregartrabajo.js}"></script-->  
+	
+</head>
+<body>
+	<div class="row">
+		<div class="col-xs-12 col-sm-4 text-left">
+			<label for="categoriatrabajo">Año</label>
+			<input type="text" class="form-control" id="anioce_add" name="anioce_add" th:value="*{anio}" disabled />				
+		</div>
+		<div class="col-xs-12 col-sm-4 text-left">
+			<label for="modalidadpostulaciontrabajo">Categoría</label>
+			<select class="form-control" id="categoriace_add" name="categoriace_add">
+				<option value="">Todos</option>
+				<option th:each="len:${listacategoriaevaluacion}" th:value="${len.id}" th:utext="${len.descripcion}"/>
+			</select>
+		</div>
+		<div class="col-xs-12 col-sm-4 text-left">
+			<label for="titulotrabajo">Nivel de participación</label>
+			<select class="form-control" id="nivelparticipacionce_add" name="nivelparticipacionce_add">
+				<option value="">Todos</option>
+				<option th:each="len:${listanivelparticipacion}" th:value="${len.id}" th:utext="${len.descripcion}"/>       				
+			</select>
+		</div>
+	</div>
+	<br>
+	<form id="formcrearevaluacion">
+		<div id="contenido_evaluacion">
+		</div>
+	</form>
+	<br>
+	<div class="row text-right">
+		<div class="col-xs-6 col-sm-6">
+			&nbsp;
+		</div>
+		<div class="col-xs-6 col-sm-6">
+			<input type="button" name="btnagregarpregunta" id="btnagregarpregunta" value="Agregar pregunta"  class="btn btn-warning" />
+		</div>
+	</div>
+	<br>
+	<div class="row text-right">
+		<div class="col-xs-6 col-sm-6">
+			&nbsp;
+		</div>
+		<div class="col-xs-6 col-sm-6">
+			<input type="button" name="btnguardarevaluacion" id="btnguardarevaluacion" value="Guardar" class="btn btn-primary"/>
+			<input type="button" name="btnhabilitarevaluacion" id="btnhabilitarevaluacion" value="Habilitar evaluación" class="btn btn-success"/>
+			<input type="button" name="btncerrarevaluacion" id="btncerrarevaluacion" value="Cerrar" class="btn btn-outline-primary"/>
+		</div>
+	</div>
+	<div class="modal" tabindex="-1" role="dialog" id="modalimagencargando">
+	  <center>
+	  	<img th:src="@{./images/cargando.gif}" style="line-height: 200px;"/>
+	  </center>	  
+	</div>	
+	
+	
+	
+	<div class="modal" tabindex="-1" role="dialog" id="modalexitocrearevaluacion">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <img th:src="@{./images/imagen_exito5.png}"/>&nbsp;&nbsp; <strong class="pt-1">Registro exitoso</strong>
+	      </div>
+	      <div class="modal-body" id="textoexitocrearevaluacion">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary rounded-0" id="btncerrarmensajeexitocrearevaluacion" name="btncerrarmensajeexitocrearevaluacion">Aceptar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	
+	<div class="modal" tabindex="-1" role="dialog" id="modalerrorcrearevaluacion">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <img th:src="@{./images/imagen_informacion11.png}"/>&nbsp;&nbsp; <strong class="pt-1">Error</strong>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>	          
+	        </button>
+	      </div>
+	      <div class="modal-body" id="textoerrorcrearevaluacion">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeerrorcrearevaluacion" name="btncerrarmensajeerrorcrearevaluacion">Cerrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="modal" tabindex="-1" role="dialog" id="modalinformacioncrearevaluacion">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <img th:src="@{./images/imagen_informacion11.png}" />&nbsp;&nbsp; <label class="pt-1" style="padding-right:380px">Alerta</label>
+	        <!-- button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button-->
+	      </div>
+	      <div class="modal-body" id="textoinformacioncrearevaluacion">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-danger rounded-0" id="btncerrarmensajeinformacioncrearevaluacion" name="btncerrarmensajeinformacioncrearevaluacion">Cerrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+		
+
+</body>
+</html>
+
+<script type="text/javascript">
+
+	var anio="", categoria="",nivelparticipacion="";
+	var rubrica, criterio1, criterio2, criterio3, criterio4, criterio5, descripcion1, descripcion2, descripcion3, descripcion4, descripcion5,puntaje1, puntaje2, puntaje3, puntaje4, puntaje5;
+	var pregunta, respuesta, puntaje;
+	var array_rubrica , array_cuestionario,array_rpta = new Array(), array_rpta_consolidado = new Array();
+	
+	var rows_selected,bandera_elemento_respuesta = 1;
+	var indice_cuestionario = 1;	
+	var contador_rubrica = 0;
+	var contador_cuestionario = 0, indice_respuesta=1;
+	var indice_rp_consolidado=0;
+	
+	$(document).ready(function(){
+		
+		$("#btncerrarmensajeexitocrearevaluacion").click(function(){			
+			$("#modalexitocrearevaluacion").modal('hide');
+			$("#modalagregarEvaluacion").modal('hide');
+		});
+		
+		$("#btncerrarmensajeerrorcrearevaluacion").click(function(){			
+			$("#modalerrorcrearevaluacion").modal('hide');
+		});
+		
+		$("#btncerrarmensajeinformacioncrearevaluacion").click(function(){			
+			$("#modalinformacioncrearevaluacion").modal('hide');
+		});	
+		
+		$("#btncerrarevaluacion").click(function(){
+			$("#modalagregarEvaluacion").modal('hide');
+		});	
+		
+		var mi_rubrica = 'contenido_rubrica' + indice_cuestionario;
+		var mi_questionario = 'contenido_questionario' + indice_cuestionario;
+		var mihtml = "<div style='border:1px solid #7DB4FF' class='p-3'><div class='row' style=''><div class='col-xs-12 col-sm-12'><table width='40%'><tr><td><strong>Seleccione tipo de cuestionario</strong></td><td><input type='radio' name='cuestionario"+indice_cuestionario+"' id='r"+indice_cuestionario+"' value='1' onchange='handleChange(this,"+'`'+indice_cuestionario+'`'+","+'`'+indice_cuestionario+'`'+");' checked> Rubrica </td><td>	<input type='radio' name='cuestionario"+indice_cuestionario+"' id='c"+indice_cuestionario+"' value='2' onchange='handleChange(this,"+'`'+indice_cuestionario+'`'+","+'`'+indice_cuestionario+'`'+");' > Cuestionario </td></tr></table> </div></div>  <div id='"+mi_rubrica+"'><div class='row' style=''><div class='col-xs-12 col-sm-6'>&nbsp;</div><div class='col-xs-12 col-sm-6 text-left'><table style='width:100%'><tr><td><label style='margin:5px'>Rubrica</label></td><td><input type='text' name='rubrica"+indice_cuestionario+"' id='rubrica"+indice_cuestionario+"' class='form-control'></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario+"1' name='criterio"+indice_cuestionario+"1' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario+"1' id='descripcion"+indice_cuestionario+"1' class='form-control'></textarea><br><table><tr><td><label>Puntaje</label></td><td><select name='puntaje"+indice_cuestionario+"1' id='puntaje"+indice_cuestionario+"1' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario+"2' name='criterio"+indice_cuestionario+"2' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario+"2' id='descripcion"+indice_cuestionario+"2' class='form-control'></textarea><br><table><tr><td><label>Puntaje</label></td><td><select name='puntaje"+indice_cuestionario+"2' id='puntaje"+indice_cuestionario+"2' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario+"3' name='criterio"+indice_cuestionario+"3' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario+"3' id='descripcion"+indice_cuestionario+"3' class='form-control'></textarea><br><table><tr><td><label>Puntaje</label></td><td><select name='puntaje"+indice_cuestionario+"3' id='puntaje"+indice_cuestionario+"3' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario+"4' name='criterio"+indice_cuestionario+"4' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario+"4' id='descripcion"+indice_cuestionario+"4' class='form-control'></textarea><br><table><tr><td><label>Puntaje</label></td><td><select name='puntaje"+indice_cuestionario+"4' id='puntaje"+indice_cuestionario+"4' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div></div></div><div id='"+mi_questionario+"' style='display:none'><div class='row' style=''><div class='col-xs-12 col-sm-12'><table style='width:100%' id='tabla"+indice_cuestionario+"'><tr><td><label>Ingrese pregunta</label><input type='text' class='form-control' id='pregunta"+indice_cuestionario+"1' name='pregunta"+indice_cuestionario+"1' /></td><td>&nbsp;</td></tr>		<tr><td><label>Respuesta</label></td><td><label>Puntaje</label></td></tr>		<tr id='tr_"+indice_cuestionario+"1'><td><input type='text' class='form-control' id='respuesta"+indice_cuestionario+"1' name='respuesta"+indice_cuestionario+"1'/></td><td><select class='form-control' id='puntajeq"+indice_cuestionario+"1' name='puntaje"+indice_cuestionario+"1'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td><td class='text-center'><input type='button' id='btnagregarrespuesta"+indice_cuestionario+"' name='btnagregarrespuesta"+indice_cuestionario+"' value='Agregar' onclick='agregar_fila("+'"'+'tabla'+indice_cuestionario+'"'+','+indice_cuestionario+")' class='btn btn-primary' /></td><td class='text-center'><input type='button' id='btnquitarrespuesta"+indice_cuestionario+"' name='btnquitarrespuesta"+indice_cuestionario+"' value='Quitar' onclick='quitar_fila("+'"'+'tr_'+indice_cuestionario.toString() +'"'+','+indice_cuestionario+")' disabled class='btn btn-outline-primary' /></td></tr></table></div></div></div></div>";
+		document.getElementById("contenido_evaluacion").insertAdjacentHTML('beforebegin',mihtml);
+			
+		$("#btnagregarpregunta").click(function(){
+			indice_respuesta = 1;
+			indice_cuestionario ++;
+			mi_rubrica = 'contenido_rubrica' + indice_cuestionario;
+			mi_questionario = 'contenido_questionario' + indice_cuestionario;
+			mihtml = "<br><div style='border:1px solid #7DB4FF' class='p-3'><div class='row' style=''><div class='col-xs-12 col-sm-12'><table width='40%'><tr><td><strong>Seleccione tipo de cuestionario</strong></td><td><input type='radio' name='cuestionario"+indice_cuestionario+"' id='r"+indice_cuestionario+"' value='1' onchange='handleChange(this,"+'`'+indice_cuestionario+'`'+","+'`'+indice_cuestionario+'`'+");' checked> Rubrica	</td><td><input type='radio' name='cuestionario"+indice_cuestionario+"' id='c"+indice_cuestionario+"' value='2' onchange='handleChange(this,"+'`'+indice_cuestionario+'`'+","+'`'+indice_cuestionario+'`'+");' > Cuestionario</td></tr></table> </div></div><div id='"+mi_rubrica+"'><div class='row' style=''><div class='col-xs-12 col-sm-6'>&nbsp;</div><div class='col-xs-12 col-sm-6 text-left'><table style='width:100%'><tr><td><label style='margin:5px'>Rubrica</label></td><td><input type='text' name='rubrica"+indice_cuestionario+"' id='rubrica"+indice_cuestionario+"' class='form-control'></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario+"1' name='criterio"+indice_cuestionario+"1' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario+"1' id='descripcion"+indice_cuestionario+"1' class='form-control'></textarea><br><table><tr><td><label>Puntaje</label></td><td><select name='puntaje"+indice_cuestionario+"1' id='puntaje"+indice_cuestionario+"1' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario+"2' name='criterio"+indice_cuestionario+"2' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario+"2' id='descripcion"+indice_cuestionario+"2' class='form-control'></textarea><br><table><tr><td><label>Puntaje</label></td><td><select name='puntaje"+indice_cuestionario+"2' id='puntaje"+indice_cuestionario+"2' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario+"3' name='criterio"+indice_cuestionario+"3' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario+"3' id='descripcion"+indice_cuestionario+"3' class='form-control'></textarea><br><table><tr><td><label>Puntaje</label></td><td><select name='puntaje"+indice_cuestionario+"3' id='puntaje"+indice_cuestionario+"3' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario+"4' name='criterio"+indice_cuestionario+"4' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario+"4' id='descripcion"+indice_cuestionario+"4' class='form-control'></textarea><br><table><tr><td><label>Puntaje</label></td><td><select name='puntaje"+indice_cuestionario+"4' id='puntaje"+indice_cuestionario+"4' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div></div></div><div id='"+mi_questionario+"' style='display:none'><div class='row' style=''><div class='col-xs-12 col-sm-12'><table style='width:100%' id='tabla"+indice_cuestionario+"'><tr><td><label>Ingrese pregunta</label><input type='text' class='form-control' id='pregunta"+indice_cuestionario+"1' name='pregunta"+indice_cuestionario+"1' /></td><td>&nbsp;</td></tr>		<tr><td><label>Respuesta</label></td><td><label>Puntaje</label></td></tr>					<tr id='tr_"+indice_cuestionario+"1'><td><input type='text' class='form-control' id='respuesta"+indice_cuestionario+"1' name='respuesta"+indice_cuestionario+"1'/></td><td><select class='form-control' id='puntajeq"+indice_cuestionario+"1' name='puntaje"+indice_cuestionario+"1'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td><td class='text-center'><input type='button' id='btnagregarrespuesta"+indice_cuestionario+"' name='btnagregarrespuesta"+indice_cuestionario+"' value='Agregar'  onclick='agregar_fila("+'"'+'tabla'+indice_cuestionario+'"'+','+indice_cuestionario+")'  class='btn btn-primary' /></td><td class='text-center'><input type='button' id='btnquitarrespuesta"+indice_cuestionario+"' name='btnquitarrespuesta"+indice_cuestionario+"' value='Quitar' onclick='quitar_fila("+'"'+'tr_'+indice_cuestionario.toString() + '"'+','+indice_cuestionario+")' disabled class='btn btn-outline-primary' /></td></tr></table></div></div></div></div>";
+			document.getElementById("contenido_evaluacion").insertAdjacentHTML('beforebegin',mihtml);
+		});
+			
+		$("#btnguardarevaluacion").click(function(){			
+			registrarhabilitar_evaluacion(1);
+		});		
+		
+		$("#btnhabilitarevaluacion").click(function(){
+			if(validarTodoFormulario()){
+				registrarhabilitar_evaluacion(2);
+				/*alert("todo correcto");*/
+			}
+			else{
+				$("#modalimagencargando").modal('hide');
+				$("#textoerrorcrearevaluacion").html("Debe llenar todos los datos del formulario");
+				$('#modalerrorcrearevaluacion').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+			}
+		});	
+	});
+	
+	function validarTodoFormulario(){
+		
+		var banderaValidacionCampos = true;
+		var inputs = document.getElementById("formcrearevaluacion").elements;
+		var elemento_type,elemento_id, elemento_val;		
+		for (i = 0; i < inputs.length; i++) {
+			elemento_type = inputs[i].type;
+			elemento_id = inputs[i].id;
+			elemento_val = $("#"+inputs[i].id).val();			
+			if($('#'+elemento_id).is(':visible')){
+				/*console.log("elemento_type : "+ elemento_type);
+				console.log("elemento_id : "+ elemento_id);
+				console.log("elemento_val : "+ elemento_val);*/
+				switch(elemento_type){
+					case 'text'  : 
+						if(elemento_val.trim()==""){
+							/*console.log("dato1");*/
+							banderaValidacionCampos = false;
+						}	
+						break;
+					case 'textarea'  : 
+						if(elemento_val.trim()==""){
+							/*console.log("dato2");*/
+							banderaValidacionCampos = false;
+						}	
+						break;
+					case 'select-one'  : 
+						if(elemento_val=="0"){
+							/*console.log("dato3");*/
+							banderaValidacionCampos = false;
+						}	
+						break;
+				}
+			}			
+		}
+		return banderaValidacionCampos
+	}
+	
+	function registrarhabilitar_evaluacion(estadoevaluacion){
+		
+		$("#modalimagencargando").modal({
+			show : true,
+			backdrop : 'static',
+			keyboard:false
+		});
+		
+		if(validarCampos()){
+			
+			array_rubrica = new Array();
+			array_cuestionario = new Array();
+			var indice_pr=0;
+			anio = $("#anioce_add").val();
+			categoria = $("#categoriace_add").val();
+			nivelparticipacion = $("#nivelparticipacionce_add").val();
+			
+			for(var i=1; i<= indice_cuestionario;i++){
+				if($("#r"+i).is(":checked")){
+					rubrica = $("#rubrica"+i).val();
+					criterio1 = $("#criterio"+i+"1").val();
+					criterio2 = $("#criterio"+i+"2").val();
+					criterio3 = $("#criterio"+i+"3").val();
+					criterio4 = $("#criterio"+i+"4").val();
+					criterio5 = $("#criterio"+i+"5").val();
+					descripcion1 = $("#descripcion"+i+"1").val();
+					descripcion2 = $("#descripcion"+i+"2").val();
+					descripcion3 = $("#descripcion"+i+"3").val();
+					descripcion4 = $("#descripcion"+i+"4").val();
+					descripcion5 = $("#descripcion"+i+"5").val();
+					puntaje1 = $("#puntaje"+i+"1").val();
+					puntaje2 = $("#puntaje"+i+"2").val();
+					puntaje3 = $("#puntaje"+i+"3").val();
+					puntaje4 = $("#puntaje"+i+"4").val();
+					puntaje5 = $("#puntaje"+i+"5").val();
+					
+					array_rubrica.push({
+						rubrica : rubrica,
+						criterio1 : criterio1,
+						criterio2 : criterio2,
+						criterio3 : criterio3,
+						criterio4 : criterio4,
+						criterio5 : criterio5,
+						descripcion1 : descripcion1,
+						descripcion2 : descripcion2,
+						descripcion3 : descripcion3,
+						descripcion4 : descripcion4,
+						descripcion5 : descripcion5,
+						puntaje1 : puntaje1,
+						puntaje2 : puntaje2,
+						puntaje3 : puntaje3,
+						puntaje4 : puntaje4,
+						puntaje5 : puntaje5
+					});
+				}
+				else{
+					bandera_elemento_respuesta = 1;
+					var indice_rp=1; /*rp es respuesta puntaje*/
+					var indice_rp_i = array_rpta.length ;
+					var indice_rp_f = array_rpta.length ;
+					
+					while(bandera_elemento_respuesta >0){
+						pregunta = $("#pregunta"+i+"1").val();
+						if($("#respuesta"+i+indice_rp).length > 0 ){
+							respuesta = $("#respuesta"+i+indice_rp).val();
+							puntaje = $("#puntajeq"+i+indice_rp).val();
+							array_rpta.push({
+								respuesta  : respuesta,
+								puntaje  : puntaje
+								
+							});
+							indice_rp_f ++;
+							indice_rp ++;
+						}
+						else{
+							bandera_elemento_respuesta = 0;
+							array_cuestionario.push({
+								pregunta : pregunta,
+								questionariorespuesta : array_rpta.slice(indice_rp_i,indice_rp_f)
+							});
+							indice_rp_consolidado++;
+						}
+					}
+				}
+			}
+			var evaluacionrubricacuestionariodto = {
+				evaluacion : {
+					anio : anio,
+					categoriaevaluacion : {
+						id : categoria
+					},
+					nivelparticipacion : {
+						id : nivelparticipacion
+					},
+					estadoevaluacion : {
+						id : estadoevaluacion
+					},
+					estado : 1
+				},
+				listarubrica: array_rubrica,
+				listaquestionario : array_cuestionario
+			};
+			$.ajax({
+				type : "POST",
+			    contentType : "application/json",
+			    url : url_base + "pedesa/registrarevaluacion",
+			    data : JSON.stringify(evaluacionrubricacuestionariodto),
+			    dataType : 'json',
+				success: function(respuesta) {
+					if(respuesta==0){
+						$("#modalimagencargando").modal('hide');
+						$("#textoerrorcrearevaluacion").html("No puede registrar una evaluación con el mismo año, nivel y categoria");
+						$('#modalerrorcrearevaluacion').modal({
+							show : true,
+							backdrop : 'static',
+							keyboard:false
+						});
+					}
+					else if(respuesta>0){
+						
+						var dato_estadoevaluacion = "";
+						if(estadoevaluacion == 1)
+							dato_estadoevaluacion = "Editando";
+						else
+							dato_estadoevaluacion = "Asignado";
+						
+						$("#modalimagencargando").modal('hide');
+						table_lista_evaluacion.row.add({
+					        "id": respuesta,
+					        "anio": anio,
+					        "nivelparticipacion":  $("#nivelparticipacionce_add option:selected").html(),
+					        "categoriaevaluacion": $("#categoriace_add option:selected").html(),
+					        "estado": dato_estadoevaluacion,
+					        "defaultContent" : '<img src="./images/svg/file-pdf-regular.svg" class="archivo" style="width:20px; cursor:pointer"/>',
+					        "estadoevaluacion" : estadoevaluacion,
+					        "defaultContent" : '<img src="./images/svg/eliminar-alt-regular.svg" class="eliminar" style="width:20px; cursor:pointer" />'
+					    }).draw();						
+						limpiarControles();
+						$("#textoexitocrearevaluacion").html(estadoevaluacion == 1?"Se registro evaluación":"Se habilitó evaluación");
+						$('#modalexitocrearevaluacion').modal({
+							show : true,
+							backdrop : 'static',
+							keyboard:false
+						});						
+					}
+					else{
+						$("#modalimagencargando").modal('hide');
+						$("#textoerrorcrearevaluacion").html("Error al registrar evaluación");
+						$('#modalerrorcrearevaluacion').modal({
+							show : true,
+							backdrop : 'static',
+							keyboard:false
+						});
+					}
+				},
+				error: function() {
+					$("#textoerrorcrearevaluacion").html("Excepción al registrar evaluación");
+					$('#modalerrorcrearevaluacion').modal({
+						show : true,
+						backdrop : 'static',
+						keyboard:false
+					});
+			    }
+			});
+		}
+		else{
+			$("#modalimagencargando").modal('hide');
+			$("#textoinformacioncrearevaluacion").html("<div style='color:red' class='text-left'>"+mensajeValidacion+"</div>");
+			$('#modalinformacioncrearevaluacion').modal({
+				show : true,
+				backdrop : 'static',
+				keyboard:false
+			});
+		}
+	}
+	
+	function agregar_fila(tabla,iq){		
+		indice_respuesta ++;
+		$("#"+tabla).append("<tr id='tr_" + indice_cuestionario.toString() + indice_respuesta.toString() + "'><td><input type='text' class='form-control' id='respuesta"+iq+indice_respuesta+"' name='respuesta"+iq+indice_respuesta+"' /></td><td><select class='form-control' id='puntajeq"+iq+indice_respuesta+"' name='puntajeq"+iq+indice_respuesta+"'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr>");
+		$("#btnquitarrespuesta"+indice_cuestionario).prop("disabled",false);
+	}
+	
+	function quitar_fila(fila,iq){
+		$("#"+fila+indice_respuesta.toString()).remove();
+		indice_respuesta --;
+		if(indice_respuesta == 1){
+			$("#btnquitarrespuesta"+indice_cuestionario).prop("disabled",true);
+		}
+	}
+	
+	function handleChange(src,a,b){
+		if(src.value == 1){			
+			$("#contenido_rubrica"+a).show();
+			$("#contenido_questionario"+b).hide();
+			$("#r"+a).attr("checked", true );
+			$("#c"+b).attr("checked", false);
+			contador_rubrica ++;
+		}
+		else{			
+			$("#contenido_rubrica"+a).hide();
+			$("#contenido_questionario"+b).show();
+			$("#r"+a).attr("checked", false);
+			$("#c"+b).attr("checked", true);
+			contador_cuestionario ++;
+		}		
+	}
+	
+	function limpiarControles(){
+		$("#anioce_add").val("");
+		$("#categoriace_add").val("");
+		$("#nivelparticipacionce_add").val("");
+	}
+	
+	function validarCampos(){
+		
+		mensajeValidacion = "";
+		anio = $("#anioce_add").val();
+		categoria = $("#categoriace_add").val();
+		nivelparticipacion = $("#nivelparticipacionce_add").val();
+		
+		if(anio == ""){
+			mensajeValidacion += "Debe seleccionar Año"+"<br>";
+		}
+		
+		if(categoria==""){
+			mensajeValidacion += "Debe seleccionar Categoria"+"<br>";
+		}
+		
+		if(nivelparticipacion==""){
+			mensajeValidacion += "Debe seleccionar Nivel de participación"+"<br>";
+		}
+		if(mensajeValidacion!=""){
+			return false;
+		}
+		return true;
+	}
+
+</script>

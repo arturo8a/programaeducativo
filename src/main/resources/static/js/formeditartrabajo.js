@@ -10,7 +10,7 @@ var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="
 	var array_evidencias_eliminadas = new Array();
 	var array_evidencias_eliminadas_editar;
 	var evidencia_inicial = "";
-	var contador_evidencias_subidos_editar;
+	var contador_evidencias_subidos_editar=1;
 	var contador_archivo_subidos_editar=1;
 	
 	nroevidencias = parseInt($("#nroevidencias").val());
@@ -22,10 +22,11 @@ var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="
 		$("#evidenciastrabajoeditar").prop("disabled",true);
 	}
 	
-	var data_evidencias = "";
+	var data_evidencias = "<table><tr>";
 	for(var i=0;i<$("#nroevidencias").val();i++){
-		data_evidencias += "<div class='alert alert-warning alert-dismissible fade show' role='alert' style='width:125px'><strong>"+($("#evidencia" + (i+1)).val())+"</strong><button type='button' class='close' onclick='eliminarEvidenciaInicial("+'`'+($("#evidencia" + (i+1)).val())+'`'+")' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>";
+		data_evidencias += "<td><div class='alert alert-warning alert-dismissible fade show' role='alert' style='width:125px'><strong><abbr title='"+($("#evidencia" + (i+1)).val())+"'>"+($("#evidencia" + (i+1)).val()).substr(0,5)+"</abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaInicial("+'`'+($("#evidencia" + (i+1)).val())+'`'+")' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div></td>";
 	}
+	data_evidencias += "</tr></table>";
 	evidencia_inicial  = data_evidencias;
 	$("#divevidencias").html(data_evidencias);
 	
@@ -40,7 +41,7 @@ var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="
 		contador_evidencias_subidos_editar = 0;
 		for(var i=0;i<evidenciastrabajoeditar.files.length;i++){
 			contador_evidencias_subidos_editar++;
-			data_archivo_subir += "<td><div class='alert alert-primary alert-dismissible fade show' role='alert' style='width:125px'><strong>"+(evidenciastrabajoeditar.files[i].name)+"</strong><button type='button' class='close' onclick='eliminarEvidenciaEditar("+'`'+(evidenciastrabajoeditar.files[i].name)+'`'+")' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div></td>";
+			data_archivo_subir += "<td><div class='alert alert-primary alert-dismissible fade show' role='alert' style='width:125px'><strong><abbr title='"+(evidenciastrabajoeditar.files[i].name)+"'>"+(evidenciastrabajoeditar.files[i].name).substr(0,5)+"<abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaEditar("+'`'+(evidenciastrabajoeditar.files[i].name)+'`'+")' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div></td>";
 		}
 		data_archivo_subir += "</tr></table>";
 		$("#divevidencias").html(data_archivo_subir);
@@ -98,7 +99,7 @@ var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="
 	table_lpt_editar = $('#table_lpt_editar').DataTable({
 		dom: '<B><"rs_seleccione_participante_edit">frtip',
 	    "scrollX": true,
-	    "scrollY": "300px",
+	    "scrollY": "250px",
 	    "scrollCollapse": true,
 	    "paging": false,
 	    fixedHeader: {

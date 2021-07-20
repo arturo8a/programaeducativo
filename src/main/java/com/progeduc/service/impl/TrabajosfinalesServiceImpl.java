@@ -55,6 +55,11 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 	}
 	
 	@Override
+	public Integer maxNumeracion(Integer programaeducativoid) {
+		return trabajosfinalesRepo.maxNumeracion(programaeducativoid);
+	}
+	
+	@Override
 	public List<Trabajosfinales> listarhabilitados(Integer programaeducativoid){
 		return trabajosfinalesRepo.listarhabilitados(programaeducativoid);
 	}
