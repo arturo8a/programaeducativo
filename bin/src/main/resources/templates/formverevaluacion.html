@@ -1,0 +1,186 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>ProgramaEducativo</title>
+    <script type="text/javascript">
+		window.history.forward();
+	</script>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+	
+	<script type="text/javascript" th:src="@{/js/jquery-3.3.1.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/bootstrapv4.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
+	
+	<script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
+	
+	<link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">   
+</head>
+<body>
+		<input type="hidden" id="id_rubrica" name="id_rubrica" th:value="${id_rubrica}" />
+		<input type="hidden" id="id_questionario" name="id_questionario" th:value="${id_questionario}" />
+		<input type="hidden" id="id_evaluacion" name="id_evaluacion" th:value="${id_evaluacion}" />
+		<input type="hidden" id="id_pregunta_respuesta" name="id_pregunta_respuesta" th:value="${id_pregunta_respuesta}" />
+		<div class="row">
+			<div class="col-xs-12 col-sm-4 text-left">
+				<label for="categoriatrabajo">Año</label>
+				<input type="text" class="form-control" id="anioce_edit" name="anioce_edit" th:value="*{anio}" disabled />				
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left">
+				<label for="modalidadpostulaciontrabajo">Categoría</label>
+				<select class="form-control" id="categoriace_edit" name="categoriace_edit"  th:field="*{evaluacion.categoriaevaluacion.id}" disabled>
+					<option value="">Todos</option>
+					<option th:each="len:${listacategoriaevaluacion}" th:value="${len.id}" th:utext="${len.descripcion}"/>
+				</select>
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left">
+				<label for="titulotrabajo">Nivel de participación</label>
+				<select class="form-control" id="nivelparticipacionce_edit" name="nivelparticipacionce_edit"  th:field="*{evaluacion.nivelparticipacion.id}" disabled>
+					<option value="">Todos</option>
+					<option th:each="len:${listanivelparticipacion}" th:value="${len.id}" th:utext="${len.descripcion}"/>       				
+				</select>
+			</div>
+		</div>
+		<br>
+		<div th:each="objeto : ${listarubrica}">
+					<div>
+						<div class="row" style="background-color:#9E9E9E;padding:10px">
+							<div class="col-xs-12 col-sm-6">
+								&nbsp;
+							</div>		
+							<div class="col-xs-12 col-sm-6 text-right">
+								<table style="width:100%">
+									<tr>
+										<td>
+											<strong style="margin:5px">Rubrica</strong>
+										</td>
+										<td>
+											<input type="text" th:id="'rubrica' + ${objeto.id}" th:value="${objeto.rubrica}" class="form-control" disabled>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-3">
+								<label>Criterio</label>
+								<input type="text" th:id="'criterio'+ ${objeto.id} + '1'" th:value="${objeto.criterio1}" class="form-control" />
+								<br>
+								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '1'" th:text="${objeto.descripcion1}" class="form-control" disabled>
+								</textarea> 
+								<br>
+								<table>
+									<tr>
+										<td>
+											<label>Puntaje</label>
+										</td>
+										<td>
+											<select th:id="'puntaje' + ${objeto.id} + '1'" class="form-control" disabled>
+												<option value="0">Seleccione</option>
+												<option th:each="len:${listapuntaje}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje1}"/>
+											</select>
+										</td>
+									</tr>
+								</table>				
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-3">
+								<label>Criterio</label>
+								<input type="text" th:id="'criterio'+ ${objeto.id} + '2'" th:value="${objeto.criterio2}"  class="form-control" disabled/>
+								<br>
+								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '2'" th:text="${objeto.descripcion2}" class="form-control" disabled>
+								</textarea>
+								<br>
+								<table>
+									<tr>
+										<td>
+											<label>Puntaje</label>
+										</td>
+										<td>
+											<select th:id="'puntaje' + ${objeto.id} + '2'" class="form-control" disabled>
+												<option value="0">Seleccione</option>
+												<option th:each="len:${listapuntaje}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje2}"/>
+											</select>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-3">
+								<label>Criterio</label>
+								<input type="text" th:id="'criterio'+ ${objeto.id} + '3'" th:value="${objeto.criterio3}" class="form-control" disabled/>
+								<br>
+								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '3'" th:text="${objeto.descripcion3}" class="form-control" disabled>
+								</textarea>
+								<br>
+								<table>
+									<tr>
+										<td>
+											<label>Puntaje</label>
+										</td>
+										<td>
+											<select th:id="'puntaje' + ${objeto.id} + '3'" class="form-control" disabled>
+												<option value="0">Seleccione</option>
+												<option th:each="len:${listapuntaje}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje3}"/>
+											</select>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div class="col-xs-12 col-sm-6 col-md-3">
+								<label>Criterio</label>
+								<input type="text" th:id="'criterio'+ ${objeto.id} + '4'" th:value="${objeto.criterio4}" class="form-control" disabled/>
+								<br>
+								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '4'" th:text="${objeto.descripcion4}" class="form-control" disabled>
+								</textarea>
+								<br>
+								<table>
+									<tr>
+										<td>
+											<label>Puntaje</label>
+										</td>
+										<td>
+											<select th:id="'puntaje' + ${objeto.id} + '4'" class="form-control" disabled>
+												<option value="0">Seleccione</option>
+												<option th:each="len:${listapuntaje}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje4}"/>
+											</select>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>			
+					<br>
+		</div>
+		<div th:each="objeto : ${listaquestionario}">
+			<div class="row" style="background-color:#9E9E9E;padding:10px">
+				<table style="width:100%">
+					<tr>
+						<td>
+							<strong>Ingrese pregunta</strong>
+							<input type="text" class="form-control" th:id="'pregunta'+ ${objeto.id}" th:value="${objeto.pregunta}" disabled/>
+						</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr th:each="qr : ${objeto.questionariorespuesta}">
+						<td>
+							<label>Respuesta</label>
+							<input type="text" class="form-control" th:id="'respuesta'+ ${qr.id}" th:value="${qr.respuesta}" disabled/>
+						</td>
+						<td>
+							<label>Puntaje</label>
+							<select th:id="'puntajeq'+ ${qr.id}" class="form-control" disabled>
+								<option value="0">Seleccione</option>
+								<option th:each="len:${listapuntaje}" th:value="${len}" th:utext="${len}" th:selected="${len == qr.puntaje}"/>
+							</select>
+						</td>
+					</tr>
+				</table>						
+			</div>
+		</div>
+		<br>	
+	
+</body>
+</html>

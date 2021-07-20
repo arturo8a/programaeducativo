@@ -21,14 +21,13 @@ public interface ITrabajosfinalesService extends ICRUD<Trabajosfinales,Integer>{
 	
 	int updateEnviados(Integer estado, Integer Sid);
 	
+	Integer maxNumeracion(Integer programaeducativoid);
+	
     List<Trabajosfinales> listarTrabajosPendientes();
     
     List<Trabajosfinales> listarHabilitadosEnviados(Integer programaeducativoid);
     
-
     int updateEstadoTrabajo(Integer id,Integer estadoTrabajoId);
     
     List<Trabajosfinales> listarTrabajosEvaluados();
-
-
 }

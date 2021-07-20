@@ -1,0 +1,942 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>ProgramaEducativo</title>
+    <script type="text/javascript">
+		window.history.forward();
+	</script>
+
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+	
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+	
+	<link rel="stylesheet" href="../static/css/dataTables.bootstrap4.min.css" th:href="@{/css/dataTables.bootstrap4.min.css}">
+	<link rel="stylesheet" href="../static/css/responsive.bootstrap4.min.css" th:href="@{/css/responsive.bootstrap4.min.css}">
+	<link rel="stylesheet" href="../static/css/editor.dataTables.min.css" th:href="@{/css/editor.dataTables.min.css}">
+	<link rel="stylesheet" href="../static/css/select.dataTables.min.css" th:href="@{/css/select.dataTables.min.css}">
+	<link rel="stylesheet" href="../static/css/buttons.dataTables.min.css" th:href="@{/css/buttons.dataTables.min.css}">
+	<link rel="stylesheet" href="../static/css/colReorder.dataTables.min.css" th:href="@{/css/colReorder.dataTables.min.css}">
+	
+	<script type="text/javascript" th:src="@{/js/jquery-3.3.1.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/bootstrapv4.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/fontawesomev5.0.6.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
+	
+	<script type="text/javascript" th:src="@{/js/bootstrap-select.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/fontawesomev5.0.6.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.dataTables.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.editor.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.select.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.colReorder.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.buttons.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jszip.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/pdfmake.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/vfs_fonts.js}"></script>
+    <script type="text/javascript" th:src="@{/js/buttons.html5.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/buttons.print.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.bootstrap4.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dataTables.responsive.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/responsive.bootstrap4.min.js}"></script>      
+    <script type="text/javascript" th:src="@{/js/dataTables.editor.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/datetime.js}"></script>
+    <script type="text/javascript" th:src="@{/js/moment.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/datetime-moment.js}"></script>
+	
+	<script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
+	
+	<link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+	<link href="../static/css/gijgo.min.css" rel="stylesheet" th:href="@{/css/gijgo.min.css}" >
+	<script type="text/javascript" th:src="@{/js/gijgo.min.js}" ></script>
+	<script type="text/javascript" th:src="@{/js/messages.es-es.js}"></script>
+	<script type="text/javascript" th:src="@{/js/datetime-moment-order.js}"></script>
+	<script type="text/javascript" th:src="@{/js/moment.js}"></script>
+	
+	<script type="text/javascript" th:src="@{/js/date-uk.js}"></script>
+	<script type="text/javascript" th:src="@{/js/date-euro.js}"></script>	
+	<!-- script type="text/javascript" th:src="@{/js/btnagregartrabajo.js}"></script-->  
+	
+	<style>
+		.rs_seleccione_participante{
+			  /*width:33%;*/
+			  float:left;
+			  text-align:center;
+			  display: inline-flex;
+			  vertical-align: middle;
+			  padding: 0.375rem 0.75rem;
+			  font-size: 0.75rem;
+			  line-height: 1.5;
+			  justify-content: left;
+		}
+		
+		table{
+        	overflow-x:auto;
+	    }
+	    table td{
+	        word-wrap: break-word;
+	        max-width: 450px;
+	    }
+	    #table_lpt td{
+	        white-space: inherit;
+	    }
+
+	</style>	
+</head>
+<body>
+	<form id="formparticipanteajax">
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 text-left w-100" >
+				<u>DATOS DEL TRABAJO</u> 	
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label for="categoriatrabajo">Seleccione categoria</label>
+				<select class="form-control" id="categoriatrabajo" name="categoriatrabajo">
+					<option value="0">Seleccione</option>
+				    <option th:each="len:${categoriatrabajo}" th:value="${len.id}" th:utext="${len.descripcion}" th:selected="${len.id} == 2"/>
+				</select>
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label for="modalidadpostulaciontrabajo">Modalidad de postulación</label>
+				<select class="form-control" id="modalidadpostulaciontrabajo" name="modalidadpostulaciontrabajo">
+					<option value="0">Seleccione</option>
+				    <option th:each="len:${modalidadtrabajo}" th:value="${len.id}" th:utext="${len.descripcion}" th:selected="${len.id} == 1"/>
+				</select>
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label for="titulotrabajo">Título de su trabajo final</label>
+				<input type="text" id="titulotrabajo" name="titulotrabajo" class="form-control"/>
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label>Subir archivo de trabajo final</label>
+				<input type="file" id="archivotrabajo" name="archivotrabajo" class="form-control" />
+				
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label>Subir archivos de evidencias</label>
+				<input type="file" id="evidenciastrabajo" class="form-control" name="file[]"  multiple/>
+				<div id="divevidencias_agregar" style="overflow-y: scroll;overflow-x: scroll; height:120px;">											
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label for="linkvideo">Link de video</label>
+				<input type="text" id="linkvideo" name="linkvideo" class="form-control" disabled/>
+			</div>
+		</div>	
+		
+		<div class="row pt-4 pb-4 m-0">
+			<div class="col-xs-12 col-sm-8 text-left" style="overflow-y: scroll; height:300px;width:100%">
+				<table id="table_lpt"  class="table table-striped table-bordered nowrap">
+					<thead>
+				        <tr>
+				        	<th>Item</th>
+				        	<th>Apellido paterno</th>
+				            <th>Apellido materno</th>
+				            <th>Nombres</th>
+				            <th>Tipo documento</th>
+				            <th>N° documento</th>
+				            <th style="display:none;">composicionmusical</th>
+				            <th style="display:none;">cuento</th>
+				            <th style="display:none;">poesia</th>
+				            <th style="display:none;">dibujopintura</th>
+				            <th style="display:none;">ahorroagua</th>
+				            <th style="display:none;">modalidadindividual</th>
+				            <th style="display:none;">modalidadgrupal</th>
+				            <th>Nivel</th>
+				        </tr>
+				    </thead>
+				</table>
+			</div>
+			<div class="col-xs-12 col-sm-4">
+				<table class="w-100 ml-2">
+					<tr>
+						<td><label>¿Qué ejes temáticos aborda tu trabajo?</label></td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" id="conversacion" /><label style="padding-left:5px" for="conversacion">Conservación de las fuentes de agua</label></td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" id="valoracionagua" /><label style="padding-left:5px" for="valoracionagua">Valoración de los servicios de agua potable</label></td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" id="valoracionalcantarillado" /><label style="padding-left:5px" for="valoracionalcantarillado">Valoración del servicio de alcantarillado</label></td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" id="buenuso" /><label style="padding-left:5px" for="buenuso">Buen uso y reúso del agua potable</label></td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" id="importancia" /><label style="padding-left:5px" for="importancia">Importancia de cerrar la brecha en saneamiento</label></td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" id="vinculo" /><label style="padding-left:5px" for="vinculo">El vínculo estratégico entre el agua segura y la salud</label></td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" id="carencias" /><label style="padding-left:5px" for="carencias">Las carencias que ponen en riesgo la vida</label></td>
+					</tr>
+				</table>
+			</div>
+		</div>		
+		
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 text-left pt-2 w-100" >
+				<u>DATOS DEL DOCENTE</u> 	
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label for="appaternodocente">Apellido paterno</label>
+				<input type="text" id="appaternodocentetrabajo" name="appaternodocentetrabajo" class="form-control"  onKeyPress="return filterCadena(event,this)"/>
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label for="apmaternoestudiante">Apellido materno</label>
+				<input type="text" id="apmaternodocentetrabajo" name="apmaternodocentetrabajo" class="form-control"  onKeyPress="return filterCadena(event,this)"/>
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label for="nombreestudiante">Nombres</label>
+				<input type="text" id="nombredocentetrabajo" name="nombredocentetrabajo" class="form-control" onKeyPress="return filterCadena(event,this)"/>
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label for="archivotrabajo">Tipo documento</label>
+				<select class="form-control" id="tipodocumentodocentetrabajo" name="tipodocumentodocentetrabajo">
+					<option value="0">Seleccione</option>
+				    <option th:each="len:${tipodoc}" th:value="${len.id}" th:utext="${len.descripcion}"/>
+				</select>
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label for="evidenciatrabajo">N° documento</label>
+				<input type="text" id="nrodocumentodocentetrabajo" name="nrodocumentodocentetrabajo" disabled class="form-control" onKeyPress="return filterIntNroDocIdentidad(event,this)"/>
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label for="fechanacimientoestudiante">Teléfono</label>
+				<input type="text" id="telefonodocentetrabajo" name="telefonodocentetrabajo" class="form-control" onKeyPress="return filterIntTelf(event,this)" maxlength="10"/>
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label for="evidenciatrabajo">Correo electrónico</label>
+				<input type="text" id="correodocentetrabajo" name="correodocentetrabajo" class="form-control" />
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label for="fechanacimientoestudiante">Género</label>
+				<select class="form-control" id="generodocentetrabajo" name="generodocentetrabajo">
+					<option value="0">Seleccione</option>
+				    <option th:each="len:${genero}" th:value="${len.id}" th:utext="${len.descripcion}"/>
+				</select>
+			</div>
+		</div>
+		<br>	
+		<div class="row">
+			<div class="col-xs-12 col-sm-6 text-right">
+				<input type="button" id="btncancelartrabajo" value="Cancelar" class="btn btn-outline-primary"/>
+			</div>
+			<div class="col-xs-12 col-sm-6 text-left">
+				<input type="button" id="btnguardartrabajo" value="Guardar" class="btn btn-primary"/>
+			</div>
+		</div>
+	</form>	
+	
+	<div class="modal" tabindex="-1" role="dialog" id="modalexitotrabajo">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <img th:src="@{./images/imagen_exito5.png}"/>&nbsp;&nbsp; <strong class="pt-1">Registro exitoso</strong>
+	      </div>
+	      <div class="modal-body" id="textoexitotrabajo">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary rounded-0" id="btncerrarmensajeexitotrabajo" name="btncerrarmensajeexitotrabajo">Aceptar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="modal" tabindex="-1" role="dialog" id="modalconfirmacion">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <img th:src="@{./images/imagen_informacion11.png}" />&nbsp;&nbsp; <strong class="pt-1">Confirmacion</strong>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body" id="textoconfirmacion">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary" id="btnaceptarmensajeconfirmacion" name="btnaceptarmensajeconfirmacion">Aceptar</button>
+	        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeconfirmacion" name="btncerrarmensajeconfirmacion">Cerrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="modal" tabindex="-1" role="dialog" id="modalinformaciontrabajo">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <img th:src="@{./images/imagen_informacion11.png}" />&nbsp;&nbsp; <label class="pt-1" style="padding-right:380px">Alerta</label>
+	      </div>
+	      <div class="modal-body" id="textoinformaciontrabajo">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeinformaciontrabajo" name="btncerrarmensajeinformaciontrabajo">Cerrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="modal" tabindex="-1" role="dialog" id="modalerror">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <img th:src="@{./images/imagen_informacion11.png}"/>&nbsp;&nbsp; <strong class="pt-1">Error</strong>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>	          
+	        </button>
+	      </div>
+	      <div class="modal-body" id="textoerror">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeerror" name="btncerrarmensajeerror">Cerrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="modal" tabindex="-1" role="dialog" id="modalimagencargando">
+	  <center>
+	  	<img th:src="@{./images/cargando.gif}" style="line-height: 200px;"/>
+	  </center>	  
+	</div>	
+</body>
+</html>
+
+<script type="text/javascript">
+
+	var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="", apellidopaternotrabajo="",apellidomaternotrabajo="",nombretrabajo="",tipodoctrabajo="",nrodoctrabajo="",nrotelefonotrabajo="",correotrabajo="",generotrabajo="";
+	var mensajeValidacion, celdas_seleccionadas = 0;
+	var acumulanivel = "", table_lpt;
+	var conversacion,valoracionagua,valoracionalcantarillado,buenuso,importancia,vinculo,carencias;
+	var arrayParticipante , array_nivel, arrayNombreParticipante;
+	var contador_archivos_subidos;
+	
+	var rows_selected;
+	
+		
+		$("#tipodocumentodocentetrabajo").on("change",function(){
+			
+			if($("#tipodocumentodocentetrabajo").val()!="0"){
+				$("#nrodocumentodocentetrabajo").prop('disabled', false);
+				$("#nrodocumentodocentetrabajo").val("");
+				$("#nrodocumentodocentetrabajo").focus();
+			}
+			else{
+				$("#nrodocumentodocentetrabajo").val("");
+				$("#nrodocumentodocentetrabajo").prop('disabled', true);
+			}
+		});
+	
+	
+		$("#categoriatrabajo").change(function(){
+			categoriatrabajo = $("#categoriatrabajo").val();			
+			if(categoriatrabajo == '1' ||  categoriatrabajo == '3')
+				$( "#linkvideo" ).prop( "disabled", false );
+			if(categoriatrabajo == '2' ||  categoriatrabajo == '4' ||  categoriatrabajo == '5')
+				$( "#linkvideo" ).prop( "disabled", true );	
+			table_lpt.rows().deselect();
+			table_lpt.draw();
+		});
+		
+		$("#modalidadpostulaciontrabajo").change(function(){
+			modalidadtrabajo = $("#modalidadpostulaciontrabajo").val();
+			if(modalidadtrabajo == '1')
+				table_lpt.select.style('single'); 
+			if(modalidadtrabajo == '2')
+				table_lpt.select.style('multi');
+			table_lpt.rows().deselect();
+			table_lpt.draw();
+		});
+		
+		$("#evidenciastrabajo").change(function(){
+			array_evidencias_eliminadas_agregar = new Array();
+			var data_archivo_subir = "<table><tr>";
+			for(var i=0;i<evidenciastrabajo.files.length;i++){
+				data_archivo_subir += "<td><div class='alert alert-primary alert-dismissible fade show' role='alert' style='width:125px'><strong>"+(evidenciastrabajo.files[i].name)+"</strong><button type='button' class='close' onclick='eliminarEvidenciaAgregar("+'`'+(evidenciastrabajo.files[i].name)+'`'+")' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div></td>";
+			}
+			data_archivo_subir += "</tr></table>";
+			$("#divevidencias_agregar").html(data_archivo_subir);
+		});
+			
+		$("#table_lpt").dataTable().fnDestroy();
+		table_lpt = $('#table_lpt').DataTable({
+			dom: '<B><"rs_seleccione_participante">frtip',
+		    "scrollX": true,
+		    "scrollY": "300px",
+	        "scrollCollapse": true,
+		    "paging": false,
+		    "destroy": true,
+		    fixedHeader: true,
+		    lengthMenu: [
+		        [ 10, 15, 25, -1 ],
+		        [ '10 filas', '15 filas', '25 filas', 'Mostrar todas' ]
+		    ],
+		    "processing":true,
+		    language: {
+		        "decimal": "",
+		        "emptyTable": "No se han registrado",
+		        "info": "",
+		        "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
+		        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+		        "infoPostFix": "",
+		        "thousands": ",",
+		        "lengthMenu": "Mostrar _MENU_ Entradas",
+		        "loadingRecords": "Cargando Registros...",
+		        "processing": "Procesando...",
+		        "search": "Buscar:",
+		        "zeroRecords": "Sin datos",//No existen registros
+		        "paginate": {
+		            "first": "Primero",
+		            "last": "Ultimo",
+		            "next": "Siguiente",
+		            "previous": "Anterior"
+		        }
+		    },
+		    'ajax' : {
+		        "url" : url_base + 'pedesa/listaparticipantes_trabajo',
+		        "type" : "GET",
+		        "dataSrc" : ""
+		    },
+		    /*"deferRender": true,*/
+		    'columnDefs': [
+		    	{
+                    orderable: false,
+                    className: 'select-checkbox',
+                    targets:   0
+                },
+                { "visible": false, "targets": 6 },
+   		    	{ "visible": false, "targets": 7 },
+   		  		{ "visible": false, "targets": 8 },
+   		  		{ "visible": false, "targets": 9 },
+		     	{ "visible": false, "targets": 10 },
+		  		{ "visible": false, "targets": 11 },
+		  		{ "visible": false, "targets": 12 }
+		    ],
+            select: {
+                style:    'single', 
+                selector: 'td:first-child'
+            },
+		    'columns' : [
+		    	{
+           		  "data":null, render:function(){return "";}
+           		},
+		    	{ 'data' : 'appaterno' },
+		        { 'data' : 'apmaterno' },
+		        { 'data' : 'nombre' },
+		        { 'data' : 'tipodocumento' },
+		        { 'data' : 'nrodocumento' },
+                { 'data' : 'composicionmusical'},
+                { 'data' : 'cuento'},
+                { 'data' : 'poesia'},
+                { 'data' : 'dibujopintura'},
+                { 'data' : 'ahorraragua'},
+                { 'data' : 'modalidadindividual'},
+                { 'data' : 'modalidadgrupal'},
+                { 'data' : 'nivel'}
+		    ],
+		    buttons: []
+		});
+		$("div.rs_seleccione_participante").html("<strong>Seleccione participantes</strong>");
+		
+		$("#btncancelartrabajo").click(function(){
+			$("#modalagregartrabajo").modal('hide');
+		});
+		
+		$("#btncerrarmensajeinformaciontrabajo").click(function(){			
+			$("#modalInformaciontrabajo").modal('hide');
+		});
+		
+		$("#btncerrarmensajeinformaciontrabajo").click(function(){			
+			$("#modalinformaciontrabajo").modal('hide');
+		});
+		
+		$("#btncerrarmensajeexitotrabajo").click(function(){
+			$("#modalexitotrabajo").modal('hide');
+			$("#modalagregartrabajo").modal('hide');
+		}); 
+		
+		$("#btnguardartrabajo").click(function(){	
+			
+			$("#modalimagencargando").modal({
+				show : true,
+				backdrop : 'static',
+				keyboard:false
+			});
+			
+			if(validarCamposTrabajo()){
+				
+				conversacion = $("#conversacion").is(":checked") ? 1 : 0;
+				valoracionagua = $("#valoracionagua").is(":checked") ? 1 : 0 ;
+				valoracionalcantarillado = $("#valoracionalcantarillado").is(":checked") ? 1 : 0;
+				buenuso = $("#buenuso").is(":checked") ? 1 : 0;
+				importancia = $("#importancia").is(":checked") ? 1 : 0;
+				vinculo = $("#vinculo").is(":checked") ? 1 : 0;
+				carencias = $("#carencias").is(":checked") ? 1 : 0;
+				
+				var trabajosfinales = {
+					categoriatrabajo  : {
+						id : categoriatrabajo
+					},
+					modalidadtrabajo : {
+						id : modalidadtrabajo
+					},
+					titulotrabajo  : titulotrabajo,
+					linkvideo : linkvideotrabajo,
+					conversacion : conversacion,
+					valoracionagua : valoracionagua,
+					valoracionalcantarillado : valoracionalcantarillado,
+					buenuso : buenuso,
+					importancia : importancia,
+					vinculo : vinculo,
+					puesto: 0,
+					carencias : carencias,
+					appaterno: apellidopaternotrabajo,
+					apmaterno : apellidomaternotrabajo,
+					nombre : nombretrabajo,
+					tipodocumento : {
+						id : tipodoctrabajo
+					},
+					estadotrabajo:{
+						id : 1
+					},
+					nrodocumento: nrodoctrabajo,
+					telefono : nrotelefonotrabajo,
+					correo  : correotrabajo,
+					genero : {
+						id : generotrabajo
+					},
+					estado : 1,
+					enviado : 0
+				};
+				
+				var trabajosfinalesparticipantesDto = {
+					trabajosfinales : trabajosfinales,
+					listaparticipante : arrayParticipante
+				}
+				
+				
+				$.ajax({
+					type : "POST",
+				    contentType : "application/json",
+				    url : url_base + "pedesa/savetrabajosfinalesparticipante",
+				    data : JSON.stringify(trabajosfinalesparticipantesDto),
+				    dataType : 'json',
+					success: function(respuesta) {
+						if(respuesta>0){
+							
+							var data = new FormData();
+							data.append('file',archivotrabajo.files[0]);
+							data.append('id',respuesta);
+							contador_archivos_subidos = 0;
+							for(var i=0;i<evidenciastrabajo.files.length;i++){
+								var bandera = true;
+								for(var j=0;j<array_evidencias_eliminadas_agregar.length;j++){
+									if(evidenciastrabajo.files[i].name === array_evidencias_eliminadas_agregar[j]){
+										bandera = false;
+									}
+								}
+								if(bandera){
+									data.append('files',evidenciastrabajo.files[i]);
+									contador_archivos_subidos++;
+								}	
+							}
+							
+							$.ajax({
+						        type: "POST",
+						        enctype: 'multipart/form-data',
+						        url: url_base + "pedesa/subirtrabajoarchivoevidencia",
+						        data: data,
+						        processData: false, 
+						        contentType: false,
+						        cache: false,
+						        timeout: 600000,
+						        success: function (data) {		
+						        	
+						        	$("#modalimagencargando").modal('hide');
+						        	var nombreparticipante = "";
+						        	for(var i=0;i<arrayNombreParticipante.length;i++){
+						        		nombreparticipante += arrayNombreParticipante[i]  + "/";
+						        	}
+						        	
+						        	table_lista_trabajos_finales.row.add({
+						        		"id": respuesta,
+						        		"categoria": $("#categoriatrabajo option:selected").html(),
+						        		"titulo" : titulotrabajo   ,
+						        		"modalidad" : $("#modalidadpostulaciontrabajo option:selected").html(),
+						        		"participantes" : nombreparticipante,
+						        		"archivos" : contador_archivos_subidos + (contador_archivos_subidos>1 ? " evidencias " : " evidencia ") + archivotrabajo.files.length + " final",
+						        		"enviado" : 0,
+						        		"enviado" : 0,
+						        		"enviado" :0
+						        	}).draw();
+						        	
+								    limpiarControles();
+								    $("#textoexitotrabajo").html("Usted registro exitosamente un nuevo trabajo");
+									$('#modalexitotrabajo').modal({
+										show : true,
+										backdrop : 'static',
+										keyboard:false
+									});
+									
+						 
+						        },
+						        error: function (e) {
+						            console.log("ERROR : ", e);
+						        }
+						    });
+							
+						}
+						else if(respuesta == -1){
+							$("#modalimagencargando").modal('hide');
+							$("#textoerror").html("No esta permitido registrar dos trabajos con la misma modalidad,categoria y participantes");
+							$('#modalerror').modal({
+								show : true,
+								backdrop : 'static',
+								keyboard:false
+							});
+						}
+						else{
+							$("#modalimagencargando").modal('hide');
+							$("#textoerror").html("Error al registrar trabajo");
+							$('#modalerror').modal({
+								show : true,
+								backdrop : 'static',
+								keyboard:false
+							});
+						}
+					},
+					error: function() {
+						$("#modalimagencargando").modal('hide');
+						alert("Exception al registrar");
+				    }
+				});	
+				
+				
+			}
+			else{
+				$("#modalimagencargando").modal('hide');
+				$("#textoinformaciontrabajo").html("<div style='color:red' class='text-left'>"+mensajeValidacion+"</div>");
+				$('#modalinformaciontrabajo').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+			}
+		});		
+	/*});*/
+	
+	$('#table_lpt').DataTable().on("draw", function(){
+		console.log("draw");   	
+	});
+	
+	
+	$.fn.dataTable.ext.search.push(
+   	    function( settings, data, dataIndex ) {
+   	    	
+   	    	if(settings.nTable.id !== 'table_lpt'){
+   	            return true;
+   	        }
+   	    	
+   	    	var composicionmusical  = 0, cuento = 0, poesia = 0,  dibujopintura = 0 , ahorraragua = 0, modalidadindividual = 0 , modalidadgrupal = 0;
+   	    	categoriatrabajo= $("#categoriatrabajo").val();
+   	    	modalidadtrabajo = $("#modalidadpostulaciontrabajo").val();
+   	    	
+   	    	switch(categoriatrabajo){
+   	    		case '1': composicionmusical = 1;  break;
+   	    		case '2': cuento = 1; break;
+   	    		case '3': poesia = 1;  break;
+   	    		case '4': dibujopintura = 1; break;
+   	    		case '5': ahorraragua = 1; break;
+   	    	}
+   	    	
+   	    	switch(modalidadtrabajo){
+	    		case '1': modalidadindividual = 1;  break;
+	    		case '2': modalidadgrupal = 1; break;
+	    	}
+   	    	
+   	    	if(!filtraCategoriaModalidad(composicionmusical, data[6]))
+   	    		return false;
+   	    	if(!filtraCategoriaModalidad(cuento, data[7]))
+   	    		return false;
+   	    	if(!filtraCategoriaModalidad(poesia, data[8]))
+   	    		return false;
+   	    	if(!filtraCategoriaModalidad(dibujopintura, data[9]))
+   	    		return false;
+   	    	if(!filtraCategoriaModalidad(ahorraragua, data[10]))
+   	    		return false;   	    	
+   	    	if(!filtraCategoriaModalidad(modalidadindividual, data[11]))
+   	    		return false;
+   	    	if(!filtraCategoriaModalidad(modalidadgrupal, data[12]))
+   	    		return false;
+   	    	return true;
+   	    }
+   	);
+	
+	function eliminarEvidenciaAgregar(archivo){
+		array_evidencias_eliminadas_agregar.push(archivo);
+		/*$("#evidenciastrabajoeditar").prop("disabled",false);*/
+	}
+	
+	function filtraCategoriaModalidad(campo1, campo2){
+		if(campo1===0)
+			return true;
+		return campo1 == campo2;
+	}
+	
+	function limpiarControles(){
+		$("#categoriatrabajo").val("0");
+		$("#modalidadpostulaciontrabajo").val("0");
+		$("#titulotrabajo").val("");
+		$("#linkvideo").val("");
+		$("#conversacion").prop("checked", false);
+		$("#valoracionagua").prop("checked", false);
+		$("#valoracionalcantarillado").prop("checked", false);
+		$("#buenuso").prop("checked", false);
+		$("#importancia").prop("checked", false);
+		$("#vinculo").prop("checked", false);
+		$("#carencias").prop("checked", false);
+		$("#appaternodocentetrabajo").val("");
+		$("#apmaternodocentetrabajo").val("");
+		$("#nombredocentetrabajo").val();
+		$("#tipodocumentodocentetrabajo").val("0");
+		$("#nrodocumentodocentetrabajo").val("");
+		$("#telefonodocentetrabajo").val("");
+		$("#correodocentetrabajo").val();
+		$("#generodocentetrabajo").val("0");
+	}
+	
+	
+	function filterCadena(evt,input){
+		
+		var key = window.Event ? evt.which : evt.keyCode;    
+	    var chark = String.fromCharCode(key);
+	    var tempValue = input.value+chark;
+	    if((key >= 65 && key <= 90) || (key >= 97 && key <= 122) || (key ==32)   || (key ==241) || (key ==209) || (key ==225) || (key ==233) || (key ==237) || (key ==243) || (key ==250)  || (key ==193) || (key ==201) || (key ==205) || (key ==211) || (key ==218)   ){    
+	        return true;
+	    }
+	    else{
+	        return false;
+	    }	
+	}
+	
+	function filterIntTelf(evt,input){
+		var key = window.Event ? evt.which : evt.keyCode;    
+	    var chark = String.fromCharCode(key);
+	    var tempValue = input.value+chark;
+	    if((key >= 48 && key <= 57) || key==45){    
+	        return true;
+	    }
+	    else{
+	        return false;
+	    }
+	}
+	
+	function filterIntNroDocIdentidad(evt,input){
+		
+		if($("#tipodocumentodocentetrabajo").val()==1){
+		    var key = window.Event ? evt.which : evt.keyCode;    
+		    var chark = String.fromCharCode(key);
+		    var tempValue = input.value+chark;
+		    if(key >= 48 && key <= 57){
+		    	if($("#tipodocumentodocentetrabajo").val() == 1){
+					if($("#nrodocumentodocentetrabajo").val().trim().length<8)
+						return true;
+					return false;
+				}
+		    	else{
+		    		return true;
+		    	}
+		    }
+		    else{
+		        return false;
+		    }
+		}
+		else if($("#tipodocumentodocentetrabajo").val()==2){
+			if($("#nrodocumentodocentetrabajo").val().trim().length<12)
+				return true;
+			return false;
+		}
+	}
+	
+	function validarCamposTrabajo(){
+		
+		arrayParticipante = new Array();
+		array_nivel = new Array();
+		arrayNombreParticipante = new Array();
+		
+		celdas_seleccionadas = table_lpt.rows('.selected').data().length;
+		mensajeValidacion = "";
+		categoriatrabajo = $("#categoriatrabajo").val();
+		modalidadtrabajo = $("#modalidadpostulaciontrabajo").val();
+		titulotrabajo = $("#titulotrabajo").val();
+		linkvideotrabajo = $("#linkvideo").val();
+		apellidopaternotrabajo = $("#appaternodocentetrabajo").val();	
+		apellidomaternotrabajo = $("#apmaternodocentetrabajo").val();
+		nombretrabajo = $("#nombredocentetrabajo").val();
+		tipodoctrabajo  = $("#tipodocumentodocentetrabajo").val();
+		nrodoctrabajo  = $("#nrodocumentodocentetrabajo").val();
+		nrotelefonotrabajo  = $("#telefonodocentetrabajo").val();
+		correotrabajo  = $("#correodocentetrabajo").val();
+		generotrabajo  = $("#generodocentetrabajo").val();
+		
+		conversacion = $("#conversacion").is(":checked");
+		valoracionagua = $("#valoracionagua").is(":checked") ;
+		valoracionalcantarillado = $("#valoracionalcantarillado").is(":checked")
+		buenuso = $("#buenuso").is(":checked") ;
+		importancia = $("#importancia").is(":checked");
+		vinculo = $("#vinculo").is(":checked");
+		carencias = $("#carencias").is(":checked");
+		
+		if(categoriatrabajo == 0){
+			mensajeValidacion = "Debe seleccionar categoria"+"<br>";
+		}
+		
+		if(modalidadtrabajo == 0){
+			mensajeValidacion += "Debe seleccionar modalidad"+"<br>";
+		}
+		else{
+			if( modalidadtrabajo == 1 && celdas_seleccionadas != 1 ) {
+				mensajeValidacion += "Debe seleccionar 1 celda de la tabla "+"<br>";
+			}
+			if( modalidadtrabajo == 2 && celdas_seleccionadas < 2 ) {
+				mensajeValidacion += "Debe seleccionar mínimo 2 celdas de la tabla"+"<br>";
+			}
+		}
+		
+		if(titulotrabajo.trim()==""){
+			mensajeValidacion += "Debe ingresar título de su trabajo final"+"<br>";
+		}
+		
+		if(archivotrabajo.files.length!=1){
+			mensajeValidacion += "Debe subir archivo de trabajo final"+"<br>";
+		}
+		else{
+			var archivotrabajo_name = (archivotrabajo.files[0]).name;
+			var archivotrabajo_size = (archivotrabajo.files[0]).size;
+			if(archivotrabajo_size >20000000){
+				mensajeValidacion += "El archivo " + archivotrabajo_name +" no debe superar los 20MB"+"<br>";
+			}
+			var ext = archivotrabajo_name.split('.').pop();
+			ext = ext.toLowerCase();
+			switch(ext){
+				case 'jpg': break;
+				case 'png': break;
+				case 'jpeg': break;
+				case 'pdf': break;
+				case 'docx': break;
+				case 'mp3': break;
+				case 'mp4': break;
+				default: mensajeValidacion += "El archivo " + archivotrabajo_name + " debe tener extensión jpg , png, pdf, word,mp3,mp4"+"<br>";	
+			}
+		}
+		
+		if(evidenciastrabajo.files.length>5 || evidenciastrabajo.files.length == 0){
+			mensajeValidacion += "Debe subir hasta 5 evidencias"+"<br>";
+		}
+		else{
+			
+			for(var i=0;i<evidenciastrabajo.files.length;i++){
+				
+				var evidenciastrabajo_name = (evidenciastrabajo.files[i]).name;
+				var evidenciastrabajo_size = (evidenciastrabajo.files[i]).size;
+				if(evidenciastrabajo_size >20000000){
+					mensajeValidacion += "El archivo "  + evidenciastrabajo_name + " no debe superar los 20MB"+"<br>";
+				}
+				var ext = evidenciastrabajo_name.split('.').pop();
+				ext = ext.toLowerCase();
+				switch(ext){
+					case 'jpg': break;
+					case 'png': break;
+					case 'jpeg': break;
+					case 'pdf': break;
+					case 'docx': break;
+					case 'mp3': break;
+					case 'mp4': break;
+					default: mensajeValidacion += "El archivo " + evidenciastrabajo_name + " debe tener extensión jpg , png, pdf, word,mp3,mp4"+"<br>";	
+				}
+			}	
+		}
+		
+		if(linkvideotrabajo.trim()=="" &&  (categoriatrabajo == "1" || categoriatrabajo == "3") ){
+			mensajeValidacion += "Debe ingresar link de video"+"<br>";
+		}
+		
+		var array = table_lpt.rows(".selected").data();	
+		var nombre="";
+		for(i=0;i<array.length;i++){
+			array_nivel.push(array[i].nivel);
+			console.log("(array[i].id) :" + (array[i].id));
+			arrayParticipante.push({id : (array[i].id)});
+			nombre = array[i].nombre + " " + array[i].appaterno + " " + array[i].apmaterno;
+			arrayNombreParticipante.push(nombre);
+		}
+		
+		let igual = true;
+		for (let i = 0; i < array_nivel.length-1 ; i++) {
+		    if (array_nivel[i] !== array_nivel[i + 1]) {
+		      igual=false;
+		      break;
+		    }
+		}
+		
+		if(!igual){
+			mensajeValidacion += "Debe seleccionar participantes con el mismo nivel"+"<br>";
+		}
+		
+		if( ! (conversacion || valoracionagua || valoracionalcantarillado || buenuso || importancia || vinculo  || carencias)){
+			mensajeValidacion += "Debe seleccionar ejes temáticos"+"<br>";
+		}
+		
+		if(apellidopaternotrabajo.trim()==""){
+			mensajeValidacion += "Debe ingresar apellido paterno de docente"+"<br>";
+		}
+		
+		if(apellidomaternotrabajo.trim()==""){
+			mensajeValidacion += "Debe ingresar apellido materno de docente"+"<br>";
+		}
+		
+		if(nombretrabajo.trim()==""){
+			mensajeValidacion += "Debe ingresar nombre de docente"+"<br>";
+		}
+		
+		if(tipodoctrabajo == "0"){
+			mensajeValidacion += "Debe seleccionar tipo de documento de docente"+"<br>";
+		}
+		
+		if(nrodoctrabajo.trim()==""){
+			mensajeValidacion += "Debe ingresar número de documento de docente"+"<br>";
+		}
+		
+		if(nrotelefonotrabajo.trim()==""){
+			mensajeValidacion += "Debe ingresar número de teléfono de docente"+"<br>";
+		}
+		
+		if(correotrabajo.trim()==""){
+			mensajeValidacion += "Debe ingresar correo electrónico de docente"+"<br>";
+		}
+		
+		if(generotrabajo=="0"){
+			mensajeValidacion += "Debe seleccionar genero de docente"+"<br>";
+		}
+		
+		if(!(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(correotrabajo))){		
+			mensajeValidacion += "Debe ingresar correctamente el correo electrónico de docente"+"<br>";
+		}
+		
+		if(mensajeValidacion!=""){
+			return false;
+		}
+		return true;
+	}
+
+</script>

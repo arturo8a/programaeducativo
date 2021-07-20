@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ficha_evaluacion" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cfadc7e7-7fbe-4546-8b05-35d340f7ce9e">
+	<subDataset name="Dataset1" uuid="cda96f59-11bf-40ac-a9c2-f3cdf27334a7">
+		<field name="rubrica" class="java.lang.String"/>
+		<field name="criterio1" class="java.lang.String"/>
+		<field name="descripcion1" class="java.lang.String"/>
+		<field name="puntaje1" class="java.lang.Integer"/>
+		<field name="criterio2" class="java.lang.String"/>
+		<field name="descripcion2" class="java.lang.String"/>
+		<field name="puntaje2" class="java.lang.Integer"/>
+		<field name="criterio3" class="java.lang.String"/>
+		<field name="descripcion3" class="java.lang.String"/>
+		<field name="puntaje3" class="java.lang.Integer"/>
+		<field name="criterio4" class="java.lang.String"/>
+		<field name="descripcion4" class="java.lang.String"/>
+		<field name="puntaje4" class="java.lang.Integer"/>
+	</subDataset>
+	<subDataset name="Dataset2" uuid="5d794b9a-77bb-4c3f-ae14-8a53a0600bc7">
+		<field name="pregunta" class="java.lang.String"/>
+		<field name="questionariorespuesta" class="java.util.List"/>
+	</subDataset>
+	<parameter name="subreport_dir" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\Sunass\\ProgramaEducativo_Desarrollo\\programaeducativo\\src\\main\\resources\\reportes_evaluacion\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="datasourcerubrica" class="java.util.List"/>
+	<parameter name="datasourcequestionario" class="java.util.List"/>
+	<parameter name="anio" class="java.lang.Integer"/>
+	<parameter name="categoria" class="java.lang.String"/>
+	<parameter name="nivelparticipacion" class="java.lang.String"/>
+	<parameter name="estado" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="43" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="51" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="250" splitType="Stretch">
+			<componentElement>
+				<reportElement x="0" y="0" width="565" height="180" uuid="aeb5b510-3bf2-4d2e-b217-229c96d41b54"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="Dataset1" uuid="9ff4b249-7949-4c9a-ae38-f6827e0c173a">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{datasourcerubrica})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="180" width="565">
+						<textField>
+							<reportElement x="301" y="10" width="249" height="15" uuid="92f506d7-f5f2-4652-99d7-c4604bb55f00"/>
+							<textFieldExpression><![CDATA[$F{rubrica}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="14" y="54" width="136" height="15" uuid="68e5fa24-849b-4877-adca-1993f1bf5fcc"/>
+							<box>
+								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
+								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+							</box>
+							<textFieldExpression><![CDATA[$F{criterio1}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="14" y="69" width="136" height="69" uuid="e32bfb94-41c3-42ec-bd70-1feb3d4d80d9"/>
+							<box>
+								<pen lineWidth="0.25"/>
+								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+							</box>
+							<textFieldExpression><![CDATA[$F{descripcion1}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="80" y="138" width="70" height="15" uuid="f0790459-5d38-4aac-94a4-994dc22a71ac"/>
+							<box>
+								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
+								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+							</box>
+							<textFieldExpression><![CDATA[$F{puntaje1}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="160" y="54" width="120" height="15" uuid="fc8762df-66bb-4604-800e-bf373c6c7e98"/>
+							<box>
+								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
+								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+							</box>
+							<textFieldExpression><![CDATA[$F{criterio2}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="160" y="69" width="120" height="69" uuid="4aa01f2e-50a3-414a-81e4-0f337769e7b8"/>
+							<box>
+								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
+								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+							</box>
+							<textFieldExpression><![CDATA[$F{descripcion2}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="220" y="138" width="60" height="15" uuid="094c6a04-a534-49c0-9853-cc711580c3df"/>
+							<box>
+								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
+								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+							</box>
+							<textFieldExpression><![CDATA[$F{puntaje2}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="301" y="54" width="119" height="15" uuid="402a53df-f7e3-4a7b-a816-aa756c59d1ec"/>
+							<box>
+								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
+								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+							</box>
+							<textFieldExpression><![CDATA[$F{criterio3}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="301" y="69" width="119" height="69" uuid="927c74b0-4307-4037-b72d-1eded1f0a4bd"/>
+							<box>
+								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
+								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+							</box>
+							<textFieldExpression><![CDATA[$F{descripcion3}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="360" y="138" width="60" height="15" uuid="07eed4f9-57a4-484b-9b58-d95d5f251f55"/>
+							<box>
+								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
+								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+							</box>
+							<textFieldExpression><![CDATA[$F{puntaje3}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="440" y="54" width="110" height="15" uuid="e78ec110-63d2-4b3f-941b-4bc3a8e832ea"/>
+							<box>
+								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
+								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+							</box>
+							<textFieldExpression><![CDATA[$F{criterio4}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="440" y="69" width="110" height="69" uuid="8b547045-ed1c-41e5-8f55-c52574acd5c3"/>
+							<box>
+								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
+								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+							</box>
+							<textFieldExpression><![CDATA[$F{descripcion4}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="490" y="138" width="60" height="15" uuid="0eefa9df-dc77-49f9-9d3e-7d2f5cac5671"/>
+							<box>
+								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
+								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+							</box>
+							<textFieldExpression><![CDATA[$F{puntaje4}]]></textFieldExpression>
+						</textField>
+						<staticText>
+							<reportElement x="190" y="10" width="90" height="15" uuid="feabfbb3-b0d6-40aa-8eec-c480a80e4783"/>
+							<textElement>
+								<font isBold="true"/>
+							</textElement>
+							<text><![CDATA[Rubrica]]></text>
+						</staticText>
+						<staticText>
+							<reportElement x="14" y="30" width="136" height="20" uuid="58f16d5e-58c0-4a92-b69f-fa9112178c52"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font isBold="true"/>
+							</textElement>
+							<text><![CDATA[Criterio]]></text>
+						</staticText>
+						<staticText>
+							<reportElement x="160" y="31" width="120" height="19" uuid="dd4b1f1b-87ed-40a7-ab85-43ee478ee716"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font isBold="true"/>
+							</textElement>
+							<text><![CDATA[Criterio]]></text>
+						</staticText>
+						<staticText>
+							<reportElement x="301" y="31" width="119" height="19" uuid="d6909a22-3c48-4393-8c69-b48188470908"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font isBold="true"/>
+							</textElement>
+							<text><![CDATA[Criterio]]></text>
+						</staticText>
+						<staticText>
+							<reportElement x="440" y="31" width="110" height="19" uuid="925b5ea8-5441-4842-b038-018cdf956553"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font isBold="true"/>
+							</textElement>
+							<text><![CDATA[Criterio]]></text>
+						</staticText>
+						<staticText>
+							<reportElement x="14" y="138" width="66" height="15" uuid="ef431d4b-757b-478a-afd4-da294f2f9b33"/>
+							<box>
+								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
+								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+							</box>
+							<text><![CDATA[Puntaje :]]></text>
+						</staticText>
+						<staticText>
+							<reportElement x="160" y="138" width="60" height="15" uuid="ec2db8fe-324f-4d3c-b9fc-47e2e26380d2"/>
+							<box>
+								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
+								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+							</box>
+							<text><![CDATA[Puntaje :]]></text>
+						</staticText>
+						<staticText>
+							<reportElement x="300" y="138" width="60" height="15" uuid="30ac1359-aa8f-4530-9517-b08daef933b1"/>
+							<box>
+								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
+								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+							</box>
+							<text><![CDATA[Puntaje :]]></text>
+						</staticText>
+						<staticText>
+							<reportElement x="440" y="138" width="50" height="15" uuid="9817bdf9-f312-4e56-be31-070e5918b63d"/>
+							<box>
+								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
+								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+							</box>
+							<text><![CDATA[Puntaje :]]></text>
+						</staticText>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+		</band>
+	</detail>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

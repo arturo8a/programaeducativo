@@ -1,0 +1,689 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8" />
+
+<link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+<link rel="stylesheet" href="../static/css/nuevo_disenio.css" th:href="@{/css/nuevo_disenio.css}">
+<link href="../static/css/gijgo.min.css" rel="stylesheet" th:href="@{/css/gijgo.min.css}" >
+
+<script type="text/javascript" th:src="@{/js/gijgo.min.js}" ></script>
+<script type="text/javascript" th:src="@{/js/messages.es-es.js}"></script>
+<script type="text/javascript" th:src="@{/js/datetime-moment-order.js}"></script>
+<script type="text/javascript" th:src="@{/js/moment.js}"></script>
+
+<script type="text/javascript" th:src="@{/js/date-uk.js}"></script>
+<script type="text/javascript" th:src="@{/js/date-euro.js}"></script>
+
+<script type="text/javascript" th:src="@{/js/bootstrapv4.js}" ></script>
+
+<style>
+	.rs_aprobar_inscripcion{
+		  /*width:33%;*/
+		  float:left;
+		  text-align:center;
+		  display: inline-flex;
+		  vertical-align: middle;
+		  padding: 0.375rem 0.75rem;
+		  font-size: 0.75rem;
+		  line-height: 1.5;
+		  justify-content: left;
+	}
+</style>
+
+<div id="containerListaRegistros" class="pl-3 pr-3">
+	<div class="row  div_titulo">
+			<div class="col-xs-12 col-sm-12 pl-0 bg-primary">
+				<img src="./images/iconos_nd/ConcursoEscolartitulo.svg" class="pt-1 pb-1 pl-3"><strong class="pt-3">APROBACIÓN DE INSCRIPCIONES</strong>
+			</div>
+		</div>
+	<div class="div_filtro">
+		<div class="row">
+			<div class="col-xs-12 col-sm-4" >
+				<select id="cbods" name="cbods" class="form-control">
+					<option value="Todos">ODS</option>
+					<option value="Amazonas">Amazonas</option>
+					<option value="Ancash - Huaraz">Ancash - Huaraz</option>
+					<option value="Ancash - Chimbote">Ancash - Chimbote</option>
+					<option value="Apurimac">Apurimac</option>
+					<option value="Arequipa">Arequipa</option>
+					<option value="Ayacucho">Ayacucho</option>
+					<option value="Cajamarca">Cajamarca</option>							
+					<option value="Cusco">Cusco</option>
+					<option value="Huancavelica">Huancavelica</option>
+					<option value="Huanuco">Huanuco</option>
+					<option value="Ica">Ica</option>
+					<option value="Junin">Junin</option>
+					<option value="Libertad">La libertad</option>
+					<option value="Lambayeque">Lambayeque</option>
+					<option value="Lima provincias">Lima provincias</option>
+					<option value="Loreto">Loreto</option>
+					<option value="Madre de dios">Madre de dios</option>
+					<option value="Moquegua">Moquegua</option>
+					<option value="OAU Callao">OAU Callao</option>
+					<option value="OAU cañete">OAU cañete</option>
+					<option value="OAU comas">OAU comas</option>
+					<option value="OAU huacho">OAU huacho</option>							
+					<option value="OAU SJL">OAU SJL</option>
+					<option value="OAU VES">OAU VES</option>	
+					<option value="Pasco">Pasco</option>
+					<option value="Piura">Piura</option>
+					<option value="Puno">Puno</option>
+					<option value="San martin">San martin</option>
+					<option value="Sede central">Sede central</option>
+					<option value="Tacna">Tacna</option>
+					<option value="Tumbes">Tumbes</option>
+					<option value="Ucayali">Ucayali</option>
+				</select>
+			</div>
+			<div class="col-xs-12 col-sm-4">
+				<select id="cbanio" name="cbanio" class="form-control">
+					<option value="Todos">Año de inscripción</option>
+					<option value="2017">2017</option >
+					<option value="2018">2018</option>
+					<option value="2019">2019</option>
+					<option value="2020">2020</option>
+					<option value="2021">2021</option>
+				</select>
+			</div>
+			<div class="col-xs-12 col-sm-4" >	
+				<input type="text" class="form-control rounded-0" id="txtnombre" name="txtnombre" placeholder="Nombre II.EE">
+			</div>
+			<div class="col-xs-12 col-sm-4 pt-3">
+				<select id="cbestado" name="cbestado" class="form-control">
+					<option value="Todos">Estado</option>
+					<option value="Pendiente">Pendiente</option>
+					<option value="Aprobado">Aprobado</option>
+					<option value="Observado">Observado</option>
+				</select>
+			</div>
+			<div class="col-xs-12 col-md-4">
+	   			<label>&nbsp;</label>
+	   		</div>
+			<div class="col-xs-12 col-sm-4 col-md-4 pt-3 text-right">			
+				<input type="image" id="btnbuscarpe"  src="./images/iconos_nd/botonbuscar.svg" width="125px" />
+				<input type="image" id="btnlimpiar"  src="./images/iconos_nd/botonrefrescar.svg" width="32px" />
+			</div>
+		</div>
+	</div>
+	<br>
+	<div class="div_filtro">
+		<div class="p-0 m-0">
+			<div class="row m-0">
+				<div class="col-xs-12 col-sm-12">
+					<table id="table_pe"  class="table table-striped display nowrap " style="width:100%">
+						<thead class="cabecera_tabla">
+					        <tr>
+					        	<th>Nº</th>
+					        	<th>Ods</th>
+					            <th>CÓDIGO II.EE</th>
+					            <th>NOMBRE II.EE</th>
+					            <th>AÑO DE INSCRIPCIÓN</th>
+					            <th>FICHA DE INSCRIPCIÓN</th>
+					            <th>PARTICIPACIÓN</th>
+					            <th>EDITAR FICHA</th>
+					            <th>ESTADO</th>		            
+					            <th>MOTIVO</th>
+					        </tr>   
+					    </thead>
+					</table>
+				</div>
+				<br><br>
+			</div>
+		</div>
+	</div>
+</div>
+	
+<div class="modal" tabindex="-1" role="dialog" id="modalimagencargando">
+  <center>
+  	<img th:src="@{./images/cargando.gif}" style="line-height: 200px;"/>
+  </center>	  
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalaprobar">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+      	<strong class="pt-1">Aprobar</strong>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-content" style="padding:10px">
+		Se enviará un correo a la I.E confirmando su inscripción al Programa educativo
+		</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" id="btncerraraprobar" name="btncerraraprobar">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="btnaceptaraprobar" name="btnaceptaraprobar">Aprobar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalobservar">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+      	<strong class="pt-1">Observar</strong>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="textoobservar">
+      	<label>Motivo</label>
+      	<textarea style="width:100%; height:180px; border-color:#E1E1E1" id="motivoobservarprograma" name="motivoobservarprograma"></textarea>
+      	
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" id="btncerrarobservar" name="btncerrarobservar">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="btnaceptarobservar" name="btnaceptarobservar">Observar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalexito">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!-- h5 class="modal-title"><label class="text-primary">exito</label></h5-->
+        <img th:src="@{./images/imagen_exito5.png}"/>&nbsp;&nbsp; <strong class="pt-1">Advertencia</strong>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="textoexito">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary rounded-0" id="btncerrarmensajeexito" name="btncerrarmensajeexito">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalinformacion">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!--h5 class="modal-title"><label class="text-primary"></label></h5-->
+        <img th:src="@{./images/imagen_informacion11.png}" />&nbsp;&nbsp; <strong class="pt-1">Alerta</strong>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="textoinformacion">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary rounded-0" id="btncerrarmensajeinformacion" name="btncerrarmensajeinformacion">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalerror">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!--h5 class="modal-title"><label class="text-primary"></label></h5-->
+        <img th:src="@{./images/imagen_informacion11.png}"/>&nbsp;&nbsp; <strong class="pt-1">Error</strong>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>	          
+        </button>
+      </div>
+      <div class="modal-body" id="textoerror">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary rounded-0" id="btncerrarmensajeerror" name="btncerrarmensajeerror">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal" tabindex="-1" role="dialog" id="modalmotivo">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!--h5 class="modal-title"><label class="text-primary"></label></h5-->
+        <img th:src="@{./images/imagen_informacion11.png}" />&nbsp;&nbsp; <strong class="pt-1">Motivo</strong>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="textomotivo">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary rounded-0" id="btncerrarmotivo" name="btncerrarmotivo">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</html>
+<script type="text/javascript">
+		
+		var url_base = location.origin+"/";		
+		var celdaseleccionada;
+		var table_pe;
+		var id;
+		
+		$(document).ready(function(){	
+			
+			$("#btnbuscarpe").click(function(){	
+				$("#consulta_menu").prop("disabled",true);
+	        	$("#btnbuscarpe").prop("disabled",true);
+	        	$("#btnlimpiar").prop("disabled",true);
+	        	
+	        	setTimeout(() => {        		  
+	        			  table_pe.draw();
+	        	}, 200);	
+			});
+			
+			$("#btnlimpiar").click(function(){
+				$("#cbods").val("Todos");
+				$("#cbanio").val("Todos");
+				$("#txtnombre").val("");
+				$("#cbestado").val("Todos");
+				setTimeout(() => {        		  
+		      			  table_pe.draw();
+		      	}, 200);
+			});
+			
+			$("#btncerrarmensajeexito").click(function(){
+				$("#modalexito").modal('hide');
+				$("#codmod").val("");
+			});
+			
+			$("#btncerrarmensajeinformacion").click(function(){
+				$("#modalinformacion").modal('hide');
+			});
+			
+			$("#btncerrarmensajeerror").click(function(){
+				$("#modalerror").modal('hide');
+			});
+			
+			$("#btncerrarmotivo").click(function(){
+				$("#modalmotivo").modal('hide');
+			});
+			
+			listar();	
+			
+			$("#btnaceptaraprobar").click(function(){
+				
+				var obj1 = {
+						id : id,
+						estado : "Aprobado"
+					};				
+				
+				$.ajax({
+					type : "POST",
+				    contentType : "application/json",
+				    url : url_base + "pedesa/updateaprobarprogramaeducativo",
+				    data : JSON.stringify(obj1),
+				    dataType : 'json',
+					success: function(respuesta) {
+						if(respuesta){
+							$("#modalaprobar").modal('hide');
+							$("#modalimagencargando").modal('hide');
+							$("#textoexito").html("Aprobado");	
+							table_pe.cell(celdaseleccionada,6).data("Aprobado").draw();
+							table_pe.cell(celdaseleccionada,7).data("Aprobado").draw();
+							table_pe.cell(celdaseleccionada,8).data("Aprobado").draw();
+							$('#modalexito').modal({
+								show : true,
+								backdrop : 'static',
+								keyboard:false
+							});
+						}
+						else{
+							$("#textoerror").html("Ocurrio un error al Aprobar");
+							$('#modalerror').modal({
+								show : true,
+								backdrop : 'static',
+								keyboard:false
+							});
+						}						
+					},
+					error: function() {
+						$("#modalimagencargando").modal('hide');
+						$("#textoerror").html("Excepcion al editar");
+						$('#modalerror').modal({
+							show : true,
+							backdrop : 'static',
+							keyboard:false
+						});
+				    }
+				});
+			});	
+			
+			$("#btncerraraprobar").click(function(){
+				$("#modalaprobar").modal('hide');
+			});	
+			
+			$("#btncerrarobservar").click(function(){
+				$("#modalobservar").modal('hide');
+			});				
+			
+			$("#btnaceptarobservar").click(function(){
+			
+				if($("#motivoobservarprograma").val().trim()==""){
+					$("#textoinformacion").html("Debe ingresar datos en el campo motivo");
+					$('#modalinformacion').modal({
+						show : true,
+						backdrop : 'static',
+						keyboard:false
+					});
+				}
+				else{
+					
+					var obj1 = {
+							id : id,
+							estado : "Observado",
+							motivoobservacion : $("#motivoobservarprograma").val()
+						};				
+					
+					$.ajax({
+						type : "POST",
+					    contentType : "application/json",
+					    url : url_base + "pedesa/updateestadoprogramaeducativo",
+					    data : JSON.stringify(obj1),
+					    dataType : 'json',
+						success: function(respuesta) {
+							if(respuesta==1){
+								$("#modalobservar").modal('hide');
+								$("#modalimagencargando").modal('hide');
+								$("#textoexito").html("'Se enviará un correo a la I.E informando que su inscripción al Programa educativo ha sido observada por el motivo ingresado'");
+								$('#modalexito').modal({
+									show : true,
+									backdrop : 'static',
+									keyboard:false
+								});
+								table_pe.cell(celdaseleccionada,6).data("Observado").draw();
+								table_pe.cell(celdaseleccionada,7).data("Observado").draw();
+								table_pe.cell(celdaseleccionada,8).data("Observado").draw();
+							}
+							else{
+								$("#textoerror").html("Ocurrio un error al observar");
+								$('#modalerror').modal({
+									show : true,
+									backdrop : 'static',
+									keyboard:false
+								});
+							}
+							
+						},
+						error: function() {
+							$("#modalimagencargando").modal('hide');
+							$("#textoerror").html("Excepcion al editar");
+							$('#modalerror').modal({
+								show : true,
+								backdrop : 'static',
+								keyboard:false
+							});
+					    }
+					});	
+				}
+			});	
+		});		
+		
+		var listar = function(){
+				
+				$("#table_pe").dataTable().fnDestroy();				
+			    
+				table_pe = $('#table_pe').DataTable({
+				"dom": '<B><"rs_aprobar_inscripcion">frtip',
+	            "scrollX": true,
+	            "searching": true,
+	            "lengthMenu": [
+	                [ 10, 15, 25, -1 ],
+	                [ '10 filas', '15 filas', '25 filas', 'Mostrar todas' ]
+	            ],
+	            "processing":true,
+	            "language": {
+	                buttons: {
+	                  pageLength: 'Mostrar'
+	                },
+	                "decimal": "",
+	                "emptyTable": "No hay información",
+	                "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+	                "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
+	                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+	                "infoPostFix": "",
+	                "thousands": ",",
+	                "lengthMenu": "Mostrar _MENU_ Entradas",
+	                "processing": "Procesando...",
+	                "search": "_INPUT_",
+			        "searchPlaceholder": "Busqueda General",
+	                "zeroRecords": " ",//No existen registros
+	                "paginate": {
+	                    "first": "Primero",
+	                    "last": "Ultimo",
+	                    "next": "Siguiente",
+	                    "previous": "Anterior"
+	                }
+	            },
+	            "ajax" : {
+	                "url" : url_base + 'pedesa/listacolegiosinscritos',
+	                "type" : "GET",
+	                "dataSrc" : ""
+	            },
+	            "columns" : [
+	            	{ 
+	            		"data": null, "render": function (data, type, full, meta) { return meta.row + 1; }
+	            	},
+	            	{ 'data' : 'ods' },
+	            	{ 'data' : 'codmod' },
+	            	{ 'data' : 'nomie' },
+	                { 'data' : 'anhio' },
+	                { 'defaultContent' : '<img src="./images/iconos_nd/pdf1.svg" class="descargar" style="width:20px; cursor:pointer"/>' },
+	                { 'data' : 'estado' ,
+	                   render: function(data, type) { 
+	                   		var x = '';
+	                        switch (data) {
+	                            case 'Aprobado':
+	                                x = '<button type="button" class="btn btn-primary" disabled>Aprobar</button><button type="button" class="btn btn-danger" disabled>Observar</button>';
+	                                break;
+	                            case 'Observado':
+	                            	x = '<button type="button" class="btn btn-primary" disabled>Aprobar</button><button type="button" class="btn btn-danger" disabled>Observar</button>';
+	                                break;
+	                            default:
+	                                x = '<button type="button" class="aprobar btn btn-primary">Aprobar</button><button type="button" class="observar btn btn-danger">Observar</button>';
+	                                break;
+                            }
+                            return x;
+                        }
+	                },	                
+	                { 'data' : 'estado' ,
+	                   render: function(data, type) { 
+	                   		var x = '';
+	                        switch (data) {
+	                            case 'Aprobado':
+	                                x = '<img src="./images/iconos_nd/lapiz.svg" style="width:20px; filter: invert(70%)" />';
+	                                break;
+	                            case 'Observado':
+	                                x = '<img src="./images/iconos_nd/lapiz.svg" style="width:20px; filter: invert(70%)" />';
+	                                break;
+	                            default:
+	                                x = '<img src="./images/iconos_nd/lapiz.svg" class="editar" id="editarficha" style="width:20px; cursor:pointer"/>';
+	                                break;
+                            }
+                            return x;
+                        }
+	                },
+	                { 'data' : 'estado' },
+	                { 'defaultContent' : '<img src="./images/svg/eye-solid.svg" class="motivo" style="width:20px; cursor:pointer"/>' }
+	            ],
+	            'columnDefs': [
+	            	  {
+	            	      "targets": 5,
+	            	      "className": "text-center"
+	            	  },
+	            	  {
+	            	      "targets": 7,
+	            	      "className": "text-center"
+	             	  },
+	             	  {
+	            	      "targets": 9,
+	            	      "className": "text-center"
+	             	  }
+	            ],
+	            "fnPreDrawCallback": function(oSettings) {
+	            	$("#btnbuscarpe").prop("disabled",true);
+	            	$("#btnlimpiar").prop("disabled",true);
+	            },
+	            "buttons": []
+	        });
+			$("div.rs_aprobar_inscripcion").html("<strong>RESULTADOS DE APROBACIÓN DE INSCRIPCIONES</strong>");
+	        obtener_data_descargar("#table_pe tbody",table_pe);
+	        obtener_data_aprobar("#table_pe tbody",table_pe);
+	        obtener_data_observar("#table_pe tbody",table_pe);
+	        obtener_data_editar("#table_pe tbody",table_pe);		
+	        obtener_data_motivo("#table_pe tbody",table_pe);
+		};
+		
+		$('#table_pe').DataTable().on("draw", function(){
+			$("#consulta_menu").prop("disabled",false);
+        	$("#btnbuscarpe").prop("disabled",false);
+        	$("#btnlimpiar").prop("disabled",false);
+        	
+		});
+		
+		$.fn.dataTable.ext.search.push(
+    	    function( settings, data, dataIndex ) {
+    	    	
+    	    	if ( settings.nTable.id !== 'table_pe' ) {
+    	            return true;
+    	        }
+    	    	
+    	    	var ods = $("#cbods").val();
+    	    	var nombre = $("#txtnombre").val();
+    	    	var anio = $("#cbanio").val();
+    	    	var estado = $("#cbestado").val();
+    	    	if(!filtra(ods,data[1]))
+    	    		return false;
+    	    	if(!filtra(nombre,data[3]))
+    	    		return false;
+    	    	if(!filtra(anio,data[4]))
+    	    		return false;
+    	    	if(!filtra(estado,data[8]))
+    	    		return false;
+   	    		return true;
+    	    }
+    	);
+		
+		function filtra(campofiltro,campotabla){
+	    	if(campofiltro==="Todos" || campofiltro===undefined)
+	    		return true;
+	    	var posicion = (campotabla.toLowerCase()).indexOf(campofiltro.toLowerCase()); 
+	    	if(posicion != -1)
+	    		return  true;
+	    	return false;
+	    }
+		
+		var obtener_data_descargar = function(tbody,table){
+			$(tbody).on("click","img.descargar",function(){
+				celdaseleccionada = table.row($(this).parents("tr")).index();
+				var data = table.row($(this).parents("tr")).data();
+				id = data.id;
+				descargarPdf(id);
+			});
+		};
+		
+		var obtener_data_aprobar = function(tbody,table){
+			$(tbody).on("click","button.aprobar",function(){
+				celdaseleccionada = table.row($(this).parents("tr")).index();
+				var data = table.row($(this).parents("tr")).data();
+				id = data.id;
+				
+				$('#modalaprobar').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});	
+			});
+		};
+		
+		var obtener_data_observar = function(tbody,table){
+			$(tbody).on("click","button.observar",function(){
+				celdaseleccionada = table.row($(this).parents("tr")).index();
+				var data = table.row($(this).parents("tr")).data();
+				id = data.id;
+				$("#motivoobservarprograma").val("");
+				$('#modalobservar').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});				
+			});
+		};
+		
+		var obtener_data_editar = function(tbody,table){
+			$(tbody).on("click","img.editar",function(){
+				celdaseleccionada = table.row($(this).parents("tr")).index();
+				var data = table.row($(this).parents("tr")).data();
+				id = data.id;				
+				editarPrograma(id);				
+			});
+		};
+		
+		var obtener_data_motivo = function(tbody,table){
+			$(tbody).on("click","img.motivo",function(){
+				celdaseleccionada = table.row($(this).parents("tr")).index();
+				var data = table.row($(this).parents("tr")).data();
+				id = data.id;
+				
+				$.ajax({
+					type : "GET",
+				    contentType : "application/json",
+				    url : url_base + "pedesa/buscarMotivoPrograma/"+id,
+					success: function(respuesta) {							
+						$('#modalmotivo').modal({
+							show : true,
+							backdrop : 'static',
+							keyboard:false
+						});
+						if(respuesta!=""){
+							$("#textomotivo").html("<strong>"+respuesta+"</strong>");		
+						}
+						else{
+							$("#textomotivo").html("<strong>No se ha registrado observación</strong>");
+						}							
+					},
+					error: function() {
+						$("#modalimagencargando").modal('hide');
+						$("#textoerror").html("Excepcion al ver motivo");
+						$('#modalerror').modal({
+							show : true,
+							backdrop : 'static',
+							keyboard:false
+						});
+				    }
+				});		
+			});
+		};        
+        
+        function editarPrograma(id){
+        	window.open(url_base + "pedesa/inicioficha/"+id);        	
+        }		
+        
+        function descargarPdf(id){
+        	
+        	$.ajax({
+				type : "GET",
+			    contentType : "application/json",
+			    url : url_base + "pedesa/descargarpdf/"+id,
+				success: function(respuesta) {
+					window.open(respuesta, '_blank');
+				},
+				error: function() {
+					$("#modalimagencargando").modal('hide');
+					$("#textoerror").html("Excepcion al descargar PDF");
+					$('#modalerror').modal({
+						show : true,
+						backdrop : 'static',
+						keyboard:false
+					});
+			    }
+			});
+        	
+        }
+</script>

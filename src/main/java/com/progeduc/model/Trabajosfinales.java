@@ -101,6 +101,10 @@ public class Trabajosfinales {
 	@Column(name="ESTADO",nullable=true)
 	private Integer estado;
 	
+	@JsonIgnore
+	@Column(name="NUMERACION",nullable=true)
+	private Integer numeracion;
+	
 	@Column(name="ENVIADO",nullable=true)
 	private Integer enviado;
 	
@@ -274,6 +278,14 @@ public class Trabajosfinales {
 
 	public void setCorreo(String correo) {
 		this.correo = correo;
+	}
+	
+	public Integer getNumeracion() {
+		return numeracion;
+	}
+
+	public void setNumeracion(Integer numeracion) {
+		this.numeracion = numeracion;
 	}
 
 	public Genero getGenero() {

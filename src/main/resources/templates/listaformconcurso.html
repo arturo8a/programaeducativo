@@ -326,7 +326,7 @@
 	  <div class="modal-dialog modal-lg" role="document">
 	    <div class="modal-content" style="overflow-y: scroll; height:350px; width:90%">
 	      <div class="modal-header">
-	        <strong class="pt-1">EVIDENCIAS</strong>
+	        <strong class="pt-1">EVIDENCIAS DE TRABAJOS FINALES</strong>
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 	          <span aria-hidden="true">&times;</span>
 	        </button>
@@ -1187,17 +1187,48 @@
 					var objeto = respuesta;
 					var archivo = objeto.archivo;
 					var evidencias = objeto.evidencia;
-					var contenido = "<div><table style='width:100%'><tr>";
+					var contenido = "<table style='width:100%'><tr>";
 					for(var i=0;i<evidencias.length;i++){
 						var evidencia = evidencias[i];
 						var ext = (evidencia.split('.')).pop();
 						ext = ext.toLowerCase();
 						var mi_evi = JSON.stringify(evidencia);
-						var archivo;
-						switch(ext){
+						var archivo = mi_evi.replace(/['"]+/g, '');
+						contenido += "<td><strong style='cursor:pointer' onclick='actualizaEvidenciaDiv("+'`'+id+'`'+","+'`'+archivo+'`'+"," +'`'+ext +'`'+")'>"+archivo+"</strong></td>";
+						
+						/*switch(ext){
 							case 'jpg': 
 								archivo = mi_evi.replace(/['"]+/g, '');
-								contenido += "<td>"+archivo+"<input type='image' width='20' src='./images/iconos_nd/descargarevidencia.svg' onclick='verdocumento(" +'`'+ id +'`'+  "," +'`'+ archivo +'`'+")'/><br><img width='300' height='240' src='../alfresco_programaeducativo/pedesa/upload_evidencias/" +id +"/" +archivo +"'/></td>";
+								contenido += "<td><strong style='cursor:pointer' onclick='actualizaEvidenciaDiv(" +'`'+ id +'`'+  "," +'`'+ archivo +'`'+")'>"+archivo+"</strong></td>";
+								break;
+							case 'png': 
+								archivo = mi_evi.replace(/['"]+/g, '');
+								contenido += "<td><strong style='cursor:pointer'>"+archivo+"</strong></td>";
+								break;
+							case 'jpeg': 
+								archivo = mi_evi.replace(/['"]+/g, '');
+								contenido += "<td><strong style='cursor:pointer'>"+archivo+"</strong></td>";
+								break;
+							case 'pdf':
+								archivo = mi_evi.replace(/['"]+/g, '');
+								contenido += "<td><strong style='cursor:pointer'>"+archivo+"</strong></td>";
+								break;
+							case 'docx': 
+								archivo = mi_evi.replace(/['"]+/g, '');
+								contenido += "<td><strong style='cursor:pointer'>"+archivo+"</strong></td>";
+								break;
+							case 'mp3': 
+								archivo = mi_evi.replace(/['"]+/g, '');
+								contenido += "<td><strong style='cursor:pointer'>"+archivo+"</strong></td>";
+								break;
+							case 'mp4': 
+								archivo = mi_evi.replace(/['"]+/g, '');
+								contenido += "<td><strong style='cursor:pointer'>"+archivo+"</strong></td>";
+								break;
+								*/
+							/*case 'jpg': 
+								archivo = mi_evi.replace(/['"]+/g, '');
+								contenido += "<td>"+archivo+"<input type='image' width='20' src='./images/iconos_nd/descargarevidencia.svg' onclick='verdocumento(" +'`'+ id +'`'+  "," +'`'+ archivo +'`'+")'/><br></td>";
 								break;
 							case 'png': 
 								archivo = mi_evi.replace(/['"]+/g, '');
@@ -1222,11 +1253,11 @@
 							case 'mp4': 
 								archivo = mi_evi.replace(/['"]+/g, '');
 								contenido += "<td>"+archivo+"<input type='image' width='20' src='./images/iconos_nd/descargarevidencia.svg' onclick='verdocumento(" +'`'+ id +'`'+  "," +'`'+ archivo +'`'+")'/><br><video width='320' height='240' controls><source src='../alfresco_programaeducativo/pedesa/upload_evidencias/" +'`'+ id +'`'+  "/" +'`'+ archivo +'`'+"'  type='video/mp4'><source src='movie.ogg' type='video/ogg'></td>";
-								break;
-						}
+								break;*/
+						/*}*/
 					}
 					
-					contenido += "</tr></table></div>";
+					contenido += "</tr><tr><td><div id='contenido_evidencia'></div></td></tr></table>";
 					$("#contenidoEvidencias").html(contenido);
 					$("#modalArchivosEvidencias").modal({
 						show : true,
@@ -1279,6 +1310,19 @@
    	    		return true;
     	    }
     	);
+    	
+    	function actualizaEvidenciaDiv(id,archivo,extension){
+			console.log("id : " + id);
+			console.log("archivo : " + archivo);
+			console.log("extension : " + extension);
+			switch(extension){
+				case 'pdf' :  
+					var subcadena  = id + "/" + archivo;
+					$("#contenido_evidencia").html("<embed src='../alfresco_programaeducativo/pedesa/upload_evidencias/"+subcadena+"'"+" type='application/pdf' width='100%' height='600px'/>");
+					/*$("#contenido_evidencia").html("<embed src='D:/Sunass/programaeducativo/src/main/resources/upload_evidencias/"+subcadena+"'"+" type='application/pdf' width='100%' height='600px'/>");*/					
+				break;
+			}
+		}
 		
 		function filtra(campofiltro,campotabla){
 	    	if(campofiltro==="Todos" || campofiltro===undefined)

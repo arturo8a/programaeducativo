@@ -121,7 +121,7 @@
 			<div class="col-xs-12 col-sm-4 text-left pt-4">
 				<label>Subir archivos de evidencias</label>
 				<input type="file" id="evidenciastrabajo" class="form-control" name="file[]"  multiple/>
-				<div id="divevidencias_agregar" style="overflow-y: scroll;overflow-x: scroll; height:120px;">											
+				<div id="divevidencias_agregar" style="overflow-y: scroll;overflow-x: scroll; height:80px;">											
 				</div>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-4">
@@ -362,7 +362,7 @@
 			array_evidencias_eliminadas_agregar = new Array();
 			var data_archivo_subir = "<table><tr>";
 			for(var i=0;i<evidenciastrabajo.files.length;i++){
-				data_archivo_subir += "<td><div class='alert alert-primary alert-dismissible fade show' role='alert' style='width:125px'><strong>"+(evidenciastrabajo.files[i].name)+"</strong><button type='button' class='close' onclick='eliminarEvidenciaAgregar("+'`'+(evidenciastrabajo.files[i].name)+'`'+")' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div></td>";
+				data_archivo_subir += "<td><div class='alert alert-primary alert-dismissible fade show' role='alert' style='width:125px'><strong><abbr title='"+(evidenciastrabajo.files[i].name)+"'>"+(evidenciastrabajo.files[i].name).substr(0,5)+"<abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaAgregar("+'`'+(evidenciastrabajo.files[i].name)+'`'+")' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div></td>";
 			}
 			data_archivo_subir += "</tr></table>";
 			$("#divevidencias_agregar").html(data_archivo_subir);
@@ -372,7 +372,7 @@
 		table_lpt = $('#table_lpt').DataTable({
 			dom: '<B><"rs_seleccione_participante">frtip',
 		    "scrollX": true,
-		    "scrollY": "300px",
+		    "scrollY": "250px",
 	        "scrollCollapse": true,
 		    "paging": false,
 		    "destroy": true,

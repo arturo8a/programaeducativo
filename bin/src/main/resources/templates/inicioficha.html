@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="es">
+<head>
+    <title>ProgramaEducativo</title>
+    <meta charset="UTF-8" />   
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <script type="text/javascript" th:src="@{/js/jquery-3.3.1.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/bootstrapv4.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/fontawesomev5.0.6.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/inicioficha.js}" ></script>
+    
+    <link href="../static/css/bootstrapv4.3.1-14.css" rel="stylesheet" th:href="@{/css/bootstrapv4.3.1-14.css}" >
+    <link href="../static/css/bootstrap-select.min.css" rel="stylesheet" th:href="@{/css/bootstrap-select.min.css}" >    
+    <link rel="stylesheet" href="../static/css/jquery-ui.css" th:href="@{/css/jquery-ui.css}">
+    
+    <style type="text/css">
+    	.group_checkbox_red{
+    		color:red;
+    	}
+    </style>
+	
+</head>
+<body class="bg-light">	
+	<form id="miform">
+	<div class="container">				
+		<div class="pl-1 pt-2 pb-2 bg-white">
+			<div class="row">
+				<div class="col-xs-9 col-sm-9">
+					<strong class="text-primary">Registro en el Programa Educativo "Aprendiendo a usar responsablemente el agua potable"</strong>
+				</div>
+				<div class="col-xs-3 col-sm-3">
+					<div class="pr-0" role="alert" id="divmsjSistemaEducativoFormAdd">
+					  <small id="statusMsg"></small>
+					</div> 
+				</div>
+			</div>
+		</div>		
+		<div style="width:100%">
+			<table style="width:100%">
+				<tr>
+					<td style="width:50%">&nbsp;</td>
+					<td style="width:50%">
+						<input class="btn btn-primary  text-white float-right ml-2 pl-2 rounded-0" type="button" value="Motivo de Obervación" id="btnmotivoobservacion">
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div style="width:100%">
+			<table style="width:100%">
+				<tr>
+					<td style="width:50%">&nbsp;</td>
+					<td style="width:50%">
+						<div id="divmsj" style="visibility:hidden">
+							<label id="msjmotivoobservacion" style="color:red" th:text="*{programaeducativo.motivoobservacion}"></label>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="accordion rounded-0" id="accordionExample" >
+		  <div class="card rounded-0">
+		    <div class="card-header" id="datinseduc">
+		      <h2 class="mb-0">
+		        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+		          <strong class="text-white">A. Datos de la Institución Educativa</strong>
+		        </button>
+		      </h2>
+		    </div>
+		    
+		    <div id="collapseOne" class="collapse show" aria-labelledby="datinseduc" >
+		      <div class="card-body">
+		        	<div class="row">		        		
+		        		<div class="col-xs-12 col-sm-6 col-md-4 pt-2">	
+		        			<input type="hidden" th:value="*{programaeducativo.id}" id="hiddenid" name="hiddenid" />
+		        			<input type="hidden" th:value="*{programaeducativo.estado}" id="hiddenestado" name="hiddenestado" />
+		        			<input type="hidden" th:value="*{programaeducativo.anhio}" id="hiddenanio" name="hiddenanio" />			
+		        			<input type="hidden" th:value="*{idi}" id="hiddenidi" name="hiddenidi" />	
+		        			<input type="hidden" th:value="*{idp}" id="hiddenidp" name="hiddenidp" />	
+		        			<input type="hidden" th:value="*{ids}" id="hiddenids" name="hiddenids" />	
+		        			        			
+	        				<label for="">Código local I.E.</label>
+							<div class="input-group mb-2">
+								<div class="ui-widget">
+									<input type="text" th:field="*{programaeducativo.codmod}" disabled id="codmod" name="codmod" class="form-control" >
+								</div>
+							</div>
+		        		</div>
+		        		<div class="col-xs-12 col-sm-6 col-md-4 pt-2">
+		        			<label>Nombre de la IE</label>
+		        			<input type="text" th:field="*{programaeducativo.nomie}" class="form-control" id="nomie" name="nomie"  />
+		        		</div>
+		        		<div class="col-xs-12 col-sm-6 col-md-4 pt-2">
+		        			<label>Tipo I.E</label>
+		        			<select class="form-control" id="tipoieid" name="tipoieid"  th:field="*{programaeducativo.tipoie}">
+		        				<option value="">Seleccione</option>
+		        				<option th:each="t:${tipoie}" th:value="${t.id}" th:utext="*{t.descripcion}" />
+		        			</select>
+		        		</div>
+		        		<div class="col-xs-12 col-sm-6 col-md-4 pt-2">
+		        			<label>Departamento</label>
+		        			<select class="form-control" id="departamentoid" name="departamentoid" th:field="*{programaeducativo.dep}">
+		        				<option value="">Seleccione</option>	
+		        				<option th:each="depa:${departamento}" th:value="${depa.id}" th:utext="*{depa.descripcion}"/>		        				
+		        			</select>
+		        		</div>
+		        		<div class="col-xs-12 col-sm-6 col-md-4 pt-2">
+		        			<label>Provincia</label>
+		        			<select class="form-control" id="provinciaid" name="provinciaid" th:field="*{programaeducativo.prov}">
+		        				<option value="">Seleccione</option>	
+		        				<option th:each="prov:${provincia}" th:value="${prov.id}" th:utext="*{prov.descripcion}"/>	
+		        			</select>
+		        		</div>
+		        		<div class="col-xs-12 col-sm-6 col-md-4 pt-2">
+		        			<label>Distrito</label>
+		        			<select class="form-control" id="distritoid" name="distritoid" th:field="*{programaeducativo.distrito.id}">
+		        				<option value="">Seleccione</option>	
+		        				<option th:each="dist:${distrito}" th:value="${dist.id}" th:utext="*{dist.descripcion}"/>	
+		        			</select>
+		        		</div>
+		        		<div class="col-xs-12 col-sm-6 col-md-4 pt-2">
+		        			<label for="">Dirección</label>			
+							<div class="input-group mb-2">
+								<div class="input-group-prepend">
+									<div class="input-group-text">
+										<img src="../images/map-marker-alt-solid.svg" style="width:18px"/>
+									</div>
+								</div>
+								<input type="text" class="form-control" id="dirie" name="dirie" th:field="*{programaeducativo.dirie}" >
+							</div>
+		        		</div>
+		        		<div class="col-xs-12 col-sm-6 col-md-4 pt-2">
+		        			<label>DRE</label>
+		        			<input type="text" class="form-control" id="dre" name="dre" th:field="*{programaeducativo.dre}" />		
+		        		</div>
+		        		<div class="col-xs-12 col-sm-6 col-md-4 pt-2">
+		        			<label>Ugel</label>
+		        			<input type="text" class="form-control" id="ugel" name="ugel" th:field="*{programaeducativo.ugel}" />		
+		        		</div>
+		        		<div class="col-xs-12 col-sm-6 col-md-4 pt-2">
+		        			<label for="">Teléfono</label>			
+							<div class="input-group mb-2">
+								<div class="input-group-prepend">
+									<div class="input-group-text">
+										<img src="../images/phone-square-alt-solid.svg" style="width:20px"/>
+									</div>
+								</div>
+								<input type="text" class="form-control" id="telfie" name="telfie" onKeyPress="return filterInt(event,this)" maxlength="10" th:field="*{programaeducativo.telfie}" >
+							</div>
+		        		</div>
+		        		<div class="col-xs-12 col-sm-6 col-md-4 pt-2">
+		        			<label for="">Correo Institucional</label>			
+							<div class="input-group mb-2">
+								<div class="input-group-prepend">
+									<div class="input-group-text">
+										<img src="../images/envelope-solid.svg" style="width:20px"/>
+									</div>
+								</div>
+								<input type="text" class="form-control" id="mailie" name="mailie" th:field="*{programaeducativo.mailie}" >
+							</div>								
+		        		</div>
+		        		<div class="col-xs-12 col-sm-6 col-md-4 pt-2">
+		        			<label for="">Link de facebook</label>			
+							<div class="input-group mb-2">
+								<div class="input-group-prepend">
+									<div class="input-group-text">
+										<img src="../images/facebook-square-brands.svg" style="width:20px"/>										
+									</div>
+								</div>
+								<input type="text" class="form-control" id="facebook" name="facebook" maxlength="120" th:field="*{programaeducativo.facebook}" >
+							</div>	
+		        		</div>
+		        		<div class="col-xs-12 col-sm-6 col-md-4 pt-2">
+		        			<label>Lengua/dialécto</label>
+		        			<select class="form-control" name="lengua" id="lengua" th:field="*{programaeducativo.lengua}">
+		        				 <option value="">Seleccione</option>
+		                         <option th:each="len:${lengua}" th:value="${len.id}" th:utext="*{len.descripcion}"/>
+		                  </select>
+		        		</div>
+		        	</div>
+		        	<br>
+		        	<div class="row">
+			        	<div class="col-xs-12 col-sm-12 pt-2">
+							<div class="table-responsive-sm">
+								<table class="table">
+								  <thead>
+								    <tr>
+								      <th scope="col"><label id="lblambito">Ámbito</label></th>
+								      <th scope="col"><label id="lblmodens">Modalidad de enseñanza</label></th>
+								      <th scope="col"><label id="lblgenero">Clasicación</label></th>
+								      <th scope="col"><label id="lblturno">Turno</label></th>
+								    </tr>
+								  </thead>
+								  <tbody>
+								    <tr>
+								      <td>
+								      	<div class="form-check">
+										  <input class="form-check-input" type="radio" name="ambradio" id="ambradio1" value="1" th:field="*{programaeducativo.ambito.id}" />
+										  <label class="form-check-label" for="ambradio1">Urbano</label>
+										</div>
+								      </td>
+								      <td>
+								      	<div class="form-check">
+										  <input class="form-check-input" type="radio" name="modensradio" id="modensradio1" value="1" th:field="*{programaeducativo.modensenianza.id}">
+										  <label class="form-check-label" for="modensradio1">Educación Básica Regular</label>
+										</div>
+								      </td>
+								      <td>
+								      	<div class="form-check">
+										  <input class="form-check-input" type="radio" name="genradio" id="genradio1" value="1" th:field="*{programaeducativo.genero.id}">
+										  <label class="form-check-label" for="genradio1">Varones</label>
+										</div>
+								      </td>
+								      <td>
+								      	<div class="form-check">
+										  <input class="form-check-input" type="checkbox" value="1" id="turradio1" th:checked="*{manana}">
+										  <label class="form-check-label" for="turradio1">Mañana</label>
+										</div>
+								      </td>
+								    </tr>
+								    <tr>
+								      <td>
+								      	<div class="form-check">
+									      	<input class="form-check-input" type="radio" name="ambradio" id="ambradio2" value="2" th:field="*{programaeducativo.ambito.id}" />
+										    <label class="form-check-label" for="ambradio2">Rural</label>
+									    </div>
+								      </td>
+								      <td>
+								      	<div class="form-check">
+								      	  <input class="form-check-input" type="radio" name="modensradio" id="modensradio2" value="2" th:field="*{programaeducativo.modensenianza.id}">
+										  <label class="form-check-label" for="modensradio2">Educación Alternativa</label>
+										</div>
+								      </td>
+								      <td>
+								      	<div class="form-check">
+										  <input class="form-check-input" type="radio" name="genradio" id="genradio2" value="2" th:field="*{programaeducativo.genero.id}">
+										  <label class="form-check-label" for="genradio2">Mujeres</label>
+										</div>
+								      </td>
+								      <td>
+								      	<div class="form-check">
+										  <input class="form-check-input" type="checkbox" value="2" id="turradio2"  th:checked="*{tarde}">
+										  <label class="form-check-label" for="turradio2">Tarde</label>
+										</div>
+								      </td>
+								    </tr>
+								    <tr>
+								      <td>
+								      	<div class="form-check">
+										  <input class="form-check-input" type="radio" name="ambradio" id="ambradio3" value="3" th:field="*{programaeducativo.ambito.id}" />
+										  <label class="form-check-label" for="ambradio3">Pequeña Ciudad</label>
+										</div>
+								      </td>
+								      <td>
+								      	<div class="form-check">
+										  <input class="form-check-input" type="radio" name="modensradio" id="modensradio3" value="3" th:field="*{programaeducativo.modensenianza.id}">
+										  <label class="form-check-label" for="modensradio3">Educación Especial</label>
+										</div>
+								      </td>
+								      <td>
+								      	<div class="form-check">
+										  <input class="form-check-input" type="radio" name="genradio" id="genradio3" value="3" th:field="*{programaeducativo.genero.id}">
+										  <label class="form-check-label" for="genradio3">Mixto</label>
+										</div>
+								      </td>
+								      <td>
+								      	<div class="form-check">
+										  <input class="form-check-input" type="checkbox" value="3" id="turradio3"  th:checked="*{noche}" >
+										  <label class="form-check-label" for="turradio3">Noche</label>
+										</div>
+								      </td>
+								    </tr>
+								  </tbody>
+								</table>
+							</div>
+						</div>						
+		        	</div>
+		        	<br>
+		        	<div class="row">
+		        	<div class="col-xs-12 col-sm-12 pt-2">
+						<div class="table-responsive-sm">
+							<table class="table">
+							  <thead>
+							    <tr>
+							      <th scope="col"><label id="lblNivel">Nivel</label></th>
+							      <th scope="col">Nº Secciones</th>
+							      <th scope="col">Nº docentes</th>
+							      <th scope="col">Nº Alumnos</th>
+							      <th scope="col">Nº varones</th>
+							      <th scope="col">Nº mujeres</th>
+							    </tr>
+							  </thead>
+							  <tbody>
+							    <tr>
+							      <td>
+							      	<div class="form-check">
+									  <input class="form-check-input" type="checkbox" value="1" id="nini" name="nini" th:checked="*{tninicial}" />
+									  <label class="form-check-label" for="nini">Inicial</label>
+									</div>
+							      </td>
+							      <td><input class="form-control" type="text" th:value="${nisec}" id="nseci" name="nseci" onKeyPress="return filterInt(event,this)"></td>
+							      <td><input class="form-control" type="text" th:value="${nidoc}" id="ndoci" name="ndoci" onKeyPress="return filterInt(event,this)"></td>
+							      <td><input class="form-control" type="text" th:value="${nial}" id="nalui" name="nalui" onKeyPress="return filterInt(event,this)"></td>
+							      <td><input class="form-control" type="text" th:value="${niva}" id="nvari" name="nvari" onKeyPress="return filterInt(event,this)" onfocusout="totalNivel()"  maxlength="4"></td>
+							      <td><input class="form-control" type="text" th:value="${nimuj}" id="nmuji" name="nmuji" onKeyPress="return filterInt(event,this)" onfocusout="totalNivel()"  maxlength="4"></td>
+							    </tr>
+							    <tr>
+							      <td>
+							      	<div class="form-check pt-3">
+									  <input class="form-check-input" type="checkbox" value="2" id="ninp" name="ninp" th:checked="*{tnprimaria}" />
+									  <label class="form-check-label" for="ninp">Primaria</label>
+									</div>
+							      </td>
+							      <td><input class="form-control" type="text" th:value="${npsec}" id="nsecp" name="nsecp"  onKeyPress="return filterInt(event,this)" maxlength="4"></td>
+							      <td><input class="form-control" type="text" th:value="${npdoc}" id="ndocp" name="ndocp" onKeyPress="return filterInt(event,this)" maxlength="4"></td>
+							      <td><input class="form-control" type="text" th:value="${npal}" id="nalup" name="nalup" onKeyPress="return filterInt(event,this)" maxlength="4"></td>
+							      <td><input class="form-control" type="text" th:value="${npva}" id="nvarp" name="nvarp" onKeyPress="return filterInt(event,this)" onfocusout="totalNivel()"  maxlength="4"></td>
+							      <td><input class="form-control" type="text" th:value="${npmuj}" id="nmujp" name="nmujp" onKeyPress="return filterInt(event,this)" onfocusout="totalNivel()"  maxlength="4"></td>
+							    </tr>
+							    <tr>
+							      <td>
+							      	<div class="form-check pt-3">
+									  <input class="form-check-input" type="checkbox" value="3" id="nins" name="nins" th:checked="*{tnsecundaria}" />
+									  <label class="form-check-label" for="nins">Secundaria</label>
+									</div>
+							      </td>
+							      <td><input class="form-control" type="text" th:value="${nssec}" id="nsecs" name="nsecs" onKeyPress="return filterInt(event,this)" maxlength="4"></td>
+							      <td><input class="form-control" type="text" th:value="${nsdoc}" id="ndocs" name="ndocs" onKeyPress="return filterInt(event,this)" maxlength="4"></td>
+							      <td><input class="form-control" type="text" th:value="${nsal}" id="nalus" name="nalus" onKeyPress="return filterInt(event,this)" maxlength="4"></td>
+							      <td><input class="form-control" type="text" th:value="${nsva}" id="nvars" name="nvars" onKeyPress="return filterInt(event,this)" onfocusout="totalNivel()"  maxlength="4"></td>
+							      <td><input class="form-control" type="text" th:value="${nsva}" id="nmujs" name="nmujs" onKeyPress="return filterInt(event,this)" onfocusout="totalNivel()"  maxlength="4"></td>
+							    </tr>
+							    <tr>
+							    	<td>&nbsp;</td>
+							    	<td>&nbsp;</td>
+							    	<td>&nbsp;</td>
+							    	<td>&nbsp;</td>
+							    	<td>
+							    		<label id="lblTotalVarones"></label>
+							    	</td>
+							    	<td>
+							    		<label id="lblTotalMujeres"></label>
+							    	</td>
+							    </tr>
+							  </tbody>
+							</table>
+						</div>
+					</div>
+		        	</div>
+		      </div>
+		   </div>
+		  </div>
+		  </form>	
+		  <div class="card">
+		    <div class="card-header" id="seragupot">
+		      <h2 class="mb-0">
+		        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
+		          <strong>B. Servicio de Agua Potable</strong>
+		        </button>
+		      </h2>
+		    </div>
+		    
+		    <div id="collapseTwo" class="collapse show" aria-labelledby="seragupot" >
+		      <div class="card-body">
+		       	<div  class="row">
+		       		<div class="col-xs-12 col-sm-6 col-md-4 pt-2">
+		       			<label>Proveedor de servicio</label>
+		       			<select class="form-control" id="proveedor" name="proveedor" th:field="*{programaeducativo.proveedor}">
+		       				<option value="">Seleccione</option>
+		       				<option th:each="p:${proveedor}" th:value="${p.id}" th:utext="*{p.descripcion}"/>
+		       			</select>
+		       		</div>	
+		       	</div>
+		       	<div class="row">	       		
+		       		<div class="col-xs-12 col-sm-6 col-md-4 pt-2" id="seragupotsuministro" name="seragupotsuministro">
+		       			<label>Nº suministro</label>
+		       			<input type="text" class="form-control d-block" id="suministro" name="suministro" onKeyPress="return filterInt(event,this)"/>
+		       			<label class="text-primary" style="cursor:pointer" id="btn_agregarsuministro">+ Agregar suministro</label>
+		       			<div id="agregarsuministro" >
+		       				<table>
+		       					<tr th:each="suministro : ${listasuministro}">
+		       						<td>
+		       							<div class="alert alert-warning alert-dismissible fade show" role="alert">
+										  <label th:text="${suministro.numero}"></label>
+										  
+										  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+										    <span aria-hidden="true">&times;</span>
+										  </button>
+										</div>
+		       						</td>
+		       					</tr>
+		       				</table>
+		       			</div>
+		       		</div>		       		
+		       		<div class="col-xs-12 col-sm-6 col-md-4 pt-2">
+		       			<label>Horas de abastecimiento de agua</label>
+		       			<select class="form-control" id="abastecimiento" name="abastecimiento" th:field="*{programaeducativo.abastecimiento}">
+		       				<option value="">Seleccione</option>
+							<option value="0">0</option>
+		       				<option value="1">1</option>
+		       				<option value="2">2</option>
+		       				<option value="3">3</option>
+		       				<option value="4">4</option>
+		       				<option value="5">5</option>
+		       				<option value="6">6</option>
+		       				<option value="7">7</option>
+		       				<option value="8">8</option>
+		       				<option value="9">9</option>
+		       				<option value="10">10</option>
+		       				<option value="11">11</option>
+		       				<option value="12">12</option>
+		       				<option value="13">13</option>
+		       				<option value="14">14</option>
+		       				<option value="15">15</option>
+		       				<option value="16">16</option>
+		       				<option value="17">17</option>
+		       				<option value="18">18</option>
+		       				<option value="19">19</option>
+		       				<option value="20">20</option>
+		       				<option value="21">21</option>
+		       				<option value="22">22</option>
+		       				<option value="23">23</option>
+		       				<option value="24">24</option>
+		       			</select>
+		       		</div>
+		       		<div class="col-xs-12 col-sm-6 col-md-4 pt-2">
+		       			<center>
+		       			<label id="lblPiscina">¿Cuenta con piscina? <img src="../images/tint-solid.svg" style="width:12px"/></label><br>	
+		       			<div class="form-check form-check-inline">
+						  <input class="form-check-input" type="radio" name="piscina" id="piscina1" value="1" th:field="*{programaeducativo.piscina.id}" >
+						  <label class="form-check-label" for="piscina1">Si</label>
+						</div>
+						<div class="form-check form-check-inline">
+						  <input class="form-check-input" type="radio" name="piscina" id="piscina0" value="0" th:field="*{programaeducativo.piscina.id}" >
+						  <label class="form-check-label" for="piscina0">No</label>
+						</div>
+						</center>
+		       		</div>
+		       	</div>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="card">
+		    <div class="card-header" id="datdirgen">
+		      <h2 class="mb-0">
+		        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTree" aria-expanded="true" aria-controls="collapseOne">
+		          <strong>C. Datos del Director General</strong>
+		        </button>
+		      </h2>
+		    </div>
+		    
+		    <div id="collapseTree" class="collapse show" aria-labelledby="datdirgen" >
+		      <div class="card-body">
+		       	<div  class="row">
+		       		<div class="col-xs-12 col-sm-6 col-md-3 pt-2">
+		       			<label>Tipo de documento de identidad</label>
+		       			<select class="form-control"  id="tipodocdir" name="tipodocdir" th:field="*{programaeducativo.tipodocidentdir.id}">
+		       				<option value="">Seleccione</option>
+		       				<option th:each="td:${tipodoc}" th:value="${td.id}" th:utext="${td.descripcion}"/>
+		       			</select>
+		       		</div>		       		
+		       		<div class="col-xs-12 col-sm-6 col-md-3 pt-2">
+		       			<label>Nº de documento de identidad</label>
+		       			<input type="text" class="form-control" id="docdir" name="docdir" onKeyPress="return filterIntNroDocIdentidadDirector(event,this)" th:field="*{programaeducativo.docdir}">
+		       		</div>		       		
+		       		<div class="col-xs-12 col-sm-6 col-md-3 pt-2">
+		       			<label>Apellidos</label>
+		       			<input type="text" class="form-control" id="apedir" name="apedir" onKeyPress="return filterCadena(event,this)" th:field="*{programaeducativo.apedir}" />
+		       		</div>
+		       		<div class="col-xs-12 col-sm-6 col-md-3 pt-2">
+		       			<label>Nombres</label>
+		       			<input type="text" class="form-control" id="nomdir" name="nomdir" onKeyPress="return filterCadena(event,this)" th:field="*{programaeducativo.nomdir}" />
+		       		</div>
+		       		<div class="col-xs-12 col-sm-6 col-md-3 pt-2">
+		       			<label>Género</label>
+		       			<select class="form-control"  id="generodir" name="generodir" th:field="*{programaeducativo.generodir.id}">
+		       				<option value="">Seleccione</option>
+		       				<option th:each="td:${generodir}" th:value="${td.id}" th:utext="${td.descripcion}"/>
+		       			</select>
+		       		</div>	
+		       		<div class="col-xs-12 col-sm-6 col-md-3 pt-2">
+		       			<label for="">Teléfono</label>			
+						<div class="input-group mb-2">
+							<div class="input-group-prepend">
+								<div class="input-group-text">
+									<img src="../images/phone-square-alt-solid.svg" style="width:20px" />
+								</div>
+							</div>
+							<input type="text" class="form-control" id="telfdir" name="telfdir" onKeyPress="return filterInt(event,this)" maxlength="12" th:field="*{programaeducativo.telfdir}" />
+						</div>						
+		       		</div>		       		
+		       		<div class="col-xs-12 col-sm-6 col-md-3 pt-2">
+		       			<label for="">Celular</label>			
+						<div class="input-group mb-2">
+							<div class="input-group-prepend">
+								<div class="input-group-text">
+									<img src="../images/mobile-alt-solid.svg" style="width:15px" onKeyPress="return filterInt(event,this)" maxlength="9"/>
+								</div>
+							</div>
+							<input type="text" class="form-control" id="celdir" name="celdir" maxlength="9" onKeyPress="return filterInt(event,this)" th:field="*{programaeducativo.celdir}" >
+						</div>		
+		       		</div>
+		       		<div class="col-xs-12 col-sm-6 pt-2">
+		       			<label for="">Correo electrónico</label>
+						<div class="input-group mb-2">
+							<div class="input-group-prepend">
+								<div class="input-group-text">
+									<img src="../images/envelope-solid.svg" style="width:20px"/>
+								</div>
+							</div>
+							<input type="text" class="form-control" id="maildir" name="maildir" th:field="*{programaeducativo.maildir}" >
+						</div>						
+		       		</div>
+		       	</div>
+		      </div>
+		    </div>
+		    
+		  </div>
+		  <div class="card">		    
+		    <div class="card-header" id="datpro">
+		      <h2 class="mb-0">
+		        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseOne">
+		          <strong>D. Datos del Profesor(es) asignado como contacto para las actividades</strong> 
+		        </button>
+		      </h2>
+		    </div>
+		    <div id="collapseFour" class="collapse show" aria-labelledby="datpro">
+		      <div class="card-body">
+		       	<div  class="row">
+		       		<div class="col-xs-12 col-sm-6 col-md-3 pt-2">
+		       			<label>Tipo de documento de identidad</label>
+		       			<select class="form-control" id="tipodocprof" name="tipodocprof" th:field="*{programaeducativo.tipodocidentprof.id}">
+		       				<option value="">Seleccione</option>
+		       				<option th:each="td:${tipodoc}" th:value="${td.id}" th:utext="${td.descripcion}"/>
+		       			</select>
+		       		</div>		       		
+		       		<div class="col-xs-12 col-sm-6 col-md-3 pt-2">
+		       			<label>Nº de documento de identidad</label>
+		       			<input type="text" class="form-control" id="docprof" name="docprof" onKeyPress="return filterIntNroDocIdentidadProfesor(event,this)" th:field="*{programaeducativo.docprof}" >
+		       		</div>		       		
+		       		<div class="col-xs-12 col-sm-6 col-md-3 pt-2">
+		       			<label>Apellidos</label>
+		       			<input type="text" class="form-control" id="apeprof" name="apeprof" onKeyPress="return filterCadena(event,this)" th:field="*{programaeducativo.apeprof}" />
+		       		</div>
+		       		<div class="col-xs-12 col-sm-6 col-md-3 pt-2">
+		       			<label>Nombres</label> 
+		       			<input type="text" class="form-control" id="nomprof" name="nomprof" onKeyPress="return filterCadena(event,this)" th:field="*{programaeducativo.nomprof}" />
+		       		</div>
+		       		<div class="col-xs-12 col-sm-6 col-md-3 pt-2">
+		       			<label>Género</label>
+		       			<select class="form-control"  id="generoprof" name="generoprof" th:field="*{programaeducativo.generoprof.id}">
+		       				<option value="">Seleccione</option>
+		       				<option th:each="td:${generoprof}" th:value="${td.id}" th:utext="${td.descripcion}"/>
+		       			</select>
+		       		</div>
+		       		<div class="col-xs-12 col-sm-6 col-md-3 pt-2">
+		       			<label for="">Teléfono</label>			
+						<div class="input-group mb-2">
+							<div class="input-group-prepend">
+								<div class="input-group-text">
+									<img src="../images/phone-square-alt-solid.svg" style="width:20px" >
+								</div>
+							</div>
+							<input type="text" class="form-control" id="telfprof" name="telfprof" maxlength="12" onKeyPress="return filterInt(event,this)" th:field="*{programaeducativo.telfprof}" >
+						</div>	
+		       		</div>		       		
+		       		<div class="col-xs-12 col-sm-6 col-md-3 pt-2">
+		       			<label for="">Celular</label>			
+						<div class="input-group mb-2">
+							<div class="input-group-prepend">
+								<div class="input-group-text">
+									<img src="../images/mobile-alt-solid.svg" style="width:15px" />
+								</div>
+							</div>
+							<input type="text" class="form-control" id="celprof" name="celprof" onKeyPress="return filterInt(event,this)" maxlength="9" th:field="*{programaeducativo.celprof}" >
+						</div>	
+		       		</div>
+		       		<div class="col-xs-12 col-sm-6 pt-2">
+		       			<label for="">Correo electrónico</label>			
+						<div class="input-group mb-2">
+							<div class="input-group-prepend">
+								<div class="input-group-text">
+									<img src="../images/envelope-solid.svg" style="width:20px"/>
+								</div>
+							</div>
+							<input type="text" class="form-control" id="mailprof" name="mailprof" th:field="*{programaeducativo.mailprof}">
+						</div>	
+		       		</div>
+		       	</div>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		<div class="pt-3 pb-3">
+			<input class="btn btn-primary  text-white float-right ml-2 pl-2 rounded-0" type="button" value="Actualizar" id="btnactualizarprogeduc">
+		</div>
+		<br><br>
+	</div>	
+	<div class="modal" tabindex="-1" role="dialog" id="modalcargando">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title"><label class="text-primary">Confirmación de Actualización de Programa Educativo</label></h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        ¿Está seguro que actualizar los datos?
+	      </div>
+	      <div class="modal-footer">
+	        <input class="btn btn-outline-primary" type="button" value="Cancelar" id="btncancelarprogeduc" name="btncancelarprogeduc">
+	        <input class="btn btn-primary text-white" type="button" value="Aceptar" id="btnconfirmarprogeduc" name="btnconfirmarprogeduc">
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="modal" tabindex="-1" role="dialog" id="modalexito">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <!-- h5 class="modal-title"><label class="text-primary">exito</label></h5-->
+	        <img th:src="@{/images/imagen_exito5.png}"/>&nbsp;&nbsp; <strong class="pt-1">Registro exitoso</strong>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body" id="textoexito">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary rounded-0" id="btncerrarmensajeexito" name="btncerrarmensajeexito">Cerrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="modal" tabindex="-1" role="dialog" id="modalinformacion">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <!--h5 class="modal-title"><label class="text-primary"></label></h5-->
+	        <img th:src="@{/images/imagen_informacion11.png}" />&nbsp;&nbsp; <strong class="pt-1">Alerta</strong>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body" id="textoinformacion">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary rounded-0" id="btncerrarmensajeinformacion" name="btncerrarmensajeinformacion">Cerrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="modal" tabindex="-1" role="dialog" id="modalerror">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <!--h5 class="modal-title"><label class="text-primary"></label></h5-->
+	        <img th:src="@{/images/imagen_informacion11.png}"/>&nbsp;&nbsp; <strong class="pt-1">Error</strong>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>	          
+	        </button>
+	      </div>
+	      <div class="modal-body" id="textoerror">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary rounded-0" id="btncerrarmensajeerror" name="btncerrarmensajeerror">Cerrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="modal" tabindex="-1" role="dialog" id="modalimagencargando">
+	  <center>
+	  	<img th:src="@{/images/cargando.gif}" style="line-height: 200px;"/>
+	  </center>	  
+	</div>	
+	
+</body>
+</html>
