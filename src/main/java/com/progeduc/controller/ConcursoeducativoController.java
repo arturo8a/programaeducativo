@@ -1346,7 +1346,7 @@ public class ConcursoeducativoController {
 				}
 				listaTrabajosFinalesPendientes = new ListaTrabajosFinalesPendientes();
 				listaTrabajosFinalesPendientes.setAnio(data.getAnio());
-				listaTrabajosFinalesPendientes.setCodigo(data.getId());
+				listaTrabajosFinalesPendientes.setCodigo(data.getProgramaeducativo().getId()+"_"+data.getId());
 				listaTrabajosFinalesPendientes.setOds(strOds);
 				listaTrabajosFinalesPendientes.setIiee(data.getProgramaeducativo().getCodmod());
 				listaTrabajosFinalesPendientes.setCategoria(data.getCategoriatrabajo().getDescripcion());
@@ -1384,7 +1384,7 @@ public class ConcursoeducativoController {
 				}
 				listaTrabajosFinalesPendientes = new ListaTrabajosFinalesPendientes();
 				listaTrabajosFinalesPendientes.setAnio(data.getAnio());
-				listaTrabajosFinalesPendientes.setCodigo(data.getId());
+				listaTrabajosFinalesPendientes.setCodigo(data.getProgramaeducativo().getId()+"_"+data.getId());
 				listaTrabajosFinalesPendientes.setOds(strOds);
 				listaTrabajosFinalesPendientes.setIiee(data.getProgramaeducativo().getCodmod());
 				listaTrabajosFinalesPendientes.setCategoria(data.getCategoriatrabajo().getDescripcion());
