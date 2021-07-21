@@ -82,26 +82,26 @@ var listar = function (){ console.log('listar()');
 		        { 'data' : 'modalidad' },
 		        { 'data' : 'titulotrabajo' },
 		       	{ 'data' : 'nivelparticipacion' },
-		        { 'data' : 'codigo' ,
+		        { 'data' : 'trabajo' ,
 	                   render: function(data, type) {
 	                   		var x = '<img src="./images/iconos_nd/pdf1.svg" class="fichatrabajo" data-id="'+data+'" style="width:20px; cursor:pointer"/>';
                             return x;
                         }
                 },
-                { 'data' : 'codigo' ,
+                { 'data' : 'trabajo' ,
 	                   render: function(data, type) {
 	                   		var x = '<img src="./images/svg/eye-solid.svg" class="evidencia" data-id="'+data+'" style="width:20px; cursor:pointer"/>';
                             return x;
                         }
                 },
-		        { 'data' : 'codigo' ,
+		        { 'data' : 'trabajo' ,
 	                   render: function(data, type) {
 	                   		var x = '<img src="./images/svg/eye-solid.svg" class="trabajo" data-id="'+data+'" style="width:20px; cursor:pointer"/>';
                             return x;
                         }
                 },
 		        { 'data' : 'permisos' },
-		        { 'data' : 'codigo' ,
+		        { 'data' : 'trabajo' ,
 	                   render: function(data, type) {
 	                   		var x = "<button type='button' data-id='"+data+"' class='registrarEvaliacion btn btn-primary'>Evaluar</button>";
 	                        /*switch (data) {

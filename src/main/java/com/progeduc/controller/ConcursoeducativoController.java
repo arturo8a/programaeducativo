@@ -65,6 +65,7 @@ import com.progeduc.model.Postulacionconcurso;
 import com.progeduc.model.Programaeducativo;
 import com.progeduc.model.Trabajosfinales;
 import com.progeduc.model.TrabajosfinalesParticipante;
+import com.progeduc.model.TrabajosfinalesUsuarioAlianza;
 import com.progeduc.model.Usuario;
 import com.progeduc.model.UsuarioAlianza;
 import com.progeduc.model.UsuarioLdap;
@@ -1334,9 +1335,43 @@ public class ConcursoeducativoController {
 	
 	@GetMapping("/listatrabpendientesasignados")
 	public ResponseEntity<List<ListaTrabajosFinalesPendientes>>listTrabajosPendientesAsignados(HttpSession ses){
+		Integer userAlianzaId = Integer.parseInt(ses.getAttribute("userId").toString());
 		
+		List<TrabajosfinalesUsuarioAlianza> listTrabAsignados = trabajosFinales_UsuarioAlianzaServ.listaTrabajosIdByUsuarioId(userAlianzaId);
 		List<ListaTrabajosFinalesPendientes> lista = new ArrayList<ListaTrabajosFinalesPendientes>();
-		List<Trabajosfinales> listaTrabajos = trabajosfinalesServ.listarTrabajosPendientes();
+		
+		listTrabAsignados.forEach(data->{
+			List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteServ.listar(data.getTrabajosfinales().getId());
+			Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
+			Evaluacion eval = evaluacionService.getPorAnioCategoriaNivelparticipacion(data.getTrabajosfinales().getAnio(), 
+					data.getTrabajosfinales().getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
+			List<EvaluacionResultado> listEvaResultado = evaluacionRespuestaServ.getRespuestas(data.getTrabajosfinales().getId());
+			
+			if(eval != null && listEvaResultado.size() == 0 && data.getTrabajosfinales().getEnviado() == 1) {
+				String strOds = "";
+				/*if(data.getTrabajosfinales().getProgramaeducativo().getOds()!=null) {
+					Ods ods = odsserv.byOds(data.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid());
+					strOds = ods.getDes_ods();
+				}*/
+				listaTrabajosFinalesPendientes = new ListaTrabajosFinalesPendientes();
+				listaTrabajosFinalesPendientes.setAnio(data.getTrabajosfinales().getAnio());
+				listaTrabajosFinalesPendientes.setCodigo(data.getTrabajosfinales().getProgramaeducativo().getCodmod()+"_"+data.getTrabajosfinales().getNumeracion());
+				listaTrabajosFinalesPendientes.setOds(odsserv.byOds(data.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+				listaTrabajosFinalesPendientes.setIiee(data.getTrabajosfinales().getProgramaeducativo().getCodmod());
+				listaTrabajosFinalesPendientes.setCategoria(data.getTrabajosfinales().getCategoriatrabajo().getDescripcion());
+				listaTrabajosFinalesPendientes.setModalidad(data.getTrabajosfinales().getModalidadtrabajo().getDescripcion());
+				listaTrabajosFinalesPendientes.setTitulotrabajo(data.getTrabajosfinales().getTitulotrabajo());
+				listaTrabajosFinalesPendientes.setNivelparticipacion(participante.getGradoestudiante().getNivelgradopartdesc());
+				listaTrabajosFinalesPendientes.setEvaluacion("ficha trabajo");
+				listaTrabajosFinalesPendientes.setTrabajo(data.getTrabajosfinales().getId().toString());
+				listaTrabajosFinalesPendientes.setFichatrabajo("ficha trabajo");
+				lista.add(listaTrabajosFinalesPendientes);
+			}
+		});
+		
+
+		
+		/*List<Trabajosfinales> listaTrabajos = trabajosfinalesServ.listarTrabajosPendientes();
 		listaTrabajos.forEach(data->{
 			List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteServ.listar(data.getId());
 			Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
@@ -1366,14 +1401,45 @@ public class ConcursoeducativoController {
 				lista.add(listaTrabajosFinalesPendientes);
 			}
 			
-		});		
+		});	*/	
 		return new ResponseEntity<List<ListaTrabajosFinalesPendientes>>(lista, HttpStatus.OK) ;
 	}
 	
 	@GetMapping("/listatrabevaluados")
 	public ResponseEntity<List<ListaTrabajosFinalesPendientes>>listTrabajosEvaluados(HttpSession ses){
+		Integer userAlianzaId = Integer.parseInt(ses.getAttribute("userId").toString());
 		
+		List<TrabajosfinalesUsuarioAlianza> listTrabAsignados = trabajosFinales_UsuarioAlianzaServ.listaTrabajosIdByUsuarioId(userAlianzaId);
 		List<ListaTrabajosFinalesPendientes> lista = new ArrayList<ListaTrabajosFinalesPendientes>();
+		
+		listTrabAsignados.forEach(data->{
+			List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteServ.listar(data.getTrabajosfinales().getId());
+			Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
+			Evaluacion eval = evaluacionService.getPorAnioCategoriaNivelparticipacion(data.getTrabajosfinales().getAnio(), 
+					data.getTrabajosfinales().getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
+			List<EvaluacionResultado> listEvaResultado = evaluacionRespuestaServ.getRespuestas(data.getTrabajosfinales().getId());
+			if(eval != null &&  listEvaResultado.size() > 0  && data.getTrabajosfinales().getEnviado() == 1) {
+				/*String strOds = "";
+				if(data.getTrabajosfinales().getProgramaeducativo().getOds()!=null) {
+					Ods ods = odsserv.byOds(data.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid());
+					strOds = ods.getDes_ods();
+				}*/
+				listaTrabajosFinalesPendientes = new ListaTrabajosFinalesPendientes();
+				listaTrabajosFinalesPendientes.setAnio(data.getTrabajosfinales().getAnio());
+				listaTrabajosFinalesPendientes.setCodigo(data.getTrabajosfinales().getProgramaeducativo().getCodmod()+"_"+data.getTrabajosfinales().getNumeracion());
+				listaTrabajosFinalesPendientes.setOds(odsserv.byOds(data.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+				listaTrabajosFinalesPendientes.setIiee(data.getTrabajosfinales().getProgramaeducativo().getCodmod());
+				listaTrabajosFinalesPendientes.setCategoria(data.getTrabajosfinales().getCategoriatrabajo().getDescripcion());
+				listaTrabajosFinalesPendientes.setModalidad(data.getTrabajosfinales().getModalidadtrabajo().getDescripcion());
+				listaTrabajosFinalesPendientes.setTitulotrabajo(data.getTrabajosfinales().getTitulotrabajo());
+				listaTrabajosFinalesPendientes.setNivelparticipacion(participante.getGradoestudiante().getNivelgradopartdesc());
+				listaTrabajosFinalesPendientes.setEvaluacion("ficha trabajo");
+				listaTrabajosFinalesPendientes.setTrabajo(data.getTrabajosfinales().getId().toString());
+				listaTrabajosFinalesPendientes.setFichatrabajo("ficha trabajo");
+				lista.add(listaTrabajosFinalesPendientes);
+			}
+		});
+		/*List<ListaTrabajosFinalesPendientes> lista = new ArrayList<ListaTrabajosFinalesPendientes>();
 		List<Trabajosfinales> listaTrabajos = trabajosfinalesServ.listarTrabajosEvaluados();
 		listaTrabajos.forEach(data->{
 			List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteServ.listar(data.getId());
@@ -1404,7 +1470,7 @@ public class ConcursoeducativoController {
 				lista.add(listaTrabajosFinalesPendientes);
 			}
 			
-		});		
+		});	*/	
 		return new ResponseEntity<List<ListaTrabajosFinalesPendientes>>(lista, HttpStatus.OK) ;
 	}
 	
@@ -1673,7 +1739,7 @@ public class ConcursoeducativoController {
 			dto.getTrabajos_evaluados().forEach(te->{
 				dto.getEvaluadores().forEach(ev->{
 					if(trabajosFinales_UsuarioAlianzaServ.buscar(te.getId(),ev.getId()) == null) {
-						trabajosFinales_UsuarioAlianzaServ.guardar(te.getId(),ev.getId());
+						trabajosFinales_UsuarioAlianzaServ.guardar(te.getId(),ev.getId(),-1f);
 						trabajosfinalesServ.updateEstadoTrabajo(te.getId(),2);
 						rpta = 1;
 					}
@@ -1687,9 +1753,14 @@ public class ConcursoeducativoController {
 	}
 	
 	@PostMapping(value="/registrarRespuestasEvaluacion")
-	public Integer registrarRespuestasEvaluacion(@Valid @RequestBody List<EvaluacionResultado> lista) {
+	public Integer registrarRespuestasEvaluacion(@Valid @RequestBody List<EvaluacionResultado> lista,HttpSession ses) {
 		
 		try {
+			
+			Integer userAlianzaId = Integer.parseInt(ses.getAttribute("userId").toString());
+			UsuarioAlianza usuAlianza = new UsuarioAlianza();
+			usuAlianza.setId(userAlianzaId);
+			
 			
 			lista.forEach(obj->{
 				EvaluacionResultado resultado = new EvaluacionResultado();
@@ -1698,6 +1769,7 @@ public class ConcursoeducativoController {
 				resultado.setTrabajosfinales(obj.getTrabajosfinales());
 				resultado.setTipo(obj.getTipo());
 				resultado.setPuntaje(obj.getPuntaje());
+				resultado.setUsuario(usuAlianza);
 				evaluacionRespuestaServ.registrar(resultado);
 				
 				totalNota += obj.getPuntaje();

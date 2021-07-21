@@ -82,26 +82,26 @@ var listar = function (){ console.log('listar()');
 		        { 'data' : 'modalidad' },
 		        { 'data' : 'titulotrabajo' },
 		       	{ 'data' : 'nivelparticipacion' },
-		        { 'data' : 'codigo' ,
+		        { 'data' : 'trabajo' ,
 	                   render: function(data, type) {
 	                   		var x = '<img src="./images/iconos_nd/pdf1.svg" class="fichatrabajo" data-id="'+data+'" style="width:20px; cursor:pointer"/>';
                             return x;
                         }
                 },
-                { 'data' : 'codigo' ,
+                { 'data' : 'trabajo' ,
 	                   render: function(data, type) {
 	                   		var x = '<img src="./images/svg/eye-solid.svg" class="evidencia" data-id="'+data+'" style="width:20px; cursor:pointer"/>';
                             return x;
                         }
                 },
-		        { 'data' : 'codigo' ,
+		        { 'data' : 'trabajo' ,
 	                   render: function(data, type) {
 	                   		var x = '<img src="./images/svg/eye-solid.svg" class="trabajo" data-id="'+data+'" style="width:20px; cursor:pointer"/>';
                             return x;
                         }
                 },
 		        { 'data' : 'permisos' },
-		        { 'data' : 'codigo' ,
+		        { 'data' : 'trabajo' ,
 	                   render: function(data, type) {
 	                   		var x = "<button type='button' data-id='"+data+"' class='mostrarEvaliacion btn btn-primary'>Evaluación</button>";
 	                        /*switch (data) {
@@ -209,7 +209,7 @@ function registarEvaliacionTrabajosPendientes(id){ console.log('-->mostrarrEvali
 	
 	$.ajax({
 		type : "GET",
-	    url : url_base + "pedesa/formregistrarevaluacion/"+ id,
+	    url : url_base + "pedesa/formmostrarevaluacion/"+ id,
 		success: function(respuesta) {
 			$("#contenidoevaluartrabajospendientes").html(respuesta);
 			$("#modalimagencargando").modal('hide');
@@ -238,8 +238,10 @@ function getRespuestas(id){
 			$.each(dataRespuestas, function( i, value ) {
 				if(value.tipo == 1){
 					$("input[name='pregunta"+value.respuestaid+"'][value='"+value.puntaje+"']").prop("checked",true);
+					$("input[name='pregunta"+value.respuestaid+"'][value='"+value.puntaje+"']").click();
 				}else{
 					$("input[id='puntajeq"+value.respuestaid+"']").prop("checked",true);
+					$("input[id='puntajeq"+value.respuestaid+"']").click();
 				}
 			});
 		},

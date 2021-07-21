@@ -16,8 +16,8 @@ public class Trabajosfinales_UsuarioAlianzaServiceImpl implements ITrabajosfinal
 	ITrabajosfinalesUsuarioAlianzaRepo trabajosfinalesUsuarioAlianzaRepo;
 	
 	@Override
-	public Integer guardar(Integer trabajosfinalesid, Integer usuarioalianzaid) {
-		return trabajosfinalesUsuarioAlianzaRepo.guardar(trabajosfinalesid, usuarioalianzaid);
+	public Integer guardar(Integer trabajosfinalesid, Integer usuarioalianzaid, Float nota) {
+		return trabajosfinalesUsuarioAlianzaRepo.guardar(trabajosfinalesid, usuarioalianzaid, nota);
 	}
 
 	@Override
@@ -38,6 +38,11 @@ public class Trabajosfinales_UsuarioAlianzaServiceImpl implements ITrabajosfinal
 	@Override
 	public TrabajosfinalesUsuarioAlianza buscar(Integer trabajofinalid, Integer usuarioalianzaid) {
 		return trabajosfinalesUsuarioAlianzaRepo.buscar(trabajofinalid, usuarioalianzaid);
+	}
+
+	@Override
+	public List<TrabajosfinalesUsuarioAlianza> listaTrabajosIdByUsuarioId(Integer usuarioalianzaid) {
+		return trabajosfinalesUsuarioAlianzaRepo.listaTrabajosIdByUsuarioId(usuarioalianzaid);
 	}
 
 }
