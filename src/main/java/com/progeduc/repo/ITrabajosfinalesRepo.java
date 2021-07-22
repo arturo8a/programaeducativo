@@ -27,6 +27,9 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
 	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where TB1.estado=1 and TB1.enviado=1 and TB1.programaeducativoid=?1",nativeQuery = true)
 	List<Trabajosfinales> listarHabilitadosEnviados(Integer programaeducativoid);
 	
+	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where TB1.categoriatrabajoid=?1 and TB1.modalidadtrabajoid=?2 and TB1.estado=?1",nativeQuery = true)
+	List<Trabajosfinales> BuscarCategoriaModalidad(Integer idcategoria, Integer idmodalidad);
+	
 	@Query(value="SELECT max(numeracion) FROM Trabajosfinales tr where tr.programaeducativoid=?1",nativeQuery = true)
 	Integer maxNumeracion(Integer programaeducativoid);
 	

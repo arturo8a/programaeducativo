@@ -80,11 +80,16 @@ public class LoginController {
 		
 		if(rpta == 1){
 			Usuario obj = usuarioServ.byUsuario(usuario);
-			if(obj.getTipousuario().getId() == 1 || obj.getTipousuario().getId() == 2 || obj.getTipousuario().getId() == 11 || obj.getTipousuario().getId() == 12 ) {
-				ses.setAttribute("usuario", obj.getUsuario());/*admin,espcialista ods, especialista du*/
-        		ses.setAttribute("perfil", obj.getTipousuario().getDescripcion());
-        		ses.setAttribute("tipousuarioid", obj.getTipousuario().getId());
-        		return obj.getUsuario();
+			if(obj!=null) {
+				if(obj.getTipousuario().getId() == 1 || obj.getTipousuario().getId() == 2 || obj.getTipousuario().getId() == 11 || obj.getTipousuario().getId() == 12 ) {
+					ses.setAttribute("usuario", obj.getUsuario());/*admin,espcialista ods, especialista du*/
+	        		ses.setAttribute("perfil", obj.getTipousuario().getDescripcion());
+	        		ses.setAttribute("tipousuarioid", obj.getTipousuario().getId());
+	        		return obj.getUsuario();
+				}
+			}
+			else {
+				return "-3"; /**/
 			}
 		}
 		else {
@@ -158,6 +163,11 @@ public class LoginController {
 		ses.removeAttribute("perfil");
 		ses.removeAttribute("flag");
 		System.out.println("/cerrar_session :"+ses.getAttribute("usuario"));		
+		return "login";
+	}
+	
+	@GetMapping("/pagina_login")
+	public String  pagina_login() {
 		return "login";
 	}
 	

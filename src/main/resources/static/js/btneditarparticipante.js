@@ -288,6 +288,9 @@ $(document).ready(function(){
 						}	
 											
 					}
+					else if(respuesta == -100){
+						 window.location = url_base + "pedesa";
+					}
 					else if(respuesta==0){
 						$("#modalimagencargando").modal('hide');
 						$("#textoerror").html("Error al registrar participante");

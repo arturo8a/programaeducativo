@@ -24,7 +24,8 @@ var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="
 	
 	var data_evidencias = "<table><tr>";
 	for(var i=0;i<$("#nroevidencias").val();i++){
-		data_evidencias += "<td><div class='alert alert-warning alert-dismissible fade show' role='alert' style='width:125px'><strong><abbr title='"+($("#evidencia" + (i+1)).val())+"'>"+($("#evidencia" + (i+1)).val()).substr(0,5)+"</abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaInicial("+'`'+($("#evidencia" + (i+1)).val())+'`'+")' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div></td>";
+		array_evidencias.push($("#evidencia" + (i+1)).val());
+		data_evidencias += "<td><div id='"+$("#evidencia" + (i+1)).val()+"' class='mi_alert mi_alert-warning mi_alert-dismissible fade show' role='alert' ><strong><abbr title='"+($("#evidencia" + (i+1)).val())+"'>"+($("#evidencia" + (i+1)).val()).substr(0,5)+"</abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaInicial("+'`'+($("#evidencia" + (i+1)).val())+'`'+")' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div></td>";
 	}
 	data_evidencias += "</tr></table>";
 	evidencia_inicial  = data_evidencias;
@@ -40,8 +41,9 @@ var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="
 		var data_archivo_subir = "<table><tr><td>"+evidencia_inicial+"</td>";
 		contador_evidencias_subidos_editar = 0;
 		for(var i=0;i<evidenciastrabajoeditar.files.length;i++){
+			array_evidencias.push(evidenciastrabajoeditar.files[i].name);
 			contador_evidencias_subidos_editar++;
-			data_archivo_subir += "<td><div class='alert alert-primary alert-dismissible fade show' role='alert' style='width:125px'><strong><abbr title='"+(evidenciastrabajoeditar.files[i].name)+"'>"+(evidenciastrabajoeditar.files[i].name).substr(0,5)+"<abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaEditar("+'`'+(evidenciastrabajoeditar.files[i].name)+'`'+")' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div></td>";
+			data_archivo_subir += "<td><div id='"+(evidenciastrabajoeditar.files[i].name)+"' class='mi_alert mi_alert-primary mi_alert-dismissible fade show' role='alert' style='width:125px'><strong><abbr title='"+(evidenciastrabajoeditar.files[i].name)+"'>"+(evidenciastrabajoeditar.files[i].name).substr(0,5)+"<abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaEditar("+'`'+(evidenciastrabajoeditar.files[i].name)+'`'+")' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div></td>";
 		}
 		data_archivo_subir += "</tr></table>";
 		$("#divevidencias").html(data_archivo_subir);
@@ -70,13 +72,15 @@ var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="
 
 
 	$("#categoriatrabajoeditar").change(function(){
-		categoriatrabajo = $("#categoriatrabajoeditar").val();			
-		if(categoriatrabajo == '1' ||  categoriatrabajo == '3')
+		categoriatrabajo = $("#categoriatrabajoeditar").val();		
+		$("#linkvideoeditar").val("");	
+		if(categoriatrabajo == '1' ||  categoriatrabajo == '3'){
 			$( "#linkvideoeditar" ).prop( "disabled", false );
-		if(categoriatrabajo == '2' ||  categoriatrabajo == '4' ||  categoriatrabajo == '5')
+		}			
+		else if(categoriatrabajo == '2' ||  categoriatrabajo == '4' ||  categoriatrabajo == '5'){
 			$( "#linkvideoeditar" ).prop( "disabled", true );
-		array_indice = new Array();	
-		
+		}		
+		array_indice = new Array();		
 		table_lpt_editar.rows().deselect();
 		table_lpt_editar.draw();
 	});
@@ -347,6 +351,9 @@ var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="
 					    });
 						
 					}
+					else if(respuesta == -100){
+						 window.location = url_base + "pedesa";
+					}
 					else{
 						$("#modalimagencargando").modal('hide');
 						$("#textoerroreditar").html("Error al registrar trabajo");
@@ -438,12 +445,19 @@ var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="
    	);
 	
 	function eliminarEvidenciaInicial(archivo){
+		for(var i =0;i<array_evidencias.length;i++){
+			if(array_evidencias[i] == archivo){
+				array_evidencias.splice(i,1);
+			}
+		}
 		array_evidencias_eliminadas.push(archivo);
+		$("#"+archivo).remove();
 		/*$("#evidenciastrabajoeditar").prop("disabled",false);*/
 	}
 	
 	function eliminarEvidenciaEditar(archivo){
 		array_evidencias_eliminadas_editar.push(archivo);
+		$("#"+archivo).remove();
 	}	
 	
 	function filtraCategoriaModalidad(campo1, campo2){

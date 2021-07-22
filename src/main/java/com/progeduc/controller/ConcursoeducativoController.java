@@ -1,6 +1,7 @@
 package com.progeduc.controller;
 
 import java.io.IOException;
+import java.net.URI;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -43,7 +44,6 @@ import com.progeduc.dto.EvaluacionRubricaQuestionarioDto;
 import com.progeduc.dto.EvaluadorDto;
 import com.progeduc.dto.ListaDocente;
 import com.progeduc.dto.ListaDocenteInscritos;
-import com.progeduc.dto.ListaInstitucionEducativa;
 import com.progeduc.dto.ListaTrabajosFinalesPendientes;
 import com.progeduc.dto.ListaparticipanteDto;
 import com.progeduc.dto.ListaparticipantetrabajoDto;
@@ -191,12 +191,40 @@ public class ConcursoeducativoController {
 	}
 	
 	@PostMapping(value = "/savetrabajosfinalesparticipante")
-	public Integer savetrabajosfinalesparticipante(@Valid @RequestBody TrabajosfinalesParticipanteDto dto,HttpSession ses){
+	public Integer savetrabajosfinalesparticipante(@Valid @RequestBody TrabajosfinalesParticipanteDto dto,HttpSession ses){ 
 		
+		rpta = 0;
+		if( ses.getAttribute("usuario")==null)
+			return -100;		
 		Integer categoria_dto = dto.getTrabajosfinales().getCategoriatrabajo().getId();
 		Integer modalidad_dto = dto.getTrabajosfinales().getModalidadtrabajo().getId();
+		
+		/*if(modalidad_dto == 1) {
+			Trabajosfinales tf1 = (Trabajosfinales) trabajosfinalesServ.BuscarCategoriaModalidad(categoria_dto, modalidad_dto);
+			if(tf1!=null) {
+				List<TrabajosfinalesParticipante> mi_tfp = trabajosfinalesparticipanteServ.listar(tf1.getId());
+				mi_tfp.forEach(obj->{
+					if(obj.getParticipante().getId() == dto.getListaparticipante().get(0).getId()){
+						rpta = -2;
+					}
+				});
+			}
+		}
+		else {
+			Trabajosfinales tf2 = (Trabajosfinales) trabajosfinalesServ.BuscarCategoriaModalidad(categoria_dto, modalidad_dto);
+			if(tf2!=null) {
+				List<TrabajosfinalesParticipante> mi_tfp = trabajosfinalesparticipanteServ.listar(tf2.getId());
+				mi_tfp.forEach(obj->{
+					if(obj.getParticipante().getId() == dto.getListaparticipante()){
+						rpta = -2;
+					}
+				});
+			}
+		}*/
+		
 		List<Integer> listaIdDto = new ArrayList<Integer>();
  		dto.getListaparticipante().forEach(obj->{
+ 			System.out.println("listaIdParticipanteDto : " + obj.getId());
  			listaIdDto.add(obj.getId());
  		});
 		List<Trabajosfinales> listaTrabajosFinales = trabajosfinalesServ.listarhabilitados();
@@ -204,6 +232,7 @@ public class ConcursoeducativoController {
 		listaTrabajosFinales.forEach(obj->{
 			if(obj.getCategoriatrabajo().getId().equals(categoria_dto)	&& obj.getModalidadtrabajo().getId().equals(modalidad_dto)){
 				trabajosfinalesparticipanteServ.listar(obj.getId()).forEach(obj1->{
+					System.out.println("listaIdParticipante : " + obj1.getParticipante().getId());
 					listaIdParticipante.add(obj1.getParticipante().getId());
 				});
 			}
@@ -258,6 +287,8 @@ public class ConcursoeducativoController {
 	
 	@GetMapping(value="/eliminartrabajoid/{id}")
 	public Integer eliminartrabajoid(@PathVariable("id") Integer id,HttpSession ses) {
+		if( ses.getAttribute("usuario")==null)
+			return -100;
 		String codmod = ses.getAttribute("usuario").toString();
 		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
 		return trabajosfinalesServ.updateestado(id, 0,pe.getId());
@@ -266,6 +297,8 @@ public class ConcursoeducativoController {
 	@GetMapping(value="/enviartrabajoid/{id}")
 	public Integer enviartrabajoid(@PathVariable("id") Integer id,HttpSession ses) {
 		
+		if( ses.getAttribute("usuario")==null)
+			return -100;
 		String codmod = ses.getAttribute("usuario").toString();
 		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
 		return trabajosfinalesServ.updateenviado(id, 1,pe.getId());
@@ -279,6 +312,8 @@ public class ConcursoeducativoController {
 	@PostMapping(value="/registrarparticipante")
 	public Integer registrarparticipante(@Valid @RequestBody Participante participante,HttpSession ses) {
 		
+		if( ses.getAttribute("usuario")==null)
+			return -100;
 		String codmod = ses.getAttribute("usuario").toString();
 		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
 		if(pe!=null) {
@@ -302,9 +337,15 @@ public class ConcursoeducativoController {
 	@PostMapping(value="/registrardocente")
 	public ClaveValor registrardocente(@Valid @RequestBody Docente docente,HttpSession ses) {
 		
+		ClaveValor cl = new ClaveValor();
+		if( ses.getAttribute("usuario")==null) {
+			cl.setId(-100);
+			cl.setValor("");
+			return cl;
+		}
 		String codmod = ses.getAttribute("usuario").toString();
 		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
-		ClaveValor cl = new ClaveValor();
+		
 		if(pe!=null) {
 			docente.setProgramaeducativo(pe);
 			Date date= new Date();
@@ -340,7 +381,10 @@ public class ConcursoeducativoController {
 	}
 	
 	@PostMapping(value="/actualizardocente")
-	public Docente actualizardocente(@Valid @RequestBody Docente docente,HttpSession ses) {
+	public Integer actualizardocente(@Valid @RequestBody Docente docente,HttpSession ses) {
+		
+		if( ses.getAttribute("usuario")==null)
+			return -100;
 		
 		String codmod = ses.getAttribute("usuario").toString();
 		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
@@ -360,7 +404,7 @@ public class ConcursoeducativoController {
 		midocente.setProgramaeducativo(pe);
 		midocente.setTipodocumento(docente.getTipodocumento());
 		docenteService.registrar(midocente);
-		return midocente;
+		return midocente.getId();
 	}
 	
 	@PostMapping(value="/registrarasignarevaluador")
@@ -388,6 +432,8 @@ public class ConcursoeducativoController {
 	@PostMapping(value="/updateTrabajosFinalesEnviados")
 	public Integer updateTrabajosFinalesEnviados(@Valid @RequestBody List<TrabajofinalesEnviadoDto> dto,HttpSession ses) {
 		
+		if( ses.getAttribute("usuario")==null)
+			return -100;
 		String codmod = ses.getAttribute("usuario").toString();
 		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
 		banderaUpdate = true;		
@@ -496,6 +542,9 @@ public class ConcursoeducativoController {
 	@GetMapping("/participar_concurso")
 	public String participar_concurso(HttpSession ses) throws ParseException {
 		
+		if( ses.getAttribute("usuario")==null)
+			return "-100";
+		
 		Calendar fecha = Calendar.getInstance();
 		Date date = Calendar.getInstance().getTime();
 		DateFormat formato = new SimpleDateFormat("dd/MM/yy");
@@ -539,6 +588,9 @@ public class ConcursoeducativoController {
 	@GetMapping(value = "/listaparticipantes")
 	public ResponseEntity<List<ListaparticipanteDto>> listaparticipante(HttpSession ses){
 		
+		if( ses.getAttribute("usuario")==null) {
+			ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://prometeo.sunass.gob.pe/pedesa")).build();
+		}		
 		String codmod = ses.getAttribute("usuario").toString();
 		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
 		

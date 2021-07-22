@@ -65,22 +65,26 @@
 	    		$.ajax({
 	    			url: url_base + "pedesa/participar_concurso",
 	    			success: function(respuesta) {
-	    				
-	    				switch(respuesta){
-	    				case "a" : $("#modalimagencargando").modal('hide'); alert("No se encuentra aperturado el año"); break;
-    					case "b" : $("#modalimagencargando").modal('hide'); alert("Esta fuera de fechas del anio aperturado"); break;
-    					case "c" : $("#modalimagencargando").modal('hide'); alert("Estimado (a) docente su inscripción al programa educativo aún no ha sido aprobada, por favor espere el correo de confirmación respectivo.");break;
-    					default : 
-    							var programaeducativoid = parseInt(respuesta);
-	    						$.ajax({
-	    			    			url: url_base + "pedesa/postular_concurso/"+programaeducativoid,
-	    			    			success: function(respuesta) {
-	    			    				$("#modalimagencargando").modal('hide');
-	    			    				$("#container").html(respuesta);
-	    			    			}
-	    						});
-	    						break;
-	    				}
+	    				if(respuesta == "-100"){
+							 window.location = url_base + "pedesa";
+						}
+						else{
+							switch(respuesta){
+		    				case "a" : $("#modalimagencargando").modal('hide'); alert("No se encuentra aperturado el aï¿½o"); break;
+	    					case "b" : $("#modalimagencargando").modal('hide'); alert("Esta fuera de fechas del anio aperturado"); break;
+	    					case "c" : $("#modalimagencargando").modal('hide'); alert("Estimado (a) docente su inscripciï¿½n al programa educativo aï¿½n no ha sido aprobada, por favor espere el correo de confirmaciï¿½n respectivo.");break;
+	    					default : 
+	    							var programaeducativoid = parseInt(respuesta);
+		    						$.ajax({
+		    			    			url: url_base + "pedesa/postular_concurso/"+programaeducativoid,
+		    			    			success: function(respuesta) {
+		    			    				$("#modalimagencargando").modal('hide');
+		    			    				$("#container").html(respuesta);
+		    			    			}
+		    						});
+		    						break;
+		    				}
+						}	    				
 	    			}
 	    		});	
 	    	});

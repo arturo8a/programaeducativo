@@ -47,6 +47,9 @@ function validarUsuario(){
 				if(respuesta=="-2"){
 					$("#msj").html("<br><br><strong><label class='text-danger'>Usuario existe en el Sistema pero no se ha registrado en el Programa Educativo</label></strong>");	
 				}
+				if(respuesta=="-2"){
+					$("#msj").html("<br><br><strong><label class='text-danger'>Usuario sin acceso al sistema</label></strong>");	
+				}
 				else{
 					window.location.replace(url_base+"pedesa/menu");
 				}

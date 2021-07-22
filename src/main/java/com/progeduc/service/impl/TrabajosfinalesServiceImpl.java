@@ -120,5 +120,10 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 		// TODO Auto-generated method stub
 		return trabajosfinalesRepo.listarTrabajosEvaluados();
 	}
+	
+	@Override
+	public 	List<Trabajosfinales> BuscarCategoriaModalidad(Integer idcategoria, Integer idmodalidad){
+		return trabajosfinalesRepo.BuscarCategoriaModalidad(idcategoria, idmodalidad);
+	}
 
 }

@@ -235,11 +235,12 @@ public class IndexController {
 		
 		Trabajosfinales tf  = trabajosfinalesService.ListarporId(id);
 		model.addAttribute("tf", tf);
+		System.out.println("hd_categoria :" + tf.getCategoriatrabajo().getId());
+		model.addAttribute("hd_categoria", (tf.getCategoriatrabajo().getId()== 1 || tf.getCategoriatrabajo().getId() == 3) ? false : true);
 		model.addAttribute("categoriatrabajo",categoriatrabajoService.listar());
 		model.addAttribute("modalidadtrabajo",modalidadtrabajoService.listar());
 		model.addAttribute("tipodoc",tipodocserv.findAll());
-		model.addAttribute("genero",generoprofserv.listar());
-		
+		model.addAttribute("genero",generoprofserv.listar());		
 		
 		model.addAttribute("chconversacion", tf.getConversacion()==1 ? true : false);
 		model.addAttribute("chvaloracionagua", tf.getValoracionagua()==1 ? true : false);

@@ -622,6 +622,9 @@
 							$("#finalizarparticipacion").prop("disabled" , true);
 							$("#modalimagencargando").modal('hide');
 						}
+						else if(respuesta == -100){
+							 window.location = url_base + "pedesa";
+						}
 						
 					}
 				});				
@@ -1148,6 +1151,9 @@
 					if(respuesta==1){
 						table_lista_trabajos_finales.row(celdaseleccionada).remove().draw(false);
 					}
+					else if(respuesta == -100){
+						window.location = url_base + "pedesa";
+					}
 					else{
 						$("#textoerror").html("No se pudo Eliminar trabajo");
 						$('#modalerror').modal({
@@ -1178,6 +1184,9 @@
 						table_lista_trabajos_finales.cell(celdaseleccionada,6).data(1).draw();
 						table_lista_trabajos_finales.cell(celdaseleccionada,7).data(1).draw();
 						table_lista_trabajos_finales.cell(celdaseleccionada,8).data(1).draw();
+					}
+					else if(respuesta == -100){
+						 window.location = url_base + "pedesa";
 					}
 					else{
 						$("#textoerror").html("No se pudo Eliminar trabajo");
