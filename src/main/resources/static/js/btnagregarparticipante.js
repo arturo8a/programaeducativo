@@ -370,7 +370,10 @@ function validarCampos(){
 	if(correoelectronicopmt.trim()==""){
 		mensajeValidacion += "Debe ingresar Correo Electrónico del Padre , Madre o Tutor"+"<br>";
 	}
-	if(!(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(correoelectronicopmt))){		
+	/*if(!(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(correoelectronicopmt))){		
+		mensajeValidacion += "Debe ingresar Correctamente el Correo Electrónico del Padre , Madre o Tutor"+"<br>";
+	}*/
+	if(correoelectronicopmt.indexOf('@', 0) == -1 || correoelectronicopmt.indexOf('.', 0) == -1) {
 		mensajeValidacion += "Debe ingresar Correctamente el Correo Electrónico del Padre , Madre o Tutor"+"<br>";
 	}
 	

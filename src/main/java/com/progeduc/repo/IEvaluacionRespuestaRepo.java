@@ -25,4 +25,7 @@ public interface IEvaluacionRespuestaRepo extends CrudRepository<EvaluacionResul
 	
 	@Query(value="SELECT tb.* FROM EVALUACIONES_RESPUESTAS tb WHERE tb.TRABAJOID=?1",nativeQuery = true)
 	List<EvaluacionResultado> getRespuestas(Integer idTrabajo);
+	
+	@Query(value="SELECT tb.* FROM EVALUACIONES_RESPUESTAS tb WHERE tb.TRABAJOID=?1 and tb.usuario_alianzaid=?2",nativeQuery = true)
+	List<EvaluacionResultado> listaEvaluacionResultado(Integer idTrabajo, Integer idUsuario);
 }

@@ -83,7 +83,7 @@
 								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '1'" th:text="${objeto.descripcion1}" class="form-control" readonly>
 								</textarea> 
 								<br>
-								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '1'" th:value="${objeto.puntaje1}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" th:text="${objeto.puntaje1}" class="form-control" />				
+								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '1'" th:value="${objeto.puntaje1}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" th:text="${objeto.puntaje1}" disabled/>				
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-3">
 								<label th:utext="${objeto.criterio2}"></label>
@@ -91,7 +91,7 @@
 								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '2'" th:text="${objeto.descripcion2}" class="form-control" readonly>
 								</textarea>
 								<br>
-								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '2'" th:value="${objeto.puntaje2}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" th:text="${objeto.puntaje2}" class="form-control" />
+								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '2'" th:value="${objeto.puntaje2}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" th:text="${objeto.puntaje2}" disabled/>
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-3">
 								<label th:utext="${objeto.criterio3}"></label>								
@@ -99,7 +99,7 @@
 								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '3'" th:text="${objeto.descripcion3}" class="form-control" readonly>
 								</textarea>
 								<br>
-								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '3'" th:value="${objeto.puntaje3}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" th:text="${objeto.puntaje3}" class="form-control" />
+								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '3'" th:value="${objeto.puntaje3}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" th:text="${objeto.puntaje3}" disabled/>
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-3">
 								<label th:utext="${objeto.criterio4}"></label>
@@ -107,7 +107,7 @@
 								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '4'" th:text="${objeto.descripcion4}" class="form-control" readonly>
 								</textarea>
 								<br>
-								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '4'" th:value="${objeto.puntaje4}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" th:text="${objeto.puntaje4}" class="form-control" />
+								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '4'" th:value="${objeto.puntaje4}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" th:text="${objeto.puntaje4}" disabled/>
 							</div>
 						</div>
 					</div>			
@@ -130,7 +130,7 @@
 										<input type="text" class="form-control" th:id="'respuesta'+ ${qr.id}" th:value="${qr.respuesta}" disabled/>
 									</td>
 									<td>
-										<input type="radio" class="form-control" th:id="'puntajeq'+ ${qr.id}" th:value="${qr.puntaje}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${qr.id}" th:text="${qr.puntaje}"/>
+										<input type="radio" class="form-control" th:id="'puntajeq'+ ${qr.id}" th:value="${qr.puntaje}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${qr.id}" th:text="${qr.puntaje}" disabled/>
 									</td>
 								</tr>							
 							</table>						
@@ -145,7 +145,6 @@
 				&nbsp;
 			</div>
 			<div class="col-xs-6 col-sm-6">
-				<input type="button" name="btnRegistrarEvaluacion" id="btnRegistrarEvaluacion" value="Enviar" class="btn btn-primary"/>
 				<input type="button" name="btncerrarevaluacion" id="btncerrarevaluacion" value="Cerrar" class="btn btn-outline-primary"/>
 			</div>
 		</div>
@@ -238,7 +237,7 @@
 		});
 		
 		 $("#btnRegistrarEvaluacion").on("click",function(){
-			registarRespuestasEvaluacion();
+			//registarRespuestasEvaluacion();
 		});
 		
 		$(document).on("click","input[type='radio']",function(){	console.log('contar notas');
@@ -259,7 +258,23 @@
 			$("#notaAcomulada").val(notaTotal);
 		});
 		
-		function registarRespuestasEvaluacion(){
+		$(document).ready(function(){
+			cargarPuntaje();
+		});
+		
+		function cargarPuntaje(){
+			var notaTotal = 0;
+			$.each($("[data-idresp]"), function( i, value ) {
+				if($(value).is(':checked')){
+					var puntaje = parseFloat($(value).val());
+					notaTotal += puntaje;
+				}
+			});
+
+			$("#notaAcomulada").val(notaTotal);
+		}
+		
+		/*function registarRespuestasEvaluacion(){
 			$("#modalimagencargando").modal({
 				show : true,
 				backdrop : 'static',
@@ -289,7 +304,7 @@
 				$("#textoerroreditevaluacion").html(mensajeValidacionedit);
 				$("#modalerroreditevaluacion").modal();
 			}
-		}
+		}*/
 		
 		
 		function validarCamposRespuesta(){console.log('validar respuestas');

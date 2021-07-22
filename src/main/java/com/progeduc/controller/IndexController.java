@@ -983,6 +983,70 @@ public class IndexController {
 		return "formregistrarevaluacion";
 	}
 	
+	@GetMapping("/formmostrarevaluacion/{id}")
+	public String formmostrarevaluacion(@PathVariable("id") Integer id,  Model model,HttpSession ses) {
+		id_rubrica = "";
+		id_questionario ="";
+		
+		Trabajosfinales trabajosfinales = trabajosfinalesService.ListarporId(id);
+		List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteService.listar(trabajosfinales.getId());
+		Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
+
+		Evaluacion eval = evaluacionService.getPorAnioCategoriaNivelparticipacion(trabajosfinales.getAnio(), 
+				trabajosfinales.getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
+		model.addAttribute("evaluacion", eval);
+		
+		List<Rubrica> listaRubrica = new ArrayList<Rubrica>();
+        evaluacionrubricaServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
+        	listaRubrica.add(obj.getRubrica());
+        	id_rubrica += obj.getRubrica().getId().toString() + "-";
+        });
+        
+        List<Questionario> listaQuestionario = new ArrayList<Questionario>();
+        evaluacionquestionarioServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
+        	listaQuestionario.add(obj.getQuestionario());
+        	id_questionario += obj.getQuestionario().getId().toString() + "-";
+        });    
+        
+        model.addAttribute("id_rubrica", id_rubrica);
+        model.addAttribute("id_questionario", id_questionario);
+        model.addAttribute("id_evaluacion", eval.getId());
+        model.addAttribute("id_trabajofinal", trabajosfinales.getId());
+        
+        List<Integer> listanro = new ArrayList<Integer>();
+        listanro.add(1);
+        listanro.add(2);
+        listanro.add(3);
+        listanro.add(4);
+        listanro.add(5);
+        model.addAttribute("listanro", listanro);
+        
+        
+        Calendar fecha = Calendar.getInstance();
+		model.addAttribute("anio",fecha.get(Calendar.YEAR));
+		List<Integer> lista = new ArrayList<Integer>();
+		int anio = fecha.get(Calendar.YEAR);
+		for(int i = anio-5;i<=anio;i++) {
+			lista.add(i);
+		}
+
+		/*List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteService.listar(trabajosfinales.getId());
+		Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());*/
+		
+		model.addAttribute("nombretrabajo", trabajosfinales.getTitulotrabajo());
+		model.addAttribute("categoria", trabajosfinales.getCategoriatrabajo().getDescripcion());
+		model.addAttribute("nivel", participante.getGradoestudiante().getNivelgradopartdesc());
+		model.addAttribute("modalidad", trabajosfinales.getModalidadtrabajo().getDescripcion());
+		
+        model.addAttribute("listarubrica", listaRubrica);
+        model.addAttribute("listaquestionario", listaQuestionario);
+        
+        model.addAttribute("listanivelparticipacion",nivelparticipacionService.listar());
+		model.addAttribute("anios", lista);
+		model.addAttribute("listacategoriaevaluacion", categoriaevaluacionService.listar());
+		return "formMostraEvaluacion";
+	}
+	
 	@GetMapping("/formregistrarusuario")
 	public String formregistrarusuario(Model model,HttpSession ses) {
 		model.addAttribute("odsregusu",odsserv.listarAll());

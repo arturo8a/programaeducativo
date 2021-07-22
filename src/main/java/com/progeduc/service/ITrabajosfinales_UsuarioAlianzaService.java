@@ -6,7 +6,7 @@ import com.progeduc.model.TrabajosfinalesUsuarioAlianza;
 
 public interface ITrabajosfinales_UsuarioAlianzaService{
 	
-	Integer guardar(Integer trabajosfinalesid, Integer usuarioalianzaid);
+	Integer guardar(Integer trabajosfinalesid, Integer usuarioalianzaid, Float nota);
 	
 	Integer eliminar(Integer trabajosfinalesid);
 	
@@ -15,5 +15,7 @@ public interface ITrabajosfinales_UsuarioAlianzaService{
 	List<TrabajosfinalesUsuarioAlianza> listarAll();
 	
 	TrabajosfinalesUsuarioAlianza buscar(Integer trabajofinalid, Integer usuarioalianzaid);
+	
+	List<TrabajosfinalesUsuarioAlianza> listaTrabajosIdByUsuarioId(Integer usuarioalianzaid);
 	
 }

@@ -1681,7 +1681,7 @@ function enfocarCampo(campo){
 }
 
 function validarControles(){
-	
+	var pattern = /^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
 	textoValidarControles  = "";
 	bandera=true;
 	
@@ -1746,7 +1746,7 @@ function validarControles(){
 		textoValidarControles  += "<label style='color:red'>Debe Ingresar Correo institucional</label><br>";
 		bandera=false;
 	}
-	if(! /^([da-z_.-]+)@([da-z.-]+).([a-z.]{2,6})$/.test($("#mailie").val())){		
+	if(!pattern.test($("#mailie").val())){		
 		$("#mailie").css({"color":"red","border":"1px solid red"});
 		textoValidarControles  += "<label style='color:red'>Debe Ingresar Correctamente el Correo Institucional</label><br>"; 
 		bandera=false;  
@@ -1855,7 +1855,7 @@ function validarControles(){
 		textoValidarControles  += "<label style='color:red'>Debe Ingresar Email del Director</label><br>"; 
 		bandera=false; 	  
 	}
-	if(! /^([da-z_.-]+)@([da-z.-]+).([a-z.]{2,6})$/.test($("#maildir").val())){		
+	if(!pattern.test($("#maildir").val())){		
 		$("#maildir").css({"color":"red","border":"1px solid red"});
 		textoValidarControles  += "<label style='color:red'>Debe Ingresar Correctamente el Email del Director</label><br>"; 
 		bandera=false;  	  
@@ -1910,7 +1910,7 @@ function validarControles(){
 		textoValidarControles  += "<label style='color:red'>Debe Ingresar Email del Profesor</label><br>"; 
 		bandera=false;    	  
 	}
-	if(! /^([da-z_.-]+)@([da-z.-]+).([a-z.]{2,6})$/.test($("#mailprof").val())){		
+	if(!pattern.test($("#mailprof").val())){		
 		$("#mailprof").css({"color":"red","border":"1px solid red"});
 		textoValidarControles  += "<label style='color:red'>Debe Ingresar Correctamente el Email del Profesor</label><br>"; 
 		bandera=false;    	  

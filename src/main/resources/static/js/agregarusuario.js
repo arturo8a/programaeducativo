@@ -365,7 +365,7 @@ function getUsuario(idUsuario){
 var contentMensajeError ="";
 
 function validarCampos(){
-	
+	var pattern = /^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
 	var status = true;
 	contentMensajeError = "";
 	if($("#odsresgusu").val() == "0"){
@@ -419,6 +419,9 @@ function validarCampos(){
 	if($('#correocontactoregusu').val() == ""){
 		contentMensajeError += "Debe ingresar Correo Institucional de Contacto"+"</br>";
 		status = false;
+	}else if(!pattern.test($('#correocontactoregusu').val())) {
+		contentMensajeError += "Debe ingresar Correo Institucional de Autoridad/Representante"+"</br>";
+		status = false;
 	}
 	if($('#cargocontactoregusu').val() == ""){
 		contentMensajeError += "Debe ingresar Cargo de Contacto"+"</br>";
@@ -438,6 +441,9 @@ function validarCampos(){
 			status = false;
 		}
 		if($('#correoautoridad').val() == ""){
+			contentMensajeError += "Debe ingresar Correo Institucional de Autoridad/Representante"+"</br>";
+			status = false;
+		}else if(!pattern.test($('#correoautoridad').val())) {
 			contentMensajeError += "Debe ingresar Correo Institucional de Autoridad/Representante"+"</br>";
 			status = false;
 		}
@@ -567,9 +573,22 @@ function filterIntNroDocIdentidad(evt,input){
 	    }
 	}
 	else if($("#tipocodcontactoresgusu").val()=="2"){
-		if($(input).val().trim().length<12)
-			return true;
-		return false;
+		var key = window.Event ? evt.which : evt.keyCode;    
+	    var chark = String.fromCharCode(key);
+	    var tempValue = input.value+chark;
+	    if(key >= 48 && key <= 57){
+	    	if($("#tipocodcontactoresgusu").val() == 2){
+				if($(input).val().trim().length<12)
+					return true;
+				return false;
+			}
+	    	else{
+	    		return true;
+	    	}
+	    }
+	    else{
+	        return false;
+	    }
 	}
 }
 

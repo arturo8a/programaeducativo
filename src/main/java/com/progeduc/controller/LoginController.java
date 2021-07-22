@@ -72,6 +72,7 @@ public class LoginController {
     		ses.setAttribute("perfil", usuAlianza.getOds().getDescripcion());
     		ses.setAttribute("tipousuarioid", 5);
     		ses.setAttribute("odsid", usuAlianza.getOds().getId());
+    		ses.setAttribute("userId", usuAlianza.getId());
     		return usuAlianza.getUsuarioautoridad();
 		}
 		

@@ -27,7 +27,7 @@
 	}
 </style>
 
-<script type="text/javascript" th:src="@{/js/evaluar.js}"></script>
+<script type="text/javascript" th:src="@{/js/evaluar.js?v=1234}"></script>
 <div id="containerListaRegistros" class="pl-3 pr-3">
 	<div class="row  div_titulo">
 		<div class="col-xs-12 col-sm-12 pl-0 bg-primary">
@@ -171,9 +171,103 @@
 	  </div>
 	</div>
 </center>
+
+<center>
+	<div class="modal fade" tabindex="-1" role="dialog" id="modaleListaPermisos" aria-labelledby="myLargeModalLabel" >
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content" style="overflow-y: scroll; height:600px;width:60%">
+	      <div class="modal-header">
+	        <strong class="pt-1">Permisos</strong>
+	      </div>
+	      <div class="modal-body" id="contenidoPermisosParticipantes">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-outline-primary" id="btnCerrarModaleListaPermisos" name="btnCerrarModaleListaPermisos">Cerrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</center>
+
 </html>
+<script type="text/javascript" th:src="@{/js/pdfobject.min.js}"></script>
 <script>
 $('#modaleEvaluarTrabajoPendientes').on('hidden.bs.modal', function () {
 	listar();
 })
+
+function openModalTrabajosPermisos(idTrabajo){
+	openCargando();
+	
+	$.ajax({
+		type : "GET",
+	    contentType : "application/json",
+	    url : url_base + "pedesa/opneModalTrabajosPermisos/"+idTrabajo,
+		success: function(respuesta) { console.log(respuesta);
+			var html ='<div class="row">';
+			$.each(respuesta, function( i, value ) {
+				html +='<div class="col-xs-12 col-sm-4">';
+				html += '	'+value.nombreArchivo+'<img src="./images/svg/file-pdf-regular.svg" onclick="cargarPDF('+value.idParticiapnte+')" class="archivo" style="width:20px; cursor:pointer">';
+				html +='</div>';
+			}); 
+			html += '</div>';
+			html +='<div class="row">';
+			html +='	<div class="col-xs-12 col-sm-12" id="sectionPdfParticipante"  style="height: 480px;"><div/>';
+			html += '<div/>'
+			$("#contenidoPermisosParticipantes").html(html);
+			closeCargando();
+			$("#modaleListaPermisos").modal();
+		},
+		error: function() {
+			closeCargando();
+			$("#textoerror").html("Excepcion al descargar PDF");
+			$('#modalerror').modal({
+				show : true,
+				backdrop : 'static',
+				keyboard:false
+			});
+	    }
+	});  
+};
+
+function cargarPDF(id){
+	openCargando();
+	$.ajax({
+			type : "GET",
+		    contentType : "application/json",
+		    url : url_base + "pedesa/fichaautorizacionpdf/"+id,
+			success: function(respuesta) {
+				//window.open(respuesta, '_blank');
+				var viewer = $("#sectionPdfParticipante");
+				PDFObject.embed(respuesta,viewer);
+				closeCargando();
+			},
+			error: function() {
+				closeCargando();
+				$("#textoerror").html("Excepcion al descargar PDF");
+				$('#modalerror').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+		    }
+		});
+}
+
+
+function openCargando(){
+	$("#modalimagencargando").modal({
+		show : true,
+		backdrop : 'static',
+		keyboard:false
+	});
+}
+function closeCargando(){
+	$("#modalimagencargando").modal('hide');
+}
+
+$("#btnCerrarModaleListaPermisos").on('click',function(){
+	$("#modaleListaPermisos").modal('hide');
+});
+
 </script>
