@@ -51,8 +51,9 @@ public class Usuario {
 		
 	}
 	
-	public Usuario(String usuario, Tipousuario tipo, Integer estado) {
+	public Usuario(String usuario, String password, Tipousuario tipo, Integer estado) {
 		this.usuario = usuario;
+		this.password = password;
 		this.tipousuario = tipo;
 		this.estado = estado;
 	}

@@ -26,7 +26,7 @@ public class EvaluacionResultado {
 	private Trabajosfinales trabajosfinales;
 	
 	@ManyToOne
-	@JoinColumn(name="usuario_alianzaid",nullable=false,foreignKey=@ForeignKey(name="fk_usuarios_evaludos_respuestas"))
+	@JoinColumn(name="usuario_alianzaid",nullable=false,foreignKey=@ForeignKey(name="fk_usuarios_evaludos_resp"))
 	private UsuarioAlianza usuario;
 	
 	@Column(name="preguntaid" ,length=150)

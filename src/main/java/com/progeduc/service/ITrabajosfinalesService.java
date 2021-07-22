@@ -31,5 +31,5 @@ public interface ITrabajosfinalesService extends ICRUD<Trabajosfinales,Integer>{
     
     List<Trabajosfinales> listarTrabajosEvaluados();
     
-	List<Trabajosfinales> BuscarCategoriaModalidad(Integer idcategoria, Integer idmodalidad);
+	List<Trabajosfinales> BuscarCategoriaModalidad(Integer idcategoria, Integer idmodalidad,Integer peid);
 }

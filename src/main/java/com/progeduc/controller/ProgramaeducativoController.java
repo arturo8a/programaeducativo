@@ -543,7 +543,7 @@ public class ProgramaeducativoController {
 				dni = us.getPassword();
 			}			
 			if(usuarioService.byUsuario(codmod)==null) {						
-				Usuario user = new Usuario(codmod,tipousuarioserv.byTipousuario(3),1);
+				Usuario user = new Usuario(codmod,dni,tipousuarioserv.byTipousuario(3),1);
 				usuarioService.registrar(user);
 			}
 			String mensaje = "<p>Sistema del Programa Educativo Sunass</p>Estimado (a) docente, le damos la bienvenida al Programa Educativo<br>'Aprendiendo a Usar Responsablemente el Agua Potable' de la Sunass. Si desea participar de nuestro Concurso Escolar confirme su inscripción <a href='http://prometeo.sunass.gob.pe/pedesa/'>Aquí</a>, ingresando el usuario y contraseña que le brindamos a continuación :<br><br>Usuario :"+ codmod+"<br>Contraseña :" + dni + "<br><br>Muchas gracias por su participación";                                        

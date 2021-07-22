@@ -122,8 +122,8 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 	}
 	
 	@Override
-	public 	List<Trabajosfinales> BuscarCategoriaModalidad(Integer idcategoria, Integer idmodalidad){
-		return trabajosfinalesRepo.BuscarCategoriaModalidad(idcategoria, idmodalidad);
+	public 	List<Trabajosfinales> BuscarCategoriaModalidad(Integer idcategoria, Integer idmodalidad,Integer peid){
+		return trabajosfinalesRepo.BuscarCategoriaModalidad(idcategoria, idmodalidad,peid);
 	}
 
 }

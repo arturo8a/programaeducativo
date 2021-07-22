@@ -131,8 +131,8 @@
 			</div>
 		</div>	
 		
-		<div class="row pt-4 pb-4 m-0">
-			<div class="col-xs-12 col-sm-8 text-left" style="overflow-y: scroll; height:300px;width:100%">
+		<div class="row pb-4">
+			<div class="col-xs-12 col-sm-8 text-left" style="overflow-y: scroll; height:260px;width:100%">
 				<table id="table_lpt"  class="table table-striped table-bordered nowrap">
 					<thead>
 				        <tr>
@@ -185,7 +185,7 @@
 		</div>		
 		
 		<div class="row">
-			<div class="col-xs-12 col-sm-12 text-left pt-2 w-100" >
+			<div class="col-xs-12 col-sm-12 text-left w-100" >
 				<u>DATOS DEL DOCENTE</u> 	
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-4">
@@ -569,7 +569,7 @@
 						        	for(var i=0;i<arrayNombreParticipante.length;i++){
 						        		nombreparticipante += arrayNombreParticipante[i]  + "/";
 						        	}
-						        	
+						        	nombreparticipante  = nombreparticipante.substr(0,nombreparticipante.length-1);
 						        	table_lista_trabajos_finales.row.add({
 						        		"id": respuesta,
 						        		"categoria": $("#categoriatrabajo option:selected").html(),

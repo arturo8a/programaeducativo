@@ -201,59 +201,44 @@ public class ConcursoeducativoController {
 		Integer categoria_dto = dto.getTrabajosfinales().getCategoriatrabajo().getId();
 		Integer modalidad_dto = dto.getTrabajosfinales().getModalidadtrabajo().getId();
 		
-		/*if(modalidad_dto == 1) {
-			Trabajosfinales tf1 = (Trabajosfinales) trabajosfinalesServ.BuscarCategoriaModalidad(categoria_dto, modalidad_dto);
-			if(tf1!=null) {
-				List<TrabajosfinalesParticipante> mi_tfp = trabajosfinalesparticipanteServ.listar(tf1.getId());
-				mi_tfp.forEach(obj->{
-					if(obj.getParticipante().getId() == dto.getListaparticipante().get(0).getId()){
-						rpta = -2;
-					}
-				});
-			}
-		}
-		else {
-			Trabajosfinales tf2 = (Trabajosfinales) trabajosfinalesServ.BuscarCategoriaModalidad(categoria_dto, modalidad_dto);
-			if(tf2!=null) {
-				List<TrabajosfinalesParticipante> mi_tfp = trabajosfinalesparticipanteServ.listar(tf2.getId());
-				mi_tfp.forEach(obj->{
-					if(obj.getParticipante().getId() == dto.getListaparticipante()){
-						rpta = -2;
-					}
-				});
-			}
-		}*/
+		String codmod = ses.getAttribute("usuario").toString();		
+		Programaeducativo pe = progeducService.getActualByCodmod(codmod);		
 		
 		List<Integer> listaIdDto = new ArrayList<Integer>();
  		dto.getListaparticipante().forEach(obj->{
- 			System.out.println("listaIdParticipanteDto : " + obj.getId());
  			listaIdDto.add(obj.getId());
  		});
-		List<Trabajosfinales> listaTrabajosFinales = trabajosfinalesServ.listarhabilitados();
 		List<Integer> listaIdParticipante = new ArrayList<Integer>();
-		listaTrabajosFinales.forEach(obj->{
-			if(obj.getCategoriatrabajo().getId().equals(categoria_dto)	&& obj.getModalidadtrabajo().getId().equals(modalidad_dto)){
-				trabajosfinalesparticipanteServ.listar(obj.getId()).forEach(obj1->{
-					System.out.println("listaIdParticipante : " + obj1.getParticipante().getId());
-					listaIdParticipante.add(obj1.getParticipante().getId());
-				});
-			}
-		});	
+		trabajosfinalesServ.BuscarCategoriaModalidad(categoria_dto, modalidad_dto,pe.getId()).forEach(tf->{
+			trabajosfinalesparticipanteServ.listar(tf.getId()).forEach(obj1->{					
+				listaIdParticipante.add(obj1.getParticipante().getId());
+			});
+		});
 		
-		if(listaIdDto.size() ==  listaIdParticipante.size()) {
-			Collections.sort(listaIdDto);
-			Collections.sort(listaIdParticipante);
-			if(listaIdDto.equals(listaIdParticipante)) {
-				return -1;
-			}	
+		switch(modalidad_dto) {
+			case 1:
+				for(int i=0;i<listaIdParticipante.size();i++) {
+					if(listaIdParticipante.get(i) == listaIdDto.get(0)) {
+						return -1;
+					}
+				}
+				break;
+			case 2:
+				if(listaIdDto.size() ==  listaIdParticipante.size()) {
+					Collections.sort(listaIdDto);
+					Collections.sort(listaIdParticipante);
+					if(listaIdDto.equals(listaIdParticipante)) {
+						return -1;
+					}	
+				}
+				break;
 		}
 		Date date= new Date();
 		long time = date.getTime();
 		Timestamp ts = new Timestamp(time);
 		dto.getTrabajosfinales().setFecha_registro(ts);
 		dto.getTrabajosfinales().setAnio(ts.toLocalDateTime().getYear());		
-		String codmod = ses.getAttribute("usuario").toString();		
-		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
+		
 		dto.getTrabajosfinales().setProgramaeducativo(pe);
 		Integer max_numeracion = trabajosfinalesServ.maxNumeracion(pe.getId());
 		if(dto.getTrabajosfinales().getId() == null) {
