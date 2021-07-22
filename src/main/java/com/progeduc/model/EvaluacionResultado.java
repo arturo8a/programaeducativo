@@ -25,6 +25,10 @@ public class EvaluacionResultado {
 	@JoinColumn(name="trabajoid",nullable=false,foreignKey=@ForeignKey(name="fk_trab_evaludos_respuestas"))
 	private Trabajosfinales trabajosfinales;
 	
+	@ManyToOne
+	@JoinColumn(name="usuario_alianzaid",nullable=false,foreignKey=@ForeignKey(name="fk_usuarios_evaludos_respuestas"))
+	private UsuarioAlianza usuario;
+	
 	@Column(name="preguntaid" ,length=150)
 	private Integer preguntaid;
 	
@@ -33,9 +37,17 @@ public class EvaluacionResultado {
 	
 	@Column(name="tipo" ,length=150)
 	private Integer tipo;
-	
+
 	@Column(name="puntaje" ,length=150)
 	private Float puntaje;
+	
+	public UsuarioAlianza getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(UsuarioAlianza usuario) {
+		this.usuario = usuario;
+	}
 	
 	public Integer getId() {
 		return id;

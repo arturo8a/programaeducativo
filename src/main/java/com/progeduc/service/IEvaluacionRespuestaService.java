@@ -11,6 +11,8 @@ public interface IEvaluacionRespuestaService extends ICRUD<EvaluacionResultado,I
 	EvaluacionResultado getPorCodigoTrabajoAndCodigoPreginta(Integer idTrabajo, Integer idPregunta);
 	
 	List<EvaluacionResultado> getRespuestas(Integer idTrabajo);
+	
+	List<EvaluacionResultado> listaEvaluacionResultado(Integer idTrabajo, Integer idUsuario);
 	/*Integer saveEvalRubQuest(EvaluacionRubricaQuestionarioDto dto);
 	
 	int updateestado(Integer id, Integer estado);

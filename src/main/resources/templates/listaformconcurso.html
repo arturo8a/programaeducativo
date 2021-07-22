@@ -718,7 +718,7 @@
 			obtener_trabajos("#table_lista_concurso tbody",table_lista_concurso);
 		}
 		
-		var listarAlianzaEstrategica = function(){
+		var listarAlianzaEstrategica = function(){ console.log('mostrar usuario alianza');
 				
 				$("#table_lista_usuarios").dataTable().fnDestroy();				
 			    
@@ -1364,10 +1364,10 @@
 	
 			$(document).off("click",".btnInactivarUsuario");
 			$(document).on("click",".btnInactivarUsuario",function(){ console.log('.btnInactivarUsuario');
-				console.log($(this).parent());
+				/*console.log($(this).parent());
 				console.log($(this).parent().prev());
 				console.log($(this).parent().prev().find('img'));
-				console.log($(this).parent().prev().find('img').attr('data-id'));
+				console.log($(this).parent().prev().find('img').attr('data-id'));*/
 				var id = $(this).parent().prev().find('img').attr('data-id');
 				$.ajax({
 					type : "GET",
@@ -1385,11 +1385,15 @@
 		/*}*/
 		
 		$("#nav-alianzaestrategica-tab").on("click",function(){
-			listarAlianzaEstrategica();
+			setTimeout(() => {        		  
+					table_lista_usuarios.draw();
+		      	}, 300);
 		});
 		
 		$('#modalAlianzaEstrategica').on('hidden.bs.modal', function () {
-			listarAlianzaEstrategica();
+			if($('#nav-alianzaestrategica-tab').hasClass( "active" )){
+				listarAlianzaEstrategica();
+			}	
 		})
 		
 </script>

@@ -70,6 +70,11 @@ public class EvaluacionRespuestaServiceImpl implements IEvaluacionRespuestaServi
 		// TODO Auto-generated method stub
 		return evaRepo.getRespuestas(idTrabajo);
 	}
+
+	@Override
+	public List<EvaluacionResultado> listaEvaluacionResultado(Integer idTrabajo, Integer idUsuario) {
+		return evaRepo.listaEvaluacionResultado(idTrabajo, idUsuario);
+	}
 	
 	
 	

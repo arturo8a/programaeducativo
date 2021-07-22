@@ -100,7 +100,12 @@ var listar = function (){ console.log('listar()');
                             return x;
                         }
                 },
-		        { 'data' : 'permisos' },
+		        { 'data' : 'trabajo', 
+	                   render: function(data, type) {
+	                   		var x = '<img src="./images/svg/eye-solid.svg" onclick="openModalTrabajosPermisos('+data+')" style="width:20px; cursor:pointer"/>';
+                            return x;
+                        }
+		        },
 		        { 'data' : 'trabajo' ,
 	                   render: function(data, type) {
 	                   		var x = "<button type='button' data-id='"+data+"' class='mostrarEvaliacion btn btn-primary'>Evaluación</button>";
@@ -244,6 +249,21 @@ function getRespuestas(id){
 					$("input[id='puntajeq"+value.respuestaid+"']").click();
 				}
 			});
+			var notaTotal = 0;
+			$.each($("[data-rubrica]"), function( i, value ) {
+				var preguntaName = $("input[name='pregunta"+$(this).attr('data-rubrica')+"']");
+				if($(preguntaName).is(':checked')){
+					var puntaje = parseFloat($("input[name='pregunta"+$(this).attr('data-rubrica')+"']:checked").val());
+					notaTotal += puntaje;
+				}
+			});
+			$.each($("[data-cuestionario]"), function( i, value ) {
+				if($(preguntaName).is(':checked')){
+					var puntaje = parseFloat($("input[name='pregunta"+$(this).attr('data-cuestionario')+"']:checked").val());
+					notaTotal += puntaje;
+				}
+			});
+			$("#notaAcomulada").val(notaTotal);
 		},
 		error: function() {
 	    }

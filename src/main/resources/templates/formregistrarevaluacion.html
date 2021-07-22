@@ -29,29 +29,39 @@
 		<input type="hidden" id="id_trabajofinal" name="id_trabajofinal" th:value="${id_trabajofinal}" />
 		<div id="contenidoPDF">
 		<div class="row">
-			<div class="col-xs-12 col-sm-3 text-left">
-				<label for="nommbretrabajo">Nombre de Trabajo:</label>
+			<div class="col-xs-12 col-sm-2 text-left">
+				<strong for="nommbretrabajo">Nombre de Trabajo:</strong>
 			</div>
 			<div class="col-xs-12 col-sm-3 text-left">
 				<label for="nommbretrabajoDesc" th:utext="${nombretrabajo}"></label>
 			</div>
-			<div class="col-xs-12 col-sm-3 text-left">
-				<label for="categoria">Categoría:</label>
+			<div class="col-xs-12 col-sm-2 text-left">
+				<strong for="categoria">Categoría:</strong>
 			</div>
-			<div class="col-xs-12 col-sm-3 text-left">
+			<div class="col-xs-12 col-sm-4 text-left">
 				<label for="categoriaDesc" th:utext="${categoria}"></label>
 			</div>
-			<div class="col-xs-12 col-sm-3 text-left">
-				<label for="nivel">Nivel de Participación:</label>
+			<div class="col-xs-12 col-sm-2 text-left">
+				<strong for="nivel">Nivel de Participación:</strong>
 			</div>
 			<div class="col-xs-12 col-sm-3 text-left">
 				<label for="nivelDesc" th:utext="${nivel}"></label>
 			</div>
-			<div class="col-xs-12 col-sm-3 text-left">
-				<label for="modalidad">Modalidad:</label>
+			<div class="col-xs-12 col-sm-2 text-left">
+				<strong for="modalidad">Modalidad:</strong>
 			</div>
-			<div class="col-xs-12 col-sm-3 text-left">
+			<div class="col-xs-12 col-sm-4 text-left">
 				<label for="modalidadDesc" th:utext="${modalidad}"></label>
+			</div>
+			<div class="col-xs-12 col-sm-4 text-center">
+			</div>
+			<div class="col-xs-12 col-sm-4 text-center">
+				<div>Calificación 
+					<input type="text" id="notaAcomulada" disabled style="width: 50px;"> de
+					<input type="text" id="notaTotal" disabled style="width: 50px;" value="20">
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-4 text-center">
 			</div>
 		</div>
 		<br>
@@ -73,7 +83,7 @@
 								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '1'" th:text="${objeto.descripcion1}" class="form-control" readonly>
 								</textarea> 
 								<br>
-								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '1'" th:value="${objeto.puntaje1}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" />				
+								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '1'" th:value="${objeto.puntaje1}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" th:text="${objeto.puntaje1}" class="form-control" />				
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-3">
 								<label th:utext="${objeto.criterio2}"></label>
@@ -81,7 +91,7 @@
 								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '2'" th:text="${objeto.descripcion2}" class="form-control" readonly>
 								</textarea>
 								<br>
-								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '2'" th:value="${objeto.puntaje2}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" />
+								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '2'" th:value="${objeto.puntaje2}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" th:text="${objeto.puntaje2}" class="form-control" />
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-3">
 								<label th:utext="${objeto.criterio3}"></label>								
@@ -89,7 +99,7 @@
 								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '3'" th:text="${objeto.descripcion3}" class="form-control" readonly>
 								</textarea>
 								<br>
-								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '3'" th:value="${objeto.puntaje3}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" />
+								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '3'" th:value="${objeto.puntaje3}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" th:text="${objeto.puntaje3}" class="form-control" />
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-3">
 								<label th:utext="${objeto.criterio4}"></label>
@@ -97,7 +107,7 @@
 								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '4'" th:text="${objeto.descripcion4}" class="form-control" readonly>
 								</textarea>
 								<br>
-								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '4'" th:value="${objeto.puntaje4}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" />
+								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '4'" th:value="${objeto.puntaje4}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" th:text="${objeto.puntaje4}" class="form-control" />
 							</div>
 						</div>
 					</div>			
@@ -120,7 +130,7 @@
 										<input type="text" class="form-control" th:id="'respuesta'+ ${qr.id}" th:value="${qr.respuesta}" disabled/>
 									</td>
 									<td>
-										<input type="radio" class="form-control" th:id="'puntajeq'+ ${qr.id}" th:value="${qr.puntaje}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${qr.id}"/>
+										<input type="radio" class="form-control" th:id="'puntajeq'+ ${qr.id}" th:value="${qr.puntaje}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${qr.id}" th:text="${qr.puntaje}"/>
 									</td>
 								</tr>							
 							</table>						
@@ -231,6 +241,23 @@
 			registarRespuestasEvaluacion();
 		});
 		
+		$(document).on("click","input[type='radio']",function(){	console.log('contar notas');
+			var notaTotal = 0;
+			$.each($("[data-rubrica]"), function( i, value ) {
+				var preguntaName = $("input[name='pregunta"+$(this).attr('data-rubrica')+"']");
+				if($(preguntaName).is(':checked')){
+					var puntaje = parseFloat($("input[name='pregunta"+$(this).attr('data-rubrica')+"']:checked").val());
+					notaTotal += puntaje;
+				}
+			});
+			$.each($("[data-cuestionario]"), function( i, value ) {
+				if($(preguntaName).is(':checked')){
+					var puntaje = parseFloat($("input[name='pregunta"+$(this).attr('data-cuestionario')+"']:checked").val());
+					notaTotal += puntaje;
+				}
+			});
+			$("#notaAcomulada").val(notaTotal);
+		});
 		
 		function registarRespuestasEvaluacion(){
 			$("#modalimagencargando").modal({

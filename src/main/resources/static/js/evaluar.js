@@ -100,7 +100,12 @@ var listar = function (){ console.log('listar()');
                             return x;
                         }
                 },
-		        { 'data' : 'permisos' },
+		        { 'data' : 'trabajo', 
+	                   render: function(data, type) {
+	                   		var x = '<img src="./images/svg/eye-solid.svg" onclick="openModalTrabajosPermisos('+data+')" style="width:20px; cursor:pointer"/>';
+                            return x;
+                        }
+		        },
 		        { 'data' : 'trabajo' ,
 	                   render: function(data, type) {
 	                   		var x = "<button type='button' data-id='"+data+"' class='registrarEvaliacion btn btn-primary'>Evaluar</button>";

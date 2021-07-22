@@ -37,6 +37,7 @@ import com.progeduc.dto.AsignarEvaluadorDto;
 import com.progeduc.dto.AsignarEvaluadoresDto;
 import com.progeduc.dto.ClaveValor;
 import com.progeduc.dto.ConcursoDto;
+import com.progeduc.dto.DataTrabajosPermisos;
 import com.progeduc.dto.DetalleUsuarioAlianzaEstrategica;
 import com.progeduc.dto.EvaluacionDto;
 import com.progeduc.dto.EvaluacionRubricaQuestionarioDto;
@@ -1345,7 +1346,7 @@ public class ConcursoeducativoController {
 			Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
 			Evaluacion eval = evaluacionService.getPorAnioCategoriaNivelparticipacion(data.getTrabajosfinales().getAnio(), 
 					data.getTrabajosfinales().getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
-			List<EvaluacionResultado> listEvaResultado = evaluacionRespuestaServ.getRespuestas(data.getTrabajosfinales().getId());
+			List<EvaluacionResultado> listEvaResultado = evaluacionRespuestaServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
 			
 			if(eval != null && listEvaResultado.size() == 0 && data.getTrabajosfinales().getEnviado() == 1) {
 				String strOds = "";
@@ -1417,7 +1418,7 @@ public class ConcursoeducativoController {
 			Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
 			Evaluacion eval = evaluacionService.getPorAnioCategoriaNivelparticipacion(data.getTrabajosfinales().getAnio(), 
 					data.getTrabajosfinales().getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
-			List<EvaluacionResultado> listEvaResultado = evaluacionRespuestaServ.getRespuestas(data.getTrabajosfinales().getId());
+			List<EvaluacionResultado> listEvaResultado = evaluacionRespuestaServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
 			if(eval != null &&  listEvaResultado.size() > 0  && data.getTrabajosfinales().getEnviado() == 1) {
 				/*String strOds = "";
 				if(data.getTrabajosfinales().getProgramaeducativo().getOds()!=null) {
@@ -1513,7 +1514,13 @@ public class ConcursoeducativoController {
 				if(!dto.getDocoficio().isEmpty()) {
 					usu.setDocoficio(dto.getDocoficio());
 				}
-				
+				/*enviar correo*/
+				String msj = "";
+				msj += "<p>Estimado(a), usted ha sido agregado como evaluador:</p>";
+				msj += "<p>Usuario: "+dto.getUsuarioautoridad()+"</p>";
+				msj += "<p>Contraseña: "+dto.getPasswordautoridad()+"</p>";				
+				mail = new Mail();
+				mail.enviarCorreoTrabajosFinalesConcursoEscolar("Credenciales de Usuario", msj, dto.getCorreoautoridad());
 				
 			}
 			
@@ -1585,7 +1592,7 @@ public class ConcursoeducativoController {
 				usu.setFecha_oficio(dto.getFecha_oficio());
 				usu.setDocoficio(dto.getDocoficio());
 				/*enviar correo*/
-				String msj = "<img src='./images/logo_login.PNG' style='width:400px' /><img src='./images/imagen1.PNG' style='width:400px' />";
+				String msj = "";
 				msj += "<p>Estimado(a), usted ha sido agregado como evaluador:</p>";
 				msj += "<p>Usuario: "+dto.getUsuarioautoridad()+"</p>";
 				msj += "<p>Contraseña: "+dto.getPasswordautoridad()+"</p>";				
@@ -1796,6 +1803,26 @@ public class ConcursoeducativoController {
 		
 		List<EvaluacionResultado> lista = evaluacionRespuestaServ.getRespuestas(id);
 		return new ResponseEntity<List<EvaluacionResultado>>(lista, HttpStatus.OK);
+	}
+	
+	@GetMapping("/opneModalTrabajosPermisos/{id}")
+	public ResponseEntity<List<DataTrabajosPermisos>>getTrabajoPermisos(@PathVariable("id") Integer id){
+		
+		List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteServ.listar(id);
+		
+		List<DataTrabajosPermisos> lista = new ArrayList<DataTrabajosPermisos>();
+		
+		int count = 1;
+		
+		for (TrabajosfinalesParticipante  dataTrabajosPermisos : listaTrabajosParticipante) {
+			DataTrabajosPermisos participante = new DataTrabajosPermisos();
+			participante.setIdParticiapnte(dataTrabajosPermisos.getParticipante().getId());
+			participante.setNombreArchivo("Permiso"+count);
+			count++;
+			lista.add(participante);
+		}
+
+		return new ResponseEntity<List<DataTrabajosPermisos>>(lista, HttpStatus.OK);
 	}
 	
 }
