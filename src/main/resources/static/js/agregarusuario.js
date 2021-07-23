@@ -41,18 +41,35 @@ $(document).ready(function(){
 		$("#numdoccontactoregusu").val('');
 	});
 	
-	$(document).on("keyup","[id*=montototalauspiciador]",function(){
+	$(document).on("keyup","[id*=montounitarioauspiciador]",function(){
 		var monto = 0;
 		$.each($("[id*=montototalauspiciador]"), function( i, value ) {
-			if(!isNaN(parseFloat($(value).val()))){
-				monto += parseFloat($(value).val());
+			if($("#cantidadauspiciador"+(i+1)) != '' && $("#montounitarioauspiciador"+(i+1)) != '' ){
+				$("#montototalauspiciador"+(i+1)).val(parseFloat($("#cantidadauspiciador"+(i+1)).val())*parseFloat($("#montounitarioauspiciador"+(i+1)).val()));
+			}
+
+			if(!isNaN(parseFloat($("#montototalauspiciador"+(i+1)).val()))){
+				monto += parseFloat($("#montototalauspiciador"+(i+1)).val());
+			}
+		});
+		$("#montototalform").val(monto);
+	});
+	$(document).on("keyup","[id*=cantidadauspiciador]",function(){
+		var monto = 0;
+		$.each($("[id*=montototalauspiciador]"), function( i, value ) {
+			if($("#cantidadauspiciador"+(i+1)) != '' && $("#montounitarioauspiciador"+(i+1)) != '' ){
+				$("#montototalauspiciador"+(i+1)).val(parseFloat($("#cantidadauspiciador"+(i+1)).val())*parseFloat($("#montounitarioauspiciador"+(i+1)).val()));
+			}
+
+			if(!isNaN(parseFloat($("#montototalauspiciador"+(i+1)).val()))){
+				monto += parseFloat($("#montototalauspiciador"+(i+1)).val());
 			}
 		});
 		$("#montototalform").val(monto);
 	});
 	
 	getUsuario($("#idAlianzaEstrategica").val());
-	
+	comboTipoAuspicio();
 	$("#fecha_oficio").datepicker({
 		locale: 'es-es',
 	    format: 'dd/mm/yyyy',
@@ -69,8 +86,9 @@ function htmlAuspicicador(){
 	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
 	html += '		<select class="form-control" id="tipocodauspiciador'+cont+'" name="tipocodauspiciador'+cont+'">';
 	html += '			<option value="0">Tipo de documento</option>';
-	html += '		    <option value="1">DNI</option>';
-	html += '		    <option value="2">CE</option>';
+	$.each(htmlTipoAuspicio, function( index, value ) {
+		html += '<option value="'+value.id+'">'+value.descripcion+'</option>';
+	});
 	html += '		</select>';
 	html += '	</div>';
 	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
@@ -83,7 +101,7 @@ function htmlAuspicicador(){
 	html += '		<input type="text" name="montounitarioauspiciador'+cont+'" id="montounitarioauspiciador'+cont+'" class="form-control" placeholder="Monto Unitario" onKeyPress="return filterFloat(event,this)" maxlength="10"/>';
 	html += '	</div>';
 	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
-	html += '		<input type="text" name="montototalauspiciador'+cont+'" id="montototalauspiciador'+cont+'" class="form-control" placeholder="Monto Total" onKeyPress="return filterFloat(event,this)" maxlength="10"/>';
+	html += '		<input type="text" name="montototalauspiciador'+cont+'" id="montototalauspiciador'+cont+'" class="form-control" placeholder="Monto Total" disabled value="0" onKeyPress="return filterFloat(event,this)" maxlength="10"/>';
 	html += '	</div>';
 	html += '	<div class="col-xs-12 col-sm-4 text-left">';
 	html += '	</div>';
@@ -266,6 +284,27 @@ $("#btnaceptarRegistro").on("click",function(){ console.log(armarData());
     
 });
 
+var htmlTipoAuspicio;
+
+function comboTipoAuspicio(){
+	$.ajax({
+		type : "GET",
+	    contentType : "application/json",
+	    url : url_base + "pedesa/getTipoAuspicio",
+	    dataType : 'json',
+		success: function(respuesta) {
+			 /*htmlTipoAuspicio = '<opcion value="0">Tipo de documento</option>';
+			$.each(respuesta, function( index, value ) {
+				htmlTipoAuspicio += '<opcion value="'+value.id+'">'+value.descripcion+'</option>';
+			});*/
+			htmlTipoAuspicio = respuesta;
+		},
+		error: function() {
+			alert("Exception al cargar combo auspicio");
+		}
+	});
+}
+
 
 function formatoFecha(fecha){
 	if(fecha == "") fecha = "01/01/2020";
@@ -357,6 +396,9 @@ function getUsuario(idUsuario){
 				$('.alert').alert('close');
 				$("#fileautoridad").show();
 			}
+			$("[id*=montototalauspiciador]").trigger('click');
+			$("[id*=montototalauspiciador]").trigger('keyup');
+			$("[id*=montototalauspiciador]").trigger('change');
 			$("#modalimagencargando").modal('hide');
 		},
 		error: function() {

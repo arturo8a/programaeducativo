@@ -64,6 +64,7 @@ import com.progeduc.model.Ods;
 import com.progeduc.model.Participante;
 import com.progeduc.model.Postulacionconcurso;
 import com.progeduc.model.Programaeducativo;
+import com.progeduc.model.TipoAuspicio;
 import com.progeduc.model.Trabajosfinales;
 import com.progeduc.model.TrabajosfinalesParticipante;
 import com.progeduc.model.TrabajosfinalesUsuarioAlianza;
@@ -81,6 +82,7 @@ import com.progeduc.service.IOdsService;
 import com.progeduc.service.IParticipanteService;
 import com.progeduc.service.IPostulacionconcursoService;
 import com.progeduc.service.IProgramaeducativoService;
+import com.progeduc.service.ITipoAuspicioService;
 import com.progeduc.service.ITrabajosfinalesParticipanteService;
 import com.progeduc.service.ITrabajosfinalesService;
 import com.progeduc.service.ITrabajosfinales_UsuarioAlianzaService;
@@ -152,6 +154,9 @@ public class ConcursoeducativoController {
 	
 	@Autowired
 	private IEvaluacionRespuestaService evaluacionRespuestaServ;
+	
+	@Autowired
+	private ITipoAuspicioService tipoAuspicioServ;
 	
 	
 	ListaparticipanteDto dto;	
@@ -1856,6 +1861,12 @@ public class ConcursoeducativoController {
 		Integer userAlianzaId = Integer.parseInt(ses.getAttribute("userId").toString());
 		List<EvaluacionResultado> lista = evaluacionRespuestaServ.listaEvaluacionResultado(id,userAlianzaId);
 		return new ResponseEntity<List<EvaluacionResultado>>(lista, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getTipoAuspicio")
+	public ResponseEntity<List<TipoAuspicio>>getRespuestas(HttpSession ses){
+		List<TipoAuspicio> lista = tipoAuspicioServ.listar();
+		return new ResponseEntity<List<TipoAuspicio>>(lista, HttpStatus.OK);
 	}
 	
 	@GetMapping("/opneModalTrabajosPermisos/{id}")

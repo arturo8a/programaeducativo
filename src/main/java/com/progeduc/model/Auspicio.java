@@ -23,8 +23,8 @@ public class Auspicio {
 	private Integer id;
 	
 	@ManyToOne
-	@JoinColumn(name="tipodoc",nullable=true,foreignKey=@ForeignKey(name="FK_auspicio_tipodoc"))
-	private Tipodocumento tipodocumento;
+	@JoinColumn(name="tipodoc",nullable=true,foreignKey=@ForeignKey(name="FK_auspicio_tipo"))
+	private TipoAuspicio tipodocumento;
 	
 	@Column(name="CANTIDAD")
 	private Integer cantidad;
@@ -54,11 +54,11 @@ public class Auspicio {
 		this.id = id;
 	}
 
-	public Tipodocumento getTipodocumento() {
+	public TipoAuspicio getTipodocumento() {
 		return tipodocumento;
 	}
 
-	public void setTipodocumento(Tipodocumento tipodocumento) {
+	public void setTipodocumento(TipoAuspicio tipodocumento) {
 		this.tipodocumento = tipodocumento;
 	}
 

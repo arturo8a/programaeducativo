@@ -65,6 +65,7 @@ import com.progeduc.service.IProgeducTurnoService;
 import com.progeduc.service.IProgramaeducativoService;
 import com.progeduc.service.IProvinciaService;
 import com.progeduc.service.IResponsableregistroService;
+import com.progeduc.service.ITipoAuspicioService;
 import com.progeduc.service.ITipodocumentoService;
 import com.progeduc.service.ITipousuarioService;
 import com.progeduc.service.ITrabajosfinalesParticipanteService;
@@ -199,6 +200,9 @@ public class IndexController {
 	
 	@Autowired
 	private IUsuarioAlianzaService usuAlianzaserv;
+	
+	@Autowired
+	private ITipoAuspicioService tipoAuspicioServ;
 	
 	String participanteid;
 	
@@ -1053,6 +1057,7 @@ public class IndexController {
 		model.addAttribute("categoriaregusu",categoriaevaluacionService.listar());
 		model.addAttribute("idAlianzaEstrategica","0");
 		model.addAttribute("tipodoc",tipodocumentoserv.listar());
+		model.addAttribute("tipodocaus",tipoAuspicioServ.listar());
 		return "formregistrarusuario";
 	}
 	
@@ -1062,6 +1067,7 @@ public class IndexController {
 		model.addAttribute("categoriaregusu",categoriaevaluacionService.listar());
 		model.addAttribute("idAlianzaEstrategica",id);
 		model.addAttribute("tipodoc",tipodocumentoserv.listar());
+		model.addAttribute("tipodocaus",tipoAuspicioServ.listar());
 		return "formregistrarusuario";
 	}
 	
