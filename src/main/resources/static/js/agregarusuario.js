@@ -395,26 +395,26 @@ function getUsuario(idUsuario){
 				$("#numtel2contactoregusu").val(respuesta.telefonodos);
 				$("#correocontactoregusu").val(respuesta.correocontato);
 				$("#cargocontactoregusu").val(respuesta.cargocontacto);
-				
+				var monto = 0;
+				$.each($("[id*=montototalauspiciador]"), function( i, value ) {
+					if($("#cantidadauspiciador"+(i+1)) != '' && $("#montounitarioauspiciador"+(i+1)) != '' ){
+						$("#montototalauspiciador"+(i+1)).val(parseFloat($("#cantidadauspiciador"+(i+1)).val())*parseFloat($("#montounitarioauspiciador"+(i+1)).val()));
+					}
+		
+					if(!isNaN(parseFloat($("#montototalauspiciador"+(i+1)).val()))){
+						monto += parseFloat($("#montototalauspiciador"+(i+1)).val());
+					}else{
+						monto = 0;
+					}
+				});
+				$("#montototalform").val(monto);
 			}else{
 				$('.alert').alert('close');
 				$("#fileautoridad").show();
 			}
 			
 			
-			var monto = 0;
-			$.each($("[id*=montototalauspiciador]"), function( i, value ) {
-				if($("#cantidadauspiciador"+(i+1)) != '' && $("#montounitarioauspiciador"+(i+1)) != '' ){
-					$("#montototalauspiciador"+(i+1)).val(parseFloat($("#cantidadauspiciador"+(i+1)).val())*parseFloat($("#montounitarioauspiciador"+(i+1)).val()));
-				}
-	
-				if(!isNaN(parseFloat($("#montototalauspiciador"+(i+1)).val()))){
-					monto += parseFloat($("#montototalauspiciador"+(i+1)).val());
-				}else{
-					monto = 0;
-				}
-			});
-			$("#montototalform").val(monto);
+			
 			
 			
 			$("#modalimagencargando").modal('hide');
