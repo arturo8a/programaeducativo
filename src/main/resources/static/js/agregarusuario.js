@@ -44,12 +44,14 @@ $(document).ready(function(){
 	$(document).on("keyup","[id*=montounitarioauspiciador]",function(){
 		var monto = 0;
 		$.each($("[id*=montototalauspiciador]"), function( i, value ) {
-			if($("#cantidadauspiciador"+(i+1)) != '' && $("#montounitarioauspiciador"+(i+1)) != '' ){
+			if($("#cantidadauspiciador"+(i+1)).val() != '' && $("#montounitarioauspiciador"+(i+1)).val() != '' ){
 				$("#montototalauspiciador"+(i+1)).val(parseFloat($("#cantidadauspiciador"+(i+1)).val())*parseFloat($("#montounitarioauspiciador"+(i+1)).val()));
 			}
 
 			if(!isNaN(parseFloat($("#montototalauspiciador"+(i+1)).val()))){
 				monto += parseFloat($("#montototalauspiciador"+(i+1)).val());
+			}else{
+				monto = 0;
 			}
 		});
 		$("#montototalform").val(monto);
@@ -57,12 +59,14 @@ $(document).ready(function(){
 	$(document).on("keyup","[id*=cantidadauspiciador]",function(){
 		var monto = 0;
 		$.each($("[id*=montototalauspiciador]"), function( i, value ) {
-			if($("#cantidadauspiciador"+(i+1)) != '' && $("#montounitarioauspiciador"+(i+1)) != '' ){
+			if($("#cantidadauspiciador"+(i+1)).val() != '' && $("#montounitarioauspiciador"+(i+1)).val() != '' ){
 				$("#montototalauspiciador"+(i+1)).val(parseFloat($("#cantidadauspiciador"+(i+1)).val())*parseFloat($("#montounitarioauspiciador"+(i+1)).val()));
 			}
 
 			if(!isNaN(parseFloat($("#montototalauspiciador"+(i+1)).val()))){
 				monto += parseFloat($("#montototalauspiciador"+(i+1)).val());
+			}else{
+				monto = 0;
 			}
 		});
 		$("#montototalform").val(monto);
@@ -396,9 +400,23 @@ function getUsuario(idUsuario){
 				$('.alert').alert('close');
 				$("#fileautoridad").show();
 			}
-			$("[id*=montototalauspiciador]").trigger('click');
-			$("[id*=montototalauspiciador]").trigger('keyup');
-			$("[id*=montototalauspiciador]").trigger('change');
+			
+			
+			var monto = 0;
+			$.each($("[id*=montototalauspiciador]"), function( i, value ) {
+				if($("#cantidadauspiciador"+(i+1)) != '' && $("#montounitarioauspiciador"+(i+1)) != '' ){
+					$("#montototalauspiciador"+(i+1)).val(parseFloat($("#cantidadauspiciador"+(i+1)).val())*parseFloat($("#montounitarioauspiciador"+(i+1)).val()));
+				}
+	
+				if(!isNaN(parseFloat($("#montototalauspiciador"+(i+1)).val()))){
+					monto += parseFloat($("#montototalauspiciador"+(i+1)).val());
+				}else{
+					monto = 0;
+				}
+			});
+			$("#montototalform").val(monto);
+			
+			
 			$("#modalimagencargando").modal('hide');
 		},
 		error: function() {
