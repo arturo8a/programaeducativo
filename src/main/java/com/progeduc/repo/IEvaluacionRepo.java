@@ -22,9 +22,9 @@ public interface IEvaluacionRepo extends CrudRepository<Evaluacion,Integer>{
 	@Query(value="SELECT tb.* FROM Evaluacion tb WHERE tb.anio=?1  and tb.estado=1",nativeQuery = true)
 	Evaluacion getPorAnio(Integer anio);
 	
-	@Query(value="SELECT tb.* FROM Evaluacion tb WHERE tb.anio=?1  and tb.idcategoriaevaluacion=?2 and tb.idnivelparticipacion=?3 and tb.estado=1",nativeQuery = true)
+	@Query(value="SELECT tb.* FROM Evaluacion tb WHERE tb.anio=?1  and tb.idcategoriaevaluacion=?2 and tb.idnivelparticipacion=?3 and tb.estado=1 and tb.idestadoevaluacion=2",nativeQuery = true)
 	Evaluacion getPorAnioCategoriaNivelparticipacion(Integer anio,Integer idcategoria,Integer idnivelparticipacion);
 	
-	@Query(value="SELECT tb.* FROM Evaluacion tb WHERE tb.anio=?1  and tb.idnivelparticipacion=?2 and tb.idcategoriaevaluacion=?3 and tb.estado=1",nativeQuery = true)
+	@Query(value="SELECT tb.* FROM Evaluacion tb WHERE tb.anio=?1  and tb.idnivelparticipacion=?2 and tb.idcategoriaevaluacion=?3 and tb.estado=1 and tb.idestadoevaluacion=2",nativeQuery = true)
 	Evaluacion getPorAnioNivelparticipacionCategoria(Integer anio,Integer nivelparticipacion,Integer idcategoria);
 }

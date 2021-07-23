@@ -37,6 +37,10 @@ $(document).ready(function(){
 		$("#fileautoridad").show();
 	});
 	
+	$("#tipocodcontactoresgusu").on("change",function(){
+		$("#numdoccontactoregusu").val('');
+	});
+	
 	$(document).on("keyup","[id*=montototalauspiciador]",function(){
 		var monto = 0;
 		$.each($("[id*=montototalauspiciador]"), function( i, value ) {
@@ -70,16 +74,16 @@ function htmlAuspicicador(){
 	html += '		</select>';
 	html += '	</div>';
 	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
-	html += '		<input type="text" name="cantidadauspiciador'+cont+'" id="cantidadauspiciador'+cont+'" class="form-control" placeholder="Cantidad" onKeyPress="return filterIntInput(event,this)"/>';
+	html += '		<input type="text" name="cantidadauspiciador'+cont+'" id="cantidadauspiciador'+cont+'" class="form-control" placeholder="Cantidad" onKeyPress="return filterIntInput(event,this)" maxlength="10"/>';
 	html += '	</div>';
 	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
-	html += '		<input type="text" name="descripcionauspiciador'+cont+'" id="descripcionauspiciador'+cont+'" class="form-control" placeholder="Descripcion" onKeyPress="return filterFloat(event,this)"/>';
+	html += '		<input type="text" name="descripcionauspiciador'+cont+'" id="descripcionauspiciador'+cont+'" class="form-control" placeholder="Descripcion" maxlength="60" />';
 	html += '	</div>';
 	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
-	html += '		<input type="text" name="montounitarioauspiciador'+cont+'" id="montounitarioauspiciador'+cont+'" class="form-control" placeholder="Monto Unitario" onKeyPress="return filterFloat(event,this)"/>';
+	html += '		<input type="text" name="montounitarioauspiciador'+cont+'" id="montounitarioauspiciador'+cont+'" class="form-control" placeholder="Monto Unitario" onKeyPress="return filterFloat(event,this)" maxlength="10"/>';
 	html += '	</div>';
 	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
-	html += '		<input type="text" name="montototalauspiciador'+cont+'" id="montototalauspiciador'+cont+'" class="form-control" placeholder="Monto Total"/>';
+	html += '		<input type="text" name="montototalauspiciador'+cont+'" id="montototalauspiciador'+cont+'" class="form-control" placeholder="Monto Total" onKeyPress="return filterFloat(event,this)" maxlength="10"/>';
 	html += '	</div>';
 	html += '	<div class="col-xs-12 col-sm-4 text-left">';
 	html += '	</div>';
@@ -576,7 +580,7 @@ function filterIntNroDocIdentidad(evt,input){
 		var key = window.Event ? evt.which : evt.keyCode;    
 	    var chark = String.fromCharCode(key);
 	    var tempValue = input.value+chark;
-	    if(key >= 48 && key <= 57){
+	    if((key >= 48 && key <= 57) || ((key >= 65 && key <= 90) || (key >= 97 && key <= 122) || (key ==32)   || (key ==241) || (key ==209) || (key ==225) || (key ==233) || (key ==237) || (key ==243) || (key ==250)  || (key ==193) || (key ==201) || (key ==205) || (key ==211) || (key ==218))){
 	    	if($("#tipocodcontactoresgusu").val() == 2){
 				if($(input).val().trim().length<12)
 					return true;

@@ -776,7 +776,7 @@
 	                   	   var x = '';
                            switch (data) {
 	                            case '1':
-	                                x = '<img src="./images/svg/eye-solid.svg" class="evidencia" style="width:20px; cursor:pointer"/>';
+	                                x = '<img src="./images/svg/eye-solid.svg" class="evidencia" style="width:20px; cursor:pointer"/>'+data;
 	                                break;
 	                            case '0':
 	                            	x = "";
@@ -893,7 +893,7 @@
 	                    	return '[ ODS: ' + $("#odsconcurso").val() + ']            [ Año de inscripción: '+ $("#anioconcurso").val() + ']';
 	                    },
 	                    filename : function(){
-	                    	/*var hoy = new Date();
+	                    	var hoy = new Date();
 	                    	var dia = String(hoy.getDate());
 	                    	if(dia.length==1){
 	                    		dia = "0"+dia;
@@ -910,7 +910,7 @@
 	                    	if(minuto.length==1){
 	                    		minuto = "0"+minuto;
 	                    	}
-	            	    	return "Listatrabajosfinales_"+dia+mes+hoy.getFullYear()+'_'+hora + minuto;*/
+	            	    	return "Reporte_"+dia+mes+hoy.getFullYear()+'_'+hora + minuto;
 	                    }
 	            	}
 	            ]
