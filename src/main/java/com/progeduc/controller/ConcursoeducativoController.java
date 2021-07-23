@@ -1647,8 +1647,17 @@ public class ConcursoeducativoController {
 			usu.setAuspicios(dto.getAuspicios());
 			usu.setFecha_registro(new Timestamp(new Date().getTime()));
 			usu.setEstado("1");
+			/*List<Auspicio> listAux = new ArrayList<Auspicio>();
+			if(dto.getAuspicios().size() > 0) {
+				listAux = dto.getAuspicios();
+				usu.setAuspicios( new ArrayList<Auspicio>());
+			}*/
 			UsuarioAlianza usu2 = usuAlianzaserv.registrar(usu);
 			
+			/*usu2.setAuspicios(listAux);
+			
+			UsuarioAlianza usu3 = usuAlianzaserv.ListarporId(usu2.getId());
+			usu3.setAuspicios(listAux);*/
 			if(dto.getAuspicios().size() > 0) {
 				List<Auspicio> listAus = dto.getAuspicios();
 				for (Auspicio auspicio : listAus) {
@@ -1843,9 +1852,9 @@ public class ConcursoeducativoController {
 	}
 
 	@GetMapping("/getRespuestas/{id}")
-	public ResponseEntity<List<EvaluacionResultado>>getRespuestas(@PathVariable("id") Integer id){
-		
-		List<EvaluacionResultado> lista = evaluacionRespuestaServ.getRespuestas(id);
+	public ResponseEntity<List<EvaluacionResultado>>getRespuestas(@PathVariable("id") Integer id,HttpSession ses){
+		Integer userAlianzaId = Integer.parseInt(ses.getAttribute("userId").toString());
+		List<EvaluacionResultado> lista = evaluacionRespuestaServ.listaEvaluacionResultado(id,userAlianzaId);
 		return new ResponseEntity<List<EvaluacionResultado>>(lista, HttpStatus.OK);
 	}
 	

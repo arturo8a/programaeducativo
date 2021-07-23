@@ -120,7 +120,7 @@ public class UsuarioAlianza {
 	@Column(name="ESTADO")
 	private String estado;
 	
-	@OneToMany(mappedBy = "usuario_alianza", cascade = CascadeType.ALL,orphanRemoval=true)
+	@OneToMany(mappedBy = "usuario_alianza", cascade = CascadeType.MERGE,orphanRemoval=true)
 	private List<Auspicio> auspicios;
 	
 	@Column(name="FECHA_REGISTRO",nullable=true)
