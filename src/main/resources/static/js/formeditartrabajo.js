@@ -5,9 +5,10 @@ var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="
 	var arrayParticipante , array_nivel, arrayNombreParticipanteEditar;	
 	var rows_selected;
 	var array_indice = new Array();	
-	var evidencias_iniciadas;
-	var evidencias_agregadas;
-	var evidencias_eliminadas;
+	var evidencias_iniciadas = new Array();
+	var evidencias_agregadas = new Array();
+	var evidencias_iniciadas_eliminadas = new Array();
+	var evidencias_agregadas_eliminadas = new Array();
 	
 	var nroevidencias = parseInt($("#nroevidencias").val());
 	
@@ -17,30 +18,28 @@ var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="
 		$("#evidenciastrabajoeditar").prop("disabled",true);
 	
 	var html1 = "<table><tr>";
-	for(var i=0;i<$("#nroevidencias").val();i++){
-		evidencias_iniciadas = new Array();
+	for(var i=0;i<nroevidencias;i++){
 		evidencias_iniciadas.push($("#evidencia" + (i+1)).val());
-		html1 += "<td><div id='"+$("#evidencia" + (i+1)).val()+"' class='mi_alert mi_alert-warning mi_alert-dismissible fade show' role='alert' ><strong><abbr title='"+($("#evidencia" + (i+1)).val())+"'>"+($("#evidencia" + (i+1)).val()).substr(0,5)+"</abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaInicial("+'`'+($("#evidencia" + (i+1)).val())+'`'+")' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div></td>";
+		html1 += "<td><div id='"+$("#evidencia" + (i+1)).val()+"' class='alert alert-warning alert-dismissible fade show' role='alert' style='padding:10px'><strong><abbr title='"+($("#evidencia" + (i+1)).val())+"'>"+($("#evidencia" + (i+1)).val()).substr(0,5)+"</abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaInicial("+'`'+($("#evidencia" + (i+1)).val())+'`'+")' data-dismiss='alert' aria-label='Close' style='padding:0px; margin:-3px'><span aria-hidden='true'>&times;</span></button></div></td>";
 	}
 	html1 += "</tr></table>";
-	$("#evidenciastrabajoeditar").html(html1);
+	$("#divevidencias").html(html1);
 	
 	$("#evidenciastrabajoeditar").change(function(){
-		evidencias_agregadas = new Array();		
+		evidencias_agregadas = new Array();
+		evidencias_agregadas_eliminadas = new Array();
 		for(var i=0;i<evidenciastrabajoeditar.files.length;i++){
 			evidencias_agregadas.push(evidenciastrabajoeditar.files[i].name);
 		}		
 		var html2 = "<table><tr>";
 		for(var i=0;i<evidencias_iniciadas.length;i++){
-			//data_archivo_subir += "";
-			html2 += "<td><div id='"+(evidencias_iniciadas[i])+"' class='mi_alert mi_alert-warning mi_alert-dismissible fade show' role='alert' style='width:125px'><strong><abbr title='"+(evidencias_iniciadas[i])+"'>"+(evidencias_iniciadas[i]).substr(0,5)+"<abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaEditar("+'`'+(evidencias_iniciadas[i])+'`'+")' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div></td>";
+			html2 += "<td><div id='"+(evidencias_iniciadas[i])+"' class='alert alert-warning alert-dismissible fade show' role='alert' style='padding:10px'><strong><abbr title='"+(evidencias_iniciadas[i])+"'>"+(evidencias_iniciadas[i]).substr(0,5)+"<abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaEditar("+'`'+(evidencias_iniciadas[i])+'`'+")' data-dismiss='alert' aria-label='Close' style='padding:0px; margin:-3px'><span aria-hidden='true'>&times;</span></button></div></td>";
 		}
 		for(var i=0;i<evidencias_agregadas.length;i++){
-			//data_archivo_subir += "";
-			html2 += "<td><div id='"+(evidencias_agregadas[i])+"' class='mi_alert mi_alert-primary mi_alert-dismissible fade show' role='alert' style='width:125px'><strong><abbr title='"+(evidencias_agregadas[i])+"'>"+(evidencias_agregadas[i]).substr(0,5)+"<abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaEditar("+'`'+(evidencias_agregadas[i])+'`'+")' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div></td>";
+			html2 += "<td><div id='"+(evidencias_agregadas[i])+"' class='alert alert-primary alert-dismissible fade show' role='alert' style='padding:10px'><strong><abbr title='"+(evidencias_agregadas[i])+"'>"+(evidencias_agregadas[i]).substr(0,5)+"<abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaEditar("+'`'+(evidencias_agregadas[i])+'`'+")' data-dismiss='alert' aria-label='Close' style='padding:0px; margin:-3px'><span aria-hidden='true'>&times;</span></button></div></td>";
 		}
 		html2 += "</tr></table>";
-		$("#evidenciastrabajoeditar").html(html2);
+		$("#divevidencias").html(html2);
 	});
 	
 	var mistyle = "";
@@ -175,7 +174,7 @@ var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="
 	
 	$('#table_lpt_editar').DataTable().on("draw", function(row, data){
 	
-		var array_data = table_lpt_editar.data();
+		/*var array_data = table_lpt_editar.data();
 		var array_participanteid = $("#participanteid").val();
 		array_participanteid = array_participanteid.split(',');
 		
@@ -187,7 +186,7 @@ var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="
 				}
 			}				
 		}
-		$('#table_lpt_editar').DataTable().columns.adjust();
+		$('#table_lpt_editar').DataTable().columns.adjust();*/
 	});
       
 	
@@ -277,30 +276,28 @@ var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="
 			    data : JSON.stringify(trabajosfinalesparticipantesDto),
 			    dataType : 'json',
 				success: function(respuesta) {
-					if(respuesta>0){						
+					if(respuesta>0){
 						var data = new FormData();
 						data.append('file',archivotrabajoeditar.files[0] != undefined ? archivotrabajoeditar.files[0] : null);
 						data.append('id',respuesta);
-						if(evidenciastrabajoeditar.files[0] != undefined){
+						if(evidencias_iniciadas.length==0 && evidencias_agregadas==0){
+							data.append('files',null);
+						}
+						else{
 							for(var i=0;i<evidenciastrabajoeditar.files.length;i++){
-								var bandera_editar = true;
-								for(var j=0;j<array_evidencias_eliminadas_editar.length;j++){
-									if(evidenciastrabajoeditar.files[i].name == array_evidencias_eliminadas_editar[j]){
-										bandera_editar = false;
+								var bandera_editar = false;
+								for(var j=0;j<evidencias_agregadas.length;j++){
+									if(evidenciastrabajoeditar.files[i].name == evidencias_agregadas[j]){
+										bandera_editar = true;
 									}
 								}
 								if(bandera_editar){
 									data.append('files',evidenciastrabajoeditar.files[i]);
-									contador_evidencias_subidos_editar++;
 								}
 							}
 						}
-						else{
-							data.append('files',null);
-						}
-						for(var i=0;i<array_evidencias_eliminadas.length;i++){
-							archivos_eliminados += array_evidencias_eliminadas[i] + ",";
-							contador_evidencias_subidos_editar--;
+						for(var i=0;i<evidencias_iniciadas_eliminadas.length;i++){
+							archivos_eliminados += evidencias_iniciadas_eliminadas[i] + ",";
 						}						
 						data.append('array_evidencias_eliminadas' , archivos_eliminados);
 						
@@ -326,7 +323,7 @@ var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="
 					        	table_lista_trabajos_finales.cell(celdaseleccionada,2).data(titulotrabajo).draw();
 					        	table_lista_trabajos_finales.cell(celdaseleccionada,3).data($("#modalidadpostulaciontrabajoeditar option:selected").html()).draw();
 					        	table_lista_trabajos_finales.cell(celdaseleccionada,4).data(nombreparticipanteeditar).draw();
-					        	table_lista_trabajos_finales.cell(celdaseleccionada,5).data(contador_evidencias_subidos_editar + (contador_evidencias_subidos_editar >1 ? " evidencias " :  " evidencia") +  contador_archivo_subidos_editar + " final").draw();
+					        	table_lista_trabajos_finales.cell(celdaseleccionada,5).data((evidencias_iniciadas.length)  + (evidencias_agregadas.length)+ " evidencias "  +  '1' + " final").draw();
 								
 								limpiarControlesEditar();
 							    $("#textoexitotrabajoeditar").html("Se actualizó los datos del participante");
@@ -441,12 +438,16 @@ var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="
 				evidencias_iniciadas.splice(i,1);
 			}
 		}
-		evidencias_eliminadas.push(archivo);
+		evidencias_iniciadas_eliminadas.push(archivo);
 	}
 	
 	function eliminarEvidenciaEditar(archivo){
-		array_evidencias_eliminadas_editar.push(archivo);
-		$("#"+archivo).remove();
+		for(var i =0;i<evidencias_agregadas.length;i++){
+			if(evidencias_agregadas[i] == archivo){
+				evidencias_agregadas.splice(i,1);
+			}
+		}
+		evidencias_agregadas_eliminadas.push(archivo);
 	}	
 	
 	function filtraCategoriaModalidad(campo1, campo2){
@@ -608,9 +609,15 @@ var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="
 			}			
 		}
 		
-		if( (evidenciastrabajoeditar.files.length  + (nroevidencias - array_evidencias_eliminadas.length) ) >5  ||  (evidenciastrabajoeditar.files.length  + (nroevidencias - array_evidencias_eliminadas.length) ) == 0  ){
-			mensajeValidacion += "Debe subir hasta 5 evidencias"+"<br>";
+		if( evidencias_iniciadas.length==0 && evidencias_agregadas==0 ){
+			mensajeValidacion += "Debe adjuntar evidencias"+"<br>";
 		}
+		
+		var suma_evidencias = (evidencias_iniciadas.length)  + (evidencias_agregadas.length);
+		
+		if( suma_evidencias > 5){
+			mensajeValidacion += "Debe adjuntar como máximo 5 evidencias"+"<br>";
+		}		
 		else{
 			
 			for(var i=0;i<evidenciastrabajoeditar.files.length;i++){
