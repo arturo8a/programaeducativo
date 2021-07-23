@@ -65,14 +65,14 @@ var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="
 
 
 	$("#categoriatrabajoeditar").change(function(){
-		categoriatrabajo = $("#categoriatrabajoeditar").val();		
-		$("#linkvideoeditar").val("");	
+		categoriatrabajo = $("#categoriatrabajoeditar").val();			
 		if(categoriatrabajo == '1' ||  categoriatrabajo == '3'){
 			$( "#linkvideoeditar" ).prop( "disabled", false );
 		}			
 		else if(categoriatrabajo == '2' ||  categoriatrabajo == '4' ||  categoriatrabajo == '5'){
 			$( "#linkvideoeditar" ).prop( "disabled", true );
 		}		
+		$("#linkvideoeditar").val("");
 		array_indice = new Array();		
 		table_lpt_editar.rows().deselect();
 		table_lpt_editar.draw();
@@ -542,7 +542,7 @@ var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="
 		categoriatrabajo = $("#categoriatrabajoeditar").val();
 		modalidadtrabajo = $("#modalidadpostulaciontrabajoeditar").val();
 		titulotrabajo = $("#titulotrabajoeditar").val();
-		linkvideo = $("#linkvideoeditar").val();
+		linkvideotrabajo = $("#linkvideoeditar").val();
 		apellidopaternotrabajo = $("#appaternodocentetrabajoeditar").val();	
 		apellidomaternotrabajo = $("#apmaternodocentetrabajoeditar").val();
 		nombretrabajo = $("#nombredocentetrabajoeditar").val();

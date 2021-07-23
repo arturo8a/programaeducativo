@@ -722,75 +722,12 @@ public class ConcursoeducativoController {
 		if(tipousuarioid == 0){			
 			Object ob = ses.getAttribute("odsid");			
 			List<UsuarioAlianza> listaUsu = usuAlianzaserv.listarByOds(Integer.parseInt(ob.toString()));
-			listaUsu.forEach(ua->{				
-				EvaluadorDto dto = new EvaluadorDto();
-				dto.setOds(ua.getOds().getDescripcion());
+			listaUsu.forEach(ua->{
 				
-				rol_entidad = "";
-				if(ua.getComitetecnico().equals("1")) {
-					rol_entidad = "Comite Técnico/";
-				}				
-				if(ua.getComitetecnico().equals("1")) {
-					rol_entidad += "Comite Evaluador/";
-				}				
-				if(ua.getComitetecnico().equals("1")) {
-					rol_entidad += "Auspiciador/";
-				}				
-				if(ua.getComitetecnico().equals("1")) {
-					rol_entidad += "Aliado/";
-				}				
-				if(rol_entidad.length()>0)
-					rol_entidad = rol_entidad.substring(0, rol_entidad.length()-1);	
-				dto.setRol_entidad(rol_entidad);
-				dto.setEntidad(ua.getEntidad());
-				dto.setApellido_paterno(ua.getApepatautoridad());
-				dto.setApellido_materno(ua.getApematautoridad());
-				dto.setNombres(ua.getNombresautoridad());
-				dto.setTipo_documento(ua.getTipodocumento().getDescripcion());
-				dto.setNro_documento(ua.getNumdocumento());
-				dto.setId(ua.getId());
-				lista.add(dto);
-			});
-		}
-		else if (tipousuarioid==30){
-			usuAlianzaserv.listar().forEach(ua->{
-				EvaluadorDto dto = new EvaluadorDto();
-				dto.setOds(ua.getOds().getDescripcion());
-				rol_entidad = "";
-				if(ua.getComitetecnico().equals("1")) {
-					rol_entidad = "Comite Técnico/";
-				}				
-				if(ua.getComitetecnico().equals("1")) {
-					rol_entidad += "Comite Evaluador/";
-				}				
-				if(ua.getComitetecnico().equals("1")) {
-					rol_entidad += "Auspiciador/";
-				}				
-				if(ua.getComitetecnico().equals("1")) {
-					rol_entidad += "Aliado/";
-				}				
-				if(rol_entidad.length()>0)
-					rol_entidad = rol_entidad.substring(0, rol_entidad.length()-1);				
-				dto.setRol_entidad(rol_entidad);
-				dto.setEntidad(ua.getEntidad());
-				dto.setApellido_paterno(ua.getApepatautoridad());
-				dto.setApellido_materno(ua.getApematautoridad());
-				dto.setNombres(ua.getNombresautoridad());
-				dto.setTipo_documento(ua.getTipodocumento().getDescripcion());
-				dto.setNro_documento(ua.getNumdocumento());
-				dto.setId(ua.getId());
-				lista.add(dto);
-			});	
-		}
-		else {
-			String usuario = ses.getAttribute("usuario").toString();
-			Usuario user = usuarioServ.byUsuario(usuario);
-			usuarioodsServ.listarByUsuario(user.getId()).forEach(usu->{				
-				//List<UsuarioAlianza> listaUsu = usuAlianzaserv.listarByOds(usu.getOds().getId());
-				List<UsuarioAlianza> listaUsu = usuAlianzaserv.listarByOds(10);
-				listaUsu.forEach(ua->{
+				if(ua.getComiteevaluador().equals("1")) {
 					EvaluadorDto dto = new EvaluadorDto();
 					dto.setOds(ua.getOds().getDescripcion());
+					
 					rol_entidad = "";
 					if(ua.getComitetecnico().equals("1")) {
 						rol_entidad = "Comite Técnico/";
@@ -815,6 +752,76 @@ public class ConcursoeducativoController {
 					dto.setNro_documento(ua.getNumdocumento());
 					dto.setId(ua.getId());
 					lista.add(dto);
+				}
+			});
+		}
+		else if (tipousuarioid==30){
+			usuAlianzaserv.listar().forEach(ua->{
+				EvaluadorDto dto = new EvaluadorDto();
+				dto.setOds(ua.getOds().getDescripcion());
+				rol_entidad = "";				
+				if(ua.getComiteevaluador().equals("1")) {
+					if(ua.getComitetecnico().equals("1")) {
+						rol_entidad = "Comite Técnico/";
+					}				
+					if(ua.getComitetecnico().equals("1")) {
+						rol_entidad += "Comite Evaluador/";
+					}				
+					if(ua.getComitetecnico().equals("1")) {
+						rol_entidad += "Auspiciador/";
+					}				
+					if(ua.getComitetecnico().equals("1")) {
+						rol_entidad += "Aliado/";
+					}				
+					if(rol_entidad.length()>0)
+						rol_entidad = rol_entidad.substring(0, rol_entidad.length()-1);				
+					dto.setRol_entidad(rol_entidad);
+					dto.setEntidad(ua.getEntidad());
+					dto.setApellido_paterno(ua.getApepatautoridad());
+					dto.setApellido_materno(ua.getApematautoridad());
+					dto.setNombres(ua.getNombresautoridad());
+					dto.setTipo_documento(ua.getTipodocumento().getDescripcion());
+					dto.setNro_documento(ua.getNumdocumento());
+					dto.setId(ua.getId());
+					lista.add(dto);
+				}				
+			});	
+		}
+		else {
+			String usuario = ses.getAttribute("usuario").toString();
+			Usuario user = usuarioServ.byUsuario(usuario);
+			usuarioodsServ.listarByUsuario(user.getId()).forEach(usu->{				
+				//List<UsuarioAlianza> listaUsu = usuAlianzaserv.listarByOds(usu.getOds().getId());
+				List<UsuarioAlianza> listaUsu = usuAlianzaserv.listarByOds(10);
+				listaUsu.forEach(ua->{
+					EvaluadorDto dto = new EvaluadorDto();
+					dto.setOds(ua.getOds().getDescripcion());
+					rol_entidad = "";					
+					if(ua.getComiteevaluador().equals("1")) {
+						if(ua.getComitetecnico().equals("1")) {
+							rol_entidad = "Comite Técnico/";
+						}				
+						if(ua.getComitetecnico().equals("1")) {
+							rol_entidad += "Comite Evaluador/";
+						}				
+						if(ua.getComitetecnico().equals("1")) {
+							rol_entidad += "Auspiciador/";
+						}				
+						if(ua.getComitetecnico().equals("1")) {
+							rol_entidad += "Aliado/";
+						}				
+						if(rol_entidad.length()>0)
+							rol_entidad = rol_entidad.substring(0, rol_entidad.length()-1);	
+						dto.setRol_entidad(rol_entidad);
+						dto.setEntidad(ua.getEntidad());
+						dto.setApellido_paterno(ua.getApepatautoridad());
+						dto.setApellido_materno(ua.getApematautoridad());
+						dto.setNombres(ua.getNombresautoridad());
+						dto.setTipo_documento(ua.getTipodocumento().getDescripcion());
+						dto.setNro_documento(ua.getNumdocumento());
+						dto.setId(ua.getId());
+						lista.add(dto);
+					}
 				});
 			});	
 		}		
