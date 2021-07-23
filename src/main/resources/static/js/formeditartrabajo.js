@@ -642,7 +642,7 @@ var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="
 			}	
 		}
 		
-		if(linkvideo.trim()=="" &&  (categoriatrabajo == "1" || categoriatrabajo == "3") ){
+		if(linkvideotrabajo.trim()=="" &&  (categoriatrabajo == "1" || categoriatrabajo == "3") ){
 			mensajeValidacion += "Debe ingresar link de video"+"<br>";
 		}
 		
