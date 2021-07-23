@@ -277,6 +277,9 @@
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <img th:src="@{./images/imagen_informacion11.png}" />&nbsp;&nbsp; <label class="pt-1" style="padding-right:380px">Alerta</label>
+	      	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
 	      </div>
 	      <div class="modal-body" id="textoinformaciontrabajo">
 	      </div>
@@ -287,7 +290,7 @@
 	  </div>
 	</div>
 	
-	<div class="modal" tabindex="8" role="dialog" id="modalerror">
+	<div class="modal" tabindex="8" role="dialog" id="modalerrortrabajo">
 	  <div class="modal-dialog" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
@@ -296,10 +299,10 @@
 	          <span aria-hidden="true">&times;</span>	          
 	        </button>
 	      </div>
-	      <div class="modal-body" id="textoerror">
+	      <div class="modal-body" id="textoerrortrabajo">
 	      </div>
 	      <div class="modal-footer">
-	        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeerror" name="btncerrarmensajeerror">Cerrar</button>
+	        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeerrortrabajo" name="btncerrarmensajeerrortrabajo">Cerrar</button>
 	      </div>
 	    </div>
 	  </div>
@@ -321,7 +324,7 @@
 	var conversacion,valoracionagua,valoracionalcantarillado,buenuso,importancia,vinculo,carencias;
 	var arrayParticipante , array_nivel, arrayNombreParticipante;
 	var contador_archivos_subidos;
-	
+	var click = true;
 	var rows_selected;
 	
 		
@@ -364,7 +367,7 @@
 			array_evidencias_eliminadas_agregar = new Array();
 			var data_archivo_subir = "<table><tr>";
 			for(var i=0;i<evidenciastrabajo.files.length;i++){
-				data_archivo_subir += "<td><div class='mi_alert mi_alert-primary mi_alert-dismissible fade show' role='alert'><strong><abbr title='"+(evidenciastrabajo.files[i].name)+"'>"+(evidenciastrabajo.files[i].name).substr(0,5)+"<abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaAgregar("+'`'+(evidenciastrabajo.files[i].name)+'`'+")' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div></td>";
+				data_archivo_subir += "<td><div class='alert alert-primary alert-dismissible fade show' role='alert' style='padding:10px'><strong><abbr title='"+(evidenciastrabajo.files[i].name)+"'>"+(evidenciastrabajo.files[i].name).substr(0,5)+"<abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaAgregar("+'`'+(evidenciastrabajo.files[i].name)+'`'+")' data-dismiss='alert' aria-label='Close' style='padding:0px; margin:-3px'><span aria-hidden='true'>&times;</span></button></div></td>";
 			}
 			data_archivo_subir += "</tr></table>";
 			$("#divevidencias_agregar").html(data_archivo_subir);
@@ -467,172 +470,182 @@
 			$("#modalagregartrabajo").modal('hide');
 		}); 
 		
+		$("#btncerrarmensajeerrortrabajo").click(function(){
+			$("#modalerrortrabajo").modal('hide');
+		});
+		
 		$("#btnguardartrabajo").click(function(){	
 			
-			$("#modalimagencargando").modal({
-				show : true,
-				backdrop : 'static',
-				keyboard:false
-			});
-			
-			if(validarCamposTrabajo()){
+			if(click){
+				click = false;
 				
-				conversacion = $("#conversacion").is(":checked") ? 1 : 0;
-				valoracionagua = $("#valoracionagua").is(":checked") ? 1 : 0 ;
-				valoracionalcantarillado = $("#valoracionalcantarillado").is(":checked") ? 1 : 0;
-				buenuso = $("#buenuso").is(":checked") ? 1 : 0;
-				importancia = $("#importancia").is(":checked") ? 1 : 0;
-				vinculo = $("#vinculo").is(":checked") ? 1 : 0;
-				carencias = $("#carencias").is(":checked") ? 1 : 0;
-				
-				var trabajosfinales = {
-					categoriatrabajo  : {
-						id : categoriatrabajo
-					},
-					modalidadtrabajo : {
-						id : modalidadtrabajo
-					},
-					titulotrabajo  : titulotrabajo,
-					linkvideo : linkvideotrabajo,
-					conversacion : conversacion,
-					valoracionagua : valoracionagua,
-					valoracionalcantarillado : valoracionalcantarillado,
-					buenuso : buenuso,
-					importancia : importancia,
-					vinculo : vinculo,
-					puesto: 0,
-					carencias : carencias,
-					appaterno: apellidopaternotrabajo,
-					apmaterno : apellidomaternotrabajo,
-					nombre : nombretrabajo,
-					tipodocumento : {
-						id : tipodoctrabajo
-					},
-					estadotrabajo:{
-						id : 1
-					},
-					nrodocumento: nrodoctrabajo,
-					telefono : nrotelefonotrabajo,
-					correo  : correotrabajo,
-					genero : {
-						id : generotrabajo
-					},
-					estado : 1,
-					enviado : 0
-				};
-				
-				var trabajosfinalesparticipantesDto = {
-					trabajosfinales : trabajosfinales,
-					listaparticipante : arrayParticipante
-				}
-				
-				
-				$.ajax({
-					type : "POST",
-				    contentType : "application/json",
-				    url : url_base + "pedesa/savetrabajosfinalesparticipante",
-				    data : JSON.stringify(trabajosfinalesparticipantesDto),
-				    dataType : 'json',
-					success: function(respuesta) {
-						if(respuesta>0){
-							
-							var data = new FormData();
-							data.append('file',archivotrabajo.files[0]);
-							data.append('id',respuesta);
-							contador_archivos_subidos = 0;
-							for(var i=0;i<evidenciastrabajo.files.length;i++){
-								var bandera = true;
-								for(var j=0;j<array_evidencias_eliminadas_agregar.length;j++){
-									if(evidenciastrabajo.files[i].name === array_evidencias_eliminadas_agregar[j]){
-										bandera = false;
-									}
-								}
-								if(bandera){
-									data.append('files',evidenciastrabajo.files[i]);
-									contador_archivos_subidos++;
-								}	
-							}
-							
-							$.ajax({
-						        type: "POST",
-						        enctype: 'multipart/form-data',
-						        url: url_base + "pedesa/subirtrabajoarchivoevidencia",
-						        data: data,
-						        processData: false, 
-						        contentType: false,
-						        cache: false,
-						        timeout: 600000,
-						        success: function (data) {		
-						        	
-						        	$("#modalimagencargando").modal('hide');
-						        	var nombreparticipante = "";
-						        	for(var i=0;i<arrayNombreParticipante.length;i++){
-						        		nombreparticipante += arrayNombreParticipante[i]  + "/";
-						        	}
-						        	nombreparticipante  = nombreparticipante.substr(0,nombreparticipante.length-1);
-						        	table_lista_trabajos_finales.row.add({
-						        		"id": respuesta,
-						        		"categoria": $("#categoriatrabajo option:selected").html(),
-						        		"titulo" : titulotrabajo   ,
-						        		"modalidad" : $("#modalidadpostulaciontrabajo option:selected").html(),
-						        		"participantes" : nombreparticipante,
-						        		"archivos" : contador_archivos_subidos + (contador_archivos_subidos>1 ? " evidencias " : " evidencia ") + archivotrabajo.files.length + " final",
-						        		"enviado" : 0,
-						        		"enviado" : 0,
-						        		"enviado" :0
-						        	}).draw();
-						        	
-								    limpiarControles();
-								    $("#textoexitotrabajo").html("Usted registro exitosamente un nuevo trabajo");
-									$('#modalexitotrabajo').modal({
-										show : true,
-										backdrop : 'static',
-										keyboard:false
-									});
-									
-						 
-						        },
-						        error: function (e) {
-						            console.log("ERROR : ", e);
-						        }
-						    });
-							
-						}
-						else if(respuesta == -1){
-							$("#modalimagencargando").modal('hide');
-							$("#textoerror").html("No esta permitido registrar dos trabajos con la misma modalidad,categoria y participantes");
-							$('#modalerror').modal({
-								show : true,
-								backdrop : 'static',
-								keyboard:false
-							});
-						}
-						else{
-							$("#modalimagencargando").modal('hide');
-							$("#textoerror").html("Error al registrar trabajo");
-							$('#modalerror').modal({
-								show : true,
-								backdrop : 'static',
-								keyboard:false
-							});
-						}
-					},
-					error: function() {
-						$("#modalimagencargando").modal('hide');
-						alert("Exception al registrar");
-				    }
-				});	
-				
-				
-			}
-			else{
-				$("#modalimagencargando").modal('hide');
-				$("#textoinformaciontrabajo").html("<div style='color:red' class='text-left'>"+mensajeValidacion+"</div>");
-				$('#modalinformaciontrabajo').modal({
+				$("#modalimagencargando").modal({
 					show : true,
 					backdrop : 'static',
 					keyboard:false
 				});
+				if(validarCamposTrabajo()){
+				
+					conversacion = $("#conversacion").is(":checked") ? 1 : 0;
+					valoracionagua = $("#valoracionagua").is(":checked") ? 1 : 0 ;
+					valoracionalcantarillado = $("#valoracionalcantarillado").is(":checked") ? 1 : 0;
+					buenuso = $("#buenuso").is(":checked") ? 1 : 0;
+					importancia = $("#importancia").is(":checked") ? 1 : 0;
+					vinculo = $("#vinculo").is(":checked") ? 1 : 0;
+					carencias = $("#carencias").is(":checked") ? 1 : 0;
+					
+					var trabajosfinales = {
+						categoriatrabajo  : {
+							id : categoriatrabajo
+						},
+						modalidadtrabajo : {
+							id : modalidadtrabajo
+						},
+						titulotrabajo  : titulotrabajo,
+						linkvideo : linkvideotrabajo,
+						conversacion : conversacion,
+						valoracionagua : valoracionagua,
+						valoracionalcantarillado : valoracionalcantarillado,
+						buenuso : buenuso,
+						importancia : importancia,
+						vinculo : vinculo,
+						puesto: 0,
+						carencias : carencias,
+						appaterno: apellidopaternotrabajo,
+						apmaterno : apellidomaternotrabajo,
+						nombre : nombretrabajo,
+						tipodocumento : {
+							id : tipodoctrabajo
+						},
+						estadotrabajo:{
+							id : 1
+						},
+						nrodocumento: nrodoctrabajo,
+						telefono : nrotelefonotrabajo,
+						correo  : correotrabajo,
+						genero : {
+							id : generotrabajo
+						},
+						estado : 1,
+						enviado : 0
+					};
+					
+					var trabajosfinalesparticipantesDto = {
+						trabajosfinales : trabajosfinales,
+						listaparticipante : arrayParticipante
+					}
+					
+					
+					$.ajax({
+						type : "POST",
+					    contentType : "application/json",
+					    url : url_base + "pedesa/savetrabajosfinalesparticipante",
+					    data : JSON.stringify(trabajosfinalesparticipantesDto),
+					    dataType : 'json',
+						success: function(respuesta) {
+							
+							if(respuesta>0){
+								
+								var data = new FormData();
+								data.append('file',archivotrabajo.files[0]);
+								data.append('id',respuesta);
+								contador_archivos_subidos = 0;
+								for(var i=0;i<evidenciastrabajo.files.length;i++){
+									var bandera = true;
+									for(var j=0;j<array_evidencias_eliminadas_agregar.length;j++){
+										if(evidenciastrabajo.files[i].name === array_evidencias_eliminadas_agregar[j]){
+											bandera = false;
+										}
+									}
+									if(bandera){
+										data.append('files',evidenciastrabajo.files[i]);
+										contador_archivos_subidos++;
+									}	
+								}
+								
+								$.ajax({
+							        type: "POST",
+							        enctype: 'multipart/form-data',
+							        url: url_base + "pedesa/subirtrabajoarchivoevidencia",
+							        data: data,
+							        processData: false, 
+							        contentType: false,
+							        cache: false,
+							        timeout: 600000,
+							        success: function (data) {		
+							        	
+							        	$("#modalimagencargando").modal('hide');
+							        	var nombreparticipante = "";
+							        	for(var i=0;i<arrayNombreParticipante.length;i++){
+							        		nombreparticipante += arrayNombreParticipante[i]  + "/";
+							        	}
+							        	nombreparticipante  = nombreparticipante.substr(0,nombreparticipante.length-1);
+							        	table_lista_trabajos_finales.row.add({
+							        		"id": respuesta,
+							        		"categoria": $("#categoriatrabajo option:selected").html(),
+							        		"titulo" : titulotrabajo   ,
+							        		"modalidad" : $("#modalidadpostulaciontrabajo option:selected").html(),
+							        		"participantes" : nombreparticipante,
+							        		"archivos" : contador_archivos_subidos + (contador_archivos_subidos>1 ? " evidencias " : " evidencia ") + archivotrabajo.files.length + " final",
+							        		"enviado" : 0,
+							        		"enviado" : 0,
+							        		"enviado" :0
+							        	}).draw();
+							        	
+									    limpiarControles();
+									    $("#textoexitotrabajo").html("Usted registro exitosamente un nuevo trabajo");
+										$('#modalexitotrabajo').modal({
+											show : true,
+											backdrop : 'static',
+											keyboard:false
+										});
+										
+							 			click = true;
+							        },
+							        error: function (e) {
+							            console.log("ERROR : ", e);
+							        }
+							    });
+								
+							}
+							else if(respuesta == -1){
+								$("#modalimagencargando").modal('hide');
+								$("#textoerrortrabajo").html("No esta permitido registrar dos trabajos con la misma modalidad,categoria y participantes");
+								$('#modalerrortrabajo').modal({
+									show : true,
+									backdrop : 'static',
+									keyboard:false
+								});
+								click  = true;
+							}
+							else{
+								$("#modalimagencargando").modal('hide');
+								$("#textoerrortrabajo").html("Error al registrar trabajo");
+								$('#modalerrortrabajo').modal({
+									show : true,
+									backdrop : 'static',
+									keyboard:false
+								});
+								click = true;
+							}
+						},
+						error: function() {
+							$("#modalimagencargando").modal('hide');
+							alert("Exception al registrar");
+							click = true;
+					    }
+					});	
+				}
+				else{
+					$("#modalimagencargando").modal('hide');
+					$("#textoinformaciontrabajo").html("<div style='color:red' class='text-left'>"+mensajeValidacion+"</div>");
+					$('#modalinformaciontrabajo').modal({
+						show : true,
+						backdrop : 'static',
+						keyboard:false
+					});
+					click = true;
+				}			
 			}
 		});		
 	/*});*/
