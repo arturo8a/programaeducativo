@@ -251,6 +251,7 @@
 				}
 			});
 			$.each($("[data-cuestionario]"), function( i, value ) {
+				var preguntaName = $("input[name='pregunta"+$(this).attr('data-cuestionario')+"']");
 				if($(preguntaName).is(':checked')){
 					var puntaje = parseFloat($("input[name='pregunta"+$(this).attr('data-cuestionario')+"']:checked").val());
 					notaTotal += puntaje;
