@@ -33,6 +33,9 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
 	@Query(value="SELECT max(numeracion) FROM Trabajosfinales tr where tr.programaeducativoid=?1",nativeQuery = true)
 	Integer maxNumeracion(Integer programaeducativoid);
 	
+	@Query(value="SELECT numeracion FROM Trabajosfinales tr where tr.id=?1",nativeQuery = true)
+	Integer getNumeracion(Integer trabajofinalid);
+	
 	@Transactional
 	@Modifying	
 	@Query(value="update Trabajosfinales p set p.estado = ?2 WHERE p.id = ?1 and p.programaeducativoid=?3 and p.anio = EXTRACT(YEAR FROM sysdate)  ",nativeQuery = true)

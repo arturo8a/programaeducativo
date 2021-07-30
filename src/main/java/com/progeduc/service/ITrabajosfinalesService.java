@@ -23,6 +23,8 @@ public interface ITrabajosfinalesService extends ICRUD<Trabajosfinales,Integer>{
 	
 	Integer maxNumeracion(Integer programaeducativoid);
 	
+	Integer getNumeracion(Integer trabajofinalid);
+	
     List<Trabajosfinales> listarTrabajosPendientes();
     
     List<Trabajosfinales> listarHabilitadosEnviados(Integer programaeducativoid);

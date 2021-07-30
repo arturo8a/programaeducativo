@@ -97,6 +97,11 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public Integer getNumeracion(Integer trabajofinalid) {
+		return trabajosfinalesRepo.getNumeracion(trabajofinalid);
+	}
 
 	@Override
 	public Trabajosfinales ListarporId(Integer id) {

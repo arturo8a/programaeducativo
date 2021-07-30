@@ -327,6 +327,9 @@
 	var click = true;
 	var rows_selected;
 	
+	var evidencias_agregadas_add = new Array();
+	var evidencias_agregadas_eliminadas_add = new Array();
+	
 		
 		$("#tipodocumentodocentetrabajo").on("change",function(){
 			
@@ -364,10 +367,14 @@
 		});
 		
 		$("#evidenciastrabajo").change(function(){
-			array_evidencias_eliminadas_agregar = new Array();
-			var data_archivo_subir = "<table><tr>";
+			evidencias_agregadas_add = new Array();
+			evidencias_agregadas_eliminadas_add = new Array();
 			for(var i=0;i<evidenciastrabajo.files.length;i++){
-				data_archivo_subir += "<td><div class='alert alert-primary alert-dismissible fade show' role='alert' style='padding:10px'><strong><abbr title='"+(evidenciastrabajo.files[i].name)+"'>"+(evidenciastrabajo.files[i].name).substr(0,5)+"<abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaAgregar("+'`'+(evidenciastrabajo.files[i].name)+'`'+")' data-dismiss='alert' aria-label='Close' style='padding:0px; margin:-3px'><span aria-hidden='true'>&times;</span></button></div></td>";
+				evidencias_agregadas_add.push(evidenciastrabajo.files[i].name);
+			}
+			var data_archivo_subir = "<table><tr>";
+			for(var i=0;i<evidencias_agregadas_add.length;i++){
+				data_archivo_subir += "<td><div class='alert alert-primary alert-dismissible fade show' role='alert' style='padding:10px'><strong><abbr title='"+(evidencias_agregadas_add[i])+"'>"+(evidencias_agregadas_add[i]).substr(0,5)+"<abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaAgregar("+'`'+(evidencias_agregadas_add[i])+'`'+")' data-dismiss='alert' aria-label='Close' style='padding:0px; margin:-3px'><span aria-hidden='true'>&times;</span></button></div></td>";
 			}
 			data_archivo_subir += "</tr></table>";
 			$("#divevidencias_agregar").html(data_archivo_subir);
@@ -542,19 +549,41 @@
 					    url : url_base + "pedesa/savetrabajosfinalesparticipante",
 					    data : JSON.stringify(trabajosfinalesparticipantesDto),
 					    dataType : 'json',
-						success: function(respuesta) {
-							
-							if(respuesta>0){
-								
+						success: function(respuesta) {	
+													
+							if(respuesta == -50){
+								$("#modalimagencargando").modal('hide');
+								$("#textoerrortrabajo").html("No se puede registrar trabajos con la misma categoria, modalidad y participantes");
+								$('#modalerrortrabajo').modal({
+									show : true,
+									backdrop : 'static',
+									keyboard:false
+								});
+								click = true;
+							}
+							else if(respuesta == -100){
+								 window.location = url_base + "pedesa";
+							}
+							else if (respuesta == 0){
+								$("#modalimagencargando").modal('hide');
+								$("#textoerrortrabajo").html("Error al registrar trabajo");
+								$('#modalerrortrabajo').modal({
+									show : true,
+									backdrop : 'static',
+									keyboard:false
+								});
+								click = true;
+							}
+							else{
 								var data = new FormData();
 								data.append('file',archivotrabajo.files[0]);
 								data.append('id',respuesta);
 								contador_archivos_subidos = 0;
 								for(var i=0;i<evidenciastrabajo.files.length;i++){
-									var bandera = true;
-									for(var j=0;j<array_evidencias_eliminadas_agregar.length;j++){
-										if(evidenciastrabajo.files[i].name === array_evidencias_eliminadas_agregar[j]){
-											bandera = false;
+									var bandera = false;
+									for(var j=0;j<evidencias_agregadas_add.length;j++){
+										if(evidenciastrabajo.files[i].name === evidencias_agregadas_add[j]){
+											bandera = true;
 										}
 									}
 									if(bandera){
@@ -562,7 +591,6 @@
 										contador_archivos_subidos++;
 									}	
 								}
-								
 								$.ajax({
 							        type: "POST",
 							        enctype: 'multipart/form-data',
@@ -605,29 +633,8 @@
 							        error: function (e) {
 							            console.log("ERROR : ", e);
 							        }
-							    });
-								
-							}
-							else if(respuesta == -1){
-								$("#modalimagencargando").modal('hide');
-								$("#textoerrortrabajo").html("No esta permitido registrar dos trabajos con la misma modalidad,categoria y participantes");
-								$('#modalerrortrabajo').modal({
-									show : true,
-									backdrop : 'static',
-									keyboard:false
-								});
-								click  = true;
-							}
-							else{
-								$("#modalimagencargando").modal('hide');
-								$("#textoerrortrabajo").html("Error al registrar trabajo");
-								$('#modalerrortrabajo').modal({
-									show : true,
-									backdrop : 'static',
-									keyboard:false
-								});
-								click = true;
-							}
+							    });								
+							}							
 						},
 						error: function() {
 							$("#modalimagencargando").modal('hide');
@@ -698,8 +705,12 @@
    	);
 	
 	function eliminarEvidenciaAgregar(archivo){
-		array_evidencias_eliminadas_agregar.push(archivo);
-		/*$("#evidenciastrabajoeditar").prop("disabled",false);*/
+		for(var i =0;i<evidencias_agregadas_add.length;i++){
+			if(evidencias_agregadas_add[i] == archivo){
+				evidencias_agregadas_add.splice(i,1);
+			}
+		}
+		/*evidencias_agregadas_eliminadas_add.push(archivo);*/
 	}
 	
 	function filtraCategoriaModalidad(campo1, campo2){
@@ -855,29 +866,33 @@
 			}
 		}
 		
-		if(evidenciastrabajo.files.length>5 || evidenciastrabajo.files.length == 0){
+		if((evidencias_agregadas_add.length>5) || (evidencias_agregadas_add.length == 0)){
 			mensajeValidacion += "Debe subir hasta 5 evidencias"+"<br>";
 		}
 		else{
 			
 			for(var i=0;i<evidenciastrabajo.files.length;i++){
 				
-				var evidenciastrabajo_name = (evidenciastrabajo.files[i]).name;
-				var evidenciastrabajo_size = (evidenciastrabajo.files[i]).size;
-				if(evidenciastrabajo_size >20000000){
-					mensajeValidacion += "El archivo "  + evidenciastrabajo_name + " no debe superar los 20MB"+"<br>";
-				}
-				var ext = evidenciastrabajo_name.split('.').pop();
-				ext = ext.toLowerCase();
-				switch(ext){
-					case 'jpg': break;
-					case 'png': break;
-					case 'jpeg': break;
-					case 'pdf': break;
-					case 'docx': break;
-					case 'mp3': break;
-					case 'mp4': break;
-					default: mensajeValidacion += "El archivo " + evidenciastrabajo_name + " debe tener extensión jpg , png, pdf, word,mp3,mp4"+"<br>";	
+				for(var j=0;j<evidencias_agregadas_add.length;j++){
+					if(evidenciastrabajo.files[i] == evidencias_agregadas_add[j]){						
+						var evidenciastrabajo_name = (evidenciastrabajo.files[i]).name;
+						var evidenciastrabajo_size = (evidenciastrabajo.files[i]).size;
+						if(evidenciastrabajo_size >20000000){
+							mensajeValidacion += "El archivo "  + evidenciastrabajo_name + " no debe superar los 20MB"+"<br>";
+						}
+						var ext = evidenciastrabajo_name.split('.').pop();
+						ext = ext.toLowerCase();
+						switch(ext){
+							case 'jpg': break;
+							case 'png': break;
+							case 'jpeg': break;
+							case 'pdf': break;
+							case 'docx': break;
+							case 'mp3': break;
+							case 'mp4': break;
+							default: mensajeValidacion += "El archivo " + evidenciastrabajo_name + " debe tener extensión jpg , png, pdf, word,mp3,mp4"+"<br>";	
+						}
+					}
 				}
 			}	
 		}
