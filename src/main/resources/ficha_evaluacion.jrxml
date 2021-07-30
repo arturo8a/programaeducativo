@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ficha_evaluacion" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cfadc7e7-7fbe-4546-8b05-35d340f7ce9e">
-	<subDataset name="Dataset1" uuid="cda96f59-11bf-40ac-a9c2-f3cdf27334a7">
+	<subDataset name="Dataset1" uuid="562ef7c8-2d81-4f28-b392-4dc1907b9639">
 		<field name="rubrica" class="java.lang.String"/>
 		<field name="criterio1" class="java.lang.String"/>
 		<field name="descripcion1" class="java.lang.String"/>
@@ -16,13 +16,10 @@
 		<field name="descripcion4" class="java.lang.String"/>
 		<field name="puntaje4" class="java.lang.Integer"/>
 	</subDataset>
-	<subDataset name="Dataset2" uuid="5d794b9a-77bb-4c3f-ae14-8a53a0600bc7">
+	<subDataset name="Dataset2" uuid="8b125cad-5ec8-4147-8fc2-05617e2b55ce">
 		<field name="pregunta" class="java.lang.String"/>
 		<field name="questionariorespuesta" class="java.util.List"/>
 	</subDataset>
-	<parameter name="subreport_dir" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["D:\\Sunass\\ProgramaEducativo_Desarrollo\\programaeducativo\\src\\main\\resources\\reportes_evaluacion\\"]]></defaultValueExpression>
-	</parameter>
 	<parameter name="datasourcerubrica" class="java.util.List"/>
 	<parameter name="datasourcequestionario" class="java.util.List"/>
 	<parameter name="anio" class="java.lang.Integer"/>
@@ -33,196 +30,209 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="43" splitType="Stretch"/>
+		<band height="126" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="550" height="40" forecolor="#FFFFFF" backcolor="#428FDB" uuid="91bd3815-dfc8-49f0-a096-3721581ec145"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FICHA DE EVALUACIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="40" y="61" width="110" height="24" uuid="33d72697-8637-4e44-a32b-d8390410cc09"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Año]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="150" y="61" width="130" height="24" uuid="0ad50033-05d0-4006-b7e0-bcaf8a992048"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#CFCFCF"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{anio}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="300" y="61" width="70" height="24" uuid="d024cc3d-7055-4017-b1af-6be4e94a62c2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Categoría]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="370" y="61" width="90" height="24" uuid="c988215d-3928-43bc-94e7-59f00a63dc7e"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#CFCFCF"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{categoria}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="40" y="97" width="110" height="24" uuid="a94946b4-3c63-4be4-9cb3-19a4b8b8218e"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Nivel de participación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="97" width="70" height="24" uuid="802a706d-3458-4228-a3e5-4e92a299e736"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="370" y="97" width="90" height="24" uuid="fcd4556b-1445-440f-8168-538051449bc4"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#CFCFCF"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{estado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="150" y="97" width="130" height="24" uuid="f2034b6e-633b-4378-8a36-044289e8afb0"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#CFCFCF"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nivelparticipacion}]]></textFieldExpression>
+			</textField>
+		</band>
 	</title>
 	<pageHeader>
-		<band height="51" splitType="Stretch"/>
+		<band height="6" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="250" splitType="Stretch">
+		<band height="145" splitType="Stretch">
 			<componentElement>
-				<reportElement x="0" y="0" width="565" height="180" uuid="aeb5b510-3bf2-4d2e-b217-229c96d41b54"/>
+				<reportElement x="0" y="0" width="550" height="145" isPrintInFirstWholeBand="true" uuid="aeb5b510-3bf2-4d2e-b217-229c96d41b54">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="Dataset1" uuid="9ff4b249-7949-4c9a-ae38-f6827e0c173a">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{datasourcerubrica})]]></dataSourceExpression>
 					</datasetRun>
-					<jr:listContents height="180" width="565">
+					<jr:listContents height="145" width="550">
 						<textField>
-							<reportElement x="301" y="10" width="249" height="15" uuid="92f506d7-f5f2-4652-99d7-c4604bb55f00"/>
+							<reportElement mode="Opaque" x="280" y="5" width="270" height="20" backcolor="#DEDEDE" uuid="92f506d7-f5f2-4652-99d7-c4604bb55f00"/>
+							<box>
+								<pen lineColor="#CFCFCF"/>
+							</box>
+							<textElement verticalAlignment="Middle">
+								<font isBold="true"/>
+							</textElement>
 							<textFieldExpression><![CDATA[$F{rubrica}]]></textFieldExpression>
 						</textField>
 						<textField>
-							<reportElement x="14" y="54" width="136" height="15" uuid="68e5fa24-849b-4877-adca-1993f1bf5fcc"/>
+							<reportElement x="14" y="46" width="136" height="15" uuid="68e5fa24-849b-4877-adca-1993f1bf5fcc"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
-								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
 							</box>
 							<textFieldExpression><![CDATA[$F{criterio1}]]></textFieldExpression>
 						</textField>
 						<textField>
-							<reportElement x="14" y="69" width="136" height="69" uuid="e32bfb94-41c3-42ec-bd70-1feb3d4d80d9"/>
+							<reportElement x="14" y="61" width="136" height="69" uuid="e32bfb94-41c3-42ec-bd70-1feb3d4d80d9"/>
 							<box>
-								<pen lineWidth="0.25"/>
-								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
 							</box>
 							<textFieldExpression><![CDATA[$F{descripcion1}]]></textFieldExpression>
 						</textField>
 						<textField>
-							<reportElement x="80" y="138" width="70" height="15" uuid="f0790459-5d38-4aac-94a4-994dc22a71ac"/>
+							<reportElement x="80" y="130" width="70" height="15" uuid="f0790459-5d38-4aac-94a4-994dc22a71ac"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
-								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
 							</box>
 							<textFieldExpression><![CDATA[$F{puntaje1}]]></textFieldExpression>
 						</textField>
 						<textField>
-							<reportElement x="160" y="54" width="120" height="15" uuid="fc8762df-66bb-4604-800e-bf373c6c7e98"/>
+							<reportElement x="150" y="46" width="130" height="15" uuid="fc8762df-66bb-4604-800e-bf373c6c7e98"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
-								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
 							</box>
 							<textFieldExpression><![CDATA[$F{criterio2}]]></textFieldExpression>
 						</textField>
 						<textField>
-							<reportElement x="160" y="69" width="120" height="69" uuid="4aa01f2e-50a3-414a-81e4-0f337769e7b8"/>
+							<reportElement x="150" y="61" width="130" height="69" uuid="4aa01f2e-50a3-414a-81e4-0f337769e7b8"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
-								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
 							</box>
 							<textFieldExpression><![CDATA[$F{descripcion2}]]></textFieldExpression>
 						</textField>
 						<textField>
-							<reportElement x="220" y="138" width="60" height="15" uuid="094c6a04-a534-49c0-9853-cc711580c3df"/>
+							<reportElement x="220" y="130" width="60" height="15" uuid="094c6a04-a534-49c0-9853-cc711580c3df"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
-								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
 							</box>
 							<textFieldExpression><![CDATA[$F{puntaje2}]]></textFieldExpression>
 						</textField>
 						<textField>
-							<reportElement x="301" y="54" width="119" height="15" uuid="402a53df-f7e3-4a7b-a816-aa756c59d1ec"/>
+							<reportElement x="280" y="46" width="140" height="15" uuid="402a53df-f7e3-4a7b-a816-aa756c59d1ec"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
-								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
 							</box>
 							<textFieldExpression><![CDATA[$F{criterio3}]]></textFieldExpression>
 						</textField>
 						<textField>
-							<reportElement x="301" y="69" width="119" height="69" uuid="927c74b0-4307-4037-b72d-1eded1f0a4bd"/>
+							<reportElement x="280" y="61" width="140" height="69" uuid="927c74b0-4307-4037-b72d-1eded1f0a4bd"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
-								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
 							</box>
 							<textFieldExpression><![CDATA[$F{descripcion3}]]></textFieldExpression>
 						</textField>
 						<textField>
-							<reportElement x="360" y="138" width="60" height="15" uuid="07eed4f9-57a4-484b-9b58-d95d5f251f55"/>
+							<reportElement x="360" y="130" width="60" height="15" uuid="07eed4f9-57a4-484b-9b58-d95d5f251f55"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
-								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
 							</box>
 							<textFieldExpression><![CDATA[$F{puntaje3}]]></textFieldExpression>
 						</textField>
 						<textField>
-							<reportElement x="440" y="54" width="110" height="15" uuid="e78ec110-63d2-4b3f-941b-4bc3a8e832ea"/>
+							<reportElement x="420" y="46" width="130" height="15" uuid="e78ec110-63d2-4b3f-941b-4bc3a8e832ea"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
-								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
 							</box>
 							<textFieldExpression><![CDATA[$F{criterio4}]]></textFieldExpression>
 						</textField>
 						<textField>
-							<reportElement x="440" y="69" width="110" height="69" uuid="8b547045-ed1c-41e5-8f55-c52574acd5c3"/>
+							<reportElement x="420" y="61" width="130" height="69" uuid="8b547045-ed1c-41e5-8f55-c52574acd5c3"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
-								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
 							</box>
 							<textFieldExpression><![CDATA[$F{descripcion4}]]></textFieldExpression>
 						</textField>
 						<textField>
-							<reportElement x="490" y="138" width="60" height="15" uuid="0eefa9df-dc77-49f9-9d3e-7d2f5cac5671"/>
+							<reportElement x="490" y="130" width="60" height="15" uuid="0eefa9df-dc77-49f9-9d3e-7d2f5cac5671"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
-								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
-								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
 							</box>
 							<textFieldExpression><![CDATA[$F{puntaje4}]]></textFieldExpression>
 						</textField>
 						<staticText>
-							<reportElement x="190" y="10" width="90" height="15" uuid="feabfbb3-b0d6-40aa-8eec-c480a80e4783"/>
-							<textElement>
+							<reportElement mode="Opaque" x="14" y="5" width="266" height="20" backcolor="#DEDEDE" uuid="3ab1ac28-a176-44e1-9373-640dfb751689">
+								<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							</reportElement>
+							<box>
+								<pen lineColor="#CFCFCF"/>
+							</box>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
 								<font isBold="true"/>
 							</textElement>
 							<text><![CDATA[Rubrica]]></text>
 						</staticText>
 						<staticText>
-							<reportElement x="14" y="30" width="136" height="20" uuid="58f16d5e-58c0-4a92-b69f-fa9112178c52"/>
-							<textElement textAlignment="Center" verticalAlignment="Middle">
-								<font isBold="true"/>
-							</textElement>
-							<text><![CDATA[Criterio]]></text>
-						</staticText>
-						<staticText>
-							<reportElement x="160" y="31" width="120" height="19" uuid="dd4b1f1b-87ed-40a7-ab85-43ee478ee716"/>
-							<textElement textAlignment="Center" verticalAlignment="Middle">
-								<font isBold="true"/>
-							</textElement>
-							<text><![CDATA[Criterio]]></text>
-						</staticText>
-						<staticText>
-							<reportElement x="301" y="31" width="119" height="19" uuid="d6909a22-3c48-4393-8c69-b48188470908"/>
-							<textElement textAlignment="Center" verticalAlignment="Middle">
-								<font isBold="true"/>
-							</textElement>
-							<text><![CDATA[Criterio]]></text>
-						</staticText>
-						<staticText>
-							<reportElement x="440" y="31" width="110" height="19" uuid="925b5ea8-5441-4842-b038-018cdf956553"/>
-							<textElement textAlignment="Center" verticalAlignment="Middle">
-								<font isBold="true"/>
-							</textElement>
-							<text><![CDATA[Criterio]]></text>
-						</staticText>
-						<staticText>
-							<reportElement x="14" y="138" width="66" height="15" uuid="ef431d4b-757b-478a-afd4-da294f2f9b33"/>
+							<reportElement x="14" y="130" width="66" height="15" uuid="21124670-d165-4aba-bfd1-c05303588745"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
 								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
@@ -230,10 +240,10 @@
 								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
 								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
 							</box>
-							<text><![CDATA[Puntaje :]]></text>
+							<text><![CDATA[puntaje]]></text>
 						</staticText>
 						<staticText>
-							<reportElement x="160" y="138" width="60" height="15" uuid="ec2db8fe-324f-4d3c-b9fc-47e2e26380d2"/>
+							<reportElement x="150" y="130" width="70" height="15" uuid="9cc21f63-f954-48d9-b180-ef48c9fd4878"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
 								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
@@ -241,10 +251,10 @@
 								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
 								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
 							</box>
-							<text><![CDATA[Puntaje :]]></text>
+							<text><![CDATA[puntaje]]></text>
 						</staticText>
 						<staticText>
-							<reportElement x="300" y="138" width="60" height="15" uuid="30ac1359-aa8f-4530-9517-b08daef933b1"/>
+							<reportElement x="280" y="130" width="80" height="15" uuid="4600594d-2455-4ecf-9277-b7b03134e49e"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
 								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
@@ -252,10 +262,10 @@
 								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
 								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
 							</box>
-							<text><![CDATA[Puntaje :]]></text>
+							<text><![CDATA[puntaje]]></text>
 						</staticText>
 						<staticText>
-							<reportElement x="440" y="138" width="50" height="15" uuid="9817bdf9-f312-4e56-be31-070e5918b63d"/>
+							<reportElement x="420" y="130" width="70" height="15" uuid="aa50491c-0a33-49a6-a6e2-4094b1c20b9f"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
 								<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
@@ -263,14 +273,103 @@
 								<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
 								<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
 							</box>
-							<text><![CDATA[Puntaje :]]></text>
+							<text><![CDATA[puntaje]]></text>
+						</staticText>
+						<staticText>
+							<reportElement mode="Opaque" x="14" y="25" width="136" height="21" backcolor="#F5F5F5" uuid="05e13a1b-1013-4166-9f27-70e5f37a4345">
+								<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							</reportElement>
+							<box>
+								<pen lineColor="#CFCFCF"/>
+							</box>
+							<textElement verticalAlignment="Middle"/>
+							<text><![CDATA[criterio]]></text>
+						</staticText>
+						<staticText>
+							<reportElement mode="Opaque" x="150" y="25" width="130" height="21" backcolor="#F5F5F5" uuid="93c943da-787b-4d6b-a193-b1cd2a902596">
+								<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							</reportElement>
+							<box>
+								<pen lineColor="#CFCFCF"/>
+							</box>
+							<textElement verticalAlignment="Middle"/>
+							<text><![CDATA[criterio]]></text>
+						</staticText>
+						<staticText>
+							<reportElement mode="Opaque" x="280" y="25" width="140" height="21" backcolor="#F5F5F5" uuid="4aceaab5-b1a8-4a2d-8f60-b0b0a923ffc8">
+								<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							</reportElement>
+							<box>
+								<pen lineColor="#CFCFCF"/>
+							</box>
+							<textElement verticalAlignment="Middle"/>
+							<text><![CDATA[criterio]]></text>
+						</staticText>
+						<staticText>
+							<reportElement mode="Opaque" x="420" y="25" width="130" height="21" backcolor="#F5F5F5" uuid="d0db7b21-f793-4e3b-9138-311e40e34b3a">
+								<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							</reportElement>
+							<box>
+								<pen lineColor="#CFCFCF"/>
+							</box>
+							<textElement verticalAlignment="Middle"/>
+							<text><![CDATA[criterio]]></text>
 						</staticText>
 					</jr:listContents>
 				</jr:list>
 			</componentElement>
 		</band>
+		<band height="53">
+			<componentElement>
+				<reportElement x="0" y="0" width="550" height="51" uuid="aeb5b510-3bf2-4d2e-b217-229c96d41b54">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="Dataset2" uuid="9ff4b249-7949-4c9a-ae38-f6827e0c173a">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{datasourcequestionario})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="51" width="550">
+						<textField>
+							<reportElement mode="Opaque" x="280" y="30" width="270" height="20" backcolor="#DEDEDE" uuid="92f506d7-f5f2-4652-99d7-c4604bb55f00">
+								<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							</reportElement>
+							<box>
+								<pen lineWidth="0.0" lineColor="#CFCFCF"/>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textElement>
+								<font isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{pregunta}]]></textFieldExpression>
+						</textField>
+						<subreport>
+							<reportElement x="0" y="30" width="550" height="20" uuid="9b5170c5-13eb-408b-989a-bb0402e14647"/>
+							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{questionariorespuesta})]]></dataSourceExpression>
+							<subreportExpression><![CDATA["./sr_questionario_respuesta.jasper"]]></subreportExpression>
+						</subreport>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<staticText>
+				<reportElement mode="Opaque" x="10" y="30" width="270" height="20" backcolor="#DEDEDE" uuid="bb0f946a-43ec-4435-9f1f-2a373fc94a46">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0" lineColor="#CFCFCF"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pregunta]]></text>
+			</staticText>
+		</band>
 	</detail>
-	<summary>
-		<band height="42" splitType="Stretch"/>
-	</summary>
 </jasperReport>

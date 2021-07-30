@@ -830,7 +830,6 @@ $('#table_trabajos_pendientes').DataTable().on("draw", function(){
 
 $.fn.dataTable.ext.search.push(
 	function( settings, data, dataIndex ) {
-		console.log("settings.nTable.id :" + settings.nTable.id);
 		if ( settings.nTable.id !== 'table_trabajos_pendientes' ) {
 	        return true;
 	    }

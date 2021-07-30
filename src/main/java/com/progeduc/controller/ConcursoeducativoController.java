@@ -180,7 +180,12 @@ public class ConcursoeducativoController {
 	Integer rpta;
 	Double totalNota = 0.0;
 	Integer idTrab = 0;
-	
+	int contador_iguales;
+	int resultado;
+	private List<Integer> listaIdParticipante;
+	private List<Integer> listaIdDto;
+	Integer max_numeracion = 0;
+	boolean verifica;
 	
 	@PostMapping(value="/registrarconcurso")
 	public String registrarconcurso(@Valid @RequestBody Postulacionconcurso dto)  {
@@ -197,6 +202,54 @@ public class ConcursoeducativoController {
 		return respuesta;
 	}
 	
+	public boolean verifivaExisteParticipanteTrabajo(Integer categoria, Integer modalidad, TrabajosfinalesParticipanteDto mi_dto,Integer idpe) {
+		
+		contador_iguales = 0;
+		resultado = 0;
+		verifica = true;
+		Integer valor;
+		if(modalidad == 1) {
+		
+			listaIdDto = new ArrayList<Integer>();
+			mi_dto.getListaparticipante().forEach(obj->{
+	 			listaIdDto.add(obj.getId());
+	 		});
+			valor =  listaIdDto.get(0);
+			listaIdParticipante = new ArrayList<Integer>();
+			trabajosfinalesServ.BuscarCategoriaModalidad(categoria, modalidad,idpe).forEach(tf->{
+				trabajosfinalesparticipanteServ.listar(tf.getId()).forEach(obj1->{					
+					if(obj1.getParticipante().getId().equals(valor)) {
+						verifica = false;
+					}
+				});
+			});
+		}
+		else{
+			listaIdDto = new ArrayList<Integer>();
+			mi_dto.getListaparticipante().forEach(obj->{
+	 			listaIdDto.add(obj.getId());
+	 		});		 		
+			listaIdParticipante = new ArrayList<Integer>();
+			trabajosfinalesServ.BuscarCategoriaModalidad(categoria, modalidad,idpe).forEach(tf->{
+				contador_iguales = 0;
+				if(verifica) {
+					trabajosfinalesparticipanteServ.listar(tf.getId()).forEach(obj1->{
+						for(int i=0;i<listaIdDto.size();i++) {
+							if(listaIdDto.get(i).equals(obj1.getParticipante().getId())) {
+								contador_iguales++;
+								i = listaIdDto.size();
+							}
+						}						
+					});
+					if(contador_iguales == listaIdDto.size()){
+						verifica = false;
+					}		
+				}
+			});
+		}
+		return verifica;
+	}
+	
 	@PostMapping(value = "/savetrabajosfinalesparticipante")
 	public Integer savetrabajosfinalesparticipante(@Valid @RequestBody TrabajosfinalesParticipanteDto dto,HttpSession ses){ 
 		
@@ -207,37 +260,11 @@ public class ConcursoeducativoController {
 		Integer modalidad_dto = dto.getTrabajosfinales().getModalidadtrabajo().getId();
 		
 		String codmod = ses.getAttribute("usuario").toString();		
-		Programaeducativo pe = progeducService.getActualByCodmod(codmod);		
+		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
 		
-		List<Integer> listaIdDto = new ArrayList<Integer>();
- 		dto.getListaparticipante().forEach(obj->{
- 			listaIdDto.add(obj.getId());
- 		});
-		List<Integer> listaIdParticipante = new ArrayList<Integer>();
-		trabajosfinalesServ.BuscarCategoriaModalidad(categoria_dto, modalidad_dto,pe.getId()).forEach(tf->{
-			trabajosfinalesparticipanteServ.listar(tf.getId()).forEach(obj1->{					
-				listaIdParticipante.add(obj1.getParticipante().getId());
-			});
-		});
-		
-		switch(modalidad_dto) {
-			case 1:
-				for(int i=0;i<listaIdParticipante.size();i++) {
-					if(listaIdParticipante.get(i) == listaIdDto.get(0)) {
-						return -1;
-					}
-				}
-				break;
-			case 2:
-				if(listaIdDto.size() ==  listaIdParticipante.size()) {
-					Collections.sort(listaIdDto);
-					Collections.sort(listaIdParticipante);
-					if(listaIdDto.equals(listaIdParticipante)) {
-						return -1;
-					}	
-				}
-				break;
-		}
+		if(! verifivaExisteParticipanteTrabajo(categoria_dto,modalidad_dto,dto,pe.getId())) {
+			return -50;
+		}		
 		Date date= new Date();
 		long time = date.getTime();
 		Timestamp ts = new Timestamp(time);
@@ -245,21 +272,25 @@ public class ConcursoeducativoController {
 		dto.getTrabajosfinales().setAnio(ts.toLocalDateTime().getYear());		
 		
 		dto.getTrabajosfinales().setProgramaeducativo(pe);
-		Integer max_numeracion = trabajosfinalesServ.maxNumeracion(pe.getId());
-		if(dto.getTrabajosfinales().getId() == null) {
+		
+		if(dto.getTrabajosfinales().getId() == null) { /*cuando registra*/
+			max_numeracion = trabajosfinalesServ.maxNumeracion(pe.getId());
 			if (max_numeracion == null)
 				dto.getTrabajosfinales().setNumeracion(1);
 			else
 				dto.getTrabajosfinales().setNumeracion(max_numeracion + 1);
 		}
-		else {
-			dto.getTrabajosfinales().setNumeracion(max_numeracion);
+		else { /*cuando actualiza*/
+			dto.getTrabajosfinales().setNumeracion(dto.getTrabajosfinales().getId());
 		}
 		Trabajosfinales tf = trabajosfinalesServ.saveTrabajofinaParticipante(dto);		
 		if( tf !=null) {
-			return tf.getId();
-		}		
-		return 0;
+			resultado = tf.getId();
+		}	
+		else {
+			resultado = 0;
+		}
+		return resultado;
 	}
 	
 	@GetMapping(value="/listargradopornivel/{id}")

@@ -20,9 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.progeduc.componente.Ldap;
-import com.progeduc.dto.ArchivoEvidenciaDto;
 import com.progeduc.model.Aperturaranio;
-import com.progeduc.model.Categoriatrabajo;
 import com.progeduc.model.Docente;
 import com.progeduc.model.Docentetutor;
 import com.progeduc.model.Evaluacion;
@@ -77,7 +75,6 @@ import com.progeduc.service.LenguaService;
 import com.progeduc.service.ProveedorService;
 import com.progeduc.service.TipodocService;
 import com.progeduc.service.TipoieService;
-import com.progeduc.service.impl.OdsServiceImpl;
 import com.progeduc.service.impl.UploadFileService;
 
 @Controller
@@ -812,17 +809,30 @@ public class IndexController {
 		id_pr_edit="";
 		id_pregunta_respuesta_edit="";
 		
-		Evaluacion eval = evaluacionService.ListarporId(id);
-		model.addAttribute("evaluacion_edit", eval);
+		Integer mayor=0;
 		
+		Integer mayor_rubrica=0;		
+		List<Integer> idRubrica_max = new ArrayList<Integer>();
+		Evaluacion eval = evaluacionService.ListarporId(id);
+		model.addAttribute("evaluacion_edit", eval);		
 		List<Rubrica> listaRubrica = new ArrayList<Rubrica>();
         evaluacionrubricaServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
+        	idRubrica_max.add(obj.getRubrica().getId());
         	listaRubrica.add(obj.getRubrica());
         	id_rubrica_edit += obj.getRubrica().getId().toString() + "-";
         });
         
+        for(int i=0;i<idRubrica_max.size();i++) {
+        	if(idRubrica_max.get(i) > mayor_rubrica) {
+        		mayor_rubrica = idRubrica_max.get(i);
+        	}
+        }
+        
+        Integer mayor_cuestionario=0;
+        List<Integer> idQuestionario_max = new ArrayList<Integer>();
         List<Questionario> listaQuestionario = new ArrayList<Questionario>();
         evaluacionquestionarioServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
+        	idQuestionario_max.add(obj.getQuestionario().getId());
         	listaQuestionario.add(obj.getQuestionario());
         	id_pr = "";
         	obj.getQuestionario().getQuestionariorespuesta().forEach(pr->{
@@ -830,6 +840,19 @@ public class IndexController {
         	});
         	id_pregunta_respuesta_edit += "(" + obj.getQuestionario().getId().toString() + "*" + (id_pr.substring(0,id_pr.length()-1)) + ")";
         });
+        
+        for(int i=0;i<idQuestionario_max.size();i++) {
+        	if(idQuestionario_max.get(i) > mayor_cuestionario) {
+        		mayor_cuestionario = idQuestionario_max.get(i);
+        	}
+        }
+        
+        if(mayor_rubrica>mayor_cuestionario) {
+        	mayor = mayor_rubrica;
+        }
+        else {
+        	mayor = mayor_cuestionario;
+        }
        
         model.addAttribute("id_evaluacion_edit", eval.getId()); 
         model.addAttribute("id_rubrica_edit", id_rubrica_edit);
@@ -842,6 +865,8 @@ public class IndexController {
         listapuntaje.add(4);
         listapuntaje.add(5);
         model.addAttribute("listapuntaje_edit", listapuntaje);
+        
+        model.addAttribute("max", mayor);
         
         Calendar fecha = Calendar.getInstance();
 		model.addAttribute("anio",fecha.get(Calendar.YEAR));		

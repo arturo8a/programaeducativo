@@ -27,6 +27,7 @@
 		<input type="hidden" id="id_questionario_edit" name="id_questionario" th:value="${id_questionario_edit}" />
 		<input type="hidden" id="id_evaluacion_edit" name="id_evaluacion" th:value="${id_evaluacion_edit}" />
 		<input type="hidden" id="id_pregunta_respuesta_edit" name="id_pregunta_respuesta_edit" th:value="${id_pregunta_respuesta_edit}" />
+		<input type="hidden" id="max" name="max" th:value="${max}" />
 		<div class="row">
 			<div class="col-xs-12 col-sm-4 text-left">
 				<label for="categoriatrabajo">Año</label>
@@ -52,7 +53,8 @@
 		<form id="formeditarevaluacion">
 			<div id="contenido_evaluacion_edit">
 				<div th:each="objeto : ${listarubrica_edit}" >
-							<div style='border:1px solid #7DB4FF' class='p-3 m-1'>
+							<div class='alert alert-warning' th:id="'rubrica_edit'+${objeto.id}">
+								<button type='button' th:onclick="|eliminarEdit('rubrica_edit',${objeto.id})|" style='float:right;cursor:pointer'>X</button>
 								<div class="row">
 									<div class="col-xs-12 col-sm-6">
 										&nbsp;
@@ -157,30 +159,33 @@
 							</div>
 							
 				</div>
-					<div th:each="objeto : ${listaquestionario_edit}" style='border:1px solid #7DB4FF' class='p-3 m-1'>
-					<div class="row" >
-						<table style="width:100%">
-							<tr>
-								<td>
-									<strong>Ingrese pregunta</strong>
-									<input type="text" class="form-control" th:id="'pregunta_edit'+ ${objeto.id}" th:value="${objeto.pregunta}"/>
-								</td>
-								<td>&nbsp;</td>
-							</tr>
-							<tr th:each="qr : ${objeto.questionariorespuesta}">
-								<td>
-									<label>respuesta</label>
-									<input type="text" class="form-control" th:id="'respuesta_edit'+ ${qr.id}" th:value="${qr.respuesta}"/>
-								</td>
-								<td>
-									<label>puntaje</label>
-									<select th:id="'puntaje_editq'+ ${qr.id}" class="form-control">
-										<option value="0">Seleccione</option>
-										<option th:each="len:${listapuntaje_edit}" th:value="${len}" th:utext="${len}" th:selected="${len == qr.puntaje}"/>
-									</select>
-								</td>
-							</tr>
-						</table>						
+				<div th:each="objeto : ${listaquestionario_edit}" class='alert alert-warning'>
+					<div class='alert alert-warning' th:id="'cuestionario_edit_'+${objeto.id}">
+						<button type='button' th:onclick="|eliminarEdit('cuestionario_edit',${objeto.id})|" style='float:right;cursor:pointer'>X</button>
+						<div class="row" >
+							<table style="width:100%">
+								<tr>
+									<td>
+										<strong>Ingrese pregunta</strong>
+										<input type="text" class="form-control" th:id="'pregunta_edit'+ ${objeto.id}" th:value="${objeto.pregunta}"/>
+									</td>
+									<td>&nbsp;</td>
+								</tr>
+								<tr th:each="qr : ${objeto.questionariorespuesta}">
+									<td>
+										<label>respuesta</label>
+										<input type="text" class="form-control" th:id="'respuesta_edit'+ ${qr.id}" th:value="${qr.respuesta}"/>
+									</td>
+									<td>
+										<label>puntaje</label>
+										<select th:id="'puntaje_editq'+ ${qr.id}" class="form-control">
+											<option value="0">Seleccione</option>
+											<option th:each="len:${listapuntaje_edit}" th:value="${len}" th:utext="${len}" th:selected="${len == qr.puntaje}"/>
+										</select>
+									</td>
+								</tr>
+							</table>						
+						</div>
 					</div>
 				</div>
 			</div>
@@ -276,7 +281,8 @@
 		var pregunta_editidedit,pregunta_editedit, respuesta_editedit, puntaje_editedit,respuesta_edit_puntaje_edit="";
 		var id_rubricaedit , id_questionarioedit,id_pregunta_respuesta_edit;		
 		
-		var indice_cuestionario_edit = 100;
+		var indice_cuestionario_edit = $("#max").val();
+		var indice_cuestionario_max_edit = $("#max").val();
 		var contador_rubrica_edit = 0;
 		var contador_cuestionario_edit = 0;
 		var mi_html_edit ="";
@@ -289,6 +295,9 @@
 		var pregunta_edit, respuesta_edit, puntaje_edit;
 		
 		var indice_rp_consolidado_edit=0;
+		
+		var indice_cuestionario_edit_eliminado = new Array();
+		var indice_cuestionario_nuevo_edit_eliminado = new Array();
 		
 		$(document).ready(function(){
 			
@@ -333,14 +342,29 @@
 			});	
 			
 			$("#btnagregarpregunta_edit").click(function(){
-				indice_cuestionario_edit ++;
-				mi_rubrica_edit = 'contenido_rubrica_edit' + indice_cuestionario_edit;
-				mi_questionario_edit = 'contenido_questionario_edit' + indice_cuestionario_edit;
-				mi_html_edit = "<div style='border:1px solid #7DB4FF' class='p-3'><div class='row' style=''><div class='col-xs-12 col-sm-12'><table width='40%'><tr><td><strong>Seleccione tipo de cuestionario</strong></td><td><input type='radio' name='cuestionario"+indice_cuestionario_edit+"' id='r"+indice_cuestionario_edit+"' value='1' onchange='fn_questionario_edit(this,"+'`'+indice_cuestionario_edit+'`'+","+'`'+indice_cuestionario_edit+'`'+");' checked> Rubrica </td><td>	<input type='radio' name='cuestionario"+indice_cuestionario_edit+"' id='c"+indice_cuestionario_edit+"' value='2' onchange='fn_questionario_edit(this,"+'`'+indice_cuestionario_edit+'`'+","+'`'+indice_cuestionario_edit+'`'+");' > Cuestionario </td></tr></table> </div></div>  <div id='"+mi_rubrica_edit+"'><div class='row' style=''><div class='col-xs-12 col-sm-6'>&nbsp;</div><div class='col-xs-12 col-sm-6 text-left'><table style='width:100%'><tr><td><label style='margin:5px'>Rubrica</label></td><td><input type='text' name='rubrica"+indice_cuestionario_edit+"' id='rubrica"+indice_cuestionario_edit+"' class='form-control'></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario_edit+"1' name='criterio"+indice_cuestionario_edit+"1' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario_edit+"1' id='descripcion"+indice_cuestionario_edit+"1' class='form-control'></textarea><br><table><tr><td><label>puntaje</label></td><td><select name='puntaje_edit"+indice_cuestionario_edit+"1' id='puntaje_edit"+indice_cuestionario_edit+"1' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario_edit+"2' name='criterio"+indice_cuestionario_edit+"2' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario_edit+"2' id='descripcion"+indice_cuestionario_edit+"2' class='form-control'></textarea><br><table><tr><td><label>puntaje</label></td><td><select name='puntaje_edit"+indice_cuestionario_edit+"2' id='puntaje_edit"+indice_cuestionario_edit+"2' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario_edit+"3' name='criterio"+indice_cuestionario_edit+"3' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario_edit+"3' id='descripcion"+indice_cuestionario_edit+"3' class='form-control'></textarea><br><table><tr><td><label>puntaje</label></td><td><select name='puntaje_edit"+indice_cuestionario_edit+"3' id='puntaje_edit"+indice_cuestionario_edit+"3' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario_edit+"4' name='criterio"+indice_cuestionario_edit+"4' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario_edit+"4' id='descripcion"+indice_cuestionario_edit+"4' class='form-control'></textarea><br><table><tr><td><label>puntaje</label></td><td><select name='puntaje_edit"+indice_cuestionario_edit+"4' id='puntaje_edit"+indice_cuestionario_edit+"4' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div></div></div><div id='"+mi_questionario_edit+"' style='display:none'><div class='row' style=''><div class='col-xs-12 col-sm-12'><table style='width:100%' id='tabla"+indice_cuestionario_edit+"'><tr><td><label>Ingrese pregunta</label><input type='text' class='form-control' id='pregunta_edit"+indice_cuestionario_edit+"1' name='pregunta_edit"+indice_cuestionario_edit+"1' /></td><td>&nbsp;</td></tr>		<tr><td><label>respuesta</label></td><td><label>puntaje</label></td></tr>		<tr id='tr_"+indice_cuestionario_edit+"1'><td><input type='text' class='form-control' id='respuesta_edit"+indice_cuestionario_edit+"1' name='respuesta_edit"+indice_cuestionario_edit+"1'/></td><td><select class='form-control' id='puntaje_editq"+indice_cuestionario_edit+"1' name='puntaje_edit"+indice_cuestionario_edit+"1'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td><td class='text-center'><input type='button' id='btnagregarrespuesta_edit"+indice_cuestionario_edit+"' name='btnagregarrespuesta_edit"+indice_cuestionario_edit+"' value='Agregar' onclick='agregar_fila_edit("+'"'+'tabla'+indice_cuestionario_edit+'"'+','+indice_cuestionario_edit+")' class='btn btn-primary' /></td><td class='text-center'><input type='button' id='btnquitarrespuesta_edit"+indice_cuestionario_edit+"' name='btnquitarrespuesta_edit"+indice_cuestionario_edit+"' value='Quitar' onclick='quitar_fila_edit("+'"'+'tr_'+indice_cuestionario_edit.toString() +'"'+','+indice_cuestionario_edit+")' disabled class='btn btn-outline-primary' /></td></tr></table></div></div></div></div>";
+				indice_cuestionario_max_edit ++;
+				mi_rubrica_edit = 'contenido_rubrica_edit' + indice_cuestionario_max_edit;
+				mi_questionario_edit = 'contenido_questionario_edit' + indice_cuestionario_max_edit;
+				mi_html_edit = "<div class='alert alert-warning' id='div_rubrica_cuestionario_edit"+indice_cuestionario_max_edit+"'><button type='button' onclick='eliminarRubricaCuestionarioEdit("+'`'+indice_cuestionario_max_edit+'`'+")' style='float:right;cursor:pointer'>X</button><div class='row'><div class='col-xs-12 col-sm-12'><table width='40%'><tr><td><strong>Seleccione tipo de cuestionario</strong></td><td><input type='radio' name='cuestionario"+indice_cuestionario_max_edit+"' id='r"+indice_cuestionario_max_edit+"' value='1' onchange='fn_questionario_edit(this,"+'`'+indice_cuestionario_max_edit+'`'+","+'`'+indice_cuestionario_max_edit+'`'+");' checked> Rubrica </td><td>	<input type='radio' name='cuestionario"+indice_cuestionario_max_edit+"' id='c"+indice_cuestionario_max_edit+"' value='2' onchange='fn_questionario_edit(this,"+'`'+indice_cuestionario_max_edit+'`'+","+'`'+indice_cuestionario_max_edit+'`'+");' > Cuestionario </td></tr></table> </div></div>  <div id='"+mi_rubrica_edit+"'><div class='row' style=''><div class='col-xs-12 col-sm-6'>&nbsp;</div><div class='col-xs-12 col-sm-6 text-left'><table style='width:100%'><tr><td><label style='margin:5px'>Rubrica</label></td><td><input type='text' name='rubrica"+indice_cuestionario_max_edit+"' id='rubrica"+indice_cuestionario_max_edit+"' class='form-control'></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario_max_edit+"1' name='criterio"+indice_cuestionario_max_edit+"1' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario_max_edit+"1' id='descripcion"+indice_cuestionario_max_edit+"1' class='form-control'></textarea><br><table><tr><td><label>puntaje</label></td><td><select name='puntaje_edit"+indice_cuestionario_max_edit+"1' id='puntaje_edit"+indice_cuestionario_max_edit+"1' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario_max_edit+"2' name='criterio"+indice_cuestionario_max_edit+"2' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario_max_edit+"2' id='descripcion"+indice_cuestionario_max_edit+"2' class='form-control'></textarea><br><table><tr><td><label>puntaje</label></td><td><select name='puntaje_edit"+indice_cuestionario_max_edit+"2' id='puntaje_edit"+indice_cuestionario_max_edit+"2' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario_max_edit+"3' name='criterio"+indice_cuestionario_max_edit+"3' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario_max_edit+"3' id='descripcion"+indice_cuestionario_max_edit+"3' class='form-control'></textarea><br><table><tr><td><label>puntaje</label></td><td><select name='puntaje_edit"+indice_cuestionario_max_edit+"3' id='puntaje_edit"+indice_cuestionario_max_edit+"3' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio"+indice_cuestionario_max_edit+"4' name='criterio"+indice_cuestionario_max_edit+"4' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion"+indice_cuestionario_max_edit+"4' id='descripcion"+indice_cuestionario_max_edit+"4' class='form-control'></textarea><br><table><tr><td><label>puntaje</label></td><td><select name='puntaje_edit"+indice_cuestionario_max_edit+"4' id='puntaje_edit"+indice_cuestionario_max_edit+"4' class='form-control'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td></tr></table></div></div></div><div id='"+mi_questionario_edit+"' style='display:none'><div class='row' style=''><div class='col-xs-12 col-sm-12'><table style='width:100%' id='tabla"+indice_cuestionario_max_edit+"'><tr><td><label>Ingrese pregunta</label><input type='text' class='form-control' id='pregunta_edit"+indice_cuestionario_max_edit+"1' name='pregunta_edit"+indice_cuestionario_max_edit+"1' /></td><td>&nbsp;</td></tr>		<tr><td><label>respuesta</label></td><td><label>puntaje</label></td></tr>		<tr id='tr_"+indice_cuestionario_max_edit+"1'><td><input type='text' class='form-control' id='respuesta_edit"+indice_cuestionario_max_edit+"1' name='respuesta_edit"+indice_cuestionario_max_edit+"1'/></td><td><select class='form-control' id='puntaje_editq"+indice_cuestionario_max_edit+"1' name='puntaje_edit"+indice_cuestionario_max_edit+"1'><option value='0'>Seleccione</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></td><td class='text-center'><input type='button' id='btnagregarrespuesta_edit"+indice_cuestionario_max_edit+"' name='btnagregarrespuesta_edit"+indice_cuestionario_max_edit+"' value='Agregar' onclick='agregar_fila_edit("+'"'+'tabla'+indice_cuestionario_max_edit+'"'+','+indice_cuestionario_max_edit+")' class='btn btn-primary' /></td><td class='text-center'><input type='button' id='btnquitarrespuesta_edit"+indice_cuestionario_max_edit+"' name='btnquitarrespuesta_edit"+indice_cuestionario_max_edit+"' value='Quitar' onclick='quitar_fila_edit("+'"'+'tr_'+indice_cuestionario_max_edit.toString() +'"'+','+indice_cuestionario_max_edit+")' disabled class='btn btn-outline-primary' /></td></tr></table></div></div></div></div>";
 				document.getElementById("contenido_evaluacion_edit").insertAdjacentHTML('afterend',mi_html_edit);
 			});
 			
 		});
+		
+		function eliminarEdit(elemento,id){
+			if (window.confirm("Desea eliminar cuestionario?")) {
+				indice_cuestionario_edit_eliminado.push(id);
+			  $("#"+elemento+id).css("display", "none");
+			}
+		}
+		
+		function eliminarRubricaCuestionarioEdit(id){
+			if (window.confirm("Desea eliminar cuestionario?")) {
+				indice_cuestionario_edit_eliminado.push(id);
+				console.log("id :" + id);
+			  	$("#div_rubrica_cuestionario_edit"+id).css("display", "none");
+			}
+		}
 		
 		function validarTodoFormularioEdit(){
 			
@@ -352,25 +376,19 @@
 				elemento_id = inputs[i].id;
 				elemento_val = $("#"+inputs[i].id).val();			
 				if($('#'+elemento_id).is(':visible')){
-					/*console.log("elemento_type : "+ elemento_type);
-					console.log("elemento_id : "+ elemento_id);
-					console.log("elemento_val : "+ elemento_val);*/
 					switch(elemento_type){
 						case 'text'  : 
 							if(elemento_val.trim()==""){
-								/*console.log("dato1");*/
 								banderaValidacionCampos = false;
 							}	
 							break;
 						case 'textarea'  : 
 							if(elemento_val.trim()==""){
-								/*console.log("dato2");*/
 								banderaValidacionCampos = false;
 							}	
 							break;
 						case 'select-one'  : 
 							if(elemento_val=="0"){
-								/*console.log("dato3");*/
 								banderaValidacionCampos = false;
 							}	
 							break;
@@ -419,7 +437,7 @@
 				keyboard:false
 			});
 			
-			if(validarCamposedit()){					
+			if(validarCamposedit()){	
 				id_evaluacionedit = $("#id_evaluacion_edit").val();
 				id_rubricaedit = $("#id_rubrica_edit").val();
 				id_questionarioedit = $("#id_questionario").val();					
@@ -427,43 +445,46 @@
 				array_cuestionarioedit = new Array();
 				array_respuesta_puntaje_edit = new Array();					
 				id_rubricaedit = id_rubricaedit.split("-");					
-				for(var i=0;i<id_rubricaedit.length-1;i++){					
-					rubricaedit = $("#rubrica"+id_rubricaedit[i]).val();
-					criterio1edit = $("#criterio"+id_rubricaedit[i]+"1").val();
-					criterio2edit = $("#criterio"+id_rubricaedit[i]+"2").val();
-					criterio3edit = $("#criterio"+id_rubricaedit[i]+"3").val();
-					criterio4edit = $("#criterio"+id_rubricaedit[i]+"4").val();
-					criterio5edit = $("#criterio"+id_rubricaedit[i]+"5").val();
-					descripcion1edit = $("#descripcion"+id_rubricaedit[i]+"1").val();
-					descripcion2edit = $("#descripcion"+id_rubricaedit[i]+"2").val();
-					descripcion3edit = $("#descripcion"+id_rubricaedit[i]+"3").val();
-					descripcion4edit = $("#descripcion"+id_rubricaedit[i]+"4").val();
-					descripcion5edit = $("#descripcion"+id_rubricaedit[i]+"5").val();
-					puntaje_edit1edit = $("#puntaje_edit"+id_rubricaedit[i]+"1").val();
-					puntaje_edit2edit = $("#puntaje_edit"+id_rubricaedit[i]+"2").val();
-					puntaje_edit3edit = $("#puntaje_edit"+id_rubricaedit[i]+"3").val();
-					puntaje_edit4edit = $("#puntaje_edit"+id_rubricaedit[i]+"4").val();
-					puntaje_edit5edit = $("#puntaje_edit"+id_rubricaedit[i]+"5").val();
-					
-					array_rubricaedit.push({
-						id : id_rubricaedit[i],
-						rubrica : rubricaedit,
-						criterio1 : criterio1edit,
-						criterio2 : criterio2edit,
-						criterio3 : criterio3edit,
-						criterio4 : criterio4edit,
-						criterio5 : criterio5edit,
-						descripcion1 : descripcion1edit,
-						descripcion2 : descripcion2edit,
-						descripcion3 : descripcion3edit,
-						descripcion4 : descripcion4edit,
-						descripcion5 : descripcion5edit,
-						puntaje1 : puntaje_edit1edit,
-						puntaje2 : puntaje_edit2edit,
-						puntaje3 : puntaje_edit3edit,
-						puntaje4 : puntaje_edit4edit,
-						puntaje5 : puntaje_edit5edit
-					});
+				for(var i=0;i<id_rubricaedit.length-1;i++){	
+					if (! $("#rubrica"+id_rubricaedit[i]).is(':hidden')) {
+					    rubricaedit = $("#rubrica"+id_rubricaedit[i]).val();
+						console.log("rubricaedit :" + rubricaedit);
+						criterio1edit = $("#criterio"+id_rubricaedit[i]+"1").val();
+						criterio2edit = $("#criterio"+id_rubricaedit[i]+"2").val();
+						criterio3edit = $("#criterio"+id_rubricaedit[i]+"3").val();
+						criterio4edit = $("#criterio"+id_rubricaedit[i]+"4").val();
+						criterio5edit = $("#criterio"+id_rubricaedit[i]+"5").val();
+						descripcion1edit = $("#descripcion"+id_rubricaedit[i]+"1").val();
+						descripcion2edit = $("#descripcion"+id_rubricaedit[i]+"2").val();
+						descripcion3edit = $("#descripcion"+id_rubricaedit[i]+"3").val();
+						descripcion4edit = $("#descripcion"+id_rubricaedit[i]+"4").val();
+						descripcion5edit = $("#descripcion"+id_rubricaedit[i]+"5").val();
+						puntaje_edit1edit = $("#puntaje_edit"+id_rubricaedit[i]+"1").val();
+						puntaje_edit2edit = $("#puntaje_edit"+id_rubricaedit[i]+"2").val();
+						puntaje_edit3edit = $("#puntaje_edit"+id_rubricaedit[i]+"3").val();
+						puntaje_edit4edit = $("#puntaje_edit"+id_rubricaedit[i]+"4").val();
+						puntaje_edit5edit = $("#puntaje_edit"+id_rubricaedit[i]+"5").val();
+						
+						array_rubricaedit.push({
+							id : id_rubricaedit[i],
+							rubrica : rubricaedit,
+							criterio1 : criterio1edit,
+							criterio2 : criterio2edit,
+							criterio3 : criterio3edit,
+							criterio4 : criterio4edit,
+							criterio5 : criterio5edit,
+							descripcion1 : descripcion1edit,
+							descripcion2 : descripcion2edit,
+							descripcion3 : descripcion3edit,
+							descripcion4 : descripcion4edit,
+							descripcion5 : descripcion5edit,
+							puntaje1 : puntaje_edit1edit,
+							puntaje2 : puntaje_edit2edit,
+							puntaje3 : puntaje_edit3edit,
+							puntaje4 : puntaje_edit4edit,
+							puntaje5 : puntaje_edit5edit
+						});
+					}
 				}				
 				
 				var j = 0;
@@ -480,36 +501,39 @@
 							while(bandera_j){
 								if(array_id_pregunta_respuesta_edit[j] == "*"){
 									pregunta_editidedit = id_pregunta_respuesta_edit.substring(i+1,j);
-									pregunta_editedit = $("#pregunta_edit"+pregunta_editidedit).val();								
-									x = j+1;
-									bandera_x = true;
-									while(bandera_x){
-										if(array_id_pregunta_respuesta_edit[x] == ")"){
-											var indice_rp_i = respuesta_edit_puntaje_edit.length ;
-											var indice_rp_f = respuesta_edit_puntaje_edit.length ;
-											respuesta_edit_puntaje_edit = id_pregunta_respuesta_edit.substring(j+1,x);
-											respuesta_edit_puntaje_edit = respuesta_edit_puntaje_edit.split("-"); 
-											for(var z = 0;z<respuesta_edit_puntaje_edit.length;z++){
-												respuesta_editedit = $("#respuesta_edit"+respuesta_edit_puntaje_edit[z]).val();
-												puntaje_editedit = $("#puntaje_editq"+respuesta_edit_puntaje_edit[z]).val();
-												array_respuesta_puntaje_edit.push({
-													id : respuesta_edit_puntaje_edit[z],
-													respuesta : respuesta_editedit,
-													puntaje : puntaje_editedit
+									pregunta_editedit = $("#pregunta_edit"+pregunta_editidedit).val();			
+									if (! $("#pregunta_edit"+pregunta_editidedit).is(':hidden')) {	
+										x = j+1;
+										bandera_x = true;
+										while(bandera_x){
+											if(array_id_pregunta_respuesta_edit[x] == ")"){
+												var indice_rp_i = respuesta_edit_puntaje_edit.length ;
+												var indice_rp_f = respuesta_edit_puntaje_edit.length ;
+												respuesta_edit_puntaje_edit = id_pregunta_respuesta_edit.substring(j+1,x);
+												respuesta_edit_puntaje_edit = respuesta_edit_puntaje_edit.split("-"); 
+												for(var z = 0;z<respuesta_edit_puntaje_edit.length;z++){
+													respuesta_editedit = $("#respuesta_edit"+respuesta_edit_puntaje_edit[z]).val();
+													puntaje_editedit = $("#puntaje_editq"+respuesta_edit_puntaje_edit[z]).val();
+												    array_respuesta_puntaje_edit.push({
+														id : respuesta_edit_puntaje_edit[z],
+														respuesta : respuesta_editedit,
+														puntaje : puntaje_editedit
+													});
+													indice_rp_f ++;
+													
+												}
+												array_cuestionarioedit.push({
+													id : pregunta_editidedit,
+													pregunta : pregunta_editedit,
+													questionariorespuesta : array_respuesta_puntaje_edit.slice(indice_rp_i,indice_rp_f)
 												});
-												indice_rp_f ++;
+												i=x;
+												bandera_x = false;
 											}
-											array_cuestionarioedit.push({
-												id : pregunta_editidedit,
-												pregunta : pregunta_editedit,
-												questionariorespuesta : array_respuesta_puntaje_edit.slice(indice_rp_i,indice_rp_f)
-											});
-											i=x;
-											bandera_x = false;
+											x++;
 										}
-										x++;
-									}
-									bandera_j = false;      							
+										bandera_j = false; 
+									} 							
 								j++;
 							}
 							else{
@@ -521,43 +545,46 @@
 				
 				
 				
-				for(var i=101; i<= indice_cuestionario_edit;i++){
+				for(var i=indice_cuestionario_edit; i<= indice_cuestionario_max_edit;i++){
 					if($("#r"+i).is(":checked")){
 						rubrica = $("#rubrica"+i).val();
-						criterio1 = $("#criterio"+i+"1").val();
-						criterio2 = $("#criterio"+i+"2").val();
-						criterio3 = $("#criterio"+i+"3").val();
-						criterio4 = $("#criterio"+i+"4").val();
-						criterio5 = $("#criterio"+i+"5").val();
-						descripcion1 = $("#descripcion"+i+"1").val();
-						descripcion2 = $("#descripcion"+i+"2").val();
-						descripcion3 = $("#descripcion"+i+"3").val();
-						descripcion4 = $("#descripcion"+i+"4").val();
-						descripcion5 = $("#descripcion"+i+"5").val();
-						puntaje_edit1 = $("#puntaje_edit"+i+"1").val();
-						puntaje_edit2 = $("#puntaje_edit"+i+"2").val();
-						puntaje_edit3 = $("#puntaje_edit"+i+"3").val();
-						puntaje_edit4 = $("#puntaje_edit"+i+"4").val();
-						puntaje_edit5 = $("#puntaje_edit"+i+"5").val();
+						if (! $("#criterio"+i+"1").is(':hidden')) {
+						    criterio1 = $("#criterio"+i+"1").val();
+							criterio2 = $("#criterio"+i+"2").val();
+							criterio3 = $("#criterio"+i+"3").val();
+							criterio4 = $("#criterio"+i+"4").val();
+							criterio5 = $("#criterio"+i+"5").val();
+							descripcion1 = $("#descripcion"+i+"1").val();
+							descripcion2 = $("#descripcion"+i+"2").val();
+							descripcion3 = $("#descripcion"+i+"3").val();
+							descripcion4 = $("#descripcion"+i+"4").val();
+							descripcion5 = $("#descripcion"+i+"5").val();
+							puntaje_edit1 = $("#puntaje_edit"+i+"1").val();
+							puntaje_edit2 = $("#puntaje_edit"+i+"2").val();
+							puntaje_edit3 = $("#puntaje_edit"+i+"3").val();
+							puntaje_edit4 = $("#puntaje_edit"+i+"4").val();
+							puntaje_edit5 = $("#puntaje_edit"+i+"5").val();
+							
+							array_rubricaedit.push({
+								rubrica : rubrica,
+								criterio1 : criterio1,
+								criterio2 : criterio2,
+								criterio3 : criterio3,
+								criterio4 : criterio4,
+								criterio5 : criterio5,
+								descripcion1 : descripcion1,
+								descripcion2 : descripcion2,
+								descripcion3 : descripcion3,
+								descripcion4 : descripcion4,
+								descripcion5 : descripcion5,
+								puntaje1 : puntaje_edit1,
+								puntaje2 : puntaje_edit2,
+								puntaje3 : puntaje_edit3,
+								puntaje4 : puntaje_edit4,
+								puntaje5 : puntaje_edit5
+							});
+						}						
 						
-						array_rubricaedit.push({
-							rubrica : rubrica,
-							criterio1 : criterio1,
-							criterio2 : criterio2,
-							criterio3 : criterio3,
-							criterio4 : criterio4,
-							criterio5 : criterio5,
-							descripcion1 : descripcion1,
-							descripcion2 : descripcion2,
-							descripcion3 : descripcion3,
-							descripcion4 : descripcion4,
-							descripcion5 : descripcion5,
-							puntaje1 : puntaje_edit1,
-							puntaje2 : puntaje_edit2,
-							puntaje3 : puntaje_edit3,
-							puntaje4 : puntaje_edit4,
-							puntaje5 : puntaje_edit5
-						});
 					}
 					else{
 						bandera_elemento_respuesta_edit_add = 1;
@@ -567,24 +594,26 @@
 						
 						while(bandera_elemento_respuesta_edit_add >0){
 							pregunta_edit = $("#pregunta_edit"+i+"1").val();
-							if($("#respuesta_edit"+i+indice_rp).length > 0 ){
-								respuesta_edit = $("#respuesta_edit"+i+indice_rp).val();
-								puntaje_edit = $("#puntaje_editq"+i+indice_rp).val();
-								array_rpta_add.push({
-									respuesta  : respuesta_edit,
-									puntaje : puntaje_edit
-									
-								});
-								indice_rp_f ++;
-								indice_rp ++;
-							}
-							else{
-								bandera_elemento_respuesta_edit_add = 0;
-								array_cuestionarioedit.push({
-									pregunta : pregunta_edit,
-									questionariorespuesta : array_rpta_add.slice(indice_rp_i,indice_rp_f)
-								});
-								indice_rp_consolidado_edit++;
+							if (! $("#pregunta_edit"+i+"1").is(':hidden')) {
+							   if($("#respuesta_edit"+i+indice_rp).length > 0 ){
+									respuesta_edit = $("#respuesta_edit"+i+indice_rp).val();
+									puntaje_edit = $("#puntaje_editq"+i+indice_rp).val();								
+									array_rpta_add.push({
+										respuesta  : respuesta_edit,
+										puntaje : puntaje_edit
+										
+									});
+									indice_rp_f ++;
+									indice_rp ++;
+								}
+								else{
+									bandera_elemento_respuesta_edit_add = 0;
+									array_cuestionarioedit.push({
+										pregunta : pregunta_edit,
+										questionariorespuesta : array_rpta_add.slice(indice_rp_i,indice_rp_f)
+									});
+									indice_rp_consolidado_edit++;
+								}
 							}
 						}
 					}

@@ -10,6 +10,8 @@
 <script type="text/javascript" th:src="@{/js/datetime-moment-order.js}"></script>
 <script type="text/javascript" th:src="@{/js/moment.js}"></script>
 
+
+
 <style>
 	.rs_evaluaciones{
 		  /*width:33%;*/
@@ -531,7 +533,6 @@
 		$.fn.dataTable.ext.search.push(
     	    function( settings, data, dataIndex ) {
     	    	
-    	    	console.log("settings.nTable.id :" + settings.nTable.id);
     	    	if ( settings.nTable.id !== 'table_lista_evaluacion' ) {
     	            return true;
     	          }
