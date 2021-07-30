@@ -48,10 +48,12 @@ $(document).ready(function(){
 				$("#montototalauspiciador"+(i+1)).val(parseFloat($("#cantidadauspiciador"+(i+1)).val())*parseFloat($("#montounitarioauspiciador"+(i+1)).val()));
 			}
 
-			if(!isNaN(parseFloat($("#montototalauspiciador"+(i+1)).val()))){
-				monto += parseFloat($("#montototalauspiciador"+(i+1)).val());
-			}else{
-				monto = 0;
+			if($('#tipocodauspiciador'+(i+1)).is(":visible")){
+				if(!isNaN(parseFloat($("#montototalauspiciador"+(i+1)).val()))){
+					monto += parseFloat($("#montototalauspiciador"+(i+1)).val());
+				}else{
+					monto = 0;
+				}
 			}
 		});
 		$("#montototalform").val(monto);
@@ -62,11 +64,30 @@ $(document).ready(function(){
 			if($("#cantidadauspiciador"+(i+1)).val() != '' && $("#montounitarioauspiciador"+(i+1)).val() != '' ){
 				$("#montototalauspiciador"+(i+1)).val(parseFloat($("#cantidadauspiciador"+(i+1)).val())*parseFloat($("#montounitarioauspiciador"+(i+1)).val()));
 			}
-
-			if(!isNaN(parseFloat($("#montototalauspiciador"+(i+1)).val()))){
-				monto += parseFloat($("#montototalauspiciador"+(i+1)).val());
-			}else{
-				monto = 0;
+			if($('#tipocodauspiciador'+(i+1)).is(":visible")){
+				if(!isNaN(parseFloat($("#montototalauspiciador"+(i+1)).val()))){
+					monto += parseFloat($("#montototalauspiciador"+(i+1)).val());
+				}else{
+					monto = 0;
+				}
+			}
+		});
+		$("#montototalform").val(monto);
+	});
+	
+	$(document).on("click","[name=btnRemoverAuspiciador]",function(evt){
+		evt.preventDefault();
+		$(this).parent().parent().hide();
+		$.each($("[id*=montototalauspiciador]"), function( i, value ) {
+			if($("#cantidadauspiciador"+(i+1)).val() != '' && $("#montounitarioauspiciador"+(i+1)).val() != '' ){
+				$("#montototalauspiciador"+(i+1)).val(parseFloat($("#cantidadauspiciador"+(i+1)).val())*parseFloat($("#montounitarioauspiciador"+(i+1)).val()));
+			}
+			if($('#tipocodauspiciador'+(i+1)).is(":visible")){
+				if(!isNaN(parseFloat($("#montototalauspiciador"+(i+1)).val()))){
+					monto += parseFloat($("#montototalauspiciador"+(i+1)).val());
+				}else{
+					monto = 0;
+				}
 			}
 		});
 		$("#montototalform").val(monto);
@@ -86,6 +107,7 @@ function htmlAuspicicador(){
 	var cont = $("[id*=tipocodauspiciador]").length;
 	cont = cont+1; 
 	html = '';
+	html += '<div class="section-auspicio-item row" style="padding-left: 10px;">';
 	html += '   <input type="hidden" name="idauspiciador'+cont+'" id="idauspiciador'+cont+'" value="0"/>';
 	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
 	html += '		<select class="form-control" id="tipocodauspiciador'+cont+'" name="tipocodauspiciador'+cont+'">';
@@ -107,8 +129,10 @@ function htmlAuspicicador(){
 	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
 	html += '		<input type="text" name="montototalauspiciador'+cont+'" id="montototalauspiciador'+cont+'" class="form-control" placeholder="Monto Total" disabled value="0" onKeyPress="return filterFloat(event,this)" maxlength="10"/>';
 	html += '	</div>';
-	html += '	<div class="col-xs-12 col-sm-4 text-left">';
+	html += '	<div class="col-xs-12 col-sm-4 text-left section-botones-aus-oti'+cont+'">';
+	html += '		<input type="image" id="btnRemoverAuspiciador" name="btnRemoverAuspiciador" src="./images/svg/minus-solid.svg" class="btn btn-primary" width="45px"/>';
 	html += '	</div>';
+	html += '</div>';
 	
 	$("#section-datos-auspicio").append(html);
 }
@@ -125,8 +149,9 @@ function armarAuspicio(){
 		  	var montounitario = $('#montounitarioauspiciador'+i).val();
 		  	var montototal = $('#montototalauspiciador'+i).val();
 		  	var id = $('#idauspiciador'+i).val();
-		  	
-		  	array.push({id,tipodocumento,cantidad,descripcion,montounitario,montototal});
+		  	if($('#tipocodauspiciador'+i).is(":visible")){
+				array.push({id,tipodocumento,cantidad,descripcion,montounitario,montototal});
+			}
 		});
 	}else{
 		//array = null;

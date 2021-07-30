@@ -1574,7 +1574,7 @@ public class ConcursoeducativoController {
 			}
 			
 			
-			
+			auspicioServ.eliminarAuspocioByUsuarioId(usu.getId());
 			if(dto.getAuspicios().size() > 0) {
 				List<Auspicio> listAus = dto.getAuspicios();
 				for (Auspicio auspicio : listAus) {

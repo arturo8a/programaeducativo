@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -45,6 +46,9 @@ public class Auspicio {
 	@ManyToOne
 	@JoinColumn(name="USUARIOID",nullable=false,foreignKey=@ForeignKey(name="FK_auspicio_usualianza"))
 	private UsuarioAlianza usuario_alianza;
+	
+	@Transient
+	private String ods;
 
 	public Integer getId() {
 		return id;
@@ -108,6 +112,14 @@ public class Auspicio {
 
 	public void setUsuario_alianza(UsuarioAlianza usuario_alianza) {
 		this.usuario_alianza = usuario_alianza;
+	}
+
+	public String getOds() {
+		return ods;
+	}
+
+	public void setOds(String ods) {
+		this.ods = ods;
 	}
 
 }

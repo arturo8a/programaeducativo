@@ -14,10 +14,13 @@ import com.progeduc.model.UsuarioAlianza;
 @Transactional(readOnly = true)
 public interface IUsuarioAlianzaRepo extends CrudRepository<UsuarioAlianza,Integer>{
 	
-	@Query(value="SELECT TB1.* FROM USUARIO_ALIANZA TB1 WHERE TB1.odsid = ?1 and tb1.estado=1",nativeQuery = true)
+	@Query(value="SELECT TB1.* FROM USUARIO_ALIANZA TB1 WHERE TB1.odsid = ?1 ",nativeQuery = true)
 	List<UsuarioAlianza> listarByOds(Integer odsid);
 	
 	@Query(value="SELECT U.* FROM USUARIO_ALIANZA U WHERE U.usuario_autoridad = ?1 and U.password_autoridad=?2 and U.estado=1",nativeQuery = true)
 	UsuarioAlianza getUsuarioEvaluador(String usuario, String password);
+	
+	@Query(value="select U.* from USUARIO_ALIANZA U where U.odsid like %?1% and U.anio like %?2% and U.estado like %?3% and U.COMITE_TECNICO like %?4%  and U.COMITE_EVALUADOR like %?5%  and U.AUSPICIADOR like %?6%  and U.ALIADO like %?7%   ",nativeQuery = true)
+	List<UsuarioAlianza> listaUsuarioFiltro(String ods, String anio, String estado, String role6, String role7, String role8, String role9);
 	
 }

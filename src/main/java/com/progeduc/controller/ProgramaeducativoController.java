@@ -336,7 +336,7 @@ public class ProgramaeducativoController {
 		
 		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
 		List<ListaInstitucionEducativa> arrayie = new ArrayList<ListaInstitucionEducativa>();
-		if(tipousuarioid == 0){			
+		/*if(tipousuarioid == 0){			
 			Object ob = ses.getAttribute("odsid");
 			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(obj->{
 				progeducService.listar(obj.getId()).forEach(obj1->{
@@ -400,7 +400,7 @@ public class ProgramaeducativoController {
 					}
 				});
 			});
-		}
+		}*/
 		return new ResponseEntity<List<ListaInstitucionEducativa>>(arrayie, HttpStatus.OK);
 		/*if(true) {
 			progeducService.listar().forEach(obj->{

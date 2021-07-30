@@ -162,7 +162,7 @@
 	  				<div class="col-xs-4 col-sm-2">
 	  					<select class="form-control" id="odsalianza" name="odsalianza">
 							<option value="Todos">ODS</option>			
-							<option th:each="dato:${ods}" th:value="${dato.descripcion}" th:utext="${dato.descripcion}"/>   				    				
+							<option th:each="dato:${ods}" th:value="${dato.id}" th:utext="${dato.descripcion}"/>   				    				
 						</select>
 	  				</div>
 	  				<div class="col-xs-4 col-sm-2">
@@ -173,7 +173,11 @@
 					</div>
 					<div class="col-xs-4 col-sm-2">
 						<select class="form-control" id="rolentidadalianza" name="rolentidadalianza">
-							<option value="Todos">Rol de la entidad</option>					       				
+							<option value="Todos">Rol de la entidad</option>	
+							<option value="6">Comite Técnico</option>
+							<option value="7">Comite Evaluador</option>
+							<option value="8">Auspiciador</option>
+							<option value="9">Aliado</option>					       				
 						</select>
 					</div>
 					<div class="col-xs-12 col-sm-2">
@@ -908,9 +912,9 @@
 	            },
 	            "buttons": [
 	            	{
-	            		extend: 'excelHtml5',
-	            		text:"<img src='./images/iconos_nd/excel1.svg' style='size:15px;margin:0px;padding:0px'/>",
-	                    titleAttr : 'LISTA DE TRABAJOS FINALES - CONCURSO',
+	            		/*extend: 'excelHtml5',*/
+	            		text:"<img src='./images/iconos_nd/excel1.svg' class='btn_exporta_excel_alianza' style='size:15px;margin:0px;padding:0px'/>",
+	                    titleAttr : 'LISTA DE TRABAJOS FINALES - CONCURSO'/*,
 	                    messageTop: function(){
 	                    	return '[ ODS: ' + $("#odsconcurso").val() + ']            [ Año de inscripción: '+ $("#anioconcurso").val() + ']';
 	                    },
@@ -933,7 +937,7 @@
 	                    		minuto = "0"+minuto;
 	                    	}
 	            	    	return "Reporte_"+dia+mes+hoy.getFullYear()+'_'+hora + minuto;
-	                    }
+	                    }*/
 	            	}
 	            ]
 	        });		
@@ -955,17 +959,17 @@
 			        return true;
 			    }
 			    
-			    var ods = $('#odsalianza').val();
+			    var ods = $('#odsalianza option:selected').text();
 		        var anio = $('#anioalianza').val();
-		       // var rol = $('#').val();
+		        var rol = $('#rolentidadalianza').val();
 		        var estado = $('#estadoalianza').val();
 		        
 		        if(!filtraSelect(ods,data[3]))
 					return false;
 				if(!filtraSelect(anio,data[2]))
 					return false;
-				/*if(!filtraSelect(rol,data[7]))
-					return false;*/
+				if(!filtraSelectRol(rol,data[6],data[7],data[8],data[9]))
+					return false;
 				if(!filtraSelect(estado,data[12]))
 					return false;
 				return true;
@@ -973,9 +977,25 @@
 		);
 		
 		function filtraSelect(dato,campo){console.log(dato+"-"+campo);
-			if(dato==="Todos")
+			if(dato==="Todos" || dato==="ODS")
 				return true;
 			return dato===campo;
+		}
+		
+		function filtraSelectRol(dato,campo6,campo7,campo8,campo9){console.log(dato+":"+campo6+"-"+campo7+"-"+campo8+"-"+campo9);
+			if(dato==="Todos"){
+				return true;
+			}else{
+				if(dato==="6"){
+					return "SI"===campo6;
+				}else if(dato==="7"){
+					return "SI"===campo7;
+				}else if(dato==="8"){
+					return "SI"===campo8;
+				}else{
+					return "SI"===campo9;
+				}
+			}
 		}
 		
 		
@@ -1496,5 +1516,22 @@ function closeCargando(){
 
 $("#btnCerrarModaleListaPermisos").on('click',function(){
 	$("#modaleListaPermisos").modal('hide');
+});
+
+function filtraParametro(campofiltro){
+	if(campofiltro==="Todos" || campofiltro===undefined)
+		return '-1';
+	return campofiltro;
+}
+
+$(document).on("click",".btn_exporta_excel_alianza",function(e){ console.log('.btn_exporta_excel_alianza');
+	e.preventDefault();
+	openCargando();
+	var fOds = filtraParametro($("#odsalianza").val());
+	var fAnio = filtraParametro($("#anioalianza").val());
+	var fRol = filtraParametro($("#rolentidadalianza").val());
+	var fEstado = filtraParametro($("#estadoalianza").val());
+	window.open(url_base + "pedesa/reporteAlianza/"+fOds+"/"+fAnio+"/"+fRol+"/"+fEstado, '_blank');
+	closeCargando();
 });
 </script>
