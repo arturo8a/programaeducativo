@@ -1874,7 +1874,7 @@ public class ConcursoeducativoController {
 				
 			Trabajosfinales  trab =trabajosfinalesServ.ListarporId(idTrab);
 			//trab.setNota();
-			trab.setEstado(3);
+			//trab.setEstado(3);
 			trabajosfinalesServ.modificar(trab);
 			//trabajosfinalesServ.updateestado(trab.getId(), 3,trab.getProgramaeducativo().getId());
 

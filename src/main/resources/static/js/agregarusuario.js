@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	
+	sumarTotal();
 	$("#btncancelRegistro").on("click",function(){
 		$("#modalAlianzaEstrategica").modal('hide');
 		$("#btnaceptarRegistro").prop("disabled",false);
@@ -78,19 +78,7 @@ $(document).ready(function(){
 	$(document).on("click","[name=btnRemoverAuspiciador]",function(evt){
 		evt.preventDefault();
 		$(this).parent().parent().hide();
-		$.each($("[id*=montototalauspiciador]"), function( i, value ) {
-			if($("#cantidadauspiciador"+(i+1)).val() != '' && $("#montounitarioauspiciador"+(i+1)).val() != '' ){
-				$("#montototalauspiciador"+(i+1)).val(parseFloat($("#cantidadauspiciador"+(i+1)).val())*parseFloat($("#montounitarioauspiciador"+(i+1)).val()));
-			}
-			if($('#tipocodauspiciador'+(i+1)).is(":visible")){
-				if(!isNaN(parseFloat($("#montototalauspiciador"+(i+1)).val()))){
-					monto += parseFloat($("#montototalauspiciador"+(i+1)).val());
-				}else{
-					monto = 0;
-				}
-			}
-		});
-		$("#montototalform").val(monto);
+		sumarTotal();
 	});
 	
 	getUsuario($("#idAlianzaEstrategica").val());
@@ -102,6 +90,22 @@ $(document).ready(function(){
 	});
 
 });
+function sumarTotal(){
+	var monto = 0;
+	$.each($("[id*=montototalauspiciador]"), function( i, value ) {
+		if($("#cantidadauspiciador"+(i+1)).val() != '' && $("#montounitarioauspiciador"+(i+1)).val() != '' ){
+			$("#montototalauspiciador"+(i+1)).val(parseFloat($("#cantidadauspiciador"+(i+1)).val())*parseFloat($("#montounitarioauspiciador"+(i+1)).val()));
+		}
+		if($('#tipocodauspiciador'+(i+1)).is(":visible")){
+			if(!isNaN(parseFloat($("#montototalauspiciador"+(i+1)).val()))){
+				monto += parseFloat($("#montototalauspiciador"+(i+1)).val());
+			}else{
+				monto = 0;
+			}
+		}
+	});
+	$("#montototalform").val(monto);
+}
 
 function htmlAuspicicador(){
 	var cont = $("[id*=tipocodauspiciador]").length;
@@ -420,19 +424,7 @@ function getUsuario(idUsuario){
 				$("#numtel2contactoregusu").val(respuesta.telefonodos);
 				$("#correocontactoregusu").val(respuesta.correocontato);
 				$("#cargocontactoregusu").val(respuesta.cargocontacto);
-				var monto = 0;
-				$.each($("[id*=montototalauspiciador]"), function( i, value ) {
-					if($("#cantidadauspiciador"+(i+1)) != '' && $("#montounitarioauspiciador"+(i+1)) != '' ){
-						$("#montototalauspiciador"+(i+1)).val(parseFloat($("#cantidadauspiciador"+(i+1)).val())*parseFloat($("#montounitarioauspiciador"+(i+1)).val()));
-					}
-		
-					if(!isNaN(parseFloat($("#montototalauspiciador"+(i+1)).val()))){
-						monto += parseFloat($("#montototalauspiciador"+(i+1)).val());
-					}else{
-						monto = 0;
-					}
-				});
-				$("#montototalform").val(monto);
+				setTimeout(function(){ sumarTotal(); }, 100);
 			}else{
 				$('.alert').alert('close');
 				$("#fileautoridad").show();
@@ -580,31 +572,31 @@ function validarCampos(){
 	
 	if($("#section-datos-auspicio").is(":visible")){
 		$.each($("[id*=tipocodauspiciador]"), function( index, value ) {
-			if($(value).val() == "0"){
+			if($(value).val() == "0" && $(value).is(":visible")){
 				contentMensajeError += "Debe seleccionar Tipo de Documento del Auspiciador"+"</br>";
 				status = false;
 			}
 		});
 		$.each($("[id*=cantidadauspiciador]"), function( index, value ) {
-			if($(value).val() == ""){
+			if($(value).val() == "" && $(value).is(":visible")){
 				contentMensajeError += "Debe ingresar Cantidad del Auspiciador"+"</br>";
 				status = false;
 			}
 		});
 		$.each($("[id*=descripcionauspiciador]"), function( index, value ) {
-			if($(value).val() == ""){
+			if($(value).val() == "" && $(value).is(":visible")){
 				contentMensajeError += "Debe ingresar Descripcion del Auspiciador"+"</br>";
 				status = false;
 			}
 		});
 		$.each($("[id*=montounitarioauspiciador]"), function( index, value ) {
-			if($(value).val() == ""){
+			if($(value).val() == "" && $(value).is(":visible")){
 				contentMensajeError += "Debe ingresar el Monto Unitario del Auspiciador"+"</br>";
 				status = false;
 			}
 		});
 		$.each($("[id*=montototalauspiciador]"), function( index, value ) {
-			if($(value).val() == ""){
+			if($(value).val() == "" && $(value).is(":visible")){
 				contentMensajeError += "Debe ingresar Monto Final del Auspiciador"+"</br>";
 				status = false;
 			}
