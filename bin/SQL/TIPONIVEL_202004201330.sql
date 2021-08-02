@@ -1,5 +1,0 @@
-INSERT INTO PROGEDUCATIVO.TIPONIVEL (ID,DESCRIPCION) VALUES 
-(1,'Inicial')
-,(2,'Primaria')
-,(3,'Secundaria')
-;

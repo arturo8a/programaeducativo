@@ -1,5 +1,0 @@
-INSERT INTO PROGEDUCATIVO.GENERO (ID,DESCRIPCION) VALUES 
-(1,'Varones')
-,(2,'Mujeres')
-,(3,'Mixto')
-;
