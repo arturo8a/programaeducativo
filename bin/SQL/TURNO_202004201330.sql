@@ -1,5 +1,0 @@
-INSERT INTO PROGEDUCATIVO.TURNO (ID,DESCRIPCION) VALUES 
-(1,'Mañana')
-,(2,'Tarde')
-,(3,'Noche')
-;

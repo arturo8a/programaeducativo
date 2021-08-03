@@ -1541,7 +1541,7 @@ public class ConcursoeducativoController {
 			}
 			
 			
-			
+			auspicioServ.eliminarAuspocioByUsuarioId(usu.getId());
 			if(dto.getAuspicios().size() > 0) {
 				List<Auspicio> listAus = dto.getAuspicios();
 				for (Auspicio auspicio : listAus) {
@@ -1810,7 +1810,7 @@ public class ConcursoeducativoController {
 				
 			Trabajosfinales  trab =trabajosfinalesServ.ListarporId(idTrab);
 			//trab.setNota();
-			trab.setEstado(3);
+			//trab.setEstado(3);
 			trabajosfinalesServ.modificar(trab);
 			//trabajosfinalesServ.updateestado(trab.getId(), 3,trab.getProgramaeducativo().getId());
 

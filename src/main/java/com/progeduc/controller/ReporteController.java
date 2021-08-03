@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -26,11 +28,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.progeduc.dto.DocenteDto;
 import com.progeduc.dto.ListaparticipantereporteDto;
+import com.progeduc.model.Auspicio;
 import com.progeduc.model.Participante;
+import com.progeduc.model.UsuarioAlianza;
 import com.progeduc.service.IDistritoService;
 import com.progeduc.service.IDocentetutorService;
 import com.progeduc.service.IOdsService;
 import com.progeduc.service.IParticipanteService;
+import com.progeduc.service.IUsuarioAlianzaService;
 
 @RestController
 @RequestMapping("")
@@ -47,6 +52,9 @@ public class ReporteController {
 	
 	@Autowired
 	private IDocentetutorService docentetutorServ;
+	
+	@Autowired
+	private IUsuarioAlianzaService usuarioAlianzaServ;
 	
 	@GetMapping(value="/reporteparticipantesinscritos/{ods}/{anio}/{categoria}/{modalidad}/{nivel}")	
 	public ResponseEntity<InputStreamResource> exportParticipantes(@PathVariable(value="ods") Integer ods,
@@ -287,6 +295,179 @@ public class ReporteController {
 		
 		
 		return new ByteArrayInputStream(stream.toByteArray());
+	}
+	
+	@GetMapping(value="/reporteAlianza/{ods}/{anio}/{rol}/{estado}")	
+	public ResponseEntity<InputStreamResource> exportParticipantes(@PathVariable(value="ods") String ods,
+			@PathVariable(value="anio") String anio,
+			@PathVariable(value="rol") String rol,
+			@PathVariable(value="estado") String estado, HttpSession ses) {
+		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());	
+		Date date = new Date();
+		DateFormat hourFormat = new SimpleDateFormat("HHmmss");
+		DateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
+		DateFormat dateFormatFecha = new SimpleDateFormat("dd/MM/yyyy");
+		
+		String role6, role7, role8, role9;
+		
+		if(ods.equals("-1")) {
+			ods = "";
+		}
+		if(anio.equals("-1")) {
+			anio = "";
+		}
+		if(estado.equals("-1")) {
+			estado = "";
+		}
+		if(rol.equals("-1")) {
+			role6= "";
+			role7= "";
+			role8= "";
+			role9= "";
+		}else {
+			if(rol.equals("6")) role6 = "1";
+			else role6 = "";
+				
+			if(rol.equals("7")) role7 = "1";
+			else role7 = "";
+			
+			if(rol.equals("8")) role8 = "1";
+			else role8 = "";
+			
+			if(rol.equals("9")) role9 = "1";
+			else role9 = "";
+		}
+		
+		if(tipousuarioid == 0){
+			String obsSesion = ses.getAttribute("odsid").toString();
+			ods = obsSesion;
+		}
+		
+		System.out.println(ods+anio+estado);
+		List<UsuarioAlianza> listaUsu = usuarioAlianzaServ.listaUsuarioFiltro(ods, anio, estado, role6, role7, role8, role9);
+		List<Auspicio> listaAuspicio = new ArrayList<>();
+		
+		Workbook workbook = new HSSFWorkbook();
+		ByteArrayOutputStream streamOut = new ByteArrayOutputStream();
+		
+		
+		String [] columns = {"Nº","AÑO","ODS","CATEGORIA","ENTIDAD","DIRECCION","COMITE TECNICO","COMITE EVALUADOR","AUSPICIADOR","ALIADO","ESTADO",
+				"¿Cúantos contactos desea agregar?","Apellido paterno","Apellido materno","Nombres","Tipo de documento","Nro de documento","N° de telefono 1",
+				"N° de telefono 2","Correo institucional","Cargo","Apellido paterno","Apellido materno","Nombres","Correo institucional","Cargo","Usuario",
+				"Contraseña","Enviar oficio","Nro oficio","Fecha de oficio","Monto total"};
+		
+		Sheet sheet = workbook.createSheet("Alianza Estrategica");
+		Row row = sheet.createRow(0);
+		for(int i=0;i<columns.length;i++) {
+			Cell cell = row.createCell(i);
+			cell.setCellValue(columns[i]);
+		}
+		
+		int initRow = 1;
+		for (UsuarioAlianza obj : listaUsu) {
+			int i = 0;
+			
+			row = sheet.createRow(initRow);
+			row.createCell(i++).setCellValue(initRow);
+			row.createCell(i++).setCellValue(obj.getAnio());
+			row.createCell(i++).setCellValue(obj.getOds().getDescripcion());
+			row.createCell(i++).setCellValue(obj.getCategoria().getDescripcion());
+			row.createCell(i++).setCellValue(obj.getEntidad());
+			row.createCell(i++).setCellValue(obj.getDireccion());
+			row.createCell(i++).setCellValue(obj.getComitetecnico().equals("1") ? "SI" : "NO");
+			row.createCell(i++).setCellValue(obj.getComiteevaluador().equals("1") ? "SI" : "NO");
+			row.createCell(i++).setCellValue(obj.getAuspiciador().equals("1") ? "SI" : "NO");
+			row.createCell(i++).setCellValue(obj.getAliado().equals("1") ? "SI" : "NO");
+			row.createCell(i++).setCellValue(obj.getEstado().equals("1") ? "ACTIVO" : "INACTIVO");
+			
+			row.createCell(i++).setCellValue(obj.getNumcontaccto());
+			row.createCell(i++).setCellValue(obj.getApepatcontacto());
+			row.createCell(i++).setCellValue(obj.getApematcontacto());
+			row.createCell(i++).setCellValue(obj.getNombrecontacto());
+			row.createCell(i++).setCellValue(obj.getTipodocumento().getDescripcion());
+			row.createCell(i++).setCellValue(obj.getNumdocumento());
+			row.createCell(i++).setCellValue(obj.getTelefonouno());
+			
+			row.createCell(i++).setCellValue(obj.getTelefonodos());
+			row.createCell(i++).setCellValue(obj.getCorreocontato());
+			row.createCell(i++).setCellValue(obj.getCargocontacto());
+			row.createCell(i++).setCellValue(obj.getApepatautoridad());
+			row.createCell(i++).setCellValue(obj.getApematautoridad());
+			row.createCell(i++).setCellValue(obj.getNombresautoridad());
+			row.createCell(i++).setCellValue(obj.getCorreoautoridad());
+			row.createCell(i++).setCellValue(obj.getCargoautoridad());
+			row.createCell(i++).setCellValue(obj.getUsuarioautoridad());
+			
+			row.createCell(i++).setCellValue(obj.getPasswordautoridad());
+			if(obj.getEnviaroficio() != null) {
+				row.createCell(i++).setCellValue(obj.getEnviaroficio().equals("1") ? "SI" : "NO");
+			}else {
+				row.createCell(i++).setCellValue("");
+			}
+			
+			row.createCell(i++).setCellValue(obj.getNumoficio());
+			if(obj.getFecha_oficio() != null) {
+				row.createCell(i++).setCellValue(dateFormatFecha.format(obj.getFecha_oficio()));
+			}else {
+				row.createCell(i++).setCellValue("");
+			}
+			
+			List<Auspicio> listAus = obj.getAuspicios();
+			float montoTotal = 0;
+			for (Auspicio asu : listAus) {
+				montoTotal += asu.getMontototal();
+				asu.setOds(obj.getOds().getDescripcion());
+				listaAuspicio.add(asu);
+			}
+			
+			row.createCell(i++).setCellValue(montoTotal);
+			
+			initRow++;
+		}
+		
+		
+		String [] columns1 = {"ODS","N°","Tipo","Cantidad","Descripcion","Monto unitario","Monto total"};
+		Sheet sheet1 = workbook.createSheet("Auspicios");
+		Row row1 = sheet1.createRow(0);
+		for(int i=0;i<columns1.length;i++) {
+			Cell cell = row1.createCell(i);
+			cell.setCellValue(columns1[i]);
+		}
+		
+		int initRow1 = 1;
+		for(Auspicio auspicio : listaAuspicio) {
+			int i = 0;
+			
+			row1 = sheet1.createRow(initRow1);
+			row1.createCell(i++).setCellValue(auspicio.getOds());
+			row1.createCell(i++).setCellValue(initRow1);
+			row1.createCell(i++).setCellValue(auspicio.getTipodocumento().getDescripcion());
+			row1.createCell(i++).setCellValue(auspicio.getCantidad());
+			row1.createCell(i++).setCellValue(auspicio.getDescripcion());
+			row1.createCell(i++).setCellValue(auspicio.getMontounitario());
+			row1.createCell(i++).setCellValue(auspicio.getMontototal());
+			initRow1 ++;
+		}
+		
+		try {
+			workbook.write(streamOut);
+			workbook.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		ByteArrayInputStream stream = new ByteArrayInputStream(streamOut.toByteArray());
+		
+		
+		HttpHeaders headers = new HttpHeaders();
+		
+		String fecha_archivo = dateFormat.format(date) + hourFormat.format(date);
+		
+		headers.add("Content-Disposition", "attachment; filename=Lista_alianzaestrategica_"+fecha_archivo+".xls");
+		
+		return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
+		
 	}
 	
 }
