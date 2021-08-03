@@ -271,7 +271,7 @@
 				<div  id="container_trabajos_finales">
 					<div class="row pt-2 pb-4 m-0">
 						<div class="col-xs-12 col-sm-12 pt-3">
-							<table id="table_lista_trabajos_finales"  class="table table-striped table-bordered nowrap" cellspacing="0" style="width:100%">
+							<table id="table_lista_trabajos_finales"  class="table table-striped table-bordered nowrap" cellspacing="0" style="width:100%" disabled>
 								<thead>
 							        <tr>
 							        	<th>Nº</th>
@@ -548,7 +548,6 @@
 	
 	
 	$(document).ready(function(){	
-		
 		//listar();
 		$("#participante-tab").click(function(){
 			$('#myTab a[href="#participante"]').tab('show');
@@ -557,7 +556,13 @@
 		
 		$("#trabajosfinales-tab").click(function(){
 			$('#myTab a[href="#trabajosfinales"]').tab('show');
-			setTimeout(function(){ listar_trabajos_finales(); }, 100);
+			setTimeout(function(){ 				
+				listar_trabajos_finales(); 
+				if($("#activar_trabajos_finales").val() != 1){
+					$("#agregartrabajo").prop("disabled",true);
+					$("#finalizarparticipacion").prop("disabled",true);
+				}			
+			}, 100);
 		});
 		
 		if($("#codmod").val().trim()!="" && $("#appaterno").val().trim()!="" && $("#apmaterno").val().trim()!="" && $("#nombre").val().trim()!="" && $("#tipodocumento").val().trim()!="" && $("#nrodocumento").val().trim()!="" && $("#genero").val().trim()!="" && $("#nrotelefono").val().trim()!="" && $("#correoelectronico").val().trim()!="" && $("#responsable").val().trim()!="" && $("#curso").val().trim()!="" ){
@@ -567,8 +572,10 @@
 				$("#trabajosfinales-tab").removeClass("nav-link disabled");
 				$("#trabajosfinales-tab").addClass("nav-link");
 			}
-			else{
+			else{				
 				alert("La carga de trabajos finales se podrá realizar en las siguientes fechas: " + $("#cuarta_etapa_desde").val() + " - " + $("#cuarta_etapa_hasta").val());
+				$("#trabajosfinales-tab").removeClass("nav-link disabled");
+				$("#trabajosfinales-tab").addClass("nav-link");
 			}
 		}
 		
@@ -951,6 +958,9 @@
 	                                break;
 	                            case 1:
 	                            	x = '<img src="./images/svg/eye-solid.svg" class="vertrabajo" style="width:20px; cursor:pointer"/>' ;
+	                                break;	                                
+	                            case 2:
+	                            	x = '<img src="./images/svg/eye-solid.svg" class="vertrabajo" style="width:20px; cursor:pointer" />' ;
 	                                break;
                             }
                             return x;
@@ -966,6 +976,9 @@
 	                            case 1:
 	                            	x = '<img src="./images/svg/eliminar-alt-regular.svg" style="width:20px; filter: invert(70%)" />';
 	                                break;
+	                            case 2:
+	                            	x = '<img src="./images/svg/eliminar-alt-regular.svg" style="width:20px; filter: invert(70%)" disabled />';
+	                                break;
                             }
                             return x;
                         }
@@ -979,6 +992,9 @@
 	                                break;
 	                            case 1:
 	                            	x = "Enviado";
+	                                break;
+	                            case 2:
+	                                x = "<button type='button' class='enviartrabajo btn btn-primary' disabled>Enviar</button>";
 	                                break;
                             }
                             return x;

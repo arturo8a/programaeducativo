@@ -402,49 +402,6 @@ public class ProgramaeducativoController {
 			});
 		}
 		return new ResponseEntity<List<ListaInstitucionEducativa>>(arrayie, HttpStatus.OK);
-		/*if(true) {
-			progeducService.listar().forEach(obj->{
-				if(obj!=null) {
-					listaie= new ListaInstitucionEducativa();
-					if(obj.getDistrito()!=null){
-						Distrito dist = distServ.getById(obj.getDistrito().getId());
-						if(dist!=null) {
-							if(dist.getOdsid()!=null) {
-								Ods ods = odsserv.byOds(dist.getOdsid());
-								if(ods !=null) {
-									listaie.setOds(ods.getDescripcion());
-									//listaie.setOds("");
-									listaie.setAnhio(obj.getAnhio());
-									listaie.setNomie(obj.getNomie());
-									listaie.setCodmod(obj.getCodmod());
-									listaie.setEstado(obj.getEstado());
-									listaie.setId(obj.getId());
-									listaie.setMotivoobservacion(obj.getMotivoobservacion());
-									arrayie.add(listaie);
-								}
-							}
-						}
-					}					
-				}		
-			});			
-		}
-		else {
-			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(obj->{
-				progeducService.listar(obj.getId()).forEach(obj1->{
-					listaie= new ListaInstitucionEducativa();
-					//listaie.setOds(odsserv.byOds(obj1.getDistrito().getOdsid()).getDescripcion());
-					listaie.setOds("");
-					listaie.setAnhio(obj1.getAnhio());
-					listaie.setNomie(obj1.getNomie());
-					listaie.setCodmod(obj1.getCodmod());
-					listaie.setEstado(obj1.getEstado());
-					listaie.setId(obj1.getId());
-					listaie.setMotivoobservacion(obj1.getMotivoobservacion());
-					arrayie.add(listaie);
-				});	
-			});			
-		}			
-		return new ResponseEntity<List<ListaInstitucionEducativa>>(arrayie, HttpStatus.OK) ;*/
 	}
 	
 	@PostMapping(value = "/save")

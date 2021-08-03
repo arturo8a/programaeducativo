@@ -93,41 +93,41 @@
 <body>
 	<form id="formparticipanteajax">
 		<div class="row">
-			<div class="col-xs-12 col-sm-12 text-left w-100" >
+			<div class="col-xs-12 col-sm-12 text-left w-95" >
 				<u>DATOS DEL TRABAJO</u> 	
 			</div>
-			<div class="col-xs-12 col-sm-4 text-left pt-4">
+			<div class="col-xs-12 col-sm-3 text-left pt-4">
 				<label for="categoriatrabajo">Seleccione categoria</label>
 				<select class="form-control" id="categoriatrabajo" name="categoriatrabajo">
 					<option value="0">Seleccione</option>
 				    <option th:each="len:${categoriatrabajo}" th:value="${len.id}" th:utext="${len.descripcion}" th:selected="${len.id} == 2"/>
 				</select>
 			</div>
-			<div class="col-xs-12 col-sm-4 text-left pt-4">
+			<div class="col-xs-12 col-sm-6 text-left pt-4">
 				<label for="modalidadpostulaciontrabajo">Modalidad de postulación</label>
 				<select class="form-control" id="modalidadpostulaciontrabajo" name="modalidadpostulaciontrabajo">
 					<option value="0">Seleccione</option>
 				    <option th:each="len:${modalidadtrabajo}" th:value="${len.id}" th:utext="${len.descripcion}" th:selected="${len.id} == 1"/>
 				</select>
 			</div>
-			<div class="col-xs-12 col-sm-4 text-left pt-4">
+			<div class="col-xs-12 col-sm-3 text-left pt-4">
 				<label for="titulotrabajo">Título de su trabajo final</label>
 				<input type="text" id="titulotrabajo" name="titulotrabajo" class="form-control"/>
 			</div>
-			<div class="col-xs-12 col-sm-4 text-left pt-4">
+			<div class="col-xs-12 col-sm-3 text-left pt-4">
 				<label>Subir archivo de trabajo final</label>
 				<input type="file" id="archivotrabajo" name="archivotrabajo" class="form-control" />
 				
 			</div>
-			<div class="col-xs-12 col-sm-4 text-left pt-4">
+			<div class="col-xs-12 col-sm-6 text-left pt-4">
 				<label>Subir archivos de evidencias</label>
 				<input type="file" id="evidenciastrabajo" class="form-control" name="file[]"  multiple/>
 				<div id="divevidencias_agregar" style="height:65px;">											
 				</div>
 			</div>
-			<div class="col-xs-12 col-sm-4 text-left pt-4">
+			<div class="col-xs-12 col-sm-3 text-left pt-4">
 				<label for="linkvideo">Link de video</label>
-				<input type="text" id="linkvideo" name="linkvideo" class="form-control" disabled/>
+				<input type="text" id="linkvideo" name="linkvideo" class="form-control"/>
 			</div>
 		</div>	
 		
@@ -327,335 +327,322 @@
 	var click = true;
 	var rows_selected;
 	
-	var evidencias_agregadas_add = new Array();
-	var evidencias_agregadas_eliminadas_add = new Array();
+	var mis_evidencias = new Array();
 	
+	
+	$("#tipodocumentodocentetrabajo").on("change",function(){
 		
-		$("#tipodocumentodocentetrabajo").on("change",function(){
-			
-			if($("#tipodocumentodocentetrabajo").val()!="0"){
-				$("#nrodocumentodocentetrabajo").prop('disabled', false);
-				$("#nrodocumentodocentetrabajo").val("");
-				$("#nrodocumentodocentetrabajo").focus();
+		if($("#tipodocumentodocentetrabajo").val()!="0"){
+			$("#nrodocumentodocentetrabajo").prop('disabled', false);
+			$("#nrodocumentodocentetrabajo").val("");
+			$("#nrodocumentodocentetrabajo").focus();
+		}
+		else{
+			$("#nrodocumentodocentetrabajo").val("");
+			$("#nrodocumentodocentetrabajo").prop('disabled', true);
+		}
+	});
+
+
+	$("#categoriatrabajo").change(function(){
+		categoriatrabajo = $("#categoriatrabajo").val();
+		$("#linkvideo" ).val("");
+		table_lpt.rows().deselect();
+		table_lpt.draw();
+	});
+	
+	$("#modalidadpostulaciontrabajo").change(function(){
+		modalidadtrabajo = $("#modalidadpostulaciontrabajo").val();
+		if(modalidadtrabajo == '1')
+			table_lpt.select.style('single'); 
+		if(modalidadtrabajo == '2')
+			table_lpt.select.style('multi');
+		table_lpt.rows().deselect();
+		table_lpt.draw();
+	});
+		
+	$("#evidenciastrabajo").change(function(){		
+		if(evidenciastrabajo.files[0].name != undefined){
+			var flag = true;
+			//validamos que el nombre del archivo no se repita en la lista de evidencias
+			for(var i=0;i<mis_evidencias.length;i++){
+				if(mis_evidencias[i].name  == evidenciastrabajo.files[0].name)
+					flag = false;
+			}
+			if(flag){
+				mis_evidencias.push(evidenciastrabajo.files[0]);
+				var data_archivo_subir = "<table><tr>";
+				for(var i=0;i<mis_evidencias.length;i++){
+					data_archivo_subir += "<td><div class='alert alert-primary alert-dismissible fade show' role='alert' style='padding:10px'><strong><abbr title='"+(mis_evidencias[i].name)+"'>"+	 (	(mis_evidencias[i].name).length <5 ? (mis_evidencias[i].name) :	(mis_evidencias[i].name).substr(0,5))	+"<abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaAgregar("+i+")' data-dismiss='alert' aria-label='Close' style='padding:0px; margin:-3px'><span aria-hidden='true'>&times;</span></button></div></td>";
+				}
+				data_archivo_subir += "</tr></table>";
+				$("#divevidencias_agregar").html(data_archivo_subir);
 			}
 			else{
-				$("#nrodocumentodocentetrabajo").val("");
-				$("#nrodocumentodocentetrabajo").prop('disabled', true);
+				alert("Este archivo ya existe");
 			}
-		});
-	
-	
-		$("#categoriatrabajo").change(function(){
-			categoriatrabajo = $("#categoriatrabajo").val();			
-			if(categoriatrabajo == '1' ||  categoriatrabajo == '3')
-				$( "#linkvideo" ).prop( "disabled", false );
-			if(categoriatrabajo == '2' ||  categoriatrabajo == '4' ||  categoriatrabajo == '5')
-				$( "#linkvideo" ).prop( "disabled", true );	
-			$( "#linkvideo" ).val("");
-			table_lpt.rows().deselect();
-			table_lpt.draw();
-		});
+		}
+	});
 		
-		$("#modalidadpostulaciontrabajo").change(function(){
-			modalidadtrabajo = $("#modalidadpostulaciontrabajo").val();
-			if(modalidadtrabajo == '1')
-				table_lpt.select.style('single'); 
-			if(modalidadtrabajo == '2')
-				table_lpt.select.style('multi');
-			table_lpt.rows().deselect();
-			table_lpt.draw();
-		});
-		
-		$("#evidenciastrabajo").change(function(){
-			evidencias_agregadas_add = new Array();
-			evidencias_agregadas_eliminadas_add = new Array();
-			for(var i=0;i<evidenciastrabajo.files.length;i++){
-				evidencias_agregadas_add.push(evidenciastrabajo.files[i].name);
-			}
-			var data_archivo_subir = "<table><tr>";
-			for(var i=0;i<evidencias_agregadas_add.length;i++){
-				data_archivo_subir += "<td><div class='alert alert-primary alert-dismissible fade show' role='alert' style='padding:10px'><strong><abbr title='"+(evidencias_agregadas_add[i])+"'>"+(evidencias_agregadas_add[i]).substr(0,5)+"<abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaAgregar("+'`'+(evidencias_agregadas_add[i])+'`'+")' data-dismiss='alert' aria-label='Close' style='padding:0px; margin:-3px'><span aria-hidden='true'>&times;</span></button></div></td>";
-			}
-			data_archivo_subir += "</tr></table>";
-			$("#divevidencias_agregar").html(data_archivo_subir);
-		});
-			
-		$("#table_lpt").dataTable().fnDestroy();
-		table_lpt = $('#table_lpt').DataTable({
-			dom: '<B><"rs_seleccione_participante">frtip',
-		    "scrollX": true,
-		    "scrollY": "250px",
-	        "scrollCollapse": true,
-		    "paging": false,
-		    "destroy": true,
-		    fixedHeader: true,
-		    lengthMenu: [
-		        [ 10, 15, 25, -1 ],
-		        [ '10 filas', '15 filas', '25 filas', 'Mostrar todas' ]
-		    ],
-		    "processing":true,
-		    language: {
-		        "decimal": "",
-		        "emptyTable": "No se han registrado",
-		        "info": "",
-		        "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
-		        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-		        "infoPostFix": "",
-		        "thousands": ",",
-		        "lengthMenu": "Mostrar _MENU_ Entradas",
-		        "loadingRecords": "Cargando Registros...",
-		        "processing": "Procesando...",
-		        "search": "Buscar:",
-		        "zeroRecords": "Sin datos",//No existen registros
-		        "paginate": {
-		            "first": "Primero",
-		            "last": "Ultimo",
-		            "next": "Siguiente",
-		            "previous": "Anterior"
-		        }
-		    },
-		    'ajax' : {
-		        "url" : url_base + 'pedesa/listaparticipantes_trabajo',
-		        "type" : "GET",
-		        "dataSrc" : ""
-		    },
-		    /*"deferRender": true,*/
-		    'columnDefs': [
-		    	{
-                    orderable: false,
-                    className: 'select-checkbox',
-                    targets:   0
-                },
-                { "visible": false, "targets": 6 },
-   		    	{ "visible": false, "targets": 7 },
-   		  		{ "visible": false, "targets": 8 },
-   		  		{ "visible": false, "targets": 9 },
-		     	{ "visible": false, "targets": 10 },
-		  		{ "visible": false, "targets": 11 },
-		  		{ "visible": false, "targets": 12 }
-		    ],
-            select: {
-                style:    'single', 
-                selector: 'td:first-child'
+	$("#table_lpt").dataTable().fnDestroy();
+	table_lpt = $('#table_lpt').DataTable({
+		dom: '<B><"rs_seleccione_participante">frtip',
+	    "scrollX": true,
+	    "scrollY": "250px",
+        "scrollCollapse": true,
+	    "paging": false,
+	    "destroy": true,
+	    fixedHeader: true,
+	    lengthMenu: [
+	        [ 10, 15, 25, -1 ],
+	        [ '10 filas', '15 filas', '25 filas', 'Mostrar todas' ]
+	    ],
+	    "processing":true,
+	    language: {
+	        "decimal": "",
+	        "emptyTable": "No se han registrado",
+	        "info": "",
+	        "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
+	        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+	        "infoPostFix": "",
+	        "thousands": ",",
+	        "lengthMenu": "Mostrar _MENU_ Entradas",
+	        "loadingRecords": "Cargando Registros...",
+	        "processing": "Procesando...",
+	        "search": "Buscar:",
+	        "zeroRecords": "Sin datos",
+	        "paginate": {
+	            "first": "Primero",
+	            "last": "Ultimo",
+	            "next": "Siguiente",
+	            "previous": "Anterior"
+	        }
+	    },
+	    'ajax' : {
+	        "url" : url_base + 'pedesa/listaparticipantes_trabajo',
+	        "type" : "GET",
+	        "dataSrc" : ""
+	    },
+	    'columnDefs': [
+	    	{
+                orderable: false,
+                className: 'select-checkbox',
+                targets:   0
             },
-		    'columns' : [
-		    	{
-           		  "data":null, render:function(){return "";}
-           		},
-		    	{ 'data' : 'appaterno' },
-		        { 'data' : 'apmaterno' },
-		        { 'data' : 'nombre' },
-		        { 'data' : 'tipodocumento' },
-		        { 'data' : 'nrodocumento' },
-                { 'data' : 'composicionmusical'},
-                { 'data' : 'cuento'},
-                { 'data' : 'poesia'},
-                { 'data' : 'dibujopintura'},
-                { 'data' : 'ahorraragua'},
-                { 'data' : 'modalidadindividual'},
-                { 'data' : 'modalidadgrupal'},
-                { 'data' : 'nivel'}
-		    ],
-		    buttons: []
-		});
-		$("div.rs_seleccione_participante").html("<strong>Seleccione participantes</strong>");
+            { "visible": false, "targets": 6 },
+	    	{ "visible": false, "targets": 7 },
+	  		{ "visible": false, "targets": 8 },
+	  		{ "visible": false, "targets": 9 },
+	     	{ "visible": false, "targets": 10 },
+	  		{ "visible": false, "targets": 11 },
+	  		{ "visible": false, "targets": 12 }
+	    ],
+        select: {
+            style:    'single', 
+            selector: 'td:first-child'
+        },
+	    'columns' : [
+	    	{
+       		  "data":null, render:function(){return "";}
+       		},
+	    	{ 'data' : 'appaterno' },
+	        { 'data' : 'apmaterno' },
+	        { 'data' : 'nombre' },
+	        { 'data' : 'tipodocumento' },
+	        { 'data' : 'nrodocumento' },
+            { 'data' : 'composicionmusical'},
+            { 'data' : 'cuento'},
+            { 'data' : 'poesia'},
+            { 'data' : 'dibujopintura'},
+            { 'data' : 'ahorraragua'},
+            { 'data' : 'modalidadindividual'},
+            { 'data' : 'modalidadgrupal'},
+            { 'data' : 'nivel'}
+	    ],
+	    buttons: []
+	});
+	$("div.rs_seleccione_participante").html("<strong>Seleccione participantes</strong>");
+	
+	$("#btncancelartrabajo").click(function(){
+		$("#modalagregartrabajo").modal('hide');
+	});
 		
-		$("#btncancelartrabajo").click(function(){
-			$("#modalagregartrabajo").modal('hide');
-		});
-		
-		$("#btncerrarmensajeinformaciontrabajo").click(function(){			
-			$("#modalInformaciontrabajo").modal('hide');
-		});
-		
-		$("#btncerrarmensajeinformaciontrabajo").click(function(){			
-			$("#modalinformaciontrabajo").modal('hide');
-		});
-		
-		$("#btncerrarmensajeexitotrabajo").click(function(){
-			$("#modalexitotrabajo").modal('hide');
-			$("#modalagregartrabajo").modal('hide');
-		}); 
-		
-		$("#btncerrarmensajeerrortrabajo").click(function(){
-			$("#modalerrortrabajo").modal('hide');
-		});
-		
-		$("#btnguardartrabajo").click(function(){	
-			
-			if(click){
-				click = false;
+	$("#btncerrarmensajeinformaciontrabajo").click(function(){			
+		$("#modalInformaciontrabajo").modal('hide');
+	});
+	
+	$("#btncerrarmensajeinformaciontrabajo").click(function(){			
+		$("#modalinformaciontrabajo").modal('hide');
+	});
+	
+	$("#btncerrarmensajeexitotrabajo").click(function(){
+		$("#modalexitotrabajo").modal('hide');
+		$("#modalagregartrabajo").modal('hide');
+	}); 
+	
+	$("#btncerrarmensajeerrortrabajo").click(function(){
+		$("#modalerrortrabajo").modal('hide');
+	});
+	
+	$("#btnguardartrabajo").click(function(){
+		if(click){
+			click = false;			
+			$("#modalimagencargando").modal({
+				show : true,
+				backdrop : 'static',
+				keyboard:false
+			});
+			if(validarCamposTrabajo()){			
+				conversacion = $("#conversacion").is(":checked") ? 1 : 0;
+				valoracionagua = $("#valoracionagua").is(":checked") ? 1 : 0 ;
+				valoracionalcantarillado = $("#valoracionalcantarillado").is(":checked") ? 1 : 0;
+				buenuso = $("#buenuso").is(":checked") ? 1 : 0;
+				importancia = $("#importancia").is(":checked") ? 1 : 0;
+				vinculo = $("#vinculo").is(":checked") ? 1 : 0;
+				carencias = $("#carencias").is(":checked") ? 1 : 0;
 				
-				$("#modalimagencargando").modal({
+				var trabajosfinales = {
+					categoriatrabajo  : {
+						id : categoriatrabajo
+					},
+					modalidadtrabajo : {
+						id : modalidadtrabajo
+					},
+					titulotrabajo  : titulotrabajo,
+					linkvideo : linkvideotrabajo,
+					conversacion : conversacion,
+					valoracionagua : valoracionagua,
+					valoracionalcantarillado : valoracionalcantarillado,
+					buenuso : buenuso,
+					importancia : importancia,
+					vinculo : vinculo,
+					puesto: 0,
+					carencias : carencias,
+					appaterno: apellidopaternotrabajo,
+					apmaterno : apellidomaternotrabajo,
+					nombre : nombretrabajo,
+					tipodocumento : {
+						id : tipodoctrabajo
+					},
+					estadotrabajo:{
+						id : 1
+					},
+					nrodocumento: nrodoctrabajo,
+					telefono : nrotelefonotrabajo,
+					correo  : correotrabajo,
+					genero : {
+						id : generotrabajo
+					},
+					estado : 1,
+					enviado : 0
+				};					
+				var trabajosfinalesparticipantesDto = {
+					trabajosfinales : trabajosfinales,
+					listaparticipante : arrayParticipante
+				}
+				$.ajax({
+					type : "POST",
+				    contentType : "application/json",
+				    url : url_base + "pedesa/savetrabajosfinalesparticipante",
+				    data : JSON.stringify(trabajosfinalesparticipantesDto),
+				    dataType : 'json',
+					success: function(respuesta) {	
+												
+						if(respuesta == -50){
+							$("#modalimagencargando").modal('hide');
+							$("#textoerrortrabajo").html("No se puede registrar trabajos con la misma categoria, modalidad y participantes");
+							$('#modalerrortrabajo').modal({
+								show : true,
+								backdrop : 'static',
+								keyboard:false
+							});
+							click = true;
+						}
+						else if(respuesta == -100){
+							 window.location = url_base + "pedesa";
+						}
+						else if (respuesta == 0){
+							$("#modalimagencargando").modal('hide');
+							$("#textoerrortrabajo").html("Error al registrar trabajo");
+							$('#modalerrortrabajo').modal({
+								show : true,
+								backdrop : 'static',
+								keyboard:false
+							});
+							click = true;
+						}
+						else{
+							var data = new FormData();
+							data.append('file',archivotrabajo.files[0]);
+							data.append('id',respuesta);
+							contador_archivos_subidos = 0;							
+							for(var i=0;i<mis_evidencias.length;i++){
+								data.append('files',mis_evidencias[i]);
+							}
+							$.ajax({
+						        type: "POST",
+						        enctype: 'multipart/form-data',
+						        url: url_base + "pedesa/subirtrabajoarchivoevidencia",
+						        data: data,
+						        processData: false, 
+						        contentType: false,
+						        cache: false,
+						        timeout: 600000,
+						        success: function (data) {		
+						        	
+						        	$("#modalimagencargando").modal('hide');
+						        	var nombreparticipante = "";
+						        	for(var i=0;i<arrayNombreParticipante.length;i++){
+						        		nombreparticipante += arrayNombreParticipante[i]  + "/";
+						        	}
+						        	nombreparticipante  = nombreparticipante.substr(0,nombreparticipante.length-1);
+						        	table_lista_trabajos_finales.row.add({
+						        		"id": respuesta,
+						        		"categoria": $("#categoriatrabajo option:selected").html(),
+						        		"titulo" : titulotrabajo   ,
+						        		"modalidad" : $("#modalidadpostulaciontrabajo option:selected").html(),
+						        		"participantes" : nombreparticipante,
+						        		"archivos" : mis_evidencias.length + (mis_evidencias.length>1 ? " evidencias " : " evidencia ") + archivotrabajo.files.length + " final",
+						        		"enviado" : 0,
+						        		"enviado" : 0,
+						        		"enviado" :0
+						        	}).draw();
+						        	
+								    limpiarControles();
+								    $("#textoexitotrabajo").html("Usted registro exitosamente un nuevo trabajo");
+									$('#modalexitotrabajo').modal({
+										show : true,
+										backdrop : 'static',
+										keyboard:false
+									});
+									
+						 			click = true;
+						        },
+						        error: function (e) {
+						            console.log("ERROR : ", e);
+						        }
+						    });								
+						}							
+					},
+					error: function() {
+						$("#modalimagencargando").modal('hide');
+						alert("Exception al registrar");
+						click = true;
+				    }
+				});	
+			}
+			else{
+				$("#modalimagencargando").modal('hide');
+				$("#textoinformaciontrabajo").html("<div style='color:red' class='text-left'>"+mensajeValidacion+"</div>");
+				$('#modalinformaciontrabajo').modal({
 					show : true,
 					backdrop : 'static',
 					keyboard:false
 				});
-				if(validarCamposTrabajo()){
-				
-					conversacion = $("#conversacion").is(":checked") ? 1 : 0;
-					valoracionagua = $("#valoracionagua").is(":checked") ? 1 : 0 ;
-					valoracionalcantarillado = $("#valoracionalcantarillado").is(":checked") ? 1 : 0;
-					buenuso = $("#buenuso").is(":checked") ? 1 : 0;
-					importancia = $("#importancia").is(":checked") ? 1 : 0;
-					vinculo = $("#vinculo").is(":checked") ? 1 : 0;
-					carencias = $("#carencias").is(":checked") ? 1 : 0;
-					
-					var trabajosfinales = {
-						categoriatrabajo  : {
-							id : categoriatrabajo
-						},
-						modalidadtrabajo : {
-							id : modalidadtrabajo
-						},
-						titulotrabajo  : titulotrabajo,
-						linkvideo : linkvideotrabajo,
-						conversacion : conversacion,
-						valoracionagua : valoracionagua,
-						valoracionalcantarillado : valoracionalcantarillado,
-						buenuso : buenuso,
-						importancia : importancia,
-						vinculo : vinculo,
-						puesto: 0,
-						carencias : carencias,
-						appaterno: apellidopaternotrabajo,
-						apmaterno : apellidomaternotrabajo,
-						nombre : nombretrabajo,
-						tipodocumento : {
-							id : tipodoctrabajo
-						},
-						estadotrabajo:{
-							id : 1
-						},
-						nrodocumento: nrodoctrabajo,
-						telefono : nrotelefonotrabajo,
-						correo  : correotrabajo,
-						genero : {
-							id : generotrabajo
-						},
-						estado : 1,
-						enviado : 0
-					};
-					
-					var trabajosfinalesparticipantesDto = {
-						trabajosfinales : trabajosfinales,
-						listaparticipante : arrayParticipante
-					}
-					
-					
-					$.ajax({
-						type : "POST",
-					    contentType : "application/json",
-					    url : url_base + "pedesa/savetrabajosfinalesparticipante",
-					    data : JSON.stringify(trabajosfinalesparticipantesDto),
-					    dataType : 'json',
-						success: function(respuesta) {	
-													
-							if(respuesta == -50){
-								$("#modalimagencargando").modal('hide');
-								$("#textoerrortrabajo").html("No se puede registrar trabajos con la misma categoria, modalidad y participantes");
-								$('#modalerrortrabajo').modal({
-									show : true,
-									backdrop : 'static',
-									keyboard:false
-								});
-								click = true;
-							}
-							else if(respuesta == -100){
-								 window.location = url_base + "pedesa";
-							}
-							else if (respuesta == 0){
-								$("#modalimagencargando").modal('hide');
-								$("#textoerrortrabajo").html("Error al registrar trabajo");
-								$('#modalerrortrabajo').modal({
-									show : true,
-									backdrop : 'static',
-									keyboard:false
-								});
-								click = true;
-							}
-							else{
-								var data = new FormData();
-								data.append('file',archivotrabajo.files[0]);
-								data.append('id',respuesta);
-								contador_archivos_subidos = 0;
-								for(var i=0;i<evidenciastrabajo.files.length;i++){
-									var bandera = false;
-									for(var j=0;j<evidencias_agregadas_add.length;j++){
-										if(evidenciastrabajo.files[i].name === evidencias_agregadas_add[j]){
-											bandera = true;
-										}
-									}
-									if(bandera){
-										data.append('files',evidenciastrabajo.files[i]);
-										contador_archivos_subidos++;
-									}	
-								}
-								$.ajax({
-							        type: "POST",
-							        enctype: 'multipart/form-data',
-							        url: url_base + "pedesa/subirtrabajoarchivoevidencia",
-							        data: data,
-							        processData: false, 
-							        contentType: false,
-							        cache: false,
-							        timeout: 600000,
-							        success: function (data) {		
-							        	
-							        	$("#modalimagencargando").modal('hide');
-							        	var nombreparticipante = "";
-							        	for(var i=0;i<arrayNombreParticipante.length;i++){
-							        		nombreparticipante += arrayNombreParticipante[i]  + "/";
-							        	}
-							        	nombreparticipante  = nombreparticipante.substr(0,nombreparticipante.length-1);
-							        	table_lista_trabajos_finales.row.add({
-							        		"id": respuesta,
-							        		"categoria": $("#categoriatrabajo option:selected").html(),
-							        		"titulo" : titulotrabajo   ,
-							        		"modalidad" : $("#modalidadpostulaciontrabajo option:selected").html(),
-							        		"participantes" : nombreparticipante,
-							        		"archivos" : contador_archivos_subidos + (contador_archivos_subidos>1 ? " evidencias " : " evidencia ") + archivotrabajo.files.length + " final",
-							        		"enviado" : 0,
-							        		"enviado" : 0,
-							        		"enviado" :0
-							        	}).draw();
-							        	
-									    limpiarControles();
-									    $("#textoexitotrabajo").html("Usted registro exitosamente un nuevo trabajo");
-										$('#modalexitotrabajo').modal({
-											show : true,
-											backdrop : 'static',
-											keyboard:false
-										});
-										
-							 			click = true;
-							        },
-							        error: function (e) {
-							            console.log("ERROR : ", e);
-							        }
-							    });								
-							}							
-						},
-						error: function() {
-							$("#modalimagencargando").modal('hide');
-							alert("Exception al registrar");
-							click = true;
-					    }
-					});	
-				}
-				else{
-					$("#modalimagencargando").modal('hide');
-					$("#textoinformaciontrabajo").html("<div style='color:red' class='text-left'>"+mensajeValidacion+"</div>");
-					$('#modalinformaciontrabajo').modal({
-						show : true,
-						backdrop : 'static',
-						keyboard:false
-					});
-					click = true;
-				}			
-			}
-		});		
-	/*});*/
+				click = true;
+			}			
+		}
+	});
 	
 	$('#table_lpt').DataTable().on("draw", function(){
 		console.log("draw");   	
@@ -667,25 +654,21 @@
    	    	
    	    	if(settings.nTable.id !== 'table_lpt'){
    	            return true;
-   	        }
-   	    	
+   	        }   	    	
    	    	var composicionmusical  = 0, cuento = 0, poesia = 0,  dibujopintura = 0 , ahorraragua = 0, modalidadindividual = 0 , modalidadgrupal = 0;
    	    	categoriatrabajo= $("#categoriatrabajo").val();
-   	    	modalidadtrabajo = $("#modalidadpostulaciontrabajo").val();
-   	    	
+   	    	modalidadtrabajo = $("#modalidadpostulaciontrabajo").val();   	    	
    	    	switch(categoriatrabajo){
    	    		case '1': composicionmusical = 1;  break;
    	    		case '2': cuento = 1; break;
    	    		case '3': poesia = 1;  break;
    	    		case '4': dibujopintura = 1; break;
    	    		case '5': ahorraragua = 1; break;
-   	    	}
-   	    	
+   	    	}   	    	
    	    	switch(modalidadtrabajo){
 	    		case '1': modalidadindividual = 1;  break;
 	    		case '2': modalidadgrupal = 1; break;
-	    	}
-   	    	
+	    	}   	    	
    	    	if(!filtraCategoriaModalidad(composicionmusical, data[6]))
    	    		return false;
    	    	if(!filtraCategoriaModalidad(cuento, data[7]))
@@ -704,13 +687,12 @@
    	    }
    	);
 	
-	function eliminarEvidenciaAgregar(archivo){
-		for(var i =0;i<evidencias_agregadas_add.length;i++){
-			if(evidencias_agregadas_add[i] == archivo){
-				evidencias_agregadas_add.splice(i,1);
+	function eliminarEvidenciaAgregar(indice){
+		for(var i =0;i<mis_evidencias.length;i++){
+			if(i == indice){
+				mis_evidencias.splice(i,1);
 			}
 		}
-		/*evidencias_agregadas_eliminadas_add.push(archivo);*/
 	}
 	
 	function filtraCategoriaModalidad(campo1, campo2){
@@ -847,9 +829,9 @@
 			mensajeValidacion += "Debe subir archivo de trabajo final"+"<br>";
 		}
 		else{
-			var archivotrabajo_name = (archivotrabajo.files[0]).name;
-			var archivotrabajo_size = (archivotrabajo.files[0]).size;
-			if(archivotrabajo_size >20000000){
+			var archivotrabajo_name = archivotrabajo.files[0].name;
+			var archivotrabajo_size = archivotrabajo.files[0].size;
+			if(archivotrabajo_size >40000000){
 				mensajeValidacion += "El archivo " + archivotrabajo_name +" no debe superar los 20MB"+"<br>";
 			}
 			var ext = archivotrabajo_name.split('.').pop();
@@ -866,46 +848,40 @@
 			}
 		}
 		
-		if((evidencias_agregadas_add.length>5) || (evidencias_agregadas_add.length == 0)){
-			mensajeValidacion += "Debe subir hasta 5 evidencias"+"<br>";
+		if((mis_evidencias.length>10) || (mis_evidencias.length == 0)){
+			mensajeValidacion += "Debe subir hasta 10 evidencias"+"<br>";
 		}
-		else{
-			
-			for(var i=0;i<evidenciastrabajo.files.length;i++){
-				
-				for(var j=0;j<evidencias_agregadas_add.length;j++){
-					if(evidenciastrabajo.files[i] == evidencias_agregadas_add[j]){						
-						var evidenciastrabajo_name = (evidenciastrabajo.files[i]).name;
-						var evidenciastrabajo_size = (evidenciastrabajo.files[i]).size;
-						if(evidenciastrabajo_size >20000000){
-							mensajeValidacion += "El archivo "  + evidenciastrabajo_name + " no debe superar los 20MB"+"<br>";
-						}
-						var ext = evidenciastrabajo_name.split('.').pop();
-						ext = ext.toLowerCase();
-						switch(ext){
-							case 'jpg': break;
-							case 'png': break;
-							case 'jpeg': break;
-							case 'pdf': break;
-							case 'docx': break;
-							case 'mp3': break;
-							case 'mp4': break;
-							default: mensajeValidacion += "El archivo " + evidenciastrabajo_name + " debe tener extensión jpg , png, pdf, word,mp3,mp4"+"<br>";	
-						}
-					}
+		else{			
+			for(var j=0;j<mis_evidencias.length;j++){
+				console.log("mis_evidencias[j] :" + mis_evidencias[j]);
+				var evidenciastrabajo_name = mis_evidencias[j].name;
+				var evidenciastrabajo_size = mis_evidencias[j].size;
+				if(evidenciastrabajo_size >40000000){
+					mensajeValidacion += "La evidencia "  + evidenciastrabajo_name + " no debe superar los 40MB"+"<br>";
+				}
+				var ext = evidenciastrabajo_name.split('.').pop();
+				ext = ext.toLowerCase();
+				switch(ext){
+					case 'jpg': break;
+					case 'png': break;
+					case 'jpeg': break;
+					case 'pdf': break;
+					case 'docx': break;
+					case 'mp3': break;
+					case 'mp4': break;
+					default: mensajeValidacion += "La evidencia " + evidenciastrabajo_name + " debe tener extensión jpg , png, pdf, word,mp3,mp4"+"<br>";	
 				}
 			}	
 		}
 		
-		if(linkvideotrabajo.trim()=="" &&  (categoriatrabajo == "1" || categoriatrabajo == "3") ){
+		/*if(linkvideotrabajo.trim()=="" &&  (categoriatrabajo == "1" || categoriatrabajo == "3") ){
 			mensajeValidacion += "Debe ingresar link de video"+"<br>";
-		}
+		}*/
 		
 		var array = table_lpt.rows(".selected").data();	
 		var nombre="";
 		for(i=0;i<array.length;i++){
 			array_nivel.push(array[i].nivel);
-			console.log("(array[i].id) :" + (array[i].id));
 			arrayParticipante.push({id : (array[i].id)});
 			nombre = array[i].nombre + " " + array[i].appaterno + " " + array[i].apmaterno;
 			arrayNombreParticipante.push(nombre);

@@ -45,4 +45,8 @@ public class RubricaServiceImpl implements IRubricaService{
 		return false;
 	}
 	
+	@Override
+	public int updateestado(Integer id,Integer estado) {
+		return repo.updateestado(id, estado);
+	}
 }

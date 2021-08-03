@@ -95,7 +95,7 @@
 			<div class="col-xs-12 col-sm-12 text-left w-100" >
 				<u>DATOS DEL TRABAJO</u> 	
 			</div>
-			<div class="col-xs-12 col-sm-4 text-left pt-4">
+			<div class="col-xs-12 col-sm-3 text-left pt-4">
 				<input type="hidden" th:value="${tf.id}" id="trabajooid" />
 				<input type="hidden" th:value="${participanteid}" id="participanteid" />
 				<input type="hidden" th:value="${nroevidencias}" id="nroevidencias" />
@@ -110,18 +110,18 @@
 				    <option th:each="len:${categoriatrabajo}" th:value="${len.id}" th:utext="${len.descripcion}" th:selected="${len.id} == 2"/>
 				</select>
 			</div>
-			<div class="col-xs-12 col-sm-4 text-left pt-4">
+			<div class="col-xs-12 col-sm-6 text-left pt-4">
 				<label for="modalidadpostulaciontrabajo">Modalidad de postulación</label>
 				<select class="form-control" id="modalidadpostulaciontrabajoeditar" name="modalidadpostulaciontrabajoeditar" th:field="*{tf.modalidadtrabajo.id}">
 					<option value="0">Seleccione</option>
 				    <option th:each="len:${modalidadtrabajo}" th:value="${len.id}" th:utext="${len.descripcion}" th:selected="${len.id} == 1"/>
 				</select>
 			</div>
-			<div class="col-xs-12 col-sm-4 text-left pt-4">
+			<div class="col-xs-12 col-sm-3 text-left pt-4">
 				<label for="titulotrabajo">Título de su trabajo final</label>
 				<input type="text" id="titulotrabajoeditar" name="titulotrabajoeditar" class="form-control" th:field="*{tf.titulotrabajo}"/>
 			</div>
-			<div class="col-xs-12 col-sm-4 text-left pt-4">
+			<div class="col-xs-12 col-sm-3 text-left pt-4">
 				<label for="archivotrabajo">Subir archivo de trabajo final</label>
 				<input type="file" id="archivotrabajoeditar" name="archivotrabajoeditar" class="form-control" disabled/>
 				<div class='alert alert-warning alert-dismissible fade show' role='alert'><strong th:text="${nombretrabajos}"></strong>
@@ -130,13 +130,13 @@
 					</button>
 				</div>
 			</div>
-			<div class="col-xs-12 col-sm-4 text-left pt-4">
+			<div class="col-xs-12 col-sm-6 text-left pt-4">
 				<label for="evidenciatrabajo">Subir archivos de evidencias</label>
 				<input type="file" id="evidenciastrabajoeditar" class="form-control" name="file[]"  multiple disabled/>				
 				<div id="divevidencias" style="height:65px;">											
 				</div>
 			</div>
-			<div class="col-xs-12 col-sm-4 text-left pt-4">
+			<div class="col-xs-12 col-sm-3 text-left pt-4">
 				<label for="linkvideo">Link de video</label>
 				<input type="text" id="linkvideoeditar" name="linkvideoeditar" class="form-control" th:disabled="${hd_categoria}" th:field="*{tf.linkvideo}"/>
 			</div>

@@ -25,7 +25,7 @@ public class Rubrica {
 	private String descripcion1;
 	
 	@Column(name="puntaje1",nullable=true)
-	private Integer puntaje1;
+	private float puntaje1;
 	
 	@Column(name="criterio2",nullable=true)
 	private String criterio2;
@@ -34,7 +34,7 @@ public class Rubrica {
 	private String descripcion2;
 	
 	@Column(name="puntaje2",nullable=true)
-	private Integer puntaje2;
+	private float puntaje2;
 	
 	@Column(name="criterio3",nullable=true)
 	private String criterio3;
@@ -43,7 +43,7 @@ public class Rubrica {
 	private String descripcion3;
 	
 	@Column(name="puntaje3",nullable=true)
-	private Integer puntaje3;
+	private float puntaje3;
 	
 	@Column(name="criterio4",nullable=true)
 	private String criterio4;
@@ -52,8 +52,11 @@ public class Rubrica {
 	private String descripcion4;
 	
 	@Column(name="puntaje4",nullable=true)
-	private Integer puntaje4;
-
+	private float puntaje4;
+	
+	@Column(name="ESTADO",nullable=true)
+	private Integer estado;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -86,11 +89,11 @@ public class Rubrica {
 		this.descripcion1 = descripcion1;
 	}
 
-	public Integer getPuntaje1() {
+	public float getPuntaje1() {
 		return puntaje1;
 	}
 
-	public void setPuntaje1(Integer puntaje1) {
+	public void setPuntaje1(float puntaje1) {
 		this.puntaje1 = puntaje1;
 	}
 
@@ -110,11 +113,11 @@ public class Rubrica {
 		this.descripcion2 = descripcion2;
 	}
 
-	public Integer getPuntaje2() {
+	public float getPuntaje2() {
 		return puntaje2;
 	}
 
-	public void setPuntaje2(Integer puntaje2) {
+	public void setPuntaje2(float puntaje2) {
 		this.puntaje2 = puntaje2;
 	}
 
@@ -134,11 +137,11 @@ public class Rubrica {
 		this.descripcion3 = descripcion3;
 	}
 
-	public Integer getPuntaje3() {
+	public float getPuntaje3() {
 		return puntaje3;
 	}
 
-	public void setPuntaje3(Integer puntaje3) {
+	public void setPuntaje3(float puntaje3) {
 		this.puntaje3 = puntaje3;
 	}
 
@@ -158,12 +161,20 @@ public class Rubrica {
 		this.descripcion4 = descripcion4;
 	}
 
-	public Integer getPuntaje4() {
+	public float getPuntaje4() {
 		return puntaje4;
 	}
 
-	public void setPuntaje4(Integer puntaje4) {
+	public void setPuntaje4(float puntaje4) {
 		this.puntaje4 = puntaje4;
+	}
+
+	public Integer getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Integer estado) {
+		this.estado = estado;
 	}
 	
 }

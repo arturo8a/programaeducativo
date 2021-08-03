@@ -135,84 +135,84 @@
 							</textElement>
 							<textFieldExpression><![CDATA[$F{rubrica}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField isBlankWhenNull="true">
 							<reportElement x="14" y="46" width="136" height="15" uuid="68e5fa24-849b-4877-adca-1993f1bf5fcc"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
 							</box>
 							<textFieldExpression><![CDATA[$F{criterio1}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField isBlankWhenNull="true">
 							<reportElement x="14" y="61" width="136" height="69" uuid="e32bfb94-41c3-42ec-bd70-1feb3d4d80d9"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
 							</box>
 							<textFieldExpression><![CDATA[$F{descripcion1}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField isBlankWhenNull="true">
 							<reportElement x="80" y="130" width="70" height="15" uuid="f0790459-5d38-4aac-94a4-994dc22a71ac"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
 							</box>
 							<textFieldExpression><![CDATA[$F{puntaje1}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField isBlankWhenNull="true">
 							<reportElement x="150" y="46" width="130" height="15" uuid="fc8762df-66bb-4604-800e-bf373c6c7e98"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
 							</box>
 							<textFieldExpression><![CDATA[$F{criterio2}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField isBlankWhenNull="true">
 							<reportElement x="150" y="61" width="130" height="69" uuid="4aa01f2e-50a3-414a-81e4-0f337769e7b8"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
 							</box>
 							<textFieldExpression><![CDATA[$F{descripcion2}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField isBlankWhenNull="true">
 							<reportElement x="220" y="130" width="60" height="15" uuid="094c6a04-a534-49c0-9853-cc711580c3df"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
 							</box>
 							<textFieldExpression><![CDATA[$F{puntaje2}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField isBlankWhenNull="true">
 							<reportElement x="280" y="46" width="140" height="15" uuid="402a53df-f7e3-4a7b-a816-aa756c59d1ec"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
 							</box>
 							<textFieldExpression><![CDATA[$F{criterio3}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField isBlankWhenNull="true">
 							<reportElement x="280" y="61" width="140" height="69" uuid="927c74b0-4307-4037-b72d-1eded1f0a4bd"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
 							</box>
 							<textFieldExpression><![CDATA[$F{descripcion3}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField isBlankWhenNull="true">
 							<reportElement x="360" y="130" width="60" height="15" uuid="07eed4f9-57a4-484b-9b58-d95d5f251f55"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
 							</box>
 							<textFieldExpression><![CDATA[$F{puntaje3}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField isBlankWhenNull="true">
 							<reportElement x="420" y="46" width="130" height="15" uuid="e78ec110-63d2-4b3f-941b-4bc3a8e832ea"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
 							</box>
 							<textFieldExpression><![CDATA[$F{criterio4}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField isBlankWhenNull="true">
 							<reportElement x="420" y="61" width="130" height="69" uuid="8b547045-ed1c-41e5-8f55-c52574acd5c3"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
 							</box>
 							<textFieldExpression><![CDATA[$F{descripcion4}]]></textFieldExpression>
 						</textField>
-						<textField>
+						<textField isBlankWhenNull="true">
 							<reportElement x="490" y="130" width="60" height="15" uuid="0eefa9df-dc77-49f9-9d3e-7d2f5cac5671"/>
 							<box>
 								<pen lineWidth="0.25" lineColor="#CFCFCF"/>
@@ -321,7 +321,7 @@
 		</band>
 		<band height="53">
 			<componentElement>
-				<reportElement x="0" y="0" width="550" height="51" uuid="aeb5b510-3bf2-4d2e-b217-229c96d41b54">
+				<reportElement x="0" y="0" width="550" height="49" uuid="aeb5b510-3bf2-4d2e-b217-229c96d41b54">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -329,9 +329,9 @@
 					<datasetRun subDataset="Dataset2" uuid="9ff4b249-7949-4c9a-ae38-f6827e0c173a">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{datasourcequestionario})]]></dataSourceExpression>
 					</datasetRun>
-					<jr:listContents height="51" width="550">
-						<textField>
-							<reportElement mode="Opaque" x="280" y="30" width="270" height="20" backcolor="#DEDEDE" uuid="92f506d7-f5f2-4652-99d7-c4604bb55f00">
+					<jr:listContents height="49" width="550">
+						<textField isBlankWhenNull="true">
+							<reportElement mode="Opaque" x="280" y="30" width="270" height="19" backcolor="#DEDEDE" uuid="92f506d7-f5f2-4652-99d7-c4604bb55f00">
 								<property name="com.jaspersoft.studio.unit.height" value="px"/>
 							</reportElement>
 							<box>
@@ -347,7 +347,7 @@
 							<textFieldExpression><![CDATA[$F{pregunta}]]></textFieldExpression>
 						</textField>
 						<subreport>
-							<reportElement x="0" y="30" width="550" height="20" uuid="9b5170c5-13eb-408b-989a-bb0402e14647"/>
+							<reportElement x="0" y="30" width="550" height="19" uuid="9b5170c5-13eb-408b-989a-bb0402e14647"/>
 							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{questionariorespuesta})]]></dataSourceExpression>
 							<subreportExpression><![CDATA["./sr_questionario_respuesta.jasper"]]></subreportExpression>
 						</subreport>

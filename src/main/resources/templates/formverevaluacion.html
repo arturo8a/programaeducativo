@@ -79,10 +79,7 @@
 											<label>Puntaje</label>
 										</td>
 										<td>
-											<select th:id="'puntaje' + ${objeto.id} + '1'" class="form-control" disabled>
-												<option value="0">Seleccione</option>
-												<option th:each="len:${listapuntaje}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje1}"/>
-											</select>
+											<input type="text" th:value="${objeto.puntaje1}" class="form-control" />
 										</td>
 									</tr>
 								</table>				
@@ -100,10 +97,7 @@
 											<label>Puntaje</label>
 										</td>
 										<td>
-											<select th:id="'puntaje' + ${objeto.id} + '2'" class="form-control" disabled>
-												<option value="0">Seleccione</option>
-												<option th:each="len:${listapuntaje}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje2}"/>
-											</select>
+											<input type="text" th:value="${objeto.puntaje2}" class="form-control" disabled/>
 										</td>
 									</tr>
 								</table>
@@ -121,10 +115,7 @@
 											<label>Puntaje</label>
 										</td>
 										<td>
-											<select th:id="'puntaje' + ${objeto.id} + '3'" class="form-control" disabled>
-												<option value="0">Seleccione</option>
-												<option th:each="len:${listapuntaje}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje3}"/>
-											</select>
+											<input type="text" th:value="${objeto.puntaje3}" class="form-control" disabled/>
 										</td>
 									</tr>
 								</table>
@@ -142,10 +133,7 @@
 											<label>Puntaje</label>
 										</td>
 										<td>
-											<select th:id="'puntaje' + ${objeto.id} + '4'" class="form-control" disabled>
-												<option value="0">Seleccione</option>
-												<option th:each="len:${listapuntaje}" th:value="${len}" th:utext="${len}" th:selected="${len == objeto.puntaje4}"/>
-											</select>
+											<input type="text" th:value="${objeto.puntaje4}" class="form-control" disabled/>
 										</td>
 									</tr>
 								</table>
@@ -171,10 +159,7 @@
 						</td>
 						<td>
 							<label>Puntaje</label>
-							<select th:id="'puntajeq'+ ${qr.id}" class="form-control" disabled>
-								<option value="0">Seleccione</option>
-								<option th:each="len:${listapuntaje}" th:value="${len}" th:utext="${len}" th:selected="${len == qr.puntaje}"/>
-							</select>
+							<input type="text" th:value="${qr.puntaje}" class="form-control" disabled/>
 						</td>
 					</tr>
 				</table>						

@@ -3,6 +3,7 @@ package com.progeduc.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import com.progeduc.model.Questionario;
@@ -42,5 +43,10 @@ public class QuestionarioServiceImpl implements IQuestionarioService{
 	public boolean Eliminar(Integer id) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	@Override 
+	public int updateestado(Integer id,Integer estado) {
+		return repo.updateestado(id, estado);
 	}
 }

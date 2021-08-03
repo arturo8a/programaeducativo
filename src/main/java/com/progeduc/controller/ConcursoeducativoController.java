@@ -186,6 +186,7 @@ public class ConcursoeducativoController {
 	private List<Integer> listaIdDto;
 	Integer max_numeracion = 0;
 	boolean verifica;
+	int estado_fuera_plazo=0;
 	
 	@PostMapping(value="/registrarconcurso")
 	public String registrarconcurso(@Valid @RequestBody Postulacionconcurso dto)  {
@@ -262,9 +263,6 @@ public class ConcursoeducativoController {
 		String codmod = ses.getAttribute("usuario").toString();		
 		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
 		
-		if(! verifivaExisteParticipanteTrabajo(categoria_dto,modalidad_dto,dto,pe.getId())) {
-			return -50;
-		}		
 		Date date= new Date();
 		long time = date.getTime();
 		Timestamp ts = new Timestamp(time);
@@ -274,6 +272,9 @@ public class ConcursoeducativoController {
 		dto.getTrabajosfinales().setProgramaeducativo(pe);
 		
 		if(dto.getTrabajosfinales().getId() == null) { /*cuando registra*/
+			if(! verifivaExisteParticipanteTrabajo(categoria_dto,modalidad_dto,dto,pe.getId())) {
+				return -50;
+			}
 			max_numeracion = trabajosfinalesServ.maxNumeracion(pe.getId());
 			if (max_numeracion == null)
 				dto.getTrabajosfinales().setNumeracion(1);
@@ -586,7 +587,8 @@ public class ConcursoeducativoController {
         				return pe.getId().toString();//pe ah sido aprobado
         			}
         			else {
-        				return "d"; /*esta fuera de las fechas - fecha desde cuarta y fecha hasta cuarta*/
+        				return pe.getId().toString();
+        				//return "d"; /*esta fuera de las fechas - fecha desde cuarta y fecha hasta cuarta*/
         			}
         		}
         		else {
@@ -1178,8 +1180,20 @@ public class ConcursoeducativoController {
 	@GetMapping(value = "/listatrabajosfinales")
 	public ResponseEntity<List<ListatrabajosfinalesDto>> listatrabajosfinales(HttpSession ses){
 		
-		String codmod = ses.getAttribute("usuario").toString();
-		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
+		estado_fuera_plazo=0;		
+		Calendar fecha = Calendar.getInstance();
+		Date date = Calendar.getInstance().getTime();
+		DateFormat formato = new SimpleDateFormat("dd/MM/yy");
+        String today = formato.format(date);
+        Aperturaranio ap = aperturaranioService.buscar(fecha.get(Calendar.YEAR));
+    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
+    	LocalDate fechaactual = LocalDate.parse(today, formatter);  
+    	
+    	String codmod = ses.getAttribute("usuario").toString();
+		Programaeducativo pe = progeducService.getActualByCodmod(codmod);	    	
+    	//Postulacionconcurso postconc = postulacionconcursoServ.getByIdAnio(pe.getId(), fecha.get(Calendar.YEAR));
+    	if(fechaactual.compareTo(ap.getCuartaetapadesde())>=0 && fechaactual.compareTo(ap.getCuartaetapahasta())<=0)
+    		estado_fuera_plazo = 1;
 		
 		List<ListatrabajosfinalesDto> lista = new ArrayList<ListatrabajosfinalesDto>();
 		List<Trabajosfinales> listaTrabajosfinales =  trabajosfinalesServ.listarhabilitados(pe.getId());
@@ -1187,35 +1201,33 @@ public class ConcursoeducativoController {
 			listaTrabajosfinales.forEach(obj->{		
 				
 				String archivos = "";
-				miparticipante = "";
-				
+				miparticipante = "";				
 				dtotf =new ListatrabajosfinalesDto();
-				
-				dtotf.setId(obj.getId());
-				
+				dtotf.setId(obj.getId());				
 				dtotf.setCategoria(obj.getCategoriatrabajo().getDescripcion());
 				dtotf.setTitulo(obj.getTitulotrabajo());
-				dtotf.setModalidad(obj.getModalidadtrabajo().getDescripcion());
-				
+				dtotf.setModalidad(obj.getModalidadtrabajo().getDescripcion());				
 				trabajosfinalesparticipanteServ.listar(obj.getId()).forEach(obj1->{
 					miparticipante += obj1.getParticipante().getNombreestudiante() + " " + obj1.getParticipante().getAppaternoestudiante() + " " + obj1.getParticipante().getApmaternoestudiante() + "/";
 				});
 				if(miparticipante.length()>0)
-					miparticipante = miparticipante.substring(0, miparticipante.length()-1);	
+					miparticipante = miparticipante.substring(0, miparticipante.length()-1);
 				
-				dtotf.setParticipantes(miparticipante);
-				
+				dtotf.setParticipantes(miparticipante);				
 				nro_evidencias = uploadfile.nroArchivos(obj.getId(), "upload_evidencias");
 				if(nro_evidencias == 1)
 					texto_evidencias = " evidencia ";
 				else
-					texto_evidencias = " evidencias ";
-				
-				archivos = nro_evidencias.toString() + texto_evidencias + uploadfile.nroArchivos(obj.getId(), "upload_trabajos").toString() + " final";
-				
+					texto_evidencias = " evidencias ";				
+				archivos = nro_evidencias.toString() + texto_evidencias + uploadfile.nroArchivos(obj.getId(), "upload_trabajos").toString() + " final";				
 				dtotf.setArchivos(archivos);
-				dtotf.setEnviado(obj.getEnviado());
+				if(estado_fuera_plazo == 1) {
+					dtotf.setEnviado(obj.getEnviado());	
+				}else {
+					dtotf.setEnviado(2);	
+				}
 				
+							
 				lista.add(dtotf);
 			});
 		}		
@@ -1301,7 +1313,6 @@ public class ConcursoeducativoController {
 	public ResponseEntity<List<ListaDocenteInscritos>> listadocentesinscritos(HttpSession ses) {
 		
 		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
-		System.out.println("tipousuarioid :" + tipousuarioid);	
 		List<ListaDocenteInscritos> arrayie = new ArrayList<ListaDocenteInscritos>();
 		if(tipousuarioid == 0){			
 			Object ob = ses.getAttribute("odsid");
@@ -1430,10 +1441,6 @@ public class ConcursoeducativoController {
 			
 			if(eval != null && listEvaResultado.size() == 0 && data.getTrabajosfinales().getEnviado() == 1) {
 				String strOds = "";
-				/*if(data.getTrabajosfinales().getProgramaeducativo().getOds()!=null) {
-					Ods ods = odsserv.byOds(data.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid());
-					strOds = ods.getDes_ods();
-				}*/
 				listaTrabajosFinalesPendientes = new ListaTrabajosFinalesPendientes();
 				listaTrabajosFinalesPendientes.setAnio(data.getTrabajosfinales().getAnio());
 				listaTrabajosFinalesPendientes.setCodigo(data.getTrabajosfinales().getProgramaeducativo().getCodmod()+"_"+data.getTrabajosfinales().getNumeracion());
@@ -1449,40 +1456,6 @@ public class ConcursoeducativoController {
 				lista.add(listaTrabajosFinalesPendientes);
 			}
 		});
-		
-
-		
-		/*List<Trabajosfinales> listaTrabajos = trabajosfinalesServ.listarTrabajosPendientes();
-		listaTrabajos.forEach(data->{
-			List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteServ.listar(data.getId());
-			Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
-			
-			Evaluacion eval = evaluacionService.getPorAnioCategoriaNivelparticipacion(data.getAnio(), 
-					data.getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
-			
-			if(eval != null) {
-				String strOds = "";
-				if(data.getProgramaeducativo().getOds()!=null) {
-					Ods ods = odsserv.byOds(data.getProgramaeducativo().getDistrito().getOdsid());
-					strOds = ods.getDes_ods();
-				}
-				listaTrabajosFinalesPendientes = new ListaTrabajosFinalesPendientes();
-				listaTrabajosFinalesPendientes.setAnio(data.getAnio());
-				listaTrabajosFinalesPendientes.setCodigo(data.getProgramaeducativo().getId()+"_"+data.getId());
-				listaTrabajosFinalesPendientes.setOds(strOds);
-				listaTrabajosFinalesPendientes.setIiee(data.getProgramaeducativo().getCodmod());
-				listaTrabajosFinalesPendientes.setCategoria(data.getCategoriatrabajo().getDescripcion());
-				listaTrabajosFinalesPendientes.setModalidad(data.getModalidadtrabajo().getDescripcion());
-				listaTrabajosFinalesPendientes.setTitulotrabajo(data.getTitulotrabajo());
-				listaTrabajosFinalesPendientes.setNivelparticipacion(participante.getGradoestudiante().getNivelgradopartdesc());
-				listaTrabajosFinalesPendientes.setFichatrabajo("ficha trabajo");
-				listaTrabajosFinalesPendientes.setEvaluacion("ficha trabajo");
-				listaTrabajosFinalesPendientes.setTrabajo("ficha trabajo");
-				listaTrabajosFinalesPendientes.setFichatrabajo("ficha trabajo");
-				lista.add(listaTrabajosFinalesPendientes);
-			}
-			
-		});	*/	
 		return new ResponseEntity<List<ListaTrabajosFinalesPendientes>>(lista, HttpStatus.OK) ;
 	}
 	
@@ -1500,11 +1473,6 @@ public class ConcursoeducativoController {
 					data.getTrabajosfinales().getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
 			List<EvaluacionResultado> listEvaResultado = evaluacionRespuestaServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
 			if(eval != null &&  listEvaResultado.size() > 0  && data.getTrabajosfinales().getEnviado() == 1) {
-				/*String strOds = "";
-				if(data.getTrabajosfinales().getProgramaeducativo().getOds()!=null) {
-					Ods ods = odsserv.byOds(data.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid());
-					strOds = ods.getDes_ods();
-				}*/
 				listaTrabajosFinalesPendientes = new ListaTrabajosFinalesPendientes();
 				listaTrabajosFinalesPendientes.setAnio(data.getTrabajosfinales().getAnio());
 				listaTrabajosFinalesPendientes.setCodigo(data.getTrabajosfinales().getProgramaeducativo().getCodmod()+"_"+data.getTrabajosfinales().getNumeracion());
@@ -1519,39 +1487,7 @@ public class ConcursoeducativoController {
 				listaTrabajosFinalesPendientes.setFichatrabajo("ficha trabajo");
 				lista.add(listaTrabajosFinalesPendientes);
 			}
-		});
-		/*List<ListaTrabajosFinalesPendientes> lista = new ArrayList<ListaTrabajosFinalesPendientes>();
-		List<Trabajosfinales> listaTrabajos = trabajosfinalesServ.listarTrabajosEvaluados();
-		listaTrabajos.forEach(data->{
-			List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteServ.listar(data.getId());
-			Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
-			
-			Evaluacion eval = evaluacionService.getPorAnioCategoriaNivelparticipacion(data.getAnio(), 
-					data.getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
-			
-			if(eval != null) {
-				String strOds = "";
-				if(data.getProgramaeducativo().getOds()!=null) {
-					Ods ods = odsserv.byOds(data.getProgramaeducativo().getDistrito().getOdsid());
-					strOds = ods.getDes_ods();
-				}
-				listaTrabajosFinalesPendientes = new ListaTrabajosFinalesPendientes();
-				listaTrabajosFinalesPendientes.setAnio(data.getAnio());
-				listaTrabajosFinalesPendientes.setCodigo(data.getProgramaeducativo().getId()+"_"+data.getId());
-				listaTrabajosFinalesPendientes.setOds(strOds);
-				listaTrabajosFinalesPendientes.setIiee(data.getProgramaeducativo().getCodmod());
-				listaTrabajosFinalesPendientes.setCategoria(data.getCategoriatrabajo().getDescripcion());
-				listaTrabajosFinalesPendientes.setModalidad(data.getModalidadtrabajo().getDescripcion());
-				listaTrabajosFinalesPendientes.setTitulotrabajo(data.getTitulotrabajo());
-				listaTrabajosFinalesPendientes.setNivelparticipacion(participante.getGradoestudiante().getNivelgradopartdesc());
-				listaTrabajosFinalesPendientes.setFichatrabajo("ficha trabajo");
-				listaTrabajosFinalesPendientes.setEvaluacion("ficha trabajo");
-				listaTrabajosFinalesPendientes.setTrabajo("ficha trabajo");
-				listaTrabajosFinalesPendientes.setFichatrabajo("ficha trabajo");
-				lista.add(listaTrabajosFinalesPendientes);
-			}
-			
-		});	*/	
+		});	
 		return new ResponseEntity<List<ListaTrabajosFinalesPendientes>>(lista, HttpStatus.OK) ;
 	}
 	

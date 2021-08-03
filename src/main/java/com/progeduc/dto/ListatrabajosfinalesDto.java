@@ -9,6 +9,7 @@ public class ListatrabajosfinalesDto {
 	String participantes;
 	String archivos;
 	Integer enviado;
+	Integer fuera_plazo;
 	
 	public String getCategoria() {
 		return categoria;
@@ -51,6 +52,12 @@ public class ListatrabajosfinalesDto {
 	}
 	public void setEnviado(Integer enviado) {
 		this.enviado = enviado;
+	}
+	public Integer getFuera_plazo() {
+		return fuera_plazo;
+	}
+	public void setFuera_plazo(Integer fuera_plazo) {
+		this.fuera_plazo = fuera_plazo;
 	}
 	
 	

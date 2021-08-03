@@ -23,7 +23,6 @@ public class UploadFileService {
             byte[] bytes = file.getBytes();            
             File directorio = new File(upload_folder+ ruta+ "//"+id+"//");
             if(directorio.mkdirs()) {
-            	System.out.println("name :" + file.getOriginalFilename());
             	Path path = Paths.get(upload_folder + ruta+ "//"+id+"//" + file.getOriginalFilename());
             	Files.write(path,bytes);
             }
@@ -38,7 +37,6 @@ public class UploadFileService {
     public void saveFile(List<MultipartFile> file,Integer id,String ruta) throws IOException {
     	
     	File directorio = new File(upload_folder+ ruta+ "//"+id+"//");
-    	System.out.println("file length :" + file.size());
         if(directorio.mkdirs()) {
         	for(int i=0;i<file.size();i++) {
         		byte[] bytes = file.get(i).getBytes();
