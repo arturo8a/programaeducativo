@@ -59,6 +59,11 @@ public class ProgramaeducativoServiceImpl implements IProgramaeducativoService{
 	}
 	
 	@Override
+	public List<Programaeducativo> getListarHabilitadosAnioActual(){
+		return progeducRepo.getListarHabilitadosAnioActual();
+	}
+	
+	@Override
 	public List<Programaeducativo> listar(Integer iddistrito){
 		return progeducRepo.listar(iddistrito);
 	}

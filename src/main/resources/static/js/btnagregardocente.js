@@ -98,6 +98,9 @@ $(document).ready(function(){
 							keyboard:false
 						});	
 					}
+					else if(respuesta.id == -100){
+						 window.location = url_base + "pedesa";
+					}
 					else if(respuesta.id==0){
 						$("#modalimagencargando").modal('hide');
 						$("#textoErrorDocente").html("Error al registrar Docente");

@@ -2,7 +2,7 @@ package com.progeduc.dto;
 
 public class ListaTrabajosFinalesPendientes {
 	
-	int codigo;
+	String codigo;
 	int anio;
 	String ods;
 	String iiee;
@@ -22,10 +22,10 @@ public class ListaTrabajosFinalesPendientes {
 	public void setTrabajo(String trabajo) {
 		this.trabajo = trabajo;
 	}
-	public int getCodigo() {
+	public String getCodigo() {
 		return codigo;
 	}
-	public void setCodigo(int codigo) {
+	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
 	public int getAnio() {

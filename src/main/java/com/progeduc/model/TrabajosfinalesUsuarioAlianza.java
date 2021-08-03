@@ -1,5 +1,6 @@
 package com.progeduc.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
@@ -15,6 +16,9 @@ public class TrabajosfinalesUsuarioAlianza {
 	
 	@Id
 	private UsuarioAlianza usuarioalianza;
+	
+	@Column(name="nota")
+	private Float nota;
 
 	public Trabajosfinales getTrabajosfinales() {
 		return trabajosfinales;
@@ -30,6 +34,14 @@ public class TrabajosfinalesUsuarioAlianza {
 
 	public void setUsuarioalianza(UsuarioAlianza usuarioalianza) {
 		this.usuarioalianza = usuarioalianza;
+	}
+
+	public Float getNota() {
+		return nota;
+	}
+
+	public void setNota(Float nota) {
+		this.nota = nota;
 	}
 	
 }

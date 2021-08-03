@@ -246,6 +246,9 @@ $(document).ready(function(){
 					        }
 					    });						
 					}
+					else if(respuesta == -100){
+						 window.location = url_base + "pedesa";
+					}
 					else if(respuesta==0){
 						$("#modalimagencargando").modal('hide');
 						$("#textoerror").html("Error al registrar participante");
@@ -367,7 +370,10 @@ function validarCampos(){
 	if(correoelectronicopmt.trim()==""){
 		mensajeValidacion += "Debe ingresar Correo Electrónico del Padre , Madre o Tutor"+"<br>";
 	}
-	if(!(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(correoelectronicopmt))){		
+	/*if(!(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(correoelectronicopmt))){		
+		mensajeValidacion += "Debe ingresar Correctamente el Correo Electrónico del Padre , Madre o Tutor"+"<br>";
+	}*/
+	if(correoelectronicopmt.indexOf('@', 0) == -1 || correoelectronicopmt.indexOf('.', 0) == -1) {
 		mensajeValidacion += "Debe ingresar Correctamente el Correo Electrónico del Padre , Madre o Tutor"+"<br>";
 	}
 	

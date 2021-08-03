@@ -87,15 +87,15 @@ $(document).ready(function(){
 			    dataType : 'json',
 				success: function(respuesta) {
 					console.log("respuesta :"+ JSON.stringify(respuesta));
-					if(respuesta!=undefined){				 
+					if(respuesta>0){				 
 			      		$("#modalimagencargando").modal('hide');
-			            table_lista_docentes.cell(celdaseleccionada,1).data(respuesta.appaterno).draw();
-						table_lista_docentes.cell(celdaseleccionada,2).data(respuesta.apmaterno).draw();
-						table_lista_docentes.cell(celdaseleccionada,3).data(respuesta.nombre).draw();
+			            table_lista_docentes.cell(celdaseleccionada,1).data(appaternodocenteeditar).draw();
+						table_lista_docentes.cell(celdaseleccionada,2).data(apmaternodocenteeditar).draw();
+						table_lista_docentes.cell(celdaseleccionada,3).data(nombredocenteeditar).draw();
 						table_lista_docentes.cell(celdaseleccionada,4).data($("#tipodocumentodocenteeditar option:selected").html()).draw();
-						table_lista_docentes.cell(celdaseleccionada,5).data(respuesta.nrodocumento).draw();
-						table_lista_docentes.cell(celdaseleccionada,6).data(respuesta.nrotelefono).draw();
-						table_lista_docentes.cell(celdaseleccionada,7).data(respuesta.correoelectronico).draw();
+						table_lista_docentes.cell(celdaseleccionada,5).data(nrodocumentodocenteeditar).draw();
+						table_lista_docentes.cell(celdaseleccionada,6).data(nrotelefonodocenteeditar).draw();
+						table_lista_docentes.cell(celdaseleccionada,7).data(correoelectronicodocenteeditar).draw();
 						
 						$("#textoexitoeditar").html("Usted modificó exitosamente los datos del docente");
 						$('#modalexitoeditar').modal({
@@ -104,9 +104,12 @@ $(document).ready(function(){
 							keyboard:false
 						});
 					}
+					else if(respuesta == -100){
+						 window.location = url_base + "pedesa";
+					}
 					else{
 						$("#modalimagencargando").modal('hide');
-						$("#textoerroreditar").html("IE no se ha registrado actualmente en el Programa Educativo");
+						$("#textoerroreditar").html("IE no se actualizo los datos del docente");
 						$('#modalerroreditar').modal({
 							show : true,
 							backdrop : 'static',

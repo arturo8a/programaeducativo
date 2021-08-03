@@ -44,7 +44,7 @@ var listar = function (){ console.log('listar()');
 		    "processing":true,
 		    language: {
 		        "decimal": "",
-		        "emptyTable": "No se encontraron registros'",
+		        "emptyTable": "No se encontraron registros",
 		        "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
 		        "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
 		        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -82,26 +82,31 @@ var listar = function (){ console.log('listar()');
 		        { 'data' : 'modalidad' },
 		        { 'data' : 'titulotrabajo' },
 		       	{ 'data' : 'nivelparticipacion' },
-		        { 'data' : 'codigo' ,
+		        { 'data' : 'trabajo' ,
 	                   render: function(data, type) {
 	                   		var x = '<img src="./images/iconos_nd/pdf1.svg" class="fichatrabajo" data-id="'+data+'" style="width:20px; cursor:pointer"/>';
                             return x;
                         }
                 },
-                { 'data' : 'codigo' ,
+                { 'data' : 'trabajo' ,
 	                   render: function(data, type) {
 	                   		var x = '<img src="./images/svg/eye-solid.svg" class="evidencia" data-id="'+data+'" style="width:20px; cursor:pointer"/>';
                             return x;
                         }
                 },
-		        { 'data' : 'codigo' ,
+		        { 'data' : 'trabajo' ,
 	                   render: function(data, type) {
 	                   		var x = '<img src="./images/svg/eye-solid.svg" class="trabajo" data-id="'+data+'" style="width:20px; cursor:pointer"/>';
                             return x;
                         }
                 },
-		        { 'data' : 'permisos' },
-		        { 'data' : 'codigo' ,
+		        { 'data' : 'trabajo', 
+	                   render: function(data, type) {
+	                   		var x = '<img src="./images/svg/eye-solid.svg" onclick="openModalTrabajosPermisos('+data+')" style="width:20px; cursor:pointer"/>';
+                            return x;
+                        }
+		        },
+		        { 'data' : 'trabajo' ,
 	                   render: function(data, type) {
 	                   		var x = "<button type='button' data-id='"+data+"' class='registrarEvaliacion btn btn-primary'>Evaluar</button>";
 	                        /*switch (data) {
@@ -132,7 +137,6 @@ $('#table_trabajos_pendientes').DataTable().on("draw", function(){
 
 $.fn.dataTable.ext.search.push(
 	function( settings, data, dataIndex ) {
-		console.log("settings.nTable.id :" + settings.nTable.id);
 		if ( settings.nTable.id !== 'table_trabajos_pendientes' ) {
 	        return true;
 	    }
@@ -176,7 +180,7 @@ function filtraSelect(dato,campo){
 }
 
 var obtener_data_form = function(tbody,table){
-	$(tbody).on("click","button.registrarEvaliacion",function(){
+	$(tbody).on("click","button.registrarEvaliacion",function(){ console.log('open modal registrar evaluacion');
 		registarEvaliacionTrabajosPendientes($(this).attr('data-id'));
 	});
 };
@@ -212,7 +216,9 @@ function registarEvaliacionTrabajosPendientes(id){ console.log('-->registarEvali
 	    url : url_base + "pedesa/formregistrarevaluacion/"+ id,
 		success: function(respuesta) {
 			$("#contenidoevaluartrabajospendientes").html(respuesta);
+			$("#modalimagencargando").modal('hide');
 			$("#modaleEvaluarTrabajoPendientes").modal();
+			
 		},
 		error: function() {
 			$("#modalimagencargando").modal('hide');

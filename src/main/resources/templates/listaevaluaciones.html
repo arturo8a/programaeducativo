@@ -10,6 +10,8 @@
 <script type="text/javascript" th:src="@{/js/datetime-moment-order.js}"></script>
 <script type="text/javascript" th:src="@{/js/moment.js}"></script>
 
+
+
 <style>
 	.rs_evaluaciones{
 		  /*width:33%;*/
@@ -25,6 +27,11 @@
 </style>
 
 <div id="containerListaRegistros" class="pl-3 pr-3">
+	<div class="row  div_titulo">
+		<div class="col-xs-12 col-sm-12 pl-0 bg-primary">
+			<img src="./images/iconos_nd/ConcursoEscolartitulo.svg" class="pt-1 pb-1 pl-3"><strong class="pt-3">EVALUACIONES</strong>
+		</div>
+	</div>
 	<div class="div_filtro">
 		<div class="row p-0 m-0">			
 			<div class="col-xs-4 col-sm-4">
@@ -194,7 +201,25 @@
 	    </div>
 	  </div>
 	</div>
-
+	
+	<div class="modal" tabindex="-1" role="dialog" id="modalerroreditevaluacion">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <img th:src="@{./images/imagen_informacion11.png}" />&nbsp;&nbsp; <label class="pt-1" style="padding-right:380px">Alerta</label>
+	        <!-- button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button-->
+	      </div>
+	      <div class="modal-body" id="textoerroreditevaluacion">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeerroreditevaluacion" name="btncerrarmensajeerroreditevaluacion">Cerrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
 </html>
 <script type="text/javascript">
 		
@@ -305,7 +330,22 @@
 	                            return x;
 	                        }
 		                },
-				        { 'defaultContent' : '<img src="./images/iconos_nd/eliminar.svg" class="eliminar" style="width:15px; cursor:pointer " />'}
+		                { 'data' : 'estado',
+		                	render: function(data, type) { 
+		                   		var x = '';
+		                        switch (data) {
+		                            case 'Editando':
+		                                x = '<img src="./images/iconos_nd/eliminar.svg" class="eliminar" style="width:15px; cursor:pointer" />';
+		                                break;
+		                            default:
+		                            	x = '<img src="./images/iconos_nd/eliminar.svg" style="width:15px;filter:invert(70%)"  />' ;
+		                                break;
+	                            }
+	                            return x;
+	                        }	
+		                
+		                }/*
+				        { 'defaultContent' : '<img src="./images/iconos_nd/eliminar.svg" class="eliminar" style="width:15px; cursor:pointer " />'}*/
 		            ],
 		            'columnDefs': [
 		            	 {
@@ -323,7 +363,7 @@
 		             ],
 		             buttons: []
 		        });
-				$("div.rs_evaluaciones").html("<strong>RESULTADOS DE EVALUACIONES</strong>")
+				$("div.rs_evaluaciones").html("<strong>RESULTADOS DE EVALUACIONES</strong>");
 				obtener_data_verPdf("#table_lista_evaluacion tbody",table_lista_evaluacion);
 				obtener_data_editar("#table_lista_evaluacion tbody",table_lista_evaluacion);
 				obtener_data_ver("#table_lista_evaluacion tbody",table_lista_evaluacion);
@@ -493,7 +533,6 @@
 		$.fn.dataTable.ext.search.push(
     	    function( settings, data, dataIndex ) {
     	    	
-    	    	console.log("settings.nTable.id :" + settings.nTable.id);
     	    	if ( settings.nTable.id !== 'table_lista_evaluacion' ) {
     	            return true;
     	          }

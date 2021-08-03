@@ -288,6 +288,9 @@ $(document).ready(function(){
 						}	
 											
 					}
+					else if(respuesta == -100){
+						 window.location = url_base + "pedesa";
+					}
 					else if(respuesta==0){
 						$("#modalimagencargando").modal('hide');
 						$("#textoerror").html("Error al registrar participante");
@@ -414,23 +417,30 @@ function validarCamposEditar(){
 	}
 	
 	if(bandera){
-		var fichaparticipanteeditar_name = (fichaparticipanteeditar.files[0]).name;
-		var fichaparticipanteeditar_size = (fichaparticipanteeditar.files[0]).size;
-		if(fichaparticipanteeditar_size >5000000){
-			mensajeValidacionEditar += "El archivo no debe superar los 5MB"+"<br>";
+		
+		if(fichaparticipanteeditar.files[0] === undefined){
+			
+			mensajeValidacionEditar += "Debe seleccionar ficha de autorización <br>";
 		}
-		var ext = fichaparticipanteeditar_name.split('.').pop();
-		ext = ext.toLowerCase();
-		switch(ext){
-			case 'jpg': break;
-			case 'png': break;
-			case 'jpeg': break;
-			case 'pdf': break;
-			case 'docx': break;
-			default: mensajeValidacionEditar += "El archivo debe tener extensión jpg , png, pdf, word"+"<br>";	
-		}	
+		else{
+			var fichaparticipanteeditar_name = (fichaparticipanteeditar.files[0]).name;
+			var fichaparticipanteeditar_size = (fichaparticipanteeditar.files[0]).size;
+			if(fichaparticipanteeditar_size >5000000){
+				mensajeValidacionEditar += "El archivo no debe superar los 5MB"+"<br>";
+			}
+			var ext = fichaparticipanteeditar_name.split('.').pop();
+			ext = ext.toLowerCase();
+			switch(ext){
+				case 'jpg': break;
+				case 'png': break;
+				case 'jpeg': break;
+				case 'pdf': break;
+				case 'docx': break;
+				default: mensajeValidacionEditar += "El archivo debe tener extensión jpg , png, pdf, word"+"<br>";	
+			}	
+		}		
 	}
-	console.log("mensajeValidacionEditar .. "+ mensajeValidacionEditar);
+	
 	if(mensajeValidacionEditar!=""){
 		return false;
 	}

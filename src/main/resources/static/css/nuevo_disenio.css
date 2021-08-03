@@ -13,6 +13,12 @@
 	margin:5px;
 }
 
+.div_titulo{
+	padding:4px;
+	border-radius: 5px 5px 5px 5px;
+	margin:5px;
+}
+
 #content{
 	background:#F4F7FA;
 }
@@ -30,4 +36,32 @@
 
 .btn_refresh svg{
 	fill: white;
+}
+
+.mi_alert-dismissible .mi_close{
+	position : absolute;
+	top: 0;
+	right : 0;
+	padding : 0.75rem 1.25rem;
+	color : inherit;
+}
+
+.mi_alert{
+	position : relative;
+	padding: 0.35rem 0.25rem;
+	margin-bottom : 0.5rem;
+	border : 1px solid transparent;
+	border-radius: 0.25rem;
+}
+
+.mi_alert-warning{
+	color : #856404;
+	background-color : #fff3cd;
+	border-color : #ffeeba;
+}
+
+.mi_alert-primary{
+	color : #856404;
+	background-color : #4B96F8;
+	border-color : #4B96F8;
 }

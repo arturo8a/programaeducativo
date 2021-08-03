@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sr_questionario_respuesta" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="531fef2c-a209-4d1a-bb1b-8259cb4f3b66">
 	<field name="puntaje" class="java.lang.Integer"/>
 	<field name="respuesta" class="java.lang.String"/>
@@ -7,22 +7,60 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="54" splitType="Stretch">
+		<band height="40" splitType="Stretch">
 			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 			<textField>
-				<reportElement x="0" y="0" width="280" height="30" uuid="07c679bc-8099-4b42-a466-a8eba8b9df16"/>
+				<reportElement mode="Transparent" x="-9" y="20" width="269" height="20" uuid="07c679bc-8099-4b42-a466-a8eba8b9df16">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25" lineColor="#CFCFCF"/>
+					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{respuesta}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="280" y="0" width="270" height="30" uuid="83b901e0-440b-424e-9cd9-041a0505cf45"/>
+				<reportElement mode="Transparent" x="260" y="20" width="270" height="20" uuid="83b901e0-440b-424e-9cd9-041a0505cf45">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25" lineColor="#CFCFCF"/>
+					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CFCFCF"/>
+				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{puntaje}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="-9" y="0" width="269" height="20" backcolor="#F5F5F5" uuid="99596e78-358b-4888-908b-c2064adc1842">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25" lineColor="#F5F5F5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[respuesta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="260" y="0" width="270" height="20" backcolor="#F5F5F5" uuid="55efe065-672b-43f8-9c90-b6c080f3de37">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25" lineColor="#F5F5F5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[puntaje]]></text>
+			</staticText>
 		</band>
 	</detail>
 </jasperReport>

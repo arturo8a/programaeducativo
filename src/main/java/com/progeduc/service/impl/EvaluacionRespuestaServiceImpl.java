@@ -58,6 +58,23 @@ public class EvaluacionRespuestaServiceImpl implements IEvaluacionRespuestaServi
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public EvaluacionResultado getPorCodigoTrabajoAndCodigoPreginta(Integer idTrabajo, Integer idPregunta) {
+		// TODO Auto-generated method stub
+		return evaRepo.getPorCodigoTrabajoAndCodigoPreginta(idTrabajo, idPregunta);
+	}
+
+	@Override
+	public List<EvaluacionResultado> getRespuestas(Integer idTrabajo) {
+		// TODO Auto-generated method stub
+		return evaRepo.getRespuestas(idTrabajo);
+	}
+
+	@Override
+	public List<EvaluacionResultado> listaEvaluacionResultado(Integer idTrabajo, Integer idUsuario) {
+		return evaRepo.listaEvaluacionResultado(idTrabajo, idUsuario);
+	}
 	
 	
 	

@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.progeduc.model.TrabajosfinalesParticipante;
+import com.progeduc.model.TrabajosfinalesUsuarioAlianza;
 import com.progeduc.repo.ITrabajosfinalesUsuarioAlianzaRepo;
 import com.progeduc.service.ITrabajosfinales_UsuarioAlianzaService;
 
@@ -16,21 +16,33 @@ public class Trabajosfinales_UsuarioAlianzaServiceImpl implements ITrabajosfinal
 	ITrabajosfinalesUsuarioAlianzaRepo trabajosfinalesUsuarioAlianzaRepo;
 	
 	@Override
-	public Integer guardar(Integer trabajosfinalesid, Integer usuarioalianzaid) {
-		// TODO Auto-generated method stub
-		return trabajosfinalesUsuarioAlianzaRepo.guardar(trabajosfinalesid, usuarioalianzaid);
+	public Integer guardar(Integer trabajosfinalesid, Integer usuarioalianzaid, Float nota) {
+		return trabajosfinalesUsuarioAlianzaRepo.guardar(trabajosfinalesid, usuarioalianzaid, nota);
 	}
 
 	@Override
 	public Integer eliminar(Integer trabajosfinalesid) {
-		// TODO Auto-generated method stub
 		return trabajosfinalesUsuarioAlianzaRepo.eliminar(trabajosfinalesid);
 	}
 
 	@Override
-	public List<TrabajosfinalesParticipante> listarByTrabajosfinalesId(Integer trabajofinalid) {
-		// TODO Auto-generated method stub
+	public List<TrabajosfinalesUsuarioAlianza> listarByTrabajosfinalesId(Integer trabajofinalid) {
 		return trabajosfinalesUsuarioAlianzaRepo.listarByTrabajosfinalesId(trabajofinalid);
+	}
+	
+	@Override
+	public List<TrabajosfinalesUsuarioAlianza> listarAll(){
+		return trabajosfinalesUsuarioAlianzaRepo.listarAll();
+	}
+	
+	@Override
+	public TrabajosfinalesUsuarioAlianza buscar(Integer trabajofinalid, Integer usuarioalianzaid) {
+		return trabajosfinalesUsuarioAlianzaRepo.buscar(trabajofinalid, usuarioalianzaid);
+	}
+
+	@Override
+	public List<TrabajosfinalesUsuarioAlianza> listaTrabajosIdByUsuarioId(Integer usuarioalianzaid) {
+		return trabajosfinalesUsuarioAlianzaRepo.listaTrabajosIdByUsuarioId(usuarioalianzaid);
 	}
 
 }

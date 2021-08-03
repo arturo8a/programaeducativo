@@ -9,4 +9,6 @@ public interface IEvaluacionRubricaService extends ICRUD<Evaluacionrubrica,Integ
 	Integer guardar(Integer evaluacionid, Integer rubricaid);
 	
 	List<Evaluacionrubrica> listarPorEvaluacionId(Integer id);
+	
+	List<Evaluacionrubrica> verificaExiste(Integer evaluacionid, Integer rubricaid);
 }

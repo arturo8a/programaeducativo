@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	
+	sumarTotal();
 	$("#btncancelRegistro").on("click",function(){
 		$("#modalAlianzaEstrategica").modal('hide');
 		$("#btnaceptarRegistro").prop("disabled",false);
@@ -37,18 +37,52 @@ $(document).ready(function(){
 		$("#fileautoridad").show();
 	});
 	
-	$(document).on("keyup","[id*=montototalauspiciador]",function(){
+	$("#tipocodcontactoresgusu").on("change",function(){
+		$("#numdoccontactoregusu").val('');
+	});
+	
+	$(document).on("keyup","[id*=montounitarioauspiciador]",function(){
 		var monto = 0;
 		$.each($("[id*=montototalauspiciador]"), function( i, value ) {
-			if(!isNaN(parseFloat($(value).val()))){
-				monto += parseFloat($(value).val());
+			if($("#cantidadauspiciador"+(i+1)).val() != '' && $("#montounitarioauspiciador"+(i+1)).val() != '' ){
+				$("#montototalauspiciador"+(i+1)).val(parseFloat($("#cantidadauspiciador"+(i+1)).val())*parseFloat($("#montounitarioauspiciador"+(i+1)).val()));
+			}
+
+			if($('#tipocodauspiciador'+(i+1)).is(":visible")){
+				if(!isNaN(parseFloat($("#montototalauspiciador"+(i+1)).val()))){
+					monto += parseFloat($("#montototalauspiciador"+(i+1)).val());
+				}else{
+					monto = 0;
+				}
+			}
+		});
+		$("#montototalform").val(monto);
+	});
+	$(document).on("keyup","[id*=cantidadauspiciador]",function(){
+		var monto = 0;
+		$.each($("[id*=montototalauspiciador]"), function( i, value ) {
+			if($("#cantidadauspiciador"+(i+1)).val() != '' && $("#montounitarioauspiciador"+(i+1)).val() != '' ){
+				$("#montototalauspiciador"+(i+1)).val(parseFloat($("#cantidadauspiciador"+(i+1)).val())*parseFloat($("#montounitarioauspiciador"+(i+1)).val()));
+			}
+			if($('#tipocodauspiciador'+(i+1)).is(":visible")){
+				if(!isNaN(parseFloat($("#montototalauspiciador"+(i+1)).val()))){
+					monto += parseFloat($("#montototalauspiciador"+(i+1)).val());
+				}else{
+					monto = 0;
+				}
 			}
 		});
 		$("#montototalform").val(monto);
 	});
 	
-	getUsuario($("#idAlianzaEstrategica").val());
+	$(document).on("click","[name=btnRemoverAuspiciador]",function(evt){
+		evt.preventDefault();
+		$(this).parent().parent().hide();
+		sumarTotal();
+	});
 	
+	getUsuario($("#idAlianzaEstrategica").val());
+	comboTipoAuspicio();
 	$("#fecha_oficio").datepicker({
 		locale: 'es-es',
 	    format: 'dd/mm/yyyy',
@@ -56,33 +90,53 @@ $(document).ready(function(){
 	});
 
 });
+function sumarTotal(){
+	var monto = 0;
+	$.each($("[id*=montototalauspiciador]"), function( i, value ) {
+		if($("#cantidadauspiciador"+(i+1)).val() != '' && $("#montounitarioauspiciador"+(i+1)).val() != '' ){
+			$("#montototalauspiciador"+(i+1)).val(parseFloat($("#cantidadauspiciador"+(i+1)).val())*parseFloat($("#montounitarioauspiciador"+(i+1)).val()));
+		}
+		if($('#tipocodauspiciador'+(i+1)).is(":visible")){
+			if(!isNaN(parseFloat($("#montototalauspiciador"+(i+1)).val()))){
+				monto += parseFloat($("#montototalauspiciador"+(i+1)).val());
+			}else{
+				monto = 0;
+			}
+		}
+	});
+	$("#montototalform").val(monto);
+}
 
 function htmlAuspicicador(){
 	var cont = $("[id*=tipocodauspiciador]").length;
 	cont = cont+1; 
 	html = '';
+	html += '<div class="section-auspicio-item row" style="padding-left: 10px;">';
 	html += '   <input type="hidden" name="idauspiciador'+cont+'" id="idauspiciador'+cont+'" value="0"/>';
 	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
 	html += '		<select class="form-control" id="tipocodauspiciador'+cont+'" name="tipocodauspiciador'+cont+'">';
 	html += '			<option value="0">Tipo de documento</option>';
-	html += '		    <option value="1">DNI</option>';
-	html += '		    <option value="2">CE</option>';
+	$.each(htmlTipoAuspicio, function( index, value ) {
+		html += '<option value="'+value.id+'">'+value.descripcion+'</option>';
+	});
 	html += '		</select>';
 	html += '	</div>';
 	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
-	html += '		<input type="text" name="cantidadauspiciador'+cont+'" id="cantidadauspiciador'+cont+'" class="form-control" placeholder="Cantidad" onKeyPress="return filterIntInput(event,this)"/>';
+	html += '		<input type="text" name="cantidadauspiciador'+cont+'" id="cantidadauspiciador'+cont+'" class="form-control" placeholder="Cantidad" onKeyPress="return filterIntInput(event,this)" maxlength="10"/>';
 	html += '	</div>';
 	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
-	html += '		<input type="text" name="descripcionauspiciador'+cont+'" id="descripcionauspiciador'+cont+'" class="form-control" placeholder="Descripcion" onKeyPress="return filterFloat(event,this)"/>';
+	html += '		<input type="text" name="descripcionauspiciador'+cont+'" id="descripcionauspiciador'+cont+'" class="form-control" placeholder="Descripcion" maxlength="60" />';
 	html += '	</div>';
 	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
-	html += '		<input type="text" name="montounitarioauspiciador'+cont+'" id="montounitarioauspiciador'+cont+'" class="form-control" placeholder="Monto Unitario" onKeyPress="return filterFloat(event,this)"/>';
+	html += '		<input type="text" name="montounitarioauspiciador'+cont+'" id="montounitarioauspiciador'+cont+'" class="form-control" placeholder="Monto Unitario" onKeyPress="return filterFloat(event,this)" maxlength="10"/>';
 	html += '	</div>';
 	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
-	html += '		<input type="text" name="montototalauspiciador'+cont+'" id="montototalauspiciador'+cont+'" class="form-control" placeholder="Monto Total"/>';
+	html += '		<input type="text" name="montototalauspiciador'+cont+'" id="montototalauspiciador'+cont+'" class="form-control" placeholder="Monto Total" disabled value="0" onKeyPress="return filterFloat(event,this)" maxlength="10"/>';
 	html += '	</div>';
-	html += '	<div class="col-xs-12 col-sm-4 text-left">';
+	html += '	<div class="col-xs-12 col-sm-4 text-left section-botones-aus-oti'+cont+'">';
+	html += '		<input type="image" id="btnRemoverAuspiciador" name="btnRemoverAuspiciador" src="./images/svg/minus-solid.svg" class="btn btn-primary" width="45px"/>';
 	html += '	</div>';
+	html += '</div>';
 	
 	$("#section-datos-auspicio").append(html);
 }
@@ -99,8 +153,9 @@ function armarAuspicio(){
 		  	var montounitario = $('#montounitarioauspiciador'+i).val();
 		  	var montototal = $('#montototalauspiciador'+i).val();
 		  	var id = $('#idauspiciador'+i).val();
-		  	
-		  	array.push({id,tipodocumento,cantidad,descripcion,montounitario,montototal});
+		  	if($('#tipocodauspiciador'+i).is(":visible")){
+				array.push({id,tipodocumento,cantidad,descripcion,montounitario,montototal});
+			}
 		});
 	}else{
 		//array = null;
@@ -262,6 +317,27 @@ $("#btnaceptarRegistro").on("click",function(){ console.log(armarData());
     
 });
 
+var htmlTipoAuspicio;
+
+function comboTipoAuspicio(){
+	$.ajax({
+		type : "GET",
+	    contentType : "application/json",
+	    url : url_base + "pedesa/getTipoAuspicio",
+	    dataType : 'json',
+		success: function(respuesta) {
+			 /*htmlTipoAuspicio = '<opcion value="0">Tipo de documento</option>';
+			$.each(respuesta, function( index, value ) {
+				htmlTipoAuspicio += '<opcion value="'+value.id+'">'+value.descripcion+'</option>';
+			});*/
+			htmlTipoAuspicio = respuesta;
+		},
+		error: function() {
+			alert("Exception al cargar combo auspicio");
+		}
+	});
+}
+
 
 function formatoFecha(fecha){
 	if(fecha == "") fecha = "01/01/2020";
@@ -348,11 +424,16 @@ function getUsuario(idUsuario){
 				$("#numtel2contactoregusu").val(respuesta.telefonodos);
 				$("#correocontactoregusu").val(respuesta.correocontato);
 				$("#cargocontactoregusu").val(respuesta.cargocontacto);
-				
+				setTimeout(function(){ sumarTotal(); }, 100);
 			}else{
 				$('.alert').alert('close');
 				$("#fileautoridad").show();
 			}
+			
+			
+			
+			
+			
 			$("#modalimagencargando").modal('hide');
 		},
 		error: function() {
@@ -365,7 +446,7 @@ function getUsuario(idUsuario){
 var contentMensajeError ="";
 
 function validarCampos(){
-	
+	var pattern = /^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
 	var status = true;
 	contentMensajeError = "";
 	if($("#odsresgusu").val() == "0"){
@@ -419,6 +500,9 @@ function validarCampos(){
 	if($('#correocontactoregusu').val() == ""){
 		contentMensajeError += "Debe ingresar Correo Institucional de Contacto"+"</br>";
 		status = false;
+	}else if(!pattern.test($('#correocontactoregusu').val())) {
+		contentMensajeError += "Debe ingresar Correo Institucional de Autoridad/Representante"+"</br>";
+		status = false;
 	}
 	if($('#cargocontactoregusu').val() == ""){
 		contentMensajeError += "Debe ingresar Cargo de Contacto"+"</br>";
@@ -438,6 +522,9 @@ function validarCampos(){
 			status = false;
 		}
 		if($('#correoautoridad').val() == ""){
+			contentMensajeError += "Debe ingresar Correo Institucional de Autoridad/Representante"+"</br>";
+			status = false;
+		}else if(!pattern.test($('#correoautoridad').val())) {
 			contentMensajeError += "Debe ingresar Correo Institucional de Autoridad/Representante"+"</br>";
 			status = false;
 		}
@@ -485,31 +572,31 @@ function validarCampos(){
 	
 	if($("#section-datos-auspicio").is(":visible")){
 		$.each($("[id*=tipocodauspiciador]"), function( index, value ) {
-			if($(value).val() == "0"){
+			if($(value).val() == "0" && $(value).is(":visible")){
 				contentMensajeError += "Debe seleccionar Tipo de Documento del Auspiciador"+"</br>";
 				status = false;
 			}
 		});
 		$.each($("[id*=cantidadauspiciador]"), function( index, value ) {
-			if($(value).val() == ""){
+			if($(value).val() == "" && $(value).is(":visible")){
 				contentMensajeError += "Debe ingresar Cantidad del Auspiciador"+"</br>";
 				status = false;
 			}
 		});
 		$.each($("[id*=descripcionauspiciador]"), function( index, value ) {
-			if($(value).val() == ""){
+			if($(value).val() == "" && $(value).is(":visible")){
 				contentMensajeError += "Debe ingresar Descripcion del Auspiciador"+"</br>";
 				status = false;
 			}
 		});
 		$.each($("[id*=montounitarioauspiciador]"), function( index, value ) {
-			if($(value).val() == ""){
+			if($(value).val() == "" && $(value).is(":visible")){
 				contentMensajeError += "Debe ingresar el Monto Unitario del Auspiciador"+"</br>";
 				status = false;
 			}
 		});
 		$.each($("[id*=montototalauspiciador]"), function( index, value ) {
-			if($(value).val() == ""){
+			if($(value).val() == "" && $(value).is(":visible")){
 				contentMensajeError += "Debe ingresar Monto Final del Auspiciador"+"</br>";
 				status = false;
 			}
@@ -567,9 +654,22 @@ function filterIntNroDocIdentidad(evt,input){
 	    }
 	}
 	else if($("#tipocodcontactoresgusu").val()=="2"){
-		if($(input).val().trim().length<12)
-			return true;
-		return false;
+		var key = window.Event ? evt.which : evt.keyCode;    
+	    var chark = String.fromCharCode(key);
+	    var tempValue = input.value+chark;
+	    if((key >= 48 && key <= 57) || ((key >= 65 && key <= 90) || (key >= 97 && key <= 122) || (key ==32)   || (key ==241) || (key ==209) || (key ==225) || (key ==233) || (key ==237) || (key ==243) || (key ==250)  || (key ==193) || (key ==201) || (key ==205) || (key ==211) || (key ==218))){
+	    	if($("#tipocodcontactoresgusu").val() == 2){
+				if($(input).val().trim().length<12)
+					return true;
+				return false;
+			}
+	    	else{
+	    		return true;
+	    	}
+	    }
+	    else{
+	        return false;
+	    }
 	}
 }
 
@@ -722,7 +822,6 @@ $('#table_trabajos_pendientes').DataTable().on("draw", function(){
 
 $.fn.dataTable.ext.search.push(
 	function( settings, data, dataIndex ) {
-		console.log("settings.nTable.id :" + settings.nTable.id);
 		if ( settings.nTable.id !== 'table_trabajos_pendientes' ) {
 	        return true;
 	    }

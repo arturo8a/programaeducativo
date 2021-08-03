@@ -89,23 +89,28 @@
 	    		$.ajax({
 	    			url: url_base + "pedesa/participar_concurso",
 	    			success: function(respuesta) {
-	    				
-	    				switch(respuesta){
-		    				case "a" : $("#modalimagencargando").modal('hide'); alert("No se encuentra aperturado el año"); break;
+	    				if(respuesta == "-100"){
+							 window.location = url_base + "pedesa";
+						}
+						else{
+							switch(respuesta){
+		    				case "a" : $("#modalimagencargando").modal('hide'); alert("No se encuentra aperturado el aï¿½o"); break;
 	    					case "b" : $("#modalimagencargando").modal('hide'); alert("Esta fuera de las fechas del proceso de inscripcion "); break;
 	    					case "c" : $("#modalimagencargando").modal('hide'); alert("Estimado (a) docente su inscripcion al programa educativo aun no ha sido aprobada, por favor espere el correo de confirmacion respectivo.");break;
 	    					case "d" : $("#modalimagencargando").modal('hide'); alert("Esta fuera de las fechas de Recepcion de trabajos "); break;
 	    					default : 
 	    						var programaeducativoid = parseInt(respuesta);
 	    						$.ajax({
-	    			    			url: url_base + "pedesa/postular_concurso/"+programaeducativoid,
-	    			    			success: function(respuesta) {
-	    			    				$("#modalimagencargando").modal('hide');
-	    			    				$("#container").html(respuesta);
-	    			    			}
-	    						});
-	    						break;
-	    				}
+		    			    			url: url_base + "pedesa/postular_concurso/"+programaeducativoid,
+		    			    			success: function(respuesta) {
+		    			    				$("#modalimagencargando").modal('hide');
+		    			    				$("#container").html(respuesta);
+		    			    			}
+		    						});
+		    						break;
+		    				}
+						}
+	    				
 	    			}
 	    		});	
 	    	});

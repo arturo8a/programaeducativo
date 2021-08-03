@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.progeduc.componente.Ldap;
 import com.progeduc.model.Programaeducativo;
 import com.progeduc.model.Usuario;
+import com.progeduc.model.UsuarioAlianza;
 import com.progeduc.model.UsuarioLdap;
 import com.progeduc.model.Usuario_Ods;
 import com.progeduc.service.IOdsService;
 import com.progeduc.service.IProgramaeducativoService;
 import com.progeduc.service.ITipousuarioService;
+import com.progeduc.service.IUsuarioAlianzaService;
 import com.progeduc.service.IUsuarioOdsService;
 import com.progeduc.service.IUsuarioService;
 import com.progeduc.service.IUsuario_odsService;
@@ -48,6 +50,10 @@ public class LoginController {
 	@Autowired
 	private ITipousuarioService tipousuarioServ;
 	
+	@Autowired
+	private IUsuarioAlianzaService usuAlianzaServ;
+	
+	
 	//@PostMapping(value="/loginUser")
 	@RequestMapping(value="/loginUser", method = RequestMethod.POST, produces="text/plain")	
 	public @ResponseBody String loginUser(@RequestParam("usuario") String usuario, @RequestParam("password") String password,HttpSession ses) throws Exception {
@@ -59,16 +65,32 @@ public class LoginController {
     		return "admin";
 		}
 		
+		UsuarioAlianza usuAlianza = usuAlianzaServ.getUsuarioEvaluador(usuario, password);
+		
+		if(usuAlianza != null) {
+			ses.setAttribute("usuario", usuAlianza.getUsuarioautoridad());
+    		ses.setAttribute("perfil", usuAlianza.getOds().getDescripcion());
+    		ses.setAttribute("tipousuarioid", 5);
+    		ses.setAttribute("odsid", usuAlianza.getOds().getId());
+    		ses.setAttribute("userId", usuAlianza.getId());
+    		return usuAlianza.getUsuarioautoridad();
+		}
+		
 		Ldap mildap = new Ldap();
 		Integer rpta = mildap.validarUsuario(usuario, password);
 		
 		if(rpta == 1){
 			Usuario obj = usuarioServ.byUsuario(usuario);
-			if(obj.getTipousuario().getId() == 1 || obj.getTipousuario().getId() == 2 || obj.getTipousuario().getId() == 11 || obj.getTipousuario().getId() == 12 ) {
-				ses.setAttribute("usuario", obj.getUsuario());/*admin,espcialista ods, especialista du*/
-        		ses.setAttribute("perfil", obj.getTipousuario().getDescripcion());
-        		ses.setAttribute("tipousuarioid", obj.getTipousuario().getId());
-        		return obj.getUsuario();
+			if(obj!=null) {
+				if(obj.getTipousuario().getId() == 1 || obj.getTipousuario().getId() == 2 || obj.getTipousuario().getId() == 11 || obj.getTipousuario().getId() == 12 ) {
+					ses.setAttribute("usuario", obj.getUsuario());/*admin,espcialista ods, especialista du*/
+	        		ses.setAttribute("perfil", obj.getTipousuario().getDescripcion());
+	        		ses.setAttribute("tipousuarioid", obj.getTipousuario().getId());
+	        		return obj.getUsuario();
+				}
+			}
+			else {
+				return "-3"; /**/
 			}
 		}
 		else {
@@ -142,6 +164,11 @@ public class LoginController {
 		ses.removeAttribute("perfil");
 		ses.removeAttribute("flag");
 		System.out.println("/cerrar_session :"+ses.getAttribute("usuario"));		
+		return "login";
+	}
+	
+	@GetMapping("/pagina_login")
+	public String  pagina_login() {
 		return "login";
 	}
 	

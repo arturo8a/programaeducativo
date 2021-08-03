@@ -30,7 +30,10 @@ public interface IProgramaeducativoRepo extends CrudRepository<Programaeducativo
 	@Query(value="SELECT TB1.* FROM PROGRAMAEDUCATIVO TB1 WHERE TB1.CODMOD = ?1 AND TB1.ANHIO = EXTRACT(YEAR FROM sysdate) FETCH FIRST 1 ROWS ONLY",nativeQuery = true)
 	Programaeducativo getCodmodByAnioActual(String codmod);
 	
-	@Query(value="SELECT TB1.* FROM PROGRAMAEDUCATIVO TB1 WHERE TB1.CODMOD = ?1 and anhio is not null order by anhio desc FETCH FIRST 1 ROWS ONLY",nativeQuery = true)
+	@Query(value="SELECT TB1.* FROM PROGRAMAEDUCATIVO TB1 where TB1.ANHIO = EXTRACT(YEAR FROM sysdate) and TB1.estado='Aprobado'",nativeQuery = true)
+	List<Programaeducativo> getListarHabilitadosAnioActual();
+	
+	@Query(value="SELECT TB1.* FROM PROGRAMAEDUCATIVO TB1 WHERE TB1.CODMOD = ?1 and TB1.ANHIO = EXTRACT(YEAR FROM sysdate)",nativeQuery = true)
 	Programaeducativo getActualByCodmod(String codmod);
 	
 	@Query(value="SELECT CODMOD FROM Programaeducativo WHERE CODMOD IS NOT NULL GROUP BY CODMOD",nativeQuery = true)
@@ -48,7 +51,7 @@ public interface IProgramaeducativoRepo extends CrudRepository<Programaeducativo
 	@Query(value="SELECT TB1.* FROM Programaeducativo TB1 where tb1.estado='Aprobado' and tb1.fecha_registro is not null and TB1.anhio is not null order by fecha_registro desc",nativeQuery = true)
 	List<Programaeducativo> listarAprobados();
 	
-	@Query(value="SELECT TB1.* FROM Programaeducativo TB1 where tb1.fecha_registro is not null and TB1.distritoid=?1 and TB1.anhio is not null",nativeQuery = true)
+	@Query(value="SELECT TB1.* FROM Programaeducativo TB1 where /*tb1.fecha_registro is not null and*/ TB1.distritoid=?1 and TB1.anhio is not null",nativeQuery = true)
 	List<Programaeducativo> listar(Integer iddistrito);
 	
 	@Query(value="SELECT TB1.CODMOD,TB1.ANHIO,TB1.NOMIE,TB1.ID,TB1.ESTADO,MOTIVOOBSERVACION FROM Programaeducativo TB1",nativeQuery = true)

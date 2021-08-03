@@ -45,13 +45,39 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 	}
 	
 	@Override
+	public int updateEnviados(Integer estado, Integer id) {
+		return trabajosfinalesRepo.updateEnviados(estado, id);
+	}
+	
+	@Override
+	public int updateEstadoTrabajo(Integer id,Integer estadoTrabajoId) {
+		return trabajosfinalesRepo.updateEstadoTrabajo(id, estadoTrabajoId);
+	}
+	
+	@Override
+	public Integer maxNumeracion(Integer programaeducativoid) {
+		return trabajosfinalesRepo.maxNumeracion(programaeducativoid);
+	}
+	
+	@Override
 	public List<Trabajosfinales> listarhabilitados(Integer programaeducativoid){
 		return trabajosfinalesRepo.listarhabilitados(programaeducativoid);
 	}
 	
 	@Override
+	public List<Trabajosfinales> listarHabilitadosEnviado(Integer programaeducativoid){
+		return trabajosfinalesRepo.listarHabilitadosEnviado(programaeducativoid);
+	}
+	
+	
+	@Override
 	public List<Trabajosfinales> listarhabilitados(){
 		return trabajosfinalesRepo.listarhabilitados();
+	}
+	
+	@Override
+	public List<Trabajosfinales> listarHabilitadosEnviados(Integer programaeducativoid){
+		return trabajosfinalesRepo.listarHabilitadosEnviados(programaeducativoid);
 	}
 	
 	@Override
@@ -63,13 +89,18 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 	@Override
 	public Trabajosfinales modificar(Trabajosfinales obj) {
 		// TODO Auto-generated method stub
-		return null;
+		return trabajosfinalesRepo.save(obj);
 	}
 
 	@Override
 	public List<Trabajosfinales> listar() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public Integer getNumeracion(Integer trabajofinalid) {
+		return trabajosfinalesRepo.getNumeracion(trabajofinalid);
 	}
 
 	@Override
@@ -87,6 +118,17 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 	@Override
 	public List<Trabajosfinales> listarTrabajosPendientes() {
 		return trabajosfinalesRepo.listarTrabajosPendientesAsignados();
+	}
+
+	@Override
+	public List<Trabajosfinales> listarTrabajosEvaluados() {
+		// TODO Auto-generated method stub
+		return trabajosfinalesRepo.listarTrabajosEvaluados();
+	}
+	
+	@Override
+	public 	List<Trabajosfinales> BuscarCategoriaModalidad(Integer idcategoria, Integer idmodalidad,Integer peid){
+		return trabajosfinalesRepo.BuscarCategoriaModalidad(idcategoria, idmodalidad,peid);
 	}
 
 }

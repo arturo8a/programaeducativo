@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>ProgramaEducativo</title>
+    <meta charset="UTF-8" />   
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <script type="text/javascript">
+		window.history.forward();
+	</script>    
+<<<<<<< HEAD
+
+=======
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+	
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+	
+	<script type="text/javascript" th:src="@{/js/jquery-3.3.1.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/bootstrapv4.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/fontawesomev5.0.6.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
+	
+	<script type="text/javascript" th:src="@{/js/bootstrap-select.min.js}"></script>
+	<link rel="stylesheet" href="../static/css/style.css" th:href ="@{/css/style.css}">
+>>>>>>> 5db6e3cafd9080ee6f02e4c38390085c345c6ca9
+</head>
+<body>	
+		<h5>Datos del especialista</h5>
+		<input type="hidden" th:value="${id}" id="id" />
+		<input type="hidden" th:value="${ods}" id="ods" />
+		<div class="row">
+			<div class="col-xs-12 col-sm-3">
+				<label>Perfil</label>
+				<select class="form-control" id="perfil_usuario_edit" name="perfil_usuario_edit" th:field="*{usuario.tipousuario.id}">
+					<option value="0">Seleccionar</option>
+					<option th:each="len:${tipousuarios}" th:value="${len.id}" th:utext="${len.descripcion}"/>
+				</select>	
+			</div>
+			<div class="col-xs-12 col-sm-3">
+				<label>Usuario</label>
+				<select class="form-control" id="usuario_edit" name="usuario_edit" th:field="*{usuario.usuario}" disabled>
+					<option value="0">Seleccionar</option>
+					<option th:each="len:${usuarios}" th:value="${len.cuenta}" th:utext="${len.cuenta}"/>
+				</select>
+			</div>
+			<div class="col-xs-12 col-sm-3">
+				<label>Nombres</label>
+				<input type="text" name="nombresusuario_edit"  th:field="*{datosusuario.nombre}" id="nombresusuario_edit" class="form-control" disabled/>
+			</div>
+			<div class="col-xs-12 col-sm-3">
+				<label>Correo electrónico</label>
+				<input type="text" name="correoelectronico_edit" th:field="*{datosusuario.correo}" id="correoelectronico_edit" class="form-control" disabled/>
+			</div>
+		</div>
+		<hr>
+		<h6>Accesos</h6>
+		<h6>ODS</h6>		
+		<div class="row">
+			<div class="col-xs-12 col-sm-12">
+				<input type="checkbox" name="check-1_edit" id="check-1_edit" style="margin:5px" /><label for="check-1_edit">Marcar todos</label>
+			</div>
+		</div>
+		
+		<div class="row" >
+			<div class="col-xs-12 col-sm-2" th:each="ods : ${listaods}">
+				<input type="checkbox" class="case_edit" th:name="chk_usuario_edit" th:id="${ods.id}" style="margin:5px"/> <label th:for="${ods.id}" th:text="${ods.descripcion}"></label>
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-xs-6 col-sm-6 text-right">
+				<input type="button" name="btncancelarusuario_edit" id="btncancelarusuario_edit" value="Cancelar" class="btn btn-danger"/>
+			</div>
+			<div class="col-xs-6 col-sm-6 text-left">
+				<input type="button" name="btnregistrarusuario_edit" id="btnregistrarusuario_edit" value="Registrar" class="btn btn-primary"/>
+			</div>
+		</div>		
+</body>
+</html>
+<script type="text/javascript">
+
+		var usuario;
+		var perfil;
+		var array_ods;
+		var mensajeValidacionusuario_edit;
+		var ods_seleccionada, array_ods_seleccionada_edit;
+
+		$(document).ready(function(){
+			
+			ods_seleccionada = $("#ods").val();
+			array_ods_seleccionada_edit = ods_seleccionada.split(",");
+			
+			for(var i=0; i<array_ods_seleccionada_edit.length-1;i++){
+				$("#"+array_ods_seleccionada_edit[i]).prop("checked",true);
+			}
+			console.log("longitud de checbox seleccionados :"  + array_ods_seleccionada_edit.length);
+			if(array_ods_seleccionada_edit.length-1==40){
+				$("#check-1_edit").prop("checked",true);
+			}
+			
+			$("#check-1_edit").click(function(){
+				if($("#check-1_edit").is(":checked")){
+					$(".case_edit").prop("checked",true);
+				}
+				else{
+					$(".case_edit").prop("checked",false);
+				}
+			});
+			
+			$("#btncancelarusuario_edit").click(function(){
+				$("#modaleditarusuario").modal('hide');
+			});	
+			
+			$("#btnregistrarusuario_edit").click(function(){
+				$("#modalimagencargando").modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+				
+				if(validarCampos_edit()){
+					
+					var data = {
+						usuario:{
+							id : $("#id").val(),
+							usuario : usuario,
+							tipousuario : {
+								id : perfil
+							},
+							estado : 1
+						},
+						ods: array_ods
+					};
+					
+					$.ajax({
+						type : "POST",
+					    contentType : "application/json",
+					    url : url_base + "pedesa/actualizarusuarioods",
+					    data : JSON.stringify(data),
+					    dataType : 'json',
+						success: function(respuesta) {
+							$("#modalimagencargando").modal('hide');
+							if(respuesta==0){
+								console.log("error al registrar usuario");
+								$("#textoerrorusuario").html("Error al registrar Usuario");
+								$('#modalerrorusuario').modal({
+									show : true,
+									backdrop : 'static',
+									keyboard:false
+								});
+							}
+							else if (respuesta == 1){
+								/*console.log("usuario registrado");*/
+								$("#textoexitocrearusuario").html("Se actualizó Usuario");
+								$('#modalexitocrearusuario').modal({
+									show : true,
+									backdrop : 'static',
+									keyboard:false
+								});
+							}
+						},
+						error: function() {
+							alert("excepcion al actualizar usuario");
+					    }
+					});
+					
+				}
+				else{
+					$("#modalimagencargando").modal('hide');
+					$("#textoinformacionusuario").html("<div style='color:red' class='text-left'>"+mensajeValidacionusuario_edit+"</div>");
+					$("#modalinformacionusuario").modal({
+						show : true,
+						backdrop : 'static',
+						keyboard:false
+					});
+				}				
+			});			
+			
+			$("#btncerrarmensajeexitocrearusuario").click(function(){
+				$("#modalexitocrearusuario").modal('hide');
+				$("#modaleditarusuario").modal('hide');
+			});
+			
+			$("#btncerrarmensajeinformacionusuario").click(function(){
+				$("#modalinformacionusuario").modal('hide');
+			});
+			
+			$("#btncerrarmensajeerrorusuario").click(function(){
+				$("#modalerrorusuario").modal('hide');
+			});
+			
+		});		
+		
+		function validarCampos_edit(){
+			
+			mensajeValidacionusuario_edit = "";
+			usuario = $("#usuario_edit").val();
+			perfil = $("#perfil_usuario_edit").val();
+			array_ods = new Array();
+			
+			if(perfil==0){
+				mensajeValidacionusuario_edit += "Debe seleccionar Perfil"+"<br>";
+			}
+			
+			if(usuario == 0){
+				mensajeValidacionusuario_edit += "Debe seleccionar Usuario"+"<br>";
+			}
+			
+			$("input[name=chk_usuario_edit]").each(function(index){
+				if($(this).is(":checked")){
+					array_ods.push(this.id);
+				}
+			});
+			
+			if(array_ods.length == 0){
+				mensajeValidacionusuario_edit += "Debe seleccionar por lo menos una ODS"+"<br>";
+			}
+			
+			if(mensajeValidacionusuario_edit!=""){
+				return false;
+			}
+			return true;
+		}
+		
+</script>
+
+		

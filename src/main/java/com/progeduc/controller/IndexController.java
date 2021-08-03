@@ -20,9 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.progeduc.componente.Ldap;
-import com.progeduc.dto.ArchivoEvidenciaDto;
 import com.progeduc.model.Aperturaranio;
-import com.progeduc.model.Categoriatrabajo;
 import com.progeduc.model.Docente;
 import com.progeduc.model.Docentetutor;
 import com.progeduc.model.Evaluacion;
@@ -65,6 +63,7 @@ import com.progeduc.service.IProgeducTurnoService;
 import com.progeduc.service.IProgramaeducativoService;
 import com.progeduc.service.IProvinciaService;
 import com.progeduc.service.IResponsableregistroService;
+import com.progeduc.service.ITipoAuspicioService;
 import com.progeduc.service.ITipodocumentoService;
 import com.progeduc.service.ITipousuarioService;
 import com.progeduc.service.ITrabajosfinalesParticipanteService;
@@ -199,11 +198,15 @@ public class IndexController {
 	@Autowired
 	private IUsuarioAlianzaService usuAlianzaserv;
 	
+	@Autowired
+	private ITipoAuspicioService tipoAuspicioServ;
+	
 	String participanteid;
 	
 	int contador;
-	
 	String id_rubrica,id_questionario,ods,id_pregunta_respuesta,id_pr;
+	String id_rubrica_edit,id_questionario_edit,ods_edit,id_pregunta_respuesta_edit,id_pr_edit;
+	Integer odsid;
 	
 	@GetMapping("/inicio")
 	public String inicio(@RequestParam(name="name",required=false,defaultValue="world") String name, Model model) {
@@ -233,11 +236,12 @@ public class IndexController {
 		
 		Trabajosfinales tf  = trabajosfinalesService.ListarporId(id);
 		model.addAttribute("tf", tf);
+		System.out.println("hd_categoria :" + tf.getCategoriatrabajo().getId());
+		model.addAttribute("hd_categoria", (tf.getCategoriatrabajo().getId()== 1 || tf.getCategoriatrabajo().getId() == 3) ? false : true);
 		model.addAttribute("categoriatrabajo",categoriatrabajoService.listar());
 		model.addAttribute("modalidadtrabajo",modalidadtrabajoService.listar());
 		model.addAttribute("tipodoc",tipodocserv.findAll());
-		model.addAttribute("genero",generoprofserv.listar());
-		
+		model.addAttribute("genero",generoprofserv.listar());		
 		
 		model.addAttribute("chconversacion", tf.getConversacion()==1 ? true : false);
 		model.addAttribute("chvaloracionagua", tf.getValoracionagua()==1 ? true : false);
@@ -493,14 +497,24 @@ public class IndexController {
 	}
 	
 	@GetMapping("/formasignarevaluador")
-	public String formasignarevaluador(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
+	public String formasignarevaluador(@RequestParam(name="name",required=false,defaultValue="") String name, Model model,HttpSession ses) {
+		
+		if(ses.getAttribute("tipousuarioid").toString().equals("1") || ses.getAttribute("tipousuarioid").toString().equals("11") || ses.getAttribute("tipousuarioid").toString().equals("12") || ses.getAttribute("tipousuarioid").toString().equals("30")) {
+			odsid = 0;
+		}
+		else if(ses.getAttribute("tipousuarioid").toString().equals("2")) {
+			
+			/*odsid = usuarioService.byUsuario(ses.getAttribute("usuario").toString()).getOdsid();*/
+			odsid = 18;
+		}		
+		System.out.println("odsid :" + odsid);
+		model.addAttribute("odsid",odsid);
 		model.addAttribute("ods",odsserv.listarAll());
 		model.addAttribute("nivelparticipacion",nivelparticipacionService.listar());
 		model.addAttribute("categoriatrabajo",categoriaevaluacionService.listar());
 		Calendar fecha = Calendar.getInstance();
-        /*List<Integer> lista = new ArrayList<Integer>();*/
         model.addAttribute("anio", fecha.get(Calendar.YEAR));
-        model.addAttribute("colegios", progeducService.listCentrosEducativosGroupbyNomie());	
+        model.addAttribute("colegios", progeducService.listCentrosEducativosGroupbyNomie());
 		return "formasignarevaluador";
 	}
 	
@@ -511,9 +525,8 @@ public class IndexController {
             List<Integer> lista = new ArrayList<Integer>();
             int anio = fecha.get(Calendar.YEAR);
             for(int i = anio-5;i<=anio;i++) {
-                    lista.add(i);
-            }
-		
+                  lista.add(i);
+            }		
             model.addAttribute("ods",odsserv.listarAll());
             model.addAttribute("anios", lista);
             model.addAttribute("departamento",depaServ.listar());
@@ -523,8 +536,8 @@ public class IndexController {
             return "trabajospendientes";
 	}
     
-    @GetMapping("/trabajospendientesevaluados")
-	public String trabajospendientesEvaluados(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
+    @GetMapping("/trabajosevaluados")
+	public String trabajosevaluados(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
             Calendar fecha = Calendar.getInstance();
             model.addAttribute("anio",fecha.get(Calendar.YEAR));
             List<Integer> lista = new ArrayList<Integer>();
@@ -539,7 +552,7 @@ public class IndexController {
             model.addAttribute("categoriatrabajo",categoriatrabajoService.listar());//categoriatrabajoService.listar());
             model.addAttribute("modalidadtrabajo",modalidadtrabajoService.listar());
             model.addAttribute("nivelparticipacion",nivelparticipacionService.listar());
-            return "trabajospendientes";
+            return "trabajosevaluados";
 	}
 	
 	@GetMapping("/listaformrevaluaciones")
@@ -614,6 +627,11 @@ public class IndexController {
 				model.addAttribute("cargainicialtabla", 1);
 				model.addAttribute("cargainicialtablatrabajos", 1);
 				return "menu_concurso";
+			}else if(Integer.parseInt(ses.getAttribute("tipousuarioid").toString()) == 5) {
+				model.addAttribute("usuario", ses.getAttribute("usuario"));
+				model.addAttribute("perfil", ses.getAttribute("perfil"));
+				model.addAttribute("tipousuarioid", ses.getAttribute("tipousuarioid"));
+				return "menu_evaluadores";
 			}
 			else { /*El admin,espcialista ods, especialista du, ODS*/
 				model.addAttribute("usuario", ses.getAttribute("usuario"));
@@ -786,56 +804,78 @@ public class IndexController {
 	@GetMapping("/editarviewevaluacionid/{id}")
 	public String editarviewevaluacionid(@PathVariable("id") Integer id,  Model model,HttpSession ses) {
 		
-		id_rubrica = "";
-		id_questionario ="";
-		id_pr="";
-		id_pregunta_respuesta="";
+		id_rubrica_edit = "";
+		id_questionario_edit ="";
+		id_pr_edit="";
+		id_pregunta_respuesta_edit="";
 		
+		Integer mayor=0;
+		
+		Integer mayor_rubrica=0;		
+		List<Integer> idRubrica_max = new ArrayList<Integer>();
 		Evaluacion eval = evaluacionService.ListarporId(id);
-		model.addAttribute("evaluacion", eval);
-		
+		model.addAttribute("evaluacion_edit", eval);		
 		List<Rubrica> listaRubrica = new ArrayList<Rubrica>();
         evaluacionrubricaServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
+        	idRubrica_max.add(obj.getRubrica().getId());
         	listaRubrica.add(obj.getRubrica());
-        	id_rubrica += obj.getRubrica().getId().toString() + "-";
+        	id_rubrica_edit += obj.getRubrica().getId().toString() + "-";
         });
         
+        for(int i=0;i<idRubrica_max.size();i++) {
+        	if(idRubrica_max.get(i) > mayor_rubrica) {
+        		mayor_rubrica = idRubrica_max.get(i);
+        	}
+        }
+        
+        Integer mayor_cuestionario=0;
+        List<Integer> idQuestionario_max = new ArrayList<Integer>();
         List<Questionario> listaQuestionario = new ArrayList<Questionario>();
         evaluacionquestionarioServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
+        	idQuestionario_max.add(obj.getQuestionario().getId());
         	listaQuestionario.add(obj.getQuestionario());
         	id_pr = "";
         	obj.getQuestionario().getQuestionariorespuesta().forEach(pr->{
         		id_pr += pr.getId() + "-";
         	});
-        	id_pregunta_respuesta += "(" + obj.getQuestionario().getId().toString() + "*" + (id_pr.substring(0,id_pr.length()-1)) + ")";
-        	System.out.println("id_pregunta_respuesta :" + id_pregunta_respuesta);
+        	id_pregunta_respuesta_edit += "(" + obj.getQuestionario().getId().toString() + "*" + (id_pr.substring(0,id_pr.length()-1)) + ")";
         });
+        
+        for(int i=0;i<idQuestionario_max.size();i++) {
+        	if(idQuestionario_max.get(i) > mayor_cuestionario) {
+        		mayor_cuestionario = idQuestionario_max.get(i);
+        	}
+        }
+        
+        if(mayor_rubrica>mayor_cuestionario) {
+        	mayor = mayor_rubrica;
+        }
+        else {
+        	mayor = mayor_cuestionario;
+        }
        
-        model.addAttribute("id_evaluacion", eval.getId()); 
-        model.addAttribute("id_rubrica", id_rubrica);
-        model.addAttribute("id_questionario", id_questionario);
-        model.addAttribute("id_pregunta_respuesta", id_pregunta_respuesta);
+        model.addAttribute("id_evaluacion_edit", eval.getId()); 
+        model.addAttribute("id_rubrica_edit", id_rubrica_edit);
+        model.addAttribute("id_questionario_edit", id_questionario);
+        model.addAttribute("id_pregunta_respuesta_edit", id_pregunta_respuesta_edit);
         List<Integer> listapuntaje = new ArrayList<Integer>();
         listapuntaje.add(1);
         listapuntaje.add(2);
         listapuntaje.add(3);
         listapuntaje.add(4);
         listapuntaje.add(5);
-        model.addAttribute("listapuntaje", listapuntaje);
+        model.addAttribute("listapuntaje_edit", listapuntaje);
+        
+        model.addAttribute("max", mayor);
         
         Calendar fecha = Calendar.getInstance();
 		model.addAttribute("anio",fecha.get(Calendar.YEAR));		
-        model.addAttribute("listaquestionario", listaQuestionario);
-		model.addAttribute("listarubrica", listaRubrica);
-        model.addAttribute("listanivelparticipacion",nivelparticipacionService.listar());
-		model.addAttribute("listacategoriaevaluacion", categoriaevaluacionService.listar());
+        model.addAttribute("listaquestionario_edit", listaQuestionario);
+		model.addAttribute("listarubrica_edit", listaRubrica);
+        model.addAttribute("listanivelparticipacion_edit",nivelparticipacionService.listar());
+		model.addAttribute("listacategoriaevaluacion_edit", categoriaevaluacionService.listar());
 		return "formeditarevaluacion";
 	}
-	
-	
-	
-	
-	
 	
 	@GetMapping("/verviewevaluacionid/{id}")
 	public String verviewevaluacionid(@PathVariable("id") Integer id,  Model model,HttpSession ses) {
@@ -972,12 +1012,77 @@ public class IndexController {
 		return "formregistrarevaluacion";
 	}
 	
+	@GetMapping("/formmostrarevaluacion/{id}")
+	public String formmostrarevaluacion(@PathVariable("id") Integer id,  Model model,HttpSession ses) {
+		id_rubrica = "";
+		id_questionario ="";
+		
+		Trabajosfinales trabajosfinales = trabajosfinalesService.ListarporId(id);
+		List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteService.listar(trabajosfinales.getId());
+		Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
+
+		Evaluacion eval = evaluacionService.getPorAnioCategoriaNivelparticipacion(trabajosfinales.getAnio(), 
+				trabajosfinales.getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
+		model.addAttribute("evaluacion", eval);
+		
+		List<Rubrica> listaRubrica = new ArrayList<Rubrica>();
+        evaluacionrubricaServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
+        	listaRubrica.add(obj.getRubrica());
+        	id_rubrica += obj.getRubrica().getId().toString() + "-";
+        });
+        
+        List<Questionario> listaQuestionario = new ArrayList<Questionario>();
+        evaluacionquestionarioServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
+        	listaQuestionario.add(obj.getQuestionario());
+        	id_questionario += obj.getQuestionario().getId().toString() + "-";
+        });    
+        
+        model.addAttribute("id_rubrica", id_rubrica);
+        model.addAttribute("id_questionario", id_questionario);
+        model.addAttribute("id_evaluacion", eval.getId());
+        model.addAttribute("id_trabajofinal", trabajosfinales.getId());
+        
+        List<Integer> listanro = new ArrayList<Integer>();
+        listanro.add(1);
+        listanro.add(2);
+        listanro.add(3);
+        listanro.add(4);
+        listanro.add(5);
+        model.addAttribute("listanro", listanro);
+        
+        
+        Calendar fecha = Calendar.getInstance();
+		model.addAttribute("anio",fecha.get(Calendar.YEAR));
+		List<Integer> lista = new ArrayList<Integer>();
+		int anio = fecha.get(Calendar.YEAR);
+		for(int i = anio-5;i<=anio;i++) {
+			lista.add(i);
+		}
+
+		/*List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteService.listar(trabajosfinales.getId());
+		Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());*/
+		
+		model.addAttribute("nombretrabajo", trabajosfinales.getTitulotrabajo());
+		model.addAttribute("categoria", trabajosfinales.getCategoriatrabajo().getDescripcion());
+		model.addAttribute("nivel", participante.getGradoestudiante().getNivelgradopartdesc());
+		model.addAttribute("modalidad", trabajosfinales.getModalidadtrabajo().getDescripcion());
+		
+        model.addAttribute("listarubrica", listaRubrica);
+        model.addAttribute("listaquestionario", listaQuestionario);
+        
+        model.addAttribute("listanivelparticipacion",nivelparticipacionService.listar());
+		model.addAttribute("anios", lista);
+		model.addAttribute("listacategoriaevaluacion", categoriaevaluacionService.listar());
+		return "formMostraEvaluacion";
+	}
+	
 	@GetMapping("/formregistrarusuario")
 	public String formregistrarusuario(Model model,HttpSession ses) {
 		model.addAttribute("odsregusu",odsserv.listarAll());
 		model.addAttribute("categoriaregusu",categoriaevaluacionService.listar());
 		model.addAttribute("idAlianzaEstrategica","0");
 		model.addAttribute("tipodoc",tipodocumentoserv.listar());
+		model.addAttribute("tipodocaus",tipoAuspicioServ.listar());
 		return "formregistrarusuario";
 	}
 	
@@ -987,6 +1092,7 @@ public class IndexController {
 		model.addAttribute("categoriaregusu",categoriaevaluacionService.listar());
 		model.addAttribute("idAlianzaEstrategica",id);
 		model.addAttribute("tipodoc",tipodocumentoserv.listar());
+		model.addAttribute("tipodocaus",tipoAuspicioServ.listar());
 		return "formregistrarusuario";
 	}
 	

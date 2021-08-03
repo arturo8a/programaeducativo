@@ -68,5 +68,9 @@ public class EvaluacionQuestionarioServiceImpl implements IEvaluacionQuestionari
 		return evaluacionquestionariorepo.listarPorEvaluacionId(evaluacionid);
 	}
 	
+	@Override
+	public List<Evaluacionquestionario> verificaExiste(Integer evaluacionid, Integer questionarioid){
+		return evaluacionquestionariorepo.verificaExiste(evaluacionid, questionarioid);
+	}
 	
 }

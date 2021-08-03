@@ -117,12 +117,12 @@ public class Mail {
                 String servidorSmtp = "10.10.3.141";
                 String emisionCorreo = "adminweb@sunass.gob.pe";
                 String emisionAutor = "SistemaEducativoSunass";
-
+                System.out.println("paso 1");
                 /* create session */
                 Properties props = System.getProperties();
                 props.put("mail.smtp.host", servidorSmtp);
                 Session session = Session.getInstance(props, null);
-
+                System.out.println("paso 2");
                 /* message */
                 MimeMessage msg = new MimeMessage(session);
                 msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
@@ -133,16 +133,18 @@ public class Mail {
                 msg.setSubject(asunto, "UTF-8");
 
                 msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(correoDestino, false));
-                
+                System.out.println("paso 3");
                 MimeMultipart multipart = new MimeMultipart("related");
                 BodyPart messageBodyPart = new MimeBodyPart();
                 messageBodyPart.setContent(contenido, "text/html");
                 multipart.addBodyPart(messageBodyPart);
                 msg.setContent(multipart);
+                System.out.println("paso 4");
                 Transport.send(msg);
-            
+                System.out.println("CORREO ENVIADO:");
         } catch (Exception ex) {
             enviadoods = false;
+            System.out.println("CORREO NO ENVIADO:");
             System.out.println("enviarCorreo: "+ex);
         }
         
@@ -183,9 +185,10 @@ public class Mail {
                 multipart.addBodyPart(messageBodyPart);
                 msg.setContent(multipart);
                 Transport.send(msg);
-            
+                System.out.println("CORREO ENVIADO: ");
         } catch (Exception ex) {
             enviadoods = false;
+            System.out.println("CORREO NO ENVIADO: ");
             System.out.println("enviarCorreo: "+ex);
         }
         

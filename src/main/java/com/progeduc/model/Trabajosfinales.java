@@ -54,6 +54,9 @@ public class Trabajosfinales {
 	@Column(name="VINCULO",nullable=true)
 	private Integer vinculo;
 	
+	@Column(name="PUESTO",nullable=true)
+	private Integer puesto;
+	
 	@Column(name="CARENCIAS",nullable=true)
 	private Integer carencias;
 	
@@ -69,6 +72,10 @@ public class Trabajosfinales {
 	@ManyToOne
 	@JoinColumn(name="tipodocumentoid",nullable=true,foreignKey=@ForeignKey(name="FK_trabajosfinales_tipodoc"))
 	private Tipodocumento tipodocumento;
+	
+	@ManyToOne
+	@JoinColumn(name="estadotrabajoid",nullable=true,foreignKey=@ForeignKey(name="FK_trabajosfinales_esttrab"))
+	private Estadotrabajo estadotrabajo;
 	
 	@Column(name="NRODOCUMENTO",nullable=true,length=15)
 	private String nrodocumento;	
@@ -93,6 +100,10 @@ public class Trabajosfinales {
 	
 	@Column(name="ESTADO",nullable=true)
 	private Integer estado;
+	
+	@JsonIgnore
+	@Column(name="NUMERACION",nullable=true)
+	private Integer numeracion;
 	
 	@Column(name="ENVIADO",nullable=true)
 	private Integer enviado;
@@ -189,6 +200,14 @@ public class Trabajosfinales {
 		this.vinculo = vinculo;
 	}
 
+	public Integer getPuesto() {
+		return puesto;
+	}
+
+	public void setPuesto(Integer puesto) {
+		this.puesto = puesto;
+	}
+
 	public Integer getCarencias() {
 		return carencias;
 	}
@@ -229,6 +248,14 @@ public class Trabajosfinales {
 		this.tipodocumento = tipodocumento;
 	}
 
+	public Estadotrabajo getEstadotrabajo() {
+		return estadotrabajo;
+	}
+
+	public void setEstadotrabajo(Estadotrabajo estadotrabajo) {
+		this.estadotrabajo = estadotrabajo;
+	}
+
 	public String getNrodocumento() {
 		return nrodocumento;
 	}
@@ -251,6 +278,14 @@ public class Trabajosfinales {
 
 	public void setCorreo(String correo) {
 		this.correo = correo;
+	}
+	
+	public Integer getNumeracion() {
+		return numeracion;
+	}
+
+	public void setNumeracion(Integer numeracion) {
+		this.numeracion = numeracion;
 	}
 
 	public Genero getGenero() {

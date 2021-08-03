@@ -15,11 +15,26 @@ import com.progeduc.model.Trabajosfinales;
 @Transactional(readOnly = true)
 public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,Integer>{
 	
-	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where TB1.programaeducativoid=?1 and tb1.estado=1 and tb1.anio = EXTRACT(YEAR FROM sysdate)   ",nativeQuery = true)
+	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where TB1.programaeducativoid=?1 and tb1.estado=1 and tb1.anio = EXTRACT(YEAR FROM sysdate)",nativeQuery = true)
 	List<Trabajosfinales> listarhabilitados(Integer programaeducativoid);
+	
+	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where TB1.programaeducativoid=?1 and tb1.estado=1 and tb1.anio = EXTRACT(YEAR FROM sysdate) and enviado=1",nativeQuery = true)
+	List<Trabajosfinales> listarHabilitadosEnviado(Integer programaeducativoid);
 	
 	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where TB1.estado=1",nativeQuery = true)
 	List<Trabajosfinales> listarhabilitados();
+	
+	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where TB1.estado=1 and TB1.enviado=1 and TB1.programaeducativoid=?1",nativeQuery = true)
+	List<Trabajosfinales> listarHabilitadosEnviados(Integer programaeducativoid);
+	
+	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where TB1.categoriatrabajoid=?1 and TB1.modalidadtrabajoid=?2 and TB1.programaeducativoid=?3 and TB1.estado=1",nativeQuery = true)
+	List<Trabajosfinales> BuscarCategoriaModalidad(Integer idcategoria, Integer idmodalidad,Integer peid);
+	
+	@Query(value="SELECT max(numeracion) FROM Trabajosfinales tr where tr.programaeducativoid=?1",nativeQuery = true)
+	Integer maxNumeracion(Integer programaeducativoid);
+	
+	@Query(value="SELECT numeracion FROM Trabajosfinales tr where tr.id=?1",nativeQuery = true)
+	Integer getNumeracion(Integer trabajofinalid);
 	
 	@Transactional
 	@Modifying	
@@ -30,8 +45,21 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
 	@Modifying	
 	@Query(value="update Trabajosfinales p set p.enviado = ?2 WHERE p.id = ?1 and p.programaeducativoid=?3  and p.anio = EXTRACT(YEAR FROM sysdate) ",nativeQuery = true)
 	int updateenviado(Integer id, Integer estado, Integer peid);
+	
+	@Transactional
+	@Modifying	
+	@Query(value="update Trabajosfinales p set p.enviado = ?1 WHERE p.id = ?2 and p.anio = EXTRACT(YEAR FROM sysdate) ",nativeQuery = true)
+	int updateEnviados(Integer estado, Integer id);
+	
+	@Transactional
+	@Modifying	
+	@Query(value="update Trabajosfinales p set p.estadotrabajoid = ?2 WHERE p.id = ?1 ",nativeQuery = true)
+	int updateEstadoTrabajo(Integer id,Integer estadoTrabajoId);
        
-    @Query(value="SELECT * FROM Trabajosfinales WHERE enviado=1",nativeQuery = true)
+    @Query(value="SELECT * FROM Trabajosfinales WHERE enviado=1 and estado=1",nativeQuery = true)
 	List<Trabajosfinales> listarTrabajosPendientesAsignados();
+    
+    @Query(value="SELECT * FROM Trabajosfinales WHERE enviado=1 and estado=3",nativeQuery = true)
+	List<Trabajosfinales> listarTrabajosEvaluados();
 
 }
