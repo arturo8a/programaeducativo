@@ -9,18 +9,13 @@
 		window.history.forward();
 	</script>
 
-    <!-- Bootstrap CSS CDN -->
-    <link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
-    <!-- Our Custom CSS -->
-    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
-	
+    <!--link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">	
 	<script type="text/javascript" th:src="@{/js/jquery-3.3.1.js}" ></script>
     <script type="text/javascript" th:src="@{/js/bootstrapv4.js}" ></script>
-    <script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
-	
-	<script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>
-	
-	<link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">   
+    <script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>	
+	<script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>	
+	<link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}"-->   
 </head>
 <body>
 		<input type="hidden" id="id_rubrica_edit" name="id_rubrica" th:value="${id_rubrica_edit}" />
@@ -37,14 +32,14 @@
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left">
 				<label for="modalidadpostulaciontrabajo">Categoría</label>
-				<select class="form-control" id="categoriace_edit" name="categoriace_edit"  th:field="*{evaluacion_edit.categoriaevaluacion.id}" disabled>
+				<select class="form-control" id="categoriace_edit" name="categoriace_edit"  th:field="*{evaluacion_edit.categoriaevaluacion.id}" >
 					<option value="">Todos</option>
 					<option th:each="len:${listacategoriaevaluacion_edit}" th:value="${len.id}" th:utext="${len.descripcion}"/>
 				</select>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left">
 				<label for="titulotrabajo">Nivel de participación</label>
-				<select class="form-control" id="nivelparticipacionce_edit" name="nivelparticipacionce_edit"  th:field="*{evaluacion_edit.nivelparticipacion.id}" disabled>
+				<select class="form-control" id="nivelparticipacionce_edit" name="nivelparticipacionce_edit"  th:field="*{evaluacion_edit.nivelparticipacion.id}" >
 					<option value="">Todos</option>
 					<option th:each="len:${listanivelparticipacion_edit}" th:value="${len.id}" th:utext="${len.descripcion}"/>       				
 				</select>
@@ -95,7 +90,7 @@
 								<label>Criterio</label>
 								<input type="text" th:id="'criterio_edit'+ ${objeto.id} + '2'" th:value="${objeto.criterio2}"  class="form-control" />
 								<br>
-								<textarea rows="3" style="width:100%" th:id="'descripcion_edt' + ${objeto.id} + '2'" th:text="${objeto.descripcion2}" class="form-control">
+								<textarea rows="3" style="width:100%" th:id="'descripcion_edit' + ${objeto.id} + '2'" th:text="${objeto.descripcion2}" class="form-control">
 								</textarea>
 								<br>
 								<table>
@@ -427,7 +422,13 @@
 		}
 		
 		function eliminarEdit(elemento,id){
-			if (window.confirm("Desea eliminar cuestionario?")) {
+			var texto_pregunta = "";
+			if(elemento=="div_rubrica_edit")
+				texto_pregunta = "Desea eliminar rubrica";
+			else
+				texto_pregunta = "Desea eliminar cuestionario";
+			
+			if (window.confirm(texto_pregunta)) {
 				for(var i=0;i<array_indice.length;i++){
 					if(array_indice[i] == id){
 						array_indice.splice(i,1);
@@ -448,7 +449,12 @@
 		}
 		
 		function eliminarRubricaCuestionarioEdit(id){
-			if (window.confirm("Desea eliminar cuestionario?")) {
+			var texto_rc = "";
+			if($("#r"+id).is(":checked"))
+				texto_rc = "Desea eliminar rubrica";
+			else
+				texto_rc = "Desea eliminar cuestionario";				
+			if (window.confirm(texto_rc)) {
 				indice_cuestionario_edit_eliminado.push(id);
 				$("#div_rubrica_cuestionario_edit"+id).css("display", "none");
 			}
@@ -505,15 +511,15 @@
 		
 		function agregar_fila_edit(tabla,iq){		
 			indice_respuesta_edit ++;
-			$("#"+tabla).append("<tr id='tr_" + indice_cuestionario_edit.toString() + indice_respuesta_edit.toString() + "'><td><input type='text' class='form-control' id='respuesta_edit"+iq+indice_respuesta_edit+"' name='respuesta_edit"+iq+indice_respuesta_edit+"' /></td><td><input type='text' onKeyPress='return filterPuntaje(event,this)' class='form-control' id='puntaje_editq"+iq+indice_respuesta_edit+"' name='puntaje_editq"+iq+indice_respuesta_edit+"' />	</td></tr>");
-			$("#btnquitarrespuesta_edit"+indice_cuestionario_edit).prop("disabled",false);
+			$("#"+tabla).append("<tr id='tr_" + indice_cuestionario_max_edit.toString() + indice_respuesta_edit.toString() + "'><td><input type='text' class='form-control' id='respuesta_edit"+iq+indice_respuesta_edit+"' name='respuesta_edit"+iq+indice_respuesta_edit+"' /></td><td><input type='text' onKeyPress='return filterPuntaje(event,this)' class='form-control' id='puntaje_editq"+iq+indice_respuesta_edit+"' name='puntaje_editq"+iq+indice_respuesta_edit+"' />	</td></tr>");
+			$("#btnquitarrespuesta_edit"+indice_cuestionario_max_edit).prop("disabled",false);
 		}
 		
 		function quitar_fila_edit(fila,iq){
 			$("#"+fila+indice_respuesta_edit.toString()).remove();
 			indice_respuesta_edit --;
 			if(indice_respuesta_edit == 1){
-				$("#btnquitarrespuesta_edit"+indice_cuestionario_edit).prop("disabled",true);
+				$("#btnquitarrespuesta_edit"+indice_cuestionario_max_edit).prop("disabled",true);
 			}
 		}
 		
@@ -535,9 +541,7 @@
 				id_rubricaedit = id_rubricaedit.split("-");					
 				for(var i=0;i<id_rubricaedit.length-1;i++){	
 					bandera_editar = true;
-					console.log("id_rubricaedit[i] :" + id_rubricaedit[i]);
 					for(var j=0;j<indice_cuestionario_edit_eliminado.length;j++){
-						console.log("indice_cuestionario_edit_eliminado[j] :"+ indice_cuestionario_edit_eliminado[j]);
 						if(indice_cuestionario_edit_eliminado[j] == id_rubricaedit[i]){
 							bandera_editar = false;
 						}							
@@ -652,7 +656,7 @@
 							}
 						}					
 						if(bandera_editar){
-							rubrica = $("#rubrica"+i).val();	
+							rubrica = $("#rubrica_edit"+i).val();	
 							criterio1 = $("#criterio_edit"+i+"1").val();
 							criterio2 = $("#criterio_edit"+i+"2").val();
 							criterio3 = $("#criterio_edit"+i+"3").val();
@@ -751,8 +755,17 @@
 				    data : JSON.stringify(evaluaciondtoedit),
 				    dataType : 'json',
 					success: function(respuesta_edit) {
-						if(respuesta_edit.id>0){								
-							$("#modalimagencargando").modal('hide');								
+						if(respuesta_edit == -1){
+							$("#modalimagencargando").modal('hide');
+							$("#textoerroreditevaluacion").html("Ya existe evaluación con el mismo : año  " + $("#anioce_edit").val() + " , categoria  " + $("#categoriace_edit option:selected").html() + " y nivel de participacion  " + $("#nivelparticipacionce_edit option:selected").html()	);
+							$('#modalerroreditevaluacion').modal({
+								show : true,
+								backdrop : 'static',
+								keyboard:false
+							});
+						}
+						else if(respuesta_edit>0){								
+							$("#modalimagencargando").modal('hide');
 							table_lista_evaluacion.cell(celdaseleccionada,1).data(anioedit).draw();
 						    table_lista_evaluacion.cell(celdaseleccionada,2).data($("#nivelparticipacionce_edit option:selected").html()).draw();
 						    table_lista_evaluacion.cell(celdaseleccionada,3).data($("#categoriace_edit option:selected").html()).draw();

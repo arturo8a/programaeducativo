@@ -363,24 +363,32 @@
 		
 	$("#evidenciastrabajo").change(function(){		
 		if(evidenciastrabajo.files[0].name != undefined){
-			var flag = true;
-			//validamos que el nombre del archivo no se repita en la lista de evidencias
-			for(var i=0;i<mis_evidencias.length;i++){
-				if(mis_evidencias[i].name  == evidenciastrabajo.files[0].name)
-					flag = false;
-			}
-			if(flag){
-				mis_evidencias.push(evidenciastrabajo.files[0]);
-				var data_archivo_subir = "<table><tr>";
-				for(var i=0;i<mis_evidencias.length;i++){
-					data_archivo_subir += "<td><div class='alert alert-primary alert-dismissible fade show' role='alert' style='padding:10px'><strong><abbr title='"+(mis_evidencias[i].name)+"'>"+	 (	(mis_evidencias[i].name).length <5 ? (mis_evidencias[i].name) :	(mis_evidencias[i].name).substr(0,5))	+"<abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaAgregar("+i+")' data-dismiss='alert' aria-label='Close' style='padding:0px; margin:-3px'><span aria-hidden='true'>&times;</span></button></div></td>";
+			
+			var msj_eviste_evidencia="";
+			var flag_existe;
+			for(var k=0;k<evidenciastrabajo.files.length;k++){
+				flag_existe = true;
+				for(var i=0;i<mis_evidencias.length;i++){					
+					if(mis_evidencias[i].name  == evidenciastrabajo.files[k].name){
+						flag_existe = false;
+						msj_eviste_evidencia +=  evidenciastrabajo.files[k].name + "/";
+					}
 				}
-				data_archivo_subir += "</tr></table>";
-				$("#divevidencias_agregar").html(data_archivo_subir);
+				if(flag_existe){
+					mis_evidencias.push(evidenciastrabajo.files[k]);
+				}
+			}			
+			var data_archivo_subir = "<table><tr>";
+			for(var i=0;i<mis_evidencias.length;i++){
+				data_archivo_subir += "<td><div class='alert alert-primary alert-dismissible fade show' role='alert' style='padding:10px'><strong><abbr title='"+(mis_evidencias[i].name)+"'>"+	 (	(mis_evidencias[i].name).length <5 ? (mis_evidencias[i].name) :	(mis_evidencias[i].name).substr(0,5))	+"<abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaAgregar("+i+")' data-dismiss='alert' aria-label='Close' style='padding:0px; margin:-3px'><span aria-hidden='true'>&times;</span></button></div></td>";
 			}
-			else{
-				alert("Este archivo ya existe");
-			}
+			data_archivo_subir += "</tr></table>";
+			if(msj_eviste_evidencia.length>0){
+				msj_eviste_evidencia = msj_eviste_evidencia.substring(0,msj_eviste_evidencia.length-1);
+				alert("La(s) siguientes evidencias no se subieron porque ya existen " + msj_eviste_evidencia);
+			}							
+			$("#divevidencias_agregar").html(data_archivo_subir);
+			
 		}
 	});
 		

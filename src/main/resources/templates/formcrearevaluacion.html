@@ -263,7 +263,12 @@
 	}
 	
 	function eliminarCuestionario(id){
-		if (window.confirm("Desea eliminar cuestionario?")) {
+		var texto_rc = "";
+		if($("#r"+id).is(":checked"))
+			texto_rc = "Desea eliminar rubrica";
+		else
+			texto_rc = "Desea eliminar cuestionario";	
+		if (text_rc) {
 			console.log("id :" + id);
 			indice_cuestionario_eliminado.push(id);
 		  $("#div_cuestionario"+id).css("display", "none");

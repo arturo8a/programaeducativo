@@ -400,7 +400,7 @@ public class ConcursoeducativoController {
 	}
 	
 	@PostMapping(value="/actualizarevaluacion")
-	public Evaluacion actualizarevaluacion(@Valid @RequestBody EvaluacionRubricaQuestionarioDto dto) {
+	public Integer actualizarevaluacion(@Valid @RequestBody EvaluacionRubricaQuestionarioDto dto) {
 		return evaluacionServ.updateEvalRubQuest(dto);
 	}
 	

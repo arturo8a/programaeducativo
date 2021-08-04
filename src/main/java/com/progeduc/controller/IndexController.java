@@ -853,8 +853,10 @@ public class IndexController {
         	}
         });
         
-        indices= indices.substring(0,indices.length()-1);
-        System.out.println("indices :" + indices);
+        if(indices.length()>0)
+        	indices= indices.substring(0,indices.length()-1);
+        else
+        	indices = "";
         
         for(int i=0;i<idQuestionario_max.size();i++) {
         	if(idQuestionario_max.get(i) > mayor_cuestionario) {
@@ -868,7 +870,6 @@ public class IndexController {
         else {
         	mayor = mayor_cuestionario;
         }
-        System.out.println("indices :" + indices);
         model.addAttribute("indices", indices); 
         model.addAttribute("id_evaluacion_edit", eval.getId()); 
         model.addAttribute("id_rubrica_edit", id_rubrica_edit);

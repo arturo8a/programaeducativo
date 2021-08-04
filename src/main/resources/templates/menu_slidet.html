@@ -108,8 +108,8 @@
                     </ul>
                 </li>
             </ul>
-            <ul th:unless="${tipousuarioid == 5}" class="list-unstyled components">
-            	<li class="active">
+            <ul th:unless="${tipousuarioid == 5}" class="list-unstyled components">            
+            	<li class="active" th:if="${tipousuarioid != 2}">
                     <a id="a_pageSubmenuAdministracion" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" style="cursor:pointer">
                     	<img th:src="@{./images/iconos_nd/Administracion.svg}" class="pl-4"/>&nbsp;<strong class="etiqueta_menu_lateral">Administración</strong>
                     </a>
@@ -144,10 +144,10 @@
                             <input type="button" class="btn btn-link" id="consulta_docentes" value="Consulta aula virtual"/>                            
                         </li>
                         <li >
-                            <input type="button" class="btn btn-link" id="concurso" value="Concurso educativo"/>                            
+                            <input type="button" class="btn btn-link" id="concurso" value="Concurso Educativo"/>                            
                         </li>
                         <li >
-                            <input type="button" class="btn btn-link" id="rubrica_evaluacion" value="Rúbrica de evaluación"/>                            
+                            <input type="button" th:if="${tipousuarioid != 2}" class="btn btn-link" id="rubrica_evaluacion" value="Rúbrica de evaluación"/>                            
                         </li>
                         <li >
                             <input type="button" class="btn btn-link" id="reportes" value="Reportes"/>                            
@@ -196,7 +196,6 @@
                             			</td>                            			
                             		</tr>
                             	</table>
-                                <!--small class="p-0 m-0 b-0"><strong>Usuario: </strong></small> / <small class="p-0 m-0 b-0"><strong>Perfil: </strong></small> <input class="btn btn-info" type="button" value="Cerrar Sesión" id="btnCerrarSesion" -->
                             </li>
                         </ul>
                     </div>
@@ -253,7 +252,6 @@
    	    		document.getElementById("concurso").style.color = "";
    	    		document.getElementById("rubrica_evaluacion").style.color = "";
    	    		document.getElementById("reportes").style.color = "";
-   	    		/*document.getElementById("trabajos_pendientes").style.color = "";*/
 	    		$("#consulta_menu").prop("disabled",true);
 	        	$("#btnbuscar").prop("disabled",true);
 	    		$('#modalimagencargando').modal({
@@ -284,10 +282,8 @@
    	    		document.getElementById("concurso").style.color = "";
    	    		document.getElementById("rubrica_evaluacion").style.color = "";
    	    		document.getElementById("reportes").style.color = "";
-   	    		/*document.getElementById("trabajos_pendientes").style.color = "";*/
 	    		$("#consulta_menu").prop("disabled",true);
 	        	$("#btnbuscar").prop("disabled",true);
-	    		//$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
 	    		$('#modalimagencargando').modal({
 					show : true,
 					backdrop : 'static',
@@ -316,10 +312,8 @@
    	    		document.getElementById("concurso").style.color = "";
    	    		document.getElementById("rubrica_evaluacion").style.color = "";
    	    		document.getElementById("reportes").style.color = "";
-   	    		/*document.getElementById("trabajos_pendientes").style.color = "";*/
 	    		$("#consulta_menu").prop("disabled",true);
 	        	$("#btnbuscar").prop("disabled",true);
-	    		//$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
 	    		$('#modalimagencargando').modal({
 					show : true,
 					backdrop : 'static',
@@ -348,10 +342,8 @@
    	    		document.getElementById("concurso").style.color = "";
    	    		document.getElementById("rubrica_evaluacion").style.color = "";
    	    		document.getElementById("reportes").style.color = "";
-   	    		/*document.getElementById("trabajos_pendientes").style.color = "";*/
 	    		$("#consulta_menu").prop("disabled",true);
 	        	$("#btnbuscar").prop("disabled",true);
-	    		//$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
 	    		$('#modalimagencargando').modal({
 					show : true,
 					backdrop : 'static',
@@ -380,10 +372,8 @@
    	    		document.getElementById("concurso").style.color = "";
    	    		document.getElementById("rubrica_evaluacion").style.color = "";
    	    		document.getElementById("reportes").style.color = "";
-   	    		/*document.getElementById("trabajos_pendientes").style.color = "";*/
 	    		$("#consulta_menu").prop("disabled",true);
 	        	$("#btnbuscar").prop("disabled",true);
-	    		//$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
 	    		$('#modalimagencargando').modal({
 					show : true,
 					backdrop : 'static',
@@ -412,10 +402,8 @@
    	    		document.getElementById("concurso").style.color = "#0083C9";
    	    		document.getElementById("rubrica_evaluacion").style.color = "";
    	    		document.getElementById("reportes").style.color = "";
-   	    		/*document.getElementById("trabajos_pendientes").style.color = "";*/
 	    		$("#consulta_menu").prop("disabled",true);
 	        	$("#btnbuscar").prop("disabled",true);
-	    		//$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
 	    		$('#modalimagencargando').modal({
 					show : true,
 					backdrop : 'static',
@@ -444,10 +432,8 @@
    	    		document.getElementById("concurso").style.color = "";
    	    		document.getElementById("rubrica_evaluacion").style.color = "#0083C9";
    	    		document.getElementById("reportes").style.color = "";
-   	    		/*document.getElementById("trabajos_pendientes").style.color = "";*/
 	    		$("#consulta_menu").prop("disabled",true);
 	        	$("#btnbuscar").prop("disabled",true);
-	    		//$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
 	    		$('#modalimagencargando').modal({
 					show : true,
 					backdrop : 'static',
@@ -476,10 +462,8 @@
    	    		document.getElementById("concurso").style.color = "";
    	    		document.getElementById("rubrica_evaluacion").style.color = "";
    	    		document.getElementById("reportes").style.color = "#0083C9";
-   	    		/*document.getElementById("trabajos_pendientes").style.color = "";*/
 	    		$("#consulta_menu").prop("disabled",true);
 	        	$("#btnbuscar").prop("disabled",true);
-	    		//$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
 	    		$('#modalimagencargando').modal({
 					show : true,
 					backdrop : 'static',
@@ -508,10 +492,8 @@
    	    		document.getElementById("concurso").style.color = "";
    	    		document.getElementById("rubrica_evaluacion").style.color = "";
    	    		document.getElementById("reportes").style.color = "";
-   	    		/*document.getElementById("trabajos_pendientes").style.color = "#0083C9";*/
 	    		$("#consulta_menu").prop("disabled",true);
 	        	$("#btnbuscar").prop("disabled",true);
-	    		//$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
 	    		$('#modalimagencargando').modal({
 					show : true,
 					backdrop : 'static',
@@ -531,7 +513,6 @@
 	    	$("#trabajos_finales_evaluados").click(function(){
 	    		$("#consulta_menu").prop("disabled",true);
 	        	$("#btnbuscar").prop("disabled",true);
-	    		//$("#contenedor_consulta").html("<center><img src='./images/cargando.gif'/></center>");
 	    		$('#modalimagencargando').modal({
 					show : true,
 					backdrop : 'static',
@@ -547,7 +528,6 @@
 		    		});
 	        	}, 200);
 	    	});
-	    	
 	    	
 	    	$('#sidebarCollapse').on('click',function(){
 	            $('#sidebar').toggleClass('active');
