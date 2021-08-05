@@ -112,6 +112,9 @@ public class Trabajosfinales {
 	@Column(name="ANIO",nullable=true)
 	private Integer anio;
 	
+	@Column(name="NOTA",nullable=true)
+	private Float nota;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -334,5 +337,13 @@ public class Trabajosfinales {
 
 	public void setAnio(Integer anio) {
 		this.anio = anio;
+	}
+
+	public Float getNota() {
+		return nota;
+	}
+
+	public void setNota(Float nota) {
+		this.nota = nota;
 	}
 }

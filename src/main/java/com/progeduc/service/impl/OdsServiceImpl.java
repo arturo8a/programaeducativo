@@ -25,4 +25,9 @@ public class OdsServiceImpl implements IOdsService{
 		return repo.listarAll();
 	}
 
+	@Override
+	public List<Ods> listarOdsDeTrabajosEvaluados() {
+		return repo.listarOdsDeTrabajosEvaluados();
+	}
+
 }

@@ -36,7 +36,6 @@ import com.progeduc.componente.Ldap;
 import com.progeduc.dto.AsignacionDto;
 import com.progeduc.dto.AsignarEvaluadorDto;
 import com.progeduc.dto.AsignarEvaluadoresDto;
-import com.progeduc.dto.CategoriaModalidadByOds;
 import com.progeduc.dto.ClaveValor;
 import com.progeduc.dto.ConcursoDto;
 import com.progeduc.dto.DataTrabajosPermisos;
@@ -50,7 +49,6 @@ import com.progeduc.dto.ListaTrabajosFinalesPendientes;
 import com.progeduc.dto.ListaparticipanteDto;
 import com.progeduc.dto.ListaparticipantetrabajoDto;
 import com.progeduc.dto.ListatrabajosfinalesDto;
-import com.progeduc.dto.OdsFinalizarDto;
 import com.progeduc.dto.ParticipanteVerDto;
 import com.progeduc.dto.TrabajofinalesEnviadoDto;
 import com.progeduc.dto.TrabajosfinalesParticipanteDto;
@@ -58,9 +56,7 @@ import com.progeduc.dto.UsuarioAlianzaDto;
 import com.progeduc.dto.trabajoEvaluadoDto;
 import com.progeduc.model.Aperturaranio;
 import com.progeduc.model.Auspicio;
-import com.progeduc.model.CerrarOds;
 import com.progeduc.model.Docente;
-import com.progeduc.model.Estadotrabajo;
 import com.progeduc.model.Evaluacion;
 import com.progeduc.model.EvaluacionResultado;
 import com.progeduc.model.Gradoparticipante;
@@ -77,7 +73,6 @@ import com.progeduc.model.UsuarioAlianza;
 import com.progeduc.model.UsuarioLdap;
 import com.progeduc.service.IAperturaranioService;
 import com.progeduc.service.IAuspicioService;
-import com.progeduc.service.ICerrarOdsService;
 import com.progeduc.service.IDistritoService;
 import com.progeduc.service.IDocenteService;
 import com.progeduc.service.IEvaluacionRespuestaService;
@@ -152,6 +147,9 @@ public class ConcursoeducativoController {
 	private ITrabajosfinales_UsuarioAlianzaService trabajosFinales_UsuarioAlianzaServ;
 	
 	@Autowired
+<<<<<<< HEAD
+	private IEvaluacionRespuestaService evaluacionRespuestaServ;
+=======
 	IUsuarioService usuarioServ;
 	
 	@Autowired
@@ -162,9 +160,7 @@ public class ConcursoeducativoController {
 	
 	@Autowired
 	private ITipoAuspicioService tipoAuspicioServ;
-	
-	@Autowired
-	private ICerrarOdsService cerrarOdsServ;
+>>>>>>> b4fd6c5cdca4c9bce79094888744a3b90611cb47
 	
 	
 	ListaparticipanteDto dto;	
@@ -186,7 +182,7 @@ public class ConcursoeducativoController {
 	String rol_entidad,entidad;
 	String nombre_apellido_evaluador;
 	Integer rpta;
-	float totalNota = 0.0f;
+	Double totalNota = 0.0;
 	Integer idTrab = 0;
 	int contador_iguales;
 	int resultado;
@@ -901,8 +897,8 @@ public class ConcursoeducativoController {
 						});			
 						dto.setNivelparticipacion(nivelparticipacion);
 						dto.setEstado(obj2.getEstadotrabajo().getDescripcion());
-						dto.setCalificacion(obj2.getNota());
-						dto.setPuesto(obj2.getPuesto());
+						dto.setCalificacion(0);
+						dto.setPuesto(0);
 						listadto.add(dto);
 					});
 				});
@@ -931,8 +927,8 @@ public class ConcursoeducativoController {
 					});			
 					dto.setNivelparticipacion(nivelparticipacion);
 					dto.setEstado(obj.getEstadotrabajo().getDescripcion());
-					dto.setCalificacion(obj.getNota());
-					dto.setPuesto(obj.getPuesto());
+					dto.setCalificacion(0);
+					dto.setPuesto(0);
 					listadto.add(dto);
 				});
 			});
@@ -962,8 +958,8 @@ public class ConcursoeducativoController {
 							});
 							dto.setNivelparticipacion(nivelparticipacion);
 							dto.setEstado(obj2.getEstadotrabajo().getDescripcion());
-							dto.setCalificacion(obj2.getNota());
-							dto.setPuesto(obj2.getPuesto());
+							dto.setCalificacion(0);
+							dto.setPuesto(0);
 							listadto.add(dto);
 						});
 					});
@@ -1157,8 +1153,8 @@ public class ConcursoeducativoController {
 			dto.setTitulotrabajo(obj.getTitulotrabajo());
 			dto.setNivelparticipacion(evaluacionServ.getPorAnio(obj.getAnio()).getNivelparticipacion().getDescripcion());
 			dto.setEstado(evaluacionServ.getPorAnio(obj.getAnio()).getEstadoevaluacion().getDescripcion());
-			dto.setCalificacion(obj.getNota());
-			dto.setPuesto(obj.getPuesto());
+			dto.setCalificacion(0);
+			dto.setPuesto(0);
 			listadto.add(dto);
 		});		
 		return new ResponseEntity<List<ConcursoDto>>(listadto, HttpStatus.OK) ;
@@ -1508,7 +1504,6 @@ public class ConcursoeducativoController {
 					data.getTrabajosfinales().getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
 			List<EvaluacionResultado> listEvaResultado = evaluacionRespuestaServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
 			if(eval != null &&  listEvaResultado.size() > 0  && data.getTrabajosfinales().getEnviado() == 1) {
-				System.out.println("eval: "+eval+" | listEvaResultado: "+data.getTrabajosfinales().getId());
 				/*String strOds = "";
 				if(data.getTrabajosfinales().getProgramaeducativo().getOds()!=null) {
 					Ods ods = odsserv.byOds(data.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid());
@@ -1836,6 +1831,10 @@ public class ConcursoeducativoController {
 		return 1; 
 	}
 	
+<<<<<<< HEAD
+	@PostMapping(value="/registrarRespuestasEvaluacion")
+	public Integer registrarRespuestasEvaluacion(@Valid @RequestBody List<EvaluacionResultado> lista) {
+=======
 	@PostMapping(value="/saveasignarevaluador")
 	public Integer saveasignarevaluador(@Valid @RequestBody AsignarEvaluadoresDto dto) {
 		
@@ -1859,6 +1858,7 @@ public class ConcursoeducativoController {
 	
 	@PostMapping(value="/registrarRespuestasEvaluacion")
 	public Integer registrarRespuestasEvaluacion(@Valid @RequestBody List<EvaluacionResultado> lista,HttpSession ses) {
+>>>>>>> b4fd6c5cdca4c9bce79094888744a3b90611cb47
 		
 		try {
 			
@@ -1866,7 +1866,7 @@ public class ConcursoeducativoController {
 			UsuarioAlianza usuAlianza = new UsuarioAlianza();
 			usuAlianza.setId(userAlianzaId);
 			
-			totalNota = 0;
+			
 			lista.forEach(obj->{
 				EvaluacionResultado resultado = new EvaluacionResultado();
 				resultado.setPreguntaid(obj.getPreguntaid());
@@ -1880,25 +1880,13 @@ public class ConcursoeducativoController {
 				totalNota += obj.getPuntaje();
 				idTrab = obj.getTrabajosfinales().getId();
 			});
-			
-			trabajosFinales_UsuarioAlianzaServ.actualizarNotaPorParticiante(idTrab, userAlianzaId, totalNota);
+				
+			Trabajosfinales  trab =trabajosfinalesServ.ListarporId(idTrab);
+			//trab.setNota();
+			//trab.setEstado(3);
+			trabajosfinalesServ.modificar(trab);
+			//trabajosfinalesServ.updateestado(trab.getId(), 3,trab.getProgramaeducativo().getId());
 
-			if(trabajosFinales_UsuarioAlianzaServ.listarTrabajosFinalesSinNota(idTrab).size() == 0) {
-				Trabajosfinales  trab =trabajosfinalesServ.ListarporId(idTrab);
-
-				List<TrabajosfinalesUsuarioAlianza>  trabajosEvaluados = trabajosFinales_UsuarioAlianzaServ.listarByTrabajosfinalesId(idTrab);
-				
-				int numeroTrabajasEvaluados =  trabajosEvaluados.size();
-				float sumaNotas = 0.0f;
-				
-				
-				for (TrabajosfinalesUsuarioAlianza trabajosfinalesUsuarioAlianza : trabajosEvaluados) {
-					sumaNotas += trabajosfinalesUsuarioAlianza.getNota();
-				}
-				
-				trab.setNota(sumaNotas/numeroTrabajasEvaluados);
-				trabajosfinalesServ.modificar(trab);
-			}
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			log.error("ERROR: ",e);
@@ -1907,6 +1895,8 @@ public class ConcursoeducativoController {
 		
 		return 1;
 	}
+<<<<<<< HEAD
+=======
 
 	@GetMapping("/getRespuestas/{id}")
 	public ResponseEntity<List<EvaluacionResultado>>getRespuestas(@PathVariable("id") Integer id,HttpSession ses){
@@ -1941,114 +1931,5 @@ public class ConcursoeducativoController {
 		return new ResponseEntity<List<DataTrabajosPermisos>>(lista, HttpStatus.OK);
 	}
 	
-	@GetMapping("/consultarEtapaHabilitada")
-	public ResponseEntity<OdsFinalizarDto> consultarEtapaHabilitada(HttpSession ses){
-		OdsFinalizarDto odsRespuesta = new OdsFinalizarDto();
-		Calendar cal= Calendar.getInstance();
-		int anio= cal.get(Calendar.YEAR);
-		Aperturaranio apertura = aperturaranioService.buscar(anio);
-		LocalDate dateActual = LocalDate.now();
-		if(apertura.getQuintaetapadesde().isAfter(dateActual)) {
-			odsRespuesta.setStatus(1);
-			odsRespuesta.setListOds(odsserv.listarAll());
-			odsRespuesta.setListCerrarOds(cerrarOdsServ.listCerrarOds());
-		}else {
-			odsRespuesta.setStatus(0);
-		}
-		return new ResponseEntity<OdsFinalizarDto>(odsRespuesta, HttpStatus.OK);
-	}
-	
-	@PostMapping(value="/cerrarOds")
-	public Integer cerrarOds(@Valid @RequestBody List<Ods> listOds,HttpSession ses) {
-		
-		try {
-
-			Calendar cal= Calendar.getInstance();
-			int anio= cal.get(Calendar.YEAR);
-			
-			for (Ods ods : listOds) {
-				CerrarOds cerrarOds = new CerrarOds();
-				cerrarOds.setOdsid(ods);
-				cerrarOds.setAnio(anio);
-				cerrarOds.setEtapa(1);
-				cerrarOdsServ.guardar(cerrarOds);
-				
-				
-				/*Listar Categorias X Modalidad de ODS*/
-				List<CategoriaModalidadByOds> listaCatModByOds = trabajosfinalesServ.listarCategoriaModalidadByOds(ods.getId());
-				
-				for (CategoriaModalidadByOds catModByODs : listaCatModByOds) {
-					log.info("CAREGORIAID: "+catModByODs.getCategoriaId() +" | MODALIDADID: "+catModByODs.getModalidadId());
-					/*Lista de trabajos Por Categoria y Modalidad con Nota Promedio*/
-					List<Trabajosfinales> listaTrab = trabajosfinalesServ.listaTrabajosFinalesConNotaPromedioPorCategoriaModalidadDds(catModByODs.getCategoriaId(), catModByODs.getModalidadId(), ods.getId());
-					/*Obtener Puesto*/
-					if(listaTrab.size() > 0) {
-						/*Puesto 1*/
-						float NotaPuesto1 = listaTrab.get(0).getNota();
-						int cantidad = 0;
-						/*BuscarEmpate*/
-						for (Trabajosfinales trabajos : listaTrab) {
-							if(trabajos.getNota() == NotaPuesto1 ) {
-								Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getId());
-								trabajoFinal.setPuesto(1);
-								trabajosfinalesServ.modificar(trabajoFinal);
-								cantidad++;
-							}
-						}
-						
-						/*Puesto 2*/
-						int cantidad2 = 0;
-						if(listaTrab.size() > cantidad) {
-							float NotaPuesto2 = listaTrab.get(cantidad).getNota();
-							/*BuscarEmpate*/
-							for (Trabajosfinales trabajos : listaTrab) {
-								if(trabajos.getNota() == NotaPuesto2 ) {
-									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getId());
-									trabajoFinal.setPuesto(2);
-									trabajosfinalesServ.modificar(trabajoFinal);
-									cantidad2++;
-								}
-							}
-						}
-						
-						/*Puesto 3*/
-						if(listaTrab.size() > cantidad+cantidad2) {
-							float NotaPuesto3 = listaTrab.get(cantidad+cantidad2).getNota();
-							/*BuscarEmpate*/
-							for (Trabajosfinales trabajos : listaTrab) {
-								if(trabajos.getNota() == NotaPuesto3 ) {
-									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getId());
-									trabajoFinal.setPuesto(3);
-									trabajosfinalesServ.modificar(trabajoFinal);
-								}
-							}
-						}
-						
-					}
-					
-					
-				}
-				
-				/*lista de trabajos finales por ODS*/
-				List<Trabajosfinales>  trabajoFinal = trabajosfinalesServ.listarTrabajosfinalesPorOds(ods.getId());
-				for (Trabajosfinales trabajos : trabajoFinal) {
-					Estadotrabajo estadoTrabajo = new  Estadotrabajo();
-					estadoTrabajo.setId(3);
-					trabajos.setEstadotrabajo(estadoTrabajo);
-					trabajosfinalesServ.modificar(trabajos);
-				}
-				
-				
-			}
-			
-			
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			log.error("ERROR: ",e);
-			return 0;
-		}
-		
-		return 1;
-	}
-	
+>>>>>>> b4fd6c5cdca4c9bce79094888744a3b90611cb47
 }

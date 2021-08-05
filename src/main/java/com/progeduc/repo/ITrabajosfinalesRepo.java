@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.progeduc.dto.CategoriaModalidadByOds;
 import com.progeduc.model.Trabajosfinales;
 
 @Repository
@@ -61,5 +62,30 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
     
     @Query(value="SELECT * FROM Trabajosfinales WHERE enviado=1 and estado=3",nativeQuery = true)
 	List<Trabajosfinales> listarTrabajosEvaluados();
+    
+    @Query(value="select tf.* from trabajosfinales tf  "
+    		+ "inner join programaeducativo pe on tf.programaeducativoid = pe.id "
+    		+ "inner join distrito d on pe.distritoid = d.id "
+    		+ "inner join ods o on d.odsid = o.id "
+    		+ "where tf.nota is not null and o.id=?3 AND tf.categoriatrabajoid = ?1 and tf.modalidadtrabajoid=?2 "
+    		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) "
+    		+ "order by tf.nota desc ",nativeQuery = true)
+    List<Trabajosfinales> listaTrabajosFinalesConNotaPromedioPorCategoriaModalidadDds(Integer idcategoria, Integer idmodalidad,Integer odsId);
+    
+    @Query(value="select tf.categoriatrabajoid, tf.modalidadtrabajoid from trabajosfinales tf "
+			+ "inner join programaeducativo pe on tf.programaeducativoid = pe.id "
+			+ "inner join distrito d on pe.distritoid = d.id "
+			+ "inner join ods o on d.odsid = o.id "
+			+ "where tf.nota is not null and o.id=?1 and tf.anio = EXTRACT(YEAR FROM sysdate) "
+			+ "group by tf.categoriatrabajoid, tf.modalidadtrabajoid",nativeQuery = true)
+	List<Object[]> listarCategoriaModalidadByOds(Integer odsId);
+	
+	 @Query(value="select tf.* from trabajosfinales tf  "
+	    		+ "inner join programaeducativo pe on tf.programaeducativoid = pe.id "
+	    		+ "inner join distrito d on pe.distritoid = d.id "
+	    		+ "inner join ods o on d.odsid = o.id "
+	    		+ "where tf.nota is not null and o.id=?3  "
+	    		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) ",nativeQuery = true)
+	List<Trabajosfinales> listarTrabajosfinalesPorOds(Integer odsId);
 
 }

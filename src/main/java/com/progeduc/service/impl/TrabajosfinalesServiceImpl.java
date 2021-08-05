@@ -1,11 +1,13 @@
 package com.progeduc.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.progeduc.dto.CategoriaModalidadByOds;
 import com.progeduc.dto.TrabajosfinalesParticipanteDto;
 import com.progeduc.model.Trabajosfinales;
 import com.progeduc.repo.ITrabajosfinalesParticipanteRepo;
@@ -129,6 +131,30 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 	@Override
 	public 	List<Trabajosfinales> BuscarCategoriaModalidad(Integer idcategoria, Integer idmodalidad,Integer peid){
 		return trabajosfinalesRepo.BuscarCategoriaModalidad(idcategoria, idmodalidad,peid);
+	}
+
+	@Override
+	public List<Trabajosfinales> listaTrabajosFinalesConNotaPromedioPorCategoriaModalidadDds(Integer idcategoria,
+			Integer idmodalidad, Integer odsId) {
+		return trabajosfinalesRepo.listaTrabajosFinalesConNotaPromedioPorCategoriaModalidadDds(idcategoria, idmodalidad, odsId);
+	}
+
+	@Override
+	public List<CategoriaModalidadByOds> listarCategoriaModalidadByOds(Integer odsId) {
+		List<CategoriaModalidadByOds> lista = new ArrayList<>();
+		List<Object[]> listaObject = trabajosfinalesRepo.listarCategoriaModalidadByOds(odsId);
+		for (Object[] objects : listaObject) {
+			System.out.println(objects.length);
+			CategoriaModalidadByOds c = new CategoriaModalidadByOds(Integer.parseInt(objects[0].toString()),Integer.parseInt(objects[1].toString()));
+			lista.add(c);
+		}
+		
+		return lista;
+	}
+
+	@Override
+	public List<Trabajosfinales> listarTrabajosfinalesPorOds(Integer odsId) {
+		return null;
 	}
 
 }

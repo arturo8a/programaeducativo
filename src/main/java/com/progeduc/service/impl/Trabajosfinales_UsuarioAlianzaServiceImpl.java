@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.progeduc.dto.CategoriaModalidadByOds;
 import com.progeduc.model.TrabajosfinalesUsuarioAlianza;
 import com.progeduc.repo.ITrabajosfinalesUsuarioAlianzaRepo;
 import com.progeduc.service.ITrabajosfinales_UsuarioAlianzaService;
@@ -43,6 +44,33 @@ public class Trabajosfinales_UsuarioAlianzaServiceImpl implements ITrabajosfinal
 	@Override
 	public List<TrabajosfinalesUsuarioAlianza> listaTrabajosIdByUsuarioId(Integer usuarioalianzaid) {
 		return trabajosfinalesUsuarioAlianzaRepo.listaTrabajosIdByUsuarioId(usuarioalianzaid);
+	}
+
+	@Override
+	public TrabajosfinalesUsuarioAlianza modificarUsuarioAlianza(
+			TrabajosfinalesUsuarioAlianza trabajosfinalesUsuarioAlianza) {
+		return trabajosfinalesUsuarioAlianzaRepo.save(trabajosfinalesUsuarioAlianza);
+	}
+
+	@Override
+	public Integer actualizarNotaPorParticiante(Integer trabajofinalid, Integer usuarioalianzaid, Float nota) {
+		return trabajosfinalesUsuarioAlianzaRepo.actualizarNotaPorParticiante(trabajofinalid, usuarioalianzaid, nota);
+	}
+	
+	@Override
+	public List<TrabajosfinalesUsuarioAlianza> listarTrabajosFinalesSinNota(Integer trabajofinalid) {
+		return trabajosfinalesUsuarioAlianzaRepo.listarTrabajosFinalesSinNota(trabajofinalid);
+	}
+
+	@Override
+	public List<TrabajosfinalesUsuarioAlianza> listarTrabajosFinalesConNotaPromedioPorCategoriaPorModalidad(
+			Integer categoiraId, Integer modalidadId) {
+		return null;
+	}
+
+	@Override
+	public List<CategoriaModalidadByOds> listarCategoriaModalidadByOds(Integer odsId) {
+		return trabajosfinalesUsuarioAlianzaRepo.listarCategoriaModalidadByOds(odsId);
 	}
 
 }

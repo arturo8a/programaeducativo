@@ -9,4 +9,6 @@ public interface IOdsService {
 	Ods byOds(int id);
 	
 	List<Ods> listarAll();
+	
+	List<Ods> listarOdsDeTrabajosEvaluados();
 }

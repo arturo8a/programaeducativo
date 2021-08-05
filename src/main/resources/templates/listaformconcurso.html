@@ -440,6 +440,68 @@
 	  </div>
 	</div>
 </center>
+<!--MODAL FINALIZAR-->
+<center>
+	<div class="modal fade" tabindex="-1" role="dialog" id="modalFinalizar" aria-labelledby="myLargeModalLabel" >
+	  <div class="modal-dialog modal-lg" role="document" style="width:70%; height:540px">
+	    <div class="modal-content" >
+	      <div class="modal-header">
+	        <strong class="pt-1">Finalizar Evaluación ODS</strong>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>	          
+		        </button>
+	      </div>
+	      <div class="modal-body" id="contenidoFinalizar">
+	      	<div class="row">
+				<div class="col-xs-12 col-sm-12 text-left">
+					<input type="checkbox" name="check-todos" id="check-todos" style="margin:5px" /><label for="check-1_edit">Marcar todos</label>
+				</div>
+			</div>
+			
+			<div class="row" id="listaOdsPorFinalizar">
+				
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-xs-6 col-sm-6 text-right">
+					<input type="button" id="btnCerrarFinalizar" value="Cancelar" class="btn btn-outline-primary"/>
+				</div>
+				<div class="col-xs-6 col-sm-6 text-left">
+					<input type="button" id="btnFinalizarCierre" value="Registrar" class="btn btn-primary"/>
+				</div>
+			</div>	 	
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</center>
+<!--MODAL CONFIRMAR FINALIZAR-->
+<center>
+	<div class="modal fade" tabindex="-1" role="dialog" id="modalConfimarCierreFinalizar" aria-labelledby="myLargeModalLabel" >
+	  <div class="modal-dialog modal-lg" role="document" style="width:70%; height:540px">
+	    <div class="modal-content" >
+	      <div class="modal-header">
+	        <strong class="pt-1">Confirmar</strong>
+	      </div>
+	      <div class="modal-body">
+	      	<div class="row">
+				<label>Se asignarán los resultados a las ODS finalizadas</label>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-xs-6 col-sm-6 text-right">
+					<input type="button" id="btnCancelarCierre" value="Cancelar" class="btn btn-outline-primary"/>
+				</div>
+				<div class="col-xs-6 col-sm-6 text-left">
+					<input type="button" id="btnConfirmarCierre" value="Confirmar" class="btn btn-primary"/>
+				</div>
+			</div>	 	
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</center>
+
 <div class="modal" tabindex="-1" role="dialog" id="modalimagencargando">
   <center>
   	<img th:src="@{./images/cargando.gif}" style="line-height: 200px;"/>
@@ -1497,4 +1559,100 @@ $(document).on("click",".btn_exporta_excel_alianza",function(e){ console.log('.b
 	window.open(url_base + "pedesa/reporteAlianza/"+fOds+"/"+fAnio+"/"+fRol+"/"+fEstado, '_blank');
 	closeCargando();
 });
+
+
+$(document).ready(function(){	
+
+	$("#btnFinalizar").on("click",function(e){ console.log('btnFinalizar');
+		openCargando();
+		$.ajax({
+			type : "GET",
+		    contentType : "application/json",
+		    url : url_base + "pedesa/consultarEtapaHabilitada",
+			success: function(respuesta) {
+				if(respuesta.status == 1){
+					var html = '';
+					$.each(respuesta.listOds, function( i, value ) {
+						html +='<div class="col-xs-12 col-sm-2 text-left">';
+						html +='<input type="checkbox" class="case_edit" name="chk_ods"  id="chk_ods_'+value.id+'" data-id='+value.id+' data-etapa="1" style="margin:5px"/> <label>'+value.descripcion+'</label>';
+						html +='</div>';
+					}); 
+					$("#listaOdsPorFinalizar").html(html);
+					
+					$.each(respuesta.listCerrarOds, function( i, value ) {
+						$('[id=chk_ods_'+value.odsid.id+'][data-etapa='+value.etapa+']').prop('disabled',true);
+						$('[id=chk_ods_'+value.odsid.id+'][data-etapa='+value.etapa+']').parent().hide();
+					}); 
+					
+					$("#modalFinalizar").modal('show');
+				}else{
+					alert("Etapa no disponible");
+				}
+				closeCargando();
+			},
+			error: function() {
+				console.log("error al cargar modal asignar evaluador");
+				
+		    }
+		});
+				
+	});
+	
+	$("#btnCerrarFinalizar").on("click",function(e){
+		$("#modalFinalizar").modal('hide');
+	});
+	
+	$("#check-todos").on("click",function(e){
+		if($(this).is(":checked")) {
+			$("[name=chk_ods]").prop('checked', true);
+		}else{
+			$("[name=chk_ods]").prop('checked', false);
+		}
+	});
+	
+	$("#btnFinalizarCierre").on("click",function(e){
+		$("#modalConfimarCierreFinalizar").modal('show');
+	});
+	
+	$("#btnConfirmarCierre").on("click",function(e){
+		openCargando();
+		var listaOds = [];
+		
+		$.each($("[name=chk_ods]"), function( i, value ){
+			if($(value).is(":checked") && !$(value).is(":disabled")  && $(value).is(":visible")){
+				listaOds.push({id: $(value).attr('data-id'), etapa:  $(value).attr('data-etapa')});
+			}
+		}); 
+		
+		$.ajax({
+			type : "POST",
+		    contentType : "application/json",
+		    url : url_base + "pedesa/cerrarOds",
+		    data : JSON.stringify(listaOds),
+		    dataType : 'json',
+			success: function(respuesta) {
+				console.log('Registro Correcto');
+				closeCargando();
+				$("#modalConfimarCierreFinalizar").modal('hide');
+				$("#modalFinalizar").modal('hide');
+			},
+			error: function() {
+				console.log("Error");
+				closeCargando();
+		    }
+		});	
+	});
+	
+	$("#btnCancelarCierre").on("click",function(e){
+		$("#modalConfimarCierreFinalizar").modal('hide');
+	});
+	
+	$("#btnVerEmpate").on("click",function(e){
+		alert('No hay empates.');
+	});
+});
+
+
+
+
 </script>
