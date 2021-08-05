@@ -17,6 +17,8 @@ public class UploadFileService {
 
     private String upload_folder = "/opt/apache-tomcat-8.0.27/webapps/alfresco_programaeducativo/pedesa/";
 	//private String upload_folder = "D:/Sunass/programaeducativo/src/main/resources/";
+    
+    private final String propertiesAlfrescoFile = "alfresco.properties";
 
     public void saveFile(MultipartFile file,Integer id,String ruta) throws IOException {
         if(!file.isEmpty()){

@@ -1010,6 +1010,7 @@ public class ConcursoeducativoController {
 							dto.setCategoria(tf.getCategoriatrabajo().getDescripcion());
 							dto.setCodigoiiee(tf.getProgramaeducativo().getCodmod());
 							dto.setCodigotrabajo(tf.getProgramaeducativo().getCodmod() + "_" + tf.getNumeracion());
+							dto.setTituloiiee(tf.getTitulotrabajo());
 							dto.setNombreiiee(tf.getProgramaeducativo().getNomie());
 							dto.setModalidad(tf.getModalidadtrabajo().getDescripcion());
 							
@@ -1060,6 +1061,7 @@ public class ConcursoeducativoController {
 					dto.setCategoria(tf.getCategoriatrabajo().getDescripcion());
 					dto.setCodigoiiee(tf.getProgramaeducativo().getCodmod());
 					dto.setCodigotrabajo(tf.getProgramaeducativo().getCodmod() + "_" + tf.getNumeracion());
+					dto.setTituloiiee(tf.getTitulotrabajo());
 					dto.setNombreiiee(tf.getProgramaeducativo().getNomie());
 					dto.setModalidad(tf.getModalidadtrabajo().getDescripcion());
 					
@@ -1113,6 +1115,7 @@ public class ConcursoeducativoController {
 								dto.setCategoria(tf.getCategoriatrabajo().getDescripcion());
 								dto.setCodigoiiee(tf.getProgramaeducativo().getCodmod());
 								dto.setCodigotrabajo(tf.getProgramaeducativo().getCodmod() + "_" + tf.getNumeracion());
+								dto.setTituloiiee(tf.getTitulotrabajo());
 								dto.setNombreiiee(tf.getProgramaeducativo().getNomie());
 								dto.setModalidad(tf.getModalidadtrabajo().getDescripcion());
 								

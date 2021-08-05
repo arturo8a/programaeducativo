@@ -33,14 +33,14 @@
 			<div class="col-xs-12 col-sm-4 text-left">
 				<label for="modalidadpostulaciontrabajo">Categoría</label>
 				<select class="form-control" id="categoriace_edit" name="categoriace_edit"  th:field="*{evaluacion_edit.categoriaevaluacion.id}" >
-					<option value="">Todos</option>
+					<option value="">Seleccione</option>
 					<option th:each="len:${listacategoriaevaluacion_edit}" th:value="${len.id}" th:utext="${len.descripcion}"/>
 				</select>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left">
 				<label for="titulotrabajo">Nivel de participación</label>
 				<select class="form-control" id="nivelparticipacionce_edit" name="nivelparticipacionce_edit"  th:field="*{evaluacion_edit.nivelparticipacion.id}" >
-					<option value="">Todos</option>
+					<option value="">Seleccione</option>
 					<option th:each="len:${listanivelparticipacion_edit}" th:value="${len.id}" th:utext="${len.descripcion}"/>       				
 				</select>
 			</div>

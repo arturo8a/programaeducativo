@@ -296,6 +296,7 @@
 							            <th>CODIGO DE LA II.EE</th>
 							            <th>NOMBRE DE LA II.EE</th>
 							            <th>CODIGO DE TRABAJO</th>
+							            <th style="display:none;">TITULO DE TRABAJO</th>
 							            <th>CATEGORIA</th>
 							            <th>MODALIDAD</th>
 							            <th>NIVEL DE PARTICIPACION</th>
@@ -1049,9 +1050,10 @@
 	            	},
 	            	{ 'data' : 'anio' },
 	            	{ 'data' : 'ods' },
-	            	{ 'data' : 'codigoiiee' },
-	            	{ 'data' : 'nombreiiee' },
+	            	{ 'data' : 'codigoiiee' },	            	
+	            	{ 'data' : 'nombreiiee' },	            	
 	                { 'data' : 'codigotrabajo' },
+	                { 'data' : 'tituloiiee' ,'searchable': false},
 	                { 'data' : 'categoria' },
 	            	{ 'data' : 'modalidad' },
 	            	{ 'data' : 'nivelparticipacion' },
@@ -1064,7 +1066,8 @@
 	                    orderable: false,
 	                    className: 'select-checkbox',
 	                    targets:   0
-	                }
+	                },
+	                { "visible": false, "targets": 7 }
 	            ],
 	            select: {
 	                style:    'multi', 
