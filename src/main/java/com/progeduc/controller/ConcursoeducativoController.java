@@ -1,5 +1,7 @@
 package com.progeduc.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.sql.Timestamp;
@@ -17,9 +19,16 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -40,6 +49,7 @@ import com.progeduc.dto.ClaveValor;
 import com.progeduc.dto.ConcursoDto;
 import com.progeduc.dto.DataTrabajosPermisos;
 import com.progeduc.dto.DetalleUsuarioAlianzaEstrategica;
+import com.progeduc.dto.DocenteDto;
 import com.progeduc.dto.EvaluacionDto;
 import com.progeduc.dto.EvaluacionRubricaQuestionarioDto;
 import com.progeduc.dto.EvaluadorDto;
@@ -47,10 +57,12 @@ import com.progeduc.dto.ListaDocente;
 import com.progeduc.dto.ListaDocenteInscritos;
 import com.progeduc.dto.ListaTrabajosFinalesPendientes;
 import com.progeduc.dto.ListaparticipanteDto;
+import com.progeduc.dto.ListaparticipantereporteDto;
 import com.progeduc.dto.ListaparticipantetrabajoDto;
 import com.progeduc.dto.ListatrabajosfinalesDto;
 import com.progeduc.dto.ParticipanteVerDto;
 import com.progeduc.dto.TrabajofinalesEnviadoDto;
+import com.progeduc.dto.TrabajosFinalesConcursoDto;
 import com.progeduc.dto.TrabajosfinalesParticipanteDto;
 import com.progeduc.dto.UsuarioAlianzaDto;
 import com.progeduc.dto.trabajoEvaluadoDto;
@@ -187,6 +199,7 @@ public class ConcursoeducativoController {
 	Integer max_numeracion = 0;
 	boolean verifica;
 	int estado_fuera_plazo=0;
+	String ejesTematicos="";
 	
 	@PostMapping(value="/registrarconcurso")
 	public String registrarconcurso(@Valid @RequestBody Postulacionconcurso dto)  {
@@ -1857,6 +1870,179 @@ public class ConcursoeducativoController {
 		}
 
 		return new ResponseEntity<List<DataTrabajosPermisos>>(lista, HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/trabajosfinalesconcurso/{ods_reporte}/{anio_reporte}/{modalidad_reporte}/{estado_reporte}/{categoria_reporte}/{nivel_participacion_reporte}/{nombre_ie_reporte}")	
+	public ResponseEntity<InputStreamResource> exportParticipantes(@PathVariable(value="ods_reporte") String ods,
+			@PathVariable(value="anio_reporte") String anio,
+			@PathVariable(name="modalidad_reporte") String modalidad,
+			@PathVariable(name="estado_reporte") String estado,
+			@PathVariable(name="categoria_reporte") String categoria,
+			@PathVariable(name="nivel_participacion_reporte") String nivel_participacion,
+			@PathVariable(name="nombre_ie_reporte") String nombreie
+			) {
+		
+		Date date = new Date();
+		DateFormat hourFormat = new SimpleDateFormat("HHmmss");
+		DateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
+		
+		ByteArrayInputStream stream = reportetrabajosfinalesconcurso(ods,anio,modalidad,estado,categoria,nivel_participacion,nombreie);
+		
+		HttpHeaders headers = new HttpHeaders();
+		
+		String fecha_archivo = dateFormat.format(date) + hourFormat.format(date);
+		
+		headers.add("Content-Disposition", "attachment; filename=trabajosfinalesconcurso_"+fecha_archivo+".xls");
+		
+		return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
+		
+	}
+	
+	public ByteArrayInputStream reportetrabajosfinalesconcurso(String ods,String anio,String modalidad,String estado,String categoria,String nivel_participacion,String nombreie)   {
+		
+		Workbook workbook = new HSSFWorkbook();
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();		
+				
+		List<TrabajosFinalesConcursoDto> lista = new ArrayList<TrabajosFinalesConcursoDto>();
+		
+		ejesTematicos="";
+		
+		trabajosfinalesparticipanteServ.listarTodos().forEach(obj->{
+			
+			if(obj.getTrabajosfinales().getEstado() == 1 && obj.getParticipante().getEstado()==1) {
+				TrabajosFinalesConcursoDto dto = new TrabajosFinalesConcursoDto();
+				dto.setAnio(obj.getTrabajosfinales().getAnio());
+				dto.setOds(odsserv.byOds(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+				dto.setCodigoie(obj.getTrabajosfinales().getProgramaeducativo().getCodmod());
+				dto.setNombreie(obj.getTrabajosfinales().getProgramaeducativo().getNomie());
+				dto.setRegion(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getProvincia().getDepartamento().getDescripcion());
+				dto.setProvincia(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getProvincia().getDescripcion());
+				dto.setDitrito(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getDescripcion());
+				dto.setModalidad(obj.getTrabajosfinales().getProgramaeducativo().getModensenianza().getDescripcion());
+				dto.setAmbito(obj.getTrabajosfinales().getProgramaeducativo().getAmbito().getDescripcion());
+				dto.setCodigoTrabajo(obj.getTrabajosfinales().getProgramaeducativo().getCodmod() + "_" + obj.getTrabajosfinales().getNumeracion().toString());
+				dto.setTituloTrabajo(obj.getTrabajosfinales().getTitulotrabajo());
+				dto.setLinkvideo(obj.getTrabajosfinales().getLinkvideo());
+				dto.setModalidadTrabajo(obj.getTrabajosfinales().getModalidadtrabajo().getDescripcion());
+				dto.setCategoriaTrabajo(obj.getTrabajosfinales().getCategoriatrabajo().getDescripcion());
+				dto.setNivelParticipacion(obj.getParticipante().getGradoestudiante().getNivelgradopartdesc());
+				
+				if(obj.getTrabajosfinales().getConversacion() == 1)
+					ejesTematicos += "Conversación de las fuentes de agua/";
+				if(obj.getTrabajosfinales().getValoracionagua() == 1)
+					ejesTematicos += "Valoración de los servicios de agua potable/";
+				if(obj.getTrabajosfinales().getValoracionalcantarillado() == 1)
+					ejesTematicos += "Valoración del servicio de alcantarillado/";
+				if(obj.getTrabajosfinales().getBuenuso() == 1)
+					ejesTematicos += "Buen uso y reúso del agua potable/";
+				if(obj.getTrabajosfinales().getImportancia() == 1)
+					ejesTematicos += "Importancia de cerrar la brecha en saneamiento/";
+				if(obj.getTrabajosfinales().getVinculo() == 1)
+					ejesTematicos += "El vínculo estratégico entre el agua segura y la salud/";
+				if(obj.getTrabajosfinales().getCarencias() == 1)
+					ejesTematicos += "Las carencias que ponen en riesgo la vida/";
+				ejesTematicos = ejesTematicos.substring(0, ejesTematicos.length()-1);
+				
+				dto.setEjesTematicos(ejesTematicos);
+				dto.setNombreParticipante(obj.getParticipante().getNombreestudiante());
+				dto.setApellidoPaternoParticipante(obj.getParticipante().getAppaternoestudiante());
+				dto.setApellidoMaternoParticipante(obj.getParticipante().getApmaternoestudiante());
+				dto.setTipoDocumentoParticipante(obj.getParticipante().getTipodocumentoestudiante().getDescripcion());
+				dto.setNroDocumentoParticipante(obj.getParticipante().getNrodocumentoestudiante());
+				dto.setFechaNacimientoParticipante(obj.getParticipante().getFechanacimientoestudiante().toString());
+				dto.setGeneroParticipante(obj.getParticipante().getGeneroestudiante().getDescripcion());
+				dto.setSeccionParticipante(obj.getParticipante().getSeccion());
+				dto.setNivelParticipante(obj.getParticipante().getGradoestudiante().getNivelparticipante().getDescripcion());
+				dto.setGradoParticipante(obj.getParticipante().getGradoestudiante().getNivelgradopartid().toString());
+				dto.setNombreTutor(obj.getParticipante().getNombrepmt());
+				dto.setApellidoPaternoTutor(obj.getParticipante().getAppaternopmt());
+				dto.setApellidoMaternoTutor(obj.getParticipante().getApmaternopmt());
+				dto.setTipoDocumentoTutor(obj.getParticipante().getTipodocumentopmt().getDescripcion());
+				dto.setNroDocumentoTutor(obj.getParticipante().getTipodocumentopmt().getDescripcion());
+				dto.setTelefonoTutor(obj.getParticipante().getNrotelefonopmt());
+				dto.setCorreoTutor(obj.getParticipante().getCorreoelectronicopmt());
+				dto.setParentescoTutor(obj.getParticipante().getParentesco().getDescripcion());
+				dto.setNombreDocente(obj.getTrabajosfinales().getNombre());
+				dto.setApellidoPaternoDocente(obj.getTrabajosfinales().getAppaterno());
+				dto.setApellidoMaternoDocente(obj.getTrabajosfinales().getApmaterno());
+				dto.setTipoDocumentoDocente(obj.getTrabajosfinales().getTipodocumento().getDescripcion());
+				dto.setNroDocumentoDocente(obj.getTrabajosfinales().getNrodocumento());
+				dto.setTelefonoDocente(obj.getTrabajosfinales().getTelefono());
+				dto.setGeneroDocente(obj.getTrabajosfinales().getGenero().getDescripcion());
+				dto.setCorreoDocente(obj.getTrabajosfinales().getCorreo());		
+				
+				lista.add(dto);
+			}			
+		});
+		
+		String [] columns = {"AÑO","ODS","Codigo II.EE","NOMBRE II.EE","REGION","PROVINCIA","DISTRITO","MODALIDAD", "AMBITO","Código de trabajo","Titulo de trabajo","Link de video","Modalidad","Categoria","Nivel de participación","Ejes temáticos","Nombres del participante","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Fecha de nacimiento","Género","Seccion","Nivel","Grado","Nombres tutor","Apellido paterno tutor","Apellido materno tutor","Tipo de documento","Nro de documento tutor","telefono","correo electronico","Parentesco","Nombres del docente","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Telefono","Género","Correo electrónico"};
+		
+		Sheet sheet = workbook.createSheet("Registro de trabajos finales");
+		Row row = sheet.createRow(0);
+		for(int i=0;i<columns.length;i++) {
+			Cell cell = row.createCell(i);
+			cell.setCellValue(columns[i]);
+		}
+		
+		int initRow = 1;
+		for(TrabajosFinalesConcursoDto dto : lista) {
+			row = sheet.createRow(initRow);
+			row.createCell(0).setCellValue(dto.getAnio());
+			row.createCell(1).setCellValue(dto.getOds());
+			row.createCell(2).setCellValue(dto.getCodigoie());
+			row.createCell(3).setCellValue(dto.getNombreie());
+			row.createCell(4).setCellValue(dto.getRegion());
+			row.createCell(5).setCellValue(dto.getProvincia());
+			row.createCell(6).setCellValue(dto.getDitrito());
+			row.createCell(7).setCellValue(dto.getModalidad());
+			row.createCell(8).setCellValue(dto.getAmbito());
+			row.createCell(9).setCellValue(dto.getCodigoTrabajo());
+			row.createCell(10).setCellValue(dto.getTituloTrabajo());
+			row.createCell(11).setCellValue(dto.getLinkvideo());
+			row.createCell(12).setCellValue(dto.getModalidadTrabajo());
+			row.createCell(13).setCellValue(dto.getCategoriaTrabajo());
+			row.createCell(14).setCellValue(dto.getNivelParticipacion());
+			row.createCell(15).setCellValue(dto.getEjesTematicos());
+			row.createCell(16).setCellValue(dto.getNombreParticipante());
+			row.createCell(17).setCellValue(dto.getApellidoPaternoParticipante());
+			row.createCell(18).setCellValue(dto.getApellidoMaternoParticipante());
+			row.createCell(19).setCellValue(dto.getTipoDocumentoParticipante());
+			row.createCell(20).setCellValue(dto.getNroDocumentoParticipante());
+			row.createCell(21).setCellValue(dto.getFechaNacimientoParticipante());
+			row.createCell(22).setCellValue(dto.getGeneroParticipante());
+			row.createCell(23).setCellValue(dto.getSeccionParticipante());
+			row.createCell(24).setCellValue(dto.getNivelParticipante());
+			row.createCell(25).setCellValue(dto.getGradoParticipante());
+			row.createCell(26).setCellValue(dto.getNombreTutor());
+			row.createCell(27).setCellValue(dto.getApellidoPaternoTutor());
+			row.createCell(28).setCellValue(dto.getApellidoMaternoTutor());
+			row.createCell(29).setCellValue(dto.getTipoDocumentoTutor());
+			row.createCell(30).setCellValue(dto.getNroDocumentoTutor());
+			row.createCell(31).setCellValue(dto.getTelefonoTutor());
+			row.createCell(32).setCellValue(dto.getCorreoTutor());
+			row.createCell(33).setCellValue(dto.getParentescoTutor());
+			row.createCell(34).setCellValue(dto.getNombreDocente());
+			row.createCell(35).setCellValue(dto.getApellidoPaternoDocente());
+			row.createCell(36).setCellValue(dto.getApellidoMaternoDocente());
+			row.createCell(37).setCellValue(dto.getTipoDocumentoDocente());
+			row.createCell(38).setCellValue(dto.getNroDocumentoDocente());
+			row.createCell(39).setCellValue(dto.getTelefonoDocente());
+			row.createCell(40).setCellValue(dto.getGeneroDocente());
+			row.createCell(41).setCellValue(dto.getCorreoDocente());
+			
+			initRow++;
+		}
+		
+		try {
+			workbook.write(stream);
+			workbook.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return new ByteArrayInputStream(stream.toByteArray());
 	}
 	
 }

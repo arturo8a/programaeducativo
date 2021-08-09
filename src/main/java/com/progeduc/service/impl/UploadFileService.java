@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UploadFileService {
 
     private String upload_folder = "/opt/apache-tomcat-8.0.27/webapps/alfresco_programaeducativo/pedesa/";
-	//private String upload_folder = "D:/Sunass/programaeducativo/src/main/resources/";
+	//private String upload_folder = "D:/Sunass/programa_educativo_desarrollo/programaeducativo/src/main/resources/";
     
     private final String propertiesAlfrescoFile = "alfresco.properties";
 

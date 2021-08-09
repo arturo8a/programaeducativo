@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sr_questionario_respuesta" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="531fef2c-a209-4d1a-bb1b-8259cb4f3b66">
-	<field name="puntaje" class="java.lang.Integer"/>
+	<field name="puntaje" class="java.lang.Float"/>
 	<field name="respuesta" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -57,6 +57,10 @@
 				</reportElement>
 				<box>
 					<pen lineWidth="0.25" lineColor="#F5F5F5"/>
+					<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#F5F5F5"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#F5F5F5"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#F5F5F5"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#F5F5F5"/>
 				</box>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[puntaje]]></text>

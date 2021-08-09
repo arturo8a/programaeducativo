@@ -11,5 +11,7 @@ public interface ITrabajosfinalesParticipanteService {
 	List<TrabajosfinalesParticipante> listar(Integer trabajofinalid);
 	
 	Integer eliminar(Integer trabajosfinalesid);
+	
+	List<TrabajosfinalesParticipante> listarTodos();
 
 }

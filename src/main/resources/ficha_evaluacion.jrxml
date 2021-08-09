@@ -5,16 +5,16 @@
 		<field name="rubrica" class="java.lang.String"/>
 		<field name="criterio1" class="java.lang.String"/>
 		<field name="descripcion1" class="java.lang.String"/>
-		<field name="puntaje1" class="java.lang.Integer"/>
+		<field name="puntaje1" class="java.lang.Float"/>
 		<field name="criterio2" class="java.lang.String"/>
 		<field name="descripcion2" class="java.lang.String"/>
-		<field name="puntaje2" class="java.lang.Integer"/>
+		<field name="puntaje2" class="java.lang.Float"/>
 		<field name="criterio3" class="java.lang.String"/>
 		<field name="descripcion3" class="java.lang.String"/>
-		<field name="puntaje3" class="java.lang.Integer"/>
+		<field name="puntaje3" class="java.lang.Float"/>
 		<field name="criterio4" class="java.lang.String"/>
 		<field name="descripcion4" class="java.lang.String"/>
-		<field name="puntaje4" class="java.lang.Integer"/>
+		<field name="puntaje4" class="java.lang.Float"/>
 	</subDataset>
 	<subDataset name="Dataset2" uuid="8b125cad-5ec8-4147-8fc2-05617e2b55ce">
 		<field name="pregunta" class="java.lang.String"/>

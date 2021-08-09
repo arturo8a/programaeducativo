@@ -26,5 +26,9 @@ public interface ITrabajosfinalesParticipanteRepo extends CrudRepository<Trabajo
 	
 	@Query(value="SELECT TB1.* FROM TRABAJOSFINALES_PARTICIPANTE TB1 WHERE TB1.trabajosfinalesid = ?1",nativeQuery = true)
 	List<TrabajosfinalesParticipante> listar(Integer trabajofinalid);
+	
+	@Query(value="SELECT TB1.* FROM TRABAJOSFINALES_PARTICIPANTE TB1",nativeQuery = true)
+	List<TrabajosfinalesParticipante> listarTodos();
+	
 
 }

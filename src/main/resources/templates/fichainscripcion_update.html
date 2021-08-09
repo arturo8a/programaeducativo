@@ -290,8 +290,8 @@
 					</div>	
 					<div class="row">
 						<div class="col text-right">
-							<input type="button" th:if="${finalizaparticipaciontrabajo == 0}" value="Agregar trabajo" id="agregartrabajo" class="btn btn-success mr-3">
-							<input type="button" th:if="${finalizaparticipaciontrabajo == 0}" id="finalizarparticipacion"  value="FINALIZAR PARTICIPACIÓN" class="btn btn-primary mr-3">
+							<input type="button" th:if="${finalizaparticipaciontrabajo != 1}" value="Agregar trabajo" id="agregartrabajo" class="btn btn-success mr-3">
+							<input type="button" th:if="${finalizaparticipaciontrabajo != 1}" id="finalizarparticipacion"  value="FINALIZAR PARTICIPACIÓN" class="btn btn-primary mr-3">
 						</div>
 					</div>
 				</div>		
