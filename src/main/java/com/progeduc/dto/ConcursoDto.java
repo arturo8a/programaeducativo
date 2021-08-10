@@ -94,5 +94,4 @@ public class ConcursoDto {
 	public void setPuesto(Integer puesto) {
 		this.puesto = puesto;
 	}
-
 }

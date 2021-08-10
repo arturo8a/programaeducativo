@@ -30,5 +30,10 @@ public class TrabajosfinalesParticipanteServiceImpl implements ITrabajosfinalesP
 		return trabajosfinalesParticipanteRepo.eliminar(trabajosfinalesid);
 	}
 	
+	@Override
+	public List<TrabajosfinalesParticipante> listarTodos(){
+		return trabajosfinalesParticipanteRepo.listarTodos();
+	}
+	
 	
 }
