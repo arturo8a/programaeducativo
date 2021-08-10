@@ -418,7 +418,9 @@ function getUsuario(idUsuario){
 				$("#apepatcontactoregusu").val(respuesta.apepatcontacto);
 				$("#apematcontactoregusu").val(respuesta.apematcontacto);
 				$("#nombrecontactoregusu").val(respuesta.nombrecontacto);
-				$("#tipocodcontactoresgusu").val(respuesta.tipodocumento.id);
+				if(respuesta.tipodocumento != null){
+					$("#tipocodcontactoresgusu").val(respuesta.tipodocumento.id);
+				}
 				$("#numdoccontactoregusu").val(respuesta.numdocumento);
 				$("#numtelcontactoregusu").val(respuesta.telefonouno);
 				$("#numtel2contactoregusu").val(respuesta.telefonodos);
@@ -481,14 +483,14 @@ function validarCampos(){
 		contentMensajeError += "Debe ingresar Nombres de Contacto"+"</br>";
 		status = false;
 	}
-	if($('#tipocodcontactoresgusu').val() == "0"){
+	/*if($('#tipocodcontactoresgusu').val() == "0"){
 		contentMensajeError += "Debe seleccionar Tipo de Documento de Contacto"+"</br>";
 		status = false;
 	}
 	if($('#numdoccontactoregusu').val() == ""){
 		contentMensajeError += "Debe ingresar N° Documento de Contacto"+"</br>";
 		status = false;
-	}
+	}*/
 	if($('#numtelcontactoregusu').val() == ""){
 		contentMensajeError += "Debe ingresar N° de teléfono 1 de Contacto"+"</br>";
 		status = false;
