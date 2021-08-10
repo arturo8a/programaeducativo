@@ -25,6 +25,7 @@ import com.progeduc.dto.LoginUsuarioDto;
 import com.progeduc.dto.UsuarioDto;
 import com.progeduc.dto.UsuarioOdsDto;
 import com.progeduc.model.UsuarioLdap;
+import com.progeduc.service.IUsuarioOdsService;
 import com.progeduc.service.IUsuarioService;
 import com.progeduc.service.impl.UploadFileService;
 
@@ -43,7 +44,12 @@ public class UsuarioController {
 	@Autowired
 	private UploadFileService uploadfile;
 	
+	@Autowired
+	private IUsuarioOdsService usuarioodsService; 
+	
 	int contador;
+	
+	String ods ="";
 	
 	@GetMapping("/listarusuarios")
 	public ResponseEntity<List<UsuarioDto>> listarusuarios() throws Exception {
@@ -63,6 +69,12 @@ public class UsuarioController {
 						usuarioDto.setCorreo(obj1.getCorreo());
 						usuarioDto.setId(obj.getId());
 						usuarioDto.setEstado(obj.getEstado());
+						ods ="";
+						usuarioodsService.listarByUsuario(obj.getId()).forEach(obj2->{
+							ods += obj2.getOds().getDescripcion() + "/";
+						});
+						
+						usuarioDto.setOds(ods);
 						lista.add(usuarioDto);
 					}
 				}

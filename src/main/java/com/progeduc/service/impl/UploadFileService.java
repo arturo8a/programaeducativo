@@ -16,14 +16,15 @@ import org.springframework.web.multipart.MultipartFile;
 public class UploadFileService {
 
     private String upload_folder = "/opt/apache-tomcat-8.0.27/webapps/alfresco_programaeducativo/pedesa/";
-	//private String upload_folder = "D:/Sunass/programaeducativo/src/main/resources/";
+	//private String upload_folder = "D:/Sunass/programa_educativo_desarrollo/programaeducativo/src/main/resources/";
+    
+    private final String propertiesAlfrescoFile = "alfresco.properties";
 
     public void saveFile(MultipartFile file,Integer id,String ruta) throws IOException {
         if(!file.isEmpty()){
             byte[] bytes = file.getBytes();            
             File directorio = new File(upload_folder+ ruta+ "//"+id+"//");
             if(directorio.mkdirs()) {
-            	System.out.println("name :" + file.getOriginalFilename());
             	Path path = Paths.get(upload_folder + ruta+ "//"+id+"//" + file.getOriginalFilename());
             	Files.write(path,bytes);
             }
@@ -38,7 +39,6 @@ public class UploadFileService {
     public void saveFile(List<MultipartFile> file,Integer id,String ruta) throws IOException {
     	
     	File directorio = new File(upload_folder+ ruta+ "//"+id+"//");
-    	System.out.println("file length :" + file.size());
         if(directorio.mkdirs()) {
         	for(int i=0;i<file.size();i++) {
         		byte[] bytes = file.get(i).getBytes();

@@ -310,6 +310,7 @@
 							            <th>CODIGO DE LA II.EE</th>
 							            <th>NOMBRE DE LA II.EE</th>
 							            <th>CODIGO DE TRABAJO</th>
+							            <th style="display:none;">TITULO DE TRABAJO</th>
 							            <th>CATEGORIA</th>
 							            <th>MODALIDAD</th>
 							            <th>NIVEL DE PARTICIPACION</th>
@@ -518,6 +519,8 @@
 		var id;
 		var table_lista_concurso, table_lista_asignacion;
 		
+		var ods_reporte="", anio_reporte=0, modalidad_reporte="", estado_reporte="", categoria_reporte="", nivel_participacion_reporte="", nombre_ie_reporte="";
+		
 		$(document).off("click",".btnInactivarUsuario");
 		$(document).off("click",".btnEditarUsuario");
 		
@@ -527,6 +530,13 @@
 	        	
 	        	setTimeout(() => {        		  
 	        		table_lista_concurso.draw();
+	        		ods_reporte = $("#odsconcurso").val();
+	        		anio_reporte = $("#anioconcurso").val();
+	        		modalidad_reporte = $("#modalidadconcurso").val();
+	        		estado_reporte = $("#estadoconcurso").val();
+	        		categoria_reporte = $("#categoriaconcurso").val();
+	        		nivel_participacion_reporte = $("#participacionconcurso").val();
+	        		nombre_ie_reporte = $("#nombreieconcurso").val();
 	        	}, 100);	
 			});
 			
@@ -783,9 +793,9 @@
 	                selector: 'td:first-child'
 	            },
 	            "buttons": [
-	            	{
+	            	/*{
 	            		extend: 'excelHtml5',
-	            		text:"<img src='./images/iconos_nd/excel1.svg' style='size:15px;margin:0px;padding:0px'/>",
+	            		
 	                    titleAttr : 'LISTA DE TRABAJOS FINALES - CONCURSO',
 	                    messageTop: function(){
 	                    	return '[ ODS: ' + $("#odsconcurso").val() + ']            [ Año de inscripción: '+ $("#anioconcurso").val() + ']';
@@ -810,7 +820,13 @@
 	                    	}
 	            	    	return "Listatrabajosfinales_"+dia+mes+hoy.getFullYear()+'_'+hora + minuto;
 	                    }
-	            	}
+	            	},*/
+	            	{
+		                text:"<img src='./images/iconos_nd/excel1.svg' style='size:15px;margin:0px;padding:0px'/>",
+		                action: function ( e, dt, node, config ) {
+							window.location.href = url_base + "pedesa/trabajosfinalesconcurso/"+ods_reporte+"/"+anio_reporte+"/"+modalidad_reporte+"/"+estado_reporte+"/"+categoria_reporte+"/"+nivel_participacion_reporte+"/"+nombre_ie_reporte;							
+		                }
+		            }
 	            ]
 	        });
 			$("div.rs_concurso_educativo").html("<strong>RESULTADOS CONCURSO EDUCATIVO</strong>");
@@ -1125,9 +1141,10 @@
 	            	},
 	            	{ 'data' : 'anio' },
 	            	{ 'data' : 'ods' },
-	            	{ 'data' : 'codigoiiee' },
-	            	{ 'data' : 'nombreiiee' },
+	            	{ 'data' : 'codigoiiee' },	            	
+	            	{ 'data' : 'nombreiiee' },	            	
 	                { 'data' : 'codigotrabajo' },
+	                { 'data' : 'tituloiiee' ,'searchable': false},
 	                { 'data' : 'categoria' },
 	            	{ 'data' : 'modalidad' },
 	            	{ 'data' : 'nivelparticipacion' },
@@ -1140,7 +1157,8 @@
 	                    orderable: false,
 	                    className: 'select-checkbox',
 	                    targets:   0
-	                }
+	                },
+	                { "visible": false, "targets": 7 }
 	            ],
 	            select: {
 	                style:    'multi', 
@@ -1255,8 +1273,11 @@
 						case 'docx': 
 							contenido += window.open('../alfresco_programaeducativo/pedesa/upload_trabajos/'+subcadena, '_blank');
 							break;
+						case 'mp3':
+							contenido += archivo + "<br><audio controls><source src='../alfresco_programaeducativo/pedesa/upload_evidencias/"+subcadena+"'"+" width='100%' height='600px' type='audio/mp3'>Tu navegador no soporta audio HTML5.</audio>";
+						break;
 						case 'mp4': 
-							contenido += archivo + "<br><video src='../alfresco_programaeducativo/pedesa/upload_trabajos/"+subcadena+"'"+" width='100%' height='600px'></<video>";
+							contenido += archivo + "<br><video src='../alfresco_programaeducativo/pedesa/upload_trabajos/"+subcadena+"'"+" width='100%' height='600px' controls></<video>";
 							break;
 					}					
 					contenido += "</div>";
@@ -1343,13 +1364,16 @@
 					$("#contenido_evidencia").html("<iframe src='../alfresco_programaeducativo/pedesa/upload_evidencias/"+subcadena+"'"+" type='application/pdf' width='100%' height='600px'></<iframe>");
 				break;
 				case 'mp4':
-					$("#contenido_evidencia").html("<video src='../alfresco_programaeducativo/pedesa/upload_evidencias/"+subcadena+"'"+" width='100%' height='600px'></<video>");
+					$("#contenido_evidencia").html("<video src='../alfresco_programaeducativo/pedesa/upload_evidencias/"+subcadena+"'"+" width='100%' height='600px' controls></<video>");
 				break;
 				case 'jpg':
 				case 'png':
 				case 'jpeg':
 					$("#contenido_evidencia").html("<img src='../alfresco_programaeducativo/pedesa/upload_evidencias/"+subcadena+"'"+" width='100%' height='600px'/>");
 					break;
+				case 'mp3':
+					$("#contenido_evidencia").html("<audio controls><source src='../alfresco_programaeducativo/pedesa/upload_evidencias/"+subcadena+"'"+" width='100%' height='600px' type='audio/mp3'>Tu navegador no soporta audio HTML5.</audio>");
+				break;
 				case 'word':
 					window.open('../alfresco_programaeducativo/pedesa/upload_evidencias/'+subcadena, '_blank');
 				break;

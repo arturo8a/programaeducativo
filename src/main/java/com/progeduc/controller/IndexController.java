@@ -207,6 +207,7 @@ public class IndexController {
 	String id_rubrica,id_questionario,ods,id_pregunta_respuesta,id_pr;
 	String id_rubrica_edit,id_questionario_edit,ods_edit,id_pregunta_respuesta_edit,id_pr_edit;
 	Integer odsid;
+	String indices;
 	
 	@GetMapping("/inicio")
 	public String inicio(@RequestParam(name="name",required=false,defaultValue="world") String name, Model model) {
@@ -236,7 +237,6 @@ public class IndexController {
 		
 		Trabajosfinales tf  = trabajosfinalesService.ListarporId(id);
 		model.addAttribute("tf", tf);
-		System.out.println("hd_categoria :" + tf.getCategoriatrabajo().getId());
 		model.addAttribute("hd_categoria", (tf.getCategoriatrabajo().getId()== 1 || tf.getCategoriatrabajo().getId() == 3) ? false : true);
 		model.addAttribute("categoriatrabajo",categoriatrabajoService.listar());
 		model.addAttribute("modalidadtrabajo",modalidadtrabajoService.listar());
@@ -266,6 +266,7 @@ public class IndexController {
 			model.addAttribute("evidencia" + contador,obj);
 			contador ++;
 		});
+		System.out.println("contador : " + contador);
 		
 		model.addAttribute("nroevidencias",uploadfile.buscarEvidencias(id, "upload_evidencias").size());
 		return "formeditartrabajo";
@@ -810,6 +811,7 @@ public class IndexController {
 		id_pregunta_respuesta_edit="";
 		
 		Integer mayor=0;
+		indices ="";
 		
 		Integer mayor_rubrica=0;		
 		List<Integer> idRubrica_max = new ArrayList<Integer>();
@@ -817,9 +819,12 @@ public class IndexController {
 		model.addAttribute("evaluacion_edit", eval);		
 		List<Rubrica> listaRubrica = new ArrayList<Rubrica>();
         evaluacionrubricaServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
-        	idRubrica_max.add(obj.getRubrica().getId());
-        	listaRubrica.add(obj.getRubrica());
-        	id_rubrica_edit += obj.getRubrica().getId().toString() + "-";
+        	if(obj.getRubrica().getEstado() == 1) {
+        		indices += obj.getRubrica().getId().toString() + "-";
+            	idRubrica_max.add(obj.getRubrica().getId());
+            	listaRubrica.add(obj.getRubrica());
+            	id_rubrica_edit += obj.getRubrica().getId().toString() + "-";
+        	}        	
         });
         
         for(int i=0;i<idRubrica_max.size();i++) {
@@ -832,14 +837,26 @@ public class IndexController {
         List<Integer> idQuestionario_max = new ArrayList<Integer>();
         List<Questionario> listaQuestionario = new ArrayList<Questionario>();
         evaluacionquestionarioServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
-        	idQuestionario_max.add(obj.getQuestionario().getId());
-        	listaQuestionario.add(obj.getQuestionario());
-        	id_pr = "";
-        	obj.getQuestionario().getQuestionariorespuesta().forEach(pr->{
-        		id_pr += pr.getId() + "-";
-        	});
-        	id_pregunta_respuesta_edit += "(" + obj.getQuestionario().getId().toString() + "*" + (id_pr.substring(0,id_pr.length()-1)) + ")";
+        	
+        	if(obj.getQuestionario().getEstado() == 1) {
+        		indices += obj.getQuestionario().getId().toString() + "/";
+            	idQuestionario_max.add(obj.getQuestionario().getId());
+            	listaQuestionario.add(obj.getQuestionario());
+            	id_pr = "";
+            	obj.getQuestionario().getQuestionariorespuesta().forEach(pr->{
+            		id_pr += pr.getId() + "-";
+            		indices += pr.getId() + "*";
+            	});
+            	indices = indices.substring(0,indices.length()-1);
+            	indices += "-";
+            	id_pregunta_respuesta_edit += "(" + obj.getQuestionario().getId().toString() + "*" + (id_pr.substring(0,id_pr.length()-1)) + ")";
+        	}
         });
+        
+        if(indices.length()>0)
+        	indices= indices.substring(0,indices.length()-1);
+        else
+        	indices = "";
         
         for(int i=0;i<idQuestionario_max.size();i++) {
         	if(idQuestionario_max.get(i) > mayor_cuestionario) {
@@ -853,18 +870,11 @@ public class IndexController {
         else {
         	mayor = mayor_cuestionario;
         }
-       
+        model.addAttribute("indices", indices); 
         model.addAttribute("id_evaluacion_edit", eval.getId()); 
         model.addAttribute("id_rubrica_edit", id_rubrica_edit);
         model.addAttribute("id_questionario_edit", id_questionario);
         model.addAttribute("id_pregunta_respuesta_edit", id_pregunta_respuesta_edit);
-        List<Integer> listapuntaje = new ArrayList<Integer>();
-        listapuntaje.add(1);
-        listapuntaje.add(2);
-        listapuntaje.add(3);
-        listapuntaje.add(4);
-        listapuntaje.add(5);
-        model.addAttribute("listapuntaje_edit", listapuntaje);
         
         model.addAttribute("max", mayor);
         
@@ -902,20 +912,12 @@ public class IndexController {
         		id_pr += pr.getId() + "-";
         	});
         	id_pregunta_respuesta += "(" + obj.getQuestionario().getId().toString() + "*" + (id_pr.substring(0,id_pr.length()-1)) + ")";
-        	System.out.println("id_pregunta_respuesta :" + id_pregunta_respuesta);
         });
        
         model.addAttribute("id_evaluacion", eval.getId()); 
         model.addAttribute("id_rubrica", id_rubrica);
         model.addAttribute("id_questionario", id_questionario);
         model.addAttribute("id_pregunta_respuesta", id_pregunta_respuesta);
-        List<Integer> listapuntaje = new ArrayList<Integer>();
-        listapuntaje.add(1);
-        listapuntaje.add(2);
-        listapuntaje.add(3);
-        listapuntaje.add(4);
-        listapuntaje.add(5);
-        model.addAttribute("listapuntaje", listapuntaje);
         
         Calendar fecha = Calendar.getInstance();
 		model.addAttribute("anio",fecha.get(Calendar.YEAR));		

@@ -6,7 +6,8 @@ public class AsignacionDto {
 	String ods;
 	String codigoiiee;
 	String nombreiiee;
-	String codigotrabajo;
+	String codigotrabajo;	
+	String tituloiiee;
 	String categoria;
 	String modalidad;
 	String nivelparticipacion;
@@ -42,6 +43,12 @@ public class AsignacionDto {
 	}
 	public void setCodigotrabajo(String codigotrabajo) {
 		this.codigotrabajo = codigotrabajo;
+	}
+	public String getTituloiiee() {
+		return tituloiiee;
+	}
+	public void setTituloiiee(String tituloiiee) {
+		this.tituloiiee = tituloiiee;
 	}
 	public String getCategoria() {
 		return categoria;

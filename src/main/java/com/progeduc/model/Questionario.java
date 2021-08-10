@@ -25,6 +25,9 @@ public class Questionario {
 	
 	@OneToMany(mappedBy="questionario", cascade= {CascadeType.ALL}, orphanRemoval=true)
 	private List<QuestionarioRespuesta> questionariorespuesta;
+	
+	@Column(name="ESTADO",nullable=true)
+	private Integer estado;
 
 	public Integer getId() {
 		return id;
@@ -48,5 +51,13 @@ public class Questionario {
 
 	public void setQuestionariorespuesta(List<QuestionarioRespuesta> questionariorespuesta) {
 		this.questionariorespuesta = questionariorespuesta;
+	}
+
+	public Integer getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Integer estado) {
+		this.estado = estado;
 	}
 }

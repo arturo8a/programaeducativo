@@ -40,6 +40,7 @@ public class EvaluacionServiceImpl implements IEvaluacionService{
 	Integer anio;
 	Integer idcategoria;
 	Integer idnivelparticipacion; 
+	Integer rpta;
 
 	@Override
 	public Evaluacion registrar(Evaluacion obj) {
@@ -115,37 +116,50 @@ public class EvaluacionServiceImpl implements IEvaluacionService{
 	}
 	
 	@Override
-	public Evaluacion updateEvalRubQuest(EvaluacionRubricaQuestionarioDto dto) {
+	public Integer updateEvalRubQuest(EvaluacionRubricaQuestionarioDto dto) {
 		
-		evaluacionrepo.save(dto.getEvaluacion());
-		dto.getListarubrica().forEach(obj->{
-			rubricarepo.save(obj);
-			System.out.println(" dto.getEvaluacion().getId() : " + dto.getEvaluacion().getId());
-			System.out.println("rubricaid : " + obj.getId());
-			if(evaluacionrubricarepo.verificaExiste(dto.getEvaluacion().getId(), obj.getId()).size()==0) {
-				System.out.println("entro rubrica");
-				evaluacionrubricarepo.guardar(dto.getEvaluacion().getId(), obj.getId());
-			}
-		});
-		
-		dto.getListaquestionario().forEach(obj->{
-			obj.getQuestionariorespuesta().forEach(obj1->{
-				obj1.setQuestionario(obj);
+		if(existe(dto.getEvaluacion().getId(),	dto.getEvaluacion().getAnio(), dto.getEvaluacion().getCategoriaevaluacion().getId(), dto.getEvaluacion().getNivelparticipacion().getId()) !=null) {
+			rpta = -1;
+		}
+		else {
+			dto.getEliminado_rubrica().forEach(obj->{
+				rubricarepo.updateestado(obj.getId(), 0);
 			});
-			questionariorepo.save(obj);
-			System.out.println(" dto.getEvaluacion().getId() : " + dto.getEvaluacion().getId());
-			System.out.println(" cuestionario : " + obj.getId());
-			if(evaluacionquestionariorepo.verificaExiste(dto.getEvaluacion().getId(), obj.getId()).size()==0) {
-				System.out.println("entro cuestionario");
-				evaluacionquestionariorepo.guardar(dto.getEvaluacion().getId(), obj.getId());
-			}
-		});
-		return dto.getEvaluacion();
+			
+			dto.getEliminado_questionario().forEach(obj->{
+				questionariorepo.updateestado(obj.getId(), 0);
+			});
+			
+			evaluacionrepo.save(dto.getEvaluacion());
+			dto.getListarubrica().forEach(obj->{
+				rubricarepo.save(obj);
+				if(evaluacionrubricarepo.verificaExiste(dto.getEvaluacion().getId(), obj.getId()).size()==0) {
+					evaluacionrubricarepo.guardar(dto.getEvaluacion().getId(), obj.getId());
+				}
+			});
+			
+			dto.getListaquestionario().forEach(obj->{
+				obj.getQuestionariorespuesta().forEach(obj1->{
+					obj1.setQuestionario(obj);
+				});
+				questionariorepo.save(obj);
+				if(evaluacionquestionariorepo.verificaExiste(dto.getEvaluacion().getId(), obj.getId()).size()==0) {
+					evaluacionquestionariorepo.guardar(dto.getEvaluacion().getId(), obj.getId());
+				}
+			});
+			rpta = dto.getEvaluacion() != null ? dto.getEvaluacion().getId() : 0;
+		}		
+		return rpta;
 	}
 	
 	@Override
 	public int updateestado(Integer id, Integer estado) {
 		return evaluacionrepo.updateestado(id, estado);
+	}
+	
+	@Override
+	public Evaluacion existe(Integer id_evaluacion,Integer anio,Integer categoria, Integer nivel_participacion) {
+		return evaluacionrepo.existe(id_evaluacion, anio, categoria, nivel_participacion);
 	}
 	
 	

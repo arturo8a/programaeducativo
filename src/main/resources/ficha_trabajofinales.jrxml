@@ -22,9 +22,9 @@
 	<field name="nrodocumentopart" class="java.lang.String"/>
 	<field name="nivelpart" class="java.lang.String"/>
 	<title>
-		<band height="53" splitType="Stretch">
+		<band height="50" splitType="Stretch">
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="5" width="550" height="30" backcolor="#2483FF" uuid="3c51bebe-f38d-4c17-b53a-adb6317d1bd8"/>
+				<reportElement x="150" y="10" width="270" height="30" uuid="3c51bebe-f38d-4c17-b53a-adb6317d1bd8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
@@ -140,7 +140,7 @@
 				<textFieldExpression><![CDATA[$P{ejestematicos}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="110" width="550" height="20" uuid="e5d21f57-d7d1-4dd9-8197-f8ac47396309"/>
+				<reportElement x="0" y="109" width="550" height="19" uuid="e5d21f57-d7d1-4dd9-8197-f8ac47396309"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
@@ -262,14 +262,14 @@
 	<columnHeader>
 		<band height="61" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="550" height="20" uuid="705cf585-cee5-4282-b318-861ad66a92f8"/>
+				<reportElement x="0" y="0" width="550" height="30" uuid="705cf585-cee5-4282-b318-861ad66a92f8"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[PARTICIPANTES]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="20" width="110" height="30" backcolor="#EFEFEF" uuid="6cffe3ba-b401-42dc-aac6-b65e539ec19c"/>
+				<reportElement mode="Opaque" x="0" y="30" width="110" height="30" backcolor="#EFEFEF" uuid="6cffe3ba-b401-42dc-aac6-b65e539ec19c"/>
 				<box>
 					<pen lineColor="#EFEFEF"/>
 				</box>
@@ -279,7 +279,7 @@
 				<text><![CDATA[Apellido paterno]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="110" y="20" width="90" height="30" backcolor="#EFEFEF" uuid="f46110e7-619a-49cc-8a6a-5abc5557ad6e"/>
+				<reportElement mode="Opaque" x="110" y="30" width="90" height="30" backcolor="#EFEFEF" uuid="f46110e7-619a-49cc-8a6a-5abc5557ad6e"/>
 				<box>
 					<pen lineColor="#EFEFEF"/>
 				</box>
@@ -289,7 +289,7 @@
 				<text><![CDATA[Apellido materno]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="200" y="20" width="130" height="30" backcolor="#EFEFEF" uuid="f4d79b0f-1b5d-4eb6-9801-1b23d1052c85"/>
+				<reportElement mode="Opaque" x="200" y="30" width="130" height="30" backcolor="#EFEFEF" uuid="f4d79b0f-1b5d-4eb6-9801-1b23d1052c85"/>
 				<box>
 					<pen lineColor="#EFEFEF"/>
 				</box>
@@ -299,7 +299,7 @@
 				<text><![CDATA[Nombres]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="330" y="20" width="80" height="30" backcolor="#EFEFEF" uuid="2c76a0fc-d4c0-483f-a1ff-6191ed7a2637"/>
+				<reportElement mode="Opaque" x="330" y="30" width="80" height="30" backcolor="#EFEFEF" uuid="2c76a0fc-d4c0-483f-a1ff-6191ed7a2637"/>
 				<box>
 					<pen lineColor="#EFEFEF"/>
 				</box>
@@ -309,7 +309,7 @@
 				<text><![CDATA[Tipo documento]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="410" y="20" width="80" height="30" backcolor="#EFEFEF" uuid="72a9f863-e7d5-4e2b-8f3b-ab84dd13caec"/>
+				<reportElement mode="Opaque" x="410" y="30" width="80" height="30" backcolor="#EFEFEF" uuid="72a9f863-e7d5-4e2b-8f3b-ab84dd13caec"/>
 				<box>
 					<pen lineColor="#EFEFEF"/>
 				</box>
@@ -319,7 +319,7 @@
 				<text><![CDATA[Nro documento]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="490" y="20" width="60" height="30" backcolor="#EFEFEF" uuid="9215fe6d-ea26-4611-8ddc-a15ea0da8cae"/>
+				<reportElement mode="Opaque" x="490" y="30" width="60" height="30" backcolor="#EFEFEF" uuid="9215fe6d-ea26-4611-8ddc-a15ea0da8cae"/>
 				<box>
 					<pen lineColor="#EFEFEF"/>
 				</box>
@@ -334,42 +334,42 @@
 		<band height="54" splitType="Stretch">
 			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 			<textField>
-				<reportElement x="0" y="-10" width="110" height="30" uuid="07c679bc-8099-4b42-a466-a8eba8b9df16"/>
+				<reportElement x="0" y="0" width="110" height="30" uuid="07c679bc-8099-4b42-a466-a8eba8b9df16"/>
 				<textElement verticalAlignment="Top">
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{appaternopart}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="110" y="-10" width="90" height="30" uuid="83b901e0-440b-424e-9cd9-041a0505cf45"/>
+				<reportElement x="110" y="0" width="90" height="30" uuid="83b901e0-440b-424e-9cd9-041a0505cf45"/>
 				<textElement verticalAlignment="Top">
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{apmaternopart}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="200" y="-10" width="130" height="30" uuid="b6859ffd-c7c3-4ef3-b55c-f6d665ff4f1f"/>
+				<reportElement x="200" y="0" width="130" height="30" uuid="b6859ffd-c7c3-4ef3-b55c-f6d665ff4f1f"/>
 				<textElement verticalAlignment="Top">
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nombrepart}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="330" y="-10" width="80" height="30" uuid="2643c82e-12e3-4747-8400-85636e8bed65"/>
+				<reportElement x="330" y="0" width="80" height="30" uuid="2643c82e-12e3-4747-8400-85636e8bed65"/>
 				<textElement verticalAlignment="Top">
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tipodocumentopart}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="410" y="-10" width="80" height="30" uuid="2addcfaa-2d0b-412a-9a61-3d43d5c82ee4"/>
+				<reportElement x="410" y="0" width="80" height="30" uuid="2addcfaa-2d0b-412a-9a61-3d43d5c82ee4"/>
 				<textElement verticalAlignment="Top">
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nrodocumentopart}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="490" y="-10" width="60" height="30" uuid="ee353e9d-6f90-4f6c-b9b4-6c433119b391"/>
+				<reportElement x="490" y="0" width="60" height="30" uuid="ee353e9d-6f90-4f6c-b9b4-6c433119b391"/>
 				<textElement verticalAlignment="Top">
 					<font size="10"/>
 				</textElement>

@@ -9,11 +9,13 @@ public interface IEvaluacionService extends ICRUD<Evaluacion,Integer>{
 	
 	int updateestado(Integer id, Integer estado);
 	
-	Evaluacion updateEvalRubQuest(EvaluacionRubricaQuestionarioDto dto);
+	Integer updateEvalRubQuest(EvaluacionRubricaQuestionarioDto dto);
 	
 	Evaluacion getPorAnio(Integer anio);
 	
 	Evaluacion getPorAnioCategoriaNivelparticipacion(Integer anio,Integer idcategoria,Integer idnivelparticipacion);
 	
 	Evaluacion getPorAnioNivelparticipacionCategoria(Integer anio,Integer nivelparticipacion,Integer idcategoria);
+	
+	Evaluacion existe(Integer id_evaluacion,Integer anio,Integer categoria, Integer nivel_participacion);
 }

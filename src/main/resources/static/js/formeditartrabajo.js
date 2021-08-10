@@ -10,8 +10,13 @@ var evidencias_agregadas = new Array();
 var evidencias_iniciadas_eliminadas = new Array();
 var evidencias_agregadas_eliminadas = new Array();
 var nroevidencias = parseInt($("#nroevidencias").val());
+
+var mis_evidencias_inicial_edit = new Array();
+var mis_evidencias_edit = new Array();
+var mis_evidencias_eliminadas = new Array();
 	
-	if(nroevidencias<5)
+	console.log("nroevidencias : " + nroevidencias);
+	if(nroevidencias<10)
 		$("#evidenciastrabajoeditar").prop("disabled",false);
 	else
 		$("#evidenciastrabajoeditar").prop("disabled",true);
@@ -22,28 +27,54 @@ var nroevidencias = parseInt($("#nroevidencias").val());
 	});
 	
 	var html1 = "<table><tr>";
-	for(var i=0;i<nroevidencias;i++){
-		evidencias_iniciadas.push($("#evidencia" + (i+1)).val());
-		html1 += "<td><div id='"+$("#evidencia" + (i+1)).val()+"' class='alert alert-warning alert-dismissible fade show' role='alert' style='padding:10px'><strong><abbr title='"+($("#evidencia" + (i+1)).val())+"'>"+($("#evidencia" + (i+1)).val()).substr(0,5)+"</abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaInicial("+'`'+($("#evidencia" + (i+1)).val())+'`'+")' data-dismiss='alert' aria-label='Close' style='padding:0px; margin:-3px'><span aria-hidden='true'>&times;</span></button></div></td>";
+	for(var i=1;i<=nroevidencias;i++){
+		mis_evidencias_inicial_edit.push($("#evidencia" + i).val());		
+		var evidencia_file = $("#evidencia" + i).val();
+		html1 += "<td><div id='"+evidencia_file+"' class='alert alert-warning alert-dismissible fade show' role='alert' style='padding:10px'><strong><abbr title='"+evidencia_file+"'>"+	(evidencia_file.length > 5 ?	evidencia_file.substr(0,5) : evidencia_file)	+"</abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaInicial("+'`'+evidencia_file+'`'+','+i+")' data-dismiss='alert' aria-label='Close' style='padding:0px; margin:-3px'><span aria-hidden='true'>&times;</span></button></div></td>";
 	}
 	html1 += "</tr></table>";
 	$("#divevidencias").html(html1);
 	
 	$("#evidenciastrabajoeditar").change(function(){
-		evidencias_agregadas = new Array();
-		evidencias_agregadas_eliminadas = new Array();
-		for(var i=0;i<evidenciastrabajoeditar.files.length;i++){
-			evidencias_agregadas.push(evidenciastrabajoeditar.files[i].name);
-		}		
-		var html2 = "<table><tr>";
-		for(var i=0;i<evidencias_iniciadas.length;i++){
-			html2 += "<td><div id='"+(evidencias_iniciadas[i])+"' class='alert alert-warning alert-dismissible fade show' role='alert' style='padding:10px'><strong><abbr title='"+(evidencias_iniciadas[i])+"'>"+(evidencias_iniciadas[i]).substr(0,5)+"<abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaEditar("+'`'+(evidencias_iniciadas[i])+'`'+")' data-dismiss='alert' aria-label='Close' style='padding:0px; margin:-3px'><span aria-hidden='true'>&times;</span></button></div></td>";
+		if(evidenciastrabajoeditar.files[0].name != undefined){
+			
+			var msj_eviste_evidencia="";
+			var flag_existe;
+			for(var k=0;k<evidenciastrabajoeditar.files.length;k++){
+				flag_existe = true;
+				for(var i=0;i<mis_evidencias_inicial_edit.length;i++){					
+					if(mis_evidencias_inicial_edit[i]  == evidenciastrabajoeditar.files[k].name){
+						flag_existe = false;
+						msj_eviste_evidencia +=  evidenciastrabajoeditar.files[k].name + "/";
+					}
+				}
+				if(flag_existe){
+					for(var j=0;j<mis_evidencias_edit.length;j++){					
+						if(mis_evidencias_edit[j].name  == evidenciastrabajoeditar.files[k].name){
+							flag_existe = false;
+							msj_eviste_evidencia +=  evidenciastrabajoeditar.files[k].name + "/";
+						}
+					}
+				}
+				if(flag_existe){
+					mis_evidencias_edit.push(evidenciastrabajoeditar.files[k]);
+				}
+			}
+			
+			var data_archivo_subir_editar = "<table><tr>";
+			for(var j=0;j<mis_evidencias_inicial_edit.length;j++){
+				data_archivo_subir_editar += "<td><div id='"+(mis_evidencias_inicial_edit[j])+"' class='alert alert-warning alert-dismissible fade show' role='alert' style='padding:10px'><strong><abbr title='"+(mis_evidencias_inicial_edit[j])+"'>"+	((	(mis_evidencias_inicial_edit[j]).length) <5 ? (mis_evidencias_inicial_edit[j]) :	(mis_evidencias_inicial_edit[j]).substr(0,5))	+"<abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaEditar("+'`'+mis_evidencias_inicial_edit[j]+'`'+")' data-dismiss='alert' aria-label='Close' style='padding:0px; margin:-3px'><span aria-hidden='true'>&times;</span></button></div></td>";
+			}
+			for(var i=0;i<mis_evidencias_edit.length;i++){
+				data_archivo_subir_editar += "<td><div id='"+(mis_evidencias_edit[i].name)+"' class='alert alert-primary alert-dismissible fade show' role='alert' style='padding:10px'><strong><abbr title='"+(mis_evidencias_edit[i].name)+"'>"+	 (	(mis_evidencias_edit[i].name).length <5 ? (mis_evidencias_edit[i].name) :	(mis_evidencias_edit[i].name).substr(0,5))	+"<abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaEditar("+'`'+mis_evidencias_edit[i].name+'`'+")' data-dismiss='alert' aria-label='Close' style='padding:0px; margin:-3px'><span aria-hidden='true'>&times;</span></button></div></td>";
+			}
+			data_archivo_subir_editar += "</tr></table>";
+			if(msj_eviste_evidencia.length>0){
+				msj_eviste_evidencia = msj_eviste_evidencia.substr(0,msj_eviste_evidencia.length-1);
+				alert("La(s) siguientes evidencias no se subieron porque ya existen " + msj_eviste_evidencia);
+			}				
+			$("#divevidencias").html(data_archivo_subir_editar);
 		}
-		for(var i=0;i<evidencias_agregadas.length;i++){
-			html2 += "<td><div id='"+(evidencias_agregadas[i])+"' class='alert alert-primary alert-dismissible fade show' role='alert' style='padding:10px'><strong><abbr title='"+(evidencias_agregadas[i])+"'>"+(evidencias_agregadas[i]).substr(0,5)+"<abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaEditar("+'`'+(evidencias_agregadas[i])+'`'+")' data-dismiss='alert' aria-label='Close' style='padding:0px; margin:-3px'><span aria-hidden='true'>&times;</span></button></div></td>";
-		}
-		html2 += "</tr></table>";
-		$("#divevidencias").html(html2);
 	});
 	
 	var mistyle = "";
@@ -69,13 +100,7 @@ var nroevidencias = parseInt($("#nroevidencias").val());
 
 
 	$("#categoriatrabajoeditar").change(function(){
-		categoriatrabajo = $("#categoriatrabajoeditar").val();			
-		if(categoriatrabajo == '1' ||  categoriatrabajo == '3'){
-			$( "#linkvideoeditar" ).prop( "disabled", false );
-		}			
-		else if(categoriatrabajo == '2' ||  categoriatrabajo == '4' ||  categoriatrabajo == '5'){
-			$( "#linkvideoeditar" ).prop( "disabled", true );
-		}		
+		categoriatrabajo = $("#categoriatrabajoeditar").val();		
 		$("#linkvideoeditar").val("");
 		array_indice = new Array();		
 		table_lpt_editar.rows().deselect();
@@ -275,8 +300,6 @@ var nroevidencias = parseInt($("#nroevidencias").val());
 				listaparticipante : arrayParticipante
 			}
 			
-			var archivos_eliminados = "";
-			
 			$.ajax({
 				type : "POST",
 			    contentType : "application/json",
@@ -309,24 +332,12 @@ var nroevidencias = parseInt($("#nroevidencias").val());
 						var data = new FormData();
 						data.append('file',archivotrabajoeditar.files[0] != undefined ? archivotrabajoeditar.files[0] : null);
 						data.append('id',respuesta);
-						if(evidencias_iniciadas.length==0 && evidencias_agregadas==0){
-							data.append('files',null);
-						}
-						else{
-							for(var i=0;i<evidenciastrabajoeditar.files.length;i++){
-								var bandera_editar = false;
-								for(var j=0;j<evidencias_agregadas.length;j++){
-									if(evidenciastrabajoeditar.files[i].name == evidencias_agregadas[j]){
-										bandera_editar = true;
-									}
-								}
-								if(bandera_editar){
-									data.append('files',evidenciastrabajoeditar.files[i]);
-								}
-							}
-						}
-						for(var i=0;i<evidencias_iniciadas_eliminadas.length;i++){
-							archivos_eliminados += evidencias_iniciadas_eliminadas[i] + ",";
+						for(var i=0;i<mis_evidencias_edit.length;i++){
+							data.append('files',mis_evidencias_edit[i]);
+						}						
+						var archivos_eliminados = "";
+						for(var i=0;i<mis_evidencias_eliminadas.length;i++){
+							archivos_eliminados += mis_evidencias_eliminadas[i] + ",";
 						}						
 						data.append('array_evidencias_eliminadas' , archivos_eliminados);
 						
@@ -352,7 +363,7 @@ var nroevidencias = parseInt($("#nroevidencias").val());
 					        	table_lista_trabajos_finales.cell(celdaseleccionada,2).data(titulotrabajo).draw();
 					        	table_lista_trabajos_finales.cell(celdaseleccionada,3).data($("#modalidadpostulaciontrabajoeditar option:selected").html()).draw();
 					        	table_lista_trabajos_finales.cell(celdaseleccionada,4).data(nombreparticipanteeditar).draw();
-					        	table_lista_trabajos_finales.cell(celdaseleccionada,5).data(nro_edit + (nro_edit >1 ? " evidencias " : " evidencia ")  +  '1' + " final").draw();
+					        	table_lista_trabajos_finales.cell(celdaseleccionada,5).data( (mis_evidencias_edit.length + mis_evidencias_inicial_edit.length) + ((mis_evidencias_edit.length + mis_evidencias_inicial_edit.length) >1 ? " evidencias " : " evidencia ")  +  '1' + " final").draw();
 								
 								limpiarControlesEditar();
 							    $("#textoexitotrabajoeditar").html("Se actualizó los datos del participante");
@@ -448,25 +459,23 @@ var nroevidencias = parseInt($("#nroevidencias").val());
    	    }
    	);
 	
-	function eliminarEvidenciaInicial(archivo){
-		for(var i =0;i<evidencias_iniciadas.length;i++){
-			if(evidencias_iniciadas[i] == archivo){
-				evidencias_iniciadas.splice(i,1);
-			}
+	function eliminarEvidenciaInicial(archivo,indice){
+		for(var i=0;i<mis_evidencias_inicial_edit.length;i++){
+			if(archivo == mis_evidencias_inicial_edit[i]){
+				mis_evidencias_inicial_edit.splice(i,1);
+				$("#evidenciastrabajoeditar").prop("disabled",false);
+				mis_evidencias_eliminadas.push(archivo);
+			}	
 		}		
-		$("#evidenciastrabajoeditar").prop("disabled",false);
-		evidencias_agregadas_eliminadas.push(archivo);
-		evidencias_iniciadas_eliminadas.push(archivo);
 	}
 	
 	function eliminarEvidenciaEditar(archivo){
-		for(var i =0;i<evidencias_agregadas.length;i++){
-			if(evidencias_agregadas[i] == archivo){
-				evidencias_agregadas.splice(i,1);
+		console.log("archivo :" + archivo);
+		for(var i =0;i<mis_evidencias_edit.length;i++){
+			if(archivo == mis_evidencias_edit[i].name){
+				mis_evidencias_edit.splice(i,1);
 			}
 		}
-		$("#evidenciastrabajoeditar").prop("disabled",false);
-		evidencias_agregadas_eliminadas.push(archivo);
 	}	
 	
 	function filtraCategoriaModalidad(campo1, campo2){
@@ -610,7 +619,7 @@ var nroevidencias = parseInt($("#nroevidencias").val());
 			if(!$("#archivotrabajoeditar").is(':disabled')){
 				var archivotrabajo_name = (archivotrabajoeditar.files[0]).name;
 				var archivotrabajo_size = (archivotrabajoeditar.files[0]).size;
-				if(archivotrabajo_size >20000000){
+				if(archivotrabajo_size >40000000){
 					mensajeValidacion += "El archivo " + archivotrabajo_name +" no debe superar los 20MB"+"<br>";
 				}
 				var ext = archivotrabajo_name.split('.').pop();
@@ -628,46 +637,28 @@ var nroevidencias = parseInt($("#nroevidencias").val());
 			}			
 		}
 		
-		if( evidencias_iniciadas.length==0 && evidencias_agregadas==0 ){
-			mensajeValidacion += "Debe adjuntar evidencias"+"<br>";
-		}
-		
-		var suma_evidencias = (evidencias_iniciadas.length)  + (evidencias_agregadas.length);
-		
-		if( suma_evidencias > 5){
-			mensajeValidacion += "Debe adjuntar como máximo 5 evidencias"+"<br>";
-		}		
-		else{
-			
-			for(var i=0;i<evidenciastrabajoeditar.files.length;i++){
-				
-				for(var j=0;j<evidencias_agregadas.length;j++){
-					
-					if(evidenciastrabajoeditar.files[i] == evidencias_agregadas[j]){	
-						var evidenciastrabajo_name = (evidenciastrabajoeditar.files[i]).name;
-						var evidenciastrabajo_size = (evidenciastrabajoeditar.files[i]).size;
-						if(evidenciastrabajo_size >20000000){
-							mensajeValidacion += "El archivo "  + evidenciastrabajo_name + " no debe superar los 20MB"+"<br>";
-						}
-						var ext = evidenciastrabajo_name.split('.').pop();
-						ext = ext.toLowerCase();
-						switch(ext){
-							case 'jpg': break;
-							case 'png': break;
-							case 'jpeg': break;
-							case 'pdf': break;
-							case 'docx': break;
-							case 'mp3': break;
-							case 'mp4': break;
-							default: mensajeValidacion += "El archivo " + evidenciastrabajo_name + " debe tener extensión jpg , png, pdf, word,mp3,mp4"+"<br>";	
-						}
-					}
+		if( ((mis_evidencias_edit.length + mis_evidencias_inicial_edit.length) >10	) || ( (mis_evidencias_edit.length + mis_evidencias_inicial_edit.length) == 0)){
+			mensajeValidacion += "Debe subir hasta 10 evidencias"+"<br>";
+		}else{			
+			for(var j=0;j<mis_evidencias_edit.length;j++){
+				var evidenciastrabajo_name = mis_evidencias_edit[j].name;
+				var evidenciastrabajo_size = mis_evidencias_edit[j].size;
+				if(evidenciastrabajo_size >40000000){
+					mensajeValidacion += "El evidencia "  + evidenciastrabajo_name + " no debe superar los 40MB"+"<br>";
 				}
-			}	
-		}
-		
-		if(linkvideotrabajo.trim()=="" &&  (categoriatrabajo == "1" || categoriatrabajo == "3") ){
-			mensajeValidacion += "Debe ingresar link de video"+"<br>";
+				var ext = evidenciastrabajo_name.split('.').pop();
+				ext = ext.toLowerCase();
+				switch(ext){
+					case 'jpg': break;
+					case 'png': break;
+					case 'jpeg': break;
+					case 'pdf': break;
+					case 'docx': break;
+					case 'mp3': break;
+					case 'mp4': break;
+					default: mensajeValidacion += "La evidencia " + evidenciastrabajo_name + " debe tener extensión jpg , png, pdf, word,mp3,mp4"+"<br>";	
+				}
+			}
 		}
 		
 		var array = table_lpt_editar.rows(".selected").data();	
