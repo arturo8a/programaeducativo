@@ -299,47 +299,33 @@ function verevidencia(id){
 			var objeto = respuesta;
 			var archivo = objeto.archivo;
 			var evidencias = objeto.evidencia;
-			var contenido = "<div><table style='width:100%'><tr>";
+			var contenido = "<table style='width:100%'><tr>";
+			
+			var evidencia_inicial;
+			var ext_inicial;
+			var mi_evi_inicial;
+			var archivo_inicial;
+			var contenido_inicial;		
+						
 			for(var i=0;i<evidencias.length;i++){
+				if(i==0){
+					evidencia_inicial = evidencias[0];
+					ext_inicial = (evidencia_inicial.split('.')).pop();
+					ext_inicial = ext_inicial.toLowerCase();
+					mi_evi_inicial = JSON.stringify(evidencia_inicial);
+					archivo_inicial = mi_evi_inicial.replace(/['"]+/g, '');
+				}						
 				var evidencia = evidencias[i];
 				var ext = (evidencia.split('.')).pop();
 				ext = ext.toLowerCase();
 				var mi_evi = JSON.stringify(evidencia);
-				var archivo;
-				switch(ext){
-					case 'jpg': 
-						archivo = mi_evi.replace(/['"]+/g, '');
-						contenido += "<td>"+archivo+"<input type='image' width='20' src='./images/iconos_nd/descargarevidencia.svg' onclick='verdocumento(" +'`'+ id +'`'+  "," +'`'+ archivo +'`'+")'/><br><img width='300' height='240' src='../alfresco_programaeducativo/pedesa/upload_evidencias/" +id +"/" +archivo +"'/></td>";
-						break;
-					case 'png': 
-						archivo = mi_evi.replace(/['"]+/g, '');
-						contenido += "<td>"+archivo+"<input type='image' width='20' src='./images/iconos_nd/descargarevidencia.svg' onclick='verdocumento(" +'`'+ id +'`'+  "," +'`'+ archivo +'`'+")'/><br><img width='300' height='240' src='../alfresco_programaeducativo/pedesa/upload_evidencias/" +id +"/" +archivo +"'/></td>";
-						break;
-					case 'jpeg': 
-						archivo = mi_evi.replace(/['"]+/g, '');
-						contenido += "<td>"+archivo+"<input type='image' width='20' src='./images/iconos_nd/descargarevidencia.svg' onclick='verdocumento(" +'`'+ id +'`'+  "," +'`'+ archivo +'`'+")'/><br><img width='300' height='240' src='../alfresco_programaeducativo/pedesa/upload_evidencias/" +id +"/" +archivo +"'/></td>";
-						break;
-					case 'pdf':
-						archivo = mi_evi.replace(/['"]+/g, '');
-						contenido += "<td><label>"+archivo+"</label>&nbsp;<input type='image' src='./images/iconos_nd/pdf1.svg' onclick='verdocumento(" +'`'+ id +'`'+  "," +'`'+ archivo +'`'+")'/></td>";
-						break;
-					case 'docx': 
-						archivo = mi_evi.replace(/['"]+/g, '');
-						contenido += "<td><label>"+archivo+"</label>&nbsp;<input type='image'  src='./images/iconos_nd/word-2019.svg' onclick='verdocumento(" +'`'+ id +'`'+  "," +'`'+ archivo +'`'+")'/></td>";
-						break;
-					case 'mp3': 
-						archivo = mi_evi.replace(/['"]+/g, '');
-						contenido += "<td><label>"+archivo+"</label><input type='image' width='20'  onclick='verdocumento(" +'`'+ id +'`'+  "," +'`'+ archivo +'`'+")'/></td>";
-						break;
-					case 'mp4': 
-						archivo = mi_evi.replace(/['"]+/g, '');
-						contenido += "<td>"+archivo+"<input type='image' width='20' src='./images/iconos_nd/descargarevidencia.svg' onclick='verdocumento(" +'`'+ id +'`'+  "," +'`'+ archivo +'`'+")'/><br><video width='320' height='240' controls><source src='../alfresco_programaeducativo/pedesa/upload_evidencias/" +'`'+ id +'`'+  "/" +'`'+ archivo +'`'+"'  type='video/mp4'><source src='movie.ogg' type='video/ogg'></td>";
-						break;
-				}
+				var archivo = mi_evi.replace(/['"]+/g, '');
+				contenido += "<td><strong style='cursor:pointer' onclick='actualizaEvidenciaDiv("+'`'+id+'`'+","+'`'+archivo+'`'+"," +'`'+ext +'`'+")'>"+archivo+"</strong></td>";						
 			}
 			
-			contenido += "</tr></table></div>";
+			contenido += "</tr></table><hr><table style='width:100%'><tr><td><div id='contenido_evidencia' style='width:100%'></div></td></tr></table>";
 			$("#contenidoEvidencias").html(contenido);
+			actualizaEvidenciaDiv(id,archivo_inicial,ext_inicial);
 			$("#modalArchivosEvidencias").modal({
 				show : true,
 				backdrop : 'static',
@@ -355,7 +341,7 @@ function verevidencia(id){
 				keyboard:false
 			});
 	    }
-	});    	
+	}); 	
 }
 
 function vertrabajo(id){
@@ -367,43 +353,29 @@ function vertrabajo(id){
 		success: function(respuesta) {
 			var objeto = respuesta;
 			var archivo = objeto.archivo;
-			var contenido = "<div><table style='width:100%'><tr>";
+			var contenido = "<div style='width:100%'>";
 			var ext = (archivo.split('.')).pop();
 			ext = ext.toLowerCase();
 			var mi_archivo = JSON.stringify(archivo);
-			var archivo;
+			var archivo = mi_archivo.replace(/['"]+/g, '');
+			var subcadena = id + "/" + archivo;
 			switch(ext){
+				case 'jpeg':
+				case 'png':
 				case 'jpg': 
-					archivo = mi_archivo.replace(/['"]+/g, '');
-					contenido += "<td>"+archivo+"<input type='image' width='20' src='./images/iconos_nd/descargarevidencia.svg' onclick='verdocumentotrabajo(" +'`'+ id +'`'+  "," +'`'+ archivo +'`'+")'/><br><img width='300' height='240' src='../alfresco_programaeducativo/pedesa/upload_trabajos/" +id +"/" +archivo +"'/></td>";
-					break;
-				case 'png': 
-					archivo = mi_archivo.replace(/['"]+/g, '');
-					contenido += "<td>"+archivo+"<input type='image' width='20' src='./images/iconos_nd/descargarevidencia.svg' onclick='verdocumentotrabajo(" +'`'+ id +'`'+  "," +'`'+ archivo +'`'+")'/><br><img width='300' height='240' src='../alfresco_programaeducativo/pedesa/upload_trabajos/" +id +"/" +archivo +"'/></td>";
-					break;
-				case 'jpeg': 
-					archivo = mi_archivo.replace(/['"]+/g, '');
-					contenido += "<td>"+archivo+"<input type='image' width='20' src='./images/iconos_nd/descargarevidencia.svg' onclick='verdocumentotrabajo(" +'`'+ id +'`'+  "," +'`'+ archivo +'`'+")'/><br><img width='300' height='240' src='../alfresco_programaeducativo/pedesa/upload_trabajos/" +id +"/" +archivo +"'/></td>";
+					contenido += archivo + "<br><img src='../alfresco_programaeducativo/pedesa/upload_trabajos/"+subcadena+"'"+" width='70%' height='400px'/>";
 					break;
 				case 'pdf':
-					archivo = mi_archivo.replace(/['"]+/g, '');
-					contenido += "<td><label>"+archivo+"</label>&nbsp;<input type='image' src='./images/iconos_nd/pdf1.svg' onclick='verdocumentotrabajo(" +'`'+ id +'`'+  "," +'`'+ archivo +'`'+")'/></td>";
+					contenido += archivo + "<br><iframe src='../alfresco_programaeducativo/pedesa/upload_trabajos/"+subcadena+"'"+" type='application/pdf' width='100%' height='600px'></<iframe>";
 					break;
 				case 'docx': 
-					archivo = mi_archivo.replace(/['"]+/g, '');
-					contenido += "<td><label>"+archivo+"</label>&nbsp;<input type='image' src='./images/iconos_nd/word-2019.svg' onclick='verdocumentotrabajo(" +'`'+ id +'`'+  "," +'`'+ archivo +'`'+")'/></td>";
-					break;
-				case 'mp3': 
-					archivo = mi_archivo.replace(/['"]+/g, '');
-					contenido += "<td><label>"+archivo+"</label><input type='image' width='20'  onclick='verdocumentotrabajo(" +'`'+ id +'`'+  "," +'`'+ archivo +'`'+")'/></td>";
+					contenido += window.open('../alfresco_programaeducativo/pedesa/upload_trabajos/'+subcadena, '_blank');
 					break;
 				case 'mp4': 
-					archivo = mi_archivo.replace(/['"]+/g, '');
-					contenido += "<td>"+archivo+"<input type='image' width='20' src='./images/iconos_nd/descargarevidencia.svg' onclick='verdocumentotrabajo(" +'`'+ id +'`'+  "," +'`'+ archivo +'`'+")'/><br><video width='320' height='240' controls><source src='../alfresco_programaeducativo/pedesa/upload_evidencias/" +id +"/" +archivo +"'  type='video/mp4'></td>";
+					contenido += archivo + "<br><video src='../alfresco_programaeducativo/pedesa/upload_trabajos/"+subcadena+"'"+" width='100%' height='600px'></<video>";
 					break;
-			}
-			
-			contenido += "</tr></table></div>";
+			}					
+			contenido += "</div>";
 			$("#contenidoTrabajo").html(contenido);
 			$("#modalArchivoTrabajo").modal({
 				show : true,
@@ -420,7 +392,7 @@ function vertrabajo(id){
 				keyboard:false
 			});
 	    }
-	});    	
+	});  	
 }
 
 function verdocumento(id,link){

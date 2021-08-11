@@ -1529,7 +1529,9 @@ public class ConcursoeducativoController {
 			usu.setApepatcontacto(dto.getApepatcontacto());
 			usu.setApematcontacto(dto.getApematcontacto());
 			usu.setNombrecontacto(dto.getNombrecontacto());
-			usu.setTipodocumento(dto.getTipodocumento());
+			if(dto.getTipodocumento().getId() != 0) {
+				usu.setTipodocumento(dto.getTipodocumento());
+			}
 			usu.setNumdocumento(dto.getNumdocumento());
 			usu.setTelefonouno(dto.getTelefonouno());
 			usu.setTelefonodos(dto.getTelefonodos());
@@ -1607,7 +1609,9 @@ public class ConcursoeducativoController {
 			usu.setApepatcontacto(dto.getApepatcontacto());
 			usu.setApematcontacto(dto.getApematcontacto());
 			usu.setNombrecontacto(dto.getNombrecontacto());
-			usu.setTipodocumento(dto.getTipodocumento());
+			if(dto.getTipodocumento().getId() != 0) {
+				usu.setTipodocumento(dto.getTipodocumento());
+			}
 			usu.setNumdocumento(dto.getNumdocumento());
 			usu.setTelefonouno(dto.getTelefonouno());
 			usu.setTelefonodos(dto.getTelefonodos());

@@ -76,6 +76,7 @@
 							<thead class="cabecera_tabla">
 						        <tr>
 						        	<th>Nº</th>
+						        	<th style="display:none">ODS</th>
 						        	<th>PERFIL</th>
 						            <th>NOMBRE</th>
 						            <th>APELLIDO</th>
@@ -287,13 +288,14 @@
 			    },
 			    "deferRender": true,
 			    'columnDefs': [
-			    	{ "visible": false, "targets": 8 },
+			    	{ "visible": false, "targets": 1 },
+			    	{ "visible": false, "targets": 9 },
 	                {
-	                	"targets": 6, 
+	                	"targets": 7, 
 	                    "className": "text-center"
 	                },
 	                {
-	                	"targets": 7, 
+	                	"targets": 8, 
 	                    "className": "text-center"
 	                }
 			    ],
@@ -301,6 +303,7 @@
 			    	{ 
 	            		"data": null, "render": function (data, type, full, meta) { return meta.row + 1; }
 	            	},
+	            	{ 'data' : 'ods' },
 			    	{ 'data' : 'perfil' },
 			        { 'data' : 'nombre' },
 			        { 'data' : 'apellido' },
@@ -312,10 +315,10 @@
 	                   		var x = '';
 	                        switch (data) {
 	                            case 0:
-	                                x = '<img src="./images/svg/add-regular.svg" class="add" style="width:20px; cursor:pointer " />';
+	                                x = '<img src="./images/svg/add-regular.svg" class="add" style="width:20px; cursor:pointer " /><div style="display:none;">Inactivo</div>';
 	                                break;
 	                            case 1:
-	                            	x = '<img src="./images/svg/minus-solid.svg" class="minus" style="width:20px; cursor:pointer " />';
+	                            	x = '<img src="./images/svg/minus-solid.svg" class="minus" style="width:20px; cursor:pointer " /><div style="display:none;">Activo</div>';
 	                                break;
                             }
                             return x;
@@ -327,7 +330,38 @@
 	                style:    'multi', 
 	                selector: 'td:first-child'
 	            },
-			    buttons: []
+			    buttons: [{
+            		extend: 'excelHtml5',
+            		exportOptions: {
+	                    columns: [ 0, 1, 2, 3, 4, 5, 6, 8 ]
+	                },
+            		text:"<img src='./images/iconos_nd/excel1.svg' style='size:15px;margin:0px;padding:0px'/>",
+                    title: 'LISTA DE USUARIOS',
+                    titleAttr: 'Excel',
+                    messageTop: function(){
+                    	return '[ Perfil: ' + $("#cbperfilusuario").val() + ']            [ Estado: '+ $("#cbestadousuario option:selected").text() + ']';
+                    },
+                    filename : function(){
+                    	var hoy = new Date();
+                    	var dia = String(hoy.getDate());
+                    	if(dia.length==1){
+                    		dia = "0"+dia;
+                    	}
+                    	var mes = String(hoy.getMonth()+1);
+                    	if(mes.length==1){
+                    		mes = "0"+mes;
+                    	}
+                    	var hora = String(hoy.getHours());
+                    	if(hora.length==1){
+                    		hora = "0"+hora;
+                    	}
+                    	var minuto = String(hoy.getMinutes());
+                    	if(minuto.length==1){
+                    		minuto = "0"+minuto;
+                    	}
+            	    	return "Usuarios"+hoy.getFullYear()+'_'+dia+'-'+mes+'-'+hoy.getFullYear()+'_'+hora + minuto;
+                    }
+            	}]
 			});
 			$("div.rs_usuarios").html('<strong>RESULTADOS DE USUARIOS</strong>');
 			obtener_data_editar_usuario("#table_lista_usuario tbody",table_lista_usuario);

@@ -9,6 +9,7 @@ public class UsuarioDto {
 	String usuario;
 	String correo;
 	Integer estado;
+	String ods;
 	
 	public UsuarioDto() {
 		
@@ -68,5 +69,13 @@ public class UsuarioDto {
 
 	public void setEstado(Integer estado) {
 		this.estado = estado;
+	}
+
+	public String getOds() {
+		return ods;
+	}
+
+	public void setOds(String ods) {
+		this.ods = ods;
 	}
 }
