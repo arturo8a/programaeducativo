@@ -200,6 +200,9 @@ public class ConcursoeducativoController {
 	boolean verifica;
 	int estado_fuera_plazo=0;
 	String ejesTematicos="";
+	boolean bandera;
+	String mi_ods,mi_modalidad,mi_estado,mi_categoria,mi_nivel_participacion,mi_nombreie;
+	Integer mi_anio;
 	
 	@PostMapping(value="/registrarconcurso")
 	public String registrarconcurso(@Valid @RequestBody Postulacionconcurso dto)  {
@@ -1910,68 +1913,123 @@ public class ConcursoeducativoController {
 		trabajosfinalesparticipanteServ.listarTodos().forEach(obj->{
 			
 			if(obj.getTrabajosfinales().getEstado() == 1 && obj.getParticipante().getEstado()==1) {
-				TrabajosFinalesConcursoDto dto = new TrabajosFinalesConcursoDto();
-				dto.setAnio(obj.getTrabajosfinales().getAnio());
-				dto.setOds(odsserv.byOds(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
-				dto.setCodigoie(obj.getTrabajosfinales().getProgramaeducativo().getCodmod());
-				dto.setNombreie(obj.getTrabajosfinales().getProgramaeducativo().getNomie());
-				dto.setRegion(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getProvincia().getDepartamento().getDescripcion());
-				dto.setProvincia(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getProvincia().getDescripcion());
-				dto.setDitrito(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getDescripcion());
-				dto.setModalidad(obj.getTrabajosfinales().getProgramaeducativo().getModensenianza().getDescripcion());
-				dto.setAmbito(obj.getTrabajosfinales().getProgramaeducativo().getAmbito().getDescripcion());
-				dto.setCodigoTrabajo(obj.getTrabajosfinales().getProgramaeducativo().getCodmod() + "_" + obj.getTrabajosfinales().getNumeracion().toString());
-				dto.setTituloTrabajo(obj.getTrabajosfinales().getTitulotrabajo());
-				dto.setLinkvideo(obj.getTrabajosfinales().getLinkvideo());
-				dto.setModalidadTrabajo(obj.getTrabajosfinales().getModalidadtrabajo().getDescripcion());
-				dto.setCategoriaTrabajo(obj.getTrabajosfinales().getCategoriatrabajo().getDescripcion());
-				dto.setNivelParticipacion(obj.getParticipante().getGradoestudiante().getNivelgradopartdesc());
+				bandera = true;				
+				mi_ods = odsserv.byOds(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid()).getDescripcion();
+				mi_anio = obj.getTrabajosfinales().getAnio();
+				mi_modalidad = obj.getTrabajosfinales().getProgramaeducativo().getModensenianza().getDescripcion();
+				mi_estado = obj.getTrabajosfinales().getEstadotrabajo().getDescripcion();
+				mi_categoria = obj.getTrabajosfinales().getCategoriatrabajo().getDescripcion();
+				mi_nivel_participacion = obj.getParticipante().getGradoestudiante().getNivelgradopartdesc();
 				
-				if(obj.getTrabajosfinales().getConversacion() == 1)
-					ejesTematicos += "Conversación de las fuentes de agua/";
-				if(obj.getTrabajosfinales().getValoracionagua() == 1)
-					ejesTematicos += "Valoración de los servicios de agua potable/";
-				if(obj.getTrabajosfinales().getValoracionalcantarillado() == 1)
-					ejesTematicos += "Valoración del servicio de alcantarillado/";
-				if(obj.getTrabajosfinales().getBuenuso() == 1)
-					ejesTematicos += "Buen uso y reúso del agua potable/";
-				if(obj.getTrabajosfinales().getImportancia() == 1)
-					ejesTematicos += "Importancia de cerrar la brecha en saneamiento/";
-				if(obj.getTrabajosfinales().getVinculo() == 1)
-					ejesTematicos += "El vínculo estratégico entre el agua segura y la salud/";
-				if(obj.getTrabajosfinales().getCarencias() == 1)
-					ejesTematicos += "Las carencias que ponen en riesgo la vida/";
-				ejesTematicos = ejesTematicos.substring(0, ejesTematicos.length()-1);
-				
-				dto.setEjesTematicos(ejesTematicos);
-				dto.setNombreParticipante(obj.getParticipante().getNombreestudiante());
-				dto.setApellidoPaternoParticipante(obj.getParticipante().getAppaternoestudiante());
-				dto.setApellidoMaternoParticipante(obj.getParticipante().getApmaternoestudiante());
-				dto.setTipoDocumentoParticipante(obj.getParticipante().getTipodocumentoestudiante().getDescripcion());
-				dto.setNroDocumentoParticipante(obj.getParticipante().getNrodocumentoestudiante());
-				dto.setFechaNacimientoParticipante(obj.getParticipante().getFechanacimientoestudiante().toString());
-				dto.setGeneroParticipante(obj.getParticipante().getGeneroestudiante().getDescripcion());
-				dto.setSeccionParticipante(obj.getParticipante().getSeccion());
-				dto.setNivelParticipante(obj.getParticipante().getGradoestudiante().getNivelparticipante().getDescripcion());
-				dto.setGradoParticipante(obj.getParticipante().getGradoestudiante().getNivelgradopartid().toString());
-				dto.setNombreTutor(obj.getParticipante().getNombrepmt());
-				dto.setApellidoPaternoTutor(obj.getParticipante().getAppaternopmt());
-				dto.setApellidoMaternoTutor(obj.getParticipante().getApmaternopmt());
-				dto.setTipoDocumentoTutor(obj.getParticipante().getTipodocumentopmt().getDescripcion());
-				dto.setNroDocumentoTutor(obj.getParticipante().getTipodocumentopmt().getDescripcion());
-				dto.setTelefonoTutor(obj.getParticipante().getNrotelefonopmt());
-				dto.setCorreoTutor(obj.getParticipante().getCorreoelectronicopmt());
-				dto.setParentescoTutor(obj.getParticipante().getParentesco().getDescripcion());
-				dto.setNombreDocente(obj.getTrabajosfinales().getNombre());
-				dto.setApellidoPaternoDocente(obj.getTrabajosfinales().getAppaterno());
-				dto.setApellidoMaternoDocente(obj.getTrabajosfinales().getApmaterno());
-				dto.setTipoDocumentoDocente(obj.getTrabajosfinales().getTipodocumento().getDescripcion());
-				dto.setNroDocumentoDocente(obj.getTrabajosfinales().getNrodocumento());
-				dto.setTelefonoDocente(obj.getTrabajosfinales().getTelefono());
-				dto.setGeneroDocente(obj.getTrabajosfinales().getGenero().getDescripcion());
-				dto.setCorreoDocente(obj.getTrabajosfinales().getCorreo());		
-				
-				lista.add(dto);
+				if(! ods.equals("Todos")) {
+					if(! mi_ods.toLowerCase().equals(ods.toLowerCase())) {
+						System.out.println("entro ods :");
+						bandera = false;
+					}
+				}
+				System.out.println("ods bandera :" + bandera);
+				if(! anio.equals("Todos")) {
+					if(mi_anio != Integer.parseInt(anio)){
+						bandera = false;
+					}
+				}
+				System.out.println("anio bandera :" + bandera);
+				if(! modalidad.equals("Todos")) {
+					if(! mi_modalidad.toLowerCase().equals(modalidad.toLowerCase())){
+						bandera = false;
+					}
+				}
+				System.out.println("modalidad bandera :" + bandera);
+				if(! estado.equals("Todos")) {
+					if(! mi_estado.toLowerCase().equals(estado.toLowerCase())){
+						bandera = false;
+					}
+				}
+				System.out.println("estado bandera :" + bandera);
+				if(! categoria.equals("Todos")) {
+					if(! mi_categoria.toLowerCase().equals(categoria.toLowerCase())){
+						bandera = false;
+					}
+				}
+				System.out.println("categoria bandera :" + bandera);
+				if(! nivel_participacion.equals("Todos")) {
+					if(! mi_nivel_participacion.toLowerCase().equals(nivel_participacion.toLowerCase())){
+						bandera = false;
+					}
+				}
+				System.out.println("nivel_participacion bandera :" + bandera);
+				if(! nombreie.trim().equals("Todos")) {
+					if(! obj.getTrabajosfinales().getProgramaeducativo().getNomie().toLowerCase().contains(nombreie.toLowerCase())){
+						bandera = false;
+					}
+				}
+				System.out.println("nombreie bandera :" + bandera);
+				System.out.println("***********************************************************");
+				if(bandera) {
+					System.out.println("entro");
+					TrabajosFinalesConcursoDto dto = new TrabajosFinalesConcursoDto();
+					dto.setAnio(mi_anio);
+					dto.setOds(mi_ods);
+					dto.setCodigoie(obj.getTrabajosfinales().getProgramaeducativo().getCodmod());
+					dto.setNombreie(obj.getTrabajosfinales().getProgramaeducativo().getNomie());
+					dto.setRegion(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getProvincia().getDepartamento().getDescripcion());
+					dto.setProvincia(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getProvincia().getDescripcion());
+					dto.setDitrito(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getDescripcion());
+					dto.setModalidad(mi_modalidad);
+					dto.setAmbito(obj.getTrabajosfinales().getProgramaeducativo().getAmbito().getDescripcion());
+					dto.setCodigoTrabajo(obj.getTrabajosfinales().getProgramaeducativo().getCodmod() + "_" + obj.getTrabajosfinales().getNumeracion().toString());
+					dto.setTituloTrabajo(obj.getTrabajosfinales().getTitulotrabajo());
+					dto.setLinkvideo(obj.getTrabajosfinales().getLinkvideo());
+					dto.setModalidadTrabajo(obj.getTrabajosfinales().getModalidadtrabajo().getDescripcion());
+					dto.setCategoriaTrabajo(obj.getTrabajosfinales().getCategoriatrabajo().getDescripcion());
+					dto.setNivelParticipacion(obj.getParticipante().getGradoestudiante().getNivelgradopartdesc());
+					
+					if(obj.getTrabajosfinales().getConversacion() == 1)
+						ejesTematicos += "Conversación de las fuentes de agua/";
+					if(obj.getTrabajosfinales().getValoracionagua() == 1)
+						ejesTematicos += "Valoración de los servicios de agua potable/";
+					if(obj.getTrabajosfinales().getValoracionalcantarillado() == 1)
+						ejesTematicos += "Valoración del servicio de alcantarillado/";
+					if(obj.getTrabajosfinales().getBuenuso() == 1)
+						ejesTematicos += "Buen uso y reúso del agua potable/";
+					if(obj.getTrabajosfinales().getImportancia() == 1)
+						ejesTematicos += "Importancia de cerrar la brecha en saneamiento/";
+					if(obj.getTrabajosfinales().getVinculo() == 1)
+						ejesTematicos += "El vínculo estratégico entre el agua segura y la salud/";
+					if(obj.getTrabajosfinales().getCarencias() == 1)
+						ejesTematicos += "Las carencias que ponen en riesgo la vida/";
+					ejesTematicos = ejesTematicos.substring(0, ejesTematicos.length()-1);
+					
+					dto.setEjesTematicos(ejesTematicos);
+					dto.setNombreParticipante(obj.getParticipante().getNombreestudiante());
+					dto.setApellidoPaternoParticipante(obj.getParticipante().getAppaternoestudiante());
+					dto.setApellidoMaternoParticipante(obj.getParticipante().getApmaternoestudiante());
+					dto.setTipoDocumentoParticipante(obj.getParticipante().getTipodocumentoestudiante().getDescripcion());
+					dto.setNroDocumentoParticipante(obj.getParticipante().getNrodocumentoestudiante());
+					dto.setFechaNacimientoParticipante(obj.getParticipante().getFechanacimientoestudiante().toString());
+					dto.setGeneroParticipante(obj.getParticipante().getGeneroestudiante().getDescripcion());
+					dto.setSeccionParticipante(obj.getParticipante().getSeccion());
+					dto.setNivelParticipante(obj.getParticipante().getGradoestudiante().getNivelparticipante().getDescripcion());
+					dto.setGradoParticipante(obj.getParticipante().getGradoestudiante().getNivelgradopartid().toString());
+					dto.setNombreTutor(obj.getParticipante().getNombrepmt());
+					dto.setApellidoPaternoTutor(obj.getParticipante().getAppaternopmt());
+					dto.setApellidoMaternoTutor(obj.getParticipante().getApmaternopmt());
+					dto.setTipoDocumentoTutor(obj.getParticipante().getTipodocumentopmt().getDescripcion());
+					dto.setNroDocumentoTutor(obj.getParticipante().getTipodocumentopmt().getDescripcion());
+					dto.setTelefonoTutor(obj.getParticipante().getNrotelefonopmt());
+					dto.setCorreoTutor(obj.getParticipante().getCorreoelectronicopmt());
+					dto.setParentescoTutor(obj.getParticipante().getParentesco().getDescripcion());
+					dto.setNombreDocente(obj.getTrabajosfinales().getNombre());
+					dto.setApellidoPaternoDocente(obj.getTrabajosfinales().getAppaterno());
+					dto.setApellidoMaternoDocente(obj.getTrabajosfinales().getApmaterno());
+					dto.setTipoDocumentoDocente(obj.getTrabajosfinales().getTipodocumento().getDescripcion());
+					dto.setNroDocumentoDocente(obj.getTrabajosfinales().getNrodocumento());
+					dto.setTelefonoDocente(obj.getTrabajosfinales().getTelefono());
+					dto.setGeneroDocente(obj.getTrabajosfinales().getGenero().getDescripcion());
+					dto.setCorreoDocente(obj.getTrabajosfinales().getCorreo());		
+					
+					lista.add(dto);
+				}
 			}			
 		});
 		
