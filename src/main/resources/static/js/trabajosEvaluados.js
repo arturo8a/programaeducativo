@@ -363,7 +363,7 @@ function vertrabajo(id){
 				case 'jpeg':
 				case 'png':
 				case 'jpg': 
-					contenido += archivo + "<br><img src='../alfresco_programaeducativo/pedesa/upload_trabajos/"+subcadena+"'"+" width='70%' height='400px'/>";
+					contenido += archivo + "<br><img class='img-fluid' src='../alfresco_programaeducativo/pedesa/upload_trabajos/"+subcadena+"'"+" width='70%' height='400px'/>";
 					break;
 				case 'pdf':
 					contenido += archivo + "<br><iframe src='../alfresco_programaeducativo/pedesa/upload_trabajos/"+subcadena+"'"+" type='application/pdf' width='100%' height='600px'></<iframe>";

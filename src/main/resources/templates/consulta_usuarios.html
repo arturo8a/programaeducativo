@@ -382,21 +382,20 @@
     	        }
     	    	
     	    	var perfil = $("#cbperfilusuario").val();
-    	    	var estado = $("#cbestadousuario").val();
-    	    	console.log("estado :" + estado);
-    	    	if(!filtra(perfil,data[1]))
+    	    	var estado = $("#cbestadousuario").val();cbestadousuario
+    	    	if(!filtra(perfil,data[2]))
     	    		return false;
-    	    	if(!filtra(estado,data[8]))
+    	    	if(!filtra(estado,data[9]))
     	    		return false;
    	    		return true;
     	    }
     	);
 		
 		function filtra(campofiltro,campotabla){
-	    	if(campofiltro==="Todos" || campofiltro===undefined)
+			if(campofiltro==="Todos" || campofiltro===undefined)
 	    		return true;
 	    	var posicion = (campotabla.toLowerCase()).indexOf(campofiltro.toLowerCase()); 
-	    	if(posicion != -1)
+	    	if(posicion != -1) 
 	    		return  true;
 	    	return false;
 	    }

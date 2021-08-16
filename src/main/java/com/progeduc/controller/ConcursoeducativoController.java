@@ -633,8 +633,47 @@ public class ConcursoeducativoController {
 			ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://prometeo.sunass.gob.pe/pedesa")).build();
 		}		
 		String codmod = ses.getAttribute("usuario").toString();
-		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
+		Programaeducativo pe = progeducService.getActualByCodmod(codmod);		
+		List<ListaparticipanteDto> lista = new ArrayList<ListaparticipanteDto>();
+		List<Participante> listaParticipante = participanteService.listarhabilitados(pe.getId());
+		if(listaParticipante!=null) {
+			listaParticipante.forEach(obj->{			
+				String categoria = "";
+				String modalidad = "";
+				ListaparticipanteDto dto =new ListaparticipanteDto();
+				dto.setId(obj.getId());
+				dto.setAppaterno(obj.getAppaternoestudiante());
+				dto.setApmaterno(obj.getApmaternoestudiante());
+				dto.setNombre(obj.getNombreestudiante());
+				dto.setTipodocumento(obj.getTipodocumentoestudiante().getDescripcion());
+				dto.setNrodocumento(obj.getNrodocumentoestudiante());
+				categoria = obj.getCategoriacuento()==1?"Cuento/":"";
+				categoria += obj.getCategoriapoesia()==1?"Poesía/":"";
+				categoria += obj.getCategoriadibujopintura()==1?"Dibujo o Pintura/":"";
+				categoria += obj.getCategoriacomposicionmusical()==1?"Composición musical/":"";
+				categoria += obj.getCategoriaahorroagua()==1?"Ahorro del agua en tu hogar/" : "";
+				if(categoria.length()>0)
+					categoria = categoria.substring(0,categoria.length()-1);				
+				dto.setCategoria(categoria);
+				modalidad = obj.getModalidadpostulacionindividual()==1?"Individual/":"";
+				modalidad += obj.getModalidadpostulaciongrupal()==1?"Grupal/":"";				
+				if(modalidad.length()>0)
+					modalidad = modalidad.substring(0,modalidad.length()-1);
+				dto.setModalidad(modalidad);
+				lista.add(dto);
+			});
+		}		
+		return new ResponseEntity<List<ListaparticipanteDto>>(lista, HttpStatus.OK) ;
+	}
+	
+	@GetMapping(value = "/listaparticipantesbyanio/{anio}")
+	public ResponseEntity<List<ListaparticipanteDto>> listaparticipantesbyanio(@PathVariable("anio") Integer anio,HttpSession ses){
 		
+		if( ses.getAttribute("usuario")==null) {
+			ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://prometeo.sunass.gob.pe/pedesa")).build();
+		}		
+		String codmod = ses.getAttribute("usuario").toString();
+		Programaeducativo pe = progeducService.getActualByCodmod(codmod);		
 		List<ListaparticipanteDto> lista = new ArrayList<ListaparticipanteDto>();
 		List<Participante> listaParticipante = participanteService.listarhabilitados(pe.getId());
 		if(listaParticipante!=null) {
@@ -1927,48 +1966,39 @@ public class ConcursoeducativoController {
 				
 				if(! ods.equals("Todos")) {
 					if(! mi_ods.toLowerCase().equals(ods.toLowerCase())) {
-						System.out.println("entro ods :");
 						bandera = false;
 					}
 				}
-				System.out.println("ods bandera :" + bandera);
 				if(! anio.equals("Todos")) {
 					if(mi_anio != Integer.parseInt(anio)){
 						bandera = false;
 					}
 				}
-				System.out.println("anio bandera :" + bandera);
 				if(! modalidad.equals("Todos")) {
 					if(! mi_modalidad.toLowerCase().equals(modalidad.toLowerCase())){
 						bandera = false;
 					}
 				}
-				System.out.println("modalidad bandera :" + bandera);
 				if(! estado.equals("Todos")) {
 					if(! mi_estado.toLowerCase().equals(estado.toLowerCase())){
 						bandera = false;
 					}
 				}
-				System.out.println("estado bandera :" + bandera);
 				if(! categoria.equals("Todos")) {
 					if(! mi_categoria.toLowerCase().equals(categoria.toLowerCase())){
 						bandera = false;
 					}
 				}
-				System.out.println("categoria bandera :" + bandera);
 				if(! nivel_participacion.equals("Todos")) {
 					if(! mi_nivel_participacion.toLowerCase().equals(nivel_participacion.toLowerCase())){
 						bandera = false;
 					}
 				}
-				System.out.println("nivel_participacion bandera :" + bandera);
 				if(! nombreie.trim().equals("Todos")) {
 					if(! obj.getTrabajosfinales().getProgramaeducativo().getNomie().toLowerCase().contains(nombreie.toLowerCase())){
 						bandera = false;
 					}
 				}
-				System.out.println("nombreie bandera :" + bandera);
-				System.out.println("***********************************************************");
 				if(bandera) {
 					System.out.println("entro");
 					TrabajosFinalesConcursoDto dto = new TrabajosFinalesConcursoDto();

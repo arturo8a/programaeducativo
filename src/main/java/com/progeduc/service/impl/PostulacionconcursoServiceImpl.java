@@ -59,5 +59,10 @@ public class PostulacionconcursoServiceImpl implements IPostulacionconcursoServi
 	public int updatefinalizarparticipaciontrabajo(Integer id) {
 		return postulacionconcursoRepo.updatefinalizarparticipaciontrabajo(id);
 	}
+	
+	@Override
+	public List<Integer> aniosConcurso(){
+		return postulacionconcursoRepo.aniosConcurso();
+	}
 
 }

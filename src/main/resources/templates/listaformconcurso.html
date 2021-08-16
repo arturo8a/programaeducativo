@@ -722,13 +722,6 @@
 		                action: function ( e, dt, node, config ) {
 							if(nombre_ie_reporte.trim()=="")
 								nombre_ie_reporte = "Todos";
-							console.log("ods_reporte :" + ods_reporte);
-							console.log("anio_reporte :" + anio_reporte);
-							console.log("modalidad_reporte :" + modalidad_reporte);
-							console.log("estado_reporte :" + estado_reporte);
-							console.log("categoria_reporte :" + categoria_reporte);
-							console.log("nivel_participacion_reporte :" + nivel_participacion_reporte);
-							console.log("nombre_ie_reporte :" + nombre_ie_reporte);
 							
 							window.location.href = url_base + "pedesa/trabajosfinalesconcurso/"+ods_reporte+"/"+anio_reporte+"/"+modalidad_reporte+"/"+estado_reporte+"/"+categoria_reporte+"/"+nivel_participacion_reporte+"/"+nombre_ie_reporte;							
 		                }
@@ -911,30 +904,7 @@
 	            	{
 	            		/*extend: 'excelHtml5',*/
 	            		text:"<img src='./images/iconos_nd/excel1.svg' class='btn_exporta_excel_alianza' style='size:15px;margin:0px;padding:0px'/>",
-	                    titleAttr : 'LISTA DE TRABAJOS FINALES - CONCURSO'/*,
-	                    messageTop: function(){
-	                    	return '[ ODS: ' + $("#odsconcurso").val() + ']            [ Año de inscripción: '+ $("#anioconcurso").val() + ']';
-	                    },
-	                    filename : function(){
-	                    	var hoy = new Date();
-	                    	var dia = String(hoy.getDate());
-	                    	if(dia.length==1){
-	                    		dia = "0"+dia;
-	                    	}
-	                    	var mes = String(hoy.getMonth()+1);
-	                    	if(mes.length==1){
-	                    		mes = "0"+mes;
-	                    	}
-	                    	var hora = String(hoy.getHours());
-	                    	if(hora.length==1){
-	                    		hora = "0"+hora;
-	                    	}
-	                    	var minuto = String(hoy.getMinutes());
-	                    	if(minuto.length==1){
-	                    		minuto = "0"+minuto;
-	                    	}
-	            	    	return "Reporte_"+dia+mes+hoy.getFullYear()+'_'+hora + minuto;
-	                    }*/
+	                    titleAttr : 'LISTA DE TRABAJOS FINALES - CONCURSO'
 	            	}
 	            ]
 	        });		
@@ -1217,7 +1187,7 @@
 					var objeto = respuesta;
 					var archivo = objeto.archivo;
 					var evidencias = objeto.evidencia;
-					var contenido = "<table style='width:100%'><tr>";
+					var contenido = "<div class='row'><div class='col-xs-3 col-sm-3'><table style='width:100%'>";
 					
 					var evidencia_inicial;
 					var ext_inicial;
@@ -1238,10 +1208,10 @@
 						ext = ext.toLowerCase();
 						var mi_evi = JSON.stringify(evidencia);
 						var archivo = mi_evi.replace(/['"]+/g, '');
-						contenido += "<td><strong style='cursor:pointer' onclick='actualizaEvidenciaDiv("+'`'+id+'`'+","+'`'+archivo+'`'+"," +'`'+ext +'`'+")'>"+archivo+"</strong></td>";						
+						contenido += "<tr><td><strong style='cursor:pointer' onclick='actualizaEvidenciaDiv("+'`'+id+'`'+","+'`'+archivo+'`'+"," +'`'+ext +'`'+")'>"+archivo+"</strong></td></tr>";						
 					}
 					
-					contenido += "</tr></table><hr><table style='width:100%'><tr><td><div id='contenido_evidencia' style='width:100%'></div></td></tr></table>";
+					contenido += "</table></div><div class='col-xs-9 col-sm-9'><table style='width:100%'><tr><td style='padding-bottom:10px'><div id='contenido_evidencia' style='width:100%'></div></td></tr></table></div></div>";
 					$("#contenidoEvidencias").html(contenido);
 					actualizaEvidenciaDiv(id,archivo_inicial,ext_inicial);
 					
@@ -1275,7 +1245,7 @@
 				case 'jpg':
 				case 'png':
 				case 'jpeg':
-					$("#contenido_evidencia").html("<img src='../alfresco_programaeducativo/pedesa/upload_evidencias/"+subcadena+"'"+" width='100%' height='600px'/>");
+					$("#contenido_evidencia").html("<img class='img-fluid' src='../alfresco_programaeducativo/pedesa/upload_evidencias/"+subcadena+"'"+" width='100%' height='600px'/>");
 					break;
 				case 'mp3':
 					$("#contenido_evidencia").html("<audio controls><source src='../alfresco_programaeducativo/pedesa/upload_evidencias/"+subcadena+"'"+" width='100%' height='600px' type='audio/mp3'>Tu navegador no soporta audio HTML5.</audio>");

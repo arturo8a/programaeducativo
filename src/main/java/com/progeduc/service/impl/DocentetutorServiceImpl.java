@@ -48,4 +48,9 @@ public class DocentetutorServiceImpl implements IDocentetutorService{
 	public Docentetutor getByProgeduc(Integer programaeducativoid) {
 		return docentetutorRepo.getByProgeduc(programaeducativoid);
 	}
+	
+	@Override
+	public Docentetutor getByProgeducByAnio(Integer programaeducativoid,Integer anio) {
+		return docentetutorRepo.getByProgeducByAnio(programaeducativoid, anio);
+	}
 }

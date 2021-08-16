@@ -115,6 +115,20 @@
 	    		});	
 	    	});
 	    	
+	    	$("#item_consulta").click(function(){
+				$("#modalimagencargando").modal({
+	    			show : true,
+	    			backdrop : 'static',
+	    			keyboard:false
+	    		});
+	    		$.ajax({
+	    			url: url_base + "pedesa/consulta_concursoeducativo",
+	    			success: function(respuesta) {	    				
+	    				$("#modalimagencargando").modal('hide');
+	    				$("#container").html(respuesta);
+	    			}
+	    		});	
+			});	    	
 	    	
 			$("#item_aula_virtual").click(function(){	    		
 	    		$("#modalimagencargando").modal({
