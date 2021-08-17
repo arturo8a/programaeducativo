@@ -41,6 +41,21 @@ $(document).ready(function(){
 		$("#numdoccontactoregusu").val('');
 	});
 	
+	$('[name="sendOficio"]').on("click",function(){
+		if($('#sendOficioNo').is(':checked')){
+			$('#numoficioautoridad').val('');
+			$('#fecha_oficio').val('');
+			$('#fileautoridad').val('');
+			$('#numoficioautoridad').prop('disabled',true);
+			$('#fecha_oficio').prop('disabled',true);
+			$('#fileautoridad').prop('disabled',true);
+		}else{
+			$('#numoficioautoridad').prop('disabled',false);
+			$('#fecha_oficio').prop('disabled',false);
+			$('#fileautoridad').prop('disabled',false);
+		}
+	});
+	
 	$(document).on("keyup","[id*=montounitarioauspiciador]",function(){
 		var monto = 0;
 		$.each($("[id*=montototalauspiciador]"), function( i, value ) {
@@ -48,7 +63,7 @@ $(document).ready(function(){
 				$("#montototalauspiciador"+(i+1)).val(parseFloat($("#cantidadauspiciador"+(i+1)).val())*parseFloat($("#montounitarioauspiciador"+(i+1)).val()));
 			}
 
-			if($('#tipocodauspiciador'+(i+1)).is(":visible")){
+			if($('#descripcionauspiciador'+(i+1)).is(":visible")){
 				if(!isNaN(parseFloat($("#montototalauspiciador"+(i+1)).val()))){
 					monto += parseFloat($("#montototalauspiciador"+(i+1)).val());
 				}else{
@@ -64,7 +79,7 @@ $(document).ready(function(){
 			if($("#cantidadauspiciador"+(i+1)).val() != '' && $("#montounitarioauspiciador"+(i+1)).val() != '' ){
 				$("#montototalauspiciador"+(i+1)).val(parseFloat($("#cantidadauspiciador"+(i+1)).val())*parseFloat($("#montounitarioauspiciador"+(i+1)).val()));
 			}
-			if($('#tipocodauspiciador'+(i+1)).is(":visible")){
+			if($('#descripcionauspiciador'+(i+1)).is(":visible")){
 				if(!isNaN(parseFloat($("#montototalauspiciador"+(i+1)).val()))){
 					monto += parseFloat($("#montototalauspiciador"+(i+1)).val());
 				}else{
@@ -96,7 +111,7 @@ function sumarTotal(){
 		if($("#cantidadauspiciador"+(i+1)).val() != '' && $("#montounitarioauspiciador"+(i+1)).val() != '' ){
 			$("#montototalauspiciador"+(i+1)).val(parseFloat($("#cantidadauspiciador"+(i+1)).val())*parseFloat($("#montounitarioauspiciador"+(i+1)).val()));
 		}
-		if($('#tipocodauspiciador'+(i+1)).is(":visible")){
+		if($('#descripcionauspiciador'+(i+1)).is(":visible")){
 			if(!isNaN(parseFloat($("#montototalauspiciador"+(i+1)).val()))){
 				monto += parseFloat($("#montototalauspiciador"+(i+1)).val());
 			}else{
@@ -108,24 +123,24 @@ function sumarTotal(){
 }
 
 function htmlAuspicicador(){
-	var cont = $("[id*=tipocodauspiciador]").length;
+	var cont = $("[id*=descripcionauspiciador]").length;
 	cont = cont+1; 
 	html = '';
 	html += '<div class="section-auspicio-item row" style="padding-left: 10px;">';
 	html += '   <input type="hidden" name="idauspiciador'+cont+'" id="idauspiciador'+cont+'" value="0"/>';
-	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
+	/*html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
 	html += '		<select class="form-control" id="tipocodauspiciador'+cont+'" name="tipocodauspiciador'+cont+'">';
 	html += '			<option value="0">Tipo de documento</option>';
 	$.each(htmlTipoAuspicio, function( index, value ) {
 		html += '<option value="'+value.id+'">'+value.descripcion+'</option>';
 	});
 	html += '		</select>';
+	html += '	</div>';*/
+	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
+	html += '		<input type="text" name="descripcionauspiciador'+cont+'" id="descripcionauspiciador'+cont+'" class="form-control" placeholder="Descripcion" maxlength="60" />';
 	html += '	</div>';
 	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
 	html += '		<input type="text" name="cantidadauspiciador'+cont+'" id="cantidadauspiciador'+cont+'" class="form-control" placeholder="Cantidad" onKeyPress="return filterIntInput(event,this)" maxlength="10"/>';
-	html += '	</div>';
-	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
-	html += '		<input type="text" name="descripcionauspiciador'+cont+'" id="descripcionauspiciador'+cont+'" class="form-control" placeholder="Descripcion" maxlength="60" />';
 	html += '	</div>';
 	html += '	<div class="col-xs-12 col-sm-4 text-left pt-1">';
 	html += '		<input type="text" name="montounitarioauspiciador'+cont+'" id="montounitarioauspiciador'+cont+'" class="form-control" placeholder="Monto Unitario" onKeyPress="return filterFloat(event,this)" maxlength="10"/>';
@@ -144,17 +159,18 @@ function htmlAuspicicador(){
 function armarAuspicio(){
 	var array = [];
 	if($("#section-datos-auspicio").is(":visible")){
-		$.each($("[id*=tipocodauspiciador]"), function( index, value ) {
+		$.each($("[id*=descripcionauspiciador]"), function( index, value ) {
 			var i = index + 1;
-		  	var tipoDoc = $('#tipocodauspiciador'+i).val();
-		  	var tipodocumento = {id : tipoDoc};
+		  	//var tipoDoc = $('#tipocodauspiciador'+i).val();
+		  	//var tipodocumento = {id : tipoDoc};
 		  	var cantidad = $('#cantidadauspiciador'+i).val();
 		  	var descripcion = $('#descripcionauspiciador'+i).val();
 		  	var montounitario = $('#montounitarioauspiciador'+i).val();
 		  	var montototal = $('#montototalauspiciador'+i).val();
 		  	var id = $('#idauspiciador'+i).val();
-		  	if($('#tipocodauspiciador'+i).is(":visible")){
-				array.push({id,tipodocumento,cantidad,descripcion,montounitario,montototal});
+		  	if($('#descripcionauspiciador'+i).is(":visible")){
+				//array.push({id,tipodocumento,cantidad,descripcion,montounitario,montototal});
+				array.push({id,cantidad,descripcion,montounitario,montototal});
 			}
 		});
 	}else{
@@ -384,11 +400,15 @@ function getUsuario(idUsuario){
 					if(respuesta.enviaroficio == "0"){
 						$('#sendOficioSi').prop("checked",false);
 						$('#sendOficioNo').prop("checked",true);
+						$('#numoficioautoridad').prop('disabled',true);
+						$('#fecha_oficio').prop('disabled',true);
+						$('#fileautoridad').prop('disabled',true);
+					}else{
+						$("#numoficioautoridad").val(respuesta.numoficio);
+						$("#fecha_oficio").val(respuesta.fechadocformat);
+						$("#fileautoridad").prop("disabled",true);
+						$("#textArchivoFile").text(respuesta.docoficio);
 					}
-					$("#numoficioautoridad").val(respuesta.numoficio);
-					$("#fecha_oficio").val(respuesta.fechadocformat);
-					$("#fileautoridad").prop("disabled",true);
-					$("#textArchivoFile").text(respuesta.docoficio);
 				}
 				
 				if(respuesta.auspiciador == "1"){
@@ -400,7 +420,7 @@ function getUsuario(idUsuario){
 							htmlAuspicicador();
 						}
 						var i = index+1; 
-						$('#tipocodauspiciador'+i).val(value.tipodocumento.id);
+						//$('#tipocodauspiciador'+i).val(value.tipodocumento.id);
 		  				$('#cantidadauspiciador'+i).val(value.cantidad);
 		  				$('#descripcionauspiciador'+i).val(value.descripcion);
 		  				$('#montounitarioauspiciador'+i).val(value.montounitario);
@@ -542,43 +562,42 @@ function validarCampos(){
 			contentMensajeError += "Debe ingresar Contraseña de Autoridad/Representante"+"</br>";
 			status = false;
 		}
-		/*if($('#sendOficioSi').is(':checked') || $('#sendOficioNo').is(':checked')){
-			contentMensajeError += "Debe ingresar Cargo de Contacto"+"</br>";
-			status = false;
-		}*/
-		if($('#numoficioautoridad').val() == ""){
-			contentMensajeError += "Debe ingresar N° Oficio de Autoridad/Representante"+"</br>";
-			status = false;
-		}
-		if($('#fecha_oficio').val() == ""){
-			contentMensajeError += "Debe ingresar Fecha de Oficio de Autoridad/Representante"+"</br>";
-			status = false;
-		}
-		if($('.alert').length == 0 && fileautoridad.files.length == 0){
-			contentMensajeError += "Debe ingresar Documento de Autoridad/Representante"+"</br>";
-			status = false;
-		}else{
-			if(fileautoridad.files.length > 0){
-				if(fileautoridad.files[0].size >5000000){
-					contentMensajeError += "El archivo no debe superar los 5MB"+"<br>";
-				}
-				var ext = fileautoridad.files[0].name.split('.').pop();
-				ext = ext.toLowerCase();
-				switch(ext){
-					case 'pdf': break;
-					default: mensajeValidacion += "El archivo debe tener extensión pdf"+"<br>";	
+		if($('#sendOficioSi').is(':checked')){
+			if($('#numoficioautoridad').val() == ""){
+				contentMensajeError += "Debe ingresar N° Oficio de Autoridad/Representante"+"</br>";
+				status = false;
+			}
+			if($('#fecha_oficio').val() == ""){
+				contentMensajeError += "Debe ingresar Fecha de Oficio de Autoridad/Representante"+"</br>";
+				status = false;
+			}
+			if($('.alert').length == 0 && fileautoridad.files.length == 0){
+				contentMensajeError += "Debe ingresar Documento de Autoridad/Representante"+"</br>";
+				status = false;
+			}else{
+				if(fileautoridad.files.length > 0){
+					if(fileautoridad.files[0].size >5000000){
+						contentMensajeError += "El archivo no debe superar los 5MB"+"<br>";
+					}
+					var ext = fileautoridad.files[0].name.split('.').pop();
+					ext = ext.toLowerCase();
+					switch(ext){
+						case 'pdf': break;
+						default: mensajeValidacion += "El archivo debe tener extensión pdf"+"<br>";	
+					}
 				}
 			}
 		}
+		
 	}
 	
 	if($("#section-datos-auspicio").is(":visible")){
-		$.each($("[id*=tipocodauspiciador]"), function( index, value ) {
+		/*$.each($("[id*=tipocodauspiciador]"), function( index, value ) {
 			if($(value).val() == "0" && $(value).is(":visible")){
 				contentMensajeError += "Debe seleccionar Tipo de Documento del Auspiciador"+"</br>";
 				status = false;
 			}
-		});
+		});*/
 		$.each($("[id*=cantidadauspiciador]"), function( index, value ) {
 			if($(value).val() == "" && $(value).is(":visible")){
 				contentMensajeError += "Debe ingresar Cantidad del Auspiciador"+"</br>";

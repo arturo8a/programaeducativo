@@ -27,6 +27,9 @@ public class CerrarOds {
 	
 	@Column(name="etapa")
 	private Integer etapa;
+	
+	@Column(name="estado")
+	private Integer estado;
 
 	public Integer getId() {
 		return id;
@@ -58,6 +61,14 @@ public class CerrarOds {
 
 	public void setEtapa(Integer etapa) {
 		this.etapa = etapa;
+	}
+
+	public Integer getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Integer estado) {
+		this.estado = estado;
 	}
 	
 	

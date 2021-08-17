@@ -495,7 +495,7 @@ public class ReporteController {
 			row1 = sheet1.createRow(initRow1);
 			row1.createCell(i++).setCellValue(auspicio.getOds());
 			row1.createCell(i++).setCellValue(initRow1);
-			row1.createCell(i++).setCellValue(auspicio.getTipodocumento().getDescripcion());
+			row1.createCell(i++).setCellValue(""/*auspicio.getTipodocumento().getDescripcion()*/);
 			row1.createCell(i++).setCellValue(auspicio.getCantidad());
 			row1.createCell(i++).setCellValue(auspicio.getDescripcion());
 			row1.createCell(i++).setCellValue(auspicio.getMontounitario());

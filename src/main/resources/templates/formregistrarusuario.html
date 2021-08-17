@@ -11,7 +11,7 @@
 
    
 	
-	<script type="text/javascript" th:src="@{/js/agregarusuario.js?v=12}"></script>  
+	<script type="text/javascript" th:src="@{/js/agregarusuario.js?v=123}"></script>  
 </head>
 <body>
 	<form id="formparticipanteajax">
@@ -116,7 +116,7 @@
 		<hr>
 		<div class="row" id="section-datos-autoridad" style="display: none;">
 			<div class="col-xs-12 col-sm-12 text-left pt-4 w-100">
-				<u>Datos de la Autoridad/Representante</u>
+				<u>Datos de la Autoridad/Evaluador</u>
 			</div>
 			<div class="col-xs-12 col-sm-4 text-left pt-1">
 				<input type="text" name="apepatautoridad" id="apepatautoridad" class="form-control" placeholder="Apellido Paterno" maxlength="60"/>
@@ -171,17 +171,17 @@
 			</div>
 			<div class="section-auspicio-item row" style="padding-left: 10px;">
 				<input type="hidden" name="idauspiciador1" id="idauspiciador1" value="0"/>
-				<div class="col-xs-12 col-sm-4 text-left pt-1">
+				<!--<div class="col-xs-12 col-sm-4 text-left pt-1">
 					<select class="form-control" id="tipocodauspiciador1" name="tipocodauspiciador1">
 						<option value="0">Tipo de documento</option>
 					    <option th:each="len:${tipodocaus}" th:value="${len.id}" th:utext="${len.descripcion}"/>
 					</select>
+				</div>-->
+				<div class="col-xs-12 col-sm-4 text-left pt-1">
+					<input type="text" name="descripcionauspiciador1" id="descripcionauspiciador1" class="form-control" placeholder="Descripcion" maxlength="60"/>
 				</div>
 				<div class="col-xs-12 col-sm-4 text-left pt-1">
 					<input type="text" name="cantidadauspiciador1" id="cantidadauspiciador1" class="form-control" placeholder="Cantidad" onKeyPress="return filterIntInput(event,this)" maxlength="10"/>
-				</div>
-				<div class="col-xs-12 col-sm-4 text-left pt-1">
-					<input type="text" name="descripcionauspiciador1" id="descripcionauspiciador1" class="form-control" placeholder="Descripcion" maxlength="60"/>
 				</div>
 				<div class="col-xs-12 col-sm-4 text-left pt-1">
 					<input type="text" name="montounitarioauspiciador1" id="montounitarioauspiciador1" class="form-control" placeholder="Monto Unitario" onKeyPress="return filterFloat(event,this)" maxlength="60"/>

@@ -11,4 +11,6 @@ public interface IOdsService {
 	List<Ods> listarAll();
 	
 	List<Ods> listarOdsDeTrabajosEvaluados();
+	
+	List<Ods> listarOdsEmpatadas();
 }

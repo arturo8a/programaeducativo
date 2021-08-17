@@ -41,4 +41,8 @@ public interface ITrabajosfinalesService extends ICRUD<Trabajosfinales,Integer>{
 	List<CategoriaModalidadByOds> listarCategoriaModalidadByOds(Integer odsId);
 	
 	List<Trabajosfinales> listarTrabajosfinalesPorOds(Integer odsId);
+	
+	List<Trabajosfinales> listaTrabajosEmpatadosPorCatModOdsPuesto(Integer idcategoria, Integer idmodalidad,Integer odsId, Integer puesto);
+	
+	List<Trabajosfinales> listaTrabajosEmpatados();
 }

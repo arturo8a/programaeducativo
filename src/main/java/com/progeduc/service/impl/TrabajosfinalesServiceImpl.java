@@ -154,7 +154,20 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 
 	@Override
 	public List<Trabajosfinales> listarTrabajosfinalesPorOds(Integer odsId) {
-		return null;
+		return trabajosfinalesRepo.listarTrabajosfinalesPorOds(odsId);
+	}
+
+	@Override
+	public List<Trabajosfinales> listaTrabajosEmpatadosPorCatModOdsPuesto(Integer idcategoria, Integer idmodalidad,
+			Integer odsId, Integer puesto) {
+		// TODO Auto-generated method stub
+		return trabajosfinalesRepo.listaTrabajosEmpatadosPorCatModOdsPuesto(idcategoria, idmodalidad, odsId, puesto);
+	}
+	
+	@Override
+	public List<Trabajosfinales> listaTrabajosEmpatados() {
+		// TODO Auto-generated method stub
+		return trabajosfinalesRepo.listaTrabajosEmpatados();
 	}
 
 }
