@@ -55,8 +55,8 @@ public class EvaluacionRespuestaServiceImpl implements IEvaluacionRespuestaServi
 
 	@Override
 	public boolean Eliminar(Integer id) {
-		// TODO Auto-generated method stub
-		return false;
+		evaRepo.deleteById(id);
+		return true;
 	}
 
 	@Override
@@ -74,6 +74,11 @@ public class EvaluacionRespuestaServiceImpl implements IEvaluacionRespuestaServi
 	@Override
 	public List<EvaluacionResultado> listaEvaluacionResultado(Integer idTrabajo, Integer idUsuario) {
 		return evaRepo.listaEvaluacionResultado(idTrabajo, idUsuario);
+	}
+
+	@Override
+	public void borrarEvaluacionesPorTrabajo(Integer idTrabajo) {
+		evaRepo.borrarEvaluacionesPorTrabajo(idTrabajo);
 	}
 	
 	

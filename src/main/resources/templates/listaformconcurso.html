@@ -64,7 +64,7 @@
     <a class="nav-item nav-link active" id="nav-concursoeducativo-tab" data-toggle="tab" href="#nav-concursoeducativo" role="tab" aria-controls="nav-concursoeducativo" aria-selected="true">Concurso educativo</a>
     <a class="nav-item nav-link" id="nav-alianzaestrategica-tab" data-toggle="tab" href="#nav-alianzaestrategica" role="tab" aria-controls="nav-alianzaestrategica" aria-selected="false">Alianza estrategica</a>
     <a class="nav-item nav-link" id="nav-asignacion-tab" data-toggle="tab" href="#nav-asignacion" role="tab" aria-controls="nav-asignacion" aria-selected="false">Asignación</a>
-    <a class="nav-item nav-link" id="nav-ganadoresregionales-tab" data-toggle="tab" href="#nav-ganadoresregionales" role="tab" aria-controls="nav-ganadoresregionales" aria-selected="false">Ganadores Regionales</a>
+    <!--a class="nav-item nav-link" id="nav-ganadoresregionales-tab" data-toggle="tab" href="#nav-ganadoresregionales" role="tab" aria-controls="nav-ganadoresregionales" aria-selected="false">Ganadores Regionales</a>-->
     <a class="nav-item nav-link" id="nav-concursonacional-tab" data-toggle="tab" href="#nav-concursonacional" role="tab" aria-controls="nav-concursonacional" aria-selected="false">Concurso Nacional</a>
   </div>
 </nav>
@@ -73,48 +73,62 @@
   		<div id="containerListaRegistros" class="pl-3 pr-3 pt-2">		  		
 			<div class="div_filtro">
 				<div class="row pt-2 m-0">			
-					<div class="col-xs-4 col-sm-3">
+					<div class="col-xs-4 col-sm-2">
 						<select class="form-control" id="odsconcurso" name="odsconcurso">
 							<option value="Todos">ODS</option>			
 							<option th:each="dato:${ods}" th:value="${dato.descripcion}" th:utext="${dato.descripcion}"/>   				    				
 						</select>
 					</div>
-					<div class="col-xs-4 col-sm-3">
+					<div class="col-xs-4 col-sm-2">
 						<select class="form-control" id="anioconcurso" name="anioconcurso">
 							<option value="Todos">Año</option>
 							<option th:each="dato:${anios}" th:value="${dato}" th:utext="${dato}"/>
 						</select>
 					</div>
-					<div class="col-xs-4 col-sm-3">
+					<div class="col-xs-4 col-sm-2">
 						<select class="form-control" id="modalidadconcurso" name="modalidadconcurso">
 							<option value="Todos">Modalidad</option>	
 							<option th:each="dato:${modalidadtrabajo}" th:value="${dato.descripcion}" th:utext="${dato.descripcion}"/>						
 						</select>
 					</div>
-					<div class="col-xs-12 col-sm-3">
+					<div class="col-xs-12 col-sm-2">
 						<select class="form-control" id="estadoconcurso" name="estadoconcurso">
 							<option value="Todos">Estado</option> 
 							<option th:each="dato:${listaestadoevaluacion}" th:value="${dato.descripcion}" th:utext="${dato.descripcion}"/>		
 						</select>
 					</div>
-					<div class="col-xs-4 col-sm-3 pt-3">
-						<select class="form-control" id="categoriaconcurso" name=""categoriaconcurso"">
+					<div class="col-xs-4 col-sm-2">
+						<select class="form-control" id="puestoconcurso" name="puestoconcurso">
+							<option value="Todos">Selecciones</option>
+							<option value="1">Primer puesto</option>
+							<option value="2">Segundo puesto</option>
+							<option value="3">Tercer puesto</option>		    				
+						</select>
+					</div>
+					<div class="col-xs-4 col-sm-2">
+					</div>
+					<div class="col-xs-4 col-sm-2 pt-3">
+						<select class="form-control" id="categoriaconcurso" name="categoriaconcurso">
 							<option value="Todos">Categoria</option>
 							<option th:each="dato:${categoriatrabajo}" th:value="${dato.descripcion}" th:utext="${dato.descripcion}"/>			    				
 						</select>
 					</div>
-					<div class="col-xs-4 col-sm-3 pt-3">
+					<div class="col-xs-4 col-sm-2 pt-3">
 						<select class="form-control" id="participacionconcurso" name="participacionconcurso">
 							<option value="Todos">Nivel de participación</option>
 							<option th:each="dato:${nivelparticipacion}" th:value="${dato.descripcion}" th:utext="${dato.descripcion}"/>					       				
 						</select>
 					</div>
-					<div class="col-xs-4 col-sm-3 pt-3">
+					<div class="col-xs-4 col-sm-2 pt-3">
 						<input type="text" id="nombreieconcurso" name="nombreieconcurso" class="form-control" placeholder="Nombre de II.EE"/>
 					</div>
 					<div class="col-xs-12 col-sm-3 pt-3 text-right">
 						<input type="image" id="btnbuscarconcurso"  src="./images/iconos_nd/botonbuscar.svg" width="125px" />
 						<input type="image" id="btnlimpiarconcurso"  src="./images/iconos_nd/botonrefrescar.svg" width="32px"  />
+					</div>
+					<div class="col-xs-12 col-sm-3 pt-3">
+						<input type="button" id="btnFinalizar" name="btnFinalizar" class="btn btn-primary text-right" value="Finalizar" style=" margin-right: 20px;">
+						<input type="button" id="btnVerEmpate" name="btnVerEmpate" class="btn btn-primary text-right" value="Ver Empate">
 					</div>
 				</div>
 			</div>
@@ -322,7 +336,82 @@
 	  	ganadoresregionales
 	</div>
 	<div class="tab-pane fade" id="nav-concursonacional" role="tabpanel" aria-labelledby="concursonacional-tab">
-	  	concursonacional
+	  	
+	  	<div id="containerListaRegistros" class="pl-3 pr-3 pt-2">		  		
+			<div class="div_filtro">
+				<div class="row pt-2 m-0">			
+					<div class="col-xs-4 col-sm-3">
+						<select class="form-control" id="odsconcurso" name="odsconcurso">
+							<option value="Todos">ODS</option>			
+							<option th:each="dato:${ods}" th:value="${dato.descripcion}" th:utext="${dato.descripcion}"/>   				    				
+						</select>
+					</div>
+					<div class="col-xs-4 col-sm-3 ">
+						<select class="form-control" id="categoriaconcurso" name="categoriaconcurso">
+							<option value="Todos">Categoria</option>
+							<option th:each="dato:${categoriatrabajo}" th:value="${dato.descripcion}" th:utext="${dato.descripcion}"/>			    				
+						</select>
+					</div>
+					<div class="col-xs-4 col-sm-3">
+						<select class="form-control" id="participacionconcurso" name="participacionconcurso">
+							<option value="Todos">Nivel de participación</option>
+							<option th:each="dato:${nivelparticipacion}" th:value="${dato.descripcion}" th:utext="${dato.descripcion}"/>					       				
+						</select>
+					</div>
+					<div class="col-xs-4 col-sm-3">
+						<select class="form-control" id="puestoconcurso" name="puestoconcurso">
+							<option value="Todos">Selecciones</option>
+							<option value="1">Primer puesto</option>
+							<option value="2">Segundo puesto</option>
+							<option value="3">Tercer puesto</option>		    				
+						</select>
+					</div>
+
+					<div class="col-xs-12 col-sm-3 pt-3 text-right">
+						<input type="image" id="btnbuscarconcurso"  src="./images/iconos_nd/botonbuscar.svg" width="125px" />
+						<input type="image" id="btnlimpiarconcurso"  src="./images/iconos_nd/botonrefrescar.svg" width="32px"  />
+					</div>
+					<div class="col-xs-12 col-sm-3 pt-3">
+						<input type="button" id="btnFinalizar" name="btnFinalizar" class="btn btn-primary text-right" value="Finalizar" style=" margin-right: 20px;">
+						<input type="button" id="btnVerEmpate" name="btnVerEmpate" class="btn btn-primary text-right" value="Ver Empate">
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="div_filtro">
+				<div class="p-0 m-0">
+					<div class="row pt-2 pb-4 m-0">
+						<div class="col-xs-12 col-sm-12">
+							<table id="table_lista_concurso_nacional"  class="table table-striped display nowrap" style="width:100%">
+								<thead class="cabecera_tabla">
+							        <tr>
+							        	<th><input type="checkbox" id="seleccionarTodo"/></th>
+							        	<th>Nº</th>
+										<th>AÑO</th>
+							            <th>CODIGO DE TRABAJO</th>
+							            <th>ODS</th>
+							            <th>CODIGO DE II.EE</th>
+							            <th>NOMBRE DE II.EE</th>
+							            <th>CATEGORIA</th>
+							            <th>MODALIDAD</th>
+							            <th>TITULO DEL TRABAJO</th>
+							            <th>NIVEL DE PARTICIPACION</th>
+							            <th>FICHA DE TRABAJO</th>
+							            <th>NOTA</th>
+							            <th>PUESTO REGIONAL</th>
+							            <th>NOTA</th>
+							            <th>PUESTO NACIONAL</th>
+							            <th>VER DETALLE</th>
+							        </tr>   
+							    </thead>
+							</table>
+						</div>
+						<br><br>
+					</div>
+				</div>
+			</div>		  		
+		</div>
+	  	
 	</div>
 </div>
 
@@ -427,6 +516,82 @@
 	  </div>
 	</div>
 </center>
+<!--MODAL FINALIZAR-->
+<center>
+	<div class="modal fade" tabindex="-1" role="dialog" id="modalFinalizar" aria-labelledby="myLargeModalLabel" >
+	  <div class="modal-dialog modal-lg" role="document" style="width:70%; height:540px">
+	    <div class="modal-content" >
+	      <div class="modal-header">
+	        <strong class="pt-1">Finalizar Evaluación ODS</strong>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>	          
+		        </button>
+	      </div>
+	      <div class="modal-body" id="contenidoFinalizar">
+	      	<div class="row">
+				<div class="col-xs-12 col-sm-12 text-left">
+					<strong class="pt-1">FINALIZAR EVALUACION</strong>
+				</div>
+			</div>
+	      	<div class="row">
+				<div class="col-xs-12 col-sm-12 text-left">
+					<input type="checkbox" name="check-todos" id="check-todos" style="margin:5px" /><label for="check-1_edit">Marcar todos</label>
+				</div>
+			</div>
+			<div class="row" id="listaOdsPorFinalizar">
+				
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 text-left">
+					<strong class="pt-1">DESEMPATE</strong>
+				</div>
+			</div>
+			
+			<div class="row" id="listaOdsEmpatadasPorFinalizar">
+				
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-xs-6 col-sm-6 text-right">
+					<input type="button" id="btnCerrarFinalizar" value="Cancelar" class="btn btn-outline-primary"/>
+				</div>
+				<div class="col-xs-6 col-sm-6 text-left">
+					<input type="button" id="btnFinalizarCierre" value="Registrar" class="btn btn-primary"/>
+				</div>
+			</div>	 	
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</center>
+<!--MODAL CONFIRMAR FINALIZAR-->
+<center>
+	<div class="modal fade" tabindex="-1" role="dialog" id="modalConfimarCierreFinalizar" aria-labelledby="myLargeModalLabel" >
+	  <div class="modal-dialog modal-lg" role="document" style="width:70%; height:540px">
+	    <div class="modal-content" >
+	      <div class="modal-header">
+	        <strong class="pt-1">Confirmar</strong>
+	      </div>
+	      <div class="modal-body">
+	      	<div class="row">
+				<label>Se asignarán los resultados a las ODS finalizadas</label>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-xs-6 col-sm-6 text-right">
+					<input type="button" id="btnCancelarCierre" value="Cancelar" class="btn btn-outline-primary"/>
+				</div>
+				<div class="col-xs-6 col-sm-6 text-left">
+					<input type="button" id="btnConfirmarCierre" value="Confirmar" class="btn btn-primary"/>
+				</div>
+			</div>	 	
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</center>
+
 <div class="modal" tabindex="-1" role="dialog" id="modalimagencargando">
   <center>
   	<img th:src="@{./images/cargando.gif}" style="line-height: 200px;"/>
@@ -441,7 +606,7 @@
 		var url_base = location.origin+"/";		
 		var celdaseleccionada;
 		var id;
-		var table_lista_concurso, table_lista_asignacion;
+		var table_lista_concurso, table_lista_asignacion, table_lista_concurso_nacional;
 		
 		var ods_reporte="Todos", anio_reporte="Todos", modalidad_reporte="Todos", estado_reporte="Todos", categoria_reporte="Todos", nivel_participacion_reporte="Todos", nombre_ie_reporte="Todos";
 		
@@ -1460,4 +1625,259 @@ $(document).on("click",".btn_exporta_excel_alianza",function(e){ console.log('.b
 	window.open(url_base + "pedesa/reporteAlianza/"+fOds+"/"+fAnio+"/"+fRol+"/"+fEstado, '_blank');
 	closeCargando();
 });
+
+
+$(document).ready(function(){	
+
+	$("#btnFinalizar").on("click",function(e){ console.log('btnFinalizar');
+		openCargando();
+		$.ajax({
+			type : "GET",
+		    contentType : "application/json",
+		    url : url_base + "pedesa/consultarEtapaHabilitada",
+			success: function(respuesta) {
+				if(respuesta.status == 1){
+					var html = '';
+					$.each(respuesta.listOds, function( i, value ) {
+						html +='<div class="col-xs-12 col-sm-2 text-left">';
+						html +='<input type="checkbox" class="case_edit" name="chk_ods"  id="chk_ods_'+value.id+'" data-id='+value.id+' data-etapa="1" style="margin:5px"/> <label>'+value.descripcion+'</label>';
+						html +='</div>';
+					}); 
+					$("#listaOdsPorFinalizar").html(html);
+					
+					$.each(respuesta.listCerrarOds, function( i, value ) {
+						$('[id=chk_ods_'+value.odsid.id+'][data-etapa='+value.etapa+']').prop('disabled',true);
+						$('[id=chk_ods_'+value.odsid.id+'][data-etapa='+value.etapa+']').parent().hide();
+					});
+					
+					/*ODS empatadas*/respuesta
+					html = '';
+					$.each(respuesta.listCerrarOds, function( i, value ) {
+						if(value.estado === "2"){
+							html +='<div class="col-xs-12 col-sm-2 text-left">';
+							html +='<input type="checkbox" class="case_edit" name="chk_ods"  id="chk_ods_'+value.id+'" data-id='+value.id+' data-etapa="1" style="margin:5px"/> <label>'+value.descripcion+'</label>';
+							html +='</div>';
+						}
+						
+					});
+					$("#listaOdsEmpatadasPorFinalizar").html(html);
+					
+					
+					$("#modalFinalizar").modal('show');
+				}else{
+					alert("Etapa no disponible");
+				}
+				closeCargando();
+			},
+			error: function() {
+				console.log("error al cargar modal asignar evaluador");
+				
+		    }
+		});
+				
+	});
+	
+	$("#btnCerrarFinalizar").on("click",function(e){
+		$("#modalFinalizar").modal('hide');
+	});
+	
+	$("#check-todos").on("click",function(e){
+		if($(this).is(":checked")) {
+			$("[name=chk_ods]").prop('checked', true);
+		}else{
+			$("[name=chk_ods]").prop('checked', false);
+		}
+	});
+	
+	$("#btnFinalizarCierre").on("click",function(e){
+		$("#modalConfimarCierreFinalizar").modal('show');
+	});
+	
+	$("#btnConfirmarCierre").on("click",function(e){
+		openCargando();
+		var listaOds = [];
+		
+		$.each($("[name=chk_ods]"), function( i, value ){
+			if($(value).is(":checked") && !$(value).is(":disabled")  && $(value).is(":visible")){
+				listaOds.push({id: $(value).attr('data-id'), etapa:  $(value).attr('data-etapa')});
+			}
+		}); 
+		
+		$.ajax({
+			type : "POST",
+		    contentType : "application/json",
+		    url : url_base + "pedesa/cerrarOds",
+		    data : JSON.stringify(listaOds),
+		    dataType : 'json',
+			success: function(respuesta) {
+				console.log('Registro Correcto');
+				closeCargando();
+				$("#modalConfimarCierreFinalizar").modal('hide');
+				$("#modalFinalizar").modal('hide');
+			},
+			error: function() {
+				console.log("Error");
+				closeCargando();
+		    }
+		});	
+	});
+	
+	$("#btnCancelarCierre").on("click",function(e){
+		$("#modalConfimarCierreFinalizar").modal('hide');
+	});
+	
+	$("#btnVerEmpate").on("click",function(e){
+		//alert('No hay empates.');
+		openCargando();
+		
+		$.ajax({
+			type : "GET",
+		    contentType : "application/json",
+		    url : url_base + "pedesa/formCerrarAsignarEvaluador",
+			success: function(respuesta) {
+				closeCargando();
+				$("#contenidoasignarevaluador").html(respuesta);
+				$('#modalasignarevaluador').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+				
+			},
+			error: function() {
+				console.log("error al cargar modal asignar evaluador");
+				closeCargando();
+		    }
+		});
+		
+	});
+	
+	$("#nav-concursonacional-tab").on("click",function(){
+		setTimeout(() => {        		  
+				table_lista_concurso_nacional.draw();
+	      	}, 300);
+	});
+	
+	listarNacional();
+});
+
+var listarNacional = function(){
+				
+		$("#table_lista_concurso_nacional").dataTable().fnDestroy();				
+	    
+		table_lista_concurso_nacional = $('#table_lista_concurso_nacional').DataTable({
+		"dom": '<"excelHtml5"B><"rs_concurso_educativo">frtip',
+        "scrollX": true,
+        "searching": true,
+        "lengthMenu": [
+            [ 10, 15, 25, -1 ],
+            [ '10 filas', '15 filas', '25 filas', 'Mostrar todas' ]
+        ],
+        "processing":true,
+        "language": {
+            buttons: {
+              pageLength: 'Mostrar'
+            },
+            "decimal": "",
+            "emptyTable": "No hay información",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+            "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Entradas",
+            "loadingRecords": "Cargando Registros...",
+            "processing": "Procesando...",
+            "search": "_INPUT_",
+	        "searchPlaceholder": "Busqueda General",
+            "zeroRecords": "No existen registros",
+            "paginate": {
+                "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            }
+        },
+        "ajax" : {
+            "url" : url_base + 'pedesa/listaconcursonacional',
+            "type" : "GET",
+            "dataSrc" : ""
+        },
+        "columns" : [
+        	{
+        		 "data":null, render:function(){return "";}
+        	},
+        	{	            	
+        		"data": null, "render": function (data, type, full, meta) { return meta.row + 1; }
+        	},
+        	{ 'data' : 'anio' },
+        	{ 'data' : 'codigotrabajo' },
+        	{ 'data' : 'ods' },
+        	{ 'data' : 'codigoie' },
+            { 'data' : 'nombreie' },
+            { 'data' : 'categoria' },
+        	{ 'data' : 'modalidad' },
+        	{ 'data' : 'titulotrabajo' },
+            { 'data' : 'nivelparticipacion' },
+            { 'defaultContent' : '<img src="./images/iconos_nd/pdf1.svg" class="fichatrabajo" style="width:20px; cursor:pointer"/>' },
+            { 'data' : 'calificacion' },
+            { 'data' : 'puesto'},
+            { 'data' : 'calificacion' },
+            { 'data' : 'puesto'},
+            { 'defaultContent' : '<img src="./images/svg/eye-solid.svg" class="detalleevaluacion" style="width:20px; cursor:pointer"/>' }
+            
+        ],
+        columnDefs: [
+        	{
+                orderable: false,
+                className: 'select-checkbox',
+                targets:   0
+            }
+        ],
+        select: {
+            style:    'multi', 
+            selector: 'td:first-child'
+        },
+        "buttons": [
+        	/*{
+        		extend: 'excelHtml5',
+        		
+                titleAttr : 'LISTA DE TRABAJOS FINALES - CONCURSO',
+                messageTop: function(){
+                	return '[ ODS: ' + $("#odsconcurso").val() + ']            [ Año de inscripción: '+ $("#anioconcurso").val() + ']';
+                },
+                filename : function(){
+                	var hoy = new Date();
+                	var dia = String(hoy.getDate());
+                	if(dia.length==1){
+                		dia = "0"+dia;
+                	}
+                	var mes = String(hoy.getMonth()+1);
+                	if(mes.length==1){
+                		mes = "0"+mes;
+                	}
+                	var hora = String(hoy.getHours());
+                	if(hora.length==1){
+                		hora = "0"+hora;
+                	}
+                	var minuto = String(hoy.getMinutes());
+                	if(minuto.length==1){
+                		minuto = "0"+minuto;
+                	}
+        	    	return "Listatrabajosfinales_"+dia+mes+hoy.getFullYear()+'_'+hora + minuto;
+                }
+        	},*/
+        	{
+                text:"<img src='./images/iconos_nd/excel1.svg' style='size:15px;margin:0px;padding:0px'/>",
+                action: function ( e, dt, node, config ) {
+					window.location.href = url_base + "pedesa/trabajosfinalesconcurso/"+ods_reporte+"/"+anio_reporte+"/"+modalidad_reporte+"/"+estado_reporte+"/"+categoria_reporte+"/"+nivel_participacion_reporte+"/"+nombre_ie_reporte;							
+                }
+            }
+        ]
+    });
+	$("div.rs_concurso_educativo").html("<strong>RESULTADOS CONCURSO EDUCATIVO</strong>");
+	obtener_fichatrabajo("#table_lista_concurso_nacional tbody",table_lista_concurso_nacional);
+}
+
+
 </script>

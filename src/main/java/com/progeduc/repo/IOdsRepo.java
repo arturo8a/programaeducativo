@@ -14,5 +14,23 @@ public interface IOdsRepo extends CrudRepository<Ods,Integer>{
 	Ods byOds(@Param("id") int id);	
 	
 	@Query(value="select od.* from ods od where od.id>0 order by od.descripcion",nativeQuery = true)
-	List<Ods> listarAll();	
+	List<Ods> listarAll();
+	
+	@Query(value="select o.* from trabajosfinales tf "
+			+ "inner join programaeducativo pe "
+			+ "on tf.programaeducativoid = pe.id "
+			+ "inner join distrito d "
+			+ "on pe.distritoid = d.id "
+			+ "inner join ods o "
+			+ "on d.odsid = o.id "
+			+ "where tf.nota is not null group by o.id, o.desc_ods, o.descripcion order by o.descripcion",nativeQuery = true)
+	List<Ods> listarOdsDeTrabajosEvaluados();
+	
+	@Query(value="select o.* from cerrar_ods co "
+			+ "inner join ods o "
+			+ "on co.odsid = o.id  "
+			+ "where co.estado = '2' ",nativeQuery = true)
+	List<Ods> listarOdsEmpatadas();
+	
+	
 }

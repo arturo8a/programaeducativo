@@ -13,7 +13,7 @@ public class ConcursoDto {
 	String titulotrabajo;
 	String nivelparticipacion;
 	String estado;
-	Integer calificacion;
+	Float calificacion;
 	Integer puesto;
 	
 	public Integer getId() {
@@ -82,10 +82,10 @@ public class ConcursoDto {
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
-	public Integer getCalificacion() {
+	public Float getCalificacion() {
 		return calificacion;
 	}
-	public void setCalificacion(Integer calificacion) {
+	public void setCalificacion(Float calificacion) {
 		this.calificacion = calificacion;
 	}
 	public Integer getPuesto() {

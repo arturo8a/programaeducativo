@@ -24,4 +24,6 @@ public interface IEvaluacionRespuestaService extends ICRUD<EvaluacionResultado,I
 	Evaluacion getPorAnioCategoriaNivelparticipacion(Integer anio,Integer idcategoria,Integer idnivelparticipacion);
 	
 	Evaluacion getPorAnioNivelparticipacionCategoria(Integer anio,Integer nivelparticipacion,Integer idcategoria);*/
+	
+	void borrarEvaluacionesPorTrabajo(Integer idTrabajo);
 }

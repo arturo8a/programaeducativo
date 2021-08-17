@@ -23,9 +23,9 @@ public class Auspicio {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@ManyToOne
+	/*@ManyToOne
 	@JoinColumn(name="tipodoc",nullable=true,foreignKey=@ForeignKey(name="FK_auspicio_tipo"))
-	private TipoAuspicio tipodocumento;
+	private TipoAuspicio tipodocumento;*/
 	
 	@Column(name="CANTIDAD")
 	private Integer cantidad;
@@ -58,13 +58,13 @@ public class Auspicio {
 		this.id = id;
 	}
 
-	public TipoAuspicio getTipodocumento() {
+	/*public TipoAuspicio getTipodocumento() {
 		return tipodocumento;
 	}
 
 	public void setTipodocumento(TipoAuspicio tipodocumento) {
 		this.tipodocumento = tipodocumento;
-	}
+	}*/
 
 	public Integer getCantidad() {
 		return cantidad;
