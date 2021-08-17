@@ -90,13 +90,11 @@ public class ReporteController {
 		
 		Workbook workbook = new HSSFWorkbook();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		
 				
 		List<DocenteDto> listadocentedto = new ArrayList<DocenteDto>();
 		
 		docentetutorServ.listar().forEach(obj->{
-			boolean banderaods = false;
-			
+			boolean banderaods = false;			
 			if(ods!=-1) {
 				if(obj.getProgramaeducativo().getDistrito().getOdsid().equals(ods))
 					banderaods  = true;
@@ -105,8 +103,7 @@ public class ReporteController {
 			}
 			else {
 				banderaods = true;
-			}
-			
+			}			
 			if(banderaods){				
 				DocenteDto dto = new DocenteDto();
 				dto.setOds(odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
