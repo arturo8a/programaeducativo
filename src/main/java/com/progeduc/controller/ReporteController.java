@@ -383,7 +383,7 @@ public class ReporteController {
 		/*Linea 1*/
 		Row rowline1 = sheet.createRow(0);
 		Cell cell1 = rowline1.createCell(0);
-		cell1.setCellValue("Reporte Alianza Estratégica");
+		cell1.setCellValue("ProgramaEducativo");
 		cell1.setCellStyle(my_style_Titulo);
 		
 		//rowline1.createCell(0).setCellValue("Reporte Alianza Estratégica");
@@ -394,7 +394,7 @@ public class ReporteController {
 		Row rowline2 = sheet.createRow(1);
 		
 		String strOds = "[ODS: "+(ods.equals("") ? "Todos" :  odsserv.byOds(Integer.parseInt(ods)).getDescripcion() )+"]";
-		String strAnio= "[Año: "+(anio.equals("") ? "Todos" :  anio )+"]";
+		String strAnio= "[Año de inscripción: "+(anio.equals("") ? "Todos" :  anio )+"]";
 		strRol = "[Rol: "+strRol+"]";
 		String strEstado = "[Estado: "+(estado.equals("") ? "Todos" :  (estado.equals("1") ? "Activo" : "Inactivo"))+"]";
 		
@@ -416,13 +416,13 @@ public class ReporteController {
 		cell32.setCellValue("Datos de la Autoridad/Representante");
 		cell32.setCellStyle(my_style_Cabecera1);
 		
-		sheet.addMergedRegion(new CellRangeAddress(2,2,21,29));
+		sheet.addMergedRegion(new CellRangeAddress(2,2,21,30));
 		
-		Cell cell33 = rowline3.createCell(30);
+		Cell cell33 = rowline3.createCell(31);
 		cell33.setCellValue("Datos del auspicio");
 		cell33.setCellStyle(my_style_Cabecera1);
 		
-		sheet.addMergedRegion(new CellRangeAddress(2,2,30,32));
+		sheet.addMergedRegion(new CellRangeAddress(2,2,31,32));
 		
 		
 		/*Contenido de la lista - Cabecera*/
@@ -502,12 +502,13 @@ public class ReporteController {
 		}
 		
 		
-		String [] columns1 = {"ODS","N°","Tipo","Cantidad","Descripcion","Monto unitario","Monto total"};
+		String [] columns1 = {"ODS","N°","Descripcion","Cantidad","Monto unitario","Monto total"};
 		Sheet sheet1 = workbook.createSheet("Auspicios");
 		Row row1 = sheet1.createRow(0);
 		for(int i=0;i<columns1.length;i++) {
 			Cell cell = row1.createCell(i);
 			cell.setCellValue(columns1[i]);
+			cell.setCellStyle(my_style);
 		}
 		
 		int initRow1 = 1;
@@ -517,9 +518,9 @@ public class ReporteController {
 			row1 = sheet1.createRow(initRow1);
 			row1.createCell(i++).setCellValue(auspicio.getOds());
 			row1.createCell(i++).setCellValue(initRow1);
-			row1.createCell(i++).setCellValue(""/*auspicio.getTipodocumento().getDescripcion()*/);
-			row1.createCell(i++).setCellValue(auspicio.getCantidad());
 			row1.createCell(i++).setCellValue(auspicio.getDescripcion());
+			//row1.createCell(i++).setCellValue(""/*auspicio.getTipodocumento().getDescripcion()*/);
+			row1.createCell(i++).setCellValue(auspicio.getCantidad());
 			row1.createCell(i++).setCellValue(auspicio.getMontounitario());
 			row1.createCell(i++).setCellValue(auspicio.getMontototal());
 			initRow1 ++;
