@@ -15,6 +15,8 @@ public interface ITrabajosfinalesService extends ICRUD<Trabajosfinales,Integer>{
 	
 	List<Trabajosfinales> listarhabilitados();
 	
+	List<Trabajosfinales> listarhabilitadosbyanio(Integer programaeducativoid,Integer anio);
+	
 	int updateestado(Integer id, Integer estado, Integer peid);
 	
 	int updateenviado(Integer id, Integer estado,Integer peid);	

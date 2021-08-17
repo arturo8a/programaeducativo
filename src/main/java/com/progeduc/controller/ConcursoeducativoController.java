@@ -69,6 +69,7 @@ import com.progeduc.dto.trabajoEvaluadoDto;
 import com.progeduc.model.Aperturaranio;
 import com.progeduc.model.Auspicio;
 import com.progeduc.model.Docente;
+import com.progeduc.model.Docentetutor;
 import com.progeduc.model.Evaluacion;
 import com.progeduc.model.EvaluacionResultado;
 import com.progeduc.model.Gradoparticipante;
@@ -87,6 +88,7 @@ import com.progeduc.service.IAperturaranioService;
 import com.progeduc.service.IAuspicioService;
 import com.progeduc.service.IDistritoService;
 import com.progeduc.service.IDocenteService;
+import com.progeduc.service.IDocentetutorService;
 import com.progeduc.service.IEvaluacionRespuestaService;
 import com.progeduc.service.IEvaluacionService;
 import com.progeduc.service.IGradoparticipanteService;
@@ -169,6 +171,9 @@ public class ConcursoeducativoController {
 	
 	@Autowired
 	private ITipoAuspicioService tipoAuspicioServ;
+	
+	@Autowired
+	private IDocentetutorService docentetutorService;
 	
 	
 	ListaparticipanteDto dto;	
@@ -666,16 +671,16 @@ public class ConcursoeducativoController {
 		return new ResponseEntity<List<ListaparticipanteDto>>(lista, HttpStatus.OK) ;
 	}
 	
-	@GetMapping(value = "/listaparticipantesbyanio/{anio}")
-	public ResponseEntity<List<ListaparticipanteDto>> listaparticipantesbyanio(@PathVariable("anio") Integer anio,HttpSession ses){
+	@PostMapping(value = "/listaparticipantesbyanio")
+	public ResponseEntity<List<ListaparticipanteDto>> listaparticipantesbyanio(@RequestParam("anio") Integer anio,HttpSession ses){
 		
 		if( ses.getAttribute("usuario")==null) {
 			ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://prometeo.sunass.gob.pe/pedesa")).build();
 		}		
 		String codmod = ses.getAttribute("usuario").toString();
-		Programaeducativo pe = progeducService.getActualByCodmod(codmod);		
+		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
 		List<ListaparticipanteDto> lista = new ArrayList<ListaparticipanteDto>();
-		List<Participante> listaParticipante = participanteService.listarhabilitados(pe.getId());
+		List<Participante> listaParticipante = participanteService.listarhabilitadosbyanio(pe.getId(),anio);
 		if(listaParticipante!=null) {
 			listaParticipante.forEach(obj->{			
 				String categoria = "";
@@ -704,6 +709,14 @@ public class ConcursoeducativoController {
 			});
 		}		
 		return new ResponseEntity<List<ListaparticipanteDto>>(lista, HttpStatus.OK) ;
+	}
+	
+	@PostMapping(value="/getdocentetutor")
+	public Docentetutor getdocentetutor(@RequestParam("anio") Integer anio,Model model, HttpSession ses) {
+		String codmod = ses.getAttribute("usuario").toString();
+		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
+		Docentetutor docentetutor = docentetutorService.getByProgeducByAnio(pe.getId(),anio);
+		return docentetutor;
 	}
 	
 	@GetMapping("/listaTrabajoEvaluado")
@@ -992,7 +1005,7 @@ public class ConcursoeducativoController {
 			usuarioodsServ.listarByUsuario(user.getId()).forEach(obj->{
 				distServ.listByOdsid(obj.getOds().getId()).forEach(dist->{
 					progeducService.listar(dist.getId()).forEach(pe->{
-						List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarhabilitados(pe.getId());
+						List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarHabilitadosEnviado(pe.getId());
 						listaTrabajoFinales.forEach(obj2->{
 							ConcursoDto dto = new ConcursoDto();
 							dto.setId(obj2.getId());
@@ -1259,7 +1272,7 @@ public class ConcursoeducativoController {
 			listaTrabajosfinales.forEach(obj->{		
 				
 				String archivos = "";
-				miparticipante = "";				
+				miparticipante = "";		
 				dtotf =new ListatrabajosfinalesDto();
 				dtotf.setId(obj.getId());				
 				dtotf.setCategoria(obj.getCategoriatrabajo().getDescripcion());
@@ -1291,6 +1304,68 @@ public class ConcursoeducativoController {
 		}		
 		return new ResponseEntity<List<ListatrabajosfinalesDto>>(lista, HttpStatus.OK) ;
 	}
+	
+	
+	
+	
+	@PostMapping(value = "/listatrabajosfinalesbyanio")
+	public ResponseEntity<List<ListatrabajosfinalesDto>> listatrabajosfinalesbyanio(@RequestParam("anio") Integer anio,HttpSession ses){
+		
+		estado_fuera_plazo=0;		
+		Calendar fecha = Calendar.getInstance();
+		Date date = Calendar.getInstance().getTime();
+		DateFormat formato = new SimpleDateFormat("dd/MM/yy");
+        String today = formato.format(date);
+        Aperturaranio ap = aperturaranioService.buscar(fecha.get(Calendar.YEAR));
+    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
+    	LocalDate fechaactual = LocalDate.parse(today, formatter);  
+    	
+    	String codmod = ses.getAttribute("usuario").toString();
+		Programaeducativo pe = progeducService.getActualByCodmod(codmod);	    	
+    	//Postulacionconcurso postconc = postulacionconcursoServ.getByIdAnio(pe.getId(), fecha.get(Calendar.YEAR));
+    	if(fechaactual.compareTo(ap.getCuartaetapadesde())>=0 && fechaactual.compareTo(ap.getCuartaetapahasta())<=0)
+    		estado_fuera_plazo = 1;
+		
+		List<ListatrabajosfinalesDto> lista = new ArrayList<ListatrabajosfinalesDto>();
+		List<Trabajosfinales> listaTrabajosfinales =  trabajosfinalesServ.listarhabilitadosbyanio(pe.getId(),anio);
+		if(listaTrabajosfinales!=null) {
+			listaTrabajosfinales.forEach(obj->{		
+				
+				String archivos = "";
+				miparticipante = "";		
+				dtotf =new ListatrabajosfinalesDto();
+				dtotf.setId(obj.getId());				
+				dtotf.setCategoria(obj.getCategoriatrabajo().getDescripcion());
+				dtotf.setTitulo(obj.getTitulotrabajo());
+				dtotf.setModalidad(obj.getModalidadtrabajo().getDescripcion());				
+				trabajosfinalesparticipanteServ.listar(obj.getId()).forEach(obj1->{
+					miparticipante += obj1.getParticipante().getNombreestudiante() + " " + obj1.getParticipante().getAppaternoestudiante() + " " + obj1.getParticipante().getApmaternoestudiante() + "/";
+				});
+				if(miparticipante.length()>0)
+					miparticipante = miparticipante.substring(0, miparticipante.length()-1);
+				
+				dtotf.setParticipantes(miparticipante);				
+				nro_evidencias = uploadfile.nroArchivos(obj.getId(), "upload_evidencias");
+				if(nro_evidencias == 1)
+					texto_evidencias = " evidencia ";
+				else
+					texto_evidencias = " evidencias ";				
+				archivos = nro_evidencias.toString() + texto_evidencias + uploadfile.nroArchivos(obj.getId(), "upload_trabajos").toString() + " final";				
+				dtotf.setArchivos(archivos);
+				if(estado_fuera_plazo == 1) {
+					dtotf.setEnviado(obj.getEnviado());	
+				}else {
+					dtotf.setEnviado(2);	
+				}
+				
+							
+				lista.add(dtotf);
+			});
+		}		
+		return new ResponseEntity<List<ListatrabajosfinalesDto>>(lista, HttpStatus.OK) ;
+	}
+	
+	
 	
 	@GetMapping(value = "/listaparticipantes_trabajo")
 	public ResponseEntity<List<ListaparticipantetrabajoDto>> listaparticipantes_trabajo(HttpSession ses){

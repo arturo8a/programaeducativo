@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -953,8 +954,8 @@ public class IndexController {
 		model.addAttribute("responsableregistro", responsableregistroserv.listar());
 		
 		Calendar fecha = Calendar.getInstance();
-		//Docentetutor docentetutor = docentetutorService.getByProgeducByAnio(pe.getId(),fecha.get(Calendar.YEAR)-1);
 		Docentetutor docentetutor = docentetutorService.getByProgeducByAnio(pe.getId(),fecha.get(Calendar.YEAR));
+		//Docentetutor docentetutor = docentetutorService.getByProgeducByAnio(pe.getId(),fecha.get(Calendar.YEAR));
 		model.addAttribute("docentetutor", docentetutor);
 		model.addAttribute("tipodoc",tipodocserv.findAll());
 		model.addAttribute("genero",generoprofserv.listar());
@@ -966,25 +967,17 @@ public class IndexController {
 		Date date = Calendar.getInstance().getTime();
 		DateFormat formato = new SimpleDateFormat("dd/MM/yy");
         String today = formato.format(date);
-        Aperturaranio ap = aperturaranioService.buscar(fecha.get(Calendar.YEAR));
-    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
     	LocalDate fechaactual = LocalDate.parse(today, formatter);
-    	//LocalDate fechaactual = LocalDate.parse("20/04/21", formatter);    	
-    	Postulacionconcurso postconc = postulacionconcursoService.getByIdAnio(pe.getId(), fecha.get(Calendar.YEAR));	    	
-    	model.addAttribute("finalizaparticipaciontrabajo",postconc.getFinalizarparticipaciontrabajo());
+    	//LocalDate fechaactual = LocalDate.parse("20/04/21", formatter);
     	
     	List<Integer> anios = new ArrayList<Integer>();
     	//model.addAttribute("anios", postulacionconcursoService.aniosConcurso());
-    	anios.add(2018);
     	anios.add(2019);
     	anios.add(2020);
+    	anios.add(2021);
     	model.addAttribute("ultimo_anio", fecha.get(Calendar.YEAR));
-    	model.addAttribute("anios", anios);
-    	
-    	if(fechaactual.compareTo(ap.getCuartaetapadesde())>=0 && fechaactual.compareTo(ap.getCuartaetapahasta())<=0)
-        	activar_trabajos_finales = 1;
-        model.addAttribute("activar_trabajos_finales",activar_trabajos_finales);		
-				
+    	model.addAttribute("anios", anios);				
 		return "consulta_concursoeducativo";
 	}	
 	

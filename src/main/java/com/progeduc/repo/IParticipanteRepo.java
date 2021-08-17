@@ -23,6 +23,9 @@ public interface IParticipanteRepo extends CrudRepository<Participante,Integer>{
 	@Query(value="SELECT tb1.* FROM Participante tb1 where tb1.programaeducativoid=?1 and tb1.estado=1",nativeQuery = true)
 	List<Participante> listarhabilitados(Integer programaeducativoid);
 	
+	@Query(value="SELECT tb1.* FROM Participante tb1 where tb1.programaeducativoid=?1 and tb1.anhio=?2 and tb1.estado=1",nativeQuery = true)
+	List<Participante> listarhabilitadosbyanio(Integer programaeducativoid, Integer anio);
+	
 	@Query(value="SELECT TB1.* FROM Participante PA where ?1 ?2 ?3 and tb1.estado=1",nativeQuery = true)
 	List<Participante> listarReporte(String filtro_categoria,String filtro_modalidad,String filtro_nivel_participante);
 	

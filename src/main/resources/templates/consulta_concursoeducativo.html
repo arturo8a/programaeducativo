@@ -110,8 +110,7 @@
 	<div class="row m-0 p-0">
 		<div class="col-xs-1 col-sm-1 pt-3">
 			<ul th:each="anio : ${anios}" class="list-unstyled components">
-            	<li class="active" th:text="${anio}" style="border-bottom:2px solid black">
-                    
+            	<li class="active" th:text="${anio}" style="border-bottom:2px solid black; cursor:pointer" th:onclick="|consultaConcursoPorAnio(${anio})|">                    
             	</li>
 			</ul>   
 		</div>
@@ -150,61 +149,52 @@
 									  <div class="row">
 									  		<div class="col-4 text-left">
 									  			<label>Apellido paterno</label>	
-									  			<input type="text" id="appaterno" class="form-control" style="width:100%" th:field="*{docentetutor.appaterno}" onKeyPress="return filterCadenaupdate(event,this)"/>
+									  			<input type="text" id="appaterno" class="form-control" style="width:100%" th:field="*{docentetutor.appaterno}" disabled/>
 									  		</div>
 									  		<div class="col-4 text-left">
 									  			<label>Apellido materno</label>	
-									  			<input type="text" id="apmaterno" class="form-control" style="width:100%" th:field="*{docentetutor.apmaterno}" onKeyPress="return filterCadenaupdate(event,this)"/>
+									  			<input type="text" id="apmaterno" class="form-control" style="width:100%" th:field="*{docentetutor.apmaterno}" disabled/>
 									  		</div>
 									  		<div class="col-4 text-left">
 									  			<label>Nombres</label>	
-									  			<input type="text" id="nombre" class="form-control" style="width:100%" th:field="*{docentetutor.nombre}" onKeyPress="return filterCadenaupdate(event,this)" />
+									  			<input type="text" id="nombre" class="form-control" style="width:100%" th:field="*{docentetutor.nombre}" disabled/>
 									  		</div>
 									  </div>
 									  <br>
 									  <div class="row">
 									  		<div class="col-4 text-left">
 									  			<label>Tipo de documento</label>	
-									  			<select class="form-control" id="tipodocumento" th:field="*{docentetutor.tipodocumento}">
-									  				<option value="">Seleccione</option>
-							                        <option th:each="len:${tipodoc}" th:value="${len.id}" th:utext="*{len.descripcion}"/>
-									  			</select>
+									  			<input type="text" id="tipodocumento" style="width:100%" class="form-control" th:field="*{docentetutor.tipodocumento.descripcion}" disabled/>
 									  		</div>
 									  		<div class="col-4 text-left">
 									  			<label>N° de documento</label>	
-									  			<input type="text" id="nrodocumento" style="width:100%" class="form-control" th:field="*{docentetutor.nrodocumento}" onKeyPress="return filterIntNroDocIdentidadupdate(event,this)"/>
+									  			<input type="text" id="nrodocumento" style="width:100%" class="form-control" th:field="*{docentetutor.nrodocumento}" disabled/>
 									  		</div>
 									  		<div class="col-4 text-left">
 									  			<label>Género</label>	
-									  			<select class="form-control" id="genero" th:field="*{docentetutor.genero}">
-									  				<option value="">Seleccione</option>
-							                        <option th:each="len:${genero}" th:value="${len.id}" th:utext="*{len.descripcion}"/>
-									  			</select>
+									  			<input type="text" id="genero" style="width:100%" class="form-control" th:field="*{docentetutor.genero.descripcion}" disabled/>
 									  		</div>
 									  </div>
 									  <br>
 									  <div class="row">
 									  		<div class="col-4 text-left">
 									  			<label>N° de teléfono</label>	
-									  			<input type="text" id="nrotelefono" style="width:100%" class="form-control" th:field="*{docentetutor.nrotelefono}" onKeyPress="return filterIntTelfupdate(event,this)" maxlength="10"/>
+									  			<input type="text" id="nrotelefono" style="width:100%" class="form-control" th:field="*{docentetutor.nrotelefono}" disabled/>
 									  		</div>
 									  		<div class="col-4 text-left">
 									  			<label>Correo electrónico</label>	
-									  			<input type="text" id="correoelectronico" style="width:100%" class="form-control" th:field="*{docentetutor.correoelectronico}"/>
+									  			<input type="text" id="correoelectronico" style="width:100%" class="form-control" th:field="*{docentetutor.correoelectronico}" disabled/>
 									  		</div>
 									  		<div class="col-4 text-left">
 									  			<label>Responsable de registro</label>	
-									  			<select class="form-control" id="responsable" th:field="*{docentetutor.responsable}">
-									  				<option value="">Seleccione</option>
-							                        <option th:each="len:${responsableregistro}" th:value="${len.id}" th:utext="*{len.descripcion}"/>
-									  			</select>
+									  			<input type="text" id="responsable" style="width:100%" class="form-control" th:field="*{docentetutor.responsable.descripcion}" disabled />
 									  		</div>
 									  </div>
 								  		<br>
 									  <div class="row">
 									  		<div class="col-4 text-left">
 									  			<label>Curso</label>	
-									  			<input type="text" id="curso" style="width:100%" class="form-control" th:field="*{docentetutor.curso}"/>
+									  			<input type="text" id="curso" style="width:100%" class="form-control" th:field="*{docentetutor.curso}" disabled/>
 									  		</div>
 									  		<div class="col-4">
 									  			&nbsp;
@@ -278,8 +268,8 @@
 								</div>	
 								<div class="row">
 									<div class="col text-right">
-										<input type="button" th:if="${finalizaparticipaciontrabajo != 1}" value="Agregar trabajo" id="agregartrabajo" class="btn btn-success mr-3" disabled>
-										<input type="button" th:if="${finalizaparticipaciontrabajo != 1}" id="finalizarparticipacion"  value="FINALIZAR PARTICIPACIÓN" class="btn btn-primary mr-3" disabled>
+										<input type="button" value="Agregar trabajo" id="agregartrabajo" class="btn btn-success mr-3" disabled>
+										<input type="button" id="finalizarparticipacion"  value="FINALIZAR PARTICIPACIÓN" class="btn btn-primary mr-3" disabled>
 									</div>
 								</div>
 							</div>		
@@ -532,23 +522,51 @@
 	var appaternopmt="",apmaternopmt="",nombrepmt="",parentesco="",tipodocumentopmt="",nrodocumentopmt="",nrotelefonopmt="",correoelectronicopmt="";
 	var celdaseleccionada,mensajeValidacion=false;
 	
-	
+	var anio;
 	
 	$(document).ready(function(){	
-		//listar();
+		
+		anio = $("#ultimo_anio").val();
+		
+		$("#docente-tab").click(function(){
+			$('#myTab a[href="#home"]').tab('show');
+			setTimeout(function(){
+				$.ajax({
+					url: url_base + "pedesa/getdocentetutor",
+					method : "POST",
+					data : {anio  : anio} , 
+					success: function(respuesta) {
+						/*$("#modalimagencargando").modal('hide');
+						$("#container").html(respuesta);*/
+						console.log("respuesta: " + JSON.stringify(respuesta));
+						console.log("respuesta.tipodocumento :" + respuesta.tipodocumento);
+						$("#appaterno").val(respuesta.appaterno);
+						$("#apmaterno").val(respuesta.apmaterno);
+						$("#nombre").val(respuesta.nombre);
+						$("#tipodocumento").val(respuesta.tipodocumento == undefined ? "" : respuesta.tipodocumento.descripcion);
+						$("#nrodocumento").val(respuesta.nrodocumento);
+						$("#genero").val(respuesta.genero == undefined ? "" :respuesta.genero.descripcion);
+						$("#nrotelefono").val(respuesta.nrotelefono);
+						$("#correoelectronico").val(respuesta.correoelectronico);
+						$("#responsable").val(respuesta.responsable == undefined ? "" :respuesta.responsable.descripcion);
+						$("#matematica").val(respuesta.curso);						
+					},
+					error: function() {
+				        console.log("No se ha podido obtener la información");
+				    }
+				});
+			}, 100);
+		});
+		
 		$("#participante-tab").click(function(){
 			$('#myTab a[href="#participante"]').tab('show');
-			setTimeout(function(){ listar(); }, 100);
+			setTimeout(function(){ listar(anio); }, 100);
 		});
 		
 		$("#trabajosfinales-tab").click(function(){
 			$('#myTab a[href="#trabajosfinales"]').tab('show');
 			setTimeout(function(){ 				
-				listar_trabajos_finales(); 
-				if($("#activar_trabajos_finales").val() != 1){
-					$("#agregartrabajo").prop("disabled",true);
-					$("#finalizarparticipacion").prop("disabled",true);
-				}			
+				listar_trabajos_finales(anio); 		
 			}, 100);
 		});
 		
@@ -560,7 +578,6 @@
 				$("#trabajosfinales-tab").addClass("nav-link");
 			}
 			else{				
-				alert("La carga de trabajos finales se podrá realizar en las siguientes fechas: " + $("#cuarta_etapa_desde").val() + " - " + $("#cuarta_etapa_hasta").val());
 				$("#trabajosfinales-tab").removeClass("nav-link disabled");
 				$("#trabajosfinales-tab").addClass("nav-link");
 			}
@@ -604,202 +621,231 @@
 		
 	});
 	
-	var listar = function (){					
-		if(cargainicial==1){
-			
-			cargainicial = 0;
-			
-			$("#table_lista_participantes").dataTable().fnDestroy();		
-			table_lista_participantes = $('#table_lista_participantes').DataTable({
-				dom: '<B><"rs_participantes_update">frtip',
-			    "scrollX": true,
-			    "searching": true,
-			    fixedHeader: {
-		            header: true,
-		            footer: true
-		        },
-			    lengthMenu: [
-			        [ 10, 15, 25, -1 ],
-			        [ '10 filas', '15 filas', '25 filas', 'Mostrar todas' ]
-			    ],
-			    "processing":true,
-			    language: {
-			        "decimal": "",
-			        "emptyTable": "No se han registrado participantes, para agregar hacer click en el botón 'Agregar participante'",
-			        "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-			        "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
-			        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-			        "infoPostFix": "",
-			        "thousands": ",",
-			        "lengthMenu": "Mostrar _MENU_ Entradas",
-			        "loadingRecords": "Cargando Registros...",
-			        "processing": "Procesando...",
-			        "search": "Buscar:",
-			        "zeroRecords": " ",//No existen registros
-			        "paginate": {
-			            "first": "Primero",
-			            "last": "Ultimo",
-			            "next": "Siguiente",
-			            "previous": "Anterior"
-			        }
-			    },
-			    'ajax' : {
-			        "url" : url_base + 'pedesa/listaparticipantesbyanio',
-			        "type" : "GET",
-			        "dataSrc" : ""
-			    },
-			    "deferRender": true,
-			    'columnDefs': [	],
-			    'columns' : [
-			    	{ 
-			    		"data": null, "render": function (data, type, full, meta) { return meta.row + 1; }
-			    	},
-			    	{ 'data' : 'appaterno' },
-			        { 'data' : 'apmaterno' },
-			        { 'data' : 'nombre' },
-			        { 'data' : 'tipodocumento' },
-			        { 'data' : 'nrodocumento' },
-			        { 'data' : 'categoria' },
-			        { 'data' : 'modalidad' },
-			        { 'defaultContent' : '<img src="./images/svg/file-pdf-regular.svg" class="archivo" style="width:20px; cursor:pointer"/>' },
-			        { 'defaultContent' : '<img src="./images/svg/file-pdf-regular.svg" class="ver" style="width:20px; cursor:pointer"/>' },
-			        { 'defaultContent' : '<img src="./images/svg/edit-regular.svg" class="editar" style="width:20px; filter: invert(70%)" disabled />'},
-			        { 'defaultContent' : '<img src="./images/svg/eliminar-alt-regular.svg" class="eliminar" style="width:20px; filter: invert(70%)" disabled />'}
-			    ],
-			    buttons: [
-			    	{
-			    		"text" : "Descargar el formato de autorización Aqu&iacute;",
-			    		"titleAttr" : "descargar",
-			    		"action" : function(){
-			    			window.open('/alfresco_programaeducativo/pedesa/reportes/AUTORIZACIÓNDEPADREPARAPARTICIPACIONVIIICONCURSO.docx', '_blank');		    			
-			    		}
-			    	}
-			    ]
+	function consultaConcursoPorAnio(anioFoco){
+		//console.log(objeto);
+		/*$('#myTab a[href="#participante"]').tab('show');
+		setTimeout(function(){ 
+			anio = anioFoco;
+			listar(anio); 
+		}, 100);*/
+		
+		
+		$('#myTab a[href="#docente"]').tab('show');
+		setTimeout(function(){
+			anio = anioFoco;
+			$.ajax({
+				url: url_base + "pedesa/getdocentetutor",
+				method : "POST",
+				data : {anio  : anio} , 
+				success: function(respuesta) {
+					/*$("#modalimagencargando").modal('hide');
+					$("#container").html(respuesta);*/
+					console.log("respuesta: " + JSON.stringify(respuesta));
+					console.log("respuesta.tipodocumento :" + respuesta.tipodocumento);
+					$("#appaterno").val(respuesta.appaterno);
+					$("#apmaterno").val(respuesta.apmaterno);
+					$("#nombre").val(respuesta.nombre);
+					$("#tipodocumento").val(respuesta.tipodocumento == undefined ? "" : respuesta.tipodocumento.descripcion);
+					$("#nrodocumento").val(respuesta.nrodocumento);
+					$("#genero").val(respuesta.genero == undefined ? "" :respuesta.genero.descripcion);
+					$("#nrotelefono").val(respuesta.nrotelefono);
+					$("#correoelectronico").val(respuesta.correoelectronico);
+					$("#responsable").val(respuesta.responsable == undefined ? "" :respuesta.responsable.descripcion);
+					$("#curso").val(respuesta.curso);						
+				},
+				error: function() {
+			        console.log("No se ha podido obtener la información");
+			    }
 			});
-			$("div.rs_participantes_update").html("")
-			obtener_data_archivo("#table_lista_participantes tbody",table_lista_participantes);
-			obtener_data_ver("#table_lista_participantes tbody",table_lista_participantes);
-	        obtener_data_editar("#table_lista_participantes tbody",table_lista_participantes);
-	        obtener_data_eliminar("#table_lista_participantes tbody",table_lista_participantes);
-		}			
+		}, 100);
+		
+		
 	}
 	
-	var listar_trabajos_finales = function (){					
-		if(cargainicialtrabajos==1){
-			
-			cargainicialtrabajos = 0;
-			
-			$("#table_lista_trabajos_finales").dataTable().fnDestroy();		
-			table_lista_trabajos_finales = $('#table_lista_trabajos_finales').DataTable({
-				dom: '<B><"rs_trabajos">frtip',
-			    "scrollX": true,
-			    "searching": true,
-			    fixedHeader: {
-		            header: true,
-		            footer: true
-		        },
-			    lengthMenu: [
-			        [ 10, 15, 25, -1 ],
-			        [ '10 filas', '15 filas', '25 filas', 'Mostrar todas' ]
-			    ],
-			    "processing":true,
-			    language: {
-			        "decimal": "",
-			        "emptyTable": "No se han registrado trabajos, para agregar hacer click en el botón 'Agregar trabajo'",
-			        "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-			        "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
-			        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-			        "infoPostFix": "",
-			        "thousands": ",",
-			        "lengthMenu": "Mostrar _MENU_ Entradas",
-			        "loadingRecords": "Cargando Registros...",
-			        "processing": "Procesando...",
-			        "search": "Buscar:",
-			        "zeroRecords": " ",//No existen registros
-			        "paginate": {
-			            "first": "Primero",
-			            "last": "Ultimo",
-			            "next": "Siguiente",
-			            "previous": "Anterior"
-			        }
-			    },
-			    'ajax' : {
-			        "url" : url_base + 'pedesa/listatrabajosfinales',
-			        "type" : "GET",
-			        "dataSrc" : ""
-			    },
-			    "deferRender": true,
-			    'columnDefs': [	],
-			    'columns' : [
-			    	{ 
-			    		"data": null, "render": function (data, type, full, meta) { return meta.row + 1; }
-			    	},
-			    	{ 'data' : 'categoria' },
-			        { 'data' : 'titulo' },
-			        { 'data' : 'modalidad' },
-			        { 'data' : 'participantes' },
-			        { 'data' : 'archivos' },
-			        { 'data' : 'enviado' ,
-	                   render: function(data, type) { 
-	                   		var x = '';
-	                        switch (data) {
-	                            case 0:
-	                                x = '<img src="./images/svg/edit-regular.svg" style="width:20px; filter: invert(70%)" disabled />';
-	                                break;
-	                            case 1:
-	                            	x = '<img src="./images/svg/eye-solid.svg" class="vertrabajo" style="width:20px; cursor:pointer"/>' ;
-	                                break;	                                
-	                            case 2:
-	                            	x = '<img src="./images/svg/eye-solid.svg" class="vertrabajo" style="width:20px; cursor:pointer" />' ;
-	                                break;
-                            }
-                            return x;
+	var listar = function (anioSelect){
+		$("#table_lista_participantes").dataTable().fnDestroy();		
+		table_lista_participantes = $('#table_lista_participantes').DataTable({
+			dom: '<B><"rs_participantes_update">frtip',
+		    "scrollX": true,
+		    "searching": true,
+		    fixedHeader: {
+	            header: true,
+	            footer: true
+	        },
+		    lengthMenu: [
+		        [ 10, 15, 25, -1 ],
+		        [ '10 filas', '15 filas', '25 filas', 'Mostrar todas' ]
+		    ],
+		    "processing":true,
+		    language: {
+		        "decimal": "",
+		        "emptyTable": "No se han registrado participantes, para agregar hacer click en el botón 'Agregar participante'",
+		        "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+		        "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
+		        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+		        "infoPostFix": "",
+		        "thousands": ",",
+		        "lengthMenu": "Mostrar _MENU_ Entradas",
+		        "loadingRecords": "Cargando Registros...",
+		        "processing": "Procesando...",
+		        "search": "Buscar:",
+		        "zeroRecords": " ",//No existen registros
+		        "paginate": {
+		            "first": "Primero",
+		            "last": "Ultimo",
+		            "next": "Siguiente",
+		            "previous": "Anterior"
+		        }
+		    },
+		    'ajax' : {
+		        "url" : url_base + 'pedesa/listaparticipantesbyanio',
+		        "type" : "POST",
+		        "data" : { 'anio' : anioSelect },
+		        "dataSrc" : ""
+		    },
+		    "deferRender": true,
+		    'columnDefs': [	],
+		    'columns' : [
+		    	{ 
+		    		"data": null, "render": function (data, type, full, meta) { return meta.row + 1; }
+		    	},
+		    	{ 'data' : 'appaterno' },
+		        { 'data' : 'apmaterno' },
+		        { 'data' : 'nombre' },
+		        { 'data' : 'tipodocumento' },
+		        { 'data' : 'nrodocumento' },
+		        { 'data' : 'categoria' },
+		        { 'data' : 'modalidad' },
+		        { 'defaultContent' : '<img src="./images/svg/file-pdf-regular.svg" class="archivo" style="width:20px; cursor:pointer"/>' },
+		        { 'defaultContent' : '<img src="./images/svg/file-pdf-regular.svg" class="ver" style="width:20px; cursor:pointer"/>' },
+		        { 'defaultContent' : '<img src="./images/svg/edit-regular.svg" class="editar" style="width:20px; filter: invert(70%)" disabled />'},
+		        { 'defaultContent' : '<img src="./images/svg/eliminar-alt-regular.svg" class="eliminar" style="width:20px; filter: invert(70%)" disabled />'}
+		    ],
+		    buttons: [
+		    	{
+		    		"text" : "Descargar el formato de autorización Aqu&iacute;",
+		    		"titleAttr" : "descargar",
+		    		"action" : function(){
+		    			window.open('/alfresco_programaeducativo/pedesa/reportes/AUTORIZACIÓNDEPADREPARAPARTICIPACIONVIIICONCURSO.docx', '_blank');		    			
+		    		}
+		    	}
+		    ]
+		});
+		$("div.rs_participantes_update").html("")
+		obtener_data_archivo("#table_lista_participantes tbody",table_lista_participantes);
+		obtener_data_ver("#table_lista_participantes tbody",table_lista_participantes);		
+	}
+	
+	var listar_trabajos_finales = function (anioSelect){					
+		$("#table_lista_trabajos_finales").dataTable().fnDestroy();		
+		table_lista_trabajos_finales = $('#table_lista_trabajos_finales').DataTable({
+			dom: '<B><"rs_trabajos">frtip',
+		    "scrollX": true,
+		    "searching": true,
+		    fixedHeader: {
+	            header: true,
+	            footer: true
+	        },
+		    lengthMenu: [
+		        [ 10, 15, 25, -1 ],
+		        [ '10 filas', '15 filas', '25 filas', 'Mostrar todas' ]
+		    ],
+		    "processing":true,
+		    language: {
+		        "decimal": "",
+		        "emptyTable": "No se han registrado trabajos, para agregar hacer click en el botón 'Agregar trabajo'",
+		        "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+		        "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
+		        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+		        "infoPostFix": "",
+		        "thousands": ",",
+		        "lengthMenu": "Mostrar _MENU_ Entradas",
+		        "loadingRecords": "Cargando Registros...",
+		        "processing": "Procesando...",
+		        "search": "Buscar:",
+		        "zeroRecords": " ",//No existen registros
+		        "paginate": {
+		            "first": "Primero",
+		            "last": "Ultimo",
+		            "next": "Siguiente",
+		            "previous": "Anterior"
+		        }
+		    },
+		    'ajax' : {
+		        "url" : url_base + 'pedesa/listatrabajosfinalesbyanio',
+		        "type" : "POST",
+		        "data" : { 'anio' : anioSelect },
+		        "dataSrc" : ""
+		    },
+		    "deferRender": true,
+		    'columnDefs': [	],
+		    'columns' : [
+		    	{ 
+		    		"data": null, "render": function (data, type, full, meta) { return meta.row + 1; }
+		    	},
+		    	{ 'data' : 'categoria' },
+		        { 'data' : 'titulo' },
+		        { 'data' : 'modalidad' },
+		        { 'data' : 'participantes' },
+		        { 'data' : 'archivos' },
+		        { 'data' : 'enviado' ,
+                   render: function(data, type) { 
+                   		var x = '';
+                        switch (data) {
+                            case 0:
+                                x = '<img src="./images/svg/edit-regular.svg" style="width:20px; filter: invert(70%)" disabled />';
+                                break;
+                            case 1:
+                            	x = '<img src="./images/svg/eye-solid.svg" class="vertrabajo" style="width:20px; cursor:pointer"/>' ;
+                                break;	                                
+                            case 2:
+                            	x = '<img src="./images/svg/eye-solid.svg" class="vertrabajo" style="width:20px; cursor:pointer" />' ;
+                                break;
                         }
-	                },
-			        { 'data' : 'enviado' ,
-	                   render: function(data, type) { 
-	                   		var x = '';
-	                        switch (data) {
-	                            case 0:
-	                                x = '<img src="./images/svg/eliminar-alt-regular.svg" style="width:20px; filter: invert(70%)" disabled />';
-	                                break;
-	                            case 1:
-	                            	x = '<img src="./images/svg/eliminar-alt-regular.svg" style="width:20px; filter: invert(70%)" disabled />';
-	                                break;
-	                            case 2:
-	                            	x = '<img src="./images/svg/eliminar-alt-regular.svg" style="width:20px; filter: invert(70%)" disabled />';
-	                                break;
-                            }
-                            return x;
+                        return x;
+                    }
+                },
+		        { 'data' : 'enviado' ,
+                   render: function(data, type) { 
+                   		var x = '';
+                        switch (data) {
+                            case 0:
+                                x = '<img src="./images/svg/eliminar-alt-regular.svg" style="width:20px; filter: invert(70%)" disabled />';
+                                break;
+                            case 1:
+                            	x = '<img src="./images/svg/eliminar-alt-regular.svg" style="width:20px; filter: invert(70%)" disabled />';
+                                break;
+                            case 2:
+                            	x = '<img src="./images/svg/eliminar-alt-regular.svg" style="width:20px; filter: invert(70%)" disabled />';
+                                break;
                         }
-	                },			        
-			        { 'data' : 'enviado' ,
-	                   render: function(data, type) { 
-	                   		var x = '';
-	                        switch (data) {
-	                            case 0:
-	                                x = "<button type='button' class='enviartrabajo btn btn-primary' disabled>Enviar</button>";
-	                                break;
-	                            case 1:
-	                            	x = "Enviado";
-	                                break;
-	                            case 2:
-	                                x = "<button type='button' class='enviartrabajo btn btn-primary' disabled>Enviar</button>";
-	                                break;
-                            }
-                            return x;
+                        return x;
+                    }
+                },			        
+		        { 'data' : 'enviado' ,
+                   render: function(data, type) { 
+                   		var x = '';
+                        switch (data) {
+                            case 0:
+                                x = "<button type='button' class='enviartrabajo btn btn-primary' disabled>Enviar</button>";
+                                break;
+                            case 1:
+                            	x = "Enviado";
+                                break;
+                            case 2:
+                                x = "<button type='button' class='enviartrabajo btn btn-primary' disabled>Enviar</button>";
+                                break;
                         }
-	                }
-			    ],
-			    buttons: []
-			});
-			
-			$("div.rs_trabajos").html("<strong>LISTA DE TRABAJOS</strong>");
-			obtener_data_editartrabajos("#table_lista_trabajos_finales tbody",table_lista_trabajos_finales);
-			obtener_data_vertrabajos("#table_lista_trabajos_finales tbody",table_lista_trabajos_finales);
-			obtener_data_eliminartrabajos("#table_lista_trabajos_finales tbody",table_lista_trabajos_finales);
-			obtener_data_enviartrabajos("#table_lista_trabajos_finales tbody",table_lista_trabajos_finales);
-		}			
+                        return x;
+                    }
+                }
+		    ],
+		    buttons: []
+		});
+		
+		$("div.rs_trabajos").html("<strong>LISTA DE TRABAJOS</strong>");
+		obtener_data_vertrabajos("#table_lista_trabajos_finales tbody",table_lista_trabajos_finales);
+				
 	}
 	
 	var obtener_data_archivo = function(tbody,table){
@@ -820,33 +866,6 @@
 		});
 	};
 	
-	var obtener_data_editar = function(tbody,table){
-		$(tbody).on("click","img.editar",function(){
-			celdaseleccionada = table.row($(this).parents("tr")).index();
-			var data = table.row($(this).parents("tr")).data();
-			id = data.id;
-			editar(id);
-		});
-	};
-	
-	var obtener_data_eliminar = function(tbody,table){
-		$(tbody).on("click","img.eliminar",function(){
-			celdaseleccionada = table.row($(this).parents("tr")).index();
-			var data = table.row($(this).parents("tr")).data();
-			id = data.id;
-			eliminar(id);
-		});
-	};
-	
-	var obtener_data_editartrabajos = function(tbody,table){
-		$(tbody).on("click","img.editartrabajo",function(){
-			celdaseleccionada = table.row($(this).parents("tr")).index();
-			var data = table.row($(this).parents("tr")).data();
-			id = data.id;
-			editartrabajos(id);
-		});
-	};
-	
 	var obtener_data_vertrabajos = function(tbody,table){
 		$(tbody).on("click","img.vertrabajo",function(){
 			celdaseleccionada = table.row($(this).parents("tr")).index();
@@ -855,83 +874,6 @@
 			vertrabajos(id);
 		});
 	};
-	
-	var obtener_data_eliminartrabajos = function(tbody,table){
-		$(tbody).on("click","img.eliminartrabajo",function(){
-			celdaseleccionada = table.row($(this).parents("tr")).index();
-			var data = table.row($(this).parents("tr")).data();
-			id = data.id;
-			eliminartrabajos(id);
-		});
-	};
-	
-	var obtener_data_enviartrabajos = function(tbody,table){
-		$(tbody).on("click","button.enviartrabajo",function(){
-			celdaseleccionada = table.row($(this).parents("tr")).index();
-			var data = table.row($(this).parents("tr")).data();
-			id = data.id;
-			enviartrabajos(id);
-		});
-	};
-	
-	
-	function eliminar(id){
-		
-		var r = confirm("¿ Está seguro de eliminar al estudiante ?");
-		if (r == true) {
-			$.ajax({
-				type : "GET",
-			    url : url_base + "pedesa/eliminarparticipanteid/"+ id,
-				success: function(respuesta) {
-					if(respuesta==1){
-						table_lista_participantes.row(celdaseleccionada).remove().draw(false);
-					}
-					else{
-						$("#textoerror").html("No se pudo Eliminar Participante");
-						$('#modalerror').modal({
-							show : true,
-							backdrop : 'static',
-							keyboard:false
-						});
-					}
-				},
-				error: function() {
-					$("#textoerror").html("Excepcion Eliminar Participante");
-					$('#modalerror').modal({
-						show : true,
-						backdrop : 'static',
-						keyboard:false
-					});
-			    }
-			});			
-		}
-	}
-	
-	function editartrabajos(id){
-		
-		$("#modalimagencargando").modal({
-			show : true,
-			backdrop : 'static',
-			keyboard:false
-		});
-		
-		$.ajax({
-			type : "GET",
-		    url : url_base + "pedesa/formeditartrabajos/"+ id,
-			success: function(respuesta) { 
-				$("#modalimagencargando").modal('hide');
-				$("#contenidoeditartrabajo").html(respuesta);
-				$("#modaleditartrabajo").modal({
-					show : true,
-					backdrop : 'static',
-					keyboard:false
-				});
-			},
-			error: function() {
-				console.log("Excepcion editar trabajo");
-		    }
-		});
-	}
 	
 	function vertrabajos(id){
 		
@@ -957,37 +899,6 @@
 				console.log("Excepcion ver trabajo");
 		    }
 		});
-	}
-	
-	function eliminartrabajos(id){
-		
-		var r = confirm("¿ Está seguro de eliminar al trabajo ?");
-		if (r == true) {
-			$.ajax({
-				type : "GET",
-			    url : url_base + "pedesa/eliminartrabajoid/"+ id,
-				success: function(respuesta) {
-					if(respuesta==1){
-						table_lista_trabajos_finales.row(celdaseleccionada).remove().draw(false);
-					}
-					else if(respuesta == -100){
-						window.location = url_base + "pedesa";
-					}
-					else{
-						$("#textoerror").html("No se pudo Eliminar trabajo");
-						$('#modalerror').modal({
-							show : true,
-							backdrop : 'static',
-							keyboard:false
-						});
-					}
-				},
-				error: function() {
-					//$("#textoerror").html("Excepcion Eliminar trabajo");
-					console.log("Excepcion Eliminar trabajo");
-			    }
-			});			
-		}
 	}
 	
 	function enviartrabajos(id){
@@ -1044,31 +955,6 @@
 		    }
 		});  	
     }
-	
-	function editar(id){
-		
-		$("#modalimagencargando").modal({
-			show : true,
-			backdrop : 'static',
-			keyboard:false
-		});
-		
-		$.ajax({
-			url: url_base + "pedesa/editarviewparticipanteid/"+ id,
-			success: function(respuesta) {
-				$("#modalimagencargando").modal('hide');
-				$("#contenidoeditarparticipante").html(respuesta);
-				$("#modaleditarParticipante").modal({
-					show : true,
-					backdrop : 'static',
-					keyboard:false
-				});
-			},
-			error: function() {
-		        console.log("No se ha podido vista del web service");
-		    }
-		});
-	}
 	
 	function verPdf(id){
     	
