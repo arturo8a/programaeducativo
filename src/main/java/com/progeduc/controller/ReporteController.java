@@ -365,6 +365,12 @@ public class ReporteController {
         /* Get access to HSSFCellStyle */
 		HSSFCellStyle my_style_Titulo = workbook.createCellStyle();
 		my_style_Titulo.setAlignment(HorizontalAlignment.CENTER);
+		
+		HSSFCellStyle my_style_Cabecera1 = workbook.createCellStyle();
+		HSSFFont my_font2 = workbook.createFont();
+        my_font2.setBold(true);
+        my_style_Cabecera1.setFont(my_font2);
+        my_style_Cabecera1.setAlignment(HorizontalAlignment.CENTER);
         
 
 		String [] columns = {"Nº","AÑO","ODS","CATEGORIA","ENTIDAD","DIRECCION","COMITE TECNICO","COMITE EVALUADOR","AUSPICIADOR","ALIADO","ESTADO",
@@ -396,19 +402,38 @@ public class ReporteController {
 		cell2.setCellValue(strOds+"            "+strAnio+"            "+strRol+"            "+strEstado);
 		cell2.setCellStyle(my_style_Titulo);
 		
-		//rowline2.createCell(1).setCellValue(strOds+"            "+strAnio+"            "+strRol+"            "+strEstado);
-		
 		sheet.addMergedRegion(new CellRangeAddress(1,1,0,columns.length));
 		
-		/*Contenido de la lista*/
-		Row row = sheet.createRow(2);
+		/*linea 2*/
+		Row rowline3 = sheet.createRow(2);
+		Cell cell31 = rowline3.createCell(11);
+		cell31.setCellValue("DATOS DEL CONTACTO");
+		cell31.setCellStyle(my_style_Cabecera1);
+		
+		sheet.addMergedRegion(new CellRangeAddress(2,2,11,20));
+		
+		Cell cell32 = rowline3.createCell(21);
+		cell32.setCellValue("Datos de la Autoridad/Representante");
+		cell32.setCellStyle(my_style_Cabecera1);
+		
+		sheet.addMergedRegion(new CellRangeAddress(2,2,21,29));
+		
+		Cell cell33 = rowline3.createCell(30);
+		cell33.setCellValue("Datos del auspicio");
+		cell33.setCellStyle(my_style_Cabecera1);
+		
+		sheet.addMergedRegion(new CellRangeAddress(2,2,30,32));
+		
+		
+		/*Contenido de la lista - Cabecera*/
+		Row row = sheet.createRow(3);
 		for(int i=0;i<columns.length;i++) {
 			Cell cell = row.createCell(i);
 			cell.setCellValue(columns[i]);
 			cell.setCellStyle(my_style);
 		}
 		
-		int initRow = 3;
+		int initRow = 4;
 		
 		for (UsuarioAlianza obj : listaUsu) {
 			int i = 0;
