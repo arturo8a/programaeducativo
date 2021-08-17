@@ -232,7 +232,7 @@
 				}
 			}else{
 				$("#modalimagencargando").modal('hide');
-				$("#textoerrorcrearevaluacion").html("Debe llenar todos los datos del formulario");
+				$("#textoerrorcrearevaluacion").html("Debe llenar los datos necesarios del formulario");
 				$('#modalerrorcrearevaluacion').modal({
 					show : true,
 					backdrop : 'static',
@@ -273,34 +273,42 @@
 	
 	function validarTodoFormulario(){
 		
-		var banderaValidacionCampos = true;
-		var inputs = document.getElementById("formcrearevaluacion").elements;
-		var elemento_type,elemento_id, elemento_val;		
-		for (var i = 0; i < inputs.length; i++) {
-			elemento_type = inputs[i].type;
-			elemento_id = inputs[i].id;
-			elemento_val = $("#"+inputs[i].id).val();	
-			if($('#'+elemento_id).is(':visible')){
-				switch(elemento_type){
-					case 'text'  : 
-						if(elemento_val.trim()==""){
-							banderaValidacionCampos = false;
-						}	
-						break;
-					case 'textarea'  : 
-						if(elemento_val.trim()==""){
-							banderaValidacionCampos = false;
-						}	
-						break;
-					case 'select-one'  : 
-						if(elemento_val=="0"){
-							banderaValidacionCampos = false;
-						}	
-						break;
+		var total_coincidencias = 0
+		var total_indice_cuestionario=0;
+		for(var i=1;i<=indice_cuestionario;i++){		
+			bandera_registrar = true;
+			for(j=0;j<indice_cuestionario_eliminado.length;j++){	
+				if(indice_cuestionario_eliminado[j] == i){
+					bandera_registrar = false;
 				}
-			}			
+			}
+			if(bandera_registrar){
+				total_indice_cuestionario++;
+				if($("#r"+i).is(":checked")){
+					for(var j=1;j<=4;j++){
+						if( $("#rubrica"+i).val().trim()!="" && $("#criterio"+i+j).val().trim() !="" && $("#descripcion"+i+j).val().trim() !="" && $("#puntaje"+i+j).val().trim()!="" ){
+							total_coincidencias++;
+						}
+					}				
+				}
+				else if($("#c"+i).is(":checked")){					
+					var fila  = 1;
+					var flag = true;
+					while($("#respuesta"+i+fila).length > 0){
+						if(!($("#pregunta"+i+fila).val().trim()!="" && $("#respuesta"+i+fila).val().trim()!="" && $("#puntajeq"+i+fila).val().trim()!="" )){
+							flag = false;
+						}
+						fila++;
+					}
+					if(flag){
+						total_coincidencias++;
+					}
+				}	
+			}
 		}
-		return banderaValidacionCampos
+		if(total_coincidencias >= total_indice_cuestionario)
+			return true;
+		return false;
 	} 
 	
 	function registrarhabilitar_evaluacion(estadoevaluacion){

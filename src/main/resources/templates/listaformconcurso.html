@@ -329,7 +329,7 @@
 <center>
 	<div class="modal fade" tabindex="-1" role="dialog" id="modalArchivosEvidencias" aria-labelledby="myLargeModalLabel" >
 	  <div class="modal-dialog modal-lg" role="document">
-	    <div class="modal-content" style="overflow-y: scroll; height:650px; width:90%">
+	    <div class="modal-content" style="overflow-y: scroll; height:650px; width:95%">
 	      <div class="modal-header">
 	        <strong class="pt-1">EVIDENCIAS DE TRABAJOS FINALES</strong>
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -1208,7 +1208,7 @@
 						ext = ext.toLowerCase();
 						var mi_evi = JSON.stringify(evidencia);
 						var archivo = mi_evi.replace(/['"]+/g, '');
-						contenido += "<tr><td><strong style='cursor:pointer' onclick='actualizaEvidenciaDiv("+'`'+id+'`'+","+'`'+archivo+'`'+"," +'`'+ext +'`'+")'>"+archivo+"</strong></td></tr>";						
+						contenido += "<tr><td style='border-bottom:1px solid #DDDDDD'><strong style='cursor:pointer' onclick='actualizaEvidenciaDiv("+'`'+id+'`'+","+'`'+archivo+'`'+"," +'`'+ext +'`'+")'>"+archivo+"</strong></td></tr>";						
 					}
 					
 					contenido += "</table></div><div class='col-xs-9 col-sm-9'><table style='width:100%'><tr><td style='padding-bottom:10px'><div id='contenido_evidencia' style='width:100%'></div></td></tr></table></div></div>";
@@ -1218,7 +1218,8 @@
 					$("#modalArchivosEvidencias").modal({
 						show : true,
 						backdrop : 'static',
-						keyboard:false
+						keyboard:false,
+						handleUpdate: true
 					});
 				},
 				error: function() {

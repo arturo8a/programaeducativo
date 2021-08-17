@@ -953,7 +953,8 @@ public class IndexController {
 		model.addAttribute("responsableregistro", responsableregistroserv.listar());
 		
 		Calendar fecha = Calendar.getInstance();
-		Docentetutor docentetutor = docentetutorService.getByProgeducByAnio(pe.getId(),fecha.get(Calendar.YEAR)-1);
+		//Docentetutor docentetutor = docentetutorService.getByProgeducByAnio(pe.getId(),fecha.get(Calendar.YEAR)-1);
+		Docentetutor docentetutor = docentetutorService.getByProgeducByAnio(pe.getId(),fecha.get(Calendar.YEAR));
 		model.addAttribute("docentetutor", docentetutor);
 		model.addAttribute("tipodoc",tipodocserv.findAll());
 		model.addAttribute("genero",generoprofserv.listar());

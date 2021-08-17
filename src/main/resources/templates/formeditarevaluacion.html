@@ -8,14 +8,6 @@
     <script type="text/javascript">
 		window.history.forward();
 	</script>
-
-    <!--link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
-    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">	
-	<script type="text/javascript" th:src="@{/js/jquery-3.3.1.js}" ></script>
-    <script type="text/javascript" th:src="@{/js/bootstrapv4.js}" ></script>
-    <script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>	
-	<script type="text/javascript" th:src="@{/js/jquery-ui.js}" ></script>	
-	<link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}"-->   
 </head>
 <body>
 		<input type="hidden" id="id_rubrica_edit" name="id_rubrica" th:value="${id_rubrica_edit}" />
@@ -289,6 +281,19 @@
 		
 		var print;
 		
+		var j = 0;
+		var x = 0;
+		var bandera_j = true;
+		var bandera_x = true;
+		var array_id_pregunta_respuesta_edit= new Array();
+		
+		var indice_rp=1; 
+		var indice_rp_i = array_rpta_add.length;
+		var indice_rp_f = array_rpta_add.length;
+		
+		var total_coincidencias_edit = 0
+		var total_indice_cuestionario_edit = 0;
+		
 		$(document).ready(function(){
 			
 			var cadena_indices = $("#indices").val();
@@ -343,7 +348,6 @@
 									puntaje_mayor_edit = puntaje_edit3edit;
 								if(puntaje_edit4edit>puntaje_mayor_edit)
 									puntaje_mayor_edit = puntaje_edit4edit;
-								console.log("puntaje_mayor_edit :" + puntaje_mayor_edit);	
 								array_puntaje_mayor_edit.push(puntaje_mayor_edit);
 							}
 						}
@@ -358,7 +362,6 @@
 									puntaje_mayor_edit = mi_puntaje;
 								}
 							}
-							console.log("puntaje_mayor_edit :" + puntaje_mayor_edit);
 							array_puntaje_mayor_edit.push(puntaje_mayor_edit);
 						}
 					}
@@ -395,6 +398,7 @@
 			
 			$("#btnagregarpregunta_edit").click(function(){
 				indice_cuestionario_max_edit ++;
+				total_indice_cuestionario_edit++;
 				array_indice.push(indice_cuestionario_max_edit);
 				mi_rubrica_edit = 'contenido_rubrica_edit' + indice_cuestionario_max_edit;
 				mi_questionario_edit = 'contenido_questionario_edit' + indice_cuestionario_max_edit;
@@ -457,39 +461,145 @@
 			if (window.confirm(texto_rc)) {
 				indice_cuestionario_edit_eliminado.push(id);
 				$("#div_rubrica_cuestionario_edit"+id).css("display", "none");
+				total_indice_cuestionario_edit--;
 			}
 		}
 		
 		function validarTodoFormularioEdit(){
 			
-			var banderaValidacionCampos = true;
-			var inputs = document.getElementById("formeditarevaluacion").elements;
-			var elemento_type,elemento_id, elemento_val;		
-			for (i = 0; i < inputs.length; i++) {
-				elemento_type = inputs[i].type;
-				elemento_id = inputs[i].id;
-				elemento_val = $("#"+elemento_id).val();	
-				if($('#'+elemento_id).is(':visible')){
-					switch(elemento_type){
-						case 'text'  : 
-							if(elemento_val.trim()==""){
-								banderaValidacionCampos = false;
-							}	
-							break;
-						case 'textarea'  : 
-							if(elemento_val.trim()==""){
-								banderaValidacionCampos = false;
-							}	
-							break;
-						case 'select-one'  : 
-							if(elemento_val=="0"){
-								banderaValidacionCampos = false;
-							}	
-							break;
+			total_coincidencias_edit = 0
+			total_indice_cuestionario_edit = 0;
+			
+			id_evaluacionedit = $("#id_evaluacion_edit").val();
+			id_rubricaedit = $("#id_rubrica_edit").val();
+			id_questionarioedit = $("#id_questionario").val();
+			array_rubricaedit = new Array();
+			array_cuestionarioedit = new Array();
+			array_respuesta_puntaje_edit = new Array();					
+			id_rubricaedit = id_rubricaedit.split("-");
+			for(var i=0;i<id_rubricaedit.length-1;i++){	
+				bandera_editar = true;
+				for(var j=0;j<indice_cuestionario_edit_eliminado.length;j++){
+					if(indice_cuestionario_edit_eliminado[j] == id_rubricaedit[i]){
+						bandera_editar = false;
 					}
-				}			
+				}					
+				if(bandera_editar){
+					total_indice_cuestionario_edit++;
+					for(var j=1;j<=4;j++){
+						if( $("#rubrica_edit"+id_rubricaedit[i]).val()!="" && $("#criterio_edit"+id_rubricaedit[i]+j).val() !="" && $("#descripcion_edit"+id_rubricaedit[i]+j).val() !="" && $("#puntaje_edit"+id_rubricaedit[i]+j).val()!="" ){
+							total_coincidencias_edit++;
+						}
+					}
+				}
 			}
-			return banderaValidacionCampos
+			
+			j = 0;
+			x = 0;
+			bandera_j = true;
+			bandera_x = true;
+			array_id_pregunta_respuesta_edit= new Array();
+			id_pregunta_respuesta_edit = $("#id_pregunta_respuesta_edit").val();
+			array_id_pregunta_respuesta_edit = id_pregunta_respuesta_edit.split('');
+			for(var i=0;i<array_id_pregunta_respuesta_edit.length-1;i++){
+				j = i+1;
+				if(array_id_pregunta_respuesta_edit[i] == "("){
+					bandera_j = true;
+					while(bandera_j){
+						if(array_id_pregunta_respuesta_edit[j] == "*"){
+							pregunta_editidedit = id_pregunta_respuesta_edit.substring(i+1,j);
+							pregunta_editedit = $("#pregunta_edit"+pregunta_editidedit).val();	
+							x = j+1;
+							bandera_x = true;
+							while(bandera_x){
+								if(array_id_pregunta_respuesta_edit[x] == ")"){
+									var indice_rp_i = respuesta_edit_puntaje_edit.length ;
+									var indice_rp_f = respuesta_edit_puntaje_edit.length ;
+									respuesta_edit_puntaje_edit = id_pregunta_respuesta_edit.substring(j+1,x);
+									respuesta_edit_puntaje_edit = respuesta_edit_puntaje_edit.split("-");
+									bandera_editar = true;	
+									for(var r=0;r<indice_cuestionario_edit_eliminado.length;r++){
+										if(indice_cuestionario_edit_eliminado[r] == pregunta_editidedit){
+											bandera_editar = false;
+										}
+									}
+									if(bandera_editar){
+										for(var z = 0;z<respuesta_edit_puntaje_edit.length;z++){
+											respuesta_editedit = $("#respuesta_edit"+respuesta_edit_puntaje_edit[z]).val();
+											puntaje_editedit = $("#puntaje_editq"+respuesta_edit_puntaje_edit[z]).val();											
+											if(pregunta_editedit.trim()!="" && respuesta_editedit.trim()!="" && puntaje_editedit.trim()!=""){
+												total_coincidencias_edit++;
+											}
+											total_indice_cuestionario_edit++;
+											indice_rp_f ++;
+										}
+										i=x;
+										bandera_x = false;
+									}else{
+										i=x;
+										bandera_x = false;
+									}										
+								}
+								x++;
+							}
+							bandera_j = false; 
+							j++;
+						}
+						else{
+							j++;
+						}
+					}
+				}
+			}
+			
+			for(var i=indice_cuestionario_edit; i<= parseInt(indice_cuestionario_max_edit);i++){
+				if($("#r"+i).is(":checked")){
+					bandera_editar = true;
+					for(var j=0;j<indice_cuestionario_edit_eliminado.length;j++){
+						if(indice_cuestionario_edit_eliminado[j] == i){
+							bandera_editar = false;
+						}
+					}					
+					if(bandera_editar){
+						total_indice_cuestionario_edit++;
+						for(var j=1;j<=4;j++){
+							if($("#rubrica_edit"+i+j).val()!="" && $("#criterio_edit"+i+j).val()!="" &&  $("#descripcion_edit"+i+j).val()!="" && $("#puntaje_edit"+i+j).val()!="" ){
+								total_coincidencias_edit++;
+							}
+						}
+					}
+				}
+				else if($("#c"+i).is(":checked")){
+					bandera_elemento_respuesta_edit_add = 1;
+					indice_rp=1; 
+					flag = true;
+					pregunta_edit = $("#pregunta_edit"+i+"1").val();							
+					bandera_editar = true;
+					for(var j=0;j<indice_cuestionario_edit_eliminado.length;j++){
+						if(indice_cuestionario_edit_eliminado[j] == i){
+							bandera_editar = false;
+						}
+					}					
+					if(bandera_editar){
+						total_indice_cuestionario_edit++;
+					   while($("#respuesta_edit"+i+indice_rp).length > 0 ){
+							respuesta_edit = $("#respuesta_edit"+i+indice_rp).val();
+							puntaje_edit = $("#puntaje_editq"+i+indice_rp).val();
+							if( !(pregunta_edit.trim()!="" && respuesta_edit.trim()!="" && puntaje_edit.trim()!="") )  {
+								flag = false;
+							}
+							indice_rp ++;
+						}
+						if(flag){
+							total_coincidencias_edit++;
+						}
+					}
+				}
+			}
+			if(total_coincidencias_edit >=total_indice_cuestionario_edit)
+				return true;
+			return false;
+			
 		}
 		
 		function fn_questionario_edit(src,a,b){
@@ -534,11 +644,11 @@
 			if(validarCamposedit()){	
 				id_evaluacionedit = $("#id_evaluacion_edit").val();
 				id_rubricaedit = $("#id_rubrica_edit").val();
-				id_questionarioedit = $("#id_questionario").val();					
+				id_questionarioedit = $("#id_questionario").val();
 				array_rubricaedit = new Array();
 				array_cuestionarioedit = new Array();
 				array_respuesta_puntaje_edit = new Array();					
-				id_rubricaedit = id_rubricaedit.split("-");					
+				id_rubricaedit = id_rubricaedit.split("-");
 				for(var i=0;i<id_rubricaedit.length-1;i++){	
 					bandera_editar = true;
 					for(var j=0;j<indice_cuestionario_edit_eliminado.length;j++){
@@ -581,11 +691,11 @@
 					}				    
 				}		
 				
-				var j = 0;
-				var x = 0;
-				var bandera_j = true;
-				var bandera_x = true;
-				var array_id_pregunta_respuesta_edit= new Array();
+				j = 0;
+				x = 0;
+				bandera_j = true;
+				bandera_x = true;
+				array_id_pregunta_respuesta_edit= new Array();
 				id_pregunta_respuesta_edit = $("#id_pregunta_respuesta_edit").val();
 				array_id_pregunta_respuesta_edit = id_pregunta_respuesta_edit.split('');
 				for(var i=0;i<array_id_pregunta_respuesta_edit.length-1;i++){
