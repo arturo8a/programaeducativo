@@ -261,7 +261,7 @@ function verevidencia(id){
 			var objeto = respuesta;
 			var archivo = objeto.archivo;
 			var evidencias = objeto.evidencia;
-			var contenido = "<table style='width:100%'><tr>";
+			var contenido = "<div class='row'><div class='col-xs-3 col-sm-3'><table style='width:100%'>";
 			
 			var evidencia_inicial;
 			var ext_inicial;
@@ -282,10 +282,10 @@ function verevidencia(id){
 				ext = ext.toLowerCase();
 				var mi_evi = JSON.stringify(evidencia);
 				var archivo = mi_evi.replace(/['"]+/g, '');
-				contenido += "<td><strong style='cursor:pointer' onclick='actualizaEvidenciaDiv("+'`'+id+'`'+","+'`'+archivo+'`'+"," +'`'+ext +'`'+")'>"+archivo+"</strong></td>";						
+				contenido += "<tr><td style='border-bottom:1px solid #DDDDDD'><strong style='cursor:pointer' onclick='actualizaEvidenciaDiv("+'`'+id+'`'+","+'`'+archivo+'`'+"," +'`'+ext +'`'+")'>"+archivo+"</strong></td></tr>";						
 			}
 			
-			contenido += "</tr></table><hr><table style='width:100%'><tr><td><div id='contenido_evidencia' style='width:100%'></div></td></tr></table>";
+			contenido += "</table></div><div class='col-xs-9 col-sm-9'><table style='width:100%'><tr><td style='padding-bottom:10px'><div id='contenido_evidencia' style='width:100%'></div></td></tr></table></div></div>";
 			$("#contenidoEvidencias").html(contenido);
 			actualizaEvidenciaDiv(id,archivo_inicial,ext_inicial);
 			$("#modalArchivosEvidencias").modal({

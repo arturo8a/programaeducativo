@@ -524,7 +524,13 @@
 	
 	var anio;
 	
-	$(document).ready(function(){	
+	$(document).ready(function(){
+		
+		$("#sidebarCollapse").click(function(){
+			setTimeout(() => {        		  
+	    			$(window).trigger('resize');
+	        }, 200);
+		});	
 		
 		anio = $("#ultimo_anio").val();
 		

@@ -213,6 +213,12 @@
     var url_base = location.origin + "/";
 	    
 	    $(document).ready(function(){
+		
+			$("#sidebarCollapse").click(function(){
+				setTimeout(() => {        		  
+	    			$(window).trigger('resize');
+	        	}, 200);
+			});	
 	    	
 	    	document.getElementById("a_pageSubmenuProgramaEducativo").style.background = "#0083C9";
 	    	document.getElementById("consulta_pe").style.color = "#0083C9";
