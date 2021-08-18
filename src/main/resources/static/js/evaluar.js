@@ -372,19 +372,15 @@ function actualizaEvidenciaDiv(id,archivo,extension){
 	switch(extension){
 		case 'pdf' :  
 			$("#contenido_evidencia").html("<iframe src='../alfresco_programaeducativo/pedesa/upload_evidencias/"+subcadena+"'"+" type='application/pdf' width='100%' height='600px'></<iframe>");
-		break;
+			break;
 		case 'mp4':
 			$("#contenido_evidencia").html("<video src='../alfresco_programaeducativo/pedesa/upload_evidencias/"+subcadena+"'"+" width='100%' height='600px'></<video>");
-		break;
+			break;
 		case 'jpg':
 		case 'png':
 		case 'jpeg':
 			$("#contenido_evidencia").html("<img src='../alfresco_programaeducativo/pedesa/upload_evidencias/"+subcadena+"'"+" width='100%' height='600px'/>");
 			break;
-		case 'doc':
-		case 'docx': 
-		case 'docs':
-			window.open('../alfresco_programaeducativo/pedesa/upload_evidencias/'+subcadena, '_blank');
-		break;
 	}
+	
 }

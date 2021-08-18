@@ -1416,7 +1416,9 @@
 				case 'mp3':
 					$("#contenido_evidencia").html("<audio controls><source src='../alfresco_programaeducativo/pedesa/upload_evidencias/"+subcadena+"'"+" width='100%' height='600px' type='audio/mp3'>Tu navegador no soporta audio HTML5.</audio>");
 				break;
-				case 'word':
+				case 'doc':
+				case 'docs':
+				case 'docx':
 					window.open('../alfresco_programaeducativo/pedesa/upload_evidencias/'+subcadena, '_blank');
 				break;
 			}
@@ -1546,9 +1548,10 @@ function openModalTrabajosPermisos(idTrabajo){
 			var html ='<div class="row">';
 			$.each(respuesta, function( i, value ) {
 				html +='<div class="col-xs-12 col-sm-12">';
-				html += "<iframe src='../alfresco_programaeducativo/pedesa/opneModalTrabajosPermisos/"+value.nombreArchivo+"'"+" type='application/pdf' width='100%' height='600px'></<iframe>";
-				//html += '	'+value.nombreArchivo+'<img src="./images/svg/file-pdf-regular.svg" onclick="cargarPDF('+value.idParticiapnte+')" class="archivo" style="width:20px; cursor:pointer">';
+				//html += "<iframe src='../alfresco_programaeducativo/pedesa/opneModalTrabajosPermisos/"+value.nombreArchivo+"'"+" type='application/pdf' width='100%' height='600px'></<iframe>";
+				html += '	'+value.nombreArchivo+'<img src="./images/svg/file-pdf-regular.svg" onclick="cargarPDF('+value.idParticiapnte+')" class="archivo" style="width:20px; cursor:pointer">';
 				html +='</div>';
+				
 			}); 
 			html += '</div>';
 			html +='<div class="row">';

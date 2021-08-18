@@ -743,12 +743,12 @@ public class ProgramaeducativoController {
         
         //JRBeanCollectionDataSource datasource = new JRBeanCollectionDataSource(listaQuestionario);
         JasperPrint jp = JasperFillManager.fillReport(jr, parameters, new JREmptyDataSource(1));
-		String path = "D:/Sunass/programa_educativo_desarrollo/programaeducativo/src/main/resources/reportes_evaluacion/";
-        //String path = "/opt/apache-tomcat-8.0.27/webapps/alfresco_programaeducativo/pedesa/reportes_evaluacion/";
+		//String path = "D:/Sunass/programa_educativo_desarrollo/programaeducativo/src/main/resources/reportes_evaluacion/";
+        String path = "/opt/apache-tomcat-8.0.27/webapps/alfresco_programaeducativo/pedesa/reportes_evaluacion/";
 		String archivo = eval.getId() + "_"+ dateFormat.format(date) + hourFormat.format(date);
 		JasperExportManager.exportReportToPdfFile(jp,path + archivo + ".pdf");		
-		return "D:/Sunass/programa_educativo_desarrollo/programaeducativo/src/main/resources/reportes_evaluacion/"+archivo+".pdf";
-		//return "/alfresco_programaeducativo/pedesa/reportes_evaluacion/"+archivo+".pdf";
+		//return "D:/Sunass/programa_educativo_desarrollo/programaeducativo/src/main/resources/reportes_evaluacion/"+archivo+".pdf";
+		return "/alfresco_programaeducativo/pedesa/reportes_evaluacion/"+archivo+".pdf";
 	}
 	
 	public String crearFichaTrabajoConcursoPdf(Trabajosfinales eval) throws FileNotFoundException, JRException {
