@@ -330,8 +330,10 @@ function vertrabajo(id){
 				case 'pdf':
 					contenido += archivo + "<br><iframe src='../alfresco_programaeducativo/pedesa/upload_trabajos/"+subcadena+"'"+" type='application/pdf' width='100%' height='600px'></<iframe>";
 					break;
+				case 'doc':
+				case 'docs':
 				case 'docx': 
-					contenido += window.open('../alfresco_programaeducativo/pedesa/upload_trabajos/'+subcadena, '_blank');
+					window.open('../alfresco_programaeducativo/pedesa/upload_trabajos/'+subcadena, '_blank');
 					break;
 				case 'mp4': 
 					contenido += archivo + "<br><video src='../alfresco_programaeducativo/pedesa/upload_trabajos/"+subcadena+"'"+" width='100%' height='600px'></<video>";
@@ -379,7 +381,9 @@ function actualizaEvidenciaDiv(id,archivo,extension){
 		case 'jpeg':
 			$("#contenido_evidencia").html("<img src='../alfresco_programaeducativo/pedesa/upload_evidencias/"+subcadena+"'"+" width='100%' height='600px'/>");
 			break;
-		case 'word':
+		case 'doc':
+		case 'docx': 
+		case 'docs':
 			window.open('../alfresco_programaeducativo/pedesa/upload_evidencias/'+subcadena, '_blank');
 		break;
 	}

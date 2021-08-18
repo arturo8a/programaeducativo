@@ -1545,8 +1545,9 @@ function openModalTrabajosPermisos(idTrabajo){
 		success: function(respuesta) { console.log(respuesta);
 			var html ='<div class="row">';
 			$.each(respuesta, function( i, value ) {
-				html +='<div class="col-xs-12 col-sm-4">';
-				html += '	'+value.nombreArchivo+'<img src="./images/svg/file-pdf-regular.svg" onclick="cargarPDF('+value.idParticiapnte+')" class="archivo" style="width:20px; cursor:pointer">';
+				html +='<div class="col-xs-12 col-sm-12">';
+				html += "<iframe src='../alfresco_programaeducativo/pedesa/opneModalTrabajosPermisos/"+value.nombreArchivo+"'"+" type='application/pdf' width='100%' height='600px'></<iframe>";
+				//html += '	'+value.nombreArchivo+'<img src="./images/svg/file-pdf-regular.svg" onclick="cargarPDF('+value.idParticiapnte+')" class="archivo" style="width:20px; cursor:pointer">';
 				html +='</div>';
 			}); 
 			html += '</div>';

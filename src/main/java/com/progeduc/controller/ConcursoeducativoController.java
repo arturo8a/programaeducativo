@@ -19,11 +19,15 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -2329,14 +2333,42 @@ public class ConcursoeducativoController {
 		
 		String [] columns = {"AÑO","ODS","Codigo II.EE","NOMBRE II.EE","REGION","PROVINCIA","DISTRITO","MODALIDAD", "AMBITO","Código de trabajo","Titulo de trabajo","Link de video","Modalidad","Categoria","Nivel de participación","Ejes temáticos","Nombres del participante","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Fecha de nacimiento","Género","Seccion","Nivel","Grado","Nombres tutor","Apellido paterno tutor","Apellido materno tutor","Tipo de documento","Nro de documento tutor","telefono","correo electronico","Parentesco","Nombres del docente","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Telefono","Género","Correo electrónico"};
 		
+		
+		
+        //style.setAlignment (HorizontalAlignment.CENTER);		
+		
 		Sheet sheet = workbook.createSheet("Registro de trabajos finales");
 		Row row = sheet.createRow(0);
+		
+		row.createCell(0).setCellValue("DATOS DE A II.EE");
+		/*CellStyle  style = row.createCell(0).getCellStyle();
+		style.setAlignment(HorizontalAlignment.CENTER);
+		row.createCell(0).setCellStyle(style);*/
+		sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 8));/*1era celda , ultima celda, 1era columna, ultima columna*/		
+		
+		row.createCell(9).setCellValue("DATOS DEL TRABAJO");
+		//row.createCell(9).setCellStyle(style);
+		sheet.addMergedRegion(new CellRangeAddress(0, 0, 9, 15));
+		
+		row.createCell(16).setCellValue("DATOS DE LOS PARTICIPANTES");
+		//row.createCell(16).setCellStyle(style);
+		sheet.addMergedRegion(new CellRangeAddress(0, 0,16, 25));
+		
+		row.createCell(26).setCellValue("DATOS DEL PADRE/MADRE O TUTOR");
+		//row.createCell(26).setCellStyle(style);
+		sheet.addMergedRegion(new CellRangeAddress(0, 0,26, 33));
+		
+		row.createCell(34).setCellValue("DATOS DEL DOCENTE");
+		//row.createCell(34).setCellStyle(style);
+		sheet.addMergedRegion(new CellRangeAddress(0, 0,34, 41));
+		
+		row = sheet.createRow(1);
 		for(int i=0;i<columns.length;i++) {
 			Cell cell = row.createCell(i);
 			cell.setCellValue(columns[i]);
 		}
 		
-		int initRow = 1;
+		int initRow = 2;
 		for(TrabajosFinalesConcursoDto dto : lista) {
 			row = sheet.createRow(initRow);
 			row.createCell(0).setCellValue(dto.getAnio());

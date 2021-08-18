@@ -725,12 +725,16 @@ public class ProgramaeducativoController {
         
 		List<Rubrica> listaRubrica = new ArrayList<Rubrica>();
         evaluacionrubricaServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
-        	listaRubrica.add(obj.getRubrica());
+        	if(obj.getRubrica().getEstado() == 1) {
+        		listaRubrica.add(obj.getRubrica());
+        	}        	
         });
         
         List<Questionario> listaQuestionario = new ArrayList<Questionario>();
         evaluacionquestionarioServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
-        	listaQuestionario.add(obj.getQuestionario());
+        	if(obj.getQuestionario().getEstado() == 1) {
+        		listaQuestionario.add(obj.getQuestionario());
+        	}
         });
         
         parameters.put("datasourcerubrica", listaRubrica);
@@ -739,20 +743,12 @@ public class ProgramaeducativoController {
         
         //JRBeanCollectionDataSource datasource = new JRBeanCollectionDataSource(listaQuestionario);
         JasperPrint jp = JasperFillManager.fillReport(jr, parameters, new JREmptyDataSource(1));
-		//String path = "D:/Sunass/programaeducativo/src/main/resources/reportes_evaluacion/";
-        String path = "/opt/apache-tomcat-8.0.27/webapps/alfresco_programaeducativo/pedesa/reportes_evaluacion/";
+		String path = "D:/Sunass/programa_educativo_desarrollo/programaeducativo/src/main/resources/reportes_evaluacion/";
+        //String path = "/opt/apache-tomcat-8.0.27/webapps/alfresco_programaeducativo/pedesa/reportes_evaluacion/";
 		String archivo = eval.getId() + "_"+ dateFormat.format(date) + hourFormat.format(date);
 		JasperExportManager.exportReportToPdfFile(jp,path + archivo + ".pdf");		
-		//return "D:/Sunass/programaeducativo/src/main/resources/reportes_evaluacion/"+archivo+".pdf";
-		return "/alfresco_programaeducativo/pedesa/reportes_evaluacion/"+archivo+".pdf";
-        
-        /*JRBeanCollectionDataSource datasource = new JRBeanCollectionDataSource(listaRubrica);
-		JasperPrint jp = JasperFillManager.fillReport(jr, parameters, datasource);
-		//String path = "D:/Sunass/ProgramaEducativo_Desarrollo/programaeducativo/src/main/resources/reportes_evaluacion/";
-		String path = "/opt/apache-tomcat-8.0.27/webapps/alfresco_programaeducativo/pedesa/reportes_evaluacion/";
-		String archivo = eval.getId() + "_"+ dateFormat.format(date) + hourFormat.format(date);
-		JasperExportManager.exportReportToPdfFile(jp,path + archivo + ".pdf");
-		return "/alfresco_programaeducativo/pedesa/reportes_evaluacion/"+archivo+".pdf";*/
+		return "D:/Sunass/programa_educativo_desarrollo/programaeducativo/src/main/resources/reportes_evaluacion/"+archivo+".pdf";
+		//return "/alfresco_programaeducativo/pedesa/reportes_evaluacion/"+archivo+".pdf";
 	}
 	
 	public String crearFichaTrabajoConcursoPdf(Trabajosfinales eval) throws FileNotFoundException, JRException {
