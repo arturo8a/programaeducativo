@@ -254,7 +254,13 @@
 	var idapertura;
 	var celdaseleccionada;
 
-	$(document).ready(function(){	
+	$(document).ready(function(){
+		
+		$("#sidebarCollapse").click(function(){
+				setTimeout(() => {        		  
+					table_lista_aperturar_anio.draw();
+		      	}, 200);
+			});	
 		
 		$("#btnlimpiar").click(function(){
 			$("#cbanioapertura").val("Todos");

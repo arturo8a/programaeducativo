@@ -204,6 +204,12 @@
 		
 		$(document).ready(function(){
 			
+			$("#sidebarCollapse").click(function(){
+				setTimeout(() => {        		  
+					table_lista_usuario.draw();
+		      	}, 200);
+			});
+			
 			$("#btnlimpiarusuario").click(function(){
 				$("#cbperfilusuario").val("Todos");
 				$("#cbestadousuario").val("Todos");
