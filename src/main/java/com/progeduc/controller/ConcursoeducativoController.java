@@ -866,7 +866,9 @@ public class ConcursoeducativoController {
 					dto.setApellido_paterno(ua.getApepatautoridad());
 					dto.setApellido_materno(ua.getApematautoridad());
 					dto.setNombres(ua.getNombresautoridad());
-					dto.setTipo_documento(ua.getTipodocumento().getDescripcion());
+					if(!ua.getTipodocumento().equals(null)) {
+						dto.setTipo_documento(ua.getTipodocumento().getDescripcion());
+					}
 					dto.setNro_documento(ua.getNumdocumento());
 					dto.setId(ua.getId());
 					lista.add(dto);
@@ -898,7 +900,9 @@ public class ConcursoeducativoController {
 					dto.setApellido_paterno(ua.getApepatautoridad());
 					dto.setApellido_materno(ua.getApematautoridad());
 					dto.setNombres(ua.getNombresautoridad());
-					dto.setTipo_documento(ua.getTipodocumento().getDescripcion());
+					if(!ua.getTipodocumento().equals(null)) {
+						dto.setTipo_documento(ua.getTipodocumento().getDescripcion());
+					}
 					dto.setNro_documento(ua.getNumdocumento());
 					dto.setId(ua.getId());
 					lista.add(dto);

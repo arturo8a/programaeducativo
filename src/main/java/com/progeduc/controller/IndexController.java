@@ -490,6 +490,16 @@ public class IndexController {
         for(int i = anio-5;i<=anio;i++) {
                 lista.add(i);
         }
+        
+        Aperturaranio apertura = aperturaranioService.buscar(anio);
+		LocalDate dateActual = LocalDate.now();
+		if(apertura.getQuintaetapadesde().isAfter(dateActual)) {
+			model.addAttribute("showFinalizar",1);
+		}else {
+			model.addAttribute("showFinalizar",0);
+		}
+        
+        
         model.addAttribute("anios", lista);
         model.addAttribute("modalidadtrabajo",modalidadtrabajoService.listar());
         model.addAttribute("listaestadoevaluacion", estadoevaluacionService.listar());

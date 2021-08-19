@@ -127,8 +127,8 @@
 						<input type="image" id="btnlimpiarconcurso"  src="./images/iconos_nd/botonrefrescar.svg" width="32px"  />
 					</div>
 					<div class="col-xs-12 col-sm-3 pt-3">
-						<input type="button" id="btnFinalizar" name="btnFinalizar" class="btn btn-primary text-right" value="Finalizar" style=" margin-right: 20px;">
-						<input type="button" id="btnVerEmpate" name="btnVerEmpate" class="btn btn-primary text-right" value="Ver Empate">
+						<input th:if="${showFinalizar == 1}" type="button" id="btnFinalizar" name="btnFinalizar" class="btn btn-primary text-right" value="Finalizar" style=" margin-right: 20px;">
+						<input th:if="${showFinalizar == 1}" type="button" id="btnVerEmpate" name="btnVerEmpate" class="btn btn-primary text-right" value="Ver Empate">
 					</div>
 				</div>
 			</div>
@@ -1560,6 +1560,7 @@ function openModalTrabajosPermisos(idTrabajo){
 			$("#contenidoPermisosParticipantes").html(html);
 			closeCargando();
 			$("#modaleListaPermisos").modal();
+			cargarPDF(respuesta[0].idParticiapnte);
 		},
 		error: function() {
 			closeCargando();
