@@ -388,7 +388,7 @@ public class ReporteController {
 		
 		//rowline1.createCell(0).setCellValue("Reporte Alianza Estratégica");
 		
-		sheet.addMergedRegion(new CellRangeAddress(0,0,0,columns.length));
+		sheet.addMergedRegion(new CellRangeAddress(0,0,0,columns.length-1));
 		
 		/*Linea 1*/
 		Row rowline2 = sheet.createRow(1);
@@ -402,7 +402,7 @@ public class ReporteController {
 		cell2.setCellValue(strOds+"            "+strAnio+"            "+strRol+"            "+strEstado);
 		cell2.setCellStyle(my_style_Titulo);
 		
-		sheet.addMergedRegion(new CellRangeAddress(1,1,0,columns.length));
+		sheet.addMergedRegion(new CellRangeAddress(1,1,0,columns.length-1));
 		
 		/*linea 2*/
 		Row rowline3 = sheet.createRow(2);
@@ -422,7 +422,7 @@ public class ReporteController {
 		cell33.setCellValue("Datos del auspicio");
 		cell33.setCellStyle(my_style_Cabecera1);
 		
-		sheet.addMergedRegion(new CellRangeAddress(2,2,31,32));
+		//sheet.addMergedRegion(new CellRangeAddress(2,2,31,31));
 		
 		
 		/*Contenido de la lista - Cabecera*/
