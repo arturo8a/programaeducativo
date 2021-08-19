@@ -13,6 +13,8 @@ public class EvaluacionRubricaQuestionarioDto {
 	List<Questionario> listaquestionario;
 	List<ClaveDto> eliminado_rubrica;
 	List<ClaveDto> eliminado_questionario;
+	List<ClaveDto> eliminado_pregunta_respuesta;
+	List<AgregarRespuestaPreguntaDto> agregado_rp_edit;
 	
 	public Evaluacion getEvaluacion() {
 		return evaluacion;
@@ -46,6 +48,18 @@ public class EvaluacionRubricaQuestionarioDto {
 	}
 	public void setListarubrica(List<Rubrica> listarubrica) {
 		this.listarubrica = listarubrica;
+	}
+	public List<ClaveDto> getEliminado_pregunta_respuesta() {
+		return eliminado_pregunta_respuesta;
+	}
+	public void setEliminado_pregunta_respuesta(List<ClaveDto> eliminado_pregunta_respuesta) {
+		this.eliminado_pregunta_respuesta = eliminado_pregunta_respuesta;
+	}
+	public List<AgregarRespuestaPreguntaDto> getAgregado_rp_edit() {
+		return agregado_rp_edit;
+	}
+	public void setAgregado_rp_edit(List<AgregarRespuestaPreguntaDto> agregado_rp_edit) {
+		this.agregado_rp_edit = agregado_rp_edit;
 	}
 
 }

@@ -142,35 +142,37 @@
 						<div class="row" >
 							<table style="width:100%" th:id="'table_questionario_'+ ${objeto.id}" >
 								<tr>
-									<td>
+									<td colspan="2">
 										<strong>Ingrese pregunta</strong>
-										<input type="text" class="form-control" th:id="'pregunta_edit'+ ${objeto.id}" th:value="${objeto.pregunta}"/>
+										<input type="text" class="form-control" th:id="'pregunta_edit'+ ${objeto.id}" th:value="${objeto.pregunta}" style="width:80%"/>
 									</td>
-									<td>&nbsp;</td>
 								</tr>
 								<tr>
 									<td>
-										<table class="w-100" >
-											<tr th:each="qr : ${objeto.questionariorespuesta}">
-												<td>
-													<label>respuesta</label>
-													<input type="text" class="form-control" th:id="'respuesta_edit'+ ${qr.id}" th:value="${qr.respuesta}"/>
-												</td>
-												<td>
-													<label>puntaje</label>
-													<input type="text" th:id="'puntaje_editq' + ${qr.id}" th:value="${qr.puntaje}" class="form-control puntaje" />
-												</td>
-											</tr>						
-										</table>										
+										<table class="w-100" th:id="'questionario' + ${objeto.id}">
+											<div th:each="qr : ${objeto.questionariorespuesta}">
+												<tr  th:id="'rp'+${qr.id}">
+													<td>
+														<label>respuesta</label>
+														<input type="text" class="form-control" th:id="'respuesta_edit'+ ${qr.id}" th:value="${qr.respuesta}"/>
+													</td>
+													<td>
+														<label>puntaje</label>
+														<input type="text" th:id="'puntaje_editq' + ${qr.id}" th:value="${qr.puntaje}" class="form-control puntaje" />
+													</td>
+													<td class="text-center">
+														<input type='button' value='Quitar' class='btn btn-outline-primary mt-4' th:attr="onclick=|quitarFilaEdit('${qr.id}')|" />
+													</td>
+												</tr>
+												
+											</div>				
+										</table>
 									</td>
 									<td class="text-center">
-										<input type='button' value='Agregar' class='btn btn-primary mt-4' />
-									</td>
-									<td class="text-center">
-										<input type='button' value='Quitar' class='btn btn-outline-primary mt-4' />
+										<input type='button' value='Agregar' class='btn btn-primary mt-4' th:attr="onclick=|agregarCeldaAgregadaEdit(${objeto.id})|" />
 									</td>
 								</tr>
-							</table>						
+							</table>
 						</div>
 					</div>
 				</div>
@@ -290,6 +292,8 @@
 		
 		var eliminado_rubrica_edit = new Array();
 		var eliminado_questionario_edit = new Array();
+		var eliminado_pregunta_respuestaedit = new Array();
+		var agregado_pregunta_respuesta_edit = new Array();
 		
 		var print;
 		
@@ -305,6 +309,35 @@
 		
 		var total_coincidencias_edit = 0
 		var total_indice_cuestionario_edit = 0;
+		
+		var i_celda_agregada_edit=0;
+		
+		
+		function agregarCeldaAgregadaEdit(idquestionario){
+			
+			i_celda_agregada_edit ++;
+			$("#questionario"+idquestionario).append("<tr  id='celdaagregada"+i_celda_agregada_edit+"_"+idquestionario+"'><td><input type='text' id='respuestaceldaagregadaedit"+i_celda_agregada_edit+"_"+idquestionario+"' class='form-control'/></td><td><input type='text' id='puntaje_celda_agregada_edit"+i_celda_agregada_edit+"_"+idquestionario+"' onKeyPress='return filterPuntaje(event,this)' class='form-control'/></td><td class='text-center'><input type='button'  onclick='eliminarCeldaAgregadaEdit("+idquestionario+","+i_celda_agregada_edit+")' value='Quitar' class='btn btn-outline-primary'/></tr>");
+			agregado_pregunta_respuesta_edit.push(i_celda_agregada_edit+"_"+idquestionario);
+		}
+		
+		function eliminarCeldaAgregadaEdit (idquestionario,i_celda_agregada_edit){
+			if (window.confirm("¿Desea eliminar Repuesta?")) {
+				$("#celdaagregada"+i_celda_agregada_edit+"_"+idquestionario).remove();
+				for(var i=0;i<agregado_pregunta_respuesta_edit.length;i++){
+					if(agregado_pregunta_respuesta_edit[i] == (i_celda_agregada_edit+"_"+idquestionario)){
+						agregado_pregunta_respuesta_edit.splice(i,1);
+					}						
+				}
+			}
+		}
+		
+		function quitarFilaEdit(idqr){
+			
+			if (window.confirm("¿Desea eliminar Repuesta?")) {
+				$("#rp"+idqr).remove();
+				eliminado_pregunta_respuestaedit.push({ id : idqr});
+			}			
+		}
 		
 		$(document).ready(function(){
 			
@@ -379,8 +412,8 @@
 					}
 					var suma_edit = 0;
 					for(var i=0;i<array_puntaje_mayor_edit.length;i++){
-						suma_edit += parseFloat(array_puntaje_mayor_edit[i]);				
-					}				
+						suma_edit += parseFloat(array_puntaje_mayor_edit[i]);
+					}
 					suma_edit = Number.parseFloat(suma_edit).toFixed(2);
 					if(suma_edit == 20){
 						actualiza_habilitar_edit_evaluacion(2);
@@ -414,7 +447,7 @@
 				array_indice.push(indice_cuestionario_max_edit);
 				mi_rubrica_edit = 'contenido_rubrica_edit' + indice_cuestionario_max_edit;
 				mi_questionario_edit = 'contenido_questionario_edit' + indice_cuestionario_max_edit;
-				mi_html_edit = "<div class='alert alert-warning' id='div_rubrica_cuestionario_edit"+indice_cuestionario_max_edit+"'><button id='eliminarCuestionarioEdit"+indice_cuestionario_max_edit+"' type='button' onclick='eliminarRubricaCuestionarioEdit("+'`'+indice_cuestionario_max_edit+'`'+")' style='float:right;cursor:pointer'>X</button><div class='row'><div class='col-xs-12 col-sm-12'><table width='40%'><tr><td><strong>Seleccione tipo de cuestionario</strong></td><td><input type='radio' name='r"+indice_cuestionario_max_edit+"' id='r"+indice_cuestionario_max_edit+"' value='1' onchange='fn_questionario_edit(this,"+'`'+indice_cuestionario_max_edit+'`'+","+'`'+indice_cuestionario_max_edit+'`'+");' checked> Rubrica </td><td>	<input type='radio' name='cuestionario"+indice_cuestionario_max_edit+"' id='c"+indice_cuestionario_max_edit+"' value='2' onchange='fn_questionario_edit(this,"+'`'+indice_cuestionario_max_edit+'`'+","+'`'+indice_cuestionario_max_edit+'`'+");' > Cuestionario </td></tr></table> </div></div>  <div id='"+mi_rubrica_edit+"'><div class='row' style=''><div class='col-xs-12 col-sm-6'>&nbsp;</div><div class='col-xs-12 col-sm-6 text-left'><table style='width:100%'><tr><td><label style='margin:5px'>Rubrica</label></td><td><input type='text' name='rubrica_edit"+indice_cuestionario_max_edit+"' id='rubrica_edit"+indice_cuestionario_max_edit+"' class='form-control'></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio_edit"+indice_cuestionario_max_edit+"1' name='criterio_edit"+indice_cuestionario_max_edit+"1' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion_edit"+indice_cuestionario_max_edit+"1' id='descripcion_edit"+indice_cuestionario_max_edit+"1' class='form-control'></textarea><br><table><tr><td><label>puntaje</label></td><td><input type='text' onKeyPress='return filterPuntaje(event,this)' class='form-control' name='puntaje_edit"+indice_cuestionario_max_edit+"1' id='puntaje_edit"+indice_cuestionario_max_edit+"1' /></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio_edit"+indice_cuestionario_max_edit+"2' name='criterio_edit"+indice_cuestionario_max_edit+"2' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion_edit"+indice_cuestionario_max_edit+"2' id='descripcion_edit"+indice_cuestionario_max_edit+"2' class='form-control'></textarea><br><table><tr><td><label>puntaje</label></td><td><input type='text' onKeyPress='return filterPuntaje(event,this)' class='form-control' name='puntaje_edit"+indice_cuestionario_max_edit+"2' id='puntaje_edit"+indice_cuestionario_max_edit+"2' /></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio_edit"+indice_cuestionario_max_edit+"3' name='criterio_edit"+indice_cuestionario_max_edit+"3' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion_edit"+indice_cuestionario_max_edit+"3' id='descripcion_edit"+indice_cuestionario_max_edit+"3' class='form-control'></textarea><br><table><tr><td><label>puntaje</label></td><td><input type='text' onKeyPress='return filterPuntaje(event,this)' class='form-control' name='puntaje_edit"+indice_cuestionario_max_edit+"3' id='puntaje_edit"+indice_cuestionario_max_edit+"3' /></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio_edit"+indice_cuestionario_max_edit+"4' name='criterio_edit"+indice_cuestionario_max_edit+"4' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion_edit"+indice_cuestionario_max_edit+"4' id='descripcion_edit"+indice_cuestionario_max_edit+"4' class='form-control'></textarea><br><table><tr><td><label>puntaje</label></td><td><input type='text' onKeyPress='return filterPuntaje(event,this)' class='form-control' name='puntaje_edit"+indice_cuestionario_max_edit+"4' id='puntaje_edit"+indice_cuestionario_max_edit+"4' />	</td></tr></table></div></div></div><div id='"+mi_questionario_edit+"' style='display:none'><div class='row' style=''><div class='col-xs-12 col-sm-12'><table style='width:100%' id='tabla"+indice_cuestionario_max_edit+"'><tr><td><label>Ingrese pregunta</label><input type='text' class='form-control' id='pregunta_edit"+indice_cuestionario_max_edit+"1' name='pregunta_edit"+indice_cuestionario_max_edit+"1' /></td><td>&nbsp;</td></tr>		<tr><td><label>respuesta</label></td><td><label>puntaje</label></td></tr>		<tr id='tr_"+indice_cuestionario_max_edit+"1'><td><input type='text' class='form-control' id='respuesta_edit"+indice_cuestionario_max_edit+"1' name='respuesta_edit"+indice_cuestionario_max_edit+"1'/></td><td><input type='text' onKeyPress='return filterPuntaje(event,this)' class='form-control' name='puntaje_editq"+indice_cuestionario_max_edit+"1' id='puntaje_editq"+indice_cuestionario_max_edit+"1' /></td><td class='text-center'><input type='button' id='btnagregarrespuesta_edit"+indice_cuestionario_max_edit+"' name='btnagregarrespuesta_edit"+indice_cuestionario_max_edit+"' value='Agregar' onclick='agregar_fila_edit("+'"'+'tabla'+indice_cuestionario_max_edit+'"'+','+indice_cuestionario_max_edit+")' class='btn btn-primary' /></td><td class='text-center'><input type='button' id='btnquitarrespuesta_edit"+indice_cuestionario_max_edit+"' name='btnquitarrespuesta_edit"+indice_cuestionario_max_edit+"' value='Quitar' onclick='quitar_fila_edit("+'"'+'tr_'+indice_cuestionario_max_edit.toString() +'"'+','+indice_cuestionario_max_edit+")' disabled class='btn btn-outline-primary' /></td></tr></table></div></div></div></div>";
+				mi_html_edit = "<div class='alert alert-warning' id='div_rubrica_cuestionario_edit"+indice_cuestionario_max_edit+"'><button id='eliminarCuestionarioEdit"+indice_cuestionario_max_edit+"' type='button' onclick='eliminarRubricaCuestionarioEdit("+'`'+indice_cuestionario_max_edit+'`'+")' style='float:right;cursor:pointer'>X</button><div class='row'><div class='col-xs-12 col-sm-12'><table width='40%'><tr><td><strong>Seleccione tipo de cuestionario</strong></td><td><input type='radio' name='r"+indice_cuestionario_max_edit+"' id='r"+indice_cuestionario_max_edit+"' value='1' onchange='fn_questionario_edit(this,"+'`'+indice_cuestionario_max_edit+'`'+","+'`'+indice_cuestionario_max_edit+'`'+");' checked> Rubrica </td><td>	<input type='radio' name='cuestionario"+indice_cuestionario_max_edit+"' id='c"+indice_cuestionario_max_edit+"' value='2' onchange='fn_questionario_edit(this,"+'`'+indice_cuestionario_max_edit+'`'+","+'`'+indice_cuestionario_max_edit+'`'+");' > Cuestionario </td></tr></table> </div></div>  <div id='"+mi_rubrica_edit+"'><div class='row' style=''><div class='col-xs-12 col-sm-6'>&nbsp;</div><div class='col-xs-12 col-sm-6 text-left'><table style='width:100%'><tr><td><label style='margin:5px'>Rubrica</label></td><td><input type='text' name='rubrica_edit"+indice_cuestionario_max_edit+"' id='rubrica_edit"+indice_cuestionario_max_edit+"' class='form-control'></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio_edit"+indice_cuestionario_max_edit+"1' name='criterio_edit"+indice_cuestionario_max_edit+"1' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion_edit"+indice_cuestionario_max_edit+"1' id='descripcion_edit"+indice_cuestionario_max_edit+"1' class='form-control'></textarea><br><table><tr><td><label>puntaje</label></td><td><input type='text' onKeyPress='return filterPuntaje(event,this)' class='form-control' name='puntaje_edit"+indice_cuestionario_max_edit+"1' id='puntaje_edit"+indice_cuestionario_max_edit+"1' /></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio_edit"+indice_cuestionario_max_edit+"2' name='criterio_edit"+indice_cuestionario_max_edit+"2' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion_edit"+indice_cuestionario_max_edit+"2' id='descripcion_edit"+indice_cuestionario_max_edit+"2' class='form-control'></textarea><br><table><tr><td><label>puntaje</label></td><td><input type='text' onKeyPress='return filterPuntaje(event,this)' class='form-control' name='puntaje_edit"+indice_cuestionario_max_edit+"2' id='puntaje_edit"+indice_cuestionario_max_edit+"2' /></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio_edit"+indice_cuestionario_max_edit+"3' name='criterio_edit"+indice_cuestionario_max_edit+"3' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion_edit"+indice_cuestionario_max_edit+"3' id='descripcion_edit"+indice_cuestionario_max_edit+"3' class='form-control'></textarea><br><table><tr><td><label>puntaje</label></td><td><input type='text' onKeyPress='return filterPuntaje(event,this)' class='form-control' name='puntaje_edit"+indice_cuestionario_max_edit+"3' id='puntaje_edit"+indice_cuestionario_max_edit+"3' /></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio_edit"+indice_cuestionario_max_edit+"4' name='criterio_edit"+indice_cuestionario_max_edit+"4' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion_edit"+indice_cuestionario_max_edit+"4' id='descripcion_edit"+indice_cuestionario_max_edit+"4' class='form-control'></textarea><br><table><tr><td><label>puntaje</label></td><td><input type='text' onKeyPress='return filterPuntaje(event,this)' class='form-control' name='puntaje_edit"+indice_cuestionario_max_edit+"4' id='puntaje_edit"+indice_cuestionario_max_edit+"4' />	</td></tr></table></div></div></div><div id='"+mi_questionario_edit+"' style='display:none'><div class='row' style=''><div class='col-xs-12 col-sm-12'><table style='width:100%' id='tabla"+indice_cuestionario_max_edit+"'><tr><td colspan='2'><label>Ingrese pregunta</label><input type='text' class='form-control' id='pregunta_edit"+indice_cuestionario_max_edit+"1' name='pregunta_edit"+indice_cuestionario_max_edit+"1' /></td><td>&nbsp;</td></tr>		<tr><td><label>respuesta</label></td><td><label>puntaje</label></td></tr>		<tr id='tr_"+indice_cuestionario_max_edit+"1'><td><input type='text' class='form-control' id='respuesta_edit"+indice_cuestionario_max_edit+"1' name='respuesta_edit"+indice_cuestionario_max_edit+"1'/></td><td><input type='text' onKeyPress='return filterPuntaje(event,this)' class='form-control' name='puntaje_editq"+indice_cuestionario_max_edit+"1' id='puntaje_editq"+indice_cuestionario_max_edit+"1' /></td><td class='text-center'><input type='button' id='btnagregarrespuesta_edit"+indice_cuestionario_max_edit+"' name='btnagregarrespuesta_edit"+indice_cuestionario_max_edit+"' value='Agregar' onclick='agregar_fila_edit("+'"'+'tabla'+indice_cuestionario_max_edit+'"'+','+indice_cuestionario_max_edit+")' class='btn btn-primary' /></td><td class='text-center'><input type='button' id='btnquitarrespuesta_edit"+indice_cuestionario_max_edit+"' name='btnquitarrespuesta_edit"+indice_cuestionario_max_edit+"' value='Quitar' onclick='quitar_fila_edit("+'"'+'tr_'+indice_cuestionario_max_edit.toString() +'"'+','+indice_cuestionario_max_edit+")' disabled class='btn btn-outline-primary' /></td></tr></table></div></div></div></div>";
 				document.getElementById("contenido_evaluacion_edit").insertAdjacentHTML('afterend',mi_html_edit);
 			});
 			
@@ -608,8 +641,19 @@
 					}
 				}
 			}
-			if(total_coincidencias_edit >=total_indice_cuestionario_edit)
-				return true;
+			if(total_coincidencias_edit >=total_indice_cuestionario_edit){
+				var rpta_celda_agregada_edit, puntaje_celda_agregada_edit;
+				var flag_agregado_pr_edit = true;
+				for(var i=0;i<agregado_pregunta_respuesta_edit.length;i++){
+					rpta_celda_agregada_edit = $("#respuestaceldaagregadaedit"+agregado_pregunta_respuesta_edit[i]).val();
+					puntaje_celda_agregada_edit = $("#puntaje_celda_agregada_edit"+agregado_pregunta_respuesta_edit[i]).val();
+					if(! (rpta_celda_agregada_edit.trim()!="" && puntaje_celda_agregada_edit.trim()!="")){
+						flag_agregado_pr_edit = false;
+					}
+				}
+				if(flag_agregado_pr_edit)
+					return true;
+			}
 			return false;
 			
 		}
@@ -717,7 +761,7 @@
 						while(bandera_j){
 							if(array_id_pregunta_respuesta_edit[j] == "*"){
 								pregunta_editidedit = id_pregunta_respuesta_edit.substring(i+1,j);
-								pregunta_editedit = $("#pregunta_edit"+pregunta_editidedit).val();	
+								pregunta_editedit = $("#pregunta_edit"+pregunta_editidedit).val();
 								x = j+1;
 								bandera_x = true;
 								while(bandera_x){
@@ -849,6 +893,21 @@
 					}
 				}
 				
+				var agregado_rp_edit = new Array();
+				
+				for(var i=0;i<agregado_pregunta_respuesta_edit.length;i++){
+					var respuestaceldaagregadaedit = $("#respuestaceldaagregadaedit"+ agregado_pregunta_respuesta_edit[i]).val();
+					var puntajeceldaagregadaedit = $("#puntaje_celda_agregada_edit"+ agregado_pregunta_respuesta_edit[i]).val();
+					var dato = agregado_pregunta_respuesta_edit[i].split("_");
+					var questionarioeditid = dato[1];
+					
+					agregado_rp_edit.push({
+						respuesta : respuestaceldaagregadaedit,
+						puntaje : puntajeceldaagregadaedit,
+						cuestionarioid  : questionarioeditid
+					});
+				}
+				
 				var evaluaciondtoedit = {
 					evaluacion : {
 						id: id_evaluacionedit,
@@ -867,8 +926,10 @@
 					listarubrica: array_rubricaedit,
 					listaquestionario : array_cuestionarioedit,
 					eliminado_rubrica: eliminado_rubrica_edit,
-					eliminado_questionario : eliminado_questionario_edit
-				};
+					eliminado_questionario : eliminado_questionario_edit,
+					eliminado_pregunta_respuesta : eliminado_pregunta_respuestaedit,
+					agregado_rp_edit : agregado_rp_edit
+				}
 				
 				$.ajax({
 					type : "POST",

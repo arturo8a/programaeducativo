@@ -147,6 +147,15 @@ public class EvaluacionServiceImpl implements IEvaluacionService{
 					evaluacionquestionariorepo.guardar(dto.getEvaluacion().getId(), obj.getId());
 				}
 			});
+			
+			dto.getEliminado_pregunta_respuesta().forEach(obj->{
+				questionariorespuestarepo.eliminar(obj.getId());
+			});
+			
+			dto.getAgregado_rp_edit().forEach(obj->{
+				questionariorespuestarepo.guardar(obj.getPuntaje(), obj.getRespuesta(), obj.getCuestionarioid());
+			});
+			
 			rpta = dto.getEvaluacion() != null ? dto.getEvaluacion().getId() : 0;
 		}		
 		return rpta;
