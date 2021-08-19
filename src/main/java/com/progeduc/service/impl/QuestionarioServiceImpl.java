@@ -49,4 +49,6 @@ public class QuestionarioServiceImpl implements IQuestionarioService{
 	public int updateestado(Integer id,Integer estado) {
 		return repo.updateestado(id, estado);
 	}
+	
+	
 }

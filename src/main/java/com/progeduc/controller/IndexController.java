@@ -922,7 +922,9 @@ public class IndexController {
         	obj.getQuestionario().getQuestionariorespuesta().forEach(pr->{
         		id_pr += pr.getId() + "-";
         	});
-        	id_pregunta_respuesta += "(" + obj.getQuestionario().getId().toString() + "*" + (id_pr.substring(0,id_pr.length()-1)) + ")";
+        	if(id_pr!="") {
+        		id_pregunta_respuesta += "(" + obj.getQuestionario().getId().toString() + "*" + (id_pr.substring(0,id_pr.length()-1)) + ")";
+        	}        	
         });
        
         model.addAttribute("id_evaluacion", eval.getId()); 
