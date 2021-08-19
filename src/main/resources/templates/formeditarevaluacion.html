@@ -326,7 +326,7 @@
 				for(var i=0;i<agregado_pregunta_respuesta_edit.length;i++){
 					if(agregado_pregunta_respuesta_edit[i] == (i_celda_agregada_edit+"_"+idquestionario)){
 						agregado_pregunta_respuesta_edit.splice(i,1);
-					}						
+					}
 				}
 			}
 		}
@@ -445,6 +445,7 @@
 				indice_cuestionario_max_edit ++;
 				total_indice_cuestionario_edit++;
 				array_indice.push(indice_cuestionario_max_edit);
+				indice_respuesta_edit = 1;
 				mi_rubrica_edit = 'contenido_rubrica_edit' + indice_cuestionario_max_edit;
 				mi_questionario_edit = 'contenido_questionario_edit' + indice_cuestionario_max_edit;
 				mi_html_edit = "<div class='alert alert-warning' id='div_rubrica_cuestionario_edit"+indice_cuestionario_max_edit+"'><button id='eliminarCuestionarioEdit"+indice_cuestionario_max_edit+"' type='button' onclick='eliminarRubricaCuestionarioEdit("+'`'+indice_cuestionario_max_edit+'`'+")' style='float:right;cursor:pointer'>X</button><div class='row'><div class='col-xs-12 col-sm-12'><table width='40%'><tr><td><strong>Seleccione tipo de cuestionario</strong></td><td><input type='radio' name='r"+indice_cuestionario_max_edit+"' id='r"+indice_cuestionario_max_edit+"' value='1' onchange='fn_questionario_edit(this,"+'`'+indice_cuestionario_max_edit+'`'+","+'`'+indice_cuestionario_max_edit+'`'+");' checked> Rubrica </td><td>	<input type='radio' name='cuestionario"+indice_cuestionario_max_edit+"' id='c"+indice_cuestionario_max_edit+"' value='2' onchange='fn_questionario_edit(this,"+'`'+indice_cuestionario_max_edit+'`'+","+'`'+indice_cuestionario_max_edit+'`'+");' > Cuestionario </td></tr></table> </div></div>  <div id='"+mi_rubrica_edit+"'><div class='row' style=''><div class='col-xs-12 col-sm-6'>&nbsp;</div><div class='col-xs-12 col-sm-6 text-left'><table style='width:100%'><tr><td><label style='margin:5px'>Rubrica</label></td><td><input type='text' name='rubrica_edit"+indice_cuestionario_max_edit+"' id='rubrica_edit"+indice_cuestionario_max_edit+"' class='form-control'></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio_edit"+indice_cuestionario_max_edit+"1' name='criterio_edit"+indice_cuestionario_max_edit+"1' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion_edit"+indice_cuestionario_max_edit+"1' id='descripcion_edit"+indice_cuestionario_max_edit+"1' class='form-control'></textarea><br><table><tr><td><label>puntaje</label></td><td><input type='text' onKeyPress='return filterPuntaje(event,this)' class='form-control' name='puntaje_edit"+indice_cuestionario_max_edit+"1' id='puntaje_edit"+indice_cuestionario_max_edit+"1' /></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio_edit"+indice_cuestionario_max_edit+"2' name='criterio_edit"+indice_cuestionario_max_edit+"2' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion_edit"+indice_cuestionario_max_edit+"2' id='descripcion_edit"+indice_cuestionario_max_edit+"2' class='form-control'></textarea><br><table><tr><td><label>puntaje</label></td><td><input type='text' onKeyPress='return filterPuntaje(event,this)' class='form-control' name='puntaje_edit"+indice_cuestionario_max_edit+"2' id='puntaje_edit"+indice_cuestionario_max_edit+"2' /></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio_edit"+indice_cuestionario_max_edit+"3' name='criterio_edit"+indice_cuestionario_max_edit+"3' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion_edit"+indice_cuestionario_max_edit+"3' id='descripcion_edit"+indice_cuestionario_max_edit+"3' class='form-control'></textarea><br><table><tr><td><label>puntaje</label></td><td><input type='text' onKeyPress='return filterPuntaje(event,this)' class='form-control' name='puntaje_edit"+indice_cuestionario_max_edit+"3' id='puntaje_edit"+indice_cuestionario_max_edit+"3' /></td></tr></table></div><div class='col-xs-12 col-sm-6 col-md-3'><label>Criterio</label><input type='text' id='criterio_edit"+indice_cuestionario_max_edit+"4' name='criterio_edit"+indice_cuestionario_max_edit+"4' class='form-control' /><br><textarea rows='3' style='width:100%' name='descripcion_edit"+indice_cuestionario_max_edit+"4' id='descripcion_edit"+indice_cuestionario_max_edit+"4' class='form-control'></textarea><br><table><tr><td><label>puntaje</label></td><td><input type='text' onKeyPress='return filterPuntaje(event,this)' class='form-control' name='puntaje_edit"+indice_cuestionario_max_edit+"4' id='puntaje_edit"+indice_cuestionario_max_edit+"4' />	</td></tr></table></div></div></div><div id='"+mi_questionario_edit+"' style='display:none'><div class='row' style=''><div class='col-xs-12 col-sm-12'><table style='width:100%' id='tabla"+indice_cuestionario_max_edit+"'><tr><td colspan='2'><label>Ingrese pregunta</label><input type='text' class='form-control' id='pregunta_edit"+indice_cuestionario_max_edit+"1' name='pregunta_edit"+indice_cuestionario_max_edit+"1' /></td><td>&nbsp;</td></tr>		<tr><td><label>respuesta</label></td><td><label>puntaje</label></td></tr>		<tr id='tr_"+indice_cuestionario_max_edit+"1'><td><input type='text' class='form-control' id='respuesta_edit"+indice_cuestionario_max_edit+"1' name='respuesta_edit"+indice_cuestionario_max_edit+"1'/></td><td><input type='text' onKeyPress='return filterPuntaje(event,this)' class='form-control' name='puntaje_editq"+indice_cuestionario_max_edit+"1' id='puntaje_editq"+indice_cuestionario_max_edit+"1' /></td><td class='text-center'><input type='button' id='btnagregarrespuesta_edit"+indice_cuestionario_max_edit+"' name='btnagregarrespuesta_edit"+indice_cuestionario_max_edit+"' value='Agregar' onclick='agregar_fila_edit("+'"'+'tabla'+indice_cuestionario_max_edit+'"'+','+indice_cuestionario_max_edit+")' class='btn btn-primary' /></td><td class='text-center'><input type='button' id='btnquitarrespuesta_edit"+indice_cuestionario_max_edit+"' name='btnquitarrespuesta_edit"+indice_cuestionario_max_edit+"' value='Quitar' onclick='quitar_fila_edit("+'"'+'tr_'+indice_cuestionario_max_edit.toString() +'"'+','+indice_cuestionario_max_edit+")' disabled class='btn btn-outline-primary' /></td></tr></table></div></div></div></div>";
@@ -561,6 +562,7 @@
 									var indice_rp_i = respuesta_edit_puntaje_edit.length ;
 									var indice_rp_f = respuesta_edit_puntaje_edit.length ;
 									respuesta_edit_puntaje_edit = id_pregunta_respuesta_edit.substring(j+1,x);
+									console.log("respuesta_edit_puntaje_edit :" + respuesta_edit_puntaje_edit);
 									respuesta_edit_puntaje_edit = respuesta_edit_puntaje_edit.split("-");
 									bandera_editar = true;	
 									for(var r=0;r<indice_cuestionario_edit_eliminado.length;r++){
@@ -580,7 +582,8 @@
 										}
 										i=x;
 										bandera_x = false;
-									}else{
+									}
+									else{
 										i=x;
 										bandera_x = false;
 									}										
@@ -590,9 +593,7 @@
 							bandera_j = false; 
 							j++;
 						}
-						else{
-							j++;
-						}
+						j++;
 					}
 				}
 			}
@@ -697,7 +698,7 @@
 				keyboard:false
 			});
 			
-			if(validarCamposedit()){	
+			if(validarCamposedit()){
 				id_evaluacionedit = $("#id_evaluacion_edit").val();
 				id_rubricaedit = $("#id_rubrica_edit").val();
 				id_questionarioedit = $("#id_questionario").val();
@@ -754,6 +755,7 @@
 				array_id_pregunta_respuesta_edit= new Array();
 				id_pregunta_respuesta_edit = $("#id_pregunta_respuesta_edit").val();
 				array_id_pregunta_respuesta_edit = id_pregunta_respuesta_edit.split('');
+				console.log("id_pregunta_respuesta_edit :" + id_pregunta_respuesta_edit);
 				for(var i=0;i<array_id_pregunta_respuesta_edit.length-1;i++){
 					j = i+1;
 					if(array_id_pregunta_respuesta_edit[i] == "("){
@@ -764,10 +766,11 @@
 								pregunta_editedit = $("#pregunta_edit"+pregunta_editidedit).val();
 								x = j+1;
 								bandera_x = true;
+								var indice_rp_i, indice_rp_f;
 								while(bandera_x){
 									if(array_id_pregunta_respuesta_edit[x] == ")"){
-										var indice_rp_i = respuesta_edit_puntaje_edit.length ;
-										var indice_rp_f = respuesta_edit_puntaje_edit.length ;
+										var indice_rp_i = array_respuesta_puntaje_edit.length ;
+										var indice_rp_f = array_respuesta_puntaje_edit.length ;
 										respuesta_edit_puntaje_edit = id_pregunta_respuesta_edit.substring(j+1,x);
 										respuesta_edit_puntaje_edit = respuesta_edit_puntaje_edit.split("-");
 										bandera_editar = true;	
@@ -785,8 +788,7 @@
 													respuesta : respuesta_editedit,
 													puntaje : parseFloat(puntaje_editedit)
 												});
-												indice_rp_f ++;
-												
+												indice_rp_f ++;												
 											}
 											array_cuestionarioedit.push({
 												id : pregunta_editidedit,
@@ -806,12 +808,11 @@
 								bandera_j = false; 
 								j++;
 							}
-							else{
-								j++;
-							}
+							j++;
 						}
 					}
 				}
+				
 				indice_cuestionario_edit = parseInt(indice_cuestionario_edit) +  1;	
 				for(var i=indice_cuestionario_edit; i<= parseInt(indice_cuestionario_max_edit);i++){
 					if($("#r"+i).is(":checked")){

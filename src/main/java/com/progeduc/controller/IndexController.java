@@ -860,7 +860,8 @@ public class IndexController {
             	});
             	indices = indices.substring(0,indices.length()-1);
             	indices += "-";
-            	id_pregunta_respuesta_edit += "(" + obj.getQuestionario().getId().toString() + "*" + (id_pr.substring(0,id_pr.length()-1)) + ")";
+            	if(id_pr!="")
+            		id_pregunta_respuesta_edit += "(" + obj.getQuestionario().getId().toString() + "*" + (id_pr.substring(0,id_pr.length()-1)) + ")";
         	}
         });
         

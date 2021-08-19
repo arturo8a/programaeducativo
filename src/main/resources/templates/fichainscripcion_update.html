@@ -136,7 +136,7 @@
 					  	<br><br>
 					  	<div class="row">
 					  		<div class="col-12 text-left">
-					  			<strong>Código de local I.E.</strong>	
+					  			<strong>Código de local I.E.</strong>
 					  			<div class="ui-widget">
 					  				<input type="hidden" th:value="${cuarta_etapa_desde}" id="cuarta_etapa_desde" />
 					  				<input type="hidden" th:value="${cuarta_etapa_hasta}" id="cuarta_etapa_hasta" />
@@ -546,12 +546,12 @@
 		
 		$("#trabajosfinales-tab").click(function(){
 			$('#myTab a[href="#trabajosfinales"]').tab('show');
-			setTimeout(function(){ 				
+			setTimeout(function(){
 				listar_trabajos_finales(); 
 				if($("#activar_trabajos_finales").val() != 1){
 					$("#agregartrabajo").prop("disabled",true);
 					$("#finalizarparticipacion").prop("disabled",true);
-				}			
+				}
 			}, 100);
 		});
 		
