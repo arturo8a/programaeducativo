@@ -422,7 +422,7 @@ public class ReporteController {
 		cell33.setCellValue("Datos del auspicio");
 		cell33.setCellStyle(my_style_Cabecera1);
 		
-		sheet.addMergedRegion(new CellRangeAddress(2,2,31,32));
+		//sheet.addMergedRegion(new CellRangeAddress(2,2,31,31));
 		
 		
 		/*Contenido de la lista - Cabecera*/
