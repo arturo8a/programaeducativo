@@ -206,7 +206,7 @@ public class IndexController {
 	
 	int contador;
 	String id_rubrica,id_questionario,ods,id_pregunta_respuesta,id_pr;
-	String id_rubrica_edit,id_questionario_edit,ods_edit,id_pregunta_respuesta_edit,id_pr_edit;
+	String id_rubrica_edit,id_questionario_edit,ods_edit,id_questionario_pregunta_respuesta_edit,id_pr_edit;
 	Integer odsid;
 	String indices;
 	
@@ -819,7 +819,7 @@ public class IndexController {
 		id_rubrica_edit = "";
 		id_questionario_edit ="";
 		id_pr_edit="";
-		id_pregunta_respuesta_edit="";
+		id_questionario_pregunta_respuesta_edit="";
 		
 		Integer mayor=0;
 		indices ="";
@@ -861,7 +861,7 @@ public class IndexController {
             	indices = indices.substring(0,indices.length()-1);
             	indices += "-";
             	if(id_pr!="")
-            		id_pregunta_respuesta_edit += "(" + obj.getQuestionario().getId().toString() + "*" + (id_pr.substring(0,id_pr.length()-1)) + ")";
+            		id_questionario_pregunta_respuesta_edit += obj.getQuestionario().getId().toString() + "*" + (id_pr.substring(0,id_pr.length()-1)) + "/";
         	}
         });
         
@@ -886,7 +886,7 @@ public class IndexController {
         model.addAttribute("id_evaluacion_edit", eval.getId()); 
         model.addAttribute("id_rubrica_edit", id_rubrica_edit);
         model.addAttribute("id_questionario_edit", id_questionario);
-        model.addAttribute("id_pregunta_respuesta_edit", id_pregunta_respuesta_edit);
+        model.addAttribute("id_questionario_pregunta_respuesta_edit", id_questionario_pregunta_respuesta_edit);
         
         model.addAttribute("max", mayor);
         
@@ -912,20 +912,24 @@ public class IndexController {
 		
 		List<Rubrica> listaRubrica = new ArrayList<Rubrica>();
         evaluacionrubricaServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
-        	listaRubrica.add(obj.getRubrica());
-        	id_rubrica += obj.getRubrica().getId().toString() + "-";
+        	if(obj.getRubrica().getEstado()==1) {
+        		listaRubrica.add(obj.getRubrica());
+	        	id_rubrica += obj.getRubrica().getId().toString() + "-";
+        	}
         });
         
         List<Questionario> listaQuestionario = new ArrayList<Questionario>();
         evaluacionquestionarioServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
-        	listaQuestionario.add(obj.getQuestionario());
-        	id_pr = "";
-        	obj.getQuestionario().getQuestionariorespuesta().forEach(pr->{
-        		id_pr += pr.getId() + "-";
-        	});
-        	if(id_pr!="") {
-        		id_pregunta_respuesta += "(" + obj.getQuestionario().getId().toString() + "*" + (id_pr.substring(0,id_pr.length()-1)) + ")";
-        	}        	
+        	if(obj.getQuestionario().getEstado()==1) {
+        		listaQuestionario.add(obj.getQuestionario());
+            	id_pr = "";
+            	obj.getQuestionario().getQuestionariorespuesta().forEach(pr->{
+            		id_pr += pr.getId() + "-";
+            	});
+            	if(id_pr!="") {
+            		id_pregunta_respuesta += "(" + obj.getQuestionario().getId().toString() + "*" + (id_pr.substring(0,id_pr.length()-1)) + ")";
+            	}
+        	}  	
         });
        
         model.addAttribute("id_evaluacion", eval.getId()); 
