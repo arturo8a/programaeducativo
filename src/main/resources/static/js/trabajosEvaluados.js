@@ -241,8 +241,8 @@ function getRespuestas(id){
 			var dataRespuestas = respuesta; console.log(dataRespuestas); 
 			$.each(dataRespuestas, function( i, value ) {
 				if(value.tipo == 1){
-					$("input[name='pregunta"+value.respuestaid+"'][value='"+value.puntaje+"']").prop("checked",true);
-					$("input[name='pregunta"+value.respuestaid+"'][value='"+value.puntaje+"']").click();
+					$("input[name='pregunta"+value.respuestaid+"'][value='"+(value.puntaje).toFixed(1)+"']").prop("checked",true);
+					$("input[name='pregunta"+value.respuestaid+"'][value='"+(value.puntaje).toFixed(1)+"']").click();
 				}else{
 					$("input[id='puntajeq"+value.respuestaid+"']").prop("checked",true);
 					$("input[id='puntajeq"+value.respuestaid+"']").click();
