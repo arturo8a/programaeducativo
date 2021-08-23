@@ -379,7 +379,10 @@ function getUsuario(idUsuario){
 				$("#idAlianzaEstrategica").val(respuesta.id);
 				$("#odsresgusu").val(respuesta.ods.id);
 				$("#anioregusu").val(respuesta.anio);
-				$("#categoriaregusu").val(respuesta.categoria.id);
+				if(respuesta.categoria !== null){
+					$("#categoriaregusu").val(respuesta.categoria.id);
+				}
+				
 				$("#entidadregusu").val(respuesta.entidad);
 				$("#direccionregusu").val(respuesta.direccion);
 				
@@ -475,10 +478,15 @@ function validarCampos(){
 		contentMensajeError += "Debe seleccionar ODS"+"</br>";
 		status = false;
 	}
-	if($("#categoriaregusu").val() == "0"){
-		contentMensajeError += "Debe seleccionar Categoría"+"</br>";
-		status = false;
+	
+	if($('#perfilregusuComiteEvaluador').is(':checked') ) {
+    	if($("#categoriaregusu").val() == "0"){
+			contentMensajeError += "Debe seleccionar Categoría"+"</br>";
+			status = false;
+		}
 	}
+	
+	
 	if($("#entidadregusu").val() == "0"){
 		contentMensajeError += "Debe ingresar Entidad"+"</br>";
 		status = false;
