@@ -850,13 +850,13 @@ public class ConcursoeducativoController {
 					if(ua.getComitetecnico().equals("1")) {
 						rol_entidad = "Comite Técnico/";
 					}				
-					if(ua.getComitetecnico().equals("1")) {
+					if(ua.getComiteevaluador().equals("1")) {
 						rol_entidad += "Comite Evaluador/";
 					}				
-					if(ua.getComitetecnico().equals("1")) {
+					if(ua.getAuspiciador().equals("1")) {
 						rol_entidad += "Auspiciador/";
 					}				
-					if(ua.getComitetecnico().equals("1")) {
+					if(ua.getAliado().equals("1")) {
 						rol_entidad += "Aliado/";
 					}				
 					if(rol_entidad.length()>0)
@@ -884,13 +884,13 @@ public class ConcursoeducativoController {
 					if(ua.getComitetecnico().equals("1")) {
 						rol_entidad = "Comite Técnico/";
 					}				
-					if(ua.getComitetecnico().equals("1")) {
+					if(ua.getComiteevaluador().equals("1")) {
 						rol_entidad += "Comite Evaluador/";
 					}				
-					if(ua.getComitetecnico().equals("1")) {
+					if(ua.getAuspiciador().equals("1")) {
 						rol_entidad += "Auspiciador/";
 					}				
-					if(ua.getComitetecnico().equals("1")) {
+					if(ua.getAliado().equals("1")) {
 						rol_entidad += "Aliado/";
 					}				
 					if(rol_entidad.length()>0)
@@ -923,13 +923,13 @@ public class ConcursoeducativoController {
 						if(ua.getComitetecnico().equals("1")) {
 							rol_entidad = "Comite Técnico/";
 						}				
-						if(ua.getComitetecnico().equals("1")) {
+						if(ua.getComiteevaluador().equals("1")) {
 							rol_entidad += "Comite Evaluador/";
 						}				
-						if(ua.getComitetecnico().equals("1")) {
+						if(ua.getAuspiciador().equals("1")) {
 							rol_entidad += "Auspiciador/";
 						}				
-						if(ua.getComitetecnico().equals("1")) {
+						if(ua.getAliado().equals("1")) {
 							rol_entidad += "Aliado/";
 						}				
 						if(rol_entidad.length()>0)
