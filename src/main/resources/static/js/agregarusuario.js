@@ -479,7 +479,7 @@ function validarCampos(){
 		status = false;
 	}
 	
-	if($('#perfilregusuAuspiciador').is(':checked') ) {
+	if($('#perfilregusuComiteEvaluador').is(':checked') ) {
     	if($("#categoriaregusu").val() == "0"){
 			contentMensajeError += "Debe seleccionar Categoría"+"</br>";
 			status = false;
