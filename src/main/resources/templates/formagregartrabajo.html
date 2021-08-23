@@ -180,6 +180,9 @@
 					<tr>
 						<td><input type="checkbox" id="carencias" /><label style="padding-left:5px" for="carencias">Las carencias que ponen en riesgo la vida</label></td>
 					</tr>
+					<tr>
+						<td><input type="checkbox" id="revaloracion" /><label style="padding-left:5px" for="revaloracion">Revaloración de las prácticas ancestrales para la seguridad hídrica</label></td>
+					</tr>
 				</table>
 			</div>
 		</div>		
@@ -321,7 +324,7 @@
 	var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="", apellidopaternotrabajo="",apellidomaternotrabajo="",nombretrabajo="",tipodoctrabajo="",nrodoctrabajo="",nrotelefonotrabajo="",correotrabajo="",generotrabajo="";
 	var mensajeValidacion, celdas_seleccionadas = 0;
 	var acumulanivel = "", table_lpt;
-	var conversacion,valoracionagua,valoracionalcantarillado,buenuso,importancia,vinculo,carencias;
+	var conversacion,valoracionagua,valoracionalcantarillado,buenuso,importancia,vinculo,carencias,revaloracion;
 	var arrayParticipante , array_nivel, arrayNombreParticipante;
 	var contador_archivos_subidos;
 	var click = true;
@@ -508,6 +511,7 @@
 				importancia = $("#importancia").is(":checked") ? 1 : 0;
 				vinculo = $("#vinculo").is(":checked") ? 1 : 0;
 				carencias = $("#carencias").is(":checked") ? 1 : 0;
+				revaloracion = $("#revaloracion").is(":checked") ? 1 : 0;
 				
 				var trabajosfinales = {
 					categoriatrabajo  : {
@@ -526,6 +530,7 @@
 					vinculo : vinculo,
 					puesto: 0,
 					carencias : carencias,
+					revaloracion : revaloracion,
 					appaterno: apellidopaternotrabajo,
 					apmaterno : apellidomaternotrabajo,
 					nombre : nombretrabajo,
@@ -721,6 +726,7 @@
 		$("#importancia").prop("checked", false);
 		$("#vinculo").prop("checked", false);
 		$("#carencias").prop("checked", false);
+		$("#revaloracion").prop("checked",false);
 		$("#appaternodocentetrabajo").val("");
 		$("#apmaternodocentetrabajo").val("");
 		$("#nombredocentetrabajo").val();
@@ -812,6 +818,7 @@
 		importancia = $("#importancia").is(":checked");
 		vinculo = $("#vinculo").is(":checked");
 		carencias = $("#carencias").is(":checked");
+		revaloracion = $("#revaloracion").is(":checked");
 		
 		if(categoriatrabajo == 0){
 			mensajeValidacion = "Debe seleccionar categoria"+"<br>";
@@ -822,10 +829,10 @@
 		}
 		else{
 			if( modalidadtrabajo == 1 && celdas_seleccionadas != 1 ) {
-				mensajeValidacion += "Debe seleccionar 1 celda de la tabla "+"<br>";
+				mensajeValidacion += "Debe seleccionar 1 participante de la tabla "+"<br>";
 			}
 			if( modalidadtrabajo == 2 && celdas_seleccionadas < 2 ) {
-				mensajeValidacion += "Debe seleccionar mínimo 2 celdas de la tabla"+"<br>";
+				mensajeValidacion += "Debe seleccionar mínimo 2 participantes de la tabla"+"<br>";
 			}
 		}
 		
@@ -907,7 +914,7 @@
 			mensajeValidacion += "Debe seleccionar participantes con el mismo nivel"+"<br>";
 		}
 		
-		if( ! (conversacion || valoracionagua || valoracionalcantarillado || buenuso || importancia || vinculo  || carencias)){
+		if( ! (conversacion || valoracionagua || valoracionalcantarillado || buenuso || importancia || vinculo  || carencias || revaloracion)){
 			mensajeValidacion += "Debe seleccionar ejes temáticos"+"<br>";
 		}
 		

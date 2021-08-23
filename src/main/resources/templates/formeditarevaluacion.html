@@ -490,7 +490,6 @@
 						if(parseFloat($("#puntaje_edit"+id_rubrica_edit[i].toString()+j.toString()).val())>puntaje_inicial)
 							puntaje_inicial = parseFloat($("#puntaje_edit"+id_rubrica_edit[i]+j).val());
 					}
-					console.log("puntaje_inicial 1 " + puntaje_inicial); 
 					suma_habilitar_evaluacion +=parseFloat(puntaje_inicial);
 				}
 			}			
@@ -539,7 +538,6 @@
 							if(parseFloat($("#puntaje_edit"+array_indice[i].toString()+j.toString()).val())>puntaje_inicial)
 								puntaje_inicial = parseFloat($("#puntaje_edit"+array_indice[i].toString()+j.toString()).val());
 						}
-						$("#puntaje_inicial 3 : "+puntaje_edit).val()
 						suma_habilitar_evaluacion += parseFloat(puntaje_inicial);
 					}
 				}
@@ -558,11 +556,10 @@
 					   while($("#respuesta_edit"+array_indice[i].toString()+indice_rp.toString()).length > 0 ){
 							respuesta_edit = $("#respuesta_edit"+array_indice[i].toString()+indice_rp.toString()).val();
 							puntaje_edit = parseFloat($("#puntaje_editq"+array_indice[i].toString()+indice_rp.toString()).val());
-							if( !(pregunta_edit.trim()!="" && respuesta_edit.trim()!="" && puntaje_edit()!="") )  {
+							if( !(pregunta_edit.trim()!="" && respuesta_edit.trim()!="" && puntaje_edit!="") )  {
 								flag = false;
 							}
 							else{
-								$("#puntaje_inicial 4 : "+puntaje_edit);
 								suma_habilitar_evaluacion += puntaje_edit;
 							}
 							indice_rp ++;

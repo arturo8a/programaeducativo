@@ -1071,14 +1071,14 @@ public class ConcursoeducativoController {
 							if(tf_ua.getUsuarioalianza().getComitetecnico().equals("1")) {
 								rol_entidad = "Comite Técnico/";
 							}				
-							if(tf_ua.getUsuarioalianza().getComitetecnico().equals("1")) {
+							if(tf_ua.getUsuarioalianza().getComiteevaluador().equals("1")) {
 								rol_entidad += "Comite Evaluador/";
 							}				
-							if(tf_ua.getUsuarioalianza().getComitetecnico().equals("1")) {
+							if(tf_ua.getUsuarioalianza().getAuspiciador().equals("1")) {
 								rol_entidad += "Auspiciador/";
 							}				
-							if(tf_ua.getUsuarioalianza().getComitetecnico().equals("1")) {
-								rol_entidad += "Aliado/";
+							if(tf_ua.getUsuarioalianza().getAliado().equals("1")) {
+								rol_entidad += "Aliador/";
 							}
 							if(rol_entidad.length()>0)
 								rol_entidad = rol_entidad.substring(0, rol_entidad.length()-1);	
@@ -1122,13 +1122,13 @@ public class ConcursoeducativoController {
 					if(tf_ua.getUsuarioalianza().getComitetecnico().equals("1")) {
 						rol_entidad = "Comite Técnico/";
 					}				
-					if(tf_ua.getUsuarioalianza().getComitetecnico().equals("1")) {
+					if(tf_ua.getUsuarioalianza().getComiteevaluador().equals("1")) {
 						rol_entidad += "Comite Evaluador/";
 					}				
-					if(tf_ua.getUsuarioalianza().getComitetecnico().equals("1")) {
+					if(tf_ua.getUsuarioalianza().getAuspiciador().equals("1")) {
 						rol_entidad += "Auspiciador/";
 					}				
-					if(tf_ua.getUsuarioalianza().getComitetecnico().equals("1")) {
+					if(tf_ua.getUsuarioalianza().getAliado().equals("1")) {
 						rol_entidad += "Aliado/";
 					}
 					if(rol_entidad.length()>0)
@@ -1176,13 +1176,13 @@ public class ConcursoeducativoController {
 								if(tf_ua.getUsuarioalianza().getComitetecnico().equals("1")) {
 									rol_entidad = "Comite Técnico/";
 								}				
-								if(tf_ua.getUsuarioalianza().getComitetecnico().equals("1")) {
+								if(tf_ua.getUsuarioalianza().getComiteevaluador().equals("1")) {
 									rol_entidad += "Comite Evaluador/";
 								}				
-								if(tf_ua.getUsuarioalianza().getComitetecnico().equals("1")) {
+								if(tf_ua.getUsuarioalianza().getAuspiciador().equals("1")) {
 									rol_entidad += "Auspiciador/";
 								}				
-								if(tf_ua.getUsuarioalianza().getComitetecnico().equals("1")) {
+								if(tf_ua.getUsuarioalianza().getAliado().equals("1")) {
 									rol_entidad += "Aliado/";
 								}
 								if(rol_entidad.length()>0)

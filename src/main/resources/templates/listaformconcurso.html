@@ -454,7 +454,7 @@
 	  <div class="modal-dialog modal-lg" role="document">
 	    <div class="modal-content" style="overflow-y: scroll; height:600px; width:80%">
 	      <div class="modal-header">
-	        <strong class="pt-1">ASIGNAR EVALUADOR</strong>
+	        <strong class="pt-1">ALIANZA ESTRATEGICA</strong>
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 	          <span aria-hidden="true">&times;</span>
 	        </button>
@@ -516,6 +516,24 @@
 	  </div>
 	</div>
 </center>
+
+<center>
+	<div class="modal fade" tabindex="-1" role="dialog" id="modalDetalleEvaluacion" aria-labelledby="myLargeModalLabel" >
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content" style="overflow-y: scroll; height:600px;width:50%">
+	      <div class="modal-header">
+	        <strong class="pt-1"></strong>
+	      </div>
+	      <div class="modal-body" id="contenidoDetalleEvaluacion">
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-outline-primary" id="btnCerrarModalDetalleEvaluacion" name="btnCerrarModalDetalleEvaluacion">Cerrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</center>
+
 <!--MODAL FINALIZAR-->
 <center>
 	<div class="modal fade" tabindex="-1" role="dialog" id="modalFinalizar" aria-labelledby="myLargeModalLabel" >
@@ -846,7 +864,7 @@
 		        	},
 	                /*{ 'defaultContent' : '<img src="./images/svg/eye-solid.svg" class="permiso" style="width:20px; cursor:pointer"/>' },*/
 	                { 'data' : 'estado' },
-	                { 'defaultContent' : '<img src="./images/svg/eye-solid.svg" class="detalleevaluacion" style="width:20px; cursor:pointer"/>' },
+	                { 'defaultContent' : '<img src="./images/svg/eye-solid.svg" class="ce_detalleevaluacion" style="width:20px; cursor:pointer"/>' },
 	                { 'data' : 'calificacion' },
 	                { 'data' : 'puesto'}
 	            ],
@@ -897,6 +915,7 @@
 			obtener_fichatrabajo("#table_lista_concurso tbody",table_lista_concurso);
 			obtener_evidencia("#table_lista_concurso tbody",table_lista_concurso);
 			obtener_trabajos("#table_lista_concurso tbody",table_lista_concurso);
+			obtener_ce_detalleevaluacion("#table_lista_concurso tbody",table_lista_concurso);
 		}
 		
 		var listarAlianzaEstrategica = function(){ console.log('mostrar usuario alianza');
@@ -957,7 +976,7 @@
 	                   	   var x = '';
                            switch (data) {
 	                            case '1':
-	                                x = '<img src="./images/svg/eye-solid.svg" class="evidencia" style="width:20px; cursor:pointer"/><div style="display:none;">SI</div>';
+	                                x = '<img src="./images/svg/check-circle-regular.svg" class="evidencia" style="width:20px; cursor:pointer"/><div style="display:none;">SI</div>';
 	                                break;
 	                            case '0':
 	                            	x = '<div style="display:none;">NO</div>';
@@ -971,7 +990,7 @@
 	                   	   var x = '';
                            switch (data) {
 	                            case '1':
-	                                x = '<img src="./images/svg/eye-solid.svg" class="evidencia" style="width:20px; cursor:pointer"/><div style="display:none;">SI</div>';
+	                                x = '<img src="./images/svg/check-circle-regular.svg" class="evidencia" style="width:20px; cursor:pointer"/><div style="display:none;">SI</div>';
 	                                break;
 	                            case '0':
 	                            	x = '<div style="display:none;">NO</div>';
@@ -985,7 +1004,7 @@
 	                   	   var x = '';
                            switch (data) {
 	                            case '1':
-	                                x = '<img src="./images/svg/eye-solid.svg" class="evidencia" style="width:20px; cursor:pointer"/><div style="display:none;">SI</div>';
+	                                x = '<img src="./images/svg/check-circle-regular.svg" class="evidencia" style="width:20px; cursor:pointer"/><div style="display:none;">SI</div>';
 	                                break;
 	                            case '0':
 	                            	x = '<div style="display:none;">NO</div>';
@@ -999,7 +1018,7 @@
 	                   	   var x = '';
                            switch (data) {
 	                            case '1':
-	                                x = '<img src="./images/svg/eye-solid.svg" class="evidencia" style="width:20px; cursor:pointer"/><div style="display:none;">SI</div>';
+	                                x = '<img src="./images/svg/check-circle-regular.svg" class="evidencia" style="width:20px; cursor:pointer"/><div style="display:none;">SI</div>';
 	                                break;
 	                            case '0':
 	                            	x = '<div style="display:none;">NO</div>';
@@ -1057,6 +1076,10 @@
 	            	      "className": "text-center"
 	                },
 	                {
+	            	      "targets": 11,
+	            	      "className": "text-center"
+	                },
+	                {
 	            	      "targets": 12,
 	            	      "visible": false
 	                }
@@ -1072,9 +1095,8 @@
 	                    titleAttr : 'LISTA DE TRABAJOS FINALES - CONCURSO'
 	            	}
 	            ]
-	        });		
+	        });
 			$("div.rs_alianza_estrategica").html("<strong>RESULTADOS DE ALIANZA ESTRATEGICA</strong>");
-			//cargarEditarUsuario();
 		}
 		
 		$("#btnbuscaralianza").on("click",function(){ 
@@ -1265,6 +1287,42 @@
 				vertrabajo(id);
 			});
 		};
+		
+		var obtener_ce_detalleevaluacion = function(tbody,table){
+			$(tbody).on("click","img.ce_detalleevaluacion",function(){
+				celdaseleccionada = table.row($(this).parents("tr")).index();
+				var data = table.row($(this).parents("tr")).data();
+				id = data.id;
+				console.log("id :"  + id);
+				f_ce_detalleevaluacion(id);
+			});
+		};
+		
+		function f_ce_detalleevaluacion(id){
+	    	
+	    	$.ajax({
+				type : "GET",
+			    contentType : "application/json",
+			    url : url_base + "pedesa/detalleverevaluacion/"+id,
+				success: function(respuesta) {
+					$("#contenidoDetalleEvaluacion").html(respuesta);
+					$("#modalDetalleEvaluacion").modal({
+						show : true,
+						backdrop : 'static',
+						keyboard:false
+					});
+				},
+				error: function() {
+					$("#modalimagencargando").modal('hide');
+					$("#textoerror").html("Excepcion al descargar PDF");
+					$('#modalerror').modal({
+						show : true,
+						backdrop : 'static',
+						keyboard:false
+					});
+			    }
+			});    	
+	    }
 		
 		function verfichatrabajo(id){
 	    	
@@ -1684,6 +1742,10 @@ $(document).ready(function(){
 	
 	$("#btnCerrarFinalizar").on("click",function(e){
 		$("#modalFinalizar").modal('hide');
+	});
+	
+	$("#btnCerrarModalDetalleEvaluacion").on("click",function(e){
+		$("#modalDetalleEvaluacion").modal('hide');
 	});
 	
 	$("#check-todos").on("click",function(e){

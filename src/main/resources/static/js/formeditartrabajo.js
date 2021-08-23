@@ -1,7 +1,7 @@
 var categoriatrabajo="", modalidadtrabajo="",titulotrabajo="",linkvideotrabajo="", apellidopaternotrabajo="",apellidomaternotrabajo="",nombretrabajo="",tipodoctrabajo="",nrodoctrabajo="",nrotelefonotrabajo="",correotrabajo="",generotrabajo="";
 var mensajeValidacion, celdas_seleccionadas = 0;
 var acumulanivel = "", table_lpt_editar;
-var conversacion,valoracionagua,valoracionalcantarillado,buenuso,importancia,vinculo,carencias;
+var conversacion,valoracionagua,valoracionalcantarillado,buenuso,importancia,vinculo,carencias,revaloracion;
 var arrayParticipante , array_nivel, arrayNombreParticipanteEditar;	
 var rows_selected;
 var array_indice = new Array();	
@@ -257,6 +257,7 @@ var mis_evidencias_eliminadas = new Array();
 			importancia = $("#importanciaeditar").is(":checked") ? 1 : 0;
 			vinculo = $("#vinculoeditar").is(":checked") ? 1 : 0;
 			carencias = $("#carenciaseditar").is(":checked") ? 1 : 0;
+			revaloracion = $("#revaloracioneditar").is(":checked") ? 1 : 0;
 			
 			var trabajosfinales = {
 				id: $("#trabajooid").val(),
@@ -276,6 +277,7 @@ var mis_evidencias_eliminadas = new Array();
 				vinculo : vinculo,
 				puesto : 0,
 				carencias : carencias,
+				revaloracion : revaloracion,
 				appaterno: apellidopaternotrabajo,
 				apmaterno : apellidomaternotrabajo,
 				nombre : nombretrabajo,
@@ -496,6 +498,7 @@ var mis_evidencias_eliminadas = new Array();
 		$("#importanciaeditar").prop("checked", false);
 		$("#vinculoeditar").prop("checked", false);
 		$("#carenciaseditar").prop("checked", false);
+		$("#revaloracioneditar").prop("checked",false);
 		$("#appaternodocentetrabajoeditar").val("");
 		$("#apmaternodocentetrabajoeditar").val("");
 		$("#nombredocentetrabajoeditar").val("");
@@ -587,6 +590,7 @@ var mis_evidencias_eliminadas = new Array();
 		importancia = $("#importanciaeditar").is(":checked");
 		vinculo = $("#vinculoeditar").is(":checked");
 		carencias = $("#carenciaseditar").is(":checked");
+		revaloracion = $("#revaloracioneditar").is(":checked");
 		
 		if(categoriatrabajo == 0){
 			mensajeValidacion = "Debe seleccionar categoria"+"<br>";
@@ -597,10 +601,10 @@ var mis_evidencias_eliminadas = new Array();
 		}
 		else{
 			if( modalidadtrabajo == 1 && celdas_seleccionadas != 1 ) {
-				mensajeValidacion += "Debe seleccionar 1 celda de la tabla "+"<br>";
+				mensajeValidacion += "Debe seleccionar 1 participante de la tabla "+"<br>";
 			}
 			if( modalidadtrabajo == 2 && celdas_seleccionadas < 2 ) {
-				mensajeValidacion += "Debe seleccionar mínimo 2 celdas de la tabla"+"<br>";
+				mensajeValidacion += "Debe seleccionar mínimo 2 participantes de la tabla"+"<br>";
 			}
 		}
 		
@@ -682,7 +686,7 @@ var mis_evidencias_eliminadas = new Array();
 			mensajeValidacion += "Debe seleccionar participantes con el mismo nivel"+"<br>";
 		}
 		
-		if( ! (conversacion || valoracionagua || valoracionalcantarillado || buenuso || importancia || vinculo  || carencias)){
+		if( ! (conversacion || valoracionagua || valoracionalcantarillado || buenuso || importancia || vinculo  || carencias || revaloracion)){
 			mensajeValidacion += "Debe seleccionar ejes temáticos"+"<br>";
 		}
 		

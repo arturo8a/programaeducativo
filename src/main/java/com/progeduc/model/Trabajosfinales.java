@@ -45,6 +45,9 @@ public class Trabajosfinales {
 	@Column(name="VALORACIONALCANTARILLADO",nullable=true)
 	private Integer valoracionalcantarillado;
 	
+	@Column(name="REVALORACION",nullable=true)
+	private Integer revaloracion;
+	
 	@Column(name="BUENUSO",nullable=true)
 	private Integer buenuso;
 	
@@ -185,6 +188,14 @@ public class Trabajosfinales {
 
 	public void setBuenuso(Integer buenuso) {
 		this.buenuso = buenuso;
+	}
+
+	public Integer getRevaloracion() {
+		return revaloracion;
+	}
+
+	public void setRevaloracion(Integer revaloracion) {
+		this.revaloracion = revaloracion;
 	}
 
 	public Integer getImportancia() {

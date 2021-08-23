@@ -16,11 +16,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.progeduc.componente.Ldap;
+import com.progeduc.dto.DetalleEvaluacionDto;
 import com.progeduc.model.Aperturaranio;
 import com.progeduc.model.Docente;
 import com.progeduc.model.Docentetutor;
@@ -69,6 +69,7 @@ import com.progeduc.service.ITipodocumentoService;
 import com.progeduc.service.ITipousuarioService;
 import com.progeduc.service.ITrabajosfinalesParticipanteService;
 import com.progeduc.service.ITrabajosfinalesService;
+import com.progeduc.service.ITrabajosfinales_UsuarioAlianzaService;
 import com.progeduc.service.IUsuarioAlianzaService;
 import com.progeduc.service.IUsuarioOdsService;
 import com.progeduc.service.IUsuarioService;
@@ -202,6 +203,9 @@ public class IndexController {
 	@Autowired
 	private ITipoAuspicioService tipoAuspicioServ;
 	
+	@Autowired
+	private ITrabajosfinales_UsuarioAlianzaService trabfin_usuarioal;
+	
 	String participanteid;
 	
 	int contador;
@@ -209,6 +213,7 @@ public class IndexController {
 	String id_rubrica_edit,id_questionario_edit,ods_edit,id_questionario_pregunta_respuesta_edit,id_pr_edit;
 	Integer odsid;
 	String indices;
+	float nota;
 	
 	@GetMapping("/inicio")
 	public String inicio(@RequestParam(name="name",required=false,defaultValue="world") String name, Model model) {
@@ -233,6 +238,27 @@ public class IndexController {
 		return "actualizarcontrasenia";
 	}
 	
+	
+	@GetMapping("/detalleverevaluacion/{id}")
+	public String detalleverevaluacion(@PathVariable("id") Integer id, Model model) {
+		
+		nota = 0;
+		List<DetalleEvaluacionDto> lista = new ArrayList<DetalleEvaluacionDto>();
+		
+		trabfin_usuarioal.listarByTrabajosfinalesId(id).forEach(obj->{
+			DetalleEvaluacionDto dto = new DetalleEvaluacionDto();
+			dto.setNombre(obj.getUsuarioalianza().getNombresautoridad());
+			dto.setAppaterno(obj.getUsuarioalianza().getApepatautoridad());
+			dto.setApmaterno(obj.getUsuarioalianza().getApematautoridad());
+			dto.setNota(obj.getNota()==null ? 0 : obj.getNota());
+			lista.add(dto);		
+			nota = obj.getTrabajosfinales().getNota() == null ? 0 : obj.getTrabajosfinales().getNota();
+		});
+		model.addAttribute("total", nota);
+		model.addAttribute("lista", lista);
+		return "modal_detalleevaluacion";
+	}
+	
 	@GetMapping("/formeditartrabajos/{id}")
 	public String formeditartrabajos(@PathVariable("id") Integer id, Model model) {
 		
@@ -251,6 +277,7 @@ public class IndexController {
 		model.addAttribute("chimportancia", tf.getImportancia()==1 ? true : false);
 		model.addAttribute("chvinculo", tf.getVinculo()==1 ? true : false);
 		model.addAttribute("chcarencias", tf.getCarencias()==1 ? true : false);
+		model.addAttribute("chrevaloracion", tf.getRevaloracion()==1 ? true : false);
 		
 		participanteid = "";
 		trabajosfinalesparticipanteService.listar(id).forEach(obj->{
@@ -291,6 +318,7 @@ public class IndexController {
 		model.addAttribute("chimportancia", tf.getImportancia()==1 ? true : false);
 		model.addAttribute("chvinculo", tf.getVinculo()==1 ? true : false);
 		model.addAttribute("chcarencias", tf.getCarencias()==1 ? true : false);
+		model.addAttribute("chrevaloracion", tf.getRevaloracion()==1 ? true : false);
 		
 		participanteid = "";
 		trabajosfinalesparticipanteService.listar(id).forEach(obj->{

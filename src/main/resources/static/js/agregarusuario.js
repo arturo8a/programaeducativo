@@ -515,10 +515,10 @@ function validarCampos(){
 		contentMensajeError += "Debe ingresar N° de teléfono 1 de Contacto"+"</br>";
 		status = false;
 	}
-	if($('#numtel2contactoregusu').val() == ""){
+	/*if($('#numtel2contactoregusu').val() == ""){
 		contentMensajeError += "Debe ingresar N° de teléfono 2 de Contacto"+"</br>";
 		status = false;
-	}
+	}*/
 	if($('#correocontactoregusu').val() == ""){
 		contentMensajeError += "Debe ingresar Correo Institucional de Contacto"+"</br>";
 		status = false;

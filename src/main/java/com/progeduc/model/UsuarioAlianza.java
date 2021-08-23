@@ -75,7 +75,7 @@ public class UsuarioAlianza {
 	@Column(name="TELEFONO_UNO")
 	private String telefonouno;
 	
-	@Column(name="TELEFONO_DOS")
+	@Column(name="TELEFONO_DOS",nullable=true)
 	private String telefonodos;
 	
 	@Column(name="CORREO_CONTACTO")

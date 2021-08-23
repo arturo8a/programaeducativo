@@ -1,0 +1,30 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8" />
+<head></head>
+<body>
+	<strong>EVIDENCIAS DE TRABAJOS FINALES</strong>
+	<br>
+	<table id="detalleevaluacion" class="table table-bordered" style="width: 100%">
+	    <thead>
+	    <tr>
+	        <th>Nombre</th>
+	        <th>Apellido paterno</th>
+	        <th>Apellido materno</th>
+	        <th>Nota</th>
+	    </tr>
+	    </thead>
+	    <tbody>
+	    <tr th:each="objeto : ${lista}">
+	        <td th:text="${objeto.nombre}"></td>
+	        <td th:text="${objeto.appaterno}"></td>
+	        <td th:text="${objeto.apmaterno}"></td>
+	        <td th:text="${objeto.nota}"></td>
+	    </tr>
+	    <tr>
+	    	<td colspan="4"><label th:text="'Nota Final : ' + ${total}"></label></td>
+	    </tr>
+	    </tbody>
+	</table>
+	
+</body>
+</html>

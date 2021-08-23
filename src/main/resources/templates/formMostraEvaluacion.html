@@ -124,13 +124,17 @@
 										<input type="text" class="form-control" th:id="'pregunta'+ ${objeto.id}" th:value="${objeto.pregunta}" disabled/>
 									</td>
 									<td>&nbsp;</td>
+									<td>&nbsp;</td>
 								</tr>
 								<tr th:each="qr : ${objeto.questionariorespuesta}">
 									<td>
 										<input type="text" class="form-control" th:id="'respuesta'+ ${qr.id}" th:value="${qr.respuesta}" disabled/>
 									</td>
 									<td>
-										<input type="radio" class="form-control" th:id="'puntajeq'+ ${qr.id}" th:value="${qr.puntaje}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${qr.id}" th:text="${qr.puntaje}" disabled/>
+										<input type="radio" class="form-control" th:id="'puntajeq'+ ${qr.id}" th:value="${qr.puntaje}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${qr.id}" disabled/>
+									</td>
+									<td>
+										<label th:utext="${qr.puntaje}"></label>
 									</td>
 								</tr>							
 							</table>						
