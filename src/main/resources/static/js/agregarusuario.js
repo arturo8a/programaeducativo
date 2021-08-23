@@ -379,7 +379,10 @@ function getUsuario(idUsuario){
 				$("#idAlianzaEstrategica").val(respuesta.id);
 				$("#odsresgusu").val(respuesta.ods.id);
 				$("#anioregusu").val(respuesta.anio);
-				$("#categoriaregusu").val(respuesta.categoria.id);
+				if(respuesta.categoria !== null){
+					$("#categoriaregusu").val(respuesta.categoria.id);
+				}
+				
 				$("#entidadregusu").val(respuesta.entidad);
 				$("#direccionregusu").val(respuesta.direccion);
 				

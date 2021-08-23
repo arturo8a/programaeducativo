@@ -1665,6 +1665,8 @@ public class ConcursoeducativoController {
 			usu.setNombrecontacto(dto.getNombrecontacto());
 			if(dto.getTipodocumento().getId() != 0) {
 				usu.setTipodocumento(dto.getTipodocumento());
+			}else {
+				usu.setTipodocumento(null);
 			}
 			usu.setNumdocumento(dto.getNumdocumento());
 			usu.setTelefonouno(dto.getTelefonouno());
@@ -1750,6 +1752,8 @@ public class ConcursoeducativoController {
 			usu.setNombrecontacto(dto.getNombrecontacto());
 			if(dto.getTipodocumento().getId() != 0) {
 				usu.setTipodocumento(dto.getTipodocumento());
+			}else {
+				usu.setTipodocumento(null);
 			}
 			usu.setNumdocumento(dto.getNumdocumento());
 			usu.setTelefonouno(dto.getTelefonouno());
@@ -1863,6 +1867,7 @@ public class ConcursoeducativoController {
 				dto.setId(obj.getId());
 				dto.setAnio(obj.getAnio());
 				dto.setOds(obj.getOds().getDescripcion());
+				if(obj.getCategoria() != null)
 				dto.setCategoria(obj.getCategoria().getDescripcion());
 				dto.setEntidad(obj.getEntidad());
 				dto.setComiteTecnico(obj.getComitetecnico());
@@ -1880,6 +1885,7 @@ public class ConcursoeducativoController {
 				dto.setId(obj.getId());
 				dto.setAnio(obj.getAnio());
 				dto.setOds(obj.getOds().getDescripcion());
+				if(obj.getCategoria() != null)
 				dto.setCategoria(obj.getCategoria().getDescripcion());
 				dto.setEntidad(obj.getEntidad());
 				dto.setComiteTecnico(obj.getComitetecnico());
@@ -1901,6 +1907,7 @@ public class ConcursoeducativoController {
 					dto.setId(obj.getId());
 					dto.setAnio(obj.getAnio());
 					dto.setOds(obj.getOds().getDescripcion());
+					if(obj.getCategoria() != null)
 					dto.setCategoria(obj.getCategoria().getDescripcion());
 					dto.setEntidad(obj.getEntidad());
 					dto.setComiteTecnico(obj.getComitetecnico());
