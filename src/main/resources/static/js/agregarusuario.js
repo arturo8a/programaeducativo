@@ -475,10 +475,15 @@ function validarCampos(){
 		contentMensajeError += "Debe seleccionar ODS"+"</br>";
 		status = false;
 	}
-	if($("#categoriaregusu").val() == "0"){
-		contentMensajeError += "Debe seleccionar Categoría"+"</br>";
-		status = false;
+	
+	if($('#perfilregusuAuspiciador').is(':checked') ) {
+    	if($("#categoriaregusu").val() == "0"){
+			contentMensajeError += "Debe seleccionar Categoría"+"</br>";
+			status = false;
+		}
 	}
+	
+	
 	if($("#entidadregusu").val() == "0"){
 		contentMensajeError += "Debe ingresar Entidad"+"</br>";
 		status = false;
