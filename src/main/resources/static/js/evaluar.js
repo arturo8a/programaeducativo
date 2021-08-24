@@ -330,13 +330,14 @@ function vertrabajo(id){
 				case 'pdf':
 					contenido += archivo + "<br><iframe src='../alfresco_programaeducativo/pedesa/upload_trabajos/"+subcadena+"'"+" type='application/pdf' width='100%' height='600px'></<iframe>";
 					break;
-				case 'doc':
-				case 'docs':
 				case 'docx': 
-					window.open('../alfresco_programaeducativo/pedesa/upload_trabajos/'+subcadena, '_blank');
+					contenido += window.open('../alfresco_programaeducativo/pedesa/upload_trabajos/'+subcadena, '_blank');
 					break;
+				case 'mp3':
+					contenido += archivo + "<br><audio controls><source src='../alfresco_programaeducativo/pedesa/upload_evidencias/"+subcadena+"'"+" width='100%' height='600px' type='audio/mp3'>Tu navegador no soporta audio HTML5.</audio>";
+				break;
 				case 'mp4': 
-					contenido += archivo + "<br><video src='../alfresco_programaeducativo/pedesa/upload_trabajos/"+subcadena+"'"+" width='100%' height='600px'></<video>";
+					contenido += archivo + "<br><video src='../alfresco_programaeducativo/pedesa/upload_trabajos/"+subcadena+"'"+" width='100%' height='600px' controls></<video>";
 					break;
 			}					
 			contenido += "</div>";

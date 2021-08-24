@@ -388,7 +388,7 @@ function vertrabajo(id){
 				case 'jpeg':
 				case 'png':
 				case 'jpg': 
-					contenido += archivo + "<br><img class='img-fluid' src='../alfresco_programaeducativo/pedesa/upload_trabajos/"+subcadena+"'"+" width='70%' height='400px'/>";
+					contenido += archivo + "<br><img src='../alfresco_programaeducativo/pedesa/upload_trabajos/"+subcadena+"'"+" width='70%' height='400px'/>";
 					break;
 				case 'pdf':
 					contenido += archivo + "<br><iframe src='../alfresco_programaeducativo/pedesa/upload_trabajos/"+subcadena+"'"+" type='application/pdf' width='100%' height='600px'></<iframe>";
@@ -396,8 +396,11 @@ function vertrabajo(id){
 				case 'docx': 
 					contenido += window.open('../alfresco_programaeducativo/pedesa/upload_trabajos/'+subcadena, '_blank');
 					break;
+				case 'mp3':
+					contenido += archivo + "<br><audio controls><source src='../alfresco_programaeducativo/pedesa/upload_evidencias/"+subcadena+"'"+" width='100%' height='600px' type='audio/mp3'>Tu navegador no soporta audio HTML5.</audio>";
+				break;
 				case 'mp4': 
-					contenido += archivo + "<br><video src='../alfresco_programaeducativo/pedesa/upload_trabajos/"+subcadena+"'"+" width='100%' height='600px'></<video>";
+					contenido += archivo + "<br><video src='../alfresco_programaeducativo/pedesa/upload_trabajos/"+subcadena+"'"+" width='100%' height='600px' controls></<video>";
 					break;
 			}					
 			contenido += "</div>";
