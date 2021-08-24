@@ -1432,7 +1432,7 @@
 						var mi_evi = JSON.stringify(evidencia);
 						var archivo = mi_evi.replace(/['"]+/g, '');
 						
-						contenido += "<tr><td style='border-bottom:1px solid #DDDDDD'><strong style='cursor:pointer' onclick='actualizaEvidenciaDiv("+'`'+id+'`'+","+'`'+archivo+'`'+"," +'`'+ext +'`'+")'>"+archivo.substr(0,40)+"</strong></td></tr>";						
+						contenido += "<tr><td style='border-bottom:1px solid #DDDDDD;padding-bottom:10px'><strong style='cursor:pointer' onclick='actualizaEvidenciaDiv("+'`'+id+'`'+","+'`'+archivo+'`'+"," +'`'+ext +'`'+")'><abbr title='"+archivo+"'>"+archivo.substr(0,40)+"</abbr></strong></td></tr>";						
 					}
 					
 					contenido += "</table></div><div class='col-xs-9 col-sm-9'><table style='width:100%'><tr><td style='padding-bottom:10px'><div id='contenido_evidencia' style='width:100%'></div></td></tr></table></div></div>";

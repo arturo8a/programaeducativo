@@ -469,11 +469,11 @@
 		function validarTodoFormularioEdit(){
 			
 			total_coincidencias_edit = 0
-			total_indice_cuestionario_edit = 0;			
+			total_indice_cuestionario_edit = 0;
 			id_rubrica_edit = $("#id_rubrica_edit").val();
 			id_rubrica_edit = id_rubrica_edit.split("-");
 			suma_habilitar_evaluacion = 0;
-			for(var i=0;i<id_rubrica_edit.length-1;i++){	
+			for(var i=0;i<id_rubrica_edit.length-1;i++){
 				bandera_editar = true;
 				for(var j=0;j<indice_rubrica_edit_eliminado.length;j++){
 					if(indice_rubrica_edit_eliminado[j] == id_rubrica_edit[i]){
@@ -492,7 +492,8 @@
 					}
 					suma_habilitar_evaluacion +=parseFloat(puntaje_inicial);
 				}
-			}			
+			}
+			console.log("suma_habilitar_evaluacion :"  + suma_habilitar_evaluacion);			
 			id_questionario_pregunta_respuesta_edit = $("#id_questionario_pregunta_respuesta_edit").val();
 			array_questionario_pr = id_questionario_pregunta_respuesta_edit.split("/");
 			for(var i=0;i<array_questionario_pr.length-1;i++){
@@ -509,17 +510,38 @@
 				if(bandera_editar){
 					total_indice_cuestionario_edit++;
 					id_pregunta_respuesta_edit = id_pregunta_respuesta_edit.split("-");
+					puntaje_inicial = 0;
+					bandera_editar = false;
 					for(var j=0;j<id_pregunta_respuesta_edit.length;j++){
 						respuesta_edit = $("#respuesta_edit"+id_pregunta_respuesta_edit[j].toString()).val();
 						puntaje_edit = $("#puntaje_editq"+id_pregunta_respuesta_edit[j].toString()).val();
 						if($("#pregunta_edit"+id_questionario_edit).val()!="" && respuesta_edit!="" && puntaje_edit!=""){
-							suma_habilitar_evaluacion += parseFloat(puntaje_edit);
-							total_coincidencias_edit++;
+							//suma_habilitar_evaluacion += parseFloat(puntaje_edit);
+							if(puntaje_inicial<puntaje_edit){
+								puntaje_inicial = parseFloat(puntaje_edit);
+							}
+							bandera_editar = true;							
 						}
+						console.log("puntaje_inicial :" + puntaje_inicial);
+					}
+					for(var k=0;k<agregado_pregunta_respuesta_edit.length;k++){
+						puntajeceldaagregadaedit = $("#puntaje_celda_agregada_edit"+agregado_pregunta_respuesta_edit[k]).val(); 
+						dato = agregado_pregunta_respuesta_edit[k].split("_");
+						questionario_id = dato[1];
+						if(questionario_id == id_questionario_edit){
+							if(puntaje_inicial<parseFloat(puntajeceldaagregadaedit)){
+								puntaje_inicial = puntajeceldaagregadaedit;
+							}
+						}
+					}
+					console.log("puntaje inicial :"  + puntaje_inicial);
+					if(bandera_editar){
+						total_coincidencias_edit++;
+						suma_habilitar_evaluacion +=parseFloat(puntaje_inicial);
 					}
 				}	
 			}
-			
+			console.log("suma_habilitar_evaluacion :"  + suma_habilitar_evaluacion);
 			for(var i=0; i<= array_indice.length;i++){
 				if($("#r"+array_indice[i]).is(":checked")){
 					bandera_editar = true;
@@ -578,9 +600,6 @@
 					puntaje_celda_agregada_edit = $("#puntaje_celda_agregada_edit"+agregado_pregunta_respuesta_edit[i]).val();
 					if(! (rpta_celda_agregada_edit.trim()!="" && puntaje_celda_agregada_edit.trim()!="")){
 						flag_agregado_pr_edit = false;
-					}
-					else{
-						suma_habilitar_evaluacion += parseFloat(puntaje_celda_agregada_edit);
 					}
 				}
 				if(flag_agregado_pr_edit)
