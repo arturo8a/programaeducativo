@@ -119,25 +119,23 @@
 				<div>					
 					<ul class="nav nav-tabs" id="myTab" role="tablist">
 					  <li class="nav-item">
-					    <a class="nav-link active" id="docente-tab" data-toggle="tab" href="#docente" role="tab" aria-controls="home" aria-selected="true">1. Datos del docente</a>
+					    <a class="nav-link active" id="docente-tab_consulta" data-toggle="tab" href="#docente" role="tab" aria-controls="home" aria-selected="true">1. Datos del docente</a>
 					  </li>
 					  <li class="nav-item">
-					    <a class="nav-link disabled" id="participante-tab" data-toggle="tab" href="#participante" role="tab" aria-controls="participante" aria-selected="false">2. Datos de los participantes</a>
+					    <a class="nav-link" id="participante-tab_consulta" data-toggle="tab" href="#participante" role="tab" aria-controls="participante" aria-selected="false">2. Datos de los participantes</a>
 					  </li>
 					  <li class="nav-item">
-					    <a class="nav-link disabled" id="trabajosfinales-tab" data-toggle="tab" href="#trabajosfinales" role="tab" aria-controls="trabajosfinales" aria-selected="false">3. Registro de trabajos finales</a>
+					    <a class="nav-link" id="trabajosfinales-tab_consulta" data-toggle="tab" href="#trabajosfinales" role="tab" aria-controls="trabajosfinales" aria-selected="false">3. Registro de trabajos finales</a>
 					  </li>
 					</ul>
 					
 					<div class="tab-content" id="myTabContent">	
-						<div class="tab-pane fade show active" id="docente" role="tabpanel" aria-labelledby="docente-tab">
+						<div class="tab-pane fade show active" id="docente" role="tabpanel" aria-labelledby="docente-tab_consulta">
 								  	<br><br>
 								  	<div class="row">
 								  		<div class="col-12 text-left">
 								  			<strong>Código de local I.E.</strong>	
 								  			<div class="ui-widget">
-								  				<input type="hidden" th:value="${cuarta_etapa_desde}" id="cuarta_etapa_desde" />
-								  				<input type="hidden" th:value="${cuarta_etapa_hasta}" id="cuarta_etapa_hasta" />
 								  				<input type="hidden" th:value="${docentetutor.programaeducativo.id}" id="idprogramaeducativo" />
 								  				<input type="hidden" th:value="${docentetutor.id}" id="id" />
 								  				<input type="hidden" th:value="${docentetutor.anio}" id="anio" />
@@ -215,7 +213,7 @@
 									  	</div>
 									  	<br><br><br>	  
 						  	</div>
-						<div class="tab-pane fade" id="participante" role="tabpanel" aria-labelledby="participante-tab">
+						<div class="tab-pane fade" id="participante" role="tabpanel" aria-labelledby="participante-tab_consulta">
 							<div  id="container_participante">
 								<div class="row">
 									<div class="col text-right">
@@ -246,7 +244,7 @@
 								</div>	
 							</div>
 						</div>		
-						<div class="tab-pane fade" id="trabajosfinales" role="tabpanel" aria-labelledby="trabajosfinales-tab" >	
+						<div class="tab-pane fade" id="trabajosfinales" role="tabpanel" aria-labelledby="trabajosfinales-tab_consulta" >	
 							<div  id="container_trabajos_finales">
 								<div class="row pt-2 pb-4 m-0">
 									<div class="col-xs-12 col-sm-12 pt-3">
@@ -279,230 +277,7 @@
 				</div>
 		</div>
 	</div>
-	
-	
 </div>
-
-<center>
-<div class="modal fade" tabindex="-1" role="dialog" id="modalagregarParticipante" aria-labelledby="myLargeModalLabel" >
-  <div class="modal-dialog modal-lg" role="document"> 
-    <div class="modal-content" style="overflow-y: scroll; height:750px;width:90%">
-      <div class="modal-header">
-        <strong class="pt-1">AGREGAR PARTICIPANTE</strong>
-      </div>
-      <div class="modal-body" id="contenidoagregarparticipante">
-      	
-      </div>
-    </div>
-  </div>
-</div>
-</center>
-
-<center>
-<div class="modal fade" tabindex="-1" role="dialog" id="modaleditarParticipante" aria-labelledby="myLargeModalLabel" >
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content" style="overflow-y: scroll; height:750px;width:90%">
-      <div class="modal-header">
-        <strong class="pt-1">EDITAR PARTICIPANTE</strong>
-      </div>
-      <div class="modal-body" id="contenidoeditarparticipante">
-      	
-      </div>
-    </div>
-  </div>
-</div>
-</center>
-
-<div class="modal" tabindex="-1" role="dialog" id="modalexito">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <img th:src="@{./images/imagen_exito5.png}"/>&nbsp;&nbsp; <strong class="pt-1">Registro exitoso</strong>
-      </div>
-      <div class="modal-body" id="textoexito">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary rounded-0" id="btncerrarmensajeexito" name="btncerrarmensajeexito">Aceptar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal" tabindex="-1" role="dialog" id="modalconfirmacion">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <img th:src="@{./images/imagen_informacion11.png}" />&nbsp;&nbsp; <strong class="pt-1">Confirmacion</strong>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body" id="textoconfirmacion">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="btnaceptarmensajeconfirmacion" name="btnaceptarmensajeconfirmacion">Aceptar</button>
-        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeconfirmacion" name="btncerrarmensajeconfirmacion">Cerrar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal" tabindex="-1" role="dialog" id="modalinformacion">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <img th:src="@{./images/imagen_informacion11.png}" />&nbsp;&nbsp; <label class="pt-1" style="padding-right:380px">Alerta</label>
-        <!-- button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button-->
-      </div>
-      <div class="modal-body" id="textoinformacion">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeinformacion" name="btncerrarmensajeinformacion">Cerrar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal" tabindex="-1" role="dialog" id="modalerror">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <img th:src="@{./images/imagen_informacion11.png}"/>&nbsp;&nbsp; <strong class="pt-1">Error</strong>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>	          
-        </button>
-      </div>
-      <div class="modal-body" id="textoerror">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeerror" name="btncerrarmensajeerror">Cerrar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<center>
-<div class="modal fade" tabindex="-1" role="dialog" id="modalagregartrabajo" aria-labelledby="myLargeModalLabel" >
-  <div class="modal-dialog modal-lg" role="document"> 
-    <div class="modal-content" style="overflow-y: scroll; height:750px; width:90%">
-      <div class="modal-header">
-        <strong class="pt-1">AGREGAR TRABAJO</strong>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>	          
-        </button>
-      </div>
-      <div class="modal-body" id="contenidoagregartrabajo">
-      	
-      </div>
-    </div>
-  </div>
-</div>
-</center>
-
-<center>
-<div class="modal fade" tabindex="-1" role="dialog" id="modaleditartrabajo">
-  <div class="modal-dialog modal-lg" role="document"> 
-    <div class="modal-content" style="overflow-y: scroll; height:750px;width:90%">
-      <div class="modal-header">
-        <strong class="pt-1">EDITAR TRABAJO</strong>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>	          
-        </button>
-      </div>
-      <div class="modal-body" id="contenidoeditartrabajo">
-      	
-      </div>
-    </div>
-  </div>
-</div>
-</center>
-
-<div class="modal fade" tabindex="-1" role="dialog" id="modalvertrabajo">
-  <div class="modal-dialog modal-lg" role="document"> 
-    <div class="modal-content" style="overflow-y: scroll; width:80%; height:750px">
-      <div class="modal-header">
-        <strong class="pt-1">VER TRABAJO</strong>
-      </div>
-      <div class="modal-body" id="contenidovertrabajo">
-      	
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal" tabindex="-1" role="dialog" id="modalexitotrabajo">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <img th:src="@{./images/imagen_exito5.png}"/>&nbsp;&nbsp; <strong class="pt-1">Registro exitoso</strong>
-      </div>
-      <div class="modal-body" id="textoexito">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary rounded-0" id="btncerrarmensajeexitotrabajo" name="btncerrarmensajeexitotrabajo">Aceptar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal" tabindex="-1" role="dialog" id="modalconfirmaciontrabajo">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <img th:src="@{./images/imagen_informacion11.png}" />&nbsp;&nbsp; <strong class="pt-1">Confirmacion</strong>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body" id="textoconfirmaciontrabajo">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="btnaceptarmensajeconfirmaciontrabajo" name="btnaceptarmensajeconfirmaciontrabajo">Aceptar</button>
-        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeconfirmaciontrabajo" name="btncerrarmensajeconfirmaciontrabajo">Cerrar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal" tabindex="-1" role="dialog" id="modalinformacion">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <img th:src="@{./images/imagen_informacion11.png}" />&nbsp;&nbsp; <label class="pt-1" style="padding-right:380px">Alerta</label>
-        <!-- button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button-->
-      </div>
-      <div class="modal-body" id="textoinformacion">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeinformacion" name="btncerrarmensajeinformacion">Cerrar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal" tabindex="-1" role="dialog" id="modalerror">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <img th:src="@{./images/imagen_informacion11.png}"/>&nbsp;&nbsp; <strong class="pt-1">Error</strong>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>	          
-        </button>
-      </div>
-      <div class="modal-body" id="textoerror">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" id="btncerrarmensajeerror" name="btncerrarmensajeerror">Cerrar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
 <div class="modal" tabindex="-1" role="dialog" id="modalimagencargando">
   <center>
   	<img th:src="@{./images/cargando.gif}" style="line-height: 200px;"/>
@@ -523,7 +298,13 @@
 	var appaternopmt="",apmaternopmt="",nombrepmt="",parentesco="",tipodocumentopmt="",nrodocumentopmt="",nrotelefonopmt="",correoelectronicopmt="";
 	var celdaseleccionada,mensajeValidacion=false;
 	
+	var id;
+	
 	var anio;
+	
+	var obtener_data_archivo,obtener_data_ver,obtener_data_vertrabajos;
+	
+	var listar,listar_trabajos_finales;
 	
 	$(document).ready(function(){
 		
@@ -535,7 +316,7 @@
 		
 		anio = $("#ultimo_anio").val();
 		
-		$("#docente-tab").click(function(){
+		$("#docente-tab_consulta").click(function(){
 			$('#myTab a[href="#home"]').tab('show');
 			setTimeout(function(){
 				$.ajax({
@@ -561,59 +342,14 @@
 			}, 100);
 		});
 		
-		$("#participante-tab").click(function(){
+		$("#participante-tab_consulta").click(function(){
 			$('#myTab a[href="#participante"]').tab('show');
 			setTimeout(function(){ listar(anio); }, 100);
 		});
 		
-		$("#trabajosfinales-tab").click(function(){
+		$("#trabajosfinales-tab_consulta").click(function(){
 			$('#myTab a[href="#trabajosfinales"]').tab('show');
-			setTimeout(function(){ 				
-				listar_trabajos_finales(anio); 		
-			}, 100);
-		});
-		
-		if($("#codmod").val().trim()!="" && $("#appaterno").val().trim()!="" && $("#apmaterno").val().trim()!="" && $("#nombre").val().trim()!="" && $("#tipodocumento").val().trim()!="" && $("#nrodocumento").val().trim()!="" && $("#genero").val().trim()!="" && $("#nrotelefono").val().trim()!="" && $("#correoelectronico").val().trim()!="" && $("#responsable").val().trim()!="" && $("#curso").val().trim()!="" ){
-			$("#participante-tab").removeClass("nav-link disabled");
-			$("#participante-tab").addClass("nav-link");	
-			if($("#activar_trabajos_finales").val() == 1){
-				$("#trabajosfinales-tab").removeClass("nav-link disabled");
-				$("#trabajosfinales-tab").addClass("nav-link");
-			}
-			else{				
-				$("#trabajosfinales-tab").removeClass("nav-link disabled");
-				$("#trabajosfinales-tab").addClass("nav-link");
-			}
-		}
-		
-		$("#btncerrarmensajeexito").click(function(){			
-			$("#modalexito").modal('hide');
-		});
-			
-		$("#btncerrarmensajeinformacion").click(function(){
-			$("#modalinformacion").modal('hide');
-		});
-		
-		$("#btncerrarmensajeerror").click(function(){
-			$("#modalerror").modal('hide');
-		});
-		
-		$("#inicioconcurso1").click(function(){
-			$("#modalimagencargando").modal({
-				show : true,
-				backdrop : 'static',
-				keyboard:false
-			});
-			$.ajax({
-				url: url_base + "pedesa/menu_concurso",
-				success: function(respuesta) {
-					$("#modalimagencargando").modal('hide');
-					$("#container").html(respuesta);
-				},
-				error: function() {
-			        console.log("No se ha podido obtener la información");
-			    }
-			});
+			setTimeout(function(){ listar_trabajos_finales(anio); }, 100);
 		});
 		
 		$("#fechanacimientoestudiante").datepicker({
@@ -649,11 +385,9 @@
 			    }
 			});
 		}, 100);
-		
-		
 	}
 	
-	var listar = function (anioSelect){
+	listar = function (anioSelect){
 		$("#table_lista_participantes_consulta").dataTable().fnDestroy();		
 		table_lista_participantes_consulta = $('#table_lista_participantes_consulta').DataTable({
 			dom: '<B><"rs_participantes_update">frtip',
@@ -696,6 +430,10 @@
 		    },
 		    "deferRender": true,
 		    'columnDefs': [	],
+		    'select': {
+                //'style':    'multi', 
+                'selector': 'td:first-child'
+	         },
 		    'columns' : [
 		    	{ 
 		    		"data": null, "render": function (data, type, full, meta) { return meta.row + 1; }
@@ -722,12 +460,11 @@
 		    	}
 		    ]
 		});
-		//$("div.rs_participantes_update").html("")
 		obtener_data_archivo("#table_lista_participantes_consulta tbody",table_lista_participantes_consulta);
 		obtener_data_ver("#table_lista_participantes_consulta tbody",table_lista_participantes_consulta);		
 	}
 	
-	var listar_trabajos_finales = function (anioSelect){					
+	listar_trabajos_finales = function (anioSelect){					
 		$("#table_lista_trabajos_finales_consulta").dataTable().fnDestroy();		
 		table_lista_trabajos_finales_consulta = $('#table_lista_trabajos_finales_consulta').DataTable({
 			dom: '<B><"rs_trabajos">frtip',
@@ -770,6 +507,10 @@
 		    },
 		    "deferRender": true,
 		    'columnDefs': [	],
+		    'select': {
+                //'style':    'multi', 
+                'selector': 'td:first-child'
+	         },
 		    'columns' : [
 		    	{ 
 		    		"data": null, "render": function (data, type, full, meta) { return meta.row + 1; }
@@ -839,31 +580,37 @@
 				
 	}
 	
-	var obtener_data_archivo = function(tbody,table){
+	obtener_data_archivo = function(tbody,table){
 		$(tbody).on("click","img.archivo",function(){
-			celdaseleccionada = table.row($(this).parents("tr")).index();
-			var data = table.row($(this).parents("tr")).data();
-			console.log("data :" + data);
-			id = data.id;
-			archivo(id);
+			//console.log("table : " + table);
+			//console.log("celdaseleccionada :" + celdaseleccionada);
+			data = table.row($(this).parents("tr")).data();
+			if(data!=undefined){
+				//console.log("data1 :" + data);
+				id = data.id;
+				archivo(id);
+			}
+			
 		});
 	};
 	
-	var obtener_data_ver = function(tbody,table){
+	obtener_data_ver = function(tbody,table){
 		$(tbody).on("click","img.ver",function(){
-			celdaseleccionada = table.row($(this).parents("tr")).index();
-			var data = table.row($(this).parents("tr")).data();
-			id = data.id;
-			verPdf(id);
+			data = table.row($(this).parents("tr")).data();
+			if(data!=undefined){
+				id = data.id;
+				verPdf(id);
+			}
 		});
 	};
 	
-	var obtener_data_vertrabajos = function(tbody,table){
+	obtener_data_vertrabajos = function(tbody,table){
 		$(tbody).on("click","img.vertrabajo",function(){
-			celdaseleccionada = table.row($(this).parents("tr")).index();
-			var data = table.row($(this).parents("tr")).data();
-			id = data.id;
-			vertrabajos(id);
+			data = table.row($(this).parents("tr")).data();
+			if(data!=undefined){
+				id = data.id;
+				vertrabajos(id);
+			}
 		});
 	};
 	
@@ -891,40 +638,6 @@
 				console.log("Excepcion ver trabajo");
 		    }
 		});
-	}
-	
-	function enviartrabajos(id){
-		
-		var r = confirm("¿Está seguro que desea enviar el trabajo, al ser enviado ya no podrá ser editado?");
-		if (r == true) {
-			$.ajax({
-				type : "GET",
-			    url : url_base + "pedesa/enviartrabajoid/"+ id,
-				success: function(respuesta) {
-					if(respuesta==1){
-						//table_lista_trabajos_finales_consulta.row(celdaseleccionada).remove().draw(false);
-						table_lista_trabajos_finales_consulta.cell(celdaseleccionada,6).data(1).draw();
-						table_lista_trabajos_finales_consulta.cell(celdaseleccionada,7).data(1).draw();
-						table_lista_trabajos_finales_consulta.cell(celdaseleccionada,8).data(1).draw();
-					}
-					else if(respuesta == -100){
-						 window.location = url_base + "pedesa";
-					}
-					else{
-						$("#textoerror").html("No se pudo Eliminar trabajo");
-						$('#modalerror').modal({
-							show : true,
-							backdrop : 'static',
-							keyboard:false
-						});
-					}
-				},
-				error: function() {
-					//$("#textoerror").html("Excepcion Eliminar trabajo");
-					console.log("Excepcion Eliminar trabajo");
-			    }
-			});			
-		}
 	}
 	
 	function archivo(id){
@@ -968,116 +681,5 @@
 		    }
 		});    	
     }
-	
-	function validarCampos(){
-		
-		mensajeValidacion = "";
-		var correoelectronico;
-		
-		if($("#appaterno").val().trim()==""){
-			mensajeValidacion = "Debe ingresar Apellido Paterno"+"<br>";
-		}
-		if($("#apmaterno").val().trim()==""){
-			mensajeValidacion += "Debe ingresar Apellido Materno"+"<br>";
-		}
-		if($("#nombre").val().trim()==""){
-			mensajeValidacion += "Debe ingresar Nombre"+"<br>";
-		}
-		if($("#tipodocumento").val()==""){
-			mensajeValidacion += "Debe seleccionar Tipo Documento"+"<br>";
-		}
-		if($("#nrodocumento").val().trim()==""){
-			mensajeValidacion += "Debe ingresar N° de Documento"+"<br>";
-		}
-		if($("#genero").val()==""){
-			mensajeValidacion += "Debe Seleccionar Genero"+"<br>";
-		}
-		if($("#nrotelefono").val().trim()==""){
-			mensajeValidacion += "Debe ingresar Número de Teléfono"+"<br>";
-		}
-		if($("#correoelectronico").val().trim()==""){
-			mensajeValidacion += "Debe ingresar Correo Eléctronico"+"<br>";
-		}
-		correoelectronico = $("#correoelectronico").val().trim();
-		if(!(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(correoelectronico))){		
-			mensajeValidacion += "Debe ingresar Correctamente el Correo Electrónico "+"<br>";
-		}
-		if($("#responsable").val().trim()==""){
-			mensajeValidacion += "Debe ingresar Responsable"+"<br>";
-		}
-		if($("#curso").val().trim()==""){
-			mensajeValidacion += "Debe ingresar Curso"+"<br>";
-		}
-		
-		if(mensajeValidacion!=""){
-			return false;
-		}
-		return true;
-	}	
-	
-	function filterCadenaupdate(evt,input){
-		
-		var key = window.Event ? evt.which : evt.keyCode;    
-	    var chark = String.fromCharCode(key);
-	    var tempValue = input.value+chark;
-	    if((key >= 65 && key <= 90) || (key >= 97 && key <= 122) || (key ==32)    || (key ==241) || (key ==209) || (key ==225) || (key ==233) || (key ==237) || (key ==243) || (key ==250)  || (key ==193) || (key ==201) || (key ==205) || (key ==211) || (key ==218)     ){    
-	        return true;
-	    }
-	    else{
-	        return false;
-	    }	
-	}
-	
-	$("#tipodocumento").on("change",function(){
-		
-		if($("#tipodocumento").val()!=""){
-			$("#nrodocumento").prop('disabled', false);
-			$("#nrodocumento").val("");
-			$("#nrodocumento").focus();
-		}
-		else{
-			$("#nrodocumento").val("");
-			$("#nrodocumento").prop('disabled', true);
-		}
-	});
-	
-	function filterIntNroDocIdentidadupdate(evt,input){
-		
-		if($("#tipodocumento").val()==1){
-		    var key = window.Event ? evt.which : evt.keyCode;    
-		    var chark = String.fromCharCode(key);
-		    var tempValue = input.value+chark;
-		    if(key >= 48 && key <= 57){
-		    	if($("#tipodocumento").val() == 1){
-					if($("#nrodocumento").val().trim().length<8)
-						return true;
-					return false;
-				}
-		    	else{
-		    		return false;
-		    	}
-		    }
-		    else{
-		        return false;
-		    }
-		}
-		else if($("#tipodocumento").val()==2){
-			if($("#nrodocumento").val().trim().length<12)
-				return true;
-			return false;
-		}
-	}
-	
-	function filterIntTelfupdate(evt,input){
-		var key = window.Event ? evt.which : evt.keyCode;    
-	    var chark = String.fromCharCode(key);
-	    var tempValue = input.value+chark;
-	    if((key >= 48 && key <= 57) || key==45){    
-	        return true;
-	    }
-	    else{
-	        return false;
-	    }
-	}
 	
 </script>

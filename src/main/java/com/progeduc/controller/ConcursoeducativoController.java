@@ -315,9 +315,9 @@ public class ConcursoeducativoController {
 				dto.getTrabajosfinales().setNumeracion(max_numeracion + 1);
 		}
 		else { /*cuando actualiza*/
-			dto.getTrabajosfinales().setNumeracion(dto.getTrabajosfinales().getId());
+			dto.getTrabajosfinales().setNumeracion(trabajosfinalesServ.getNumeracion(dto.getTrabajosfinales().getId()));
 		}
-		Trabajosfinales tf = trabajosfinalesServ.saveTrabajofinaParticipante(dto);		
+		Trabajosfinales tf = trabajosfinalesServ.saveTrabajofinaParticipante(dto);
 		if( tf !=null) {
 			resultado = tf.getId();
 		}	
@@ -2218,7 +2218,7 @@ public class ConcursoeducativoController {
 		
 		String fecha_archivo = dateFormat.format(date) + hourFormat.format(date);
 		
-		headers.add("Content-Disposition", "attachment; filename=trabajosfinalesconcurso_"+fecha_archivo+".xls");
+		headers.add("Content-Disposition", "attachment; filename=trabajosfinalesconcurso_"+fecha_archivo+".csv");
 		
 		return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
 		
