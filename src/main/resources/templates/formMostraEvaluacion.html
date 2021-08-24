@@ -83,7 +83,7 @@
 								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '1'" th:text="${objeto.descripcion1}" class="form-control" readonly>
 								</textarea> 
 								<br>
-								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '1'" th:value="${objeto.puntaje1}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" th:text="${objeto.puntaje1}" disabled/>				
+								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '1'" th:value="${objeto.puntaje1}" th:name="'preguntar'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" th:text="${objeto.puntaje1}" disabled/>				
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-3">
 								<label th:utext="${objeto.criterio2}"></label>
@@ -91,7 +91,7 @@
 								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '2'" th:text="${objeto.descripcion2}" class="form-control" readonly>
 								</textarea>
 								<br>
-								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '2'" th:value="${objeto.puntaje2}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" th:text="${objeto.puntaje2}" disabled/>
+								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '2'" th:value="${objeto.puntaje2}" th:name="'preguntar'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" th:text="${objeto.puntaje2}" disabled/>
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-3">
 								<label th:utext="${objeto.criterio3}"></label>								
@@ -99,7 +99,7 @@
 								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '3'" th:text="${objeto.descripcion3}" class="form-control" readonly>
 								</textarea>
 								<br>
-								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '3'" th:value="${objeto.puntaje3}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" th:text="${objeto.puntaje3}" disabled/>
+								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '3'" th:value="${objeto.puntaje3}" th:name="'preguntar'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" th:text="${objeto.puntaje3}" disabled/>
 							</div>
 							<div class="col-xs-12 col-sm-6 col-md-3">
 								<label th:utext="${objeto.criterio4}"></label>
@@ -107,7 +107,7 @@
 								<textarea rows="3" style="width:100%" th:id="'descripcion' + ${objeto.id} + '4'" th:text="${objeto.descripcion4}" class="form-control" readonly>
 								</textarea>
 								<br>
-								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '4'" th:value="${objeto.puntaje4}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" th:text="${objeto.puntaje4}" disabled/>
+								<input type="radio" th:id="'respuesta'+ ${objeto.id} + '4'" th:value="${objeto.puntaje4}" th:name="'preguntar'+ ${objeto.id}" th:attr="data-idresp=${objeto.id}" class="form-control" th:text="${objeto.puntaje4}" disabled/>
 							</div>
 						</div>
 					</div>			
@@ -131,7 +131,7 @@
 										<input type="text" class="form-control" th:id="'respuesta'+ ${qr.id}" th:value="${qr.respuesta}" disabled/>
 									</td>
 									<td>
-										<input type="radio" class="form-control" th:id="'puntajeq'+ ${qr.id}" th:value="${qr.puntaje}" th:name="'pregunta'+ ${objeto.id}" th:attr="data-idresp=${qr.id}" disabled/>
+										<input type="radio" class="form-control" th:id="'puntajeq'+ ${qr.id}" th:value="${qr.puntaje}" th:name="'preguntaq'+ ${objeto.id}" th:attr="data-idresp=${qr.id}" disabled/>
 									</td>
 									<td>
 										<label th:utext="${qr.puntaje}"></label>
@@ -247,16 +247,16 @@
 		$(document).on("click","input[type='radio']",function(){	console.log('contar notas');
 			var notaTotal = 0;
 			$.each($("[data-rubrica]"), function( i, value ) {
-				var preguntaName = $("input[name='pregunta"+$(this).attr('data-rubrica')+"']");
+				var preguntaName = $("input[name='preguntar"+$(this).attr('data-rubrica')+"']");
 				if($(preguntaName).is(':checked')){
-					var puntaje = parseFloat($("input[name='pregunta"+$(this).attr('data-rubrica')+"']:checked").val());
+					var puntaje = parseFloat($("input[name='preguntar"+$(this).attr('data-rubrica')+"']:checked").val());
 					notaTotal += puntaje;
 				}
 			});
 			$.each($("[data-cuestionario]"), function( i, value ) {
-				var preguntaName = $("input[name='pregunta"+$(this).attr('data-cuestionario')+"']");
+				var preguntaName = $("input[name='preguntaq"+$(this).attr('data-cuestionario')+"']");
 				if($(preguntaName).is(':checked')){
-					var puntaje = parseFloat($("input[name='pregunta"+$(this).attr('data-cuestionario')+"']:checked").val());
+					var puntaje = parseFloat($("input[name='preguntaq"+$(this).attr('data-cuestionario')+"']:checked").val());
 					notaTotal += puntaje;
 				}
 			});
@@ -317,7 +317,7 @@
 			var status = true;
 			mensajeValidacionedit ="";
 			$.each($("[data-rubrica]"), function( i, value ) { console.log($(this).attr('data-rubrica'));
-				var preguntaName = $("input[name='pregunta"+$(this).attr('data-rubrica')+"']");
+				var preguntaName = $("input[name='preguntar"+$(this).attr('data-rubrica')+"']");
 				console.log(preguntaName);
 				if(!$(preguntaName).is(':checked')){ console.log('complete rubrica');
 					//mensajeValidacionedit += "Complete todas las respuestas"+"<br>";
@@ -326,15 +326,15 @@
 					var idtrabajo = $("#id_trabajofinal").val();
 					var trabajosfinales = {id:idtrabajo};
 					var preguntaid = $(this).attr('data-rubrica');
-					var respuestaid = $("input[name='pregunta"+$(this).attr('data-rubrica')+"']:checked").attr('data-idresp');
-					var puntaje = $("input[name='pregunta"+$(this).attr('data-rubrica')+"']:checked").val();
+					var respuestaid = $("input[name='preguntar"+$(this).attr('data-rubrica')+"']:checked").attr('data-idresp');
+					var puntaje = $("input[name='preguntar"+$(this).attr('data-rubrica')+"']:checked").val();
 					var tipo = "1";
 					listaRespuestas.push({trabajosfinales,preguntaid,respuestaid,tipo,puntaje});
 				}
 				
 			});
 			$.each($("[data-cuestionario]"), function( i, value ) {
-				var preguntaName = $("input[name='pregunta"+$(this).attr('data-cuestionario')+"']");
+				var preguntaName = $("input[name='preguntaq"+$(this).attr('data-cuestionario')+"']");
 				console.log(preguntaName);
 				if(!$(preguntaName).is(':checked')){ console.log('complete cuertionario');
 					//mensajeValidacionedit += "Complete todas las respuestas"+"<br>";
@@ -343,8 +343,8 @@
 					var idtrabajo = $("#id_trabajofinal").val();
 					var trabajosfinales = {id:idtrabajo};
 					var preguntaid = $(this).attr('data-cuestionario');
-					var respuestaid = $("input[name='pregunta"+$(this).attr('data-cuestionario')+"']:checked").attr('data-idresp');
-					var puntaje = $("input[name='pregunta"+$(this).attr('data-cuestionario')+"']:checked").val();
+					var respuestaid = $("input[name='preguntaq"+$(this).attr('data-cuestionario')+"']:checked").attr('data-idresp');
+					var puntaje = $("input[name='preguntaq"+$(this).attr('data-cuestionario')+"']:checked").val();
 					var tipo = "2";
 					listaRespuestas.push({trabajosfinales,preguntaid,respuestaid,tipo,puntaje});
 				}
