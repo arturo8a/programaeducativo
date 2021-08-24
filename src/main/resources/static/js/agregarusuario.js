@@ -222,7 +222,7 @@ function armarData(){
 	var sendOficio = "";
 	if($('#sendOficioSi').is(':checked') ) {
 	    sendOficio = $('#sendOficioSi').val();
-	}else if($('#sendOficioSi').is(':checked')){
+	}else if($('#sendOficioNo').is(':checked')){
 		sendOficio = $('#sendOficioNo').val();
 	}
 	var numoficioautoridad = $('#numoficioautoridad').val();

@@ -241,8 +241,8 @@ function getRespuestas(id){
 			var dataRespuestas = respuesta; console.log(dataRespuestas); 
 			$.each(dataRespuestas, function( i, value ) {
 				if(value.tipo == 1){
-					$("input[name='pregunta"+value.respuestaid+"'][value='"+(value.puntaje).toFixed(1)+"']").prop("checked",true);
-					$("input[name='pregunta"+value.respuestaid+"'][value='"+(value.puntaje).toFixed(1)+"']").click();
+					$("input[name='preguntar"+value.respuestaid+"'][value='"+(value.puntaje).toFixed(1)+"']").prop("checked",true);
+					$("input[name='preguntar"+value.respuestaid+"'][value='"+(value.puntaje).toFixed(1)+"']").click();
 				}else{
 					$("input[id='puntajeq"+value.respuestaid+"']").prop("checked",true);
 					$("input[id='puntajeq"+value.respuestaid+"']").click();
@@ -250,16 +250,16 @@ function getRespuestas(id){
 			});
 			var notaTotal = 0;
 			$.each($("[data-rubrica]"), function( i, value ) {
-				var preguntaName = $("input[name='pregunta"+$(this).attr('data-rubrica')+"']");
+				var preguntaName = $("input[name='preguntar"+$(this).attr('data-rubrica')+"']");
 				if($(preguntaName).is(':checked')){
-					var puntaje = parseFloat($("input[name='pregunta"+$(this).attr('data-rubrica')+"']:checked").val());
+					var puntaje = parseFloat($("input[name='preguntar"+$(this).attr('data-rubrica')+"']:checked").val());
 					notaTotal += puntaje;
 				}
 			});
 			$.each($("[data-cuestionario]"), function( i, value ) {
-				var preguntaName = $("input[name='pregunta"+$(this).attr('data-cuestionario')+"']");
+				var preguntaName = $("input[name='preguntaq"+$(this).attr('data-cuestionario')+"']");
 				if($(preguntaName).is(':checked')){
-					var puntaje = parseFloat($("input[name='pregunta"+$(this).attr('data-cuestionario')+"']:checked").val());
+					var puntaje = parseFloat($("input[name='preguntaq"+$(this).attr('data-cuestionario')+"']:checked").val());
 					notaTotal += puntaje;
 				}
 			});
