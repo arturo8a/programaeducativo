@@ -541,7 +541,7 @@ public class ReporteController {
 		
 		String fecha_archivo = dateFormat.format(date) + hourFormat.format(date);
 		
-		headers.add("Content-Disposition", "attachment; filename=Lista_alianzaestrategica_"+fecha_archivo+".xls");
+		headers.add("Content-Disposition", "attachment; filename=Lista_alianzaestrategica_"+fecha_archivo+".csv");
 		
 		return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
 		

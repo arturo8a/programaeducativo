@@ -615,7 +615,7 @@ var mis_evidencias_eliminadas = new Array();
 		if(titulotrabajo.trim()==""){
 			mensajeValidacion += "Debe ingresar título de su trabajo final"+"<br>";
 		}
-		
+		console.log("archivotrabajoeditar.files.length:  " + archivotrabajoeditar.files.length);
 		if(!$("#archivotrabajoeditar").is(':disabled') && archivotrabajoeditar.files.length==0){
 			mensajeValidacion += "Debe subir archivo de trabajo final"+"<br>";
 		}
@@ -640,6 +640,8 @@ var mis_evidencias_eliminadas = new Array();
 				}
 			}			
 		}
+		console.log("mis_evidencias_edit.length : " + mis_evidencias_edit.length);
+		console.log("mis_evidencias_inicial_edit.length : " + mis_evidencias_inicial_edit.length);
 		
 		if( ((mis_evidencias_edit.length + mis_evidencias_inicial_edit.length) >10	) || ( (mis_evidencias_edit.length + mis_evidencias_inicial_edit.length) == 0)){
 			mensajeValidacion += "Debe subir hasta 10 evidencias"+"<br>";

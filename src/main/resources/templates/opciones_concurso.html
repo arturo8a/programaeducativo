@@ -24,14 +24,14 @@
 		<div class="col-4">
 			<img th:src="@{/images/imagen3.PNG}" style="padding:10px; border:1px solid #C9C9C9" width="220px"/>
 			<h4>
-				<a id="consultace" style="cursor:pointer; color:#2E2D2D">CONSULTA</a>
+				<a id="consultace" style="cursor:pointer; color:#2E2D2D">Consulta</a>
 			</h4>
 			<label style="color:#2E2D2D"><i>Aqu&iacute; podras visualizar tus trabajos ingresados en a&ntilde;os anteriores</i></label>
 		</div>
 		<div class="col-4">
 			<img th:src="@{/images/imagen2.PNG}" style="padding:10px; border:1px solid #C9C9C9" width="430px"/>
 			<h4>
-				<a id="aulavirtualce" style="cursor:pointer; color:#2E2D2D">AULA VIRTUAL</a>
+				<a id="aulavirtualce" style="cursor:pointer; color:#2E2D2D">Aula virtual</a>
 			</h4>
 			<label style="color:#2E2D2D"><i>Aqu&iacute; podras encontrar los diversos recursos compartidos en las charlas y talleres, para acceder a ellos debes registrar tus datos en el sistema</i></label>
 		</div>
@@ -45,6 +45,21 @@
     	var cargainicialtrabajos= $("#cargainicialtablatrabajos").val();
 	    
 	    $(document).ready(function(){		
+		
+			$("#consultace").click(function(){
+				$("#modalimagencargando").modal({
+	    			show : true,
+	    			backdrop : 'static',
+	    			keyboard:false
+	    		});
+	    		$.ajax({
+	    			url: url_base + "pedesa/consulta_concursoeducativo",
+	    			success: function(respuesta) {	    				
+	    				$("#modalimagencargando").modal('hide');
+	    				$("#container").html(respuesta);
+	    			}
+	    		});	
+			});	  
 			
 	    	$("#btnCerrarSesion").click(function(){
 	    		$.ajax({

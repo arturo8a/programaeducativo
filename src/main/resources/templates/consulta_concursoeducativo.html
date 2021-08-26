@@ -93,7 +93,7 @@
 	    }
 	    table td{
 	        word-wrap: break-word;
-	        max-width: 450px;
+	        max-width: 600px;
 	    }
 	    #table_lista_participantes_consulta td{
 	        white-space: inherit;
@@ -105,17 +105,40 @@
 	</style>	
 </head>
 <body>
+
 <input type="hidden" id="ultimo_anio" name="ultimo_anio"  th:value="*{ultimo_anio}">
-<input type="hidden" th:value="${docentetutor.id}" id="id" />
-<div style="margin-top:-20px">
-	<div class="row m-0 p-0">
-		<div class="col-xs-1 col-sm-1 pt-3">
-			<ul th:each="anio : ${anios}" class="list-unstyled components">
-            	<li class="active" th:text="${anio}" style="border-bottom:2px solid black; cursor:pointer" th:onclick="|consultaConcursoPorAnio(${anio})|">                    
-            	</li>
-			</ul>   
-		</div>
-		<div class="col-xs-11 col-sm-11 pt-3">
+<input type="hidden" th:value="${docentetutor_id}" id="id" />
+
+<div class="wrapper">
+	<nav id="sidebar" class="border-right" style="background: #fafafa">
+		<strong>Año</strong><br><br>
+		<ul th:each="anio : ${anios}" class="list-unstyled components">
+        	<li class="active" th:text="${anio}" style="border-bottom:2px solid black; cursor:pointer" th:onclick="|consultaConcursoPorAnio(${anio})|">                    
+        	</li>
+		</ul>  
+	</nav>
+	<div id="content" class="m-0 p-0">
+		<nav class="navbar navbar-expand-lg" style="height:50px">
+			<div class="container-fluid">
+				<table style="width:100%">
+					<tr>
+						<td>
+							<button type="button" id="sidebarCollapse_consulta" class="btn btn-info">
+								 <i class="fas fa-align-left"></i>
+								 <span>CONSULTA</span>
+							</button>
+						</td>
+						<td style="float: right">
+							<div class="collapse navbar-collapse" id="navbarSupportedContent">
+								<input type="button" value="Ir al inicio" id="inicioconcursoconsulta" class="btn btn-primary" style="cursor: pointer"/>
+							</div>
+						</td>						
+					</tr>
+				</table>
+			</div>
+		</nav>
+		<div id="consulta_concurso" class="m-0 p-0">
+			
 				<div>					
 					<ul class="nav nav-tabs" id="myTab" role="tablist">
 					  <li class="nav-item">
@@ -132,68 +155,65 @@
 					<div class="tab-content" id="myTabContent">	
 						<div class="tab-pane fade show active" id="docente" role="tabpanel" aria-labelledby="docente-tab_consulta">
 								  	<br><br>
-								  	<div class="row">
+								  	<div class="row m-0 p-0">
 								  		<div class="col-12 text-left">
 								  			<strong>Código de local I.E.</strong>	
 								  			<div class="ui-widget">
-								  				<input type="hidden" th:value="${docentetutor.programaeducativo.id}" id="idprogramaeducativo" />
-								  				<input type="hidden" th:value="${docentetutor.id}" id="id" />
-								  				<input type="hidden" th:value="${docentetutor.anio}" id="anio" />
-								  				<input type="hidden" th:value="${activar_trabajos_finales}" id="activar_trabajos_finales" />
+								  				<input type="hidden" th:value="${docentetutor_anio}" id="anio" />
 								  				<input type="text" id="codmod" style="width:100%" class="form-control" th:value="${codmod}" disabled />
 								  			</div>
 								  		</div>
 								  	</div>
 								  	<br>
-									  <div class="row">
+									  <div class="row m-0 p-0">
 									  		<div class="col-4 text-left">
 									  			<label>Apellido paterno</label>	
-									  			<input type="text" id="appaterno" class="form-control" style="width:100%" th:field="*{docentetutor.appaterno}" disabled/>
+									  			<input type="text" id="appaterno" class="form-control" style="width:100%" th:field="*{docentetutor_appaterno}" disabled/>
 									  		</div>
 									  		<div class="col-4 text-left">
 									  			<label>Apellido materno</label>	
-									  			<input type="text" id="apmaterno" class="form-control" style="width:100%" th:field="*{docentetutor.apmaterno}" disabled/>
+									  			<input type="text" id="apmaterno" class="form-control" style="width:100%" th:field="*{docentetutor_apmaterno}" disabled/>
 									  		</div>
 									  		<div class="col-4 text-left">
 									  			<label>Nombres</label>	
-									  			<input type="text" id="nombre" class="form-control" style="width:100%" th:field="*{docentetutor.nombre}" disabled/>
+									  			<input type="text" id="nombre" class="form-control" style="width:100%" th:field="*{docentetutor_nombre}" disabled/>
 									  		</div>
 									  </div>
 									  <br>
-									  <div class="row">
+									  <div class="row m-0 p-0">
 									  		<div class="col-4 text-left">
 									  			<label>Tipo de documento</label>	
-									  			<input type="text" id="tipodocumento" style="width:100%" class="form-control" th:field="*{docentetutor.tipodocumento.descripcion}" disabled/>
+									  			<input type="text" id="tipodocumento" style="width:100%" class="form-control" th:field="*{docentetutor_tipodocumento}" disabled/>
 									  		</div>
 									  		<div class="col-4 text-left">
 									  			<label>N° de documento</label>	
-									  			<input type="text" id="nrodocumento" style="width:100%" class="form-control" th:field="*{docentetutor.nrodocumento}" disabled/>
+									  			<input type="text" id="nrodocumento" style="width:100%" class="form-control" th:field="*{docentetutor_nrodocumento}" disabled/>
 									  		</div>
 									  		<div class="col-4 text-left">
 									  			<label>Género</label>	
-									  			<input type="text" id="genero" style="width:100%" class="form-control" th:field="*{docentetutor.genero.descripcion}" disabled/>
+									  			<input type="text" id="genero" style="width:100%" class="form-control" th:field="*{docentetutor_genero}" disabled/>
 									  		</div>
 									  </div>
 									  <br>
-									  <div class="row">
+									  <div class="row m-0 p-0">
 									  		<div class="col-4 text-left">
 									  			<label>N° de teléfono</label>	
-									  			<input type="text" id="nrotelefono" style="width:100%" class="form-control" th:field="*{docentetutor.nrotelefono}" disabled/>
+									  			<input type="text" id="nrotelefono" style="width:100%" class="form-control" th:field="*{docentetutor_nrotelefono}" disabled/>
 									  		</div>
 									  		<div class="col-4 text-left">
 									  			<label>Correo electrónico</label>	
-									  			<input type="text" id="correoelectronico" style="width:100%" class="form-control" th:field="*{docentetutor.correoelectronico}" disabled/>
+									  			<input type="text" id="correoelectronico" style="width:100%" class="form-control" th:field="*{docentetutor_correoelectronico}" disabled/>
 									  		</div>
 									  		<div class="col-4 text-left">
 									  			<label>Responsable de registro</label>	
-									  			<input type="text" id="responsable" style="width:100%" class="form-control" th:field="*{docentetutor.responsable.descripcion}" disabled />
+									  			<input type="text" id="responsable" style="width:100%" class="form-control" th:field="*{docentetutor_responsable}" disabled />
 									  		</div>
 									  </div>
 								  		<br>
-									  <div class="row">
+									  <div class="row m-0 p-0">
 									  		<div class="col-4 text-left">
 									  			<label>Curso</label>	
-									  			<input type="text" id="curso" style="width:100%" class="form-control" th:field="*{docentetutor.curso}" disabled/>
+									  			<input type="text" id="curso" style="width:100%" class="form-control" th:field="*{docentetutor_curso}" disabled/>
 									  		</div>
 									  		<div class="col-4">
 									  			&nbsp;
@@ -203,7 +223,7 @@
 									  		</div>
 									  </div>
 									  <br>
-									  	<div class="row">
+									  	<div class="row m-0 p-0">
 									  		<div class="col-6 text-right">
 								 				<input type="button" value="Cancelar" id="btncancelarficha" class="btn btn-outline-primary" disabled/>
 											</div>
@@ -215,12 +235,12 @@
 						  	</div>
 						<div class="tab-pane fade" id="participante" role="tabpanel" aria-labelledby="participante-tab_consulta">
 							<div  id="container_participante">
-								<div class="row">
+								<div class="row m-0 p-0">
 									<div class="col text-right">
-										<input type="button" value="Agregar participante" id="agregarparticipante" class="btn btn-primary  mr-3" disabled>
+										<input type="button" value="Agregar participante" id="agregarparticipante" class="btn btn-primary  m-1" disabled>
 									</div>
 								</div>
-								<div class="row pt-2 pb-4 m-0">
+								<div class="row m-0 p-0">
 									<div class="col-xs-12 col-sm-12">
 										<table id="table_lista_participantes_consulta"  class="table table-striped table-bordered nowrap" cellspacing="0" style="width:100%">
 											<thead>
@@ -246,9 +266,9 @@
 						</div>		
 						<div class="tab-pane fade" id="trabajosfinales" role="tabpanel" aria-labelledby="trabajosfinales-tab_consulta" >	
 							<div  id="container_trabajos_finales">
-								<div class="row pt-2 pb-4 m-0">
+								<div class="row m-0 p-0">
 									<div class="col-xs-12 col-sm-12 pt-3">
-										<table id="table_lista_trabajos_finales_consulta"  class="table table-striped table-bordered nowrap" cellspacing="0" style="width:100%" disabled>
+										<table id="table_lista_trabajos_finales_consulta"  class="table table-striped table-bordered nowrap" cellspacing="0" style="width:100%">
 											<thead>
 										        <tr>
 										        	<th>Nº</th>
@@ -265,7 +285,7 @@
 										</table>
 									</div>
 								</div>	
-								<div class="row">
+								<div class="row m-0 p-0">
 									<div class="col text-right">
 										<input type="button" value="Agregar trabajo" id="agregartrabajo" class="btn btn-success mr-3" disabled>
 										<input type="button" id="finalizarparticipacion"  value="FINALIZAR PARTICIPACIÓN" class="btn btn-primary mr-3" disabled>
@@ -275,9 +295,28 @@
 						</div>
 					</div>
 				</div>
+			
+			
 		</div>
+		<br><br>
 	</div>
 </div>
+
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modalvertrabajoconsulta">
+  <div class="modal-dialog modal-lg" role="document"> 
+    <div class="modal-content" style="overflow-y: scroll; width:80%; height:750px">
+      <div class="modal-header">
+        <strong class="pt-1">VER TRABAJO</strong>
+      </div>
+      <div class="modal-body" id="contenidovertrabajoconsulta">
+      	
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal" tabindex="-1" role="dialog" id="modalimagencargando">
   <center>
   	<img th:src="@{./images/cargando.gif}" style="line-height: 200px;"/>
@@ -308,11 +347,28 @@
 	
 	$(document).ready(function(){
 		
-		$("#sidebarCollapse").click(function(){
-			setTimeout(() => {        		  
-	    			$(window).trigger('resize');
-	        }, 200);
-		});	
+		$('#sidebarCollapse_consulta').on('click',function(){
+            $('#sidebar').toggleClass('active');
+            $('#content').toggleClass('active');
+        });
+			
+		$("#inicioconcursoconsulta").click(function(){
+			$("#modalimagencargando").modal({
+				show : true,
+				backdrop : 'static',
+				keyboard:false
+			});
+			$.ajax({
+				url: url_base + "pedesa/menu_concurso",
+				success: function(respuesta) {
+					$("#modalimagencargando").modal('hide');
+					$("#container").html(respuesta);
+				},
+				error: function() {
+			        console.log("No se ha podido obtener la información");
+			    }
+			});
+		});
 		
 		anio = $("#ultimo_anio").val();
 		
@@ -627,8 +683,8 @@
 		    url : url_base + "pedesa/formvertrabajos/"+ id,
 			success: function(respuesta) { 
 				$("#modalimagencargando").modal('hide');
-				$("#contenidovertrabajo").html(respuesta);
-				$("#modalvertrabajo").modal({
+				$("#contenidovertrabajoconsulta").html(respuesta);
+				$("#modalvertrabajoconsulta").modal({
 					show : true,
 					backdrop : 'static',
 					keyboard:false

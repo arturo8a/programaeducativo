@@ -337,7 +337,7 @@ public class IndexController {
 		});
 		
 		model.addAttribute("nroevidencias",uploadfile.buscarEvidencias(id, "upload_evidencias").size());
-		return "formvertrabajo";
+		return "formvertrabajoconsulta";
 	}
 	
 	@GetMapping("/actualizarcontrasenia/uo/{id}")
@@ -999,30 +999,48 @@ public class IndexController {
 		model.addAttribute("responsableregistro", responsableregistroserv.listar());
 		
 		Calendar fecha = Calendar.getInstance();
-		Docentetutor docentetutor = docentetutorService.getByProgeducByAnio(pe.getId(),fecha.get(Calendar.YEAR));
-		//Docentetutor docentetutor = docentetutorService.getByProgeducByAnio(pe.getId(),fecha.get(Calendar.YEAR));
+		Docentetutor docentetutor = docentetutorService.getByProgeducByAnio(pe.getId(),fecha.get(Calendar.YEAR)-1);
+		if(docentetutor!=null) {
+			model.addAttribute("docentetutor_id", docentetutor.getId());
+			model.addAttribute("docentetutor_anio", docentetutor.getAnio());
+			model.addAttribute("docentetutor_appaterno", docentetutor.getAppaterno());
+			model.addAttribute("docentetutor_apmaterno", docentetutor.getApmaterno());
+			model.addAttribute("docentetutor_nombre", docentetutor.getNombre());
+			model.addAttribute("docentetutor_tipodocumento", docentetutor.getTipodocumento().getDescripcion());
+			model.addAttribute("docentetutor_nrodocumento", docentetutor.getNrodocumento());
+			model.addAttribute("docentetutor_genero", docentetutor.getGenero().getDescripcion());
+			model.addAttribute("docentetutor_nrotelefono", docentetutor.getNrotelefono());
+			model.addAttribute("docentetutor_correoelectronico", docentetutor.getCorreoelectronico());
+			model.addAttribute("docentetutor_responsable", docentetutor.getResponsable());
+			model.addAttribute("docentetutor_curso", docentetutor.getCurso());
+		}
+		else {
+			model.addAttribute("docentetutor_id", "");
+			model.addAttribute("docentetutor_anio", "");
+			model.addAttribute("docentetutor_appaterno", "");
+			model.addAttribute("docentetutor_apmaterno", "");
+			model.addAttribute("docentetutor_nombre", "");
+			model.addAttribute("docentetutor_tipodocumento", "");
+			model.addAttribute("docentetutor_nrodocumento", "");
+			model.addAttribute("docentetutor_genero", "");
+			model.addAttribute("docentetutor_nrotelefono", "");
+			model.addAttribute("docentetutor_correoelectronico", "");
+			model.addAttribute("docentetutor_responsable", "");
+			model.addAttribute("docentetutor_curso", "");
+		}
 		model.addAttribute("docentetutor", docentetutor);
 		model.addAttribute("tipodoc",tipodocserv.findAll());
 		model.addAttribute("genero",generoprofserv.listar());
 		model.addAttribute("nivel",nivelparticipanteService.listar());
 		model.addAttribute("parentesco",parentescoService.listar());
 		
-		int activar_trabajos_finales = 0;		
-		
-		Date date = Calendar.getInstance().getTime();
-		DateFormat formato = new SimpleDateFormat("dd/MM/yy");
-        String today = formato.format(date);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
-    	LocalDate fechaactual = LocalDate.parse(today, formatter);
-    	//LocalDate fechaactual = LocalDate.parse("20/04/21", formatter);
-    	
-    	List<Integer> anios = new ArrayList<Integer>();
-    	//model.addAttribute("anios", postulacionconcursoService.aniosConcurso());
+		model.addAttribute("anios", postulacionconcursoService.aniosConcurso(pe.getId()));
+    	/*List<Integer> anios = new ArrayList<Integer>();
     	anios.add(2019);
     	anios.add(2020);
     	anios.add(2021);
-    	model.addAttribute("ultimo_anio", fecha.get(Calendar.YEAR));
-    	model.addAttribute("anios", anios);				
+    	model.addAttribute("anios", anios);	*/
+    	model.addAttribute("ultimo_anio", fecha.get(Calendar.YEAR)-1);
 		return "consulta_concursoeducativo";
 	}	
 	

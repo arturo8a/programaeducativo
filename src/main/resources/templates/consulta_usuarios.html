@@ -472,8 +472,8 @@
 				    url : url_base + "pedesa/activarusuario/"+ usuario,
 					success: function(respuesta) {
 						if(respuesta==1){
-							table_lista_usuario.cell(celdaseleccionada,7).data(1).draw();
-							table_lista_usuario.cell(celdaseleccionada,8).data(1).draw();	
+							table_lista_usuario.cell(celdaseleccionada,8).data(1).draw();
+							table_lista_usuario.cell(celdaseleccionada,9).data(1).draw();	
 						}
 						else{
 							$("#modalimagencargando").modal('hide');
@@ -506,8 +506,8 @@
 				    url : url_base + "pedesa/eliminarusuario/"+ usuario,
 					success: function(respuesta) {
 						if(respuesta==1){
-							table_lista_usuario.cell(celdaseleccionada,7).data(0).draw();
 							table_lista_usuario.cell(celdaseleccionada,8).data(0).draw();
+							table_lista_usuario.cell(celdaseleccionada,9).data(0).draw();
 						}
 						else{
 							$("#modalimagencargando").modal('hide');

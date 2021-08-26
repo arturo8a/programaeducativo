@@ -843,35 +843,37 @@ public class ConcursoeducativoController {
 			listaUsu.forEach(ua->{
 				
 				if(ua.getComiteevaluador().equals("1")) {
-					EvaluadorDto dto = new EvaluadorDto();
-					dto.setOds(ua.getOds().getDescripcion());
-					
-					rol_entidad = "";
-					if(ua.getComitetecnico().equals("1")) {
-						rol_entidad = "Comite Técnico/";
-					}				
-					if(ua.getComiteevaluador().equals("1")) {
-						rol_entidad += "Comite Evaluador/";
-					}				
-					if(ua.getAuspiciador().equals("1")) {
-						rol_entidad += "Auspiciador/";
-					}				
-					if(ua.getAliado().equals("1")) {
-						rol_entidad += "Aliado/";
-					}				
-					if(rol_entidad.length()>0)
-						rol_entidad = rol_entidad.substring(0, rol_entidad.length()-1);	
-					dto.setRol_entidad(rol_entidad);
-					dto.setEntidad(ua.getEntidad());
-					dto.setApellido_paterno(ua.getApepatautoridad());
-					dto.setApellido_materno(ua.getApematautoridad());
-					dto.setNombres(ua.getNombresautoridad());
-					if(ua.getTipodocumento() != null) {
-						dto.setTipo_documento(ua.getTipodocumento().getDescripcion());
+					if(ua.getEstado().equals("1")) {
+						EvaluadorDto dto = new EvaluadorDto();
+						dto.setOds(ua.getOds().getDescripcion());
+						
+						rol_entidad = "";
+						if(ua.getComitetecnico().equals("1")) {
+							rol_entidad = "Comite Técnico/";
+						}				
+						if(ua.getComiteevaluador().equals("1")) {
+							rol_entidad += "Comite Evaluador/";
+						}				
+						if(ua.getAuspiciador().equals("1")) {
+							rol_entidad += "Auspiciador/";
+						}				
+						if(ua.getAliado().equals("1")) {
+							rol_entidad += "Aliado/";
+						}				
+						if(rol_entidad.length()>0)
+							rol_entidad = rol_entidad.substring(0, rol_entidad.length()-1);	
+						dto.setRol_entidad(rol_entidad);
+						dto.setEntidad(ua.getEntidad());
+						dto.setApellido_paterno(ua.getApepatautoridad());
+						dto.setApellido_materno(ua.getApematautoridad());
+						dto.setNombres(ua.getNombresautoridad());
+						if(ua.getTipodocumento() != null) {
+							dto.setTipo_documento(ua.getTipodocumento().getDescripcion());
+						}
+						dto.setNro_documento(ua.getNumdocumento());
+						dto.setId(ua.getId());
+						lista.add(dto);
 					}
-					dto.setNro_documento(ua.getNumdocumento());
-					dto.setId(ua.getId());
-					lista.add(dto);
 				}
 			});
 		}
@@ -1900,7 +1902,6 @@ public class ConcursoeducativoController {
 			String usuario = ses.getAttribute("usuario").toString();
 			Usuario user = usuarioServ.byUsuario(usuario);
 			usuarioodsServ.listarByUsuario(user.getId()).forEach(usu->{				
-				System.out.println("usu.getOds().getId() :" + usu.getOds().getId());
 				List<UsuarioAlianza> listaUsu = usuAlianzaserv.listarByOds(usu.getOds().getId());
 				listaUsu.forEach(obj->{
 					DetalleUsuarioAlianzaEstrategica dto = new DetalleUsuarioAlianzaEstrategica();
@@ -2231,11 +2232,11 @@ public class ConcursoeducativoController {
 				
 		List<TrabajosFinalesConcursoDto> lista = new ArrayList<TrabajosFinalesConcursoDto>();
 		
-		ejesTematicos="";
+		
 		
 		trabajosfinalesparticipanteServ.listarTodos().forEach(obj->{
 			
-			if(obj.getTrabajosfinales().getEstado() == 1 && obj.getParticipante().getEstado()==1) {
+			if(obj.getTrabajosfinales().getEstado() == 1 && obj.getParticipante().getEstado()==1 && obj.getTrabajosfinales().getEnviado()==1) {
 				bandera = true;				
 				mi_ods = odsserv.byOds(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid()).getDescripcion();
 				mi_anio = obj.getTrabajosfinales().getAnio();
@@ -2298,6 +2299,8 @@ public class ConcursoeducativoController {
 					dto.setCategoriaTrabajo(obj.getTrabajosfinales().getCategoriatrabajo().getDescripcion());
 					dto.setNivelParticipacion(obj.getParticipante().getGradoestudiante().getNivelgradopartdesc());
 					
+					ejesTematicos="";
+					
 					if(obj.getTrabajosfinales().getConversacion() == 1)
 						ejesTematicos += "Conversación de las fuentes de agua/";
 					if(obj.getTrabajosfinales().getValoracionagua() == 1)
@@ -2324,7 +2327,7 @@ public class ConcursoeducativoController {
 					dto.setGeneroParticipante(obj.getParticipante().getGeneroestudiante().getDescripcion());
 					dto.setSeccionParticipante(obj.getParticipante().getSeccion());
 					dto.setNivelParticipante(obj.getParticipante().getGradoestudiante().getNivelparticipante().getDescripcion());
-					dto.setGradoParticipante(obj.getParticipante().getGradoestudiante().getNivelgradopartid().toString());
+					dto.setGradoParticipante(obj.getParticipante().getGradoestudiante().getDescripcion());
 					dto.setNombreTutor(obj.getParticipante().getNombrepmt());
 					dto.setApellidoPaternoTutor(obj.getParticipante().getAppaternopmt());
 					dto.setApellidoMaternoTutor(obj.getParticipante().getApmaternopmt());

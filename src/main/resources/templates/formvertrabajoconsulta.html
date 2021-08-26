@@ -1,0 +1,221 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>ProgramaEducativo</title>
+    <script type="text/javascript">
+		window.history.forward();
+	</script>
+	
+	<style>
+		table{
+        	overflow-x:auto;
+	    }
+	    table td{
+	        word-wrap: break-word;
+	        max-width: 650px;
+	    }
+	    #table_lpt_ver td{
+	        white-space: inherit;
+	    }
+	</style>
+</head>
+<body>
+	<form id="formparticipanteajax">
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 text-left w-100" >
+				<u>DETALLE DEL TRABAJO</u> 	
+			</div>
+			<div class="col-xs-12 col-sm-3 text-left pt-4">
+				<input type="hidden" th:value="${tf.id}" id="trabajooid" />
+				<label for="categoriatrabajo">Categoria</label>
+				<input type="text" th:value="${tf.categoriatrabajo.descripcion}" disabled class="form-control" />
+			</div>
+			<div class="col-xs-12 col-sm-5 text-left pt-4">
+				<label for="modalidadpostulaciontrabajo">Modalidad de postulación</label>
+				<input type="text" th:value="${tf.modalidadtrabajo.descripcion}" disableddisabled class="form-control" />
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label for="titulotrabajo">Título de su trabajo final</label>
+				<input type="text" class="form-control" th:field="*{tf.titulotrabajo}" disabled/>
+			</div>
+			<div class="col-xs-12 col-sm-3 text-left pt-4">
+				<label for="archivotrabajo"><strong>Archivo de trabajo final</strong></label>
+				<table  th:each="trabajo : ${nombretrabajos}">
+				    <tr>
+				        <td th:text="${trabajo}"></td>
+				    </tr>
+				</table>
+			</div>
+			<div class="col-xs-12 col-sm-5 text-left pt-4">
+				<label for="evidenciatrabajo"><strong>Archivos de evidencias</strong></label>
+				<table >
+				    <tr>				    	
+			    		<td th:each="evidencia:${nombreevidencias}">
+			    			<label th:text="${#strings.abbreviate(evidencia,8)}"></label>
+			    		</td>			         
+				    </tr>
+				</table>		
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label for="linkvideo">Link de video</label>
+				<input type="text" class="form-control" disabled th:field="*{tf.linkvideo}"/>
+			</div>
+		</div>	
+		
+		<div class="row pb-4 pt-3">
+			<div class="col-xs-12 col-sm-8 text-center" style="overflow-y: scroll; height:300px;width:100%">
+				<table id="table_lpt_ver"  class="table table-striped table-bordered nowrap">
+					<thead>
+				        <tr>
+				        	<th>Apellido paterno</th>
+				            <th>Apellido materno</th>
+				            <th>Nombres</th>
+				            <th>Tipo documento</th>
+				            <th>N° documento</th>
+				            <th>Nivel</th>
+				        </tr>
+				    </thead>
+				</table>
+			</div>
+			<div class="col-xs-12 col-sm-4">
+				<table>
+					<tr>
+						<td><label>¿Qué ejes temáticos aborda tu trabajo?</label></td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" th:checked="${chconversacion}" disabled /><label style="padding-left:5px" >Conversación de las fuentes de agua</label></td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" th:checked="${chvaloracionagua}" disabled/><label style="padding-left:5px" >Valoración de los servicios de agua potable</label></td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" th:checked="${chvaloracionalcantarillado}" disabled/><label style="padding-left:5px" >Valoración del servicio de alcantarillado</label></td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" th:checked="${chbuenuso}" disabled/><label style="padding-left:5px">Buen uso y reúso del agua potable</label></td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" th:checked="${chimportancia}" disabled/><label style="padding-left:5px" >Importancia de cerrar la brecha en saneamiento</label></td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" th:checked="${chvinculo}" disabled/><label style="padding-left:5px" >El vínculo estratégico entre el agua segura y la salud</label></td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" th:checked="${chcarencias}" disabled/><label style="padding-left:5px" >Las carencias que ponen en riesgo la vida</label></td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" th:checked="${chrevaloracion}" disabled/><label style="padding-left:5px" >Revaloración de las prácticas ancestrales para la seguridad hídrica</label></td>
+					</tr>
+				</table>
+			</div>
+		</div>		
+		
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 text-left w-100" >
+				<u>DATOS DEL DOCENTE</u> 	
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label for="appaternodocente">Apellido paterno</label>
+				<input type="text" disabled th:field="*{tf.appaterno}" class="form-control" />
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label for="apmaternoestudiante">Apellido materno</label>
+				<input type="text" disabled th:field="*{tf.apmaterno}" class="form-control" />
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label for="nombreestudiante">Nombres</label>
+				<input type="text" disabled th:field="*{tf.nombre}" class="form-control" />
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label for="archivotrabajo">Tipo documento</label>
+				<input type="text" disabled th:field="*{tf.tipodocumento.descripcion}" class="form-control" />
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label for="evidenciatrabajo">N° documento</label>
+				<input type="text" th:field="*{tf.nrodocumento}" disabled class="form-control" />
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label for="fechanacimientoestudiante">Teléfono</label>
+				<input type="text" class="form-control" th:field="*{tf.telefono}" disabled/>
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label for="evidenciatrabajo">Correo electrónico</label>
+				<input type="text" disabled th:field="*{tf.correo}" class="form-control" />
+			</div>
+			<div class="col-xs-12 col-sm-4 text-left pt-4">
+				<label for="fechanacimientoestudiante">Género</label>
+				<input type="text" disabled th:field="*{tf.genero.descripcion}" class="form-control" />
+			</div>
+		</div>
+		<br>
+		<div >
+		  		<button type="button" class="btn btn-outline-primary" id="btncerrarvertrabajoconsulta" name="btncerrarvertrabajoconsulta">Cerrar</button>
+		</div>
+	</form>	
+</body>
+</html>
+
+<script type="text/javascript">
+
+	$("#btncerrarvertrabajoconsulta").click(function(){
+		$("#modalvertrabajoconsulta").modal('hide');
+	});
+
+	$("#table_lpt_ver").dataTable().fnDestroy();
+	table_lpt_ver = $('#table_lpt_ver').DataTable({
+		dom: 'Bfrtip',
+	    "scrollX": true,
+	    /*"searching": false,*/
+	    "paging": false,
+	    fixedHeader: {
+            header: true,
+            footer: true
+        },
+	    lengthMenu: [
+	        [ 10, 15, 25, -1 ],
+	        [ '10 filas', '15 filas', '25 filas', 'Mostrar todas' ]
+	    ],
+	    "processing":true,
+	    language: {
+	        "decimal": "",
+	        "emptyTable": "No se han registrado",
+	        "info": "",
+	        "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
+	        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+	        "infoPostFix": "",
+	        "thousands": ",",
+	        "lengthMenu": "Mostrar _MENU_ Entradas",
+	        "loadingRecords": "Cargando Registros...",
+	        "processing": "Procesando...",
+	        "search": "Buscar:",
+	        "zeroRecords": "Sin datos",//No existen registros
+	        "paginate": {
+	            "first": "Primero",
+	            "last": "Ultimo",
+	            "next": "Siguiente",
+	            "previous": "Anterior"
+	        }
+	    },
+	    'ajax' : {
+	        "url" : url_base + 'pedesa/listaparticipantesver_trabajo/'+$("#trabajooid").val() ,
+	        "type" : "GET",
+	        "dataSrc" : ""
+	    },
+	    'columnDefs': [
+		    	
+	    ],
+	    'columns' : [
+	    		{ 'data' : 'apellidopaterno' },
+		        { 'data' : 'apellidomaterno' },
+		        { 'data' : 'nombres' },
+		        { 'data' : 'tipodocumento' },
+		        { 'data' : 'nrodocumento' },
+               { 'data' : 'nivel'}
+	    ],
+	    buttons: []
+	});
+
+</script>
