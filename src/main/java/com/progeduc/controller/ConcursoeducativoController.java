@@ -2097,7 +2097,7 @@ public class ConcursoeducativoController {
 						float NotaPuesto1 = listaTrab.get(0).getNota();
 						int cantidad = 0;
 						/*BuscarEmpate*/
-						for (Trabajosfinales trabajos : listaTrab) {
+						for (Trabajosfinales trabajos : listaTrab) { log.info("TRABAJO_ID: "+trabajos.getId() +" | TRABAJO_NOTA: "+trabajos.getNota()+" | NOTA_1: "+NotaPuesto1);
 							if(trabajos.getNota() == NotaPuesto1 ) {
 								Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getId());
 								trabajoFinal.setPuesto(1);
@@ -2126,7 +2126,7 @@ public class ConcursoeducativoController {
 						if(listaTrab.size() > cantidad) {
 							float NotaPuesto2 = listaTrab.get(cantidad).getNota();
 							/*BuscarEmpate*/
-							for (Trabajosfinales trabajos : listaTrab) {
+							for (Trabajosfinales trabajos : listaTrab) {log.info("TRABAJO_ID: "+trabajos.getId() +" | TRABAJO_NOTA: "+trabajos.getNota()+" | NOTA_2: "+NotaPuesto2);
 								if(trabajos.getNota() == NotaPuesto2 ) {
 									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getId());
 									trabajoFinal.setPuesto(2);
@@ -2156,7 +2156,7 @@ public class ConcursoeducativoController {
 							float NotaPuesto3 = listaTrab.get(cantidad+cantidad2).getNota();
 							/*BuscarEmpate*/
 							for (Trabajosfinales trabajos : listaTrab) {
-								if(trabajos.getNota() == NotaPuesto3 ) {
+								if(trabajos.getNota() == NotaPuesto3 ) {log.info("TRABAJO_ID: "+trabajos.getId() +" | TRABAJO_NOTA: "+trabajos.getNota()+" | NOTA_3: "+NotaPuesto3);
 									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getId());
 									trabajoFinal.setPuesto(3);
 									trabajosfinalesServ.modificar(trabajoFinal);

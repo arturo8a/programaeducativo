@@ -86,7 +86,7 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
 	    		+ "inner join programaeducativo pe on tf.programaeducativoid = pe.id "
 	    		+ "inner join distrito d on pe.distritoid = d.id "
 	    		+ "inner join ods o on d.odsid = o.id "
-	    		+ "where tf.nota is not null and o.id=?3  "
+	    		+ "where tf.nota is not null and o.id=?1  "
 	    		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) ",nativeQuery = true)
 	List<Trabajosfinales> listarTrabajosfinalesPorOds(Integer odsId);
 	 
