@@ -442,7 +442,7 @@ public class ReporteController {
 			row.createCell(i++).setCellValue(initRow-2); sheet.autoSizeColumn(i);
 			row.createCell(i++).setCellValue(obj.getAnio()); sheet.autoSizeColumn(i);
 			row.createCell(i++).setCellValue(obj.getOds().getDescripcion()); sheet.autoSizeColumn(i);
-			row.createCell(i++).setCellValue(obj.getCategoria().getDescripcion()); sheet.autoSizeColumn(i);
+			row.createCell(i++).setCellValue(obj.getCategoria()!=null?obj.getCategoria().getDescripcion():""); sheet.autoSizeColumn(i);
 			row.createCell(i++).setCellValue(obj.getEntidad()); sheet.autoSizeColumn(i);
 			row.createCell(i++).setCellValue(obj.getDireccion()); sheet.autoSizeColumn(i);
 			row.createCell(i++).setCellValue(obj.getComitetecnico().equals("1") ? "SI" : "NO"); sheet.autoSizeColumn(i);

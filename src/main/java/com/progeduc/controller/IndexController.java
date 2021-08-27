@@ -510,7 +510,7 @@ public class IndexController {
 	}
 	
 	@GetMapping("/listaformconcurso")
-	public String listaconcurso(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
+	public String listaconcurso(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {		
 		model.addAttribute("ods",odsserv.listarAll());
 		Calendar fecha = Calendar.getInstance();
         List<Integer> lista = new ArrayList<Integer>();
@@ -544,8 +544,8 @@ public class IndexController {
 		}
 		else if(ses.getAttribute("tipousuarioid").toString().equals("2")) {
 			
-			/*odsid = usuarioService.byUsuario(ses.getAttribute("usuario").toString()).getOdsid();*/
-			odsid = 18;
+			odsid = usuarioService.byUsuario(ses.getAttribute("usuario").toString()).getOdsid();
+			//odsid = 18;
 		}		
 		System.out.println("odsid :" + odsid);
 		model.addAttribute("odsid",odsid);
