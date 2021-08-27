@@ -868,7 +868,7 @@ public class ConcursoeducativoController {
 						dto.setApellido_materno(ua.getApematautoridad());
 						dto.setNombres(ua.getNombresautoridad());
 						if(ua.getTipodocumento() != null) {
-							dto.setTipo_documento(ua.getTipodocumento()!=null?ua.getTipodocumento().getDescripcion():"");
+							dto.setTipo_documento(ua.getTipodocumento().getDescripcion());
 						}
 						dto.setNro_documento(ua.getNumdocumento());
 						dto.setId(ua.getId());
@@ -904,7 +904,7 @@ public class ConcursoeducativoController {
 						dto.setApellido_materno(ua.getApematautoridad());
 						dto.setNombres(ua.getNombresautoridad());
 						if(ua.getTipodocumento() != null) {
-							dto.setTipo_documento(ua.getTipodocumento()!=null?ua.getTipodocumento().getDescripcion():"");
+							dto.setTipo_documento(ua.getTipodocumento().getDescripcion());
 						}
 						dto.setNro_documento(ua.getNumdocumento());
 						dto.setId(ua.getId());
@@ -944,7 +944,7 @@ public class ConcursoeducativoController {
 							dto.setApellido_paterno(ua.getApepatautoridad());
 							dto.setApellido_materno(ua.getApematautoridad());
 							dto.setNombres(ua.getNombresautoridad());
-							dto.setTipo_documento(ua.getTipodocumento()!=null?ua.getTipodocumento().getDescripcion():"");
+							dto.setTipo_documento(ua.getTipodocumento().getDescripcion());
 							dto.setNro_documento(ua.getNumdocumento());
 							dto.setId(ua.getId());
 							lista.add(dto);
@@ -2101,7 +2101,7 @@ public class ConcursoeducativoController {
 						float NotaPuesto1 = listaTrab.get(0).getNota();
 						int cantidad = 0;
 						/*BuscarEmpate*/
-						for (Trabajosfinales trabajos : listaTrab) { log.info("TRABAJO_ID: "+trabajos.getId() +" | TRABAJO_NOTA: "+trabajos.getNota()+" | NOTA_1: "+NotaPuesto1);
+						for (Trabajosfinales trabajos : listaTrab) {
 							if(trabajos.getNota() == NotaPuesto1 ) {
 								Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getId());
 								trabajoFinal.setPuesto(1);
@@ -2130,7 +2130,7 @@ public class ConcursoeducativoController {
 						if(listaTrab.size() > cantidad) {
 							float NotaPuesto2 = listaTrab.get(cantidad).getNota();
 							/*BuscarEmpate*/
-							for (Trabajosfinales trabajos : listaTrab) {log.info("TRABAJO_ID: "+trabajos.getId() +" | TRABAJO_NOTA: "+trabajos.getNota()+" | NOTA_2: "+NotaPuesto2);
+							for (Trabajosfinales trabajos : listaTrab) {
 								if(trabajos.getNota() == NotaPuesto2 ) {
 									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getId());
 									trabajoFinal.setPuesto(2);
@@ -2160,7 +2160,7 @@ public class ConcursoeducativoController {
 							float NotaPuesto3 = listaTrab.get(cantidad+cantidad2).getNota();
 							/*BuscarEmpate*/
 							for (Trabajosfinales trabajos : listaTrab) {
-								if(trabajos.getNota() == NotaPuesto3 ) {log.info("TRABAJO_ID: "+trabajos.getId() +" | TRABAJO_NOTA: "+trabajos.getNota()+" | NOTA_3: "+NotaPuesto3);
+								if(trabajos.getNota() == NotaPuesto3 ) {
 									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getId());
 									trabajoFinal.setPuesto(3);
 									trabajosfinalesServ.modificar(trabajoFinal);
@@ -2319,7 +2319,10 @@ public class ConcursoeducativoController {
 						ejesTematicos += "El vínculo estratégico entre el agua segura y la salud/";
 					if(obj.getTrabajosfinales().getCarencias() == 1)
 						ejesTematicos += "Las carencias que ponen en riesgo la vida/";
-					ejesTematicos = ejesTematicos.substring(0, ejesTematicos.length()-1);
+					
+					if(ejesTematicos.length()>0)
+						ejesTematicos = ejesTematicos.substring(0, ejesTematicos.length()-1);
+					
 					
 					dto.setEjesTematicos(ejesTematicos);
 					dto.setNombreParticipante(obj.getParticipante().getNombreestudiante());
