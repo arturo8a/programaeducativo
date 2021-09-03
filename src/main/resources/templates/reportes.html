@@ -30,20 +30,8 @@
 			<select id="reporte" name="reporte" class="form-control">
 				<option value="0">Seleccione</option>
 				<option value="1">Información de docentes y participantes C.E</option>
+				<option value="2">Reporte General</option>
 			</select>
-			<!-- table style="width:100%">
-				<tr>
-					<td style="width:30%">
-						<label>Seleccione reporte</label>
-					</td>
-					<td style="width:70%">
-						<select id="reporte" name="reporte" class="form-control">
-							<option value="0">Seleccione</option>
-							<option value="1">Información de docentes y participantes C.E</option>
-						</select>
-					</td>
-				</tr>
-			</table-->	
 		</div>
 	</div>
 	<div class="row p-0 m-0">
@@ -128,11 +116,10 @@
 				var modalidad = parseInt($("#cbmodalidad").val());
 				var nivel = parseInt($("#cbnivelparticipacion").val());		
 				
-				if(reporte!="0"){
-					window.location.href = url_base + "pedesa/reporteparticipantesinscritos/"+ods+"/"+anio+"/"+categoria+"/"+modalidad+"/"+nivel;
-				}
-				else{
-					alert("Seleccione reporte");
+				switch(reporte){
+					case '1' : window.location.href = url_base + "pedesa/reporteparticipantesinscritos/"+ods+"/"+anio+"/"+categoria+"/"+modalidad+"/"+nivel; break;
+					case '2' : window.location.href = url_base + "pedesa/reportegeneral/"+ods+"/"+anio+"/"+categoria+"/"+modalidad+"/"+nivel; break;
+					default : alert("Seleccione reporte"); break;
 				}
 			});
 			

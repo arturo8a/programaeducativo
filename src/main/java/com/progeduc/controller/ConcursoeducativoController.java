@@ -12,18 +12,14 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -53,8 +49,8 @@ import com.progeduc.dto.CategoriaModalidadByOds;
 import com.progeduc.dto.ClaveValor;
 import com.progeduc.dto.ConcursoDto;
 import com.progeduc.dto.DataTrabajosPermisos;
+import com.progeduc.dto.DetalleEvaluacionReporteDto;
 import com.progeduc.dto.DetalleUsuarioAlianzaEstrategica;
-import com.progeduc.dto.DocenteDto;
 import com.progeduc.dto.EvaluacionDto;
 import com.progeduc.dto.EvaluacionRubricaQuestionarioDto;
 import com.progeduc.dto.EvaluadorDto;
@@ -62,7 +58,6 @@ import com.progeduc.dto.ListaDocente;
 import com.progeduc.dto.ListaDocenteInscritos;
 import com.progeduc.dto.ListaTrabajosFinalesPendientes;
 import com.progeduc.dto.ListaparticipanteDto;
-import com.progeduc.dto.ListaparticipantereporteDto;
 import com.progeduc.dto.ListaparticipantetrabajoDto;
 import com.progeduc.dto.ListatrabajosfinalesDto;
 import com.progeduc.dto.OdsFinalizarDto;
@@ -220,6 +215,7 @@ public class ConcursoeducativoController {
 	boolean bandera;
 	String mi_ods,mi_modalidad,mi_estado,mi_categoria,mi_nivel_participacion,mi_nombreie;
 	Integer mi_anio;
+	Integer nroEvaluadoresAsignados;
 	
 	@PostMapping(value="/registrarconcurso")
 	public String registrarconcurso(@Valid @RequestBody Postulacionconcurso dto)  {
@@ -2234,13 +2230,12 @@ public class ConcursoeducativoController {
 		Workbook workbook = new HSSFWorkbook();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();		
 				
-		List<TrabajosFinalesConcursoDto> lista = new ArrayList<TrabajosFinalesConcursoDto>();
-		
-		
-		
+		List<TrabajosFinalesConcursoDto> lista = new ArrayList<TrabajosFinalesConcursoDto>();		
+		List<DetalleEvaluacionReporteDto> listaDerDto = new ArrayList<>();
 		trabajosfinalesparticipanteServ.listarTodos().forEach(obj->{
 			
 			if(obj.getTrabajosfinales().getEstado() == 1 && obj.getParticipante().getEstado()==1 && obj.getTrabajosfinales().getEnviado()==1) {
+				
 				bandera = true;				
 				mi_ods = odsserv.byOds(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid()).getDescripcion();
 				mi_anio = obj.getTrabajosfinales().getAnio();
@@ -2285,7 +2280,6 @@ public class ConcursoeducativoController {
 					}
 				}
 				if(bandera) {
-					System.out.println("entro");
 					TrabajosFinalesConcursoDto dto = new TrabajosFinalesConcursoDto();
 					dto.setAnio(mi_anio);
 					dto.setOds(mi_ods);
@@ -2302,7 +2296,6 @@ public class ConcursoeducativoController {
 					dto.setModalidadTrabajo(obj.getTrabajosfinales().getModalidadtrabajo().getDescripcion());
 					dto.setCategoriaTrabajo(obj.getTrabajosfinales().getCategoriatrabajo().getDescripcion());
 					dto.setNivelParticipacion(obj.getParticipante().getGradoestudiante().getNivelgradopartdesc());
-					
 					ejesTematicos="";
 					
 					if(obj.getTrabajosfinales().getConversacion() == 1)
@@ -2350,43 +2343,71 @@ public class ConcursoeducativoController {
 					dto.setNroDocumentoDocente(obj.getTrabajosfinales().getNrodocumento());
 					dto.setTelefonoDocente(obj.getTrabajosfinales().getTelefono());
 					dto.setGeneroDocente(obj.getTrabajosfinales().getGenero().getDescripcion());
-					dto.setCorreoDocente(obj.getTrabajosfinales().getCorreo());		
-					
+					dto.setCorreoDocente(obj.getTrabajosfinales().getCorreo());	
+					dto.setNotaRegional(0);
+					dto.setPuestoRegional("");
+					dto.setNotaNacional(0);
+					dto.setPuestoNacional("");
 					lista.add(dto);
+					
+					nroEvaluadoresAsignados = 0;
+					
+					trabajosFinales_UsuarioAlianzaServ.listarByTrabajosfinalesId(obj.getTrabajosfinales().getId()).forEach(tf_ua->{
+						nroEvaluadoresAsignados++;
+					});
+					
+					DetalleEvaluacionReporteDto derDto = new DetalleEvaluacionReporteDto();
+					derDto.setAnio(mi_anio);
+					derDto.setOds(mi_ods);
+					derDto.setCodigoie(obj.getTrabajosfinales().getProgramaeducativo().getCodmod());
+					derDto.setNombreie(obj.getTrabajosfinales().getProgramaeducativo().getNomie());
+					derDto.setAmbito(obj.getTrabajosfinales().getProgramaeducativo().getAmbito().getDescripcion());
+					derDto.setCodigoTrabajo(obj.getTrabajosfinales().getProgramaeducativo().getCodmod() + "_" + obj.getTrabajosfinales().getNumeracion().toString());
+					derDto.setTituloTrabajo(obj.getTrabajosfinales().getTitulotrabajo());
+					derDto.setModalidad(obj.getTrabajosfinales().getModalidadtrabajo().getDescripcion());
+					derDto.setCategoria(obj.getTrabajosfinales().getCategoriatrabajo().getDescripcion());
+					derDto.setNivelParticipacion(obj.getParticipante().getGradoestudiante().getNivelgradopartdesc());
+					derDto.setCantidadEvaluadoresAsignados(nroEvaluadoresAsignados);
+					derDto.setPregunta1((float) 0.0);
+					derDto.setPregunta2((float) 0.0);
+					derDto.setPregunta3((float) 0.0);
+					derDto.setPregunta4((float) 0.0);
+					derDto.setPregunta5((float) 0.0);
+					derDto.setEresCebe("");
+					derDto.setNota((float) 0.0);
+					derDto.setPuesto("");					
+					listaDerDto.add(derDto);
+					
+					
 				}
 			}			
 		});
 		
-		String [] columns = {"AÑO","ODS","Codigo II.EE","NOMBRE II.EE","REGION","PROVINCIA","DISTRITO","MODALIDAD", "AMBITO","Código de trabajo","Titulo de trabajo","Link de video","Modalidad","Categoria","Nivel de participación","Ejes temáticos","Nombres del participante","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Fecha de nacimiento","Género","Seccion","Nivel","Grado","Nombres tutor","Apellido paterno tutor","Apellido materno tutor","Tipo de documento","Nro de documento tutor","telefono","correo electronico","Parentesco","Nombres del docente","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Telefono","Género","Correo electrónico"};
-		
-		
-		
-        //style.setAlignment (HorizontalAlignment.CENTER);		
+		String [] columns = {"AÑO","ODS","Codigo II.EE","NOMBRE II.EE","REGION","PROVINCIA","DISTRITO","MODALIDAD", "AMBITO","Código de trabajo","Titulo de trabajo","Link de video","Modalidad","Categoria","Nivel de participación","Ejes temáticos","Nombres del participante","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Fecha de nacimiento","Género","Seccion","Nivel","Grado","Nombres tutor","Apellido paterno tutor","Apellido materno tutor","Tipo de documento","Nro de documento tutor","telefono","correo electronico","Parentesco","Nombres del docente","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Telefono","Género","Correo electrónico","Nota","Puesto","Nota","Puesto"};
 		
 		Sheet sheet = workbook.createSheet("Registro de trabajos finales");
 		Row row = sheet.createRow(0);
 		
 		row.createCell(0).setCellValue("DATOS DE A II.EE");
-		/*CellStyle  style = row.createCell(0).getCellStyle();
-		style.setAlignment(HorizontalAlignment.CENTER);
-		row.createCell(0).setCellStyle(style);*/
 		sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 8));/*1era celda , ultima celda, 1era columna, ultima columna*/		
 		
 		row.createCell(9).setCellValue("DATOS DEL TRABAJO");
-		//row.createCell(9).setCellStyle(style);
 		sheet.addMergedRegion(new CellRangeAddress(0, 0, 9, 15));
 		
 		row.createCell(16).setCellValue("DATOS DE LOS PARTICIPANTES");
-		//row.createCell(16).setCellStyle(style);
 		sheet.addMergedRegion(new CellRangeAddress(0, 0,16, 25));
 		
 		row.createCell(26).setCellValue("DATOS DEL PADRE/MADRE O TUTOR");
-		//row.createCell(26).setCellStyle(style);
 		sheet.addMergedRegion(new CellRangeAddress(0, 0,26, 33));
 		
 		row.createCell(34).setCellValue("DATOS DEL DOCENTE");
-		//row.createCell(34).setCellStyle(style);
 		sheet.addMergedRegion(new CellRangeAddress(0, 0,34, 41));
+		
+		row.createCell(42).setCellValue("Concurso regional");
+		sheet.addMergedRegion(new CellRangeAddress(0, 0,42, 43));
+		
+		row.createCell(44).setCellValue("Concurso nacional");
+		sheet.addMergedRegion(new CellRangeAddress(0, 0,44, 45));
 		
 		row = sheet.createRow(1);
 		for(int i=0;i<columns.length;i++) {
@@ -2439,7 +2460,57 @@ public class ConcursoeducativoController {
 			row.createCell(39).setCellValue(dto.getTelefonoDocente());
 			row.createCell(40).setCellValue(dto.getGeneroDocente());
 			row.createCell(41).setCellValue(dto.getCorreoDocente());
-			
+			row.createCell(42).setCellValue(dto.getNotaRegional());
+			row.createCell(43).setCellValue(dto.getPuestoRegional());
+			row.createCell(44).setCellValue(dto.getNotaRegional());
+			row.createCell(45).setCellValue(dto.getPuestoNacional());
+			initRow++;
+		}
+		
+		
+		String[] columnaDetalleEvaluacion = {"AÑO","ODS","CODIGO II.EE","NOMBRE II.EE","AMBITO","Código de trabajo","Titulo de trabajo","Modalidad","Categoria","Nivel de participación","Cantidad de evaluadores asignados","Pregunta 1","Pregunta 2","Pregunta 3","Pregunta 4","Pregunta 5","Eres Cebe","Nota","Puesto"};
+		Sheet hojaDetalleEvaluacion = workbook.createSheet("Detalle de la evaluación");
+		
+		Row row1DetalleEvaluacion = hojaDetalleEvaluacion.createRow(0);
+		
+		row1DetalleEvaluacion.createCell(0).setCellValue("");
+		hojaDetalleEvaluacion.addMergedRegion(new CellRangeAddress(0, 0, 0, 9));/*1era celda , ultima celda, 1era columna, ultima columna*/		
+		
+		row1DetalleEvaluacion.createCell(10).setCellValue("");
+		
+		row1DetalleEvaluacion.createCell(11).setCellValue("RUBRICA");
+		hojaDetalleEvaluacion.addMergedRegion(new CellRangeAddress(0, 0, 11, 15));
+		
+		row1DetalleEvaluacion.createCell(16).setCellValue("CUESTIONARIO");
+		
+		row1DetalleEvaluacion = hojaDetalleEvaluacion.createRow(1);
+		for(int i=0;i<columnaDetalleEvaluacion.length;i++) {
+			Cell cell = row1DetalleEvaluacion.createCell(i);
+			cell.setCellValue(columnaDetalleEvaluacion[i]);
+		}
+		
+		initRow = 2;
+		for(DetalleEvaluacionReporteDto dto : listaDerDto) {
+			row1DetalleEvaluacion = hojaDetalleEvaluacion.createRow(initRow);
+			row1DetalleEvaluacion.createCell(0).setCellValue(dto.getAnio());
+			row1DetalleEvaluacion.createCell(1).setCellValue(dto.getOds());
+			row1DetalleEvaluacion.createCell(2).setCellValue(dto.getCodigoie());
+			row1DetalleEvaluacion.createCell(3).setCellValue(dto.getNombreie());
+			row1DetalleEvaluacion.createCell(4).setCellValue(dto.getAmbito());
+			row1DetalleEvaluacion.createCell(5).setCellValue(dto.getCodigoTrabajo());
+			row1DetalleEvaluacion.createCell(6).setCellValue(dto.getTituloTrabajo());
+			row1DetalleEvaluacion.createCell(7).setCellValue(dto.getModalidad());
+			row1DetalleEvaluacion.createCell(8).setCellValue(dto.getCategoria());
+			row1DetalleEvaluacion.createCell(9).setCellValue(dto.getNivelParticipacion());		
+			row1DetalleEvaluacion.createCell(10).setCellValue(dto.getCantidadEvaluadoresAsignados());
+			row1DetalleEvaluacion.createCell(11).setCellValue(0);
+			row1DetalleEvaluacion.createCell(12).setCellValue(0);
+			row1DetalleEvaluacion.createCell(13).setCellValue(0);
+			row1DetalleEvaluacion.createCell(14).setCellValue(0);
+			row1DetalleEvaluacion.createCell(15).setCellValue(0);
+			row1DetalleEvaluacion.createCell(16).setCellValue("");
+			row1DetalleEvaluacion.createCell(17).setCellValue(0);
+			row1DetalleEvaluacion.createCell(18).setCellValue("");
 			initRow++;
 		}
 		
