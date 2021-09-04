@@ -141,12 +141,12 @@ $.fn.dataTable.ext.search.push(
 	        return true;
 	    }
 	    
-	    var ods = $('#ods option:selected').val();
-        var anio = $('#anio option:selected').val();
-        var modalidad = $('#modalidad option:selected').val();
-        var categoria = $('#categoria option:selected').val();
-        var nivel = $('#nivel option:selected').val();
-        var txtnombreIE = $('#txtnombreIE').val();
+	    var ods = $('#ods option:selected').text();
+        var anio = $('#anio option:selected').text();
+        var modalidad = $('#modalidad option:selected').text();
+        var categoria = $('#categoria option:selected').text();
+        var nivel = $('#nivel option:selected').text();
+        var txtnombreIE = $('#txtnombreIE').text();
         
         if(!filtraSelect(ods,data[3]))
 			return false;
