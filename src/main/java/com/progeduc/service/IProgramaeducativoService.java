@@ -46,4 +46,6 @@ public interface IProgramaeducativoService extends ICRUD<Programaeducativo,Integ
 	Programaeducativo verificarEstadoAnio(String codmod,Integer anio, String estado);
 	
 	Programaeducativo getActualByCodmod(String codmod);
+	
+	List<Programaeducativo> listarTodos();
 }

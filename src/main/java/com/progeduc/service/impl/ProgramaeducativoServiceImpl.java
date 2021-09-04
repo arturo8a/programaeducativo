@@ -72,6 +72,11 @@ public class ProgramaeducativoServiceImpl implements IProgramaeducativoService{
 	public List<ListaInstitucionEducativa> listar1(){
 		return progeducRepo.listar1();
 	}
+	
+	@Override
+	public List<Programaeducativo> listarTodos(){
+		return progeducRepo.listarTodos();
+	}
 
 	@Override
 	public Programaeducativo ListarporId(Integer id) {

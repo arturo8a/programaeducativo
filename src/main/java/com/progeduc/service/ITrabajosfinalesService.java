@@ -47,4 +47,6 @@ public interface ITrabajosfinalesService extends ICRUD<Trabajosfinales,Integer>{
 	List<Trabajosfinales> listaTrabajosEmpatadosPorCatModOdsPuesto(Integer idcategoria, Integer idmodalidad,Integer odsId, Integer puesto);
 	
 	List<Trabajosfinales> listaTrabajosEmpatados();
+	
+	List<Trabajosfinales> listarhabilitadosPE(Integer peid);
 }

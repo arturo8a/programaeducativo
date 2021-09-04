@@ -45,6 +45,10 @@ public interface IProgramaeducativoRepo extends CrudRepository<Programaeducativo
 	@Query(value="SELECT TB1.*,TB1.ANHIO FROM Programaeducativo TB1",nativeQuery = true)
 	List<Programaeducativo> listCentrosEducativosInscritos();
 	
+	
+	@Query(value="SELECT TB1.* FROM Programaeducativo TB1",nativeQuery = true)
+	List<Programaeducativo> listarTodos();
+	
 	@Query(value="SELECT TB1.* FROM Programaeducativo TB1 where tb1.fecha_registro is not null and TB1.anhio is not null order by fecha_registro desc",nativeQuery = true)
 	List<Programaeducativo> listar();
 	
