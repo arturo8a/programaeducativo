@@ -39,7 +39,7 @@
 			<div class="col-xs-4 col-sm-3">
 		            <select class="form-control" id="ods" name="ods">
 		                <option value="Todos">ODS</option>	
-		                <option th:each="ods:${ods}" th:value="${ods.id}" th:utext="${ods.descripcion}"/>       				
+		                <option th:each="ods:${ods}" th:value="${ods.descripcion}" th:utext="${ods.descripcion}"/>       				
 		            </select>
 			</div>
 			<div class="col-xs-4 col-sm-3">
@@ -54,19 +54,19 @@
 			<div class="col-xs-12 col-sm-6 col-md-3 pt-3">
 		            <select class="form-control" id="categoria" name="categoria">
 		                    <option value="Todos">Categoría</option>	
-		                    <option th:each="cate:${categoriatrabajo}" th:value="${cate.id}" th:utext="${cate.descripcion}"/>       				
+		                    <option th:each="cate:${categoriatrabajo}" th:value="${cate.descripcion}" th:utext="${cate.descripcion}"/>       				
 		            </select>
 	        </div>
 	        <div class="col-xs-12 col-sm-6 col-md-3 pt-3">
 	            <select class="form-control" id="nivel" name="nivel">
 	                    <option value="Todos">Nivel de participación</option>
-	                    <option th:each="nivel:${nivelparticipacion}" th:value="${nivel.id}" th:utext="${nivel.descripcion}"/>    
+	                    <option th:each="nivel:${nivelparticipacion}" th:value="${nivel.descripcion}" th:utext="${nivel.descripcion}"/>    
 	            </select>
 	        </div>
 	        <div class="col-xs-12 col-sm-2 pt-3">
 		            <select class="form-control" id="modalidad" name="modalidad">
 		                <option value="Todos">Modalidad</option>	
-		                <option th:each="modalidad:${modalidadtrabajo}" th:value="${modalidad.id}" th:utext="${modalidad.descripcion}"/>               
+		                <option th:each="modalidad:${modalidadtrabajo}" th:value="${modalidad.descripcion}" th:utext="${modalidad.descripcion}"/>               
 		            </select>
 			</div>
 			<div class="col-xs-4 col-md-3 pt-3 text-right">

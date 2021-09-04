@@ -29,7 +29,7 @@ $(document).ready(function(){
     $('.dt-buttons').hide();
 });
 console.log('------------> evaluar.js');
-
+var table_lista_aperturar_anio;
 var listar = function (){ console.log('listar()');
 		
 		$("#table_trabajos_pendientes").dataTable().fnDestroy();
@@ -141,11 +141,11 @@ $.fn.dataTable.ext.search.push(
 	        return true;
 	    }
 	    
-	    var ods = $('#ods option:selected').text();
-        var anio = $('#anio option:selected').text();
-        var modalidad = $('#modalidad option:selected').text();
-        var categoria = $('#categoria option:selected').text();
-        var nivel = $('#nivel option:selected').text();
+	    var ods = $('#ods').val();
+        var anio = $('#anio').val();
+        var modalidad = $('#modalidad').val();
+        var categoria = $('#categoria').val();
+        var nivel = $('#nivel').val();
         var txtnombreIE = $('#txtnombreIE').val();
         
         if(!filtraSelect(ods,data[3]))

@@ -521,7 +521,8 @@ public class IndexController {
         
         Aperturaranio apertura = aperturaranioService.buscar(anio);
 		LocalDate dateActual = LocalDate.now();
-		if(apertura.getQuintaetapadesde().isAfter(dateActual)) {
+		//if(apertura.getQuintaetapadesde().isAfter(dateActual)) {
+		if(apertura.getQuintaetapadesde().isBefore(dateActual) || apertura.getQuintaetapadesde().isEqual(dateActual)) {
 			model.addAttribute("showFinalizar",1);
 		}else {
 			model.addAttribute("showFinalizar",0);

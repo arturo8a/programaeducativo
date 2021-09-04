@@ -2171,7 +2171,7 @@ public class ConcursoeducativoController {
 						
 						/*Puesto 3*/
 						int cantidad3 = 0;
-						if(listaTrab.size() > cantidad+cantidad2 && cantidad == 2) {
+						if(listaTrab.size() > cantidad+cantidad2 && (cantidad+cantidad2) == 2) {
 							float NotaPuesto3 = listaTrab.get(cantidad+cantidad2).getNota();
 							/*BuscarEmpate*/
 							for (TrabajosFinalizados trabajos : listaTrab) {
