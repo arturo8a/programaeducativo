@@ -3,11 +3,13 @@ package com.progeduc.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.progeduc.model.QuestionarioRespuesta;
 import com.progeduc.repo.IQuestionarioRespuestaRepo;
 import com.progeduc.service.IQuestionarioRespuestaService;
 
+@Service
 public class QuestionarioRespuestaServiceImpl implements IQuestionarioRespuestaService{
 	
 	@Autowired
@@ -47,6 +49,11 @@ public class QuestionarioRespuestaServiceImpl implements IQuestionarioRespuestaS
 	public Integer eliminar(Integer id) {
 		// TODO Auto-generated method stub
 		return repo.eliminar(id);
+	}
+	
+	@Override
+	public List<QuestionarioRespuesta> listarByTrabajo(Integer trabajoid){
+		return repo.listarByTrabajo(trabajoid);
 	}
 
 }

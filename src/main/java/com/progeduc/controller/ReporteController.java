@@ -52,6 +52,7 @@ import com.progeduc.service.IPostulacionconcursoService;
 import com.progeduc.service.IProgeducNivelService;
 import com.progeduc.service.IProgeducTurnoService;
 import com.progeduc.service.IProgramaeducativoService;
+import com.progeduc.service.IQuestionarioRespuestaService;
 import com.progeduc.service.ITrabajosfinalesParticipanteService;
 import com.progeduc.service.ITrabajosfinalesService;
 import com.progeduc.service.IUsuarioAlianzaService;
@@ -95,6 +96,9 @@ public class ReporteController {
 	
 	@Autowired
 	private IEvaluacionRespuestaService evaluacionRepuestaServ;
+	
+	@Autowired
+	private IQuestionarioRespuestaService questionarioRespuestaService;
 	
 	String nivelSeccionDocenteAlumnoVaronMujer;
 	String peTurno;
@@ -1107,20 +1111,37 @@ public class ReporteController {
 				dto.setNivelParticipacion(obj.getParticipante().getGradoestudiante().getNivelgradopartdesc());
 				dto.setCantidadEvaluadoresAsignados(0);
 				
+				dto.setPregunta1(0);
+				dto.setPregunta2(0);
+				dto.setPregunta3(0);
+				dto.setPregunta4(0);
+				dto.setPregunta5(0);
+				dto.setEresCebe("NO");
+				
 				indice=1;
 				evaluacionRepuestaServ.getRespuestas(obj.getTrabajosfinales().getId()).forEach(objER->{
-					switch(indice) {
-						case 1 : dto.setPregunta1(objER.getPuntaje());	 break;
-						case 2 : dto.setPregunta2(objER.getPuntaje());	 break;
-						case 3 : dto.setPregunta3(objER.getPuntaje());	 break;
-						case 4 : dto.setPregunta4(objER.getPuntaje());	 break;
-						case 5 :dto.setPregunta5(objER.getPuntaje());	 break;
+					if(objER.getTipo()==1) {
+						switch(indice) {
+							case 1 : dto.setPregunta1(objER.getPuntaje());	 break;
+							case 2 : dto.setPregunta2(objER.getPuntaje());	 break;
+							case 3 : dto.setPregunta3(objER.getPuntaje());	 break;
+							case 4 : dto.setPregunta4(objER.getPuntaje());	 break;
+							case 5 : dto.setPregunta5(objER.getPuntaje());	 break;
+						}
+						indice++;
 					}
-					indice++;
+					if(objER.getTipo()==2) {
+						questionarioRespuestaService.listarByTrabajo(objER.getRespuestaid()).forEach(qr->{
+							if(qr.getQuestionario().getPregunta().toLowerCase().contains("cebe")) {
+								if(qr.getRespuesta().toLowerCase().contains("si")) {
+									dto.setEresCebe("SI");
+								}
+							}
+						});
+					}
 				});
 				
-				dto.setEresCebe("");
-				dto.setNota(obj.getTrabajosfinales().getNota());
+				dto.setNota(obj.getTrabajosfinales().getNota()!=null?obj.getTrabajosfinales().getNota():0);
 				dto.setPuesto(obj.getTrabajosfinales().getPuesto().toString());
 				lista.add(dto);
 			}					

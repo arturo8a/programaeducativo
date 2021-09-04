@@ -102,6 +102,7 @@ import com.progeduc.service.IOdsService;
 import com.progeduc.service.IParticipanteService;
 import com.progeduc.service.IPostulacionconcursoService;
 import com.progeduc.service.IProgramaeducativoService;
+import com.progeduc.service.IQuestionarioRespuestaService;
 import com.progeduc.service.ITipoAuspicioService;
 import com.progeduc.service.ITrabajosfinalesParticipanteService;
 import com.progeduc.service.ITrabajosfinalesService;
@@ -184,6 +185,12 @@ public class ConcursoeducativoController {
 	@Autowired
 	private ICerrarOdsService cerrarOdsServ;
 	
+	@Autowired
+	private IEvaluacionRespuestaService evaluacionRepuestaServ;
+	
+	@Autowired
+	private IQuestionarioRespuestaService questionarioRespuestaServ;
+	
 	
 	ListaparticipanteDto dto;	
 	ListatrabajosfinalesDto dtotf;	
@@ -218,6 +225,7 @@ public class ConcursoeducativoController {
 	String mi_ods,mi_modalidad,mi_estado,mi_categoria,mi_nivel_participacion,mi_nombreie;
 	Integer mi_anio;
 	Integer nroEvaluadoresAsignados;
+	int indice;
 	
 	@PostMapping(value="/registrarconcurso")
 	public String registrarconcurso(@Valid @RequestBody Postulacionconcurso dto)  {
@@ -2390,13 +2398,38 @@ public class ConcursoeducativoController {
 					derDto.setCategoria(obj.getTrabajosfinales().getCategoriatrabajo().getDescripcion());
 					derDto.setNivelParticipacion(obj.getParticipante().getGradoestudiante().getNivelgradopartdesc());
 					derDto.setCantidadEvaluadoresAsignados(nroEvaluadoresAsignados);
-					derDto.setPregunta1((float) 0.0);
-					derDto.setPregunta2((float) 0.0);
-					derDto.setPregunta3((float) 0.0);
-					derDto.setPregunta4((float) 0.0);
-					derDto.setPregunta5((float) 0.0);
-					derDto.setEresCebe("");
-					derDto.setNota(obj.getTrabajosfinales().getNota());
+					
+					derDto.setPregunta1(0);
+					derDto.setPregunta2(0);
+					derDto.setPregunta3(0);
+					derDto.setPregunta4(0);
+					derDto.setPregunta5(0);
+					derDto.setEresCebe("NO");
+					
+					indice=1;
+					evaluacionRepuestaServ.getRespuestas(obj.getTrabajosfinales().getId()).forEach(objER->{
+						if(objER.getTipo()==1) {
+							switch(indice) {
+								case 1 : derDto.setPregunta1(objER.getPuntaje());	 break;
+								case 2 : derDto.setPregunta2(objER.getPuntaje());	 break;
+								case 3 : derDto.setPregunta3(objER.getPuntaje());	 break;
+								case 4 : derDto.setPregunta4(objER.getPuntaje());	 break;
+								case 5 :derDto.setPregunta5(objER.getPuntaje());	 break;
+							}
+							indice++;
+						}
+						if(objER.getTipo()==2) {
+							questionarioRespuestaServ.listarByTrabajo(objER.getRespuestaid()).forEach(qr->{
+								if(qr.getQuestionario().getPregunta().toLowerCase().contains("cebe")) {
+									if(qr.getRespuesta().toLowerCase().contains("si")) {
+										derDto.setEresCebe("SI");
+									}
+								}
+							});
+						}
+					});
+					
+					derDto.setNota(obj.getTrabajosfinales().getNota()!=null?obj.getTrabajosfinales().getNota():0);
 					derDto.setPuesto(obj.getTrabajosfinales().getPuesto().toString());
 					listaDerDto.add(derDto);
 				}
@@ -2525,12 +2558,12 @@ public class ConcursoeducativoController {
 			row1DetalleEvaluacion.createCell(9).setCellValue(dto.getCategoria());
 			row1DetalleEvaluacion.createCell(10).setCellValue(dto.getNivelParticipacion());		
 			row1DetalleEvaluacion.createCell(11).setCellValue(dto.getCantidadEvaluadoresAsignados());
-			row1DetalleEvaluacion.createCell(12).setCellValue(0);
-			row1DetalleEvaluacion.createCell(13).setCellValue(0);
-			row1DetalleEvaluacion.createCell(14).setCellValue(0);
-			row1DetalleEvaluacion.createCell(15).setCellValue(0);
-			row1DetalleEvaluacion.createCell(16).setCellValue(0);
-			row1DetalleEvaluacion.createCell(17).setCellValue("");
+			row1DetalleEvaluacion.createCell(12).setCellValue(dto.getPregunta1());
+			row1DetalleEvaluacion.createCell(13).setCellValue(dto.getPregunta2());
+			row1DetalleEvaluacion.createCell(14).setCellValue(dto.getPregunta3());
+			row1DetalleEvaluacion.createCell(15).setCellValue(dto.getPregunta4());
+			row1DetalleEvaluacion.createCell(16).setCellValue(dto.getPregunta5());
+			row1DetalleEvaluacion.createCell(17).setCellValue(dto.getEresCebe());
 			row1DetalleEvaluacion.createCell(18).setCellValue(dto.getNota());
 			row1DetalleEvaluacion.createCell(19).setCellValue(dto.getPuesto());
 			initRow++;
