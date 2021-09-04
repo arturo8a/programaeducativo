@@ -44,6 +44,10 @@ public class TrabajosFinalesConcursoDto {
 	String telefonoDocente;
 	String generoDocente;
 	String correoDocente;
+	Integer notaRegional;
+	String puestoRegional;
+	Integer notaNacional;
+	String puestoNacional;
 	
 	public Integer getAnio() {
 		return anio;
@@ -296,6 +300,30 @@ public class TrabajosFinalesConcursoDto {
 	}
 	public void setCorreoDocente(String correoDocente) {
 		this.correoDocente = correoDocente;
+	}
+	public Integer getNotaRegional() {
+		return notaRegional;
+	}
+	public void setNotaRegional(Integer notaRegional) {
+		this.notaRegional = notaRegional;
+	}
+	public String getPuestoRegional() {
+		return puestoRegional;
+	}
+	public void setPuestoRegional(String puestoRegional) {
+		this.puestoRegional = puestoRegional;
+	}
+	public Integer getNotaNacional() {
+		return notaNacional;
+	}
+	public void setNotaNacional(Integer notaNacional) {
+		this.notaNacional = notaNacional;
+	}
+	public String getPuestoNacional() {
+		return puestoNacional;
+	}
+	public void setPuestoNacional(String puestoNacional) {
+		this.puestoNacional = puestoNacional;
 	}
 	
 }
