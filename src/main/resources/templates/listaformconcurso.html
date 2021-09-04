@@ -565,7 +565,11 @@
 					<strong class="pt-1">DESEMPATE</strong>
 				</div>
 			</div>
-			
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 text-left">
+					<input type="checkbox" name="check-todos-empates" id="check-todos-empates" style="margin:5px" /><label for="check-1_edit">Marcar todos</label>
+				</div>
+			</div>
 			<div class="row" id="listaOdsEmpatadasPorFinalizar">
 				
 			</div>
@@ -1700,6 +1704,8 @@ $(document).ready(function(){
 
 	$("#btnFinalizar").on("click",function(e){ console.log('btnFinalizar');
 		openCargando();
+		$("[name=check-todos]").prop('checked', false);
+		$("[name=check-todos-permisos]").prop('checked', false);
 		$.ajax({
 			type : "GET",
 		    contentType : "application/json",
@@ -1717,14 +1723,15 @@ $(document).ready(function(){
 					$.each(respuesta.listCerrarOds, function( i, value ) {
 						$('[id=chk_ods_'+value.odsid.id+'][data-etapa='+value.etapa+']').prop('disabled',true);
 						$('[id=chk_ods_'+value.odsid.id+'][data-etapa='+value.etapa+']').parent().hide();
+						$('[id=chk_ods_'+value.odsid.id+'][data-etapa='+value.etapa+']').parent().remove();
 					});
 					
-					/*ODS empatadas*/respuesta
+					/*ODS empatadas*/
 					html = '';
 					$.each(respuesta.listCerrarOds, function( i, value ) {
-						if(value.estado === "2"){
+						if(value.estado === 2){
 							html +='<div class="col-xs-12 col-sm-2 text-left">';
-							html +='<input type="checkbox" class="case_edit" name="chk_ods"  id="chk_ods_'+value.id+'" data-id='+value.id+' data-etapa="1" style="margin:5px"/> <label>'+value.descripcion+'</label>';
+							html +='<input type="checkbox" class="case_edit" name="chk_ods"  id="chk_ods_'+value.odsid.id+'" data-id='+value.odsid.id+' data-etapa="1" style="margin:5px"/> <label>'+value.odsid.descripcion+'</label>';
 							html +='</div>';
 						}
 						
@@ -1740,7 +1747,7 @@ $(document).ready(function(){
 			},
 			error: function() {
 				console.log("error al cargar modal asignar evaluador");
-				
+				closeCargando();
 		    }
 		});
 				
@@ -1756,9 +1763,17 @@ $(document).ready(function(){
 	
 	$("#check-todos").on("click",function(e){
 		if($(this).is(":checked")) {
-			$("[name=chk_ods]").prop('checked', true);
+			$("#listaOdsPorFinalizar [name=chk_ods]").prop('checked', true);
 		}else{
-			$("[name=chk_ods]").prop('checked', false);
+			$("#listaOdsPorFinalizar [name=chk_ods]").prop('checked', false);
+		}
+	});
+	
+	$("#check-todos-empates").on("click",function(e){
+		if($(this).is(":checked")) {
+			$("#listaOdsEmpatadasPorFinalizar [name=chk_ods]").prop('checked', true);
+		}else{
+			$("#listaOdsEmpatadasPorFinalizar [name=chk_ods]").prop('checked', false);
 		}
 	});
 	
@@ -1787,6 +1802,7 @@ $(document).ready(function(){
 				closeCargando();
 				$("#modalConfimarCierreFinalizar").modal('hide');
 				$("#modalFinalizar").modal('hide');
+				listar();
 			},
 			error: function() {
 				console.log("Error");

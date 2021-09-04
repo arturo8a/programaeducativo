@@ -73,7 +73,7 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
     		+ "inner join distrito d on pe.distritoid = d.id "
     		+ "inner join ods o on d.odsid = o.id "
     		+ "where tf.nota is not null and o.id=?3 AND tf.categoriatrabajoid = ?1 and tf.modalidadtrabajoid=?2 "
-    		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) "
+    		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) AND tf.nota >= 16"
     		+ "order by tf.nota desc ",nativeQuery = true)
     List<Trabajosfinales> listaTrabajosFinalesConNotaPromedioPorCategoriaModalidadDds(Integer idcategoria, Integer idmodalidad,Integer odsId);
     
@@ -89,7 +89,7 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
 	    		+ "inner join programaeducativo pe on tf.programaeducativoid = pe.id "
 	    		+ "inner join distrito d on pe.distritoid = d.id "
 	    		+ "inner join ods o on d.odsid = o.id "
-	    		+ "where tf.nota is not null and o.id=?1  "
+	    		+ "where o.id=?1  "
 	    		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) ",nativeQuery = true)
 	List<Trabajosfinales> listarTrabajosfinalesPorOds(Integer odsId);
 	 
@@ -107,7 +107,45 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
     		+ "inner join distrito d on pe.distritoid = d.id "
     		+ "inner join ods o on d.odsid = o.id "
     		+ "inner join cerrar_ods co on co.odsid = o.id  "
-    		+ "where tf.estado=3 and tf.estadotrabajoid=21 and tf.puesto!= 0 and tf.anio = EXTRACT(YEAR FROM sysdate) ",nativeQuery = true)
+    		+ "where tf.estado=1 and tf.estadotrabajoid=21 and tf.puesto!= 0 and tf.anio = EXTRACT(YEAR FROM sysdate) ",nativeQuery = true)
 	List<Trabajosfinales> listaTrabajosEmpatados();
+	
+	/*Finalizar ODS*/
+	@Query(value="select tf.id, d.odsid, tf.categoriatrabajoid, gp.nivelgradopartdesc, tf.nota from trabajosfinales tf "
+			+ "inner join programaeducativo pe on tf.programaeducativoid = pe.id "
+			+ "inner join distrito d on pe.distritoid = d.id "
+			+ "inner join ods o on d.odsid = o.id "
+			+ "inner join trabajosfinales_participante tfp on tfp.trabajosfinalesid = tf.id "
+			+ "inner join participante p on p.id = tfp.participanteid "
+			+ "inner join gradoparticipante gp on gp.id = p.gradooestudiante "
+    		+ "where tf.nota is not null and o.id=?3 AND tf.categoriatrabajoid = ?1 and gp.nivelgradopartdesc=?2 "
+    		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) AND tf.nota >= 16 "
+    		+ "group by tf.id, d.odsid, tf.categoriatrabajoid, gp.nivelgradopartdesc, tf.nota "
+    		+ "order by tf.nota desc ",nativeQuery = true)
+    List<Object[]> listaTrabajosFinalesConNotaPromedioPorCategoriaNivelOds(Integer idcategoria, String nivel,Integer odsId);
+    
+    @Query(value="select tf.categoriatrabajoid, gp.nivelgradopartdesc from trabajosfinales tf "
+			+ "inner join programaeducativo pe on tf.programaeducativoid = pe.id "
+			+ "inner join distrito d on pe.distritoid = d.id "
+			+ "inner join ods o on d.odsid = o.id "
+			+ "inner join trabajosfinales_participante tfp on tfp.trabajosfinalesid = tf.id "
+			+ "inner join participante p on p.id = tfp.participanteid "
+			+ "inner join gradoparticipante gp on gp.id = p.gradooestudiante "
+			+ "where tf.nota is not null and o.id=?1 and tf.anio = EXTRACT(YEAR FROM sysdate) "
+			+ "group by tf.categoriatrabajoid, gp.nivelgradopartdesc",nativeQuery = true)
+	List<Object[]> listarCategoriaNivelByOds(Integer odsId);
+	
+	@Query(value="select tf.id, d.odsid, tf.categoriatrabajoid, gp.nivelgradopartdesc, tf.nota from trabajosfinales tf "
+			+ "inner join programaeducativo pe on tf.programaeducativoid = pe.id "
+			+ "inner join distrito d on pe.distritoid = d.id "
+			+ "inner join ods o on d.odsid = o.id "
+			+ "inner join trabajosfinales_participante tfp on tfp.trabajosfinalesid = tf.id "
+			+ "inner join participante p on p.id = tfp.participanteid "
+			+ "inner join gradoparticipante gp on gp.id = p.gradooestudiante "
+    		+ "where tf.nota is not null and o.id=?3 AND tf.categoriatrabajoid = ?1 and gp.nivelgradopartdesc=?2 "
+    		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) AND tf.puesto= ?4 "
+    		+ "group by tf.id, d.odsid, tf.categoriatrabajoid, gp.nivelgradopartdesc, tf.nota "
+    		+ "order by tf.nota desc ",nativeQuery = true)
+	List<Object[]> listaTrabajosEmpatadosPorCatNivOdsPuesto(Integer idcategoria, String nivel,Integer odsId, Integer puesto);
 
 }

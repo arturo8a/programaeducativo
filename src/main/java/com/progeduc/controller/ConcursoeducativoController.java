@@ -46,6 +46,7 @@ import com.progeduc.dto.AsignacionDto;
 import com.progeduc.dto.AsignarEvaluadorDto;
 import com.progeduc.dto.AsignarEvaluadoresDto;
 import com.progeduc.dto.CategoriaModalidadByOds;
+import com.progeduc.dto.CategoriaNivelParticipacionByOds;
 import com.progeduc.dto.ClaveValor;
 import com.progeduc.dto.ConcursoDto;
 import com.progeduc.dto.DataTrabajosPermisos;
@@ -64,6 +65,7 @@ import com.progeduc.dto.OdsFinalizarDto;
 import com.progeduc.dto.ParticipanteVerDto;
 import com.progeduc.dto.TrabajofinalesEnviadoDto;
 import com.progeduc.dto.TrabajosFinalesConcursoDto;
+import com.progeduc.dto.TrabajosFinalizados;
 import com.progeduc.dto.TrabajosfinalesParticipanteDto;
 import com.progeduc.dto.UsuarioAlianzaDto;
 import com.progeduc.dto.trabajoEvaluadoDto;
@@ -1589,8 +1591,8 @@ public class ConcursoeducativoController {
 			Evaluacion eval = evaluacionService.getPorAnioCategoriaNivelparticipacion(data.getTrabajosfinales().getAnio(), 
 					data.getTrabajosfinales().getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
 			List<EvaluacionResultado> listEvaResultado = evaluacionRespuestaServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
-			
-			if(eval != null && listEvaResultado.size() == 0 && data.getTrabajosfinales().getEnviado() == 1) {
+			log.info(data.getTrabajosfinales().getId()+"-"+data.getTrabajosfinales().getEstadotrabajo().getId());
+			if(eval != null && listEvaResultado.size() == 0 && data.getTrabajosfinales().getEnviado() == 1 && (data.getTrabajosfinales().getEstadotrabajo().getId() == 2 || data.getTrabajosfinales().getEstadotrabajo().getId() == 21)) {
 				String strOds = "";
 				listaTrabajosFinalesPendientes = new ListaTrabajosFinalesPendientes();
 				listaTrabajosFinalesPendientes.setAnio(data.getTrabajosfinales().getAnio());
@@ -2066,12 +2068,22 @@ public class ConcursoeducativoController {
 			Calendar cal= Calendar.getInstance();
 			int anio= cal.get(Calendar.YEAR);
 			
+			List<CerrarOds> lisCerrarOds = cerrarOdsServ.listCerrarOds();
+			
 			for (Ods ods : listOds) {
 				CerrarOds cerrarOds = new CerrarOds();
 				cerrarOds.setOdsid(ods);
 				cerrarOds.setAnio(anio);
 				cerrarOds.setEtapa(1);
 				cerrarOds.setEstado(1);//finalizado
+				
+				for (CerrarOds cerrarOds2 : lisCerrarOds) {
+					if(cerrarOds2.getOdsid().getId() == cerrarOds.getOdsid().getId()) {//si existe el registro actulizar
+						cerrarOds = cerrarOds2;
+						cerrarOds.setEstado(1);//finalizado
+					}
+				}
+				
 				cerrarOds = cerrarOdsServ.guardar(cerrarOds);
 				
 				/*lista de trabajos finales por ODS*/
@@ -2083,38 +2095,44 @@ public class ConcursoeducativoController {
 					trabajosfinalesServ.modificar(trabajos);
 				}
 				
+				List<CerrarOds> listCerrarOds = cerrarOdsServ.listCerrarOds();//lista de ODS cerradas
 				
-				/*Listar Categorias X Modalidad de ODS*/
-				List<CategoriaModalidadByOds> listaCatModByOds = trabajosfinalesServ.listarCategoriaModalidadByOds(ods.getId());
+				/*Listar Categorias X Nivel de Participacion de ODS*/
+				//List<CategoriaModalidadByOds> listaCatModByOds = trabajosfinalesServ.listarCategoriaModalidadByOds(ods.getId());
+				List<CategoriaNivelParticipacionByOds> listaCatNivByOds = trabajosfinalesServ.listarCategoriaNivelByOds(ods.getId());
 				
-				for (CategoriaModalidadByOds catModByODs : listaCatModByOds) {
-					log.info("CAREGORIAID: "+catModByODs.getCategoriaId() +" | MODALIDADID: "+catModByODs.getModalidadId());
-					/*Lista de trabajos Por Categoria y Modalidad con Nota Promedio*/
-					List<Trabajosfinales> listaTrab = trabajosfinalesServ.listaTrabajosFinalesConNotaPromedioPorCategoriaModalidadDds(catModByODs.getCategoriaId(), catModByODs.getModalidadId(), ods.getId());
+				for (CategoriaNivelParticipacionByOds catModByODs : listaCatNivByOds) {
+					log.info("CAREGORIAID: "+catModByODs.getCategoriaId() +" | NIVEL: "+catModByODs.getNivelId());
+					/*Lista de trabajos Por Categoria y Nivel con Nota Promedio*/
+					//List<Trabajosfinales> listaTrab = trabajosfinalesServ.listaTrabajosFinalesConNotaPromedioPorCategoriaModalidadDds(catModByODs.getCategoriaId(), catModByODs.getModalidadId(), ods.getId());
+					List<TrabajosFinalizados> listaTrab = trabajosfinalesServ.listaTrabajosFinalesConNotaPromedioPorCategoriaNivelOds(catModByODs.getCategoriaId(), catModByODs.getNivelId(), ods.getId());
+					
 					/*Obtener Puesto*/
 					if(listaTrab.size() > 0) {
 						/*Puesto 1*/
 						float NotaPuesto1 = listaTrab.get(0).getNota();
 						int cantidad = 0;
 						/*BuscarEmpate*/
-						for (Trabajosfinales trabajos : listaTrab) {
+						for (TrabajosFinalizados trabajos : listaTrab) {
 							if(trabajos.getNota() == NotaPuesto1 ) {
-								Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getId());
+								Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getTrabajoId());
 								trabajoFinal.setPuesto(1);
 								trabajosfinalesServ.modificar(trabajoFinal);
 								cantidad++;
 							}
 						}
 						if(cantidad > 1) {
-							List<Trabajosfinales> listaPuesto1= trabajosfinalesServ.listaTrabajosEmpatadosPorCatModOdsPuesto(catModByODs.getCategoriaId(), catModByODs.getModalidadId(), ods.getId(),1);
-							for (Trabajosfinales trab : listaPuesto1) {
-								evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getId());//borrar las respuestas de las evaluaciones;
-								trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getId());//borrar asignacion de evaluadores
+							//List<Trabajosfinales> listaPuesto1= trabajosfinalesServ.listaTrabajosEmpatadosPorCatModOdsPuesto(catModByODs.getCategoriaId(), catModByODs.getCategoriaId()ModalidadId(), ods.getId(),1);
+							List<TrabajosFinalizados> listaPuesto1= trabajosfinalesServ.listaTrabajosEmpatadosPorCatNivOdsPuesto(catModByODs.getCategoriaId(), catModByODs.getNivelId(), ods.getId(), 1);
+							for (TrabajosFinalizados trab : listaPuesto1) {
+								evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getTrabajoId());//borrar las respuestas de las evaluaciones;
+								trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getTrabajoId());//borrar asignacion de evaluadores
 								
 								Estadotrabajo estadoTrabajo = new  Estadotrabajo();
 								estadoTrabajo.setId(21);
-								trab.setEstadotrabajo(estadoTrabajo);
-								trabajosfinalesServ.modificar(trab);
+								Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getTrabajoId());
+								trabajoFinal.setEstadotrabajo(estadoTrabajo);
+								trabajosfinalesServ.modificar(trabajoFinal);
 								
 							}
 							cerrarOds.setEstado(2);//empate
@@ -2123,28 +2141,29 @@ public class ConcursoeducativoController {
 						
 						/*Puesto 2*/
 						int cantidad2 = 0;
-						if(listaTrab.size() > cantidad) {
+						if(listaTrab.size() > cantidad && cantidad == 1) {
 							float NotaPuesto2 = listaTrab.get(cantidad).getNota();
 							/*BuscarEmpate*/
-							for (Trabajosfinales trabajos : listaTrab) {
+							for (TrabajosFinalizados trabajos : listaTrab) {
 								if(trabajos.getNota() == NotaPuesto2 ) {
-									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getId());
+									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getTrabajoId());
 									trabajoFinal.setPuesto(2);
 									trabajosfinalesServ.modificar(trabajoFinal);
 									cantidad2++;
 								}
 							}
 						}
-						if(cantidad2 > 1) {
-							List<Trabajosfinales> listaPuesto2= trabajosfinalesServ.listaTrabajosEmpatadosPorCatModOdsPuesto(catModByODs.getCategoriaId(), catModByODs.getModalidadId(), ods.getId(),2);
-							for (Trabajosfinales trab : listaPuesto2) {
-								evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getId());
-								trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getId());
+						if(cantidad2 > 1 && cantidad == 1) {
+							List<TrabajosFinalizados> listaPuesto2= trabajosfinalesServ.listaTrabajosEmpatadosPorCatNivOdsPuesto(catModByODs.getCategoriaId(), catModByODs.getNivelId(), ods.getId(),2);
+							for (TrabajosFinalizados trab : listaPuesto2) {
+								evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getTrabajoId());
+								trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getTrabajoId());
 								
 								Estadotrabajo estadoTrabajo = new  Estadotrabajo();
 								estadoTrabajo.setId(21);
-								trab.setEstadotrabajo(estadoTrabajo);
-								trabajosfinalesServ.modificar(trab);
+								Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getTrabajoId());
+								trabajoFinal.setEstadotrabajo(estadoTrabajo);
+								trabajosfinalesServ.modificar(trabajoFinal);
 							}
 							cerrarOds.setEstado(2);//empate
 							cerrarOdsServ.guardar(cerrarOds);
@@ -2152,28 +2171,29 @@ public class ConcursoeducativoController {
 						
 						/*Puesto 3*/
 						int cantidad3 = 0;
-						if(listaTrab.size() > cantidad+cantidad2) {
+						if(listaTrab.size() > cantidad+cantidad2 && (cantidad+cantidad2) == 2) {
 							float NotaPuesto3 = listaTrab.get(cantidad+cantidad2).getNota();
 							/*BuscarEmpate*/
-							for (Trabajosfinales trabajos : listaTrab) {
+							for (TrabajosFinalizados trabajos : listaTrab) {
 								if(trabajos.getNota() == NotaPuesto3 ) {
-									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getId());
+									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getTrabajoId());
 									trabajoFinal.setPuesto(3);
 									trabajosfinalesServ.modificar(trabajoFinal);
 									cantidad3++;
 								}
 							}
 						}
-						if(cantidad3 > 1) {
-							List<Trabajosfinales> listaPuesto3= trabajosfinalesServ.listaTrabajosEmpatadosPorCatModOdsPuesto(catModByODs.getCategoriaId(), catModByODs.getModalidadId(), ods.getId(),3);
-							for (Trabajosfinales trab : listaPuesto3) {
-								evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getId());
-								trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getId());
+						if(cantidad3 > 1 && cantidad == 2) {
+							List<TrabajosFinalizados> listaPuesto3= trabajosfinalesServ.listaTrabajosEmpatadosPorCatNivOdsPuesto(catModByODs.getCategoriaId(), catModByODs.getNivelId(), ods.getId(),3);
+							for (TrabajosFinalizados trab : listaPuesto3) {
+								evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getTrabajoId());
+								trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getTrabajoId());
 								
 								Estadotrabajo estadoTrabajo = new  Estadotrabajo();
 								estadoTrabajo.setId(21);
-								trab.setEstadotrabajo(estadoTrabajo);
-								trabajosfinalesServ.modificar(trab);
+								Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getTrabajoId());
+								trabajoFinal.setEstadotrabajo(estadoTrabajo);
+								trabajosfinalesServ.modificar(trabajoFinal);
 							}
 							cerrarOds.setEstado(2);//empate
 							cerrarOdsServ.guardar(cerrarOds);

@@ -29,7 +29,7 @@ $(document).ready(function(){
     $('.dt-buttons').hide();
 });
 console.log('------------> evaluar.js');
-
+var table_lista_aperturar_anio;
 var listar = function (){ console.log('listar()');
 		
 		$("#table_trabajos_pendientes").dataTable().fnDestroy();
