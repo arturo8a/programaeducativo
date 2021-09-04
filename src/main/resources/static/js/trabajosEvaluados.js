@@ -141,11 +141,11 @@ $.fn.dataTable.ext.search.push(
 	        return true;
 	    }
 	    
-	    var ods = $('#ods').val();
-        var anio = $('#anio').val();
-        var modalidad = $('#modalidad').val();
-        var categoria = $('#categoria').val();
-        var nivel = $('#nivel').val();
+	    var ods = $('#ods option:selected').val();
+        var anio = $('#anio option:selected').val();
+        var modalidad = $('#modalidad option:selected').val();
+        var categoria = $('#categoria option:selected').val();
+        var nivel = $('#nivel option:selected').val();
         var txtnombreIE = $('#txtnombreIE').val();
         
         if(!filtraSelect(ods,data[3]))

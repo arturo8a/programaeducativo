@@ -1066,14 +1066,18 @@ public class IndexController {
 		
 		List<Rubrica> listaRubrica = new ArrayList<Rubrica>();
         evaluacionrubricaServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
-        	listaRubrica.add(obj.getRubrica());
-        	id_rubrica += obj.getRubrica().getId().toString() + "-";
+        	if(obj.getRubrica().getEstado()==1) {
+        		listaRubrica.add(obj.getRubrica());
+            	id_rubrica += obj.getRubrica().getId().toString() + "-";
+        	}
         });
         
         List<Questionario> listaQuestionario = new ArrayList<Questionario>();
         evaluacionquestionarioServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
-        	listaQuestionario.add(obj.getQuestionario());
-        	id_questionario += obj.getQuestionario().getId().toString() + "-";
+        	if(obj.getQuestionario().getEstado()==1) {
+        		listaQuestionario.add(obj.getQuestionario());
+            	id_questionario += obj.getQuestionario().getId().toString() + "-";
+        	}
         });    
         
         model.addAttribute("id_rubrica", id_rubrica);
@@ -1130,14 +1134,18 @@ public class IndexController {
 		
 		List<Rubrica> listaRubrica = new ArrayList<Rubrica>();
         evaluacionrubricaServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
-        	listaRubrica.add(obj.getRubrica());
-        	id_rubrica += obj.getRubrica().getId().toString() + "-";
+        	if(obj.getRubrica().getEstado()==1) {
+        		listaRubrica.add(obj.getRubrica());
+            	id_rubrica += obj.getRubrica().getId().toString() + "-";
+        	}
         });
         
         List<Questionario> listaQuestionario = new ArrayList<Questionario>();
         evaluacionquestionarioServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
-        	listaQuestionario.add(obj.getQuestionario());
-        	id_questionario += obj.getQuestionario().getId().toString() + "-";
+        	if(obj.getQuestionario().getEstado()==1) {
+        		listaQuestionario.add(obj.getQuestionario());
+            	id_questionario += obj.getQuestionario().getId().toString() + "-";
+        	}
         });    
         
         model.addAttribute("id_rubrica", id_rubrica);

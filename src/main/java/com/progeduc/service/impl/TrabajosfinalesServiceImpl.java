@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.progeduc.dto.CategoriaModalidadByOds;
+import com.progeduc.dto.CategoriaNivelParticipacionByOds;
+import com.progeduc.dto.TrabajosFinalizados;
 import com.progeduc.dto.TrabajosfinalesParticipanteDto;
 import com.progeduc.model.Trabajosfinales;
 import com.progeduc.repo.ITrabajosfinalesParticipanteRepo;
@@ -173,6 +175,47 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 	public List<Trabajosfinales> listaTrabajosEmpatados() {
 		// TODO Auto-generated method stub
 		return trabajosfinalesRepo.listaTrabajosEmpatados();
+	}
+
+	@Override
+	public List<TrabajosFinalizados> listaTrabajosFinalesConNotaPromedioPorCategoriaNivelOds(Integer idcategoria,
+			String nivel, Integer odsId) {
+		List<TrabajosFinalizados> lista = new ArrayList<>();
+		List<Object[]> listaObject = trabajosfinalesRepo.listaTrabajosFinalesConNotaPromedioPorCategoriaNivelOds(idcategoria, nivel, odsId);
+		for (Object[] objects : listaObject) {
+			System.out.println(objects.length);
+			TrabajosFinalizados t = new TrabajosFinalizados(Integer.parseInt(objects[0].toString()), Integer.parseInt(objects[1].toString()), Integer.parseInt(objects[2].toString()), (objects[3].toString()), Float.parseFloat(objects[4].toString()));
+			lista.add(t);
+		}
+		
+		return lista;
+	}
+
+	@Override
+	public List<CategoriaNivelParticipacionByOds> listarCategoriaNivelByOds(Integer odsId) {
+		List<CategoriaNivelParticipacionByOds> lista = new ArrayList<>();
+		List<Object[]> listaObject = trabajosfinalesRepo.listarCategoriaNivelByOds(odsId);
+		for (Object[] objects : listaObject) {
+			System.out.println(objects.length);System.out.println(objects[0].toString()+"-"+objects[0].toString());
+			CategoriaNivelParticipacionByOds c = new CategoriaNivelParticipacionByOds(Integer.parseInt(objects[0].toString()),objects[1].toString());
+			lista.add(c);
+		}
+		
+		return lista;
+	}
+
+	@Override
+	public List<TrabajosFinalizados> listaTrabajosEmpatadosPorCatNivOdsPuesto(Integer idcategoria, String nivel,
+			Integer odsId, Integer puesto) {
+		List<TrabajosFinalizados> lista = new ArrayList<>();
+		List<Object[]> listaObject = trabajosfinalesRepo.listaTrabajosEmpatadosPorCatNivOdsPuesto(idcategoria, nivel, odsId,puesto);
+		for (Object[] objects : listaObject) {
+			System.out.println(objects.length);
+			TrabajosFinalizados t = new TrabajosFinalizados(Integer.parseInt(objects[0].toString()), Integer.parseInt(objects[1].toString()), Integer.parseInt(objects[2].toString()), (objects[3].toString()), Float.parseFloat(objects[4].toString()));
+			lista.add(t);
+		}
+		
+		return lista;
 	}
 
 }

@@ -3,6 +3,8 @@ package com.progeduc.service;
 import java.util.List;
 
 import com.progeduc.dto.CategoriaModalidadByOds;
+import com.progeduc.dto.CategoriaNivelParticipacionByOds;
+import com.progeduc.dto.TrabajosFinalizados;
 import com.progeduc.dto.TrabajosfinalesParticipanteDto;
 import com.progeduc.model.Trabajosfinales;
 
@@ -47,4 +49,11 @@ public interface ITrabajosfinalesService extends ICRUD<Trabajosfinales,Integer>{
 	List<Trabajosfinales> listaTrabajosEmpatadosPorCatModOdsPuesto(Integer idcategoria, Integer idmodalidad,Integer odsId, Integer puesto);
 	
 	List<Trabajosfinales> listaTrabajosEmpatados();
+	
+	/**/
+	List<TrabajosFinalizados> listaTrabajosFinalesConNotaPromedioPorCategoriaNivelOds(Integer idcategoria, String nivel,Integer odsId);
+	
+	List<CategoriaNivelParticipacionByOds> listarCategoriaNivelByOds(Integer odsId);
+	
+	List<TrabajosFinalizados> listaTrabajosEmpatadosPorCatNivOdsPuesto(Integer idcategoria, String nivel,Integer odsId, Integer puesto);
 }
