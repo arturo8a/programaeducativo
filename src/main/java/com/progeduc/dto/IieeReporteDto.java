@@ -78,9 +78,9 @@ public class IieeReporteDto {
 	String telefonoDocente;
 	String generoDocente;
 	String correoDocente;
-	Integer notaRegional;
+	Float notaRegional;
 	String puestoRegional;
-	Integer notaNacional;
+	Float notaNacional;
 	String puestoNacional;
 	
 	
@@ -540,10 +540,10 @@ public class IieeReporteDto {
 	public void setCorreoDocente(String correoDocente) {
 		this.correoDocente = correoDocente;
 	}
-	public Integer getNotaRegional() {
+	public Float getNotaRegional() {
 		return notaRegional;
 	}
-	public void setNotaRegional(Integer notaRegional) {
+	public void setNotaRegional(Float notaRegional) {
 		this.notaRegional = notaRegional;
 	}
 	public String getPuestoRegional() {
@@ -552,10 +552,10 @@ public class IieeReporteDto {
 	public void setPuestoRegional(String puestoRegional) {
 		this.puestoRegional = puestoRegional;
 	}
-	public Integer getNotaNacional() {
+	public Float getNotaNacional() {
 		return notaNacional;
 	}
-	public void setNotaNacional(Integer notaNacional) {
+	public void setNotaNacional(Float notaNacional) {
 		this.notaNacional = notaNacional;
 	}
 	public String getPuestoNacional() {

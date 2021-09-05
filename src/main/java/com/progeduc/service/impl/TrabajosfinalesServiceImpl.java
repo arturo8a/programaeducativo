@@ -80,6 +80,11 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 	}
 	
 	@Override
+	public List<Trabajosfinales> listarhabilitadosPE(Integer peid){
+		return trabajosfinalesRepo.listarhabilitadosPE(peid);
+	}
+	
+	@Override
 	public List<Trabajosfinales> listarhabilitadosbyanio(Integer programaeducativoid,Integer anio){
 		return trabajosfinalesRepo.listarhabilitadosbyanio(programaeducativoid,anio);
 	}

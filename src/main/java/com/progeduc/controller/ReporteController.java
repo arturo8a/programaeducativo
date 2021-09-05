@@ -38,19 +38,21 @@ import com.progeduc.dto.ResultadosRegionalesDto;
 import com.progeduc.model.Auspicio;
 import com.progeduc.model.Participante;
 import com.progeduc.model.Postulacionconcurso;
-import com.progeduc.model.Programaeducativo;
 import com.progeduc.model.ProgramaeducativoNivel;
 import com.progeduc.model.ProgramaeducativoTurno;
 import com.progeduc.model.Trabajosfinales;
+import com.progeduc.model.TrabajosfinalesParticipante;
 import com.progeduc.model.UsuarioAlianza;
 import com.progeduc.service.IDistritoService;
 import com.progeduc.service.IDocentetutorService;
+import com.progeduc.service.IEvaluacionRespuestaService;
 import com.progeduc.service.IOdsService;
 import com.progeduc.service.IParticipanteService;
 import com.progeduc.service.IPostulacionconcursoService;
 import com.progeduc.service.IProgeducNivelService;
 import com.progeduc.service.IProgeducTurnoService;
 import com.progeduc.service.IProgramaeducativoService;
+import com.progeduc.service.IQuestionarioRespuestaService;
 import com.progeduc.service.ITrabajosfinalesParticipanteService;
 import com.progeduc.service.ITrabajosfinalesService;
 import com.progeduc.service.IUsuarioAlianzaService;
@@ -92,6 +94,12 @@ public class ReporteController {
 	@Autowired
 	private IProgeducTurnoService peTurnoServ;
 	
+	@Autowired
+	private IEvaluacionRespuestaService evaluacionRepuestaServ;
+	
+	@Autowired
+	private IQuestionarioRespuestaService questionarioRespuestaService;
+	
 	String nivelSeccionDocenteAlumnoVaronMujer;
 	String peTurno;
 	String peSuministro;
@@ -106,6 +114,8 @@ public class ReporteController {
 	boolean bandera_categoria;
 	boolean bandera_modalidad;
 	boolean bandera_nivel;
+	int contador;
+	int indice;
 	
 	@GetMapping(value="/reporteparticipantesinscritos/{ods}/{anio}/{categoria}/{modalidad}/{nivel}")	
 	public ResponseEntity<InputStreamResource> exportParticipantes(@PathVariable(value="ods") Integer ods,
@@ -613,9 +623,8 @@ public class ReporteController {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		
 		List<IieeReporteDto> listaiiee = new ArrayList<>();
-		
-		trabajosFinalesParticipanteService.listarTodos().forEach(tfp->{
-			
+		contador=0;
+		programaEducativoServ.listarTodos().forEach(pe->{
 			bandera_ods = false;
 			bandera_anio = false;
 			bandera_categoria = false;
@@ -623,7 +632,7 @@ public class ReporteController {
 			bandera_nivel = false;
 			
 			if(ods!=-1) {
-				if(tfp.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid().equals(ods))
+				if(pe.getDistrito().getOdsid().equals(ods))
 					bandera_ods = true;
 				else
 					bandera_ods = false;
@@ -633,7 +642,7 @@ public class ReporteController {
 			}
 			
 			if(anio!=-1) {
-				if(tfp.getTrabajosfinales().getProgramaeducativo().getAnhio().equals(anio))
+				if(pe.getAnhio().equals(anio))
 					bandera_anio = true;
 				else
 					bandera_anio = false;					
@@ -642,54 +651,20 @@ public class ReporteController {
 				bandera_anio = true;
 			}
 			
-			if(categoria!=-1) {
-				switch(categoria) {
-					case 1: bandera_categoria = (tfp.getParticipante().getCategoriacuento()==1 ? true : false ); break;
-					case 2: bandera_categoria = (tfp.getParticipante().getCategoriapoesia()==1 ? true : false ); break;
-					case 3: bandera_categoria = (tfp.getParticipante().getCategoriadibujopintura()==1 ? true : false ); break;
-					case 4: bandera_categoria = (tfp.getParticipante().getCategoriacomposicionmusical()==1 ? true : false ); break;
-					case 5: bandera_categoria = (tfp.getParticipante().getCategoriaahorroagua()==1 ? true : false ); break;
-				}
-			}
-			else {
-				bandera_categoria = true;
-			}
-			
-			if(modalidad!=-1) {
-				switch(modalidad) {
-					case 1: bandera_modalidad = (tfp.getParticipante().getModalidadpostulacionindividual()==1 ? true : false ); break;
-					case 2: bandera_modalidad = (tfp.getParticipante().getModalidadpostulaciongrupal()==1 ? true : false ); break;
-				}
-			}
-			else {
-				bandera_modalidad = true;
-			}
-			
-			if(nivel!=-1) {
-				if(tfp.getParticipante().getGradoestudiante().getNivelgradopartid().equals(nivel))
-					bandera_nivel = true;
-				else
-					bandera_nivel = false;
-			}
-			else {
-				bandera_nivel = true;
-			}	
-			
-			if( bandera_ods && bandera_anio && bandera_categoria && bandera_modalidad && bandera_nivel) 			
+			if( bandera_ods && bandera_anio) 			
 			{
-				Programaeducativo objP = tfp.getTrabajosfinales().getProgramaeducativo();
 				IieeReporteDto iiee = new IieeReporteDto();
-				iiee.setAnio(objP.getAnhio());
-				iiee.setOds(odsserv.byOds(objP.getDistrito().getOdsid()).getDescripcion());
-				iiee.setDepartamento(objP.getDistrito().getProvincia().getDepartamento().getDescripcion());
-				iiee.setProvincia(objP.getDistrito().getProvincia().getDescripcion());
-				iiee.setDistrito(objP.getDistrito().getDescripcion());
-				iiee.setNombreIiee(objP.getNomie());
-				iiee.setCodigoLocalIiee(objP.getCodmod());
-				iiee.setFechaRegistro(objP.getFecha_registro().toString());
-				Postulacionconcurso pc = potulacionConcursoServ.getByIdAnio(objP.getId(), anio);
+				iiee.setAnio(pe.getAnhio());
+				iiee.setOds(odsserv.byOds(pe.getDistrito().getOdsid()).getDescripcion());
+				iiee.setDepartamento(pe.getDistrito().getProvincia().getDepartamento().getDescripcion());
+				iiee.setProvincia(pe.getDistrito().getProvincia().getDescripcion());
+				iiee.setDistrito(pe.getDistrito().getDescripcion());
+				iiee.setNombreIiee(pe.getNomie());
+				iiee.setCodigoLocalIiee(pe.getCodmod());
+				iiee.setFechaRegistro(pe.getFecha_registro()!=null?pe.getFecha_registro().toString():"");
+				Postulacionconcurso pc = potulacionConcursoServ.getByIdAnio(pe.getId(), pe.getAnhio());
 				iiee.setInscrioCe(pc!=null ? "Si":"No");
-				List<ProgramaeducativoNivel> peNivel = peNivelServ.listProgeducNivel(objP.getId());
+				List<ProgramaeducativoNivel> peNivel = peNivelServ.listProgeducNivel(pe.getId());
 				nivelSeccionDocenteAlumnoVaronMujer = "";
 				peNivel.forEach(objPenivel->{
 					nivelSeccionDocenteAlumnoVaronMujer += objPenivel.getNivel().getTiponivel().getDescripcion() + "-"+objPenivel.getNivel().getNrosecciones()+"-"+objPenivel.getNivel().getNrodocentes()+"-"+objPenivel.getNivel().getNroalumnos()+"-"+objPenivel.getNivel().getNrovarones()+"-"+objPenivel.getNivel().getNromujeres()+ "/";
@@ -697,120 +672,249 @@ public class ReporteController {
 				if(nivelSeccionDocenteAlumnoVaronMujer.length()>0)
 					nivelSeccionDocenteAlumnoVaronMujer = nivelSeccionDocenteAlumnoVaronMujer.substring(0, nivelSeccionDocenteAlumnoVaronMujer.length()-1);
 				iiee.setNivelSeccionDocenteAlumnoVaronMujer(nivelSeccionDocenteAlumnoVaronMujer);
-				iiee.setAmbito(objP.getAmbito().getDescripcion());
-				iiee.setModalidadEnsenianza(objP.getModensenianza().getDescripcion());
-				iiee.setCodigoLocal(objP.getId().toString());
-				iiee.setTipoIiee(objP.getTipoie().getDescripcion());
-				iiee.setDireccion(objP.getDirie());
-				iiee.setDre(objP.getDre());
-				iiee.setUgel(objP.getUgel());
-				iiee.setTelfIiee(objP.getTelfie());
-				iiee.setEmailIiee(objP.getMailie());
-				iiee.setFacebook(objP.getFacebook());
-				iiee.setLengua(objP.getLengua().getDescripcion());
-				iiee.setGenero(objP.getGenero().getDescripcion());
+				iiee.setAmbito(pe.getAmbito()!=null?pe.getAmbito().getDescripcion():"");
+				iiee.setModalidadEnsenianza(pe.getModensenianza()!=null?pe.getModensenianza().getDescripcion():"");
+				iiee.setCodigoLocal(pe.getId().toString());
+				iiee.setTipoIiee(pe.getTipoie()!=null?pe.getTipoie().getDescripcion():"");
+				iiee.setDireccion(pe.getDirie());
+				iiee.setDre(pe.getDre());
+				iiee.setUgel(pe.getUgel());
+				iiee.setTelfIiee(pe.getTelfie());
+				iiee.setEmailIiee(pe.getMailie());
+				iiee.setFacebook(pe.getFacebook());
+				iiee.setLengua(pe.getLengua()!=null?pe.getLengua().getDescripcion():"");
+				iiee.setGenero(pe.getGenero()!=null?pe.getGenero().getDescripcion():"");
 				peTurno = "";
-				List<ProgramaeducativoTurno> objPeTurno =	peTurnoServ.listProgeducTurno(objP.getId());
+				List<ProgramaeducativoTurno> objPeTurno =	peTurnoServ.listProgeducTurno(pe.getId());
 				objPeTurno.forEach(objTurno->{
 					peTurno += objTurno.getTurno().getDescripcion() + " ";
 				});				
 				iiee.setTurno(peTurno);
-				iiee.setProveedorServicio(objP.getProveedor().getDescripcion());
+				iiee.setProveedorServicio(pe.getProveedor()!=null?pe.getProveedor().getDescripcion():"");
 				peSuministro = "";
-				objP.getSuministro().forEach(objSuministro->{
+				pe.getSuministro().forEach(objSuministro->{
 					peSuministro += objSuministro.getNumero().toString() + "/";
 				});
 				if(peSuministro.length()>0)
 					peSuministro = peSuministro.substring(0, peSuministro.length()-1);
 				iiee.setSuministro(peSuministro);
-				iiee.setHorasAbastecimiento(objP.getAbastecimiento().toString());
-				iiee.setPiscina(objP.getPiscina().getDescripcion());
-				iiee.setTipoDocDirector(objP.getTipodocidentdir().getDescripcion());
-				iiee.setNroDocDirector(objP.getDocdir());
-				iiee.setApellidosDirector(objP.getApedir());
-				iiee.setNombresDirector(objP.getNomdir());
-				iiee.setGeneroDirector(objP.getGenerodir()!=null?objP.getGenerodir().getDescripcion():"");
-				iiee.setTelefonoDirector(objP.getTelfdir());
-				iiee.setCelularDirector(objP.getCeldir());
-				iiee.setCorreoDirector(objP.getMaildir());
-				iiee.setTipoDocProfesor(objP.getTipodocidentprof()!=null?objP.getTipodocidentprof().getDescripcion():"");
-				iiee.setNroDocProfesor(objP.getDocprof());
-				iiee.setApellidosProfesor(objP.getApeprof());
-				iiee.setNombresProfesor(objP.getNomprof());
-				iiee.setGeneroProfesor(objP.getGeneroprof()!=null?objP.getGeneroprof().getDescripcion():"");
-				iiee.setTelefonoProfesor(objP.getTelfprof());
-				iiee.setCelularProfesor(objP.getCelprof());
-				iiee.setCorreoProfesor(objP.getMailprof());
+				iiee.setHorasAbastecimiento(pe.getAbastecimiento()!=null?pe.getAbastecimiento().toString():"");
+				iiee.setPiscina(pe.getPiscina()!=null?pe.getPiscina().getDescripcion():"");
+				iiee.setTipoDocDirector(pe.getTipodocidentdir()!=null?pe.getTipodocidentdir().getDescripcion():"");
+				iiee.setNroDocDirector(pe.getDocdir());
+				iiee.setApellidosDirector(pe.getApedir());
+				iiee.setNombresDirector(pe.getNomdir());
+				iiee.setGeneroDirector(pe.getGenerodir()!=null?pe.getGenerodir().getDescripcion():"");
+				iiee.setTelefonoDirector(pe.getTelfdir());
+				iiee.setCelularDirector(pe.getCeldir());
+				iiee.setCorreoDirector(pe.getMaildir());
+				iiee.setTipoDocProfesor(pe.getTipodocidentprof()!=null?pe.getTipodocidentprof().getDescripcion():"");
+				iiee.setNroDocProfesor(pe.getDocprof());
+				iiee.setApellidosProfesor(pe.getApeprof());
+				iiee.setNombresProfesor(pe.getNomprof());
+				iiee.setGeneroProfesor(pe.getGeneroprof()!=null?pe.getGeneroprof().getDescripcion():"");
+				iiee.setTelefonoProfesor(pe.getTelfprof());
+				iiee.setCelularProfesor(pe.getCelprof());
+				iiee.setCorreoProfesor(pe.getMailprof());
 				
-				Trabajosfinales tf = tfp.getTrabajosfinales();
-				iiee.setCodigoTrabajo(tf.getProgramaeducativo().getCodmod()+"_"+tf.getNumeracion());
-				iiee.setTituloTrabajo(tf.getTitulotrabajo());
-				iiee.setLinkVideo(tf.getLinkvideo());
-				iiee.setModalidadTrabajo(tf.getModalidadtrabajo().getDescripcion());
-				iiee.setCategoriaTrabajo(tf.getCategoriatrabajo().getDescripcion());
-				iiee.setNivelParticipacionTrabajo(tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc());
 				
-				peEjesTematicos = "";
-				if(tf.getConversacion()==1) {
-					peEjesTematicos += "Conversación de las fuentes de agua/";
+				iiee.setCodigoTrabajo("-");
+				iiee.setTituloTrabajo("-");
+				iiee.setLinkVideo("-");
+				iiee.setModalidadTrabajo("-");
+				iiee.setCategoriaTrabajo("-");
+				iiee.setNivelParticipacionTrabajo("-");
+				iiee.setEjesTematicos("-");
+				iiee.setNombreParticipante("-");
+				iiee.setApellidoPaternoParticipante("-");
+				iiee.setApellidoMaternoParticipante("-");
+				iiee.setTipoDocumentoParticipante("-");
+				iiee.setNroDocumentoParticipante("-");
+				iiee.setFechaNacimientoParticipante("-");
+				iiee.setGeneroParticipante("-");
+				iiee.setSeccionParticipante("-");
+				iiee.setNivelParticipante("-");
+				iiee.setGradoParticipante("-");
+				iiee.setNombreTutor("-");
+				iiee.setApellidoPaternoTutor("-");
+				iiee.setApellidoMaternoTutor("-");
+				iiee.setTipoDocumentoTutor("-");
+				iiee.setNroDocumentoTutor("-");
+				iiee.setTelefonoTutor("-");
+				iiee.setCorreoTutor("-");
+				iiee.setParentesco("-");
+				iiee.setNombreDocente("-");
+				iiee.setApellidoPaternoDocente("-");
+				iiee.setApellidoMaternoDocente("-");
+				iiee.setTipoDocumentoDocente("-");
+				iiee.setNrodocumentoDocente("-");
+				iiee.setTelefonoDocente("-");
+				iiee.setGeneroDocente("-");
+				iiee.setCorreoDocente("-");
+				iiee.setNotaRegional((float) 0);
+				iiee.setPuestoRegional("-");
+				iiee.setNotaNacional((float) 0);
+				iiee.setPuestoNacional("");				
+				
+				
+				List<Trabajosfinales> objTrabajosFinales = trabajosFinalesServ.listarhabilitadosPE(pe.getId());				
+				if(objTrabajosFinales.size()>0) {					
+					objTrabajosFinales.forEach(tf->{
+						
+						List<TrabajosfinalesParticipante> objtfp = trabajosFinalesParticipanteService.listar(tf.getId());
+						if(objtfp.size()>0) {
+							
+							objtfp.forEach(tfp->{
+								System.out.println("codmod: " + tf.getProgramaeducativo().getCodmod()+"_"+tf.getNumeracion());
+								if(categoria!=-1) {
+									switch(categoria) {
+										case 1: bandera_categoria =	(tfp.getParticipante().getCategoriacuento()==1 ? true : false ); break;
+										case 2: bandera_categoria = (tfp.getParticipante().getCategoriapoesia()==1 ? true : false ); break;
+										case 3: bandera_categoria = (tfp.getParticipante().getCategoriadibujopintura()==1 ? true : false ); break;
+										case 4: bandera_categoria = (tfp.getParticipante().getCategoriacomposicionmusical()==1 ? true : false ); break;
+										case 5: bandera_categoria = (tfp.getParticipante().getCategoriaahorroagua()==1 ? true : false ); break;
+									}
+								}
+								else {
+									bandera_categoria = true;
+								}
+								
+								if(modalidad!=-1) {
+									switch(modalidad) {
+										case 1: bandera_modalidad = (tfp.getParticipante().getModalidadpostulacionindividual()==1 ? true : false ); break;
+										case 2: bandera_modalidad = (tfp.getParticipante().getModalidadpostulaciongrupal()==1 ? true : false ); break;
+									}
+								}
+								else {
+									bandera_modalidad = true;
+								}
+								
+								if(nivel!=-1) {
+									if(tfp.getParticipante().getGradoestudiante().getNivelgradopartid().equals(nivel))
+										bandera_nivel = true;
+									else
+										bandera_nivel = false;
+								}
+								else {
+									bandera_nivel = true;
+								}	
+								
+								if(bandera_categoria && bandera_modalidad && bandera_nivel) {		
+									iiee.setCodigoTrabajo(tf.getProgramaeducativo().getCodmod()+"_"+tf.getNumeracion());
+									iiee.setTituloTrabajo(tf.getTitulotrabajo());
+									iiee.setLinkVideo(tf.getLinkvideo());
+									iiee.setModalidadTrabajo(tf.getModalidadtrabajo()!=null?tf.getModalidadtrabajo().getDescripcion():"");
+									iiee.setCategoriaTrabajo(tf.getCategoriatrabajo()!=null?tf.getCategoriatrabajo().getDescripcion():"");
+									iiee.setNivelParticipacionTrabajo(tfp.getParticipante()!=null?tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc():"");
+									
+									peEjesTematicos = "";
+									if(tf.getConversacion()==1) {
+										peEjesTematicos += "Conversación de las fuentes de agua/";
+									}
+									if(tf.getValoracionagua()==1) {
+										peEjesTematicos += "Valoración de los servicios de agua potable/";
+									}
+									if(tf.getValoracionalcantarillado()==1) {
+										peEjesTematicos += "Valoración del servicio de alcantarillado/";
+									}
+									if(tf.getBuenuso()==1) {
+										peEjesTematicos += "Buen uso y reúso del agua potable/";
+									}
+									if(tf.getImportancia()==1) {
+										peEjesTematicos += "Importancia de cerrar la brecha en saneamiento/";
+									}
+									if(tf.getVinculo()==1) {
+										peEjesTematicos += "El vínculo estratégico entre el agua seura y la salud/";
+									}
+									if(tf.getCarencias()==1) {
+										peEjesTematicos += "Las carencias que ponen en riesgo la vida/";
+									}
+									if(tf.getRevaloracion()!=null) {
+										if(tf.getRevaloracion()==1) {
+											peEjesTematicos += "Revaloración de las practicas ancetrales para la seguridad hídrica/";
+										}
+									}
+									if(peEjesTematicos.length()>0)
+										peEjesTematicos = peEjesTematicos.substring(0, peEjesTematicos.length()-1);
+									iiee.setEjesTematicos(peEjesTematicos);
+									iiee.setNombreParticipante(tfp.getParticipante()!=null?tfp.getParticipante().getNombreestudiante():"");
+									iiee.setApellidoPaternoParticipante(tfp.getParticipante()!=null?tfp.getParticipante().getAppaternoestudiante():"");
+									iiee.setApellidoMaternoParticipante(tfp.getParticipante()!=null?tfp.getParticipante().getApmaternoestudiante():"");
+									iiee.setTipoDocumentoParticipante(tfp.getParticipante()!=null?tfp.getParticipante().getTipodocumentoestudiante().getDescripcion():"");
+									iiee.setNroDocumentoParticipante(tfp.getParticipante()!=null?tfp.getParticipante().getNrodocumentoestudiante():"");
+									iiee.setFechaNacimientoParticipante(tfp.getParticipante()!=null?tfp.getParticipante().getFechanacimientoestudiante().toString():"");
+									iiee.setGeneroParticipante(tfp.getParticipante()!=null?tfp.getParticipante().getGeneroestudiante().getDescripcion():"");
+									iiee.setSeccionParticipante(tfp.getParticipante()!=null?tfp.getParticipante().getSeccion():"");
+									iiee.setNivelParticipante(tfp.getParticipante()!=null?tfp.getParticipante().getGradoestudiante().getNivelparticipante().getDescripcion():"");
+									iiee.setGradoParticipante(tfp.getParticipante()!=null?tfp.getParticipante().getGradoestudiante().getNivelgradopartid().toString():"");
+									iiee.setNombreTutor(tfp.getParticipante()!=null?tfp.getParticipante().getNombrepmt():"");
+									iiee.setApellidoPaternoTutor(tfp.getParticipante()!=null?tfp.getParticipante().getAppaternopmt():"");
+									iiee.setApellidoMaternoTutor(tfp.getParticipante()!=null?tfp.getParticipante().getAppaternopmt():"");
+									iiee.setTipoDocumentoTutor(tfp.getParticipante()!=null?tfp.getParticipante().getTipodocumentopmt().getDescripcion():"");
+									iiee.setNroDocumentoTutor(tfp.getParticipante()!=null?tfp.getParticipante().getNrodocumentopmt():"");
+									iiee.setTelefonoTutor(tfp.getParticipante()!=null?tfp.getParticipante().getNrotelefonopmt():"");
+									iiee.setCorreoTutor(tfp.getParticipante()!=null?tfp.getParticipante().getCorreoelectronicopmt():"");
+									iiee.setParentesco(tfp.getParticipante()!=null?tfp.getParticipante().getParentesco().getDescripcion():"");
+									iiee.setNombreDocente(tf.getNombre());
+									iiee.setApellidoPaternoDocente(tf.getAppaterno());
+									iiee.setApellidoMaternoDocente(tf.getApmaterno());
+									iiee.setTipoDocumentoDocente(tf.getTipodocumento()!=null?tf.getTipodocumento().getDescripcion():"");
+									iiee.setNrodocumentoDocente(tf.getNrodocumento());
+									iiee.setTelefonoDocente(tf.getTelefono());
+									iiee.setGeneroDocente(tf.getGenero()!=null?tf.getGenero().getDescripcion():"");
+									iiee.setCorreoDocente(tf.getCorreo());
+									iiee.setNotaRegional(tf.getNota());
+									iiee.setPuestoRegional(tf.getPuesto().toString());
+									iiee.setNotaNacional((float) 0);
+									iiee.setPuestoNacional("");
+									listaiiee.add(iiee);							
+								}
+							});							
+						}
+						else {
+							iiee.setCodigoTrabajo(tf.getProgramaeducativo().getCodmod()+"_"+tf.getNumeracion());
+							iiee.setTituloTrabajo(tf.getTitulotrabajo());
+							iiee.setLinkVideo(tf.getLinkvideo());
+							iiee.setModalidadTrabajo(tf.getModalidadtrabajo()!=null?tf.getModalidadtrabajo().getDescripcion():"");
+							iiee.setCategoriaTrabajo(tf.getCategoriatrabajo()!=null?tf.getCategoriatrabajo().getDescripcion():"");
+							
+							peEjesTematicos = "";
+							if(tf.getConversacion()==1) {
+								peEjesTematicos += "Conversación de las fuentes de agua/";
+							}
+							if(tf.getValoracionagua()==1) {
+								peEjesTematicos += "Valoración de los servicios de agua potable/";
+							}
+							if(tf.getValoracionalcantarillado()==1) {
+								peEjesTematicos += "Valoración del servicio de alcantarillado/";
+							}
+							if(tf.getBuenuso()==1) {
+								peEjesTematicos += "Buen uso y reúso del agua potable/";
+							}
+							if(tf.getImportancia()==1) {
+								peEjesTematicos += "Importancia de cerrar la brecha en saneamiento/";
+							}
+							if(tf.getVinculo()==1) {
+								peEjesTematicos += "El vínculo estratégico entre el agua seura y la salud/";
+							}
+							if(tf.getCarencias()==1) {
+								peEjesTematicos += "Las carencias que ponen en riesgo la vida/";
+							}
+							if(tf.getRevaloracion()!=null) {
+								if(tf.getRevaloracion()==1) {
+									peEjesTematicos += "Revaloración de las practicas ancetrales para la seguridad hídrica/";
+								}
+							}
+							if(peEjesTematicos.length()>0)
+								peEjesTematicos = peEjesTematicos.substring(0, peEjesTematicos.length()-1);
+							iiee.setEjesTematicos(peEjesTematicos);
+							listaiiee.add(iiee);
+						}
+					});
 				}
-				if(tf.getValoracionagua()==1) {
-					peEjesTematicos += "Valoración de los servicios de agua potable/";
+				else {
+					listaiiee.add(iiee);
 				}
-				if(tf.getValoracionalcantarillado()==1) {
-					peEjesTematicos += "Valoración del servicio de alcantarillado/";
-				}
-				if(tf.getBuenuso()==1) {
-					peEjesTematicos += "Buen uso y reúso del agua potable/";
-				}
-				if(tf.getImportancia()==1) {
-					peEjesTematicos += "Importancia de cerrar la brecha en saneamiento/";
-				}
-				if(tf.getVinculo()==1) {
-					peEjesTematicos += "El vínculo estratégico entre el agua seura y la salud/";
-				}
-				if(tf.getCarencias()==1) {
-					peEjesTematicos += "Las carencias que ponen en riesgo la vida/";
-				}
-				if(tf.getRevaloracion()!=null) {
-					if(tf.getRevaloracion()==1) {
-						peEjesTematicos += "Revaloración de las practicas ancetrales para la seguridad hídrica/";
-					}
-				}
-				if(peEjesTematicos.length()>0)
-					peEjesTematicos = peEjesTematicos.substring(0, peEjesTematicos.length()-1);
-				iiee.setEjesTematicos(peEjesTematicos);
-				iiee.setNombreParticipante(tfp.getParticipante().getNombreestudiante());
-				iiee.setApellidoPaternoParticipante(tfp.getParticipante().getAppaternoestudiante());
-				iiee.setApellidoMaternoParticipante(tfp.getParticipante().getApmaternoestudiante());
-				iiee.setTipoDocumentoParticipante(tfp.getParticipante().getTipodocumentoestudiante().getDescripcion());
-				iiee.setNroDocumentoParticipante(tfp.getParticipante().getNrodocumentoestudiante());
-				iiee.setFechaNacimientoParticipante(tfp.getParticipante().getFechanacimientoestudiante().toString());
-				iiee.setGeneroParticipante(tfp.getParticipante().getGeneroestudiante().getDescripcion());
-				iiee.setSeccionParticipante(tfp.getParticipante().getSeccion());
-				iiee.setNivelParticipante(tfp.getParticipante().getGradoestudiante().getNivelparticipante().getDescripcion());
-				iiee.setGradoParticipante(tfp.getParticipante().getGradoestudiante().getNivelgradopartid().toString());
-				iiee.setNombreTutor(tfp.getParticipante().getNombrepmt());
-				iiee.setApellidoPaternoTutor(tfp.getParticipante().getAppaternopmt());
-				iiee.setApellidoMaternoTutor(tfp.getParticipante().getAppaternopmt());
-				iiee.setTipoDocumentoTutor(tfp.getParticipante().getTipodocumentopmt().getDescripcion());
-				iiee.setNroDocumentoTutor(tfp.getParticipante().getNrodocumentopmt());
-				iiee.setTelefonoTutor(tfp.getParticipante().getNrotelefonopmt());
-				iiee.setCorreoTutor(tfp.getParticipante().getCorreoelectronicopmt());
-				iiee.setParentesco(tfp.getParticipante().getParentesco().getDescripcion());
-				iiee.setNombreDocente(tf.getNombre());
-				iiee.setApellidoPaternoDocente(tf.getAppaterno());
-				iiee.setApellidoMaternoDocente(tf.getApmaterno());
-				iiee.setTipoDocumentoDocente(tf.getTipodocumento().getDescripcion());
-				iiee.setNrodocumentoDocente(tf.getNrodocumento());
-				iiee.setTelefonoDocente(tf.getTelefono());
-				iiee.setGeneroDocente(tf.getGenero().getDescripcion());
-				iiee.setCorreoDocente(tf.getCorreo());
-				iiee.setNotaRegional(0);
-				iiee.setPuestoRegional("");
-				iiee.setNotaNacional(0);
-				iiee.setPuestoNacional("");
-				listaiiee.add(iiee);
 			}
 		});
 		
@@ -1006,13 +1110,38 @@ public class ReporteController {
 				dto.setCategoria(obj.getTrabajosfinales().getCategoriatrabajo().getDescripcion());
 				dto.setNivelParticipacion(obj.getParticipante().getGradoestudiante().getNivelgradopartdesc());
 				dto.setCantidadEvaluadoresAsignados(0);
+				
 				dto.setPregunta1(0);
 				dto.setPregunta2(0);
 				dto.setPregunta3(0);
 				dto.setPregunta4(0);
 				dto.setPregunta5(0);
-				dto.setEresCebe("");
-				dto.setNota(0);
+				dto.setEresCebe("NO");
+				
+				indice=1;
+				evaluacionRepuestaServ.getRespuestas(obj.getTrabajosfinales().getId()).forEach(objER->{
+					if(objER.getTipo()==1) {
+						switch(indice) {
+							case 1 : dto.setPregunta1(objER.getPuntaje());	 break;
+							case 2 : dto.setPregunta2(objER.getPuntaje());	 break;
+							case 3 : dto.setPregunta3(objER.getPuntaje());	 break;
+							case 4 : dto.setPregunta4(objER.getPuntaje());	 break;
+							case 5 : dto.setPregunta5(objER.getPuntaje());	 break;
+						}
+						indice++;
+					}
+					if(objER.getTipo()==2) {
+						questionarioRespuestaService.listarByTrabajo(objER.getRespuestaid()).forEach(qr->{
+							if(qr.getQuestionario().getPregunta().toLowerCase().contains("cebe")) {
+								if(qr.getRespuesta().toLowerCase().contains("si")) {
+									dto.setEresCebe("SI");
+								}
+							}
+						});
+					}
+				});
+				
+				dto.setNota(obj.getTrabajosfinales().getNota()!=null?obj.getTrabajosfinales().getNota():0);
 				dto.setPuesto(obj.getTrabajosfinales().getPuesto().toString());
 				lista.add(dto);
 			}					

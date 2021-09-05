@@ -12,6 +12,7 @@ public class TrabajosFinalesConcursoDto {
 	String modalidad;
 	String ambito;
 	String codigoTrabajo;
+	String estadoTrabajo;
 	String tituloTrabajo;
 	String linkvideo;
 	String modalidadTrabajo;
@@ -44,9 +45,9 @@ public class TrabajosFinalesConcursoDto {
 	String telefonoDocente;
 	String generoDocente;
 	String correoDocente;
-	Integer notaRegional;
+	Float notaRegional;
 	String puestoRegional;
-	Integer notaNacional;
+	Float notaNacional;
 	String puestoNacional;
 	
 	public Integer getAnio() {
@@ -108,6 +109,12 @@ public class TrabajosFinalesConcursoDto {
 	}
 	public void setCodigoTrabajo(String codigoTrabajo) {
 		this.codigoTrabajo = codigoTrabajo;
+	}
+	public String getEstadoTrabajo() {
+		return estadoTrabajo;
+	}
+	public void setEstadoTrabajo(String estadoTrabajo) {
+		this.estadoTrabajo = estadoTrabajo;
 	}
 	public String getTituloTrabajo() {
 		return tituloTrabajo;
@@ -301,10 +308,10 @@ public class TrabajosFinalesConcursoDto {
 	public void setCorreoDocente(String correoDocente) {
 		this.correoDocente = correoDocente;
 	}
-	public Integer getNotaRegional() {
+	public Float getNotaRegional() {
 		return notaRegional;
 	}
-	public void setNotaRegional(Integer notaRegional) {
+	public void setNotaRegional(Float notaRegional) {
 		this.notaRegional = notaRegional;
 	}
 	public String getPuestoRegional() {
@@ -313,10 +320,10 @@ public class TrabajosFinalesConcursoDto {
 	public void setPuestoRegional(String puestoRegional) {
 		this.puestoRegional = puestoRegional;
 	}
-	public Integer getNotaNacional() {
+	public Float getNotaNacional() {
 		return notaNacional;
 	}
-	public void setNotaNacional(Integer notaNacional) {
+	public void setNotaNacional(Float notaNacional) {
 		this.notaNacional = notaNacional;
 	}
 	public String getPuestoNacional() {

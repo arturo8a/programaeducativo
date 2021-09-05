@@ -8,6 +8,7 @@ public class DetalleEvaluacionReporteDto {
 	String nombreie;
 	String ambito;
 	String codigoTrabajo;
+	String estadoTrabajo;
 	String tituloTrabajo;
 	String modalidad;
 	String categoria;
@@ -57,6 +58,12 @@ public class DetalleEvaluacionReporteDto {
 	}
 	public void setCodigoTrabajo(String codigoTrabajo) {
 		this.codigoTrabajo = codigoTrabajo;
+	}
+	public String getEstadoTrabajo() {
+		return estadoTrabajo;
+	}
+	public void setEstadoTrabajo(String estadoTrabajo) {
+		this.estadoTrabajo = estadoTrabajo;
 	}
 	public String getTituloTrabajo() {
 		return tituloTrabajo;
