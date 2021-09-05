@@ -2123,6 +2123,8 @@ public class ConcursoeducativoController {
 						for (TrabajosFinalizados trabajos : listaTrabEmpatados) {
 							if(trabajos.getNota() == NotaPuesto1 ) {
 								Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getTrabajoId());
+								/*trabajoFinal.setPuesto(1);
+								trabajosfinalesServ.modificar(trabajoFinal);*/
 								cantidad++;
 							}
 						}
@@ -2133,15 +2135,18 @@ public class ConcursoeducativoController {
 								Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getTrabajoId());
 								log.info("TRABAJO EMPATADO FINALIZADOS: "+trabajos.getTrabajoId() + " | ODS: "+ ods.getId() +" | "+"CAREGORIAID: "+catModByODs.getCategoriaId() +" | NIVEL: "+catModByODs.getNivelId()+" | NOTA: "+trabajoFinal.getPuesto()+indice);
 								trabajoFinal.setPuesto(trabajoFinal.getPuesto()+indice);
-								/*if(trabajoFinal.getPuesto()+indice > 3) {
+								if(trabajoFinal.getPuesto()+indice > 4) {
 									trabajoFinal.setPuesto(0);
-								}*/
+								}
 								
 								trabajosfinalesServ.modificar(trabajoFinal);
 								indice++;
 							}
 						}else {
 							for (TrabajosFinalizados trabajos : listaTrabEmpatados) {
+								evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trabajos.getTrabajoId());//borrar las respuestas de las evaluaciones;
+								trabajosFinales_UsuarioAlianzaServ.eliminar(trabajos.getTrabajoId());//borrar asignacion de evaluadores
+								
 								Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getTrabajoId());
 								Estadotrabajo estadoTrabajo = new  Estadotrabajo();
 								estadoTrabajo.setId(21);
@@ -2149,6 +2154,8 @@ public class ConcursoeducativoController {
 								trabajosfinalesServ.modificar(trabajoFinal);
 								log.info("TRABAJO EMPATADO EMPATADOS: "+trabajos.getTrabajoId() + " | ODS: "+ ods.getId() +" | "+"CAREGORIAID: "+catModByODs.getCategoriaId() +" | NIVEL: "+catModByODs.getNivelId()+" | NOTA: "+catModByODs.getNivelId());
 							}
+							cerrarOds.setEstado(2);//empate
+							cerrarOdsServ.guardar(cerrarOds);
 						}
 						
 					}
