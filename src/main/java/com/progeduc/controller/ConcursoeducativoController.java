@@ -2050,7 +2050,7 @@ public class ConcursoeducativoController {
 		int anio= cal.get(Calendar.YEAR);
 		Aperturaranio apertura = aperturaranioService.buscar(anio);
 		LocalDate dateActual = LocalDate.now();
-		if(apertura.getQuintaetapadesde().isAfter(dateActual)) {
+		if(apertura.getQuintaetapadesde().isBefore(dateActual) || apertura.getQuintaetapadesde().isEqual(dateActual)) {
 			odsRespuesta.setStatus(1);
 			odsRespuesta.setListOds(odsserv.listarAll());
 			odsRespuesta.setListCerrarOds(cerrarOdsServ.listCerrarOds());
@@ -2104,102 +2104,148 @@ public class ConcursoeducativoController {
 				for (CategoriaNivelParticipacionByOds catModByODs : listaCatNivByOds) {
 					log.info("CAREGORIAID: "+catModByODs.getCategoriaId() +" | NIVEL: "+catModByODs.getNivelId());
 					/*Lista de trabajos Por Categoria y Nivel con Nota Promedio*/
-					//List<Trabajosfinales> listaTrab = trabajosfinalesServ.listaTrabajosFinalesConNotaPromedioPorCategoriaModalidadDds(catModByODs.getCategoriaId(), catModByODs.getModalidadId(), ods.getId());
 					List<TrabajosFinalizados> listaTrab = trabajosfinalesServ.listaTrabajosFinalesConNotaPromedioPorCategoriaNivelOds(catModByODs.getCategoriaId(), catModByODs.getNivelId(), ods.getId());
+					/*Lista de empatados*/
+					List<TrabajosFinalizados> listaTrabEmpatados = trabajosfinalesServ.listaTrabajosFinalesConNotaPromedioPorCategoriaNivelOdsEmpatados(catModByODs.getCategoriaId(), catModByODs.getNivelId(), ods.getId());
 					
-					/*Obtener Puesto*/
-					if(listaTrab.size() > 0) {
-						/*Puesto 1*/
+					if(listaTrabEmpatados.size() > 0) {
 						float NotaPuesto1 = listaTrab.get(0).getNota();
 						int cantidad = 0;
 						/*BuscarEmpate*/
-						for (TrabajosFinalizados trabajos : listaTrab) {
+						for (TrabajosFinalizados trabajos : listaTrabEmpatados) {
 							if(trabajos.getNota() == NotaPuesto1 ) {
 								Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getTrabajoId());
-								trabajoFinal.setPuesto(1);
-								trabajosfinalesServ.modificar(trabajoFinal);
 								cantidad++;
 							}
 						}
-						if(cantidad > 1) {
-							//List<Trabajosfinales> listaPuesto1= trabajosfinalesServ.listaTrabajosEmpatadosPorCatModOdsPuesto(catModByODs.getCategoriaId(), catModByODs.getCategoriaId()ModalidadId(), ods.getId(),1);
-							List<TrabajosFinalizados> listaPuesto1= trabajosfinalesServ.listaTrabajosEmpatadosPorCatNivOdsPuesto(catModByODs.getCategoriaId(), catModByODs.getNivelId(), ods.getId(), 1);
-							for (TrabajosFinalizados trab : listaPuesto1) {
-								evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getTrabajoId());//borrar las respuestas de las evaluaciones;
-								trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getTrabajoId());//borrar asignacion de evaluadores
-								
-								Estadotrabajo estadoTrabajo = new  Estadotrabajo();
-								estadoTrabajo.setId(21);
-								Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getTrabajoId());
-								trabajoFinal.setEstadotrabajo(estadoTrabajo);
-								trabajosfinalesServ.modificar(trabajoFinal);
-								
-							}
-							cerrarOds.setEstado(2);//empate
-							cerrarOdsServ.guardar(cerrarOds);
-						}
 						
-						/*Puesto 2*/
-						int cantidad2 = 0;
-						if(listaTrab.size() > cantidad && cantidad == 1) {
-							float NotaPuesto2 = listaTrab.get(cantidad).getNota();
-							/*BuscarEmpate*/
-							for (TrabajosFinalizados trabajos : listaTrab) {
-								if(trabajos.getNota() == NotaPuesto2 ) {
-									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getTrabajoId());
-									trabajoFinal.setPuesto(2);
-									trabajosfinalesServ.modificar(trabajoFinal);
-									cantidad2++;
-								}
-							}
-						}
-						if(cantidad2 > 1 && cantidad == 1) {
-							List<TrabajosFinalizados> listaPuesto2= trabajosfinalesServ.listaTrabajosEmpatadosPorCatNivOdsPuesto(catModByODs.getCategoriaId(), catModByODs.getNivelId(), ods.getId(),2);
-							for (TrabajosFinalizados trab : listaPuesto2) {
-								evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getTrabajoId());
-								trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getTrabajoId());
+						if(cantidad <= 1) {
+							int indice = 0;
+							for (TrabajosFinalizados trabajos : listaTrabEmpatados) {
+								Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getTrabajoId());
+								log.info("TRABAJO EMPATADO FINALIZADOS: "+trabajos.getTrabajoId() + " | ODS: "+ ods.getId() +" | "+"CAREGORIAID: "+catModByODs.getCategoriaId() +" | NIVEL: "+catModByODs.getNivelId()+" | NOTA: "+trabajoFinal.getPuesto()+indice);
+								trabajoFinal.setPuesto(trabajoFinal.getPuesto()+indice);
+								/*if(trabajoFinal.getPuesto()+indice > 3) {
+									trabajoFinal.setPuesto(0);
+								}*/
 								
+								trabajosfinalesServ.modificar(trabajoFinal);
+								indice++;
+							}
+						}else {
+							for (TrabajosFinalizados trabajos : listaTrabEmpatados) {
+								Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getTrabajoId());
 								Estadotrabajo estadoTrabajo = new  Estadotrabajo();
 								estadoTrabajo.setId(21);
-								Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getTrabajoId());
 								trabajoFinal.setEstadotrabajo(estadoTrabajo);
 								trabajosfinalesServ.modificar(trabajoFinal);
+								log.info("TRABAJO EMPATADO EMPATADOS: "+trabajos.getTrabajoId() + " | ODS: "+ ods.getId() +" | "+"CAREGORIAID: "+catModByODs.getCategoriaId() +" | NIVEL: "+catModByODs.getNivelId()+" | NOTA: "+catModByODs.getNivelId());
 							}
-							cerrarOds.setEstado(2);//empate
-							cerrarOdsServ.guardar(cerrarOds);
-						}
-						
-						/*Puesto 3*/
-						int cantidad3 = 0;
-						if(listaTrab.size() > cantidad+cantidad2 && (cantidad+cantidad2) == 2) {
-							float NotaPuesto3 = listaTrab.get(cantidad+cantidad2).getNota();
-							/*BuscarEmpate*/
-							for (TrabajosFinalizados trabajos : listaTrab) {
-								if(trabajos.getNota() == NotaPuesto3 ) {
-									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getTrabajoId());
-									trabajoFinal.setPuesto(3);
-									trabajosfinalesServ.modificar(trabajoFinal);
-									cantidad3++;
-								}
-							}
-						}
-						if(cantidad3 > 1 && cantidad == 2) {
-							List<TrabajosFinalizados> listaPuesto3= trabajosfinalesServ.listaTrabajosEmpatadosPorCatNivOdsPuesto(catModByODs.getCategoriaId(), catModByODs.getNivelId(), ods.getId(),3);
-							for (TrabajosFinalizados trab : listaPuesto3) {
-								evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getTrabajoId());
-								trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getTrabajoId());
-								
-								Estadotrabajo estadoTrabajo = new  Estadotrabajo();
-								estadoTrabajo.setId(21);
-								Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getTrabajoId());
-								trabajoFinal.setEstadotrabajo(estadoTrabajo);
-								trabajosfinalesServ.modificar(trabajoFinal);
-							}
-							cerrarOds.setEstado(2);//empate
-							cerrarOdsServ.guardar(cerrarOds);
 						}
 						
 					}
+					else {
+						/*Obtener Puesto*/
+						if(listaTrab.size() > 0) {
+							/*Puesto 1*/
+							float NotaPuesto1 = listaTrab.get(0).getNota();
+							int cantidad = 0;
+							/*BuscarEmpate*/
+							for (TrabajosFinalizados trabajos : listaTrab) {
+								if(trabajos.getNota() == NotaPuesto1 ) {
+									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getTrabajoId());
+									trabajoFinal.setPuesto(1);
+									trabajosfinalesServ.modificar(trabajoFinal);
+									cantidad++;
+								}
+							}
+							if(cantidad > 1) {
+								//List<Trabajosfinales> listaPuesto1= trabajosfinalesServ.listaTrabajosEmpatadosPorCatModOdsPuesto(catModByODs.getCategoriaId(), catModByODs.getCategoriaId()ModalidadId(), ods.getId(),1);
+								List<TrabajosFinalizados> listaPuesto1= trabajosfinalesServ.listaTrabajosEmpatadosPorCatNivOdsPuesto(catModByODs.getCategoriaId(), catModByODs.getNivelId(), ods.getId(), 1);
+								for (TrabajosFinalizados trab : listaPuesto1) {
+									evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getTrabajoId());//borrar las respuestas de las evaluaciones;
+									trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getTrabajoId());//borrar asignacion de evaluadores
+									
+									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+									estadoTrabajo.setId(21);
+									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getTrabajoId());
+									trabajoFinal.setEstadotrabajo(estadoTrabajo);
+									trabajoFinal.setEmpate(1);//empate si
+									trabajoFinal.setNota_original(trabajoFinal.getNota());//nota original
+									trabajosfinalesServ.modificar(trabajoFinal);
+									
+								}
+								cerrarOds.setEstado(2);//empate
+								cerrarOdsServ.guardar(cerrarOds);
+							}
+							
+							/*Puesto 2*/
+							int cantidad2 = 0;
+							if(listaTrab.size() > cantidad && cantidad == 1) {
+								float NotaPuesto2 = listaTrab.get(cantidad).getNota();
+								/*BuscarEmpate*/
+								for (TrabajosFinalizados trabajos : listaTrab) {
+									if(trabajos.getNota() == NotaPuesto2 ) {
+										Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getTrabajoId());
+										trabajoFinal.setPuesto(2);
+										trabajosfinalesServ.modificar(trabajoFinal);
+										cantidad2++;
+									}
+								}
+							}
+							if(cantidad2 > 1 && cantidad == 1) {
+								List<TrabajosFinalizados> listaPuesto2= trabajosfinalesServ.listaTrabajosEmpatadosPorCatNivOdsPuesto(catModByODs.getCategoriaId(), catModByODs.getNivelId(), ods.getId(),2);
+								for (TrabajosFinalizados trab : listaPuesto2) {
+									evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getTrabajoId());
+									trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getTrabajoId());
+									
+									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+									estadoTrabajo.setId(21);
+									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getTrabajoId());
+									trabajoFinal.setEstadotrabajo(estadoTrabajo);
+									trabajoFinal.setEmpate(1);//empate si
+									trabajoFinal.setNota_original(trabajoFinal.getNota());//nota original
+									trabajosfinalesServ.modificar(trabajoFinal);
+								}
+								cerrarOds.setEstado(2);//empate
+								cerrarOdsServ.guardar(cerrarOds);
+							}
+							
+							/*Puesto 3*/
+							int cantidad3 = 0;
+							if(listaTrab.size() > cantidad+cantidad2 && (cantidad+cantidad2) == 2) {
+								float NotaPuesto3 = listaTrab.get(cantidad+cantidad2).getNota();
+								/*BuscarEmpate*/
+								for (TrabajosFinalizados trabajos : listaTrab) {
+									if(trabajos.getNota() == NotaPuesto3 ) {
+										Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getTrabajoId());
+										trabajoFinal.setPuesto(3);
+										trabajosfinalesServ.modificar(trabajoFinal);
+										cantidad3++;
+									}
+								}
+							}
+							if(cantidad3 > 1 && cantidad == 2) {
+								List<TrabajosFinalizados> listaPuesto3= trabajosfinalesServ.listaTrabajosEmpatadosPorCatNivOdsPuesto(catModByODs.getCategoriaId(), catModByODs.getNivelId(), ods.getId(),3);
+								for (TrabajosFinalizados trab : listaPuesto3) {
+									evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getTrabajoId());
+									trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getTrabajoId());
+									
+									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+									estadoTrabajo.setId(21);
+									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getTrabajoId());
+									trabajoFinal.setEstadotrabajo(estadoTrabajo);
+									trabajoFinal.setEmpate(1);//empate si
+									trabajoFinal.setNota_original(trabajoFinal.getNota());//nota original
+									trabajosfinalesServ.modificar(trabajoFinal);
+								}
+								cerrarOds.setEstado(2);//empate
+								cerrarOdsServ.guardar(cerrarOds);
+							}
+							
+						}
+					}
+					
 					
 					
 				}

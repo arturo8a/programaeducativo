@@ -144,5 +144,18 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
     		+ "group by tf.id, d.odsid, tf.categoriatrabajoid, gp.nivelgradopartdesc, tf.nota "
     		+ "order by tf.nota desc ",nativeQuery = true)
 	List<Object[]> listaTrabajosEmpatadosPorCatNivOdsPuesto(Integer idcategoria, String nivel,Integer odsId, Integer puesto);
-
+	
+	@Query(value="select tf.id, d.odsid, tf.categoriatrabajoid, gp.nivelgradopartdesc, tf.nota from trabajosfinales tf "
+			+ "inner join programaeducativo pe on tf.programaeducativoid = pe.id "
+			+ "inner join distrito d on pe.distritoid = d.id "
+			+ "inner join ods o on d.odsid = o.id "
+			+ "inner join trabajosfinales_participante tfp on tfp.trabajosfinalesid = tf.id "
+			+ "inner join participante p on p.id = tfp.participanteid "
+			+ "inner join gradoparticipante gp on gp.id = p.gradooestudiante "
+    		+ "where tf.nota is not null and o.id=?3 AND tf.categoriatrabajoid = ?1 and gp.nivelgradopartdesc=?2 "
+    		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) AND tf.nota >= 16 and tf.empate=1 "
+    		+ "group by tf.id, d.odsid, tf.categoriatrabajoid, gp.nivelgradopartdesc, tf.nota "
+    		+ "order by tf.nota desc ",nativeQuery = true)
+    List<Object[]> listaTrabajosFinalesConNotaPromedioPorCategoriaNivelOdsEmpatados(Integer idcategoria, String nivel,Integer odsId);
+	
 }
