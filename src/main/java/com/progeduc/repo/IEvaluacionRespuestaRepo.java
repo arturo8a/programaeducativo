@@ -8,7 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.progeduc.model.Evaluacion;
+import com.progeduc.dto.rubricaPuntajeDto;
 import com.progeduc.model.EvaluacionResultado;
 
 @Repository
@@ -33,4 +33,7 @@ public interface IEvaluacionRespuestaRepo extends CrudRepository<EvaluacionResul
 	@Modifying	
 	@Query(value="delete from EVALUACIONES_RESPUESTAS tb where tb.TRABAJOID = ?1",nativeQuery = true)
 	void borrarEvaluacionesPorTrabajo(Integer idTrabajo);
+	
+	@Query(value="select preguntaid,round(avg(puntaje),2) as puntaje from evaluaciones_respuestas where trabajoid = ?1 and tipo=1  group by preguntaid order by preguntaid asc",nativeQuery=true)
+	public List<rubricaPuntajeDto> listaRubricaPuntajeDto(Integer trabajoid);
 }

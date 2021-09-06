@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.progeduc.dto.EvaluacionRubricaQuestionarioDto;
+import com.progeduc.dto.rubricaPuntajeDto;
 import com.progeduc.model.Evaluacion;
 import com.progeduc.model.EvaluacionResultado;
 import com.progeduc.model.UsuarioAlianza;
@@ -81,7 +82,10 @@ public class EvaluacionRespuestaServiceImpl implements IEvaluacionRespuestaServi
 		evaRepo.borrarEvaluacionesPorTrabajo(idTrabajo);
 	}
 	
-	
+	@Override
+	public List<rubricaPuntajeDto> listaRubricaPuntajeDto(Integer trabajoid){
+		return evaRepo.listaRubricaPuntajeDto(trabajoid);
+	}
 	
 	
 }

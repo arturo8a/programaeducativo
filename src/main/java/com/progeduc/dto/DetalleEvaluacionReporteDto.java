@@ -14,13 +14,13 @@ public class DetalleEvaluacionReporteDto {
 	String categoria;
 	String nivelParticipacion;
 	Integer cantidadEvaluadoresAsignados;
-	float pregunta1;
-	float pregunta2;
-	float pregunta3;
-	float pregunta4;
-	float pregunta5;
+	String pregunta1;
+	String pregunta2;
+	String pregunta3;
+	String pregunta4;
+	String pregunta5;
 	String eresCebe;
-	float nota;
+	String nota;
 	String puesto;
 	
 	public Integer getAnio() {
@@ -95,34 +95,34 @@ public class DetalleEvaluacionReporteDto {
 	public void setCantidadEvaluadoresAsignados(Integer cantidadEvaluadoresAsignados) {
 		this.cantidadEvaluadoresAsignados = cantidadEvaluadoresAsignados;
 	}
-	public float getPregunta1() {
+	public String getPregunta1() {
 		return pregunta1;
 	}
-	public void setPregunta1(float pregunta1) {
+	public void setPregunta1(String pregunta1) {
 		this.pregunta1 = pregunta1;
 	}
-	public float getPregunta2() {
+	public String getPregunta2() {
 		return pregunta2;
 	}
-	public void setPregunta2(float pregunta2) {
+	public void setPregunta2(String pregunta2) {
 		this.pregunta2 = pregunta2;
 	}
-	public float getPregunta3() {
+	public String getPregunta3() {
 		return pregunta3;
 	}
-	public void setPregunta3(float pregunta3) {
+	public void setPregunta3(String pregunta3) {
 		this.pregunta3 = pregunta3;
 	}
-	public float getPregunta4() {
+	public String getPregunta4() {
 		return pregunta4;
 	}
-	public void setPregunta4(float pregunta4) {
+	public void setPregunta4(String pregunta4) {
 		this.pregunta4 = pregunta4;
 	}
-	public float getPregunta5() {
+	public String getPregunta5() {
 		return pregunta5;
 	}
-	public void setPregunta5(float pregunta5) {
+	public void setPregunta5(String pregunta5) {
 		this.pregunta5 = pregunta5;
 	}
 	public String getEresCebe() {
@@ -131,10 +131,10 @@ public class DetalleEvaluacionReporteDto {
 	public void setEresCebe(String eresCebe) {
 		this.eresCebe = eresCebe;
 	}
-	public float getNota() {
+	public String getNota() {
 		return nota;
 	}
-	public void setNota(float nota) {
+	public void setNota(String nota) {
 		this.nota = nota;
 	}
 	public String getPuesto() {

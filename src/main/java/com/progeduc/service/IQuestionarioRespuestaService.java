@@ -13,4 +13,6 @@ public interface IQuestionarioRespuestaService extends ICRUD<QuestionarioRespues
 	Integer eliminar(@Param("id") Integer id);
 	
 	List<QuestionarioRespuesta> listarByTrabajo(Integer trabajoid);
+	
+	List<QuestionarioRespuesta> listarByQuestionario(Integer questionarioid);
 }

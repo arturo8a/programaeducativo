@@ -26,5 +26,8 @@ public interface IQuestionarioRespuestaRepo extends JpaRepository<QuestionarioRe
 	
 	@Query(value="SELECT TB1.* FROM QUESTIONARIORESPUESTA TB1 WHERE TB1.QUESTIONARIOID = ?1",nativeQuery = true)
 	List<QuestionarioRespuesta> listarByTrabajo(Integer trabajoid);
+	
+	@Query(value="SELECT TB1.* FROM QUESTIONARIORESPUESTA TB1 WHERE TB1.QUESTIONARIOID = ?1",nativeQuery = true)
+	List<QuestionarioRespuesta> listarByQuestionario(Integer questionarioid);
 
 }
