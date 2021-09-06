@@ -237,4 +237,18 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 		return lista;
 	}
 
+	@Override
+	public List<TrabajosFinalizados> listaTrabajosFinalesConNotaPromedioPorCategoriaNivelOdsEmpatadosPendientes(
+			Integer idcategoria, String nivel, Integer odsId) {
+		List<TrabajosFinalizados> lista = new ArrayList<>();
+		List<Object[]> listaObject = trabajosfinalesRepo.listaTrabajosFinalesConNotaPromedioPorCategoriaNivelOdsEmpatadosPendientes(idcategoria, nivel, odsId);
+		for (Object[] objects : listaObject) {
+			System.out.println(objects.length);
+			TrabajosFinalizados t = new TrabajosFinalizados(Integer.parseInt(objects[0].toString()), Integer.parseInt(objects[1].toString()), Integer.parseInt(objects[2].toString()), (objects[3].toString()),  Float.parseFloat(objects[4].toString()));
+			lista.add(t);
+		}
+		
+		return lista;
+	}
+
 }
