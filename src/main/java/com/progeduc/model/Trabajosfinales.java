@@ -118,6 +118,12 @@ public class Trabajosfinales {
 	@Column(name="NOTA",nullable=true)
 	private Float nota;
 	
+	@Column(name="NOTA_ORIGINAL",nullable=true)
+	private Float nota_original;
+	
+	@Column(name="EMPATE",nullable=true)
+	private Integer empate;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -357,4 +363,22 @@ public class Trabajosfinales {
 	public void setNota(Float nota) {
 		this.nota = nota;
 	}
+
+	public Float getNota_original() {
+		return nota_original;
+	}
+
+	public void setNota_original(Float nota_original) {
+		this.nota_original = nota_original;
+	}
+
+	public Integer getEmpate() {
+		return empate;
+	}
+
+	public void setEmpate(Integer empate) {
+		this.empate = empate;
+	}
+	
+	
 }

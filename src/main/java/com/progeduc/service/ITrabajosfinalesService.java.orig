@@ -2,6 +2,9 @@ package com.progeduc.service;
 
 import java.util.List;
 
+import com.progeduc.dto.CategoriaModalidadByOds;
+import com.progeduc.dto.CategoriaNivelParticipacionByOds;
+import com.progeduc.dto.TrabajosFinalizados;
 import com.progeduc.dto.TrabajosfinalesParticipanteDto;
 import com.progeduc.model.Trabajosfinales;
 
@@ -15,6 +18,8 @@ public interface ITrabajosfinalesService extends ICRUD<Trabajosfinales,Integer>{
 	
 	List<Trabajosfinales> listarhabilitados();
 	
+	List<Trabajosfinales> listarhabilitadosbyanio(Integer programaeducativoid,Integer anio);
+	
 	int updateestado(Integer id, Integer estado, Integer peid);
 	
 	int updateenviado(Integer id, Integer estado,Integer peid);	
@@ -23,20 +28,35 @@ public interface ITrabajosfinalesService extends ICRUD<Trabajosfinales,Integer>{
 	
 	Integer maxNumeracion(Integer programaeducativoid);
 	
+	Integer getNumeracion(Integer trabajofinalid);
+	
     List<Trabajosfinales> listarTrabajosPendientes();
     
     List<Trabajosfinales> listarHabilitadosEnviados(Integer programaeducativoid);
     
-<<<<<<< HEAD
-
     int updateEstadoTrabajo(Integer id,Integer estadoTrabajoId);
     
     List<Trabajosfinales> listarTrabajosEvaluados();
-
-
-=======
-    int updateEstadoTrabajo(Integer id,Integer estadoTrabajoId);
     
-    List<Trabajosfinales> listarTrabajosEvaluados();
->>>>>>> 1da3dd2dbd83984f2ed53012cb03557f0bf9ed6f
+	List<Trabajosfinales> BuscarCategoriaModalidad(Integer idcategoria, Integer idmodalidad,Integer peid);
+	
+	List<Trabajosfinales> listaTrabajosFinalesConNotaPromedioPorCategoriaModalidadDds(Integer idcategoria, Integer idmodalidad,Integer odsId);
+	
+	List<CategoriaModalidadByOds> listarCategoriaModalidadByOds(Integer odsId);
+	
+	List<Trabajosfinales> listarTrabajosfinalesPorOds(Integer odsId);
+	
+	List<Trabajosfinales> listaTrabajosEmpatadosPorCatModOdsPuesto(Integer idcategoria, Integer idmodalidad,Integer odsId, Integer puesto);
+	
+	List<Trabajosfinales> listaTrabajosEmpatados();
+	
+	List<Trabajosfinales> listarhabilitadosPE(Integer peid);
+	
+	List<TrabajosFinalizados> listaTrabajosFinalesConNotaPromedioPorCategoriaNivelOds(Integer idcategoria, String nivel,Integer odsId);
+	
+	List<CategoriaNivelParticipacionByOds> listarCategoriaNivelByOds(Integer odsId);
+	
+	List<TrabajosFinalizados> listaTrabajosEmpatadosPorCatNivOdsPuesto(Integer idcategoria, String nivel,Integer odsId, Integer puesto);
+	
+	List<TrabajosFinalizados> listaTrabajosFinalesConNotaPromedioPorCategoriaNivelOdsEmpatados(Integer idcategoria, String nivel,Integer odsId);
 }

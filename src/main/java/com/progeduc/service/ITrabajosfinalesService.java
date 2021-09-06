@@ -58,4 +58,5 @@ public interface ITrabajosfinalesService extends ICRUD<Trabajosfinales,Integer>{
 	
 	List<TrabajosFinalizados> listaTrabajosEmpatadosPorCatNivOdsPuesto(Integer idcategoria, String nivel,Integer odsId, Integer puesto);
 	
+	List<TrabajosFinalizados> listaTrabajosFinalesConNotaPromedioPorCategoriaNivelOdsEmpatados(Integer idcategoria, String nivel,Integer odsId);
 }
