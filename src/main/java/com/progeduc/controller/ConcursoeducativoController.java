@@ -2116,8 +2116,10 @@ public class ConcursoeducativoController {
 					/*Lista de empatados*/
 					List<TrabajosFinalizados> listaTrabEmpatados = trabajosfinalesServ.listaTrabajosFinalesConNotaPromedioPorCategoriaNivelOdsEmpatados(catModByODs.getCategoriaId(), catModByODs.getNivelId(), ods.getId());
 					
+					/*SECTION EMPATES*/
 					if(listaTrabEmpatados.size() > 0) {
-						float NotaPuesto1 = listaTrab.get(0).getNota();
+						float NotaPuesto1 = listaTrab.get(0).getNota(); //primera nota
+						int puestoEmpate = 0;
 						int cantidad = 0;
 						/*BuscarEmpate*/
 						for (TrabajosFinalizados trabajos : listaTrabEmpatados) {
@@ -2125,34 +2127,120 @@ public class ConcursoeducativoController {
 								Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getTrabajoId());
 								/*trabajoFinal.setPuesto(1);
 								trabajosfinalesServ.modificar(trabajoFinal);*/
+								puestoEmpate = trabajoFinal.getPuesto();//PUESTO DE LOS EMPATADOS
 								cantidad++;
 							}
 						}
 						
-						if(cantidad <= 1) {
+						if(cantidad <= 1) {//cantidad de empatados <= 1 (NO HAY EMPATES NUEVOS)
 							int indice = 0;
+							float notaPuestoNuevo = 0;
+							int puestoNuevo = 0;
+							int cantidadEmpateNuevo = 0;
+							//int puestoDeEmpate = 100;
 							for (TrabajosFinalizados trabajos : listaTrabEmpatados) {
 								Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getTrabajoId());
-								log.info("TRABAJO EMPATADO FINALIZADOS: "+trabajos.getTrabajoId() + " | ODS: "+ ods.getId() +" | "+"CAREGORIAID: "+catModByODs.getCategoriaId() +" | NIVEL: "+catModByODs.getNivelId()+" | NOTA: "+trabajoFinal.getPuesto()+indice);
-								trabajoFinal.setPuesto(trabajoFinal.getPuesto()+indice);
-								if(trabajoFinal.getPuesto()+indice > 4) {
-									trabajoFinal.setPuesto(0);
-								}
+								log.info("TRABAJO EMPATADO FINALIZADOS: "+trabajos.getTrabajoId() + " | ODS: "+ ods.getId() +" | "+"CAREGORIAID: "+catModByODs.getCategoriaId() +" | NIVEL: "+catModByODs.getNivelId()+" | PUESTO: "+trabajoFinal.getPuesto()+indice+" | NOTA: "+trabajoFinal.getNota());
 								
+								if(trabajos.getNota() == notaPuestoNuevo) { log.info("EMPATE NUEVO");
+									trabajoFinal.setPuesto(puestoNuevo);
+									
+									cantidadEmpateNuevo++;
+									//puestoDeEmpate = puestoNuevo;
+									cerrarOds.setEstado(2);//empate
+									cerrarOdsServ.guardar(cerrarOds);
+								}else { log.info("SIN EMPATE NUEVO");
+									trabajoFinal.setPuesto(puestoEmpate + indice); //asignar nuevo puesto
+									puestoNuevo = trabajoFinal.getPuesto();
+									if((puestoEmpate + indice) > 3) {
+										trabajoFinal.setPuesto(0);
+									}
+									//trabajosfinalesServ.modificar(trabajoFinal);
+									indice++;
+								}
 								trabajosfinalesServ.modificar(trabajoFinal);
-								indice++;
+								notaPuestoNuevo = trabajos.getNota();
 							}
-						}else {
+							
+							//cambias estado a los trabajos empatados
+							//List<TrabajosFinalizados> listaPuesto= trabajosfinalesServ.listaTrabajosEmpatadosPorCatNivOdsPuesto(catModByODs.getCategoriaId(), catModByODs.getNivelId(), ods.getId(), puestoDeEmpate);
+							List<TrabajosFinalizados> listaPuesto1= trabajosfinalesServ.listaTrabajosEmpatadosPorCatNivOdsPuesto(catModByODs.getCategoriaId(), catModByODs.getNivelId(), ods.getId(), 1);
+							List<TrabajosFinalizados> listaPuesto2= trabajosfinalesServ.listaTrabajosEmpatadosPorCatNivOdsPuesto(catModByODs.getCategoriaId(), catModByODs.getNivelId(), ods.getId(), 2);
+							List<TrabajosFinalizados> listaPuesto3= trabajosfinalesServ.listaTrabajosEmpatadosPorCatNivOdsPuesto(catModByODs.getCategoriaId(), catModByODs.getNivelId(), ods.getId(), 3);
+							
+							for (TrabajosFinalizados trab : listaPuesto1) {
+								if(listaPuesto1.size() > 1) {
+									evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getTrabajoId());//borrar las respuestas de las evaluaciones;
+									trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getTrabajoId());//borrar asignacion de evaluadores
+									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getTrabajoId());
+									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+									estadoTrabajo.setId(21);
+									trabajoFinal.setEstadotrabajo(estadoTrabajo);
+		
+									trabajosfinalesServ.modificar(trabajoFinal);
+								}
+							}
+							
+							for (TrabajosFinalizados trab : listaPuesto2) {
+								if(listaPuesto1.size() >= 3) {
+									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getTrabajoId());
+									trabajoFinal.setPuesto(0);
+									
+									trabajosfinalesServ.modificar(trabajoFinal);
+								}else if(listaPuesto2.size() > 1) {
+									evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getTrabajoId());//borrar las respuestas de las evaluaciones;
+									trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getTrabajoId());//borrar asignacion de evaluadores
+									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getTrabajoId());
+									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+									estadoTrabajo.setId(21);
+									trabajoFinal.setEstadotrabajo(estadoTrabajo);
+		
+									trabajosfinalesServ.modificar(trabajoFinal);
+								}
+							}
+							for (TrabajosFinalizados trab : listaPuesto3) {
+								if((listaPuesto1.size() + listaPuesto2.size()) >= 3) {
+									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getTrabajoId());
+									trabajoFinal.setPuesto(0);
+									
+									trabajosfinalesServ.modificar(trabajoFinal);
+								}else if(listaPuesto3.size() > 1){
+									evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getTrabajoId());//borrar las respuestas de las evaluaciones;
+									trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getTrabajoId());//borrar asignacion de evaluadores
+									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getTrabajoId());
+									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+									estadoTrabajo.setId(21);
+									trabajoFinal.setEstadotrabajo(estadoTrabajo);
+		
+									trabajosfinalesServ.modificar(trabajoFinal);
+								}
+							}
+						}else {//(HAY EMPATES NUEVOS)
 							for (TrabajosFinalizados trabajos : listaTrabEmpatados) {
 								evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trabajos.getTrabajoId());//borrar las respuestas de las evaluaciones;
 								trabajosFinales_UsuarioAlianzaServ.eliminar(trabajos.getTrabajoId());//borrar asignacion de evaluadores
 								
-								Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getTrabajoId());
+								if(trabajos.getNota() == NotaPuesto1 ) {//trabajo iguales a la nota mayor
+									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getTrabajoId());
+									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+									estadoTrabajo.setId(21);
+									trabajoFinal.setEstadotrabajo(estadoTrabajo);
+									trabajosfinalesServ.modificar(trabajoFinal);
+									log.info("TRABAJO EMPATADO EMPATADOS: "+trabajos.getTrabajoId() + " | ODS: "+ ods.getId() +" | "+"CAREGORIAID: "+catModByODs.getCategoriaId() +" | NIVEL: "+catModByODs.getNivelId()+" | PUESTO: "+trabajoFinal.getPuesto()+indice+" | NOTA: "+trabajoFinal.getNota());
+								}else {//Trabajos menores a la nota mayor
+									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getTrabajoId());
+									trabajoFinal.setPuesto(0);
+									trabajosfinalesServ.modificar(trabajoFinal);
+									log.info("TRABAJO EMPATADO DESCARTADOS: "+trabajos.getTrabajoId() + " | ODS: "+ ods.getId() +" | "+"CAREGORIAID: "+catModByODs.getCategoriaId() +" | NIVEL: "+catModByODs.getNivelId()+" | PUESTO: "+trabajoFinal.getPuesto()+indice+" | NOTA: "+trabajoFinal.getNota());
+								}
+								
+								
+								/*Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trabajos.getTrabajoId());
 								Estadotrabajo estadoTrabajo = new  Estadotrabajo();
 								estadoTrabajo.setId(21);
 								trabajoFinal.setEstadotrabajo(estadoTrabajo);
 								trabajosfinalesServ.modificar(trabajoFinal);
-								log.info("TRABAJO EMPATADO EMPATADOS: "+trabajos.getTrabajoId() + " | ODS: "+ ods.getId() +" | "+"CAREGORIAID: "+catModByODs.getCategoriaId() +" | NIVEL: "+catModByODs.getNivelId()+" | NOTA: "+catModByODs.getNivelId());
+								log.info("TRABAJO EMPATADO EMPATADOS: "+trabajos.getTrabajoId() + " | ODS: "+ ods.getId() +" | "+"CAREGORIAID: "+catModByODs.getCategoriaId() +" | NIVEL: "+catModByODs.getNivelId()+" | NOTA: "+catModByODs.getNivelId());*/
 							}
 							cerrarOds.setEstado(2);//empate
 							cerrarOdsServ.guardar(cerrarOds);
