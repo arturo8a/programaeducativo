@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -226,6 +227,8 @@ public class ConcursoeducativoController {
 	Integer mi_anio;
 	Integer nroEvaluadoresAsignados;
 	int indice;
+	DecimalFormat dosDecimales = new DecimalFormat("##.00");
+	List<Float> puntaje;
 	
 	@PostMapping(value="/registrarconcurso")
 	public String registrarconcurso(@Valid @RequestBody Postulacionconcurso dto)  {
@@ -2514,9 +2517,11 @@ public class ConcursoeducativoController {
 					dto.setTelefonoDocente(obj.getTrabajosfinales().getTelefono());
 					dto.setGeneroDocente(obj.getTrabajosfinales().getGenero().getDescripcion());
 					dto.setCorreoDocente(obj.getTrabajosfinales().getCorreo());	
-					dto.setNotaRegional(obj.getTrabajosfinales().getNota()!=null?obj.getTrabajosfinales().getNota():0);
-					dto.setPuestoRegional(obj.getTrabajosfinales().getPuesto().toString());
-					dto.setNotaNacional((float) 0);
+					dto.setNotaRegional(obj.getTrabajosfinales().getNota()!=null?dosDecimales.format(obj.getTrabajosfinales().getNota()):"");
+					dto.setPuestoRegional(obj.getTrabajosfinales().getPuesto()==0?"":obj.getTrabajosfinales().getPuesto().toString());
+					//dto.setEmpate(obj.getTrabajosfinales().getEmpate());
+					//dto.setNotaOriginal(obj.getTrabajosfinales().getNotaOriginal());
+					dto.setNotaNacional("0.0");
 					dto.setPuestoNacional("");
 					lista.add(dto);
 					
@@ -2540,29 +2545,34 @@ public class ConcursoeducativoController {
 					derDto.setNivelParticipacion(obj.getParticipante().getGradoestudiante().getNivelgradopartdesc());
 					derDto.setCantidadEvaluadoresAsignados(nroEvaluadoresAsignados);
 					
-					derDto.setPregunta1(0);
-					derDto.setPregunta2(0);
-					derDto.setPregunta3(0);
-					derDto.setPregunta4(0);
-					derDto.setPregunta5(0);
+					derDto.setPregunta1("");
+					derDto.setPregunta2("");
+					derDto.setPregunta3("");
+					derDto.setPregunta4("");
+					derDto.setPregunta5("");
 					derDto.setEresCebe("NO");
 					
-					indice=1;
-					evaluacionRepuestaServ.getRespuestas(obj.getTrabajosfinales().getId()).forEach(objER->{
-						if(objER.getTipo()==1) {
-							switch(indice) {
-								case 1 : derDto.setPregunta1(objER.getPuntaje());	 break;
-								case 2 : derDto.setPregunta2(objER.getPuntaje());	 break;
-								case 3 : derDto.setPregunta3(objER.getPuntaje());	 break;
-								case 4 : derDto.setPregunta4(objER.getPuntaje());	 break;
-								case 5 :derDto.setPregunta5(objER.getPuntaje());	 break;
-							}
-							indice++;
+					puntaje  = new ArrayList<Float>();
+					
+					evaluacionRepuestaServ.listaRubricaPuntajeDto(obj.getTrabajosfinales().getId()).forEach(er->{
+						puntaje.add(er.getPuntaje());
+					});
+					
+					for(int i=0;i<puntaje.size();i++) {
+						switch(i) {
+							case 0 : derDto.setPregunta1(dosDecimales.format(puntaje.get(i))); break;
+							case 1 : derDto.setPregunta2(dosDecimales.format(puntaje.get(i))); break;
+							case 2 : derDto.setPregunta3(dosDecimales.format(puntaje.get(i))); break;
+							case 3 : derDto.setPregunta4(dosDecimales.format(puntaje.get(i))); break;
+							case 4 : derDto.setPregunta5(dosDecimales.format(puntaje.get(i))); break;
 						}
+					}	
+					
+					evaluacionRepuestaServ.getRespuestas(obj.getTrabajosfinales().getId()).forEach(objER->{
 						if(objER.getTipo()==2) {
-							questionarioRespuestaServ.listarByTrabajo(objER.getRespuestaid()).forEach(qr->{
-								if(qr.getQuestionario().getPregunta().toLowerCase().contains("cebe")) {
-									if(qr.getRespuesta().toLowerCase().contains("si")) {
+							questionarioRespuestaServ.listarByQuestionario(objER.getPreguntaid()).forEach(objQR->{
+								if(objQR.getQuestionario().getPregunta().toLowerCase().contains("cebe")) {
+									if(objQR.getRespuesta().toLowerCase().contains("si")) {
 										derDto.setEresCebe("SI");
 									}
 								}
@@ -2570,14 +2580,16 @@ public class ConcursoeducativoController {
 						}
 					});
 					
-					derDto.setNota(obj.getTrabajosfinales().getNota()!=null?obj.getTrabajosfinales().getNota():0);
-					derDto.setPuesto(obj.getTrabajosfinales().getPuesto().toString());
+					
+					
+					derDto.setNota(obj.getTrabajosfinales().getNota()!=null?obj.getTrabajosfinales().getNota().toString():"");
+					derDto.setPuesto(obj.getTrabajosfinales().getPuesto()==0?"":obj.getTrabajosfinales().getPuesto().toString());
 					listaDerDto.add(derDto);
 				}
 			}			
 		});
 		
-		String [] columns = {"AÑO","ODS","Codigo II.EE","NOMBRE II.EE","REGION","PROVINCIA","DISTRITO","MODALIDAD", "AMBITO","Código de trabajo","Estado de trabajo","Titulo de trabajo","Link de video","Modalidad","Categoria","Nivel de participación","Ejes temáticos","Nombres del participante","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Fecha de nacimiento","Género","Seccion","Nivel","Grado","Nombres tutor","Apellido paterno tutor","Apellido materno tutor","Tipo de documento","Nro de documento tutor","telefono","correo electronico","Parentesco","Nombres del docente","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Telefono","Género","Correo electrónico","Nota","Puesto","Nota","Puesto"};
+		String [] columns = {"AÑO","ODS","Codigo II.EE","NOMBRE II.EE","REGION","PROVINCIA","DISTRITO","MODALIDAD", "AMBITO","Código de trabajo","Estado de trabajo","Titulo de trabajo","Link de video","Modalidad","Categoria","Nivel de participación","Ejes temáticos","Nombres del participante","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Fecha de nacimiento","Género","Seccion","Nivel","Grado","Nombres tutor","Apellido paterno tutor","Apellido materno tutor","Tipo de documento","Nro de documento tutor","telefono","correo electronico","Parentesco","Nombres del docente","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Telefono","Género","Correo electrónico","Nota","Nota original","¿tuvo empate?","Puesto","Nota","Puesto"};
 		
 		Sheet sheet = workbook.createSheet("Registro de trabajos finales");
 		Row row = sheet.createRow(0);
@@ -2598,10 +2610,10 @@ public class ConcursoeducativoController {
 		sheet.addMergedRegion(new CellRangeAddress(0, 0,35, 42));
 		
 		row.createCell(43).setCellValue("Concurso regional");
-		sheet.addMergedRegion(new CellRangeAddress(0, 0,43, 44));
+		sheet.addMergedRegion(new CellRangeAddress(0, 0,43, 46));
 		
-		row.createCell(45).setCellValue("Concurso nacional");
-		sheet.addMergedRegion(new CellRangeAddress(0, 0,45, 46));
+		row.createCell(47).setCellValue("Concurso nacional");
+		sheet.addMergedRegion(new CellRangeAddress(0, 0,47, 48));
 		
 		row = sheet.createRow(1);
 		for(int i=0;i<columns.length;i++) {
@@ -2656,9 +2668,11 @@ public class ConcursoeducativoController {
 			row.createCell(41).setCellValue(dto.getGeneroDocente());
 			row.createCell(42).setCellValue(dto.getCorreoDocente());
 			row.createCell(43).setCellValue(dto.getNotaRegional());
-			row.createCell(44).setCellValue(dto.getPuestoRegional());
-			row.createCell(45).setCellValue(dto.getNotaRegional());
-			row.createCell(46).setCellValue(dto.getPuestoNacional());
+			row.createCell(44).setCellValue(dto.getEmpate());
+			row.createCell(45).setCellValue(dto.getNotaOriginal());
+			row.createCell(46).setCellValue(dto.getPuestoRegional());
+			row.createCell(47).setCellValue(dto.getNotaNacional());
+			row.createCell(48).setCellValue(dto.getPuestoNacional());
 			initRow++;
 		}
 		

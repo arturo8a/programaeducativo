@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,6 +54,7 @@ import com.progeduc.service.IProgeducNivelService;
 import com.progeduc.service.IProgeducTurnoService;
 import com.progeduc.service.IProgramaeducativoService;
 import com.progeduc.service.IQuestionarioRespuestaService;
+import com.progeduc.service.IRubricaService;
 import com.progeduc.service.ITrabajosfinalesParticipanteService;
 import com.progeduc.service.ITrabajosfinalesService;
 import com.progeduc.service.IUsuarioAlianzaService;
@@ -100,6 +102,9 @@ public class ReporteController {
 	@Autowired
 	private IQuestionarioRespuestaService questionarioRespuestaService;
 	
+	@Autowired
+	private IRubricaService rubricaServ;
+	
 	String nivelSeccionDocenteAlumnoVaronMujer;
 	String peTurno;
 	String peSuministro;
@@ -109,13 +114,14 @@ public class ReporteController {
 	String peGeneroParticipante;
 	String peModalidad;
 	String peCategorias;
-	boolean bandera_ods;
-	boolean bandera_anio;
-	boolean bandera_categoria;
-	boolean bandera_modalidad;
-	boolean bandera_nivel;
+	boolean bandera_ods,bandera_anio,bandera_categoria,bandera_modalidad,bandera_nivel,flag;
 	int contador;
 	int indice;
+	DecimalFormat dosDecimales = new DecimalFormat("##.00");
+	Float pregunta1,pregunta2,pregunta3,pregunta4,pregunta5;
+	int contador1,contador2,contador3,contador4,contador5;
+	List<Float> puntaje;
+	
 	
 	@GetMapping(value="/reporteparticipantesinscritos/{ods}/{anio}/{categoria}/{modalidad}/{nivel}")	
 	public ResponseEntity<InputStreamResource> exportParticipantes(@PathVariable(value="ods") Integer ods,
@@ -651,7 +657,7 @@ public class ReporteController {
 				bandera_anio = true;
 			}
 			
-			if( bandera_ods && bandera_anio) 			
+			if( bandera_ods && bandera_anio &&  pe.getAnhio()!=null) 			
 			{
 				IieeReporteDto iiee = new IieeReporteDto();
 				iiee.setAnio(pe.getAnhio());
@@ -751,9 +757,9 @@ public class ReporteController {
 				iiee.setTelefonoDocente("-");
 				iiee.setGeneroDocente("-");
 				iiee.setCorreoDocente("-");
-				iiee.setNotaRegional((float) 0);
-				iiee.setPuestoRegional("-");
-				iiee.setNotaNacional((float) 0);
+				iiee.setNotaRegional("0.0");
+				iiee.setPuestoRegional("");
+				iiee.setNotaNacional("0.0");
 				iiee.setPuestoNacional("");				
 				
 				
@@ -863,11 +869,11 @@ public class ReporteController {
 									iiee.setTelefonoDocente(tf.getTelefono());
 									iiee.setGeneroDocente(tf.getGenero()!=null?tf.getGenero().getDescripcion():"");
 									iiee.setCorreoDocente(tf.getCorreo());
-									iiee.setNotaRegional(tf.getNota());
-									iiee.setPuestoRegional(tf.getPuesto().toString());
-									iiee.setNotaNacional((float) 0);
+									iiee.setNotaRegional(tf.getNota()!=null?dosDecimales.format(tf.getNota()):"");
+									iiee.setPuestoRegional(tf.getPuesto()==0?"":tf.getPuesto().toString());
+									iiee.setNotaNacional("0.0");
 									iiee.setPuestoNacional("");
-									listaiiee.add(iiee);							
+									listaiiee.add(iiee);
 								}
 							});							
 						}
@@ -1029,10 +1035,10 @@ public class ReporteController {
 			row.createCell(73).setCellValue(dto.getTelefonoDocente());
 			row.createCell(74).setCellValue(dto.getGeneroDocente());
 			row.createCell(75).setCellValue(dto.getCorreoDocente());
-			row.createCell(76).setCellValue(dto.getNotaRegional()!=null?dto.getNotaRegional():0);
-			row.createCell(77).setCellValue(dto.getPuestoRegional()!=null?dto.getPuestoRegional():"");
-			row.createCell(78).setCellValue(dto.getNotaNacional()!=null?dto.getNotaNacional():0);
-			row.createCell(79).setCellValue(dto.getPuestoNacional()!=null?dto.getPuestoNacional():"");
+			row.createCell(76).setCellValue(dto.getNotaRegional());
+			row.createCell(77).setCellValue(dto.getPuestoRegional());
+			row.createCell(78).setCellValue(dto.getNotaNacional());
+			row.createCell(79).setCellValue(dto.getPuestoNacional());
 			initRow++;
 		}		
 		
@@ -1111,29 +1117,34 @@ public class ReporteController {
 				dto.setNivelParticipacion(obj.getParticipante().getGradoestudiante().getNivelgradopartdesc());
 				dto.setCantidadEvaluadoresAsignados(0);
 				
-				dto.setPregunta1(0);
-				dto.setPregunta2(0);
-				dto.setPregunta3(0);
-				dto.setPregunta4(0);
-				dto.setPregunta5(0);
+				dto.setPregunta1("");
+				dto.setPregunta2("");
+				dto.setPregunta3("");
+				dto.setPregunta4("");
+				dto.setPregunta5("");
 				dto.setEresCebe("NO");
 				
-				indice=1;
-				evaluacionRepuestaServ.getRespuestas(obj.getTrabajosfinales().getId()).forEach(objER->{
-					if(objER.getTipo()==1) {
-						switch(indice) {
-							case 1 : dto.setPregunta1(objER.getPuntaje());	 break;
-							case 2 : dto.setPregunta2(objER.getPuntaje());	 break;
-							case 3 : dto.setPregunta3(objER.getPuntaje());	 break;
-							case 4 : dto.setPregunta4(objER.getPuntaje());	 break;
-							case 5 : dto.setPregunta5(objER.getPuntaje());	 break;
-						}
-						indice++;
+				puntaje  = new ArrayList<Float>();
+				
+				evaluacionRepuestaServ.listaRubricaPuntajeDto(obj.getTrabajosfinales().getId()).forEach(er->{
+					puntaje.add(er.getPuntaje());
+				});
+				
+				for(int i=0;i<puntaje.size();i++) {
+					switch(i) {
+						case 0 : dto.setPregunta1(dosDecimales.format(puntaje.get(i))); break;
+						case 1 : dto.setPregunta2(dosDecimales.format(puntaje.get(i))); break;
+						case 2 : dto.setPregunta3(dosDecimales.format(puntaje.get(i))); break;
+						case 3 : dto.setPregunta4(dosDecimales.format(puntaje.get(i))); break;
+						case 4 : dto.setPregunta5(dosDecimales.format(puntaje.get(i))); break;
 					}
+				}			
+				
+				evaluacionRepuestaServ.getRespuestas(obj.getTrabajosfinales().getId()).forEach(objER->{
 					if(objER.getTipo()==2) {
-						questionarioRespuestaService.listarByTrabajo(objER.getRespuestaid()).forEach(qr->{
-							if(qr.getQuestionario().getPregunta().toLowerCase().contains("cebe")) {
-								if(qr.getRespuesta().toLowerCase().contains("si")) {
+						questionarioRespuestaService.listarByQuestionario(objER.getPreguntaid()).forEach(objQR->{
+							if(objQR.getQuestionario().getPregunta().toLowerCase().contains("cebe")) {
+								if(objQR.getRespuesta().toLowerCase().contains("si")) {
 									dto.setEresCebe("SI");
 								}
 							}
@@ -1141,7 +1152,8 @@ public class ReporteController {
 					}
 				});
 				
-				dto.setNota(obj.getTrabajosfinales().getNota()!=null?obj.getTrabajosfinales().getNota():0);
+				
+				dto.setNota(obj.getTrabajosfinales().getNota()!=null?obj.getTrabajosfinales().getNota().toString():"");
 				dto.setPuesto(obj.getTrabajosfinales().getPuesto().toString());
 				lista.add(dto);
 			}					

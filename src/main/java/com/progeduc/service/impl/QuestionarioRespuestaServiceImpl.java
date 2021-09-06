@@ -55,5 +55,10 @@ public class QuestionarioRespuestaServiceImpl implements IQuestionarioRespuestaS
 	public List<QuestionarioRespuesta> listarByTrabajo(Integer trabajoid){
 		return repo.listarByTrabajo(trabajoid);
 	}
+	
+	@Override
+	public List<QuestionarioRespuesta> listarByQuestionario(Integer questionarioid){
+		return repo.listarByQuestionario(questionarioid);
+	}
 
 }

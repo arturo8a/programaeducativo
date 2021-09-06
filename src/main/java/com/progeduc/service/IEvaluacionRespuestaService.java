@@ -3,6 +3,7 @@ package com.progeduc.service;
 import java.util.List;
 
 import com.progeduc.dto.EvaluacionRubricaQuestionarioDto;
+import com.progeduc.dto.rubricaPuntajeDto;
 import com.progeduc.model.Evaluacion;
 import com.progeduc.model.EvaluacionResultado;
 
@@ -26,4 +27,6 @@ public interface IEvaluacionRespuestaService extends ICRUD<EvaluacionResultado,I
 	Evaluacion getPorAnioNivelparticipacionCategoria(Integer anio,Integer nivelparticipacion,Integer idcategoria);*/
 	
 	void borrarEvaluacionesPorTrabajo(Integer idTrabajo);
+	
+	List<rubricaPuntajeDto> listaRubricaPuntajeDto(Integer trabajoid);
 }
