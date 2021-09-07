@@ -29,7 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +46,6 @@ import com.progeduc.componente.Ldap;
 import com.progeduc.dto.AsignacionDto;
 import com.progeduc.dto.AsignarEvaluadorDto;
 import com.progeduc.dto.AsignarEvaluadoresDto;
-import com.progeduc.dto.CategoriaModalidadByOds;
 import com.progeduc.dto.CategoriaNivelParticipacionByOds;
 import com.progeduc.dto.ClaveValor;
 import com.progeduc.dto.ConcursoDto;
@@ -99,6 +97,7 @@ import com.progeduc.service.IDocenteService;
 import com.progeduc.service.IDocentetutorService;
 import com.progeduc.service.IEvaluacionRespuestaService;
 import com.progeduc.service.IEvaluacionService;
+import com.progeduc.service.IGeneroprofService;
 import com.progeduc.service.IGradoparticipanteService;
 import com.progeduc.service.IOdsService;
 import com.progeduc.service.IParticipanteService;
@@ -193,6 +192,8 @@ public class ConcursoeducativoController {
 	@Autowired
 	private IQuestionarioRespuestaService questionarioRespuestaServ;
 	
+	@Autowired
+	private IGeneroprofService generoprofserv;
 	
 	ListaparticipanteDto dto;	
 	ListatrabajosfinalesDto dtotf;	
@@ -2703,7 +2704,9 @@ public class ConcursoeducativoController {
 					dto.setTipoDocumentoParticipante(obj.getParticipante().getTipodocumentoestudiante().getDescripcion());
 					dto.setNroDocumentoParticipante(obj.getParticipante().getNrodocumentoestudiante());
 					dto.setFechaNacimientoParticipante(obj.getParticipante().getFechanacimientoestudiante().toString());
-					dto.setGeneroParticipante(obj.getParticipante().getGeneroestudiante().getDescripcion());
+					
+					dto.setGeneroParticipante(generoprofserv.ListarporId(obj.getParticipante().getGeneroestudiante().getId()).getDescripcion());
+					
 					dto.setSeccionParticipante(obj.getParticipante().getSeccion());
 					dto.setNivelParticipante(obj.getParticipante().getGradoestudiante().getNivelparticipante().getDescripcion());
 					dto.setGradoParticipante(obj.getParticipante().getGradoestudiante().getDescripcion());
@@ -2711,7 +2714,7 @@ public class ConcursoeducativoController {
 					dto.setApellidoPaternoTutor(obj.getParticipante().getAppaternopmt());
 					dto.setApellidoMaternoTutor(obj.getParticipante().getApmaternopmt());
 					dto.setTipoDocumentoTutor(obj.getParticipante().getTipodocumentopmt().getDescripcion());
-					dto.setNroDocumentoTutor(obj.getParticipante().getTipodocumentopmt().getDescripcion());
+					dto.setNroDocumentoTutor(obj.getParticipante().getNrodocumentopmt());
 					dto.setTelefonoTutor(obj.getParticipante().getNrotelefonopmt());
 					dto.setCorreoTutor(obj.getParticipante().getCorreoelectronicopmt());
 					dto.setParentescoTutor(obj.getParticipante().getParentesco().getDescripcion());

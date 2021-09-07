@@ -49,7 +49,6 @@ import com.progeduc.model.Programaeducativo;
 import com.progeduc.model.ProgramaeducativoNivel;
 import com.progeduc.model.ProgramaeducativoTurno;
 import com.progeduc.model.Questionario;
-import com.progeduc.model.QuestionarioRespuesta;
 import com.progeduc.model.Rubrica;
 import com.progeduc.model.Trabajosfinales;
 import com.progeduc.model.Turno;
@@ -63,6 +62,7 @@ import com.progeduc.service.IDocentetutorService;
 import com.progeduc.service.IEvaluacionQuestionarioService;
 import com.progeduc.service.IEvaluacionRubricaService;
 import com.progeduc.service.IEvaluacionService;
+import com.progeduc.service.IGeneroprofService;
 import com.progeduc.service.IOdsService;
 import com.progeduc.service.IParticipanteService;
 import com.progeduc.service.IPostulacionconcursoService;
@@ -158,6 +158,9 @@ public class ProgramaeducativoController {
 	
 	@Autowired
 	private ITrabajosfinalesParticipanteService trabajosfinalesparticipanteServ;
+	
+	@Autowired
+	private IGeneroprofService generoprofserv;
 	
 	ProgeducTurnoNivelDto dto;
 	List<Nivel> listNivel;
@@ -859,7 +862,9 @@ public class ProgramaeducativoController {
         parameters.put("tipodocumentoestudiante",pe.getTipodocumentoestudiante()!=null ? pe.getTipodocumentoestudiante().getDescripcion() : "");
         parameters.put("nrodocumentoestudiante", pe.getNrodocumentoestudiante()!=null ? pe.getNrodocumentoestudiante() : "");
         parameters.put("fechanacimientoestudiante",pe.getFechanacimientoestudiante()!=null?pe.getFechanacimientoestudiante().toString():"");
-        parameters.put("generoestudiante", pe.getGeneroestudiante()!=null ? pe.getGeneroestudiante().getDescripcion() : "");
+        
+        parameters.put("generoestudiante", pe.getGeneroestudiante()!=null ?	(generoprofserv.ListarporId(pe.getGeneroestudiante().getId()).getDescripcion()) : "");
+        
         parameters.put("nivelestudiante", pe.getGradoestudiante()!=null ? pe.getGradoestudiante().getNivelparticipante().getDescripcion() : "");
         parameters.put("gradoestudiante", pe.getGradoestudiante()!=null ? pe.getGradoestudiante().getDescripcion() : "");
         parameters.put("seccion", pe.getSeccion()!=null ? pe.getSeccion():"");

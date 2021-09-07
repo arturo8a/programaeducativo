@@ -318,7 +318,7 @@ public class IndexController {
 		model.addAttribute("chimportancia", tf.getImportancia()==1 ? true : false);
 		model.addAttribute("chvinculo", tf.getVinculo()==1 ? true : false);
 		model.addAttribute("chcarencias", tf.getCarencias()==1 ? true : false);
-		model.addAttribute("chrevaloracion", tf.getRevaloracion()==1 ? true : false);
+		model.addAttribute("chrevaloracion", tf.getRevaloracion()!=null?(tf.getRevaloracion()==1 ? true:false):false);
 		
 		participanteid = "";
 		trabajosfinalesparticipanteService.listar(id).forEach(obj->{
