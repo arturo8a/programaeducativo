@@ -2518,8 +2518,8 @@ public class ConcursoeducativoController {
 					dto.setCorreoDocente(obj.getTrabajosfinales().getCorreo());	
 					dto.setNotaRegional(obj.getTrabajosfinales().getNota()!=null?dosDecimales.format(obj.getTrabajosfinales().getNota()):"");
 					dto.setPuestoRegional(obj.getTrabajosfinales().getPuesto()==0?"":obj.getTrabajosfinales().getPuesto().toString());
-					dto.setEmpate(obj.getTrabajosfinales().getEmpate()!=null?obj.getTrabajosfinales().getEmpate().toString():"");
-					dto.setNotaOriginal(obj.getTrabajosfinales().getNota_original()!=null?obj.getTrabajosfinales().getNota_original().toString():"");
+					dto.setEmpate(obj.getTrabajosfinales().getEmpate()!=null?(obj.getTrabajosfinales().getEmpate()==0?"No":"Si"):"");
+					dto.setNotaOriginal(obj.getTrabajosfinales().getNota_original()!=null?dosDecimales.format(obj.getTrabajosfinales().getNota_original()):"");
 					dto.setNotaNacional("0.0");
 					dto.setPuestoNacional("");
 					lista.add(dto);					
@@ -2677,8 +2677,8 @@ public class ConcursoeducativoController {
 			row.createCell(41).setCellValue(dto.getGeneroDocente());
 			row.createCell(42).setCellValue(dto.getCorreoDocente());
 			row.createCell(43).setCellValue(dto.getNotaRegional());
-			row.createCell(44).setCellValue(dto.getEmpate());
-			row.createCell(45).setCellValue(dto.getNotaOriginal());
+			row.createCell(44).setCellValue(dto.getNotaOriginal());
+			row.createCell(45).setCellValue(dto.getEmpate());
 			row.createCell(46).setCellValue(dto.getPuestoRegional());
 			row.createCell(47).setCellValue(dto.getNotaNacional());
 			row.createCell(48).setCellValue(dto.getPuestoNacional());

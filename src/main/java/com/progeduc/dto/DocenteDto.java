@@ -23,13 +23,14 @@ public class DocenteDto {
 	String emailIe;
 	String facebook;
 	String lengua;
-	String genero;
+	String generoie;
 	String turno;
 	String proveedorServicio;
 	String suministro;
 	String horasAbastecimiento;
 	String piscina;
 	String tipoDocDirector;
+	String nroDocDirector;
 	String apellidosDirector;
 	String nombresDirector;
 	String generoDirector;
@@ -53,6 +54,7 @@ public class DocenteDto {
 	String apmaterno;
 	String tipodocumento;
 	String nrodocumento;
+	String genero;
 	String telefono;
 	String email;
 	String curso;
@@ -106,11 +108,11 @@ public class DocenteDto {
 	public void setNrodocumento(String nrodocumento) {
 		this.nrodocumento = nrodocumento;
 	}
-	public String getGenero() {
-		return genero;
+	public String getGeneroie() {
+		return generoie;
 	}
-	public void setGenero(String genero) {
-		this.genero = genero;
+	public void setGeneroie(String generoie) {
+		this.generoie = generoie;
 	}
 	public String getTelefono() {
 		return telefono;
@@ -286,6 +288,12 @@ public class DocenteDto {
 	public void setTipoDocDirector(String tipoDocDirector) {
 		this.tipoDocDirector = tipoDocDirector;
 	}
+	public String getNroDocDirector() {
+		return nroDocDirector;
+	}
+	public void setNroDocDirector(String nroDocDirector) {
+		this.nroDocDirector = nroDocDirector;
+	}
 	public String getApellidosDirector() {
 		return apellidosDirector;
 	}
@@ -387,5 +395,11 @@ public class DocenteDto {
 	}
 	public void setAmbitoProfesor(String ambitoProfesor) {
 		this.ambitoProfesor = ambitoProfesor;
+	}
+	public String getGenero() {
+		return genero;
+	}
+	public void setGenero(String genero) {
+		this.genero = genero;
 	}
 }

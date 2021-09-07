@@ -57,6 +57,7 @@ import com.progeduc.service.IQuestionarioRespuestaService;
 import com.progeduc.service.IRubricaService;
 import com.progeduc.service.ITrabajosfinalesParticipanteService;
 import com.progeduc.service.ITrabajosfinalesService;
+import com.progeduc.service.ITrabajosfinales_UsuarioAlianzaService;
 import com.progeduc.service.IUsuarioAlianzaService;
 
 @RestController
@@ -91,6 +92,9 @@ public class ReporteController {
 	private ITrabajosfinalesParticipanteService trabajosFinalesParticipanteService;
 	
 	@Autowired
+	private ITrabajosfinales_UsuarioAlianzaService trabajosFinales_UsuarioAlianzaServ;
+	
+	@Autowired
 	private IProgeducNivelService peNivelServ;
 	
 	@Autowired
@@ -122,6 +126,7 @@ public class ReporteController {
 	Float pregunta1,pregunta2,pregunta3,pregunta4,pregunta5;
 	int contador1,contador2,contador3,contador4,contador5;
 	List<Float> puntaje;
+	Integer nroEvaluadoresAsignados;
 	
 	
 	@GetMapping(value="/reporteparticipantesinscritos/{ods}/{anio}/{categoria}/{modalidad}/{nivel}")	
@@ -155,7 +160,19 @@ public class ReporteController {
 		List<DocenteDto> listadocentedto = new ArrayList<DocenteDto>();
 		
 		docentetutorServ.listar().forEach(obj->{
-			boolean banderaods = false;			
+			boolean banderaods = false;	
+			bandera_anio=false;
+			
+			if(anio!=-1) {
+				if(obj.getAnio().equals(anio))
+					bandera_anio = true;
+				else
+					bandera_anio = false;
+			}
+			else {
+				bandera_anio = true;
+			}
+			
 			if(ods!=-1) {
 				if(obj.getProgramaeducativo().getDistrito().getOdsid().equals(ods))
 					banderaods  = true;
@@ -165,7 +182,7 @@ public class ReporteController {
 			else {
 				banderaods = true;
 			}			
-			if(banderaods){				
+			if(bandera_anio && banderaods){				
 				DocenteDto dto = new DocenteDto();
 				dto.setAnio(obj.getAnio());
 				dto.setOds(odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
@@ -175,7 +192,7 @@ public class ReporteController {
 				dto.setNomie(obj.getProgramaeducativo().getNomie());
 				dto.setCodigoie(obj.getProgramaeducativo().getCodmod());
 				dto.setFechaRegistro(obj.getProgramaeducativo().getFecha_registro().toString());
-				Postulacionconcurso pc = potulacionConcursoServ.getByIdAnio(obj.getProgramaeducativo().getId(), anio);
+				Postulacionconcurso pc = potulacionConcursoServ.getByIdAnio(obj.getProgramaeducativo().getId(), obj.getAnio());
 				dto.setInscritoCe(pc!=null ? "Si":"No");
 				List<ProgramaeducativoNivel> peNivel = peNivelServ.listProgeducNivel(obj.getProgramaeducativo().getId());
 				nivelSeccionDocenteAlumnoVaronMujer = "";
@@ -196,7 +213,7 @@ public class ReporteController {
 				dto.setEmailIe(obj.getProgramaeducativo().getMailie());
 				dto.setFacebook(obj.getProgramaeducativo().getFacebook());
 				dto.setLengua(obj.getProgramaeducativo().getLengua().getDescripcion());
-				dto.setGenero(obj.getProgramaeducativo().getGenero().getDescripcion());
+				dto.setGeneroie(obj.getProgramaeducativo().getGenero().getDescripcion());
 				
 				peTurno = "";
 				List<ProgramaeducativoTurno> objPeTurno =	peTurnoServ.listProgeducTurno(obj.getProgramaeducativo().getId());
@@ -207,17 +224,18 @@ public class ReporteController {
 				
 				dto.setProveedorServicio(obj.getProgramaeducativo().getProveedor().getDescripcion());
 				
-				peSuministro = "";
+				/*peSuministro = "";
 				obj.getProgramaeducativo().getSuministro().forEach(objSuministro->{
 					peSuministro += objSuministro.getNumero().toString() + "/";
 				});
 				if(peSuministro.length()>0)
-					peSuministro = peSuministro.substring(0, peSuministro.length()-1);
+					peSuministro = peSuministro.substring(0, peSuministro.length()-1);*/
 				
 				dto.setHorasAbastecimiento(obj.getProgramaeducativo().getAbastecimiento().toString());
 				dto.setPiscina(obj.getProgramaeducativo().getPiscina().getDescripcion());
 				dto.setTipoDocDirector(obj.getProgramaeducativo().getTipodocidentdir().getDescripcion());
-				dto.setNrodocumento(obj.getProgramaeducativo().getDocdir());
+				//dto.setNrodocumento(obj.getProgramaeducativo().getDocdir());
+				dto.setNroDocDirector(obj.getProgramaeducativo().getDocdir());
 				dto.setApellidosDirector(obj.getProgramaeducativo().getApedir());
 				dto.setNombresDirector(obj.getProgramaeducativo().getNomdir());
 				dto.setGeneroDirector(obj.getProgramaeducativo().getGenerodir()!=null?obj.getProgramaeducativo().getGenerodir().getDescripcion():"");
@@ -248,7 +266,7 @@ public class ReporteController {
 			}				
 		});
 		
-		String [] columns = {"AÑO","ODS","DEPARTAMENTO","PROVINCIA","DISTRITO","INSTITUCIÓN EDUCATIVA","CÓDIGO LOCAL II.EE","FECHA REGISTRO","INSCRITO AL C.E","NIVEL-N°SECIONES-N°DOCENTES-N°ALUMNOS-N°VARONES-N°MUJERES","AMBITO","Modalidad de enseñanza", "Código local","Tipo II.EE","Dirección","DRE","UGEL","TELEF. II.EE","EMAIL II.EE","Facebook","Lengua","Genero","Turno","Proveedor servicio","Suministro","Horas abastecimiento","Piscina","Tipo doc. Director","N° Doc. Director","Apellidos director","Nombres director","Genero director","Telefono director","Celular director","Correo director","Tipo doc. profesor","N° Doc. profesor","Apellidos profesor","Nombres profesor","Genero profesor","Telefono profesor","Celular profesor","Correo profesor","Nombres","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Género","Télefono","Email","Curso","Tipo de docente"};
+		String [] columns = {"AÑO","ODS","DEPARTAMENTO","PROVINCIA","DISTRITO","INSTITUCIÓN EDUCATIVA","CÓDIGO LOCAL II.EE","FECHA REGISTRO","INSCRITO AL C.E","NIVEL-N°SECIONES-N°DOCENTES-N°ALUMNOS-N°VARONES-N°MUJERES","AMBITO","Modalidad de enseñanza", "Código local","Tipo II.EE","Dirección","DRE","UGEL","TELEF. II.EE","EMAIL II.EE","Facebook","Lengua","Clasifiación","Turno","Proveedor servicio","Horas abastecimiento","Piscina","Tipo doc. Director","N° Doc. Director","Apellidos director","Nombres director","Genero director","Telefono director","Celular director","Correo director","Tipo doc. profesor","N° Doc. profesor","Apellidos profesor","Nombres profesor","Genero profesor","Telefono profesor","Celular profesor","Correo profesor","Nombres","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Género","Télefono","Email","Curso","Tipo de docente"};
 		
 		Sheet sheet = workbook.createSheet("Datos de docentes");
 		Row row = sheet.createRow(0);
@@ -289,39 +307,39 @@ public class ReporteController {
 			row.createCell(18).setCellValue(dto.getEmailIe());
 			row.createCell(19).setCellValue(dto.getFacebook());
 			row.createCell(20).setCellValue(dto.getLengua());
-			row.createCell(21).setCellValue(dto.getGenero());
+			row.createCell(21).setCellValue(dto.getGeneroie());
 			row.createCell(22).setCellValue(dto.getTurno());
 			row.createCell(23).setCellValue(dto.getProveedorServicio());
-			row.createCell(24).setCellValue(dto.getSuministro());
-			row.createCell(25).setCellValue(dto.getHorasAbastecimiento());
-			row.createCell(26).setCellValue(dto.getPiscina());
-			row.createCell(27).setCellValue(dto.getTipoDocDirector());
-			row.createCell(28).setCellValue(dto.getNrodocumento());
-			row.createCell(29).setCellValue(dto.getApellidosDirector());
-			row.createCell(30).setCellValue(dto.getNombresDirector());
-			row.createCell(31).setCellValue(dto.getGeneroDirector());
-			row.createCell(32).setCellValue(dto.getTelefonoDirector());
-			row.createCell(33).setCellValue(dto.getCelularDirector());
-			row.createCell(34).setCellValue(dto.getCorreoDirector());
-			row.createCell(35).setCellValue(dto.getTipoDocProfesor());
-			row.createCell(36).setCellValue(dto.getNroDocProfesor());
-			row.createCell(37).setCellValue(dto.getApellidosProfesor());
-			row.createCell(38).setCellValue(dto.getNombreProfesor());
-			row.createCell(39).setCellValue(dto.getGeneroProfesor());
-			row.createCell(40).setCellValue(dto.getTelefonoProfesor());
-			row.createCell(41).setCellValue(dto.getCelularProfesor());
-			row.createCell(42).setCellValue(dto.getCorreoProfesor());
-			row.createCell(43).setCellValue(dto.getNombre());
-			row.createCell(44).setCellValue(dto.getAppaterno());
-			row.createCell(45).setCellValue(dto.getApmaterno());
-			row.createCell(46).setCellValue(dto.getTipodocumento());
-			row.createCell(47).setCellValue(dto.getNrodocumento());
-			row.createCell(48).setCellValue(dto.getGenero());
-			row.createCell(49).setCellValue(dto.getTelefono());
-			row.createCell(50).setCellValue(dto.getEmail());
-			row.createCell(51).setCellValue(dto.getCurso());
-			row.createCell(52).setCellValue(dto.getTipodocente());
-			initRow++;
+			//row.createCell(24).setCellValue(dto.getSuministro());
+			row.createCell(24).setCellValue(dto.getHorasAbastecimiento());
+			row.createCell(25).setCellValue(dto.getPiscina());
+			row.createCell(26).setCellValue(dto.getTipoDocDirector());
+			row.createCell(27).setCellValue(dto.getNroDocDirector());
+			row.createCell(28).setCellValue(dto.getApellidosDirector());
+			row.createCell(29).setCellValue(dto.getNombresDirector());
+			row.createCell(30).setCellValue(dto.getGeneroDirector());
+			row.createCell(31).setCellValue(dto.getTelefonoDirector());
+			row.createCell(32).setCellValue(dto.getCelularDirector());
+			row.createCell(33).setCellValue(dto.getCorreoDirector());
+			row.createCell(34).setCellValue(dto.getTipoDocProfesor());
+			row.createCell(35).setCellValue(dto.getNroDocProfesor());
+			row.createCell(36).setCellValue(dto.getApellidosProfesor());
+			row.createCell(37).setCellValue(dto.getNombreProfesor());
+			row.createCell(38).setCellValue(dto.getGeneroProfesor());
+			row.createCell(39).setCellValue(dto.getTelefonoProfesor());
+			row.createCell(40).setCellValue(dto.getCelularProfesor());
+			row.createCell(41).setCellValue(dto.getCorreoProfesor());
+			row.createCell(42).setCellValue(dto.getNombre());
+			row.createCell(43).setCellValue(dto.getAppaterno());
+			row.createCell(44).setCellValue(dto.getApmaterno());
+			row.createCell(45).setCellValue(dto.getTipodocumento());
+			row.createCell(46).setCellValue(dto.getNrodocumento());
+			row.createCell(47).setCellValue(dto.getGenero());
+			row.createCell(48).setCellValue(dto.getTelefono());
+			row.createCell(49).setCellValue(dto.getEmail());
+			row.createCell(50).setCellValue(dto.getCurso());
+			row.createCell(51).setCellValue(dto.getTipodocente());
+			initRow++;			
 		}		
 		
 		List<Participante> listaParticipante = participanteServ.listarhabilitados();
@@ -427,13 +445,13 @@ public class ReporteController {
 				});
 				reporte.setTurno(peTurno);
 				reporte.setProveedorServicio(obj.getProgramaeducativo().getProveedor().getDescripcion());
-				peSuministro = "";
+				/*peSuministro = "";
 				obj.getProgramaeducativo().getSuministro().forEach(objSuministro->{
 					peSuministro += objSuministro.getNumero().toString() + "/";
 				});
 				if(peSuministro.length()>0)
 					peSuministro = peSuministro.substring(0, peSuministro.length()-1);
-				reporte.setSuministro(peSuministro);
+				reporte.setSuministro(peSuministro);*/
 				reporte.setHorasAbastecimiento(obj.getProgramaeducativo().getAbastecimiento());
 				reporte.setPiscina(obj.getProgramaeducativo().getPiscina().getDescripcion());
 				reporte.setTipoDocDirector(obj.getProgramaeducativo().getTipodocidentdir().getDescripcion());
@@ -499,15 +517,18 @@ public class ReporteController {
         
 		Collections.sort(listareporte);
 		
-		String [] columns1 = {"AÑO","ODS","DEPARTAMENTO","PROVINCIA","DISTRITO","INSTITUCION EDUCATIVA","CODIGO LOCAL IIEE","FECHA REGISTRO","INSCRITO AL CE","NIVEL-N°Seciones-N°Docenes-N°Alumnos-N°Varones-N°Mujeres","Ambito","Modalidad enseñanza","Código local","Tipo II.EE","Dirección","DRE","UGEL","Teléfono II.EE","Email II.EE","Facebook","Lengua","Genero","Turno","Proveedor de servicio","Suministro","Horas de abastecimiento","Piscina","Tipo doc. director","N° doc.Director","Apellidos de director","Nombre director","Genero director","Telefono director","Celular director","Correo director","Tipo doc. profesor","N° doc. profesor","Apellidos profesor","Nombres profesor","Genero profesor","Teléfono profesor","Celular profesor","Correo profesor","Nombre de IE","Nombres","Apellido paterno","Apellido materno","Fecha de nacimiento","Sección", "Tipo de documento","Nro de documento","Genero","Nivel","Grado",    "Nivel de participación", "Modalidad",    "Categorías","Nombres tutor","Apellido paterno tutor","Apellido materno tutor","telefono","Correo electronico", "Tipo de documento tutor","Nro de documento tutor","Parentesco"};
+		String [] columns1 = {"AÑO","ODS","DEPARTAMENTO","PROVINCIA","DISTRITO","INSTITUCION EDUCATIVA","CODIGO LOCAL IIEE","FECHA REGISTRO","INSCRITO AL CE","NIVEL-N°Seciones-N°Docenes-N°Alumnos-N°Varones-N°Mujeres","Ambito","Modalidad enseñanza","Código local","Tipo II.EE","Dirección","DRE","UGEL","Teléfono II.EE","Email II.EE","Facebook","Lengua","Clasificación","Turno","Proveedor de servicio","Horas de abastecimiento","Piscina","Tipo doc. director","N° doc.Director","Apellidos de director","Nombre director","Genero director","Telefono director","Celular director","Correo director","Tipo doc. profesor","N° doc. profesor","Apellidos profesor","Nombres profesor","Genero profesor","Teléfono profesor","Celular profesor","Correo profesor","Nombres","Apellido paterno","Apellido materno","Fecha de nacimiento","Sección", "Tipo de documento","Nro de documento","Genero","Nivel","Grado",    "Nivel de participación", "Modalidad",    "Categorías","Nombres tutor","Apellido paterno tutor","Apellido materno tutor","telefono","Correo electronico", "Tipo de documento tutor","Nro de documento tutor","Parentesco"};
 		Sheet sheet1 = workbook.createSheet("Datos de participantes");
 		Row row1 = sheet1.createRow(0);
 		
 		row1.createCell(0).setCellValue("DATOS DE A II.EE");
-		sheet1.addMergedRegion(new CellRangeAddress(0, 0, 0, 42));/*1era celda , ultima celda, 1era columna, ultima columna*/		
+		sheet1.addMergedRegion(new CellRangeAddress(0, 0, 0, 41));/*1era celda , ultima celda, 1era columna, ultima columna*/		
 		
-		row1.createCell(43).setCellValue("DATOS DEL ESTUDIANTE INSCRITOS EN EL C.E");
-		sheet1.addMergedRegion(new CellRangeAddress(0, 0, 43, 64));
+		row1.createCell(42).setCellValue("DATOS DEL ESTUDIANTE INSCRITOS EN EL C.E");
+		sheet1.addMergedRegion(new CellRangeAddress(0, 0, 42, 54));
+		
+		row1.createCell(55).setCellValue("DATOS DEL PADRE/MADRE O TUTOR");
+		sheet1.addMergedRegion(new CellRangeAddress(0, 0, 55, 62));
 		
 		row1 = sheet1.createRow(1);
 		for(int i=0;i<columns1.length;i++) {
@@ -542,47 +563,45 @@ public class ReporteController {
 			row1.createCell(21).setCellValue(participante.getGenero());
 			row1.createCell(22).setCellValue(participante.getTurno());
 			row1.createCell(23).setCellValue(participante.getProveedorServicio());
-			row1.createCell(24).setCellValue(participante.getSuministro());
-			row1.createCell(25).setCellValue(participante.getHorasAbastecimiento());
-			row1.createCell(26).setCellValue(participante.getPiscina());
-			row1.createCell(27).setCellValue(participante.getTipoDocDirector());
-			row1.createCell(28).setCellValue(participante.getNroDocDirector());
-			row1.createCell(29).setCellValue(participante.getApellidoDirector());
-			row1.createCell(30).setCellValue(participante.getNombresDirector());
-			row1.createCell(31).setCellValue(participante.getGeneroDirector());
-			row1.createCell(32).setCellValue(participante.getTelefonoDirector());
-			row1.createCell(33).setCellValue(participante.getCeularDirector());
-			row1.createCell(34).setCellValue(participante.getCorreoDirector());
-			row1.createCell(35).setCellValue(participante.getTipoDocProfesor());
-			row1.createCell(36).setCellValue(participante.getNroDocProfesor());
-			row1.createCell(37).setCellValue(participante.getApellidosProfesor());
-			row1.createCell(38).setCellValue(participante.getNombresProfesor());
-			row1.createCell(39).setCellValue(participante.getGeneroProfesor());
-			row1.createCell(40).setCellValue(participante.getTelefonoProfesor());
-			row1.createCell(41).setCellValue(participante.getCelularProfesor());
-			row1.createCell(42).setCellValue(participante.getCorreoProfesor());
-			row1.createCell(43).setCellValue(participante.getNombreest());
-			row1.createCell(44).setCellValue(participante.getNombreIe());
-			row1.createCell(45).setCellValue(participante.getAppaternoest());
-			row1.createCell(46).setCellValue(participante.getApmaternoest());
-			row1.createCell(47).setCellValue(participante.getFechanacimientoest());
-			row1.createCell(48).setCellValue(participante.getSeccionest());
-			row1.createCell(49).setCellValue(participante.getTipodocest());
-			row1.createCell(50).setCellValue(participante.getNrodocest());
-			row1.createCell(51).setCellValue(participante.getGeneroest());
-			row1.createCell(52).setCellValue(participante.getNivelest());
-			row1.createCell(53).setCellValue(participante.getGradoest());
-			row1.createCell(54).setCellValue(participante.getNivelparticipacion());
-			row1.createCell(55).setCellValue(participante.getModalidadest());
-			row1.createCell(56).setCellValue(participante.getCategoriaest());
-			row1.createCell(57).setCellValue(participante.getNombreapoderado());
-			row1.createCell(58).setCellValue(participante.getAppaternoapoderado());
-			row1.createCell(59).setCellValue(participante.getApmaternoapoderado());
-			row1.createCell(60).setCellValue(participante.getNrotelfapoderado());
-			row1.createCell(61).setCellValue(participante.getCorreoapoderado());
-			row1.createCell(62).setCellValue(participante.getTipodocapoderado());
-			row1.createCell(63).setCellValue(participante.getNrodocapoderado());
-			row1.createCell(64).setCellValue(participante.getParentescoapoderado());	
+			row1.createCell(24).setCellValue(participante.getHorasAbastecimiento());
+			row1.createCell(25).setCellValue(participante.getPiscina());
+			row1.createCell(26).setCellValue(participante.getTipoDocDirector());
+			row1.createCell(27).setCellValue(participante.getNroDocDirector());
+			row1.createCell(28).setCellValue(participante.getApellidoDirector());
+			row1.createCell(29).setCellValue(participante.getNombresDirector());
+			row1.createCell(30).setCellValue(participante.getGeneroDirector());
+			row1.createCell(31).setCellValue(participante.getTelefonoDirector());
+			row1.createCell(32).setCellValue(participante.getCeularDirector());
+			row1.createCell(33).setCellValue(participante.getCorreoDirector());
+			row1.createCell(34).setCellValue(participante.getTipoDocProfesor());
+			row1.createCell(35).setCellValue(participante.getNroDocProfesor());
+			row1.createCell(36).setCellValue(participante.getApellidosProfesor());
+			row1.createCell(37).setCellValue(participante.getNombresProfesor());
+			row1.createCell(38).setCellValue(participante.getGeneroProfesor());
+			row1.createCell(39).setCellValue(participante.getTelefonoProfesor());
+			row1.createCell(40).setCellValue(participante.getCelularProfesor());
+			row1.createCell(41).setCellValue(participante.getCorreoProfesor());
+			row1.createCell(42).setCellValue(participante.getNombreest());
+			row1.createCell(43).setCellValue(participante.getAppaternoest());
+			row1.createCell(44).setCellValue(participante.getApmaternoest());
+			row1.createCell(45).setCellValue(participante.getFechanacimientoest());
+			row1.createCell(46).setCellValue(participante.getSeccionest());
+			row1.createCell(47).setCellValue(participante.getTipodocest());
+			row1.createCell(48).setCellValue(participante.getNrodocest());
+			row1.createCell(49).setCellValue(participante.getGeneroest());
+			row1.createCell(50).setCellValue(participante.getNivelest());
+			row1.createCell(51).setCellValue(participante.getGradoest());
+			row1.createCell(52).setCellValue(participante.getNivelparticipacion());
+			row1.createCell(53).setCellValue(participante.getModalidadest());
+			row1.createCell(54).setCellValue(participante.getCategoriaest());
+			row1.createCell(55).setCellValue(participante.getNombreapoderado());
+			row1.createCell(56).setCellValue(participante.getAppaternoapoderado());
+			row1.createCell(57).setCellValue(participante.getApmaternoapoderado());
+			row1.createCell(58).setCellValue(participante.getNrotelfapoderado());
+			row1.createCell(59).setCellValue(participante.getCorreoapoderado());
+			row1.createCell(60).setCellValue(participante.getTipodocapoderado());
+			row1.createCell(61).setCellValue(participante.getNrodocapoderado());
+			row1.createCell(62).setCellValue(participante.getParentescoapoderado());	
 			initRow1 ++;
 		}
 		
@@ -765,24 +784,33 @@ public class ReporteController {
 					objTrabajosFinales.forEach(tf->{
 						List<TrabajosfinalesParticipante> objtfp = trabajosFinalesParticipanteService.listar(tf.getId());
 							objtfp.forEach(tfp->{
+								bandera_ods = false;
+								bandera_anio = false;
+								bandera_categoria = false;
+								bandera_modalidad = false;
+								bandera_nivel = false;
 								if(categoria!=-1) {
-									switch(categoria) {
+									if(categoria == tfp.getTrabajosfinales().getCategoriatrabajo().getId())
+										bandera_categoria = true;
+									/*switch(categoria) {
 										case 1: bandera_categoria =	(tfp.getParticipante().getCategoriacuento()==1 ? true : false ); break;
 										case 2: bandera_categoria = (tfp.getParticipante().getCategoriapoesia()==1 ? true : false ); break;
 										case 3: bandera_categoria = (tfp.getParticipante().getCategoriadibujopintura()==1 ? true : false ); break;
 										case 4: bandera_categoria = (tfp.getParticipante().getCategoriacomposicionmusical()==1 ? true : false ); break;
 										case 5: bandera_categoria = (tfp.getParticipante().getCategoriaahorroagua()==1 ? true : false ); break;
-									}
+									}*/
 								}
 								else {
 									bandera_categoria = true;
 								}
 								
 								if(modalidad!=-1) {
-									switch(modalidad) {
+									if(modalidad == tfp.getTrabajosfinales().getModalidadtrabajo().getId())
+										bandera_modalidad = true;
+									/*switch(modalidad) {
 										case 1: bandera_modalidad = (tfp.getParticipante().getModalidadpostulacionindividual()==1 ? true : false ); break;
 										case 2: bandera_modalidad = (tfp.getParticipante().getModalidadpostulaciongrupal()==1 ? true : false ); break;
-									}
+									}*/
 								}
 								else {
 									bandera_modalidad = true;
@@ -791,8 +819,6 @@ public class ReporteController {
 								if(nivel!=-1) {
 									if(tfp.getParticipante().getGradoestudiante().getNivelgradopartid().equals(nivel))
 										bandera_nivel = true;
-									else
-										bandera_nivel = false;
 								}
 								else {
 									bandera_nivel = true;
@@ -1131,7 +1157,13 @@ public class ReporteController {
 				dto.setTituloTrabajo(obj.getTitulotrabajo());
 				dto.setModalidad(obj.getModalidadtrabajo().getDescripcion());
 				dto.setCategoria(obj.getCategoriatrabajo().getDescripcion());
-				dto.setCantidadEvaluadoresAsignados(0);
+				
+				nroEvaluadoresAsignados = 0;
+				trabajosFinales_UsuarioAlianzaServ.listarByTrabajosfinalesId(obj.getId()).forEach(tf_ua->{
+					nroEvaluadoresAsignados++;
+				});
+				
+				dto.setCantidadEvaluadoresAsignados(nroEvaluadoresAsignados);
 				
 				dto.setPregunta1("");
 				dto.setPregunta2("");
@@ -1155,7 +1187,7 @@ public class ReporteController {
 						case 3 : dto.setPregunta4(dosDecimales.format(puntaje.get(i))); break;
 						case 4 : dto.setPregunta5(dosDecimales.format(puntaje.get(i))); break;
 					}
-				}			
+				}		
 				
 				evaluacionRepuestaServ.getRespuestas(obj.getId()).forEach(objER->{
 					if(objER.getTipo()==2) {
@@ -1167,8 +1199,7 @@ public class ReporteController {
 							}
 						});
 					}
-				});
-				
+				});				
 				
 				dto.setNota(obj.getNota()!=null?obj.getNota().toString():"");
 				dto.setPuesto(obj.getPuesto().toString());
