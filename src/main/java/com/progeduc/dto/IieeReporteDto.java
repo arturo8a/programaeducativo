@@ -46,6 +46,7 @@ public class IieeReporteDto {
 	String celularProfesor;
 	String correoProfesor;
 	String codigoTrabajo;
+	String estadoTrabajo;
 	String tituloTrabajo;
 	String linkVideo;
 	String modalidadTrabajo;
@@ -347,6 +348,12 @@ public class IieeReporteDto {
 	}
 	public void setCodigoTrabajo(String codigoTrabajo) {
 		this.codigoTrabajo = codigoTrabajo;
+	}
+	public String getEstadoTrabajo() {
+		return estadoTrabajo;
+	}
+	public void setEstadoTrabajo(String estadoTrabajo) {
+		this.estadoTrabajo = estadoTrabajo;
 	}
 	public String getTituloTrabajo() {
 		return tituloTrabajo;

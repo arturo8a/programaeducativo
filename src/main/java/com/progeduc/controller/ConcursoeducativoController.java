@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -2594,10 +2595,8 @@ public class ConcursoeducativoController {
 				
 		List<TrabajosFinalesConcursoDto> lista = new ArrayList<TrabajosFinalesConcursoDto>();		
 		List<DetalleEvaluacionReporteDto> listaDerDto = new ArrayList<>();
-		trabajosfinalesparticipanteServ.listarTodos().forEach(obj->{
-			
-			if(obj.getTrabajosfinales().getEstado() == 1 && obj.getParticipante().getEstado()==1 && obj.getTrabajosfinales().getEnviado()==1) {
-				
+		trabajosfinalesparticipanteServ.listarTodos().forEach(obj->{			
+			if(obj.getTrabajosfinales().getEstado() == 1 && obj.getParticipante().getEstado()==1 && obj.getTrabajosfinales().getEnviado()==1) {				
 				bandera = true;				
 				mi_ods = odsserv.byOds(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid()).getDescripcion();
 				mi_anio = obj.getTrabajosfinales().getAnio();
@@ -2709,75 +2708,85 @@ public class ConcursoeducativoController {
 					dto.setCorreoDocente(obj.getTrabajosfinales().getCorreo());	
 					dto.setNotaRegional(obj.getTrabajosfinales().getNota()!=null?dosDecimales.format(obj.getTrabajosfinales().getNota()):"");
 					dto.setPuestoRegional(obj.getTrabajosfinales().getPuesto()==0?"":obj.getTrabajosfinales().getPuesto().toString());
-					//dto.setEmpate(obj.getTrabajosfinales().getEmpate());
-					//dto.setNotaOriginal(obj.getTrabajosfinales().getNotaOriginal());
+					dto.setEmpate(obj.getTrabajosfinales().getEmpate()!=null?obj.getTrabajosfinales().getEmpate().toString():"");
+					dto.setNotaOriginal(obj.getTrabajosfinales().getNota_original()!=null?obj.getTrabajosfinales().getNota_original().toString():"");
 					dto.setNotaNacional("0.0");
 					dto.setPuestoNacional("");
-					lista.add(dto);
-					
+					lista.add(dto);					
 					nroEvaluadoresAsignados = 0;
-					
-					trabajosFinales_UsuarioAlianzaServ.listarByTrabajosfinalesId(obj.getTrabajosfinales().getId()).forEach(tf_ua->{
-						nroEvaluadoresAsignados++;
-					});
-					
-					DetalleEvaluacionReporteDto derDto = new DetalleEvaluacionReporteDto();
-					derDto.setAnio(mi_anio);
-					derDto.setOds(mi_ods);
-					derDto.setCodigoie(obj.getTrabajosfinales().getProgramaeducativo().getCodmod());
-					derDto.setNombreie(obj.getTrabajosfinales().getProgramaeducativo().getNomie());
-					derDto.setAmbito(obj.getTrabajosfinales().getProgramaeducativo().getAmbito().getDescripcion());
-					derDto.setCodigoTrabajo(obj.getTrabajosfinales().getProgramaeducativo().getCodmod() + "_" + obj.getTrabajosfinales().getNumeracion().toString());
-					derDto.setEstadoTrabajo(obj.getTrabajosfinales().getEstadotrabajo().getDescripcion());
-					derDto.setTituloTrabajo(obj.getTrabajosfinales().getTitulotrabajo());
-					derDto.setModalidad(obj.getTrabajosfinales().getModalidadtrabajo().getDescripcion());
-					derDto.setCategoria(obj.getTrabajosfinales().getCategoriatrabajo().getDescripcion());
-					derDto.setNivelParticipacion(obj.getParticipante().getGradoestudiante().getNivelgradopartdesc());
-					derDto.setCantidadEvaluadoresAsignados(nroEvaluadoresAsignados);
-					
-					derDto.setPregunta1("");
-					derDto.setPregunta2("");
-					derDto.setPregunta3("");
-					derDto.setPregunta4("");
-					derDto.setPregunta5("");
-					derDto.setEresCebe("NO");
-					
-					puntaje  = new ArrayList<Float>();
-					
-					evaluacionRepuestaServ.listaRubricaPuntajeDto(obj.getTrabajosfinales().getId()).forEach(er->{
-						puntaje.add(er.getPuntaje());
-					});
-					
-					for(int i=0;i<puntaje.size();i++) {
-						switch(i) {
-							case 0 : derDto.setPregunta1(dosDecimales.format(puntaje.get(i))); break;
-							case 1 : derDto.setPregunta2(dosDecimales.format(puntaje.get(i))); break;
-							case 2 : derDto.setPregunta3(dosDecimales.format(puntaje.get(i))); break;
-							case 3 : derDto.setPregunta4(dosDecimales.format(puntaje.get(i))); break;
-							case 4 : derDto.setPregunta5(dosDecimales.format(puntaje.get(i))); break;
-						}
-					}	
-					
-					evaluacionRepuestaServ.getRespuestas(obj.getTrabajosfinales().getId()).forEach(objER->{
-						if(objER.getTipo()==2) {
-							questionarioRespuestaServ.listarByQuestionario(objER.getPreguntaid()).forEach(objQR->{
-								if(objQR.getQuestionario().getPregunta().toLowerCase().contains("cebe")) {
-									if(objQR.getRespuesta().toLowerCase().contains("si")) {
-										derDto.setEresCebe("SI");
-									}
-								}
-							});
-						}
-					});
-					
-					
-					
-					derDto.setNota(obj.getTrabajosfinales().getNota()!=null?obj.getTrabajosfinales().getNota().toString():"");
-					derDto.setPuesto(obj.getTrabajosfinales().getPuesto()==0?"":obj.getTrabajosfinales().getPuesto().toString());
-					listaDerDto.add(derDto);
 				}
 			}			
 		});
+		
+		
+		trabajosfinalesServ.listarhabilitados().forEach(obj->{
+			nroEvaluadoresAsignados = 0;
+			trabajosFinales_UsuarioAlianzaServ.listarByTrabajosfinalesId(obj.getId()).forEach(tf_ua->{
+				nroEvaluadoresAsignados++;
+			});
+			
+			DetalleEvaluacionReporteDto derDto = new DetalleEvaluacionReporteDto();
+			derDto.setAnio(mi_anio);
+			derDto.setOds(mi_ods);
+			derDto.setCodigoie(obj.getProgramaeducativo().getCodmod());
+			derDto.setNombreie(obj.getProgramaeducativo().getNomie());
+			derDto.setAmbito(obj.getProgramaeducativo().getAmbito().getDescripcion());
+			derDto.setCodigoTrabajo(obj.getProgramaeducativo().getCodmod() + "_" + obj.getNumeracion().toString());
+			derDto.setEstadoTrabajo(obj.getEstadotrabajo().getDescripcion());
+			derDto.setTituloTrabajo(obj.getTitulotrabajo());
+			derDto.setModalidad(obj.getModalidadtrabajo().getDescripcion());
+			derDto.setCategoria(obj.getCategoriatrabajo().getDescripcion());
+			//derDto.setNivelParticipacion(	.getGradoestudiante().getNivelgradopartdesc());
+			derDto.setCantidadEvaluadoresAsignados(nroEvaluadoresAsignados);
+			
+			mi_nivel_participacion = "";
+			trabajosfinalesparticipanteServ.listar(obj.getId()).forEach(objn->{
+				mi_nivel_participacion = objn.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+			});
+			
+			derDto.setNivelParticipacion(mi_nivel_participacion);
+			
+			derDto.setPregunta1("");
+			derDto.setPregunta2("");
+			derDto.setPregunta3("");
+			derDto.setPregunta4("");
+			derDto.setPregunta5("");
+			derDto.setEresCebe("NO");
+			
+			puntaje  = new ArrayList<Float>();
+			
+			evaluacionRepuestaServ.listaRubricaPuntajeDto(obj.getId()).forEach(er->{
+				puntaje.add(er.getPuntaje());
+			});
+			
+			for(int i=0;i<puntaje.size();i++) {
+				switch(i) {
+					case 0 : derDto.setPregunta1(dosDecimales.format(puntaje.get(i))); break;
+					case 1 : derDto.setPregunta2(dosDecimales.format(puntaje.get(i))); break;
+					case 2 : derDto.setPregunta3(dosDecimales.format(puntaje.get(i))); break;
+					case 3 : derDto.setPregunta4(dosDecimales.format(puntaje.get(i))); break;
+					case 4 : derDto.setPregunta5(dosDecimales.format(puntaje.get(i))); break;
+				}
+			}	
+			
+			evaluacionRepuestaServ.getRespuestas(obj.getId()).forEach(objER->{
+				if(objER.getTipo()==2) {
+					questionarioRespuestaServ.listarByQuestionario(objER.getPreguntaid()).forEach(objQR->{
+						if(objQR.getQuestionario().getPregunta().toLowerCase().contains("cebe")) {
+							if(objQR.getRespuesta().toLowerCase().contains("si")) {
+								derDto.setEresCebe("SI");
+							}
+						}
+					});
+				}
+			});
+			
+			derDto.setNota(obj.getNota()!=null?obj.getNota().toString():"");
+			derDto.setPuesto(obj.getPuesto()==0?"":obj.getPuesto().toString());
+			listaDerDto.add(derDto);
+			
+		});
+		
 		
 		String [] columns = {"AÑO","ODS","Codigo II.EE","NOMBRE II.EE","REGION","PROVINCIA","DISTRITO","MODALIDAD", "AMBITO","Código de trabajo","Estado de trabajo","Titulo de trabajo","Link de video","Modalidad","Categoria","Nivel de participación","Ejes temáticos","Nombres del participante","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Fecha de nacimiento","Género","Seccion","Nivel","Grado","Nombres tutor","Apellido paterno tutor","Apellido materno tutor","Tipo de documento","Nro de documento tutor","telefono","correo electronico","Parentesco","Nombres del docente","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Telefono","Género","Correo electrónico","Nota","Nota original","¿tuvo empate?","Puesto","Nota","Puesto"};
 		
