@@ -2554,7 +2554,7 @@ public class ConcursoeducativoController {
 				mi_nivel_participacion = objn.getParticipante().getGradoestudiante().getNivelgradopartdesc();
 			});
 			
-			derDto.setNivelParticipacion(nivel_participacion);
+			derDto.setNivelParticipacion(mi_nivel_participacion);
 			
 			derDto.setPregunta1("");
 			derDto.setPregunta2("");
