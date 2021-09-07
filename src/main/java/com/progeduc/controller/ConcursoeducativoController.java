@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -2063,14 +2064,28 @@ public class ConcursoeducativoController {
 	@GetMapping("/consultarEtapaHabilitada")
 	public ResponseEntity<OdsFinalizarDto> consultarEtapaHabilitada(HttpSession ses){
 		OdsFinalizarDto odsRespuesta = new OdsFinalizarDto();
+		String odsId = ses.getAttribute("odsid") != null ? ses.getAttribute("odsid").toString() : null;
+		String tipousuarioid = ses.getAttribute("tipousuarioid") != null ? ses.getAttribute("tipousuarioid").toString() : null;
 		Calendar cal= Calendar.getInstance();
 		int anio= cal.get(Calendar.YEAR);
 		Aperturaranio apertura = aperturaranioService.buscar(anio);
 		LocalDate dateActual = LocalDate.now();
 		if(apertura.getQuintaetapadesde().isBefore(dateActual) || apertura.getQuintaetapadesde().isEqual(dateActual)) {
 			odsRespuesta.setStatus(1);
-			odsRespuesta.setListOds(odsserv.listarAll());
-			odsRespuesta.setListCerrarOds(cerrarOdsServ.listCerrarOds());
+			if(odsId != null && tipousuarioid != null && tipousuarioid.equals("0")) {
+				List<Ods> listOds = new ArrayList<>();
+				Optional<Ods> ods = odsserv.listarAll().stream().filter(o -> o.getId() == Integer.parseInt(odsId)).findFirst();
+				listOds.add(ods.get());
+				odsRespuesta.setListOds(listOds);
+				
+				List<CerrarOds> listCerrarOds = new ArrayList<>();
+				Optional<CerrarOds> cerrarOds = cerrarOdsServ.listCerrarOds().stream().filter(o -> o.getOdsid().getId() == Integer.parseInt(odsId)).findFirst();
+				if(!cerrarOds.isEmpty()) listCerrarOds.add(cerrarOds.get());
+				odsRespuesta.setListCerrarOds(listCerrarOds);
+			}else {
+				odsRespuesta.setListOds(odsserv.listarAll());
+				odsRespuesta.setListCerrarOds(cerrarOdsServ.listCerrarOds());
+			}
 		}else {
 			odsRespuesta.setStatus(0);
 		}
