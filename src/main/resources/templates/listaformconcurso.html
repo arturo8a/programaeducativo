@@ -99,7 +99,7 @@
 					</div>
 					<div class="col-xs-4 col-sm-2">
 						<select class="form-control" id="puestoconcurso" name="puestoconcurso">
-							<option value="Todos">Selecciones</option>
+							<option value="Todos">Puesto</option>
 							<option value="1">Primer puesto</option>
 							<option value="2">Segundo puesto</option>
 							<option value="3">Tercer puesto</option>		    				
@@ -630,7 +630,7 @@
 		var id;
 		var table_lista_concurso, table_lista_asignacion, table_lista_concurso_nacional;
 		
-		var ods_reporte="Todos", anio_reporte="Todos", modalidad_reporte="Todos", estado_reporte="Todos", categoria_reporte="Todos", nivel_participacion_reporte="Todos", nombre_ie_reporte="Todos";
+		var ods_reporte="Todos", anio_reporte="Todos", modalidad_reporte="Todos", estado_reporte="Todos", categoria_reporte="Todos", nivel_participacion_reporte="Todos", nombre_ie_reporte="Todos",puesto_reporte="Todos";
 		
 		$(document).off("click",".btnInactivarUsuario");
 		$(document).off("click",".btnEditarUsuario");
@@ -649,6 +649,7 @@
 	        		categoria_reporte = $("#categoriaconcurso").val();
 	        		nivel_participacion_reporte = $("#participacionconcurso").val();
 	        		nombre_ie_reporte = $("#nombreieconcurso").val();
+	        		puesto_reporte = $("#puestoconcurso").val();
 	        	}, 100);	
 			});
 			
@@ -668,6 +669,7 @@
 				$("#nivelparticipacionasignacion").val("Todos");
 				$("#rolentidadasignacion").val("Todos");
 				$("#nombreieasignacion").val("");
+				
 				setTimeout(() => {        		  
 					table_lista_asignacion.draw();
 		      	}, 100);
@@ -691,6 +693,15 @@
 				$("#participacionconcurso").val("Todos");
 				$("#nombreieconcurso").val("Todos");
 				$("#puestoconcurso").val("Todos");
+				
+				ods_reporte = $("#odsconcurso").val();
+        		anio_reporte = $("#anioconcurso").val();
+        		modalidad_reporte = $("#modalidadconcurso").val();
+        		estado_reporte = $("#estadoconcurso").val();
+        		categoria_reporte = $("#categoriaconcurso").val();
+        		nivel_participacion_reporte = $("#participacionconcurso").val();
+        		nombre_ie_reporte = $("#nombreieconcurso").val();
+        		puesto_reporte = $("#puestoconcurso").val();
 				setTimeout(() => {        		  
 					table_lista_concurso.draw();
 		      	}, 100);
@@ -912,7 +923,7 @@
 							if(nombre_ie_reporte.trim()=="")
 								nombre_ie_reporte = "Todos";
 							
-							window.location.href = url_base + "pedesa/trabajosfinalesconcurso/"+ods_reporte+"/"+anio_reporte+"/"+modalidad_reporte+"/"+estado_reporte+"/"+categoria_reporte+"/"+nivel_participacion_reporte+"/"+nombre_ie_reporte;							
+							window.location.href = url_base + "pedesa/trabajosfinalesconcurso/"+ods_reporte+"/"+anio_reporte+"/"+modalidad_reporte+"/"+estado_reporte+"/"+categoria_reporte+"/"+nivel_participacion_reporte+"/"+nombre_ie_reporte+"/"+puesto_reporte;
 		                }
 		            }
 	            ]
