@@ -2183,13 +2183,18 @@ public class ConcursoeducativoController {
 											puestoFinalizados = true;
 										}else {
 											if(puestoNuevo < trabajoFinal.getPuesto()) indice=0;
-											trabajoFinal.setPuesto(trabajoFinal.getPuesto() + indice); //asignar nuevo puesto
+											else indice++;
+											if(trabajoFinal.getPuesto() == 3) {
+												trabajoFinal.setPuesto(trabajoFinal.getPuesto()); //asignar nuevo puesto
+											}else {
+												trabajoFinal.setPuesto(trabajoFinal.getPuesto() + indice+empates1); //asignar nuevo puesto
+											}
 											puestoNuevo = trabajoFinal.getPuesto();log.info("Nuevo puesto: "+puestoNuevo);
 										}
 										if(trabajoFinal.getPuesto() == 3) {
 											indice=10;
 										}
-										indice++;
+										//indice++;
 										log.info("empates1: "+empates1);
 										if(empates1 > 1) {
 											trabajoFinal.setPuesto(0);
