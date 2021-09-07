@@ -1960,6 +1960,11 @@ public class ConcursoeducativoController {
 					if(trabajosFinales_UsuarioAlianzaServ.buscar(te.getId(),ev.getId()) == null) {
 						trabajosFinales_UsuarioAlianzaServ.guardar(te.getId(),ev.getId(),-1f);
 						trabajosfinalesServ.updateEstadoTrabajo(te.getId(),2);
+						
+						Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(te.getId());
+						trabajoFinal.setNota(0f);
+						trabajosfinalesServ.modificar(trabajoFinal);
+						
 						rpta = 1;
 					}
 				});
