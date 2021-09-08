@@ -35,6 +35,7 @@ import com.progeduc.dto.DetalleEvaluacionReporteDto;
 import com.progeduc.dto.DocenteDto;
 import com.progeduc.dto.IieeReporteDto;
 import com.progeduc.dto.ListaparticipantereporteDto;
+import com.progeduc.dto.NotasEvaluadorDto;
 import com.progeduc.dto.ResultadosRegionalesDto;
 import com.progeduc.model.Auspicio;
 import com.progeduc.model.Participante;
@@ -132,6 +133,8 @@ public class ReporteController {
 	List<Float> puntaje;
 	Integer nroEvaluadoresAsignados;
 	boolean bandera;
+	boolean banderaods;
+	String fecha_archivo;
 	
 	
 	@GetMapping(value="/reporteparticipantesinscritos/{ods}/{anio}/{categoria}/{modalidad}/{nivel}")	
@@ -149,13 +152,145 @@ public class ReporteController {
 		
 		HttpHeaders headers = new HttpHeaders();
 		
-		String fecha_archivo = dateFormat.format(date) + hourFormat.format(date);
+		fecha_archivo = dateFormat.format(date) + hourFormat.format(date);
 		
 		headers.add("Content-Disposition", "attachment; filename=Reportedocente_participantes_"+fecha_archivo+".csv");
 		
-		return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
-		
+		return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));		
 	}
+	
+	@GetMapping(value="/reportenotasevaluador/{ods}/{anio}/{categoria}/{nivel}")	
+	public ResponseEntity<InputStreamResource> reportenotasevaluador(@PathVariable(value="ods") Integer ods,
+			@PathVariable(value="anio") Integer anio,
+			@PathVariable(name="categoria") Integer categoria,
+			@PathVariable(name="nivel") Integer nivel) {
+		
+		Date date = new Date();
+		DateFormat hourFormat = new SimpleDateFormat("HHmmss");
+		DateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
+		
+		ByteArrayInputStream stream = reporteexcelnotasevaluador(ods,anio,categoria,nivel);
+		
+		HttpHeaders headers = new HttpHeaders();
+		
+		fecha_archivo = dateFormat.format(date) + hourFormat.format(date);
+		
+		headers.add("Content-Disposition", "attachment; filename=ReporteNotasEvaluador_"+fecha_archivo+".csv");
+		
+		return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
+	}
+	
+	public ByteArrayInputStream reporteexcelnotasevaluador(Integer ods,Integer anio,Integer categoria,Integer nivel)   {
+		
+		Workbook workbook = new HSSFWorkbook();
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				
+		List<NotasEvaluadorDto> lista = new ArrayList<NotasEvaluadorDto>();
+		
+		trabajosFinales_UsuarioAlianzaServ.listarAll().forEach(obj->{
+			banderaods = false;	
+			bandera_anio = false;
+			bandera_categoria = false;
+			
+			if(anio!=-1) {
+				if(obj.getTrabajosfinales().getAnio().equals(anio))
+					bandera_anio = true;
+			}
+			else {
+				bandera_anio = true;
+			}
+			
+			if(ods!=-1) {
+				if(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid().equals(ods))
+					banderaods  = true;
+			}
+			else {
+				banderaods = true;
+			}	
+			
+			if(categoria!=-1) {
+				if(obj.getTrabajosfinales().getCategoriatrabajo().getId().equals(categoria))
+					bandera_categoria  = true;
+			}
+			else {
+				bandera_categoria = true;
+			}
+			
+			mi_nivel_participacion = "";
+			if(nivel!=-1) {
+				trabajosFinalesParticipanteService.listar(obj.getTrabajosfinales().getId()).forEach(tfp->{
+					if(tfp.getParticipante().getGradoestudiante().getNivelgradopartid().equals(nivel)) {
+						mi_nivel_participacion = tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+						bandera_nivel = true;
+					}
+				});
+			}
+			else {
+				bandera_nivel = true;
+			}
+			
+			
+			if(bandera_anio && banderaods && bandera_categoria && bandera_nivel){				
+				NotasEvaluadorDto dto = new NotasEvaluadorDto();
+				dto.setAnio(obj.getTrabajosfinales().getAnio());
+				dto.setOds(odsserv.byOds(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+				dto.setCodigoIe(obj.getTrabajosfinales().getProgramaeducativo().getCodmod());
+				dto.setNombreIe(obj.getTrabajosfinales().getProgramaeducativo().getNomie());
+				dto.setCodigoTrabajo(obj.getTrabajosfinales().getProgramaeducativo().getCodmod()+"_"+obj.getTrabajosfinales().getNumeracion());
+				dto.setEstadoTrabajo(obj.getTrabajosfinales().getEstadotrabajo().getDescripcion());
+				dto.setCategoria(obj.getTrabajosfinales().getCategoriatrabajo().getDescripcion());
+				
+				if(mi_nivel_participacion.equals("")) {
+					trabajosFinalesParticipanteService.listar(obj.getTrabajosfinales().getId()).forEach(tfp->{
+						mi_nivel_participacion = tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+					});
+				}
+				
+				dto.setNivelParticipacion(mi_nivel_participacion);
+				dto.setEvaluador(obj.getUsuarioalianza().getNombresautoridad() + " " + obj.getUsuarioalianza().getApepatautoridad()+ " " + obj.getUsuarioalianza().getApematautoridad());
+				dto.setCalificacion(obj.getNota()!=null?obj.getNota().toString():"");
+				lista.add(dto);
+			}				
+		});
+		
+		String [] columns = {"AÑO","ODS","CODIGO II.EE","NOMBRE II.EE","Código de trabajo","Estado de trabajo","Categoria","Nivel de participación","Evaluador","Calificación"};
+		
+		Sheet sheet = workbook.createSheet("Notas de evaluadores");
+		Row row = sheet.createRow(0);
+		
+		for(int i=0;i<columns.length;i++) {
+			Cell cell = row.createCell(i);
+			cell.setCellValue(columns[i]);
+		}
+		
+		int initRow = 1;
+		for(NotasEvaluadorDto dto : lista) {
+			row = sheet.createRow(initRow);
+			row.createCell(0).setCellValue(dto.getAnio());
+			row.createCell(1).setCellValue(dto.getOds());
+			row.createCell(2).setCellValue(dto.getCodigoIe());
+			row.createCell(3).setCellValue(dto.getNombreIe());
+			row.createCell(4).setCellValue(dto.getCodigoTrabajo());
+			row.createCell(5).setCellValue(dto.getEstadoTrabajo());
+			row.createCell(6).setCellValue(dto.getCategoria());
+			row.createCell(7).setCellValue(dto.getNivelParticipacion());
+			row.createCell(8).setCellValue(dto.getEvaluador());
+			row.createCell(9).setCellValue(dto.getCalificacion());
+			initRow++;			
+		}
+		
+		try {
+			workbook.write(stream);
+			workbook.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return new ByteArrayInputStream(stream.toByteArray());
+	}
+	
 	
 	public ByteArrayInputStream reporteparticipantesinscritos(Integer ods,Integer anio,Integer categoria,Integer modalidad,Integer nivel)   {
 		
@@ -620,7 +755,7 @@ public class ReporteController {
 		
 		HttpHeaders headers = new HttpHeaders();
 		
-		String fecha_archivo = dateFormat.format(date) + hourFormat.format(date);
+		fecha_archivo = dateFormat.format(date) + hourFormat.format(date);
 		
 		headers.add("Content-Disposition", "attachment; filename=Reportegeneral_"+fecha_archivo+".csv");
 		
@@ -1627,7 +1762,7 @@ public class ReporteController {
 		
 		HttpHeaders headers = new HttpHeaders();
 		
-		String fecha_archivo = dateFormat.format(date) + hourFormat.format(date);
+		fecha_archivo = dateFormat.format(date) + hourFormat.format(date);
 		
 		headers.add("Content-Disposition", "attachment; filename=Lista_alianzaestrategica_"+fecha_archivo+".csv");
 		

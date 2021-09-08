@@ -28,7 +28,7 @@ public interface ITrabajosfinalesUsuarioAlianzaRepo extends CrudRepository<Traba
 	@Query(value="SELECT TB1.* FROM TRABAJOSFINALES_USUARIOALIANZA TB1 WHERE TB1.trabajosfinalesid = ?1",nativeQuery = true)
 	List<TrabajosfinalesUsuarioAlianza> listarByTrabajosfinalesId(Integer trabajofinalid);
 	
-	@Query(value="SELECT TB1.* FROM TRABAJOSFINALES_USUARIOALIANZA",nativeQuery = true)
+	@Query(value="SELECT * FROM TRABAJOSFINALES_USUARIOALIANZA",nativeQuery = true)
 	List<TrabajosfinalesUsuarioAlianza> listarAll();
 	
 	@Query(value="SELECT TB1.* FROM TRABAJOSFINALES_USUARIOALIANZA TB1 WHERE TB1.trabajosfinalesid = ?1 and TB1.usuarioalianzaid=?2",nativeQuery = true)

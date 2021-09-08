@@ -31,6 +31,7 @@
 				<option value="0">Seleccione</option>
 				<option value="1">Información de docentes y participantes C.E</option>
 				<option value="2">Reporte General</option>
+				<option value="3">Notas por evaluador</option>				
 			</select>
 		</div>
 	</div>
@@ -119,6 +120,7 @@
 				switch(reporte){
 					case '1' : window.location.href = url_base + "pedesa/reporteparticipantesinscritos/"+ods+"/"+anio+"/"+categoria+"/"+modalidad+"/"+nivel; break;
 					case '2' : window.location.href = url_base + "pedesa/reportegeneral/"+ods+"/"+anio+"/"+categoria+"/"+modalidad+"/"+nivel; break;
+					case '3' : window.location.href = url_base + "pedesa/reportenotasevaluador/"+ods+"/"+anio+"/"+categoria+"/"+nivel; break;
 					default : alert("Seleccione reporte"); break;
 				}
 			});
