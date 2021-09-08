@@ -90,6 +90,7 @@ import com.progeduc.model.TrabajosfinalesUsuarioAlianza;
 import com.progeduc.model.Usuario;
 import com.progeduc.model.UsuarioAlianza;
 import com.progeduc.model.UsuarioLdap;
+import com.progeduc.model.UsuarioOds;
 import com.progeduc.service.IAperturaranioService;
 import com.progeduc.service.IAuspicioService;
 import com.progeduc.service.ICerrarOdsService;
@@ -2067,21 +2068,53 @@ public class ConcursoeducativoController {
 		OdsFinalizarDto odsRespuesta = new OdsFinalizarDto();
 		String odsId = ses.getAttribute("odsid") != null ? ses.getAttribute("odsid").toString() : null;
 		String tipousuarioid = ses.getAttribute("tipousuarioid") != null ? ses.getAttribute("tipousuarioid").toString() : null;
+		String usuario = ses.getAttribute("usuario") != null ? ses.getAttribute("usuario").toString() : null;
 		Calendar cal= Calendar.getInstance();
 		int anio= cal.get(Calendar.YEAR);
 		Aperturaranio apertura = aperturaranioService.buscar(anio);
 		LocalDate dateActual = LocalDate.now();
+
 		if(apertura.getQuintaetapadesde().isBefore(dateActual) || apertura.getQuintaetapadesde().isEqual(dateActual)) {
 			odsRespuesta.setStatus(1);
-			if(odsId != null && tipousuarioid != null && tipousuarioid.equals("0")) {
+			if(odsId != null && tipousuarioid != null && (tipousuarioid.equals("0")) ) {
 				List<Ods> listOds = new ArrayList<>();
-				Optional<Ods> ods = odsserv.listarAll().stream().filter(o -> o.getId() == Integer.parseInt(odsId)).findFirst();
-				listOds.add(ods.get());
-				odsRespuesta.setListOds(listOds);
+
+				if(tipousuarioid.equals("2")) {
+					Optional<Ods> ods = odsserv.listarAll().stream().filter(o -> o.getId() == Integer.parseInt(odsId)).findFirst();
+					listOds.add(ods.get());
+					odsRespuesta.setListOds(listOds);
+				}else {
+					Optional<Ods> ods = odsserv.listarAll().stream().filter(o -> o.getId() == usuarioServ.byUsuario(ses.getAttribute("usuario").toString()).getOdsid()).findFirst();
+					listOds.add(ods.get());
+					odsRespuesta.setListOds(listOds);
+				}
+				
 				
 				List<CerrarOds> listCerrarOds = new ArrayList<>();
 				Optional<CerrarOds> cerrarOds = cerrarOdsServ.listCerrarOds().stream().filter(o -> o.getOdsid().getId() == Integer.parseInt(odsId)).findFirst();
 				if(!cerrarOds.isEmpty()) listCerrarOds.add(cerrarOds.get());
+				odsRespuesta.setListCerrarOds(listCerrarOds);
+			}else if(tipousuarioid != null && (tipousuarioid.equals("0") || tipousuarioid.equals("2") || tipousuarioid.equals("11")) ) {
+				List<Ods> listOds = new ArrayList<>();
+				Usuario usuarioLogin = usuarioServ.byUsuario(ses.getAttribute("usuario").toString());
+				List<UsuarioOds> listUsuOds = usuarioodsServ.listarByUsuario(usuarioLogin.getId());
+				for (UsuarioOds usuarioOds : listUsuOds) {
+					listOds.add(usuarioOds.getOds());
+				}
+				odsRespuesta.setListOds(listOds);
+				
+				List<CerrarOds> listCerrarOds = new ArrayList<>();
+				List<CerrarOds> listCerrarOdsTotales = cerrarOdsServ.listCerrarOds();
+				if(!listCerrarOdsTotales.isEmpty()) {
+					for (int i = 0; i < listCerrarOdsTotales.size(); i++) {
+						for (int j = 0; j < listOds.size(); j++) {
+							if(listOds.get(j).getId() == listCerrarOdsTotales.get(i).getOdsid().getId() ) {
+								listCerrarOds.add(listCerrarOdsTotales.get(i));
+							}
+						}
+					}
+					
+				}
 				odsRespuesta.setListCerrarOds(listCerrarOds);
 			}else {
 				odsRespuesta.setListOds(odsserv.listarAll());
