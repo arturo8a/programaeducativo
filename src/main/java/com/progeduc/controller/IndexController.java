@@ -1216,12 +1216,13 @@ public class IndexController {
 		}
 		else if(ses.getAttribute("tipousuarioid").toString().equals("2")) {
 			
-			/*odsid = usuarioService.byUsuario(ses.getAttribute("usuario").toString()).getOdsid();*/
-			odsid = 18;
+			odsid = usuarioService.byUsuario(ses.getAttribute("usuario").toString()).getOdsid();
+			//odsid = 18;
 		}		
 		
 		model.addAttribute("odsid",odsid);
-		model.addAttribute("ods",odsserv.listarOdsEmpatadas());//ods empatadas
+		//model.addAttribute("ods",odsserv.listarOdsEmpatadas());//ods empatadas
+		model.addAttribute("ods",odsserv.listarAll());
 		model.addAttribute("nivelparticipacion",nivelparticipacionService.listar());
 		model.addAttribute("categoriatrabajo",categoriaevaluacionService.listar());
 		Calendar fecha = Calendar.getInstance();
