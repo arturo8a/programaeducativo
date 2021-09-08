@@ -992,7 +992,7 @@ public class ConcursoeducativoController {
 						dto.setModalidad(obj2.getModalidadtrabajo().getDescripcion());
 						dto.setTitulotrabajo(obj2.getTitulotrabajo());
 						nivelparticipacion = "";
-						trabajosfinalesparticipanteServ.listar(pe.getId()).forEach(obj3->{
+						trabajosfinalesparticipanteServ.listar(obj2.getId()).forEach(obj3->{
 							nivelparticipacion = obj3.getParticipante().getGradoestudiante().getNivelgradopartdesc();
 							idnivelparticipacion = obj3.getParticipante().getGradoestudiante().getNivelgradopartid();
 						});			
@@ -1053,7 +1053,7 @@ public class ConcursoeducativoController {
 							dto.setModalidad(obj2.getModalidadtrabajo().getDescripcion());
 							dto.setTitulotrabajo(obj2.getTitulotrabajo());
 							nivelparticipacion = "";
-							trabajosfinalesparticipanteServ.listar(pe.getId()).forEach(obj3->{
+							trabajosfinalesparticipanteServ.listar(obj2.getId()).forEach(obj3->{
 								nivelparticipacion = obj3.getParticipante().getGradoestudiante().getNivelgradopartdesc();
 								idnivelparticipacion = obj3.getParticipante().getGradoestudiante().getNivelgradopartid();
 							});

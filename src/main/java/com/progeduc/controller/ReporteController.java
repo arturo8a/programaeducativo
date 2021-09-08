@@ -44,6 +44,7 @@ import com.progeduc.model.ProgramaeducativoNivel;
 import com.progeduc.model.ProgramaeducativoTurno;
 import com.progeduc.model.Trabajosfinales;
 import com.progeduc.model.TrabajosfinalesParticipante;
+import com.progeduc.model.TrabajosfinalesUsuarioAlianza;
 import com.progeduc.model.UsuarioAlianza;
 import com.progeduc.service.IDistritoService;
 import com.progeduc.service.IDocentetutorService;
@@ -187,71 +188,141 @@ public class ReporteController {
 				
 		List<NotasEvaluadorDto> lista = new ArrayList<NotasEvaluadorDto>();
 		
-		trabajosFinales_UsuarioAlianzaServ.listarAll().forEach(obj->{
-			banderaods = false;	
-			bandera_anio = false;
-			bandera_categoria = false;
-			
-			if(anio!=-1) {
-				if(obj.getTrabajosfinales().getAnio().equals(anio))
-					bandera_anio = true;
-			}
-			else {
-				bandera_anio = true;
-			}
-			
-			if(ods!=-1) {
-				if(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid().equals(ods))
-					banderaods  = true;
-			}
-			else {
-				banderaods = true;
-			}	
-			
-			if(categoria!=-1) {
-				if(obj.getTrabajosfinales().getCategoriatrabajo().getId().equals(categoria))
-					bandera_categoria  = true;
-			}
-			else {
-				bandera_categoria = true;
-			}
-			
-			mi_nivel_participacion = "";
-			if(nivel!=-1) {
-				trabajosFinalesParticipanteService.listar(obj.getTrabajosfinales().getId()).forEach(tfp->{
-					if(tfp.getParticipante().getGradoestudiante().getNivelgradopartid().equals(nivel)) {
-						mi_nivel_participacion = tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc();
-						bandera_nivel = true;
-					}
-				});
-			}
-			else {
-				bandera_nivel = true;
-			}
-			
-			
-			if(bandera_anio && banderaods && bandera_categoria && bandera_nivel){				
-				NotasEvaluadorDto dto = new NotasEvaluadorDto();
-				dto.setAnio(obj.getTrabajosfinales().getAnio());
-				dto.setOds(odsserv.byOds(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
-				dto.setCodigoIe(obj.getTrabajosfinales().getProgramaeducativo().getCodmod());
-				dto.setNombreIe(obj.getTrabajosfinales().getProgramaeducativo().getNomie());
-				dto.setCodigoTrabajo(obj.getTrabajosfinales().getProgramaeducativo().getCodmod()+"_"+obj.getTrabajosfinales().getNumeracion());
-				dto.setEstadoTrabajo(obj.getTrabajosfinales().getEstadotrabajo().getDescripcion());
-				dto.setCategoria(obj.getTrabajosfinales().getCategoriatrabajo().getDescripcion());
+		trabajosFinalesServ.listarhabilitados().forEach(tf->{	
+			List<TrabajosfinalesUsuarioAlianza> listatfua = trabajosFinales_UsuarioAlianzaServ.listarByTrabajosfinalesId(tf.getId());
+			if(listatfua.size()==0) {
+				banderaods = false;	
+				bandera_anio = false;
+				bandera_categoria = false;
 				
-				if(mi_nivel_participacion.equals("")) {
-					trabajosFinalesParticipanteService.listar(obj.getTrabajosfinales().getId()).forEach(tfp->{
-						mi_nivel_participacion = tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc();
-					});
+				if(anio!=-1) {
+					if(tf.getAnio().equals(anio))
+						bandera_anio = true;
+				}
+				else {
+					bandera_anio = true;
 				}
 				
-				dto.setNivelParticipacion(mi_nivel_participacion);
-				dto.setEvaluador(obj.getUsuarioalianza().getNombresautoridad() + " " + obj.getUsuarioalianza().getApepatautoridad()+ " " + obj.getUsuarioalianza().getApematautoridad());
-				dto.setCalificacion(obj.getNota()!=null?obj.getNota().toString():"");
-				lista.add(dto);
-			}				
-		});
+				if(ods!=-1) {
+					if(tf.getProgramaeducativo().getDistrito().getOdsid().equals(ods))
+						banderaods  = true;
+				}
+				else {
+					banderaods = true;
+				}	
+				
+				if(categoria!=-1) {
+					if(tf.getCategoriatrabajo().getId().equals(categoria))
+						bandera_categoria  = true;
+				}
+				else {
+					bandera_categoria = true;
+				}
+				
+				mi_nivel_participacion = "";
+				if(nivel!=-1) {
+					trabajosFinalesParticipanteService.listar(tf.getId()).forEach(tfp->{
+						if(tfp.getParticipante().getGradoestudiante().getNivelgradopartid().equals(nivel)) {
+							mi_nivel_participacion = tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+							bandera_nivel = true;
+						}
+					});
+				}
+				else {
+					bandera_nivel = true;
+				}
+				
+				
+				if(bandera_anio && banderaods && bandera_categoria && bandera_nivel){				
+					NotasEvaluadorDto dto = new NotasEvaluadorDto();
+					dto.setAnio(tf.getAnio());
+					dto.setOds(odsserv.byOds(tf.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+					dto.setCodigoIe(tf.getProgramaeducativo().getCodmod());
+					dto.setNombreIe(tf.getProgramaeducativo().getNomie());
+					dto.setCodigoTrabajo(tf.getProgramaeducativo().getCodmod()+"_"+tf.getNumeracion());
+					dto.setEstadoTrabajo(tf.getEstadotrabajo().getDescripcion());
+					dto.setCategoria(tf.getCategoriatrabajo().getDescripcion());
+					
+					if(mi_nivel_participacion.equals("")) {
+						trabajosFinalesParticipanteService.listar(tf.getId()).forEach(tfp->{
+							mi_nivel_participacion = tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+						});
+					}
+					
+					dto.setNivelParticipacion(mi_nivel_participacion);
+					dto.setEvaluador("-");
+					dto.setCalificacion("");
+					lista.add(dto);
+				}				
+			}
+			else {
+				listatfua.forEach(obj->{
+					banderaods = false;	
+					bandera_anio = false;
+					bandera_categoria = false;
+					
+					if(anio!=-1) {
+						if(obj.getTrabajosfinales().getAnio().equals(anio))
+							bandera_anio = true;
+					}
+					else {
+						bandera_anio = true;
+					}
+					
+					if(ods!=-1) {
+						if(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid().equals(ods))
+							banderaods  = true;
+					}
+					else {
+						banderaods = true;
+					}	
+					
+					if(categoria!=-1) {
+						if(obj.getTrabajosfinales().getCategoriatrabajo().getId().equals(categoria))
+							bandera_categoria  = true;
+					}
+					else {
+						bandera_categoria = true;
+					}
+					
+					mi_nivel_participacion = "";
+					if(nivel!=-1) {
+						trabajosFinalesParticipanteService.listar(obj.getTrabajosfinales().getId()).forEach(tfp->{
+							if(tfp.getParticipante().getGradoestudiante().getNivelgradopartid().equals(nivel)) {
+								mi_nivel_participacion = tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+								bandera_nivel = true;
+							}
+						});
+					}
+					else {
+						bandera_nivel = true;
+					}
+					
+					
+					if(bandera_anio && banderaods && bandera_categoria && bandera_nivel){				
+						NotasEvaluadorDto dto = new NotasEvaluadorDto();
+						dto.setAnio(obj.getTrabajosfinales().getAnio());
+						dto.setOds(odsserv.byOds(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+						dto.setCodigoIe(obj.getTrabajosfinales().getProgramaeducativo().getCodmod());
+						dto.setNombreIe(obj.getTrabajosfinales().getProgramaeducativo().getNomie());
+						dto.setCodigoTrabajo(obj.getTrabajosfinales().getProgramaeducativo().getCodmod()+"_"+obj.getTrabajosfinales().getNumeracion());
+						dto.setEstadoTrabajo(obj.getTrabajosfinales().getEstadotrabajo().getDescripcion());
+						dto.setCategoria(obj.getTrabajosfinales().getCategoriatrabajo().getDescripcion());
+						
+						if(mi_nivel_participacion.equals("")) {
+							trabajosFinalesParticipanteService.listar(obj.getTrabajosfinales().getId()).forEach(tfp->{
+								mi_nivel_participacion = tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+							});
+						}
+						
+						dto.setNivelParticipacion(mi_nivel_participacion);
+						dto.setEvaluador(obj.getUsuarioalianza().getNombresautoridad() + " " + obj.getUsuarioalianza().getApepatautoridad()+ " " + obj.getUsuarioalianza().getApematautoridad());
+						dto.setCalificacion(obj.getNota()!=null?obj.getNota().toString():"");
+						lista.add(dto);
+					}				
+				});	
+			}		
+		});		
 		
 		String [] columns = {"AÑO","ODS","CODIGO II.EE","NOMBRE II.EE","Código de trabajo","Estado de trabajo","Categoria","Nivel de participación","Evaluador","Calificación"};
 		
