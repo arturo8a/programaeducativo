@@ -188,4 +188,13 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
     		+ "order by tf.nota desc ",nativeQuery = true)
 	List<Object[]> listaTrabajosEmpatadosPorCatNivOdsPuestoPendientes(Integer idcategoria, String nivel,Integer odsId, Integer puesto);
 	
+	
+	@Query(value="select tf.* from trabajosfinales tf  "
+    		+ "inner join programaeducativo pe on tf.programaeducativoid = pe.id "
+    		+ "inner join distrito d on pe.distritoid = d.id "
+    		+ "inner join ods o on d.odsid = o.id "
+    		+ "inner join cerrar_ods co on co.odsid = o.id  "
+    		+ "where tf.estado=1 and tf.estadotrabajoid=21 and tf.puesto!= 0 and tf.anio = EXTRACT(YEAR FROM sysdate) and tf.programaeducativoid=?1 ",nativeQuery = true)
+	List<Trabajosfinales> listaTrabajosEmpatadosPorODS(Integer odsId);
+	
 }

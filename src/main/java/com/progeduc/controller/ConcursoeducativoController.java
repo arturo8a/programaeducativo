@@ -3059,85 +3059,95 @@ public class ConcursoeducativoController {
 		
 		if(tipousuarioid == 0){			
 			Object ob = ses.getAttribute("odsid");
-			
-			trabajosfinalesServ.listaTrabajosEmpatados().forEach(tf->{							
-				nivel_participante = "";
-				evaluadores_asignados = 0;
-				trabajoEvaluadoDto dto = new trabajoEvaluadoDto();
-				dto.setOds(odsserv.byOds(tf.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
-				dto.setCategoria(tf.getCategoriatrabajo().getDescripcion());
-				trabajosfinalesparticipanteServ.listar(tf.getId()).forEach(tfp->{
-					nivel_participante  = tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(dist->{
+				progeducService.listar(dist.getId()).forEach(pe->{
+					trabajosfinalesServ.listaTrabajosEmpatadosPorODS(pe.getId()).forEach(tf->{							
+						nivel_participante = "";
+						evaluadores_asignados = 0;
+						trabajoEvaluadoDto dto = new trabajoEvaluadoDto();
+						dto.setOds(odsserv.byOds(tf.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+						dto.setCategoria(tf.getCategoriatrabajo().getDescripcion());
+						trabajosfinalesparticipanteServ.listar(tf.getId()).forEach(tfp->{
+							nivel_participante  = tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+						});
+						dto.setNivel_participacion(nivel_participante);
+						dto.setCodigoie(tf.getProgramaeducativo().getCodmod());
+						dto.setNombreie(tf.getProgramaeducativo().getNomie());
+						dto.setCodigo_trabajo(tf.getProgramaeducativo().getCodmod() + "_" + tf.getNumeracion());
+						dto.setModalidad(tf.getModalidadtrabajo().getDescripcion());
+						dto.setTitulo(tf.getTitulotrabajo());				
+						trabajosFinales_UsuarioAlianzaServ.listarByTrabajosfinalesId(tf.getId()).forEach(tf_ua->{
+							evaluadores_asignados += 1;
+						});
+						dto.setEvaluadores_asignados(evaluadores_asignados);
+						dto.setTiene_evaluador_asignado(evaluadores_asignados>0? "Si" : "No");
+						dto.setId(tf.getId());
+						listadto.add(dto);
+					});
 				});
-				dto.setNivel_participacion(nivel_participante);
-				dto.setCodigoie(tf.getProgramaeducativo().getCodmod());
-				dto.setNombreie(tf.getProgramaeducativo().getNomie());
-				dto.setCodigo_trabajo(tf.getProgramaeducativo().getCodmod() + "_" + tf.getNumeracion());
-				dto.setModalidad(tf.getModalidadtrabajo().getDescripcion());
-				dto.setTitulo(tf.getTitulotrabajo());				
-				trabajosFinales_UsuarioAlianzaServ.listarByTrabajosfinalesId(tf.getId()).forEach(tf_ua->{
-					evaluadores_asignados += 1;
-				});
-				dto.setEvaluadores_asignados(evaluadores_asignados);
-				dto.setTiene_evaluador_asignado(evaluadores_asignados>0? "Si" : "No");
-				dto.setId(tf.getId());
-				listadto.add(dto);
 			});
-			
-		
 		}
 		else if (tipousuarioid==30){
 			
-			trabajosfinalesServ.listaTrabajosEmpatados().forEach(tf->{							
-				nivel_participante = "";
-				evaluadores_asignados = 0;
-				trabajoEvaluadoDto dto = new trabajoEvaluadoDto();
-				dto.setOds(odsserv.byOds(tf.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
-				dto.setCategoria(tf.getCategoriatrabajo().getDescripcion());
-				trabajosfinalesparticipanteServ.listar(tf.getId()).forEach(tfp->{
-					nivel_participante  = tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+			progeducService.getListarHabilitadosAnioActual().forEach(pe->{
+				trabajosfinalesServ.listaTrabajosEmpatadosPorODS(pe.getId()).forEach(tf->{							
+					nivel_participante = "";
+					evaluadores_asignados = 0;
+					trabajoEvaluadoDto dto = new trabajoEvaluadoDto();
+					dto.setOds(odsserv.byOds(tf.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+					dto.setCategoria(tf.getCategoriatrabajo().getDescripcion());
+					trabajosfinalesparticipanteServ.listar(tf.getId()).forEach(tfp->{
+						nivel_participante  = tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+					});
+					dto.setNivel_participacion(nivel_participante);
+					dto.setCodigoie(tf.getProgramaeducativo().getCodmod());
+					dto.setNombreie(tf.getProgramaeducativo().getNomie());
+					dto.setCodigo_trabajo(tf.getProgramaeducativo().getCodmod() + "_" + tf.getNumeracion());
+					dto.setModalidad(tf.getModalidadtrabajo().getDescripcion());
+					dto.setTitulo(tf.getTitulotrabajo());				
+					trabajosFinales_UsuarioAlianzaServ.listarByTrabajosfinalesId(tf.getId()).forEach(tf_ua->{
+						evaluadores_asignados += 1;
+					});
+					dto.setEvaluadores_asignados(evaluadores_asignados);
+					dto.setTiene_evaluador_asignado(evaluadores_asignados>0? "Si" : "No");
+					dto.setId(tf.getId());
+					listadto.add(dto);
 				});
-				dto.setNivel_participacion(nivel_participante);
-				dto.setCodigoie(tf.getProgramaeducativo().getCodmod());
-				dto.setNombreie(tf.getProgramaeducativo().getNomie());
-				dto.setCodigo_trabajo(tf.getProgramaeducativo().getCodmod() + "_" + tf.getNumeracion());
-				dto.setModalidad(tf.getModalidadtrabajo().getDescripcion());
-				dto.setTitulo(tf.getTitulotrabajo());				
-				trabajosFinales_UsuarioAlianzaServ.listarByTrabajosfinalesId(tf.getId()).forEach(tf_ua->{
-					evaluadores_asignados += 1;
-				});
-				dto.setEvaluadores_asignados(evaluadores_asignados);
-				dto.setTiene_evaluador_asignado(evaluadores_asignados>0? "Si" : "No");
-				dto.setId(tf.getId());
-				listadto.add(dto);
-			});	
+			});
 		}
 		else {
 			String usuario = ses.getAttribute("usuario").toString();
 			Usuario user = usuarioServ.byUsuario(usuario);
-			trabajosfinalesServ.listaTrabajosEmpatados().forEach(tf->{							
-				nivel_participante = "";
-				evaluadores_asignados = 0;
-				trabajoEvaluadoDto dto = new trabajoEvaluadoDto();
-				dto.setOds(odsserv.byOds(tf.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
-				dto.setCategoria(tf.getCategoriatrabajo().getDescripcion());
-				trabajosfinalesparticipanteServ.listar(tf.getId()).forEach(tfp->{
-					nivel_participante  = tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+			usuarioodsServ.listarByUsuario(user.getId()).forEach(obj->{
+				distServ.listByOdsid(obj.getOds().getId()).forEach(dist->{
+					progeducService.listar(dist.getId()).forEach(pe->{
+						trabajosfinalesServ.listaTrabajosEmpatadosPorODS(pe.getId()).forEach(tf->{							
+							nivel_participante = "";
+							evaluadores_asignados = 0;
+							trabajoEvaluadoDto dto = new trabajoEvaluadoDto();
+							dto.setOds(odsserv.byOds(tf.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+							dto.setCategoria(tf.getCategoriatrabajo().getDescripcion());
+							trabajosfinalesparticipanteServ.listar(tf.getId()).forEach(tfp->{
+								nivel_participante  = tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+							});
+							dto.setNivel_participacion(nivel_participante);
+							dto.setCodigoie(tf.getProgramaeducativo().getCodmod());
+							dto.setNombreie(tf.getProgramaeducativo().getNomie());
+							dto.setCodigo_trabajo(tf.getProgramaeducativo().getCodmod() + "_" + tf.getNumeracion());
+							dto.setModalidad(tf.getModalidadtrabajo().getDescripcion());
+							dto.setTitulo(tf.getTitulotrabajo());				
+							trabajosFinales_UsuarioAlianzaServ.listarByTrabajosfinalesId(tf.getId()).forEach(tf_ua->{
+								evaluadores_asignados += 1;
+							});
+							dto.setEvaluadores_asignados(evaluadores_asignados);
+							dto.setTiene_evaluador_asignado(evaluadores_asignados>0? "Si" : "No");
+							dto.setId(tf.getId());
+							listadto.add(dto);
+						});
+					});
 				});
-				dto.setNivel_participacion(nivel_participante);
-				dto.setCodigoie(tf.getProgramaeducativo().getCodmod());
-				dto.setNombreie(tf.getProgramaeducativo().getNomie());
-				dto.setCodigo_trabajo(tf.getProgramaeducativo().getCodmod() + "_" + tf.getNumeracion());
-				dto.setModalidad(tf.getModalidadtrabajo().getDescripcion());
-				dto.setTitulo(tf.getTitulotrabajo());				
-				trabajosFinales_UsuarioAlianzaServ.listarByTrabajosfinalesId(tf.getId()).forEach(tf_ua->{
-					evaluadores_asignados += 1;
-				});
-				dto.setEvaluadores_asignados(evaluadores_asignados);
-				dto.setTiene_evaluador_asignado(evaluadores_asignados>0? "Si" : "No");
-				dto.setId(tf.getId());
-				listadto.add(dto);
 			});
+			
 		}
 		return new ResponseEntity<List<trabajoEvaluadoDto>>(listadto, HttpStatus.OK);
 	}

@@ -251,4 +251,10 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 		return lista;
 	}
 
+	@Override
+	public List<Trabajosfinales> listaTrabajosEmpatadosPorODS(Integer odsId) {
+		// TODO Auto-generated method stub
+		return trabajosfinalesRepo.listaTrabajosEmpatadosPorODS(odsId);
+	}
+
 }
