@@ -266,10 +266,10 @@ public class ReporteController {
 		Row row = sheet.createRow(0);
 		
 		row.createCell(0).setCellValue("DATOS DE LA II.EE");
-		sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 42));/*1era celda , ultima celda, 1era columna, ultima columna*/		
+		sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 41));/*1era celda , ultima celda, 1era columna, ultima columna*/		
 		
-		row.createCell(43).setCellValue("DATOS DEL DOCENTE INSCRITOS EN EL C.E");
-		sheet.addMergedRegion(new CellRangeAddress(0, 0, 43, 52));
+		row.createCell(42).setCellValue("DATOS DEL DOCENTE INSCRITOS EN EL C.E");
+		sheet.addMergedRegion(new CellRangeAddress(0, 0, 42, 52));
 		
 		row = sheet.createRow(1);
 		for(int i=0;i<columns.length;i++) {
