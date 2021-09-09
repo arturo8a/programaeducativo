@@ -2727,7 +2727,7 @@ public class ConcursoeducativoController {
 					ejesTematicos="";
 					
 					if(obj.getTrabajosfinales().getConversacion() == 1)
-						ejesTematicos += "Conversación de las fuentes de agua/";
+						ejesTematicos += "Conservación de las fuentes de agua/";
 					if(obj.getTrabajosfinales().getValoracionagua() == 1)
 						ejesTematicos += "Valoración de los servicios de agua potable/";
 					if(obj.getTrabajosfinales().getValoracionalcantarillado() == 1)

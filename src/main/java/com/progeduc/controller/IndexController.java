@@ -213,7 +213,7 @@ public class IndexController {
 	String id_rubrica_edit,id_questionario_edit,ods_edit,id_questionario_pregunta_respuesta_edit,id_pr_edit;
 	Integer odsid;
 	String indices;
-	float nota;
+	String nota;
 	
 	@GetMapping("/inicio")
 	public String inicio(@RequestParam(name="name",required=false,defaultValue="world") String name, Model model) {
@@ -242,7 +242,7 @@ public class IndexController {
 	@GetMapping("/detalleverevaluacion/{id}")
 	public String detalleverevaluacion(@PathVariable("id") Integer id, Model model) {
 		
-		nota = 0;
+		nota = "";
 		List<DetalleEvaluacionDto> lista = new ArrayList<DetalleEvaluacionDto>();
 		
 		trabfin_usuarioal.listarByTrabajosfinalesId(id).forEach(obj->{
@@ -252,7 +252,7 @@ public class IndexController {
 			dto.setApmaterno(obj.getUsuarioalianza().getApematautoridad());
 			dto.setNota(obj.getNota()==null ? 0 : obj.getNota());
 			lista.add(dto);		
-			nota = obj.getTrabajosfinales().getNota() == null ? 0 : obj.getTrabajosfinales().getNota();
+			nota = (obj.getTrabajosfinales().getNota() == null || obj.getTrabajosfinales().getNota() == -1.0) ? "" : obj.getTrabajosfinales().getNota().toString();
 		});
 		model.addAttribute("total", nota);
 		model.addAttribute("lista", lista);

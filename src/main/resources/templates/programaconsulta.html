@@ -530,7 +530,41 @@
 	            	$("#btnbuscarpe").prop("disabled",true);
 	            	$("#btnlimpiar").prop("disabled",true);
 	            },
-	            "buttons": []
+	            "buttons": [
+	            	{
+	            		extend: 'excelHtml5',
+	            		text:"<img src='./images/iconos_nd/excel1.svg' style='size:15px;margin:0px;padding:0px'/>",
+	                    title: 'RESULTADOS DE CONSULTA',
+	                    exportOptions: {
+			                columns: [0,1,2,3,4,8]
+			            },
+	                    titleAttr: 'Excel',
+	                    messageTop: function(){
+	                    	return '[ Ods: ' + $("#cbods").val() + ']            [ Año de inscripcion: '+ $("#cbanio").val() + ']           [ Nombre: ' + $("#txtnombre").val() + ']           [ Estado: ' + $("#cbestado").text() + ']'
+	                    },
+	                    filename : function(){
+	                    	var hoy = new Date();
+	                    	var dia = String(hoy.getDate());
+	                    	if(dia.length==1){
+	                    		dia = "0"+dia;
+	                    	}
+	                    	var mes = String(hoy.getMonth()+1);
+	                    	if(mes.length==1){
+	                    		mes = "0"+mes;
+	                    	}
+	                    	var hora = String(hoy.getHours());
+	                    	if(hora.length==1){
+	                    		hora = "0"+hora;
+	                    	}
+	                    	var minuto = String(hoy.getMinutes());
+	                    	if(minuto.length==1){
+	                    		minuto = "0"+minuto;
+	                    	}
+	            	    	return "PE"+hoy.getFullYear()+'_'+dia+'-'+mes+'-'+hoy.getFullYear()+'_'+hora + minuto;
+	                    }
+	            	}
+	            	
+	            ]
 	        });
 			$("div.rs_aprobar_inscripcion").html("<strong>RESULTADOS DE APROBACIÓN DE INSCRIPCIONES</strong>");
 	        obtener_data_descargar("#table_pe tbody",table_pe);

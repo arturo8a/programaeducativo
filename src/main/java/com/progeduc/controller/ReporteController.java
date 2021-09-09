@@ -1100,7 +1100,7 @@ public class ReporteController {
 											
 											peEjesTematicos = "";
 											if(tf.getConversacion()==1) {
-												peEjesTematicos += "Conversación de las fuentes de agua/";
+												peEjesTematicos += "Conservación de las fuentes de agua/";
 											}
 											if(tf.getValoracionagua()==1) {
 												peEjesTematicos += "Valoración de los servicios de agua potable/";

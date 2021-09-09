@@ -773,19 +773,24 @@ public class ProgramaeducativoController {
 		
 		ejestematicos = ""; 
 		if(eval.getConversacion() == 1)
-			ejestematicos = "Conversación de las fuentes de agua/";
+			ejestematicos = "Conservación de las fuentes de agua/";
 		if(eval.getValoracionagua() == 1)
-			ejestematicos = "Valoración de los servicios de agua potable/";
+			ejestematicos += "Valoración de los servicios de agua potable/";
 		if(eval.getValoracionalcantarillado() == 1)
-			ejestematicos = "Valoración del servicio de alcantarillado";
+			ejestematicos += "Valoración del servicio de alcantarillado/";
 		if(eval.getBuenuso() == 1)
-			ejestematicos = "Buen uso y reúso del agua potable";
+			ejestematicos += "Buen uso y reúso del agua potable/";
 		if(eval.getImportancia() == 1)
-			ejestematicos = "";
+			ejestematicos += "Importancia de cerrar la brecha en saneamiento/";
 		if(eval.getVinculo() == 1)
-			ejestematicos = "El vínculo estratégico entre el agua segura y la salud";
+			ejestematicos += "El vínculo estratégico entre el agua segura y la salud/";
 		if(eval.getCarencias() == 1)
-			ejestematicos = "Las carencias que ponen en riesgo la vida";
+			ejestematicos += "Las carencias que ponen en riesgo la vida/";
+		if(eval.getRevaloracion() == 1)
+			ejestematicos += "Revaloración de las prácticas ancestrales para la seguridad hídrica/";
+		
+		if(ejestematicos.length()>0)
+			ejestematicos = ejestematicos.substring(0, ejestematicos.length()-1);
 		
 		parameters.put("ejestematicos", ejestematicos);
 		
