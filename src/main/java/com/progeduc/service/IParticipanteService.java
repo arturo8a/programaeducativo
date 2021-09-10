@@ -15,5 +15,7 @@ public interface IParticipanteService extends ICRUD<Participante,Integer>{
 	List<Participante> listarhabilitados();
 	
 	List<Participante> listarhabilitadosbyanio(Integer programaeducativoid, Integer anio);
+	
+	List<Participante> buscaTipoNroDocumento(Integer tipoDocumentoid, String nroDocumento);
 		
 }

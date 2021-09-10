@@ -198,8 +198,7 @@ public class ConcursoeducativoController {
 	private IGeneroprofService generoprofserv;
 	
 	ListaparticipanteDto dto;	
-	ListatrabajosfinalesDto dtotf;	
-	ListaparticipantetrabajoDto ptdto;	
+	ListatrabajosfinalesDto dtotf;			
 	ListaDocenteInscritos listadocentesinscritos;
 	ListaTrabajosFinalesPendientes listaTrabajosFinalesPendientes;
 	String miparticipante = "";	
@@ -386,6 +385,12 @@ public class ConcursoeducativoController {
 			return -100;
 		String codmod = ses.getAttribute("usuario").toString();
 		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
+		
+		int tipodocumentoid   = participante.getTipodocumentoestudiante().getId();
+		String dnoDocumento = participante.getNrodocumentoestudiante();
+		
+		if(participanteService.buscaTipoNroDocumento(tipodocumentoid, dnoDocumento).size()>0)
+			return -2;
 		if(pe!=null) {
 			participante.setProgramaeducativo(pe);
 			Date date= new Date();
@@ -1402,33 +1407,62 @@ public class ConcursoeducativoController {
 	
 	
 	
-	@GetMapping(value = "/listaparticipantes_trabajo")
+	@GetMapping("/listaparticipantes_trabajo")
 	public ResponseEntity<List<ListaparticipantetrabajoDto>> listaparticipantes_trabajo(HttpSession ses){
 		
 		String codmod = ses.getAttribute("usuario").toString();
 		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
-		
-		List<ListaparticipantetrabajoDto> lista = new ArrayList<ListaparticipantetrabajoDto>();
+		List<ListaparticipantetrabajoDto> lista = new ArrayList<>();
 		List<Participante> listaParticipante = participanteService.listarhabilitados(pe.getId());
 		if(listaParticipante!=null) {
-			listaParticipante.forEach(obj->{
-				
-				ptdto =new ListaparticipantetrabajoDto();
-				ptdto.setId(obj.getId());
-				ptdto.setAppaterno(obj.getAppaternoestudiante());
-				ptdto.setApmaterno(obj.getApmaternoestudiante());
-				ptdto.setNombre(obj.getNombreestudiante());
-				ptdto.setTipodocumento(obj.getTipodocumentoestudiante().getDescripcion());
-				ptdto.setNrodocumento(obj.getNrodocumentoestudiante());
-				ptdto.setComposicionmusical(obj.getCategoriacomposicionmusical());
-				ptdto.setCuento(obj.getCategoriacuento());
-				ptdto.setPoesia(obj.getCategoriapoesia());
-				ptdto.setDibujopintura(obj.getCategoriadibujopintura());
-				ptdto.setAhorraragua(obj.getCategoriaahorroagua());
-				ptdto.setModalidadindividual(obj.getModalidadpostulacionindividual());
-				ptdto.setModalidadgrupal(obj.getModalidadpostulaciongrupal());
-				ptdto.setNivel(obj.getGradoestudiante().getNivelgradopartdesc());
-				lista.add(ptdto);
+			listaParticipante.forEach(p->{				
+				List<TrabajosfinalesParticipante> listatfp = trabajosfinalesparticipanteServ.listarPorParticipante(p.getId());
+				if(listatfp.size()==0) {
+					ListaparticipantetrabajoDto ptdto =new ListaparticipantetrabajoDto();
+					ptdto.setId(p.getId());
+					ptdto.setAppaterno(p.getAppaternoestudiante());
+					ptdto.setApmaterno(p.getApmaternoestudiante());
+					ptdto.setNombre(p.getNombreestudiante());
+					ptdto.setTipodocumento(p.getTipodocumentoestudiante().getDescripcion());
+					ptdto.setNrodocumento(p.getNrodocumentoestudiante());
+					ptdto.setComposicionmusical(p.getCategoriacomposicionmusical());
+					ptdto.setCuento(p.getCategoriacuento());
+					ptdto.setPoesia(p.getCategoriapoesia());
+					ptdto.setDibujopintura(p.getCategoriadibujopintura());
+					ptdto.setAhorraragua(p.getCategoriaahorroagua());
+					ptdto.setModalidadindividual(p.getModalidadpostulacionindividual());
+					ptdto.setModalidadgrupal(p.getModalidadpostulaciongrupal());
+					ptdto.setNivel(p.getGradoestudiante().getNivelgradopartdesc());
+				    ptdto.setCategoriatrabajo(0);
+				    ptdto.setModalidadtrabajo(0);
+					lista.add(ptdto);
+				}
+				else {
+					listatfp.forEach(tfp->{
+						if(tfp.getTrabajosfinales().getEstado().equals(1)) {
+							//if(! (tfp.getTrabajosfinales().getCategoriatrabajo().getId().equals(categoria) && tfp.getTrabajosfinales().getModalidadtrabajo().getId().equals(modalidad))) {
+								ListaparticipantetrabajoDto ptdto =new ListaparticipantetrabajoDto();
+								ptdto.setId(p.getId());
+								ptdto.setAppaterno(p.getAppaternoestudiante());
+								ptdto.setApmaterno(p.getApmaternoestudiante());
+								ptdto.setNombre(p.getNombreestudiante());
+								ptdto.setTipodocumento(p.getTipodocumentoestudiante().getDescripcion());
+								ptdto.setNrodocumento(p.getNrodocumentoestudiante());
+								ptdto.setComposicionmusical(p.getCategoriacomposicionmusical());
+								ptdto.setCuento(p.getCategoriacuento());
+								ptdto.setPoesia(p.getCategoriapoesia());
+								ptdto.setDibujopintura(p.getCategoriadibujopintura());
+								ptdto.setAhorraragua(p.getCategoriaahorroagua());
+								ptdto.setModalidadindividual(p.getModalidadpostulacionindividual());
+								ptdto.setModalidadgrupal(p.getModalidadpostulaciongrupal());
+								ptdto.setNivel(p.getGradoestudiante().getNivelgradopartdesc());
+								ptdto.setCategoriatrabajo(tfp.getTrabajosfinales().getCategoriatrabajo().getId());
+								ptdto.setModalidadtrabajo(tfp.getTrabajosfinales().getModalidadtrabajo().getId());
+								lista.add(ptdto);
+							//}
+						}					
+					});
+				}
 			});
 		}		
 		return new ResponseEntity<List<ListaparticipantetrabajoDto>>(lista, HttpStatus.OK) ;
@@ -2740,6 +2774,8 @@ public class ConcursoeducativoController {
 						ejesTematicos += "El vínculo estratégico entre el agua segura y la salud/";
 					if(obj.getTrabajosfinales().getCarencias() == 1)
 						ejesTematicos += "Las carencias que ponen en riesgo la vida/";
+					if(obj.getTrabajosfinales().getRevaloracion()==1)
+						ejesTematicos += "Revaloración de las prácticas ancestrales para la seguridad hídrica";
 					
 					if(ejesTematicos.length()>0)
 						ejesTematicos = ejesTematicos.substring(0, ejesTematicos.length()-1);

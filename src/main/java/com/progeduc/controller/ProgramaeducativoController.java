@@ -786,8 +786,11 @@ public class ProgramaeducativoController {
 			ejestematicos += "El vínculo estratégico entre el agua segura y la salud/";
 		if(eval.getCarencias() == 1)
 			ejestematicos += "Las carencias que ponen en riesgo la vida/";
-		if(eval.getRevaloracion() == 1)
-			ejestematicos += "Revaloración de las prácticas ancestrales para la seguridad hídrica/";
+		if(eval.getRevaloracion()!=null) {
+			if(eval.getRevaloracion()==1) {
+				ejestematicos += "Revaloración de las prácticas ancestrales para la seguridad hídrica/";
+			}
+		}			
 		
 		if(ejestematicos.length()>0)
 			ejestematicos = ejestematicos.substring(0, ejestematicos.length()-1);

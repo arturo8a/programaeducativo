@@ -106,8 +106,7 @@
 			<div class="col-xs-12 col-sm-6 text-left pt-4">
 				<label for="modalidadpostulaciontrabajo">Modalidad de postulación</label>
 				<select class="form-control" id="modalidadpostulaciontrabajo" name="modalidadpostulaciontrabajo">
-					<option value="0">Seleccione</option>
-				    <option th:each="len:${modalidadtrabajo}" th:value="${len.id}" th:utext="${len.descripcion}" th:selected="${len.id} == 1"/>
+					<option value="1">Individual</option>
 				</select>
 			</div>
 			<div class="col-xs-12 col-sm-3 text-left pt-4">
@@ -150,6 +149,8 @@
 				            <th style="display:none;">modalidadindividual</th>
 				            <th style="display:none;">modalidadgrupal</th>
 				            <th>Nivel</th>
+				             <th style="display:none;">categoriatrabajo</th>
+				              <th style="display:none;">modalidadtrabajo</th>
 				        </tr>
 				    </thead>
 				</table>
@@ -349,12 +350,34 @@
 
 	$("#categoriatrabajo").change(function(){
 		categoriatrabajo = $("#categoriatrabajo").val();
+		//modalidadtrabajo = $("#modalidadpostulaciontrabajo").val();
 		$("#linkvideo" ).val("");
+		
+		var htmlModalidad="";
+		switch(categoriatrabajo){
+			case '1': 
+				htmlModalidad  = "<option value='2''>Grupal</option>";
+				break;
+			case '2':
+				htmlModalidad  = "<option value='1'>Individual</option>";
+				break;
+			case '3':
+				htmlModalidad  = "<option value='1'>Individual</option>";
+				break;
+			case '4':
+				htmlModalidad  = "<option value='1'>Individual</option>";
+				break;
+			case '5':
+				htmlModalidad  = "<option value='1'>Individual</option>";
+				break;
+		}
+		$("#modalidadpostulaciontrabajo").html(htmlModalidad);
 		table_lpt.rows().deselect();
 		table_lpt.draw();
 	});
 	
 	$("#modalidadpostulaciontrabajo").change(function(){
+		categoriatrabajo = $("#categoriatrabajo").val();
 		modalidadtrabajo = $("#modalidadpostulaciontrabajo").val();
 		if(modalidadtrabajo == '1')
 			table_lpt.select.style('single'); 
@@ -394,7 +417,7 @@
 			
 		}
 	});
-		
+	
 	$("#table_lpt").dataTable().fnDestroy();
 	table_lpt = $('#table_lpt').DataTable({
 		dom: '<B><"rs_seleccione_participante">frtip',
@@ -446,7 +469,9 @@
 	  		{ "visible": false, "targets": 9 },
 	     	{ "visible": false, "targets": 10 },
 	  		{ "visible": false, "targets": 11 },
-	  		{ "visible": false, "targets": 12 }
+	  		{ "visible": false, "targets": 12 },
+	  		{ "visible": false, "targets": 14 },
+	  		{ "visible": false, "targets": 15 }
 	    ],
         select: {
             style:    'single', 
@@ -468,7 +493,9 @@
             { 'data' : 'ahorraragua'},
             { 'data' : 'modalidadindividual'},
             { 'data' : 'modalidadgrupal'},
-            { 'data' : 'nivel'}
+            { 'data' : 'nivel'},
+            { 'data' : 'categoriatrabajo'},
+            { 'data' : 'modalidadtrabajo'}
 	    ],
 	    buttons: []
 	});
@@ -659,6 +686,7 @@
 	
 	$('#table_lpt').DataTable().on("draw", function(){
 		console.log("draw");   	
+		//table_lpt.draw();
 	});
 	
 	
@@ -668,9 +696,9 @@
    	    	if(settings.nTable.id !== 'table_lpt'){
    	            return true;
    	        }   	    	
-   	    	var composicionmusical  = 0, cuento = 0, poesia = 0,  dibujopintura = 0 , ahorraragua = 0, modalidadindividual = 0 , modalidadgrupal = 0;
+   	    	/*var composicionmusical  = 0, cuento = 0, poesia = 0,  dibujopintura = 0 , ahorraragua = 0, modalidadindividual = 0 , modalidadgrupal = 0;
    	    	categoriatrabajo= $("#categoriatrabajo").val();
-   	    	modalidadtrabajo = $("#modalidadpostulaciontrabajo").val();   	    	
+   	    	modalidadtrabajo = $("#modalidadpostulaciontrabajo").val();
    	    	switch(categoriatrabajo){
    	    		case '1': composicionmusical = 1;  break;
    	    		case '2': cuento = 1; break;
@@ -696,6 +724,12 @@
    	    		return false;
    	    	if(!filtraCategoriaModalidad(modalidadgrupal, data[12]))
    	    		return false;
+   	    	return true;*/
+   	    	categoriatrabajo= $("#categoriatrabajo").val();
+   	    	modalidadtrabajo = $("#modalidadpostulaciontrabajo").val();
+   	    	
+   	    	if(data[14] == categoriatrabajo && data[15]==modalidadtrabajo)
+   	    		 return false;
    	    	return true;
    	    }
    	);

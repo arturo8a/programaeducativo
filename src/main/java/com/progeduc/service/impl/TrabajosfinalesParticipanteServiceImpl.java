@@ -35,5 +35,9 @@ public class TrabajosfinalesParticipanteServiceImpl implements ITrabajosfinalesP
 		return trabajosfinalesParticipanteRepo.listarTodos();
 	}
 	
-	
+	@Override
+	public List<TrabajosfinalesParticipante> listarPorParticipante(Integer participanteid){
+		return trabajosfinalesParticipanteRepo.listarPorParticipante(participanteid);
+	}
+		
 }

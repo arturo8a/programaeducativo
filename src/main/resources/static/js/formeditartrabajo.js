@@ -100,8 +100,27 @@ var mis_evidencias_eliminadas = new Array();
 
 
 	$("#categoriatrabajoeditar").change(function(){
-		categoriatrabajo = $("#categoriatrabajoeditar").val();		
+		categoriatrabajo = $("#categoriatrabajoeditar").val();
 		$("#linkvideoeditar").val("");
+		var htmlModalidad="";
+		switch(categoriatrabajo){
+			case '1': 
+				htmlModalidad  = "<option value='2''>Grupal</option>";
+				break;
+			case '2':
+				htmlModalidad  = "<option value='1'>Individual</option>";
+				break;
+			case '3':
+				htmlModalidad  = "<option value='1'>Individual</option>";
+				break;
+			case '4':
+				htmlModalidad  = "<option value='1'>Individual</option>";
+				break;
+			case '5':
+				htmlModalidad  = "<option value='1'>Individual</option>";
+				break;
+		}
+		$("#modalidadpostulaciontrabajoeditar").html(htmlModalidad);
 		array_indice = new Array();		
 		table_lpt_editar.rows().deselect();
 		table_lpt_editar.draw();

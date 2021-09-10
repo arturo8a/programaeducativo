@@ -267,6 +267,15 @@ $(document).ready(function(){
 							keyboard:false
 						});
 					}
+					else if(respuesta==-2){
+						$("#modalimagencargando").modal('hide');
+						$("#textoerror").html("Ya existe un participante registrado en el sistema con el mismo Tipo y número de documento");
+						$('#modalerror').modal({
+							show : true,
+							backdrop : 'static',
+							keyboard:false
+						});
+					}
 				},
 				error: function() {
 					$("#modalimagencargando").modal('hide');

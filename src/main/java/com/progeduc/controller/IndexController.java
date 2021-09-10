@@ -25,6 +25,8 @@ import com.progeduc.model.Aperturaranio;
 import com.progeduc.model.Docente;
 import com.progeduc.model.Docentetutor;
 import com.progeduc.model.Evaluacion;
+import com.progeduc.model.Modalidadtrabajo;
+import com.progeduc.model.Ods;
 import com.progeduc.model.Participante;
 import com.progeduc.model.Postulacionconcurso;
 import com.progeduc.model.Programaeducativo;
@@ -250,9 +252,9 @@ public class IndexController {
 			dto.setNombre(obj.getUsuarioalianza().getNombresautoridad());
 			dto.setAppaterno(obj.getUsuarioalianza().getApepatautoridad());
 			dto.setApmaterno(obj.getUsuarioalianza().getApematautoridad());
-			dto.setNota(obj.getNota()==null ? 0 : obj.getNota());
+			dto.setNota((obj.getNota()==null || obj.getNota()==-1.0)  ? "" : obj.getNota().toString());
 			lista.add(dto);		
-			nota = (obj.getTrabajosfinales().getNota() == null || obj.getTrabajosfinales().getNota() == -1.0) ? "" : obj.getTrabajosfinales().getNota().toString();
+			nota = obj.getTrabajosfinales().getNota() == null  ? "" : obj.getTrabajosfinales().getNota().toString();
 		});
 		model.addAttribute("total", nota);
 		model.addAttribute("lista", lista);
@@ -262,11 +264,21 @@ public class IndexController {
 	@GetMapping("/formeditartrabajos/{id}")
 	public String formeditartrabajos(@PathVariable("id") Integer id, Model model) {
 		
+		List<Modalidadtrabajo> listaModalidad = new ArrayList<>();
+		
 		Trabajosfinales tf  = trabajosfinalesService.ListarporId(id);
 		model.addAttribute("tf", tf);
 		model.addAttribute("hd_categoria", (tf.getCategoriatrabajo().getId()== 1 || tf.getCategoriatrabajo().getId() == 3) ? false : true);
 		model.addAttribute("categoriatrabajo",categoriatrabajoService.listar());
-		model.addAttribute("modalidadtrabajo",modalidadtrabajoService.listar());
+		
+		if(tf.getCategoriatrabajo().getId()==1) {
+			listaModalidad.add(modalidadtrabajoService.ListarporId(2));
+		}	
+		else {
+			listaModalidad.add(modalidadtrabajoService.ListarporId(1));
+		}
+		model.addAttribute("modalidadtrabajo",listaModalidad);
+		
 		model.addAttribute("tipodoc",tipodocserv.findAll());
 		model.addAttribute("genero",generoprofserv.listar());		
 		
@@ -622,11 +634,22 @@ public class IndexController {
 		return "formcrearevaluacion";
 	}
 	
-	
-	
 	@GetMapping("/reportes")
-	public String reportes(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
-		model.addAttribute("ods",odsserv.listarAll());
+	public String reportes(@RequestParam(name="name",required=false,defaultValue="") String name, Model model,HttpSession ses) {
+		
+		List<Ods> listaOds = new ArrayList<>();
+		
+		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		if(tipousuarioid.equals(2)) {
+			String usuario = ses.getAttribute("usuario").toString();
+			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
+				listaOds.add(obj.getOds());
+			});
+			model.addAttribute("ods", listaOds);
+		}
+		else {
+			model.addAttribute("ods",odsserv.listarAll());
+		}		
 		return "reportes";
 	}
 	

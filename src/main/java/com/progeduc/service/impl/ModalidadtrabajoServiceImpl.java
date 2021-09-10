@@ -1,10 +1,12 @@
 package com.progeduc.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.progeduc.model.Genero;
 import com.progeduc.model.Modalidadtrabajo;
 import com.progeduc.repo.IModalidadtrabajoRepo;
 import com.progeduc.service.IModalidadtrabajoService;
@@ -35,8 +37,8 @@ public class ModalidadtrabajoServiceImpl implements IModalidadtrabajoService{
 
 	@Override
 	public Modalidadtrabajo ListarporId(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Modalidadtrabajo> op = repo.findById(id);
+		return op.get();
 	}
 
 	@Override

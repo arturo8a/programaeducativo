@@ -32,4 +32,7 @@ public interface IParticipanteRepo extends CrudRepository<Participante,Integer>{
 	@Query(value="SELECT TB1.* FROM Participante TB1 where tb1.estado=1",nativeQuery = true)
 	List<Participante> listarhabilitados();
 	
+	@Query(value="SELECT TB1.* FROM Participante TB1 where tb1.tipodocumentoestudiante=?1 and tb1.nrodocumentoestudiante=?2",nativeQuery = true)
+	List<Participante> buscaTipoNroDocumento(Integer tipoDocumentoid, String nroDocumento);
+	
 }

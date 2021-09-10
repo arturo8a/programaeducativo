@@ -532,7 +532,7 @@
 	            },
 	            "buttons": [
 	            	{
-	            		extend: 'excelHtml5',
+	            		extend: 'csv',
 	            		text:"<img src='./images/iconos_nd/excel1.svg' style='size:15px;margin:0px;padding:0px'/>",
 	                    title: 'RESULTADOS DE CONSULTA',
 	                    exportOptions: {
@@ -540,7 +540,7 @@
 			            },
 	                    titleAttr: 'Excel',
 	                    messageTop: function(){
-	                    	return '[ Ods: ' + $("#cbods").val() + ']            [ Año de inscripcion: '+ $("#cbanio").val() + ']           [ Nombre: ' + $("#txtnombre").val() + ']           [ Estado: ' + $("#cbestado").text() + ']'
+	                    	return '[ Ods: ' + $("#cbods").val() + ']            [ Año de inscripcion: '+ $("#cbanio").val() + ']           [ Nombre: ' + $("#txtnombre").val() + ']           [ Estado: ' + $("#cbestado").val() + ']'
 	                    },
 	                    filename : function(){
 	                    	var hoy = new Date();

@@ -71,5 +71,11 @@ public class ParticipanteServiceImpl implements IParticipanteService{
 	public List<Participante> listarhabilitados(){
 		return repo.listarhabilitados();
 	}
+	
+	@Override
+	public List<Participante> buscaTipoNroDocumento(Integer tipoDocumentoid, String nroDocumento){
+		return repo.buscaTipoNroDocumento(tipoDocumentoid, nroDocumento);
+	}
+	
 
 }

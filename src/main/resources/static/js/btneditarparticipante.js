@@ -215,9 +215,6 @@ $(document).ready(function(){
 				estado : 1
 			};
 			
-			console.log("id ..." + $("#idparticipanteeditar").val());
-			console.log("data ..." + data);
-			
 			$.ajax({
 				type : "POST",
 			    contentType : "application/json",
@@ -308,7 +305,18 @@ $(document).ready(function(){
 							backdrop : 'static',
 							keyboard:false
 						});
-					}					
+					}	
+					else if(respuesta==-2){
+						$("#modalimagencargando").modal('hide');
+						$("#textoerror").html("Ya existe un participante registrado en el sistema con el mismo Tipo y número de documento");
+						$('#modalerroreditar').modal({
+							show : true,
+							backdrop : 'static',
+							keyboard:false
+						});
+					}
+					
+									
 				},
 				error: function() {
 					$("#modalimagencargando").modal('hide');
