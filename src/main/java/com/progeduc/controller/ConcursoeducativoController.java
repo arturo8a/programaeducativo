@@ -2496,7 +2496,7 @@ public class ConcursoeducativoController {
 									}
 								}
 							}
-							if(cantidad3 > 1 && cantidad == 2) {
+							if(cantidad3 > 1 && (cantidad+cantidad2) == 2) {
 								List<TrabajosFinalizados> listaPuesto3= trabajosfinalesServ.listaTrabajosEmpatadosPorCatNivOdsPuesto(catModByODs.getCategoriaId(), catModByODs.getNivelId(), ods.getId(),3);
 								for (TrabajosFinalizados trab : listaPuesto3) {
 									evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getTrabajoId());
