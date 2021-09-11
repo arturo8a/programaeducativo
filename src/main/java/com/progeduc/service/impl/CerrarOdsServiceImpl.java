@@ -26,6 +26,10 @@ public class CerrarOdsServiceImpl implements ICerrarOdsService{
 		return (List<CerrarOds>) repo.findAll();
 	}
 	
+	@Override
+	public CerrarOds buscarPorOdsAnioactual(Integer odsid){
+		return repo.buscarPorOdsAnioactual(odsid);
+	}
 	
 	
 }

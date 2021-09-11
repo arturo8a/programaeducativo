@@ -42,6 +42,7 @@ import com.progeduc.model.UsuarioLdap;
 import com.progeduc.service.IAperturaranioService;
 import com.progeduc.service.ICategoriaevaluacionService;
 import com.progeduc.service.ICategoriatrabajoService;
+import com.progeduc.service.ICerrarOdsService;
 import com.progeduc.service.IDepartamentoService;
 import com.progeduc.service.IDistritoService;
 import com.progeduc.service.IDocenteService;
@@ -204,6 +205,9 @@ public class IndexController {
 	
 	@Autowired
 	private ITipoAuspicioService tipoAuspicioServ;
+	
+	@Autowired
+	private ICerrarOdsService cerrarOdsService;
 	
 	@Autowired
 	private ITrabajosfinales_UsuarioAlianzaService trabfin_usuarioal;
@@ -511,19 +515,60 @@ public class IndexController {
 	}	
 	
 	@GetMapping("/programaconsulta")
-	public String programaconsulta(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
+	public String programaconsulta(@RequestParam(name="name",required=false,defaultValue="") String name, Model model,HttpSession ses) {
+		
+		List<Ods> listaOds = new ArrayList<>();
+		
+		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		if(tipousuarioid.equals(2)) {
+			String usuario = ses.getAttribute("usuario").toString();
+			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
+				listaOds.add(obj.getOds());
+			});
+			model.addAttribute("ods", listaOds);
+		}
+		else {
+			model.addAttribute("ods",odsserv.listarAll());
+		}
+		
 		model.addAttribute("departamento",depaServ.listar());
 		return "programaconsulta";
 	}
 	
 	@GetMapping("/docenteconsulta")
-	public String docenteconsulta(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
+	public String docenteconsulta(@RequestParam(name="name",required=false,defaultValue="") String name, Model model,HttpSession ses) {
+		
+		List<Ods> listaOds = new ArrayList<>();		
+		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		if(tipousuarioid.equals(2)) {
+			String usuario = ses.getAttribute("usuario").toString();
+			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
+				listaOds.add(obj.getOds());
+			});
+			model.addAttribute("ods", listaOds);
+		}
+		else {
+			model.addAttribute("ods",odsserv.listarAll());
+		}
 		return "docenteconsulta";
 	}
 	
 	@GetMapping("/listaformconcurso")
-	public String listaconcurso(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {		
-		model.addAttribute("ods",odsserv.listarAll());
+	public String listaconcurso(@RequestParam(name="name",required=false,defaultValue="") String name, Model model,HttpSession ses) {		
+		
+		List<Ods> listaOds = new ArrayList<>();		
+		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		if(tipousuarioid.equals(2)) {
+			String usuario = ses.getAttribute("usuario").toString();
+			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
+				listaOds.add(obj.getOds());
+			});
+			model.addAttribute("ods", listaOds);
+		}
+		else {
+			model.addAttribute("ods",odsserv.listarAll());
+		}
+		
 		Calendar fecha = Calendar.getInstance();
         List<Integer> lista = new ArrayList<Integer>();
         int anio = fecha.get(Calendar.YEAR);
@@ -783,7 +828,12 @@ public class IndexController {
 	    	String codmod = ses.getAttribute("usuario").toString();
 			Programaeducativo pe = progeducService.getActualByCodmod(codmod);	    	
 	    	Postulacionconcurso postconc = postulacionconcursoService.getByIdAnio(pe.getId(), fecha.get(Calendar.YEAR));	    	
-	    	model.addAttribute("finalizaparticipaciontrabajo",postconc.getFinalizarparticipaciontrabajo());	    	
+	    	
+	    	Integer odsid = usuarioService.byUsuario(ses.getAttribute("usuario").toString()).getOdsid();
+	    	if(postconc.getFinalizarparticipaciontrabajo() == 1 || cerrarOdsService.buscarPorOdsAnioactual(odsid)!=null?(cerrarOdsService.buscarPorOdsAnioactual(odsid).getEstado()==1?true:false):false) 
+	    		model.addAttribute("finalizaparticipaciontrabajo",1);
+	    	else
+	    		model.addAttribute("finalizaparticipaciontrabajo",0);	   
 	        if(fechaactual.compareTo(ap.getCuartaetapadesde())>=0 && fechaactual.compareTo(ap.getCuartaetapahasta())<=0)
 	        	activar_trabajos_finales = 1;        
 	        model.addAttribute("activar_trabajos_finales",activar_trabajos_finales);

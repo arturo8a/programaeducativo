@@ -342,7 +342,7 @@
 				<div class="row pt-2 m-0">			
 					<div class="col-xs-4 col-sm-3">
 						<select class="form-control" id="odsconcurso" name="odsconcurso">
-							<option value="Todos">ODS</option>			
+							<option value="Todos">ODS</option>	
 							<option th:each="dato:${ods}" th:value="${dato.descripcion}" th:utext="${dato.descripcion}"/>   				    				
 						</select>
 					</div>
