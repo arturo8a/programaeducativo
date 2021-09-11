@@ -2546,7 +2546,7 @@ public class ConcursoeducativoController {
 										cantidad2++;
 									}
 								}
-							}log.info("FINALIZACION 1 - TOTAL EMPATES P2: "+cantidad);
+							}log.info("FINALIZACION 1 - TOTAL EMPATES P2: "+cantidad2);
 							if(cantidad2 > 1 && cantidad == 1) {
 								List<TrabajosFinalizados> listaPuesto2= trabajosfinalesServ.listaTrabajosEmpatadosPorCatNivOdsPuesto(catModByODs.getCategoriaId(), catModByODs.getNivelId(), ods.getId(),2);
 								for (TrabajosFinalizados trab : listaPuesto2) {
@@ -2579,8 +2579,8 @@ public class ConcursoeducativoController {
 										cantidad3++;
 									}
 								}
-							}log.info("FINALIZACION 1 - TOTAL EMPATES P3: "+cantidad);
-							if(cantidad3 > 1 && cantidad == 2) {
+							}log.info("FINALIZACION 1 - TOTAL EMPATES P3: "+cantidad3);
+							if(cantidad3 > 1 && (cantidad+cantidad2) == 2) {
 								List<TrabajosFinalizados> listaPuesto3= trabajosfinalesServ.listaTrabajosEmpatadosPorCatNivOdsPuesto(catModByODs.getCategoriaId(), catModByODs.getNivelId(), ods.getId(),3);
 								for (TrabajosFinalizados trab : listaPuesto3) {
 									evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getTrabajoId());
