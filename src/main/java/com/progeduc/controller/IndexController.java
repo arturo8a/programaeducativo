@@ -829,8 +829,8 @@ public class IndexController {
 			Programaeducativo pe = progeducService.getActualByCodmod(codmod);	    	
 	    	Postulacionconcurso postconc = postulacionconcursoService.getByIdAnio(pe.getId(), fecha.get(Calendar.YEAR));	    	
 	    	
-	    	Integer odsid = usuarioService.byUsuario(ses.getAttribute("usuario").toString()).getOdsid();
-	    	if(postconc.getFinalizarparticipaciontrabajo() == 1 || cerrarOdsService.buscarPorOdsAnioactual(odsid)!=null?(cerrarOdsService.buscarPorOdsAnioactual(odsid).getEstado()==1?true:false):false) 
+	    	Integer odsid = pe.getDistrito().getOdsid();
+	    	if(postconc.getFinalizarparticipaciontrabajo() == 1 || (cerrarOdsService.buscarPorOdsAnioactual(odsid)!=null?(cerrarOdsService.buscarPorOdsAnioactual(odsid).getEstado()==1?true:false):false)) 
 	    		model.addAttribute("finalizaparticipaciontrabajo",1);
 	    	else
 	    		model.addAttribute("finalizaparticipaciontrabajo",0);	   
