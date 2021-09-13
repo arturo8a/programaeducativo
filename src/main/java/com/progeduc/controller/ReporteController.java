@@ -161,13 +161,13 @@ public class ReporteController {
 	public ResponseEntity<InputStreamResource> reportenotasevaluador(@PathVariable(value="ods") Integer ods,
 			@PathVariable(value="anio") Integer anio,
 			@PathVariable(name="categoria") Integer categoria,
-			@PathVariable(name="nivel") Integer nivel) {
+			@PathVariable(name="nivel") Integer nivel,HttpSession ses) {
 		
 		Date date = new Date();
 		DateFormat hourFormat = new SimpleDateFormat("HHmmss");
 		DateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
 		
-		ByteArrayInputStream stream = reporteexcelnotasevaluador(ods,anio,categoria,nivel);
+		ByteArrayInputStream stream = reporteexcelnotasevaluador(ods,anio,categoria,nivel,ses);
 		
 		HttpHeaders headers = new HttpHeaders();
 		
@@ -178,7 +178,20 @@ public class ReporteController {
 		return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
 	}
 	
-	public ByteArrayInputStream reporteexcelnotasevaluador(Integer ods,Integer anio,Integer categoria,Integer nivel)   {
+	public ByteArrayInputStream reporteexcelnotasevaluador(Integer ods,Integer anio,Integer categoria,Integer nivel,HttpSession ses)   {
+		
+		listaOds = new ArrayList<>();
+		
+		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		if(tipousuarioid.equals(2)) {
+			String usuario = ses.getAttribute("usuario").toString();
+			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
+				listaOds.add(obj.getOds());
+			});
+		}
+		else {
+			listaOds = odsserv.listarAll();
+		}
 		
 		Workbook workbook = new HSSFWorkbook();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -205,7 +218,11 @@ public class ReporteController {
 						banderaods  = true;
 				}
 				else {
-					banderaods = true;
+					listaOds.forEach(objOds->{
+						if(objOds.getId().equals(tf.getProgramaeducativo().getDistrito().getOdsid())) {
+							banderaods = true;
+						}
+					});
 				}	
 				
 				if(categoria!=-1) {
@@ -271,7 +288,11 @@ public class ReporteController {
 							banderaods  = true;
 					}
 					else {
-						banderaods = true;
+						listaOds.forEach(objOds->{
+							if(objOds.getId().equals(tf.getProgramaeducativo().getDistrito().getOdsid())) {
+								banderaods = true;
+							}
+						});
 					}	
 					
 					if(categoria!=-1) {
@@ -881,7 +902,7 @@ public class ReporteController {
 					else {
 						listaOds.forEach(objOds->{
 							if(objOds.getId().equals(pe.getDistrito().getOdsid())) {
-								banderaods = true;
+								bandera_ods = true;
 							}
 						});
 					}
@@ -1027,6 +1048,17 @@ public class ReporteController {
 										bandera_categoria = false;
 										bandera_modalidad = false;
 										bandera_nivel = false;
+										if(ods!=-1) {
+											if(tfp.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid().equals(ods))
+												bandera_ods = true;
+										}
+										else {
+											listaOds.forEach(objOds->{
+												if(objOds.getId().equals(tfp.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid())) {
+													bandera_ods = true;
+												}
+											});
+										}
 										if(categoria!=-1) {
 											if(categoria.equals(tfp.getTrabajosfinales().getCategoriatrabajo().getId()))
 												bandera_categoria = true;
@@ -1051,7 +1083,7 @@ public class ReporteController {
 											bandera_nivel = true;
 										}	
 										
-										if(bandera_categoria && bandera_modalidad && bandera_nivel && tfp.getTrabajosfinales().getEnviado()==1) {		
+										if(bandera_categoria && bandera_modalidad && bandera_nivel && bandera_ods && tfp.getTrabajosfinales().getEnviado()==1) {		
 											IieeReporteDto iiee = new IieeReporteDto();
 											iiee.setAnio(pe.getAnhio());
 											iiee.setOds(odsserv.byOds(pe.getDistrito().getOdsid()).getDescripcion());
@@ -1327,7 +1359,7 @@ public class ReporteController {
 			else {
 				listaOds.forEach(objOds->{
 					if(objOds.getId().equals(obj.getProgramaeducativo().getDistrito().getOdsid())) {
-						banderaods = true;
+						bandera_ods = true;
 					}
 				});
 			}
@@ -1634,6 +1666,19 @@ public class ReporteController {
 		DateFormat hourFormat = new SimpleDateFormat("HHmmss");
 		DateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
 		DateFormat dateFormatFecha = new SimpleDateFormat("dd/MM/yyyy");
+		
+		listaOds = new ArrayList<>();
+		
+		tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		if(tipousuarioid.equals(2)) {
+			String usuario = ses.getAttribute("usuario").toString();
+			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
+				listaOds.add(obj.getOds());
+			});
+		}
+		else {
+			listaOds = odsserv.listarAll();
+		}
 		
 		String role6, role7, role8, role9;
 		String strRol = "";

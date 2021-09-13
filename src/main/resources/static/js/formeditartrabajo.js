@@ -105,7 +105,8 @@ var mis_evidencias_eliminadas = new Array();
 		var htmlModalidad="";
 		switch(categoriatrabajo){
 			case '1': 
-				htmlModalidad  = "<option value='2''>Grupal</option>";
+				htmlModalidad  += "<option value='1''>Individual</option>";
+				htmlModalidad  += "<option value='2''>Grupal</option>";
 				break;
 			case '2':
 				htmlModalidad  = "<option value='1'>Individual</option>";
@@ -221,20 +222,6 @@ var mis_evidencias_eliminadas = new Array();
 	$("div.rs_seleccione_participante_edit").html("<strong>Seleccione participantes</strong>");
 	
 	$('#table_lpt_editar').DataTable().on("draw", function(row, data){
-	
-		/*var array_data = table_lpt_editar.data();
-		var array_participanteid = $("#participanteid").val();
-		array_participanteid = array_participanteid.split(',');
-		
-		var contador = 0;
-		for(var i=0;i<array_indice.length;i++){				
-			for(var j=0;j<array_participanteid.length-1;j++){ 
-				if(array_indice[i] == array_participanteid[j]){
-					table_lpt_editar.row(':eq('+i+')', { page: 'current' }).select();
-				}
-			}				
-		}
-		$('#table_lpt_editar').DataTable().columns.adjust();*/
 	});
       
 	
@@ -476,7 +463,36 @@ var mis_evidencias_eliminadas = new Array();
    	    	if(!filtraCategoriaModalidad(modalidadgrupal, data[12]))
    	    		return false;
    	    	array_indice.push(data[14])
-   	    	return true;
+   	    	
+   	    	/*verifica si a registrado un trabajo con esta misma categoria y modalidad*/
+   	    	var miData = {
+				id : data[14],
+				idCategoria  :  parseInt(categoriatrabajo),
+				idModalidad : parseInt(modalidadtrabajo)
+			};
+   	    	
+   	    	var bandera;
+   	    	$.ajax({
+						type : "POST",
+					    contentType : "application/json",
+					    url : url_base + "pedesa/verificaParticipanteSubidoTrabajo",
+					    data : JSON.stringify(miData),
+					    async: false,
+					    dataType : 'json',
+						success: function(respuesta) {	
+							if(respuesta!=0){
+								bandera = false;
+							}
+							else{
+								bandera = true;
+							}							
+						},
+						error: function() {
+							alert("error en el servicio verificaParticipanteSubidoTrabajo ");
+					    }
+					});
+   	    	return bandera;
+   	    	
    	    }
    	);
 	

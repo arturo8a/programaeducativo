@@ -164,11 +164,13 @@ public class ProgramaeducativoController {
 	
 	ProgeducTurnoNivelDto dto;
 	List<Nivel> listNivel;
+	List<Ods> listaOds;
 	List<Turno> listTurno;
 	ProgeducDto pedto;
 	ListaInstitucionEducativa listaie;
 	List<ProgeducDto> listProgeducDto;
 	ProgramaeducativoTurno progeducTurno;
+	boolean banderaOds;
 	
 	private String turno;
 	private String nivel;
@@ -261,74 +263,96 @@ public class ProgramaeducativoController {
 	}	
 	
 	@GetMapping("/listaprogeduc")
-	public ResponseEntity<List<ProgeducDto>> listaprogeduc() {
+	public ResponseEntity<List<ProgeducDto>> listaprogeduc(Model model,HttpSession ses) {
+		
+		listaOds = new ArrayList<>();
+		
+		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		if(tipousuarioid.equals(2)) {
+			String usuario = ses.getAttribute("usuario").toString();
+			usuarioodsServ.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
+				listaOds.add(obj.getOds());
+			});
+			model.addAttribute("ods", listaOds);
+		}
+		else {
+			listaOds = odsserv.listarAll();
+		}
 		
 		listProgeducDto = new ArrayList<ProgeducDto>();
 		pedto = new ProgeducDto();
 		progeducTurno = new ProgramaeducativoTurno();
 		
 		progeducService.listarAprobados().forEach(obj->{
-			turno = "";
-			nivel = "";
-			suministro="";
-			pedto = new ProgeducDto();
-			pedto.setOds(odsserv.byOds(obj.getDistrito().getOdsid()).getDescripcion());
-			pedto.setDepartamento((obj.getDistrito()!=null? (obj.getDistrito().getProvincia()!=null?(obj.getDistrito().getProvincia().getDepartamento()!=null?obj.getDistrito().getProvincia().getDepartamento().getDescripcion():""):""):""));
-			pedto.setProvincia((obj.getDistrito()!=null? (obj.getDistrito().getProvincia()!=null?(obj.getDistrito().getProvincia().getDescripcion()):""):""));
-			pedto.setDistrito((obj.getDistrito()!=null? (obj.getDistrito().getDescripcion()):""));
-			pedto.setInsteduc(obj.getNomie());			
-			pedto.setInscrito_ce(postulacionconcursoServ.getByIdAnio(obj.getId(), obj.getAnhio())!=null?"Si":"No");					
-			pedto.setFecharegistro(obj.getFecha_registro());
-			pedto.setCodlocalie(obj.getCodmod());
-			pedto.setEstado(null);
-			pedto.setAmbito(obj.getAmbito()!=null?obj.getAmbito().getDescripcion():"");
-			pedto.setModensenianza(obj.getModensenianza()!=null?obj.getModensenianza().getDescripcion():"");
-			pedto.setId(obj.getId());
-			pedto.setTipoieid(obj.getTipoie()!=null?obj.getTipoie().getDescripcion():"");
-			pedto.setDirie(obj.getDirie());
-			pedto.setDre(obj.getDre());
-			pedto.setUgel(obj.getUgel());
-			pedto.setTelfie(obj.getTelfie());
-			pedto.setMailie(obj.getMailie());
-			pedto.setFacebook(obj.getFacebook());
-			pedto.setLengua(obj.getLengua()!=null?obj.getLengua().getDescripcion():"");		
-			pedto.setGenero(obj.getGenero()!=null?obj.getGenero().getDescripcion():"");
-			pedto.setProvedor(obj.getProveedor()!=null?obj.getProveedor().getDescripcion():"");
-			obj.getSuministro().forEach(obj3->{
-				suministro += obj3.getNumero() + " / ";
-			});		
-			listTurno = new ArrayList<Turno>();
-			progeducTurnoService.listProgeducTurno(pedto.getId()).forEach(obj1->{
-				turno += " " + obj1.getTurno().getDescripcion();
+			banderaOds = false;
+			listaOds.forEach(objOds->{
+				if(objOds.getId().equals(obj.getDistrito().getOdsid())) {
+					banderaOds = true;
+				}
 			});
-			pedto.setTurno(turno);
-			listNivel = new ArrayList<Nivel>();
-			progeducNivelService.listProgeducNivel(obj.getId()).forEach(obj2->{
-				nivel += " "+ obj2.getNivel().getTiponivel().getDescripcion() + "-"+(obj2.getNivel().getNrosecciones()!=null?obj2.getNivel().getNrosecciones():'0')+"-"+(obj2.getNivel().getNrodocentes()!=null?obj2.getNivel().getNrodocentes():'0')+"-" + (obj2.getNivel().getNroalumnos()!=null?obj2.getNivel().getNroalumnos():'0')+ "-"+(obj2.getNivel().getNrovarones()!=null?obj2.getNivel().getNrovarones():'0') + "-"+(obj2.getNivel().getNromujeres()!=null?obj2.getNivel().getNromujeres():'0' )+ "/";
-			});
-			pedto.setNivel(nivel);
-			pedto.setSuministro(suministro);
-			pedto.setHora_abastecimiento(obj.getAbastecimiento());
-			pedto.setPiscina(obj.getPiscina()!=null?obj.getPiscina().getDescripcion():"");
-			
-			pedto.setTipodocdir(obj.getTipodocidentdir()!=null?obj.getTipodocidentdir().getDescripcion():"");
-			pedto.setNrodocidentdir(obj.getDocdir());
-			pedto.setApedir(obj.getApedir());
-			pedto.setNomdir(obj.getNomdir());
-			pedto.setGenerodir(obj.getGenerodir()!=null?obj.getGenerodir().getDescripcion():"");				
-			pedto.setTeldir(obj.getTelfdir());
-			pedto.setCeldir(obj.getCeldir());
-			pedto.setCorreodir(obj.getMaildir());
-			
-			pedto.setTipodocprof(obj.getTipodocidentprof()!=null?obj.getTipodocidentprof().getDescripcion():"");
-			pedto.setNrodocidentprof(obj.getDocprof());
-			pedto.setApeprof(obj.getApeprof());
-			pedto.setNomprof(obj.getNomprof());
-			pedto.setGeneroprof(obj.getGeneroprof()!=null?obj.getGeneroprof().getDescripcion():"");
-			pedto.setTelprof(obj.getTelfprof());
-			pedto.setCelprof(obj.getCelprof());
-			pedto.setCorreoprof(obj.getMailprof());				
-			listProgeducDto.add(pedto);
+			if(banderaOds) {
+				turno = "";
+				nivel = "";
+				suministro="";
+				pedto = new ProgeducDto();
+				pedto.setOds(odsserv.byOds(obj.getDistrito().getOdsid()).getDescripcion());
+				pedto.setDepartamento((obj.getDistrito()!=null? (obj.getDistrito().getProvincia()!=null?(obj.getDistrito().getProvincia().getDepartamento()!=null?obj.getDistrito().getProvincia().getDepartamento().getDescripcion():""):""):""));
+				pedto.setProvincia((obj.getDistrito()!=null? (obj.getDistrito().getProvincia()!=null?(obj.getDistrito().getProvincia().getDescripcion()):""):""));
+				pedto.setDistrito((obj.getDistrito()!=null? (obj.getDistrito().getDescripcion()):""));
+				pedto.setInsteduc(obj.getNomie());			
+				pedto.setInscrito_ce(postulacionconcursoServ.getByIdAnio(obj.getId(), obj.getAnhio())!=null?"Si":"No");					
+				pedto.setFecharegistro(obj.getFecha_registro());
+				pedto.setCodlocalie(obj.getCodmod());
+				pedto.setEstado(null);
+				pedto.setAmbito(obj.getAmbito()!=null?obj.getAmbito().getDescripcion():"");
+				pedto.setModensenianza(obj.getModensenianza()!=null?obj.getModensenianza().getDescripcion():"");
+				pedto.setId(obj.getId());
+				pedto.setTipoieid(obj.getTipoie()!=null?obj.getTipoie().getDescripcion():"");
+				pedto.setDirie(obj.getDirie());
+				pedto.setDre(obj.getDre());
+				pedto.setUgel(obj.getUgel());
+				pedto.setTelfie(obj.getTelfie());
+				pedto.setMailie(obj.getMailie());
+				pedto.setFacebook(obj.getFacebook());
+				pedto.setLengua(obj.getLengua()!=null?obj.getLengua().getDescripcion():"");		
+				pedto.setGenero(obj.getGenero()!=null?obj.getGenero().getDescripcion():"");
+				pedto.setProvedor(obj.getProveedor()!=null?obj.getProveedor().getDescripcion():"");
+				obj.getSuministro().forEach(obj3->{
+					suministro += obj3.getNumero() + " / ";
+				});		
+				listTurno = new ArrayList<Turno>();
+				progeducTurnoService.listProgeducTurno(pedto.getId()).forEach(obj1->{
+					turno += " " + obj1.getTurno().getDescripcion();
+				});
+				pedto.setTurno(turno);
+				listNivel = new ArrayList<Nivel>();
+				progeducNivelService.listProgeducNivel(obj.getId()).forEach(obj2->{
+					nivel += " "+ obj2.getNivel().getTiponivel().getDescripcion() + "-"+(obj2.getNivel().getNrosecciones()!=null?obj2.getNivel().getNrosecciones():'0')+"-"+(obj2.getNivel().getNrodocentes()!=null?obj2.getNivel().getNrodocentes():'0')+"-" + (obj2.getNivel().getNroalumnos()!=null?obj2.getNivel().getNroalumnos():'0')+ "-"+(obj2.getNivel().getNrovarones()!=null?obj2.getNivel().getNrovarones():'0') + "-"+(obj2.getNivel().getNromujeres()!=null?obj2.getNivel().getNromujeres():'0' )+ "/";
+				});
+				pedto.setNivel(nivel);
+				pedto.setSuministro(suministro);
+				pedto.setHora_abastecimiento(obj.getAbastecimiento());
+				pedto.setPiscina(obj.getPiscina()!=null?obj.getPiscina().getDescripcion():"");
+				
+				pedto.setTipodocdir(obj.getTipodocidentdir()!=null?obj.getTipodocidentdir().getDescripcion():"");
+				pedto.setNrodocidentdir(obj.getDocdir());
+				pedto.setApedir(obj.getApedir());
+				pedto.setNomdir(obj.getNomdir());
+				pedto.setGenerodir(obj.getGenerodir()!=null?obj.getGenerodir().getDescripcion():"");				
+				pedto.setTeldir(obj.getTelfdir());
+				pedto.setCeldir(obj.getCeldir());
+				pedto.setCorreodir(obj.getMaildir());
+				
+				pedto.setTipodocprof(obj.getTipodocidentprof()!=null?obj.getTipodocidentprof().getDescripcion():"");
+				pedto.setNrodocidentprof(obj.getDocprof());
+				pedto.setApeprof(obj.getApeprof());
+				pedto.setNomprof(obj.getNomprof());
+				pedto.setGeneroprof(obj.getGeneroprof()!=null?obj.getGeneroprof().getDescripcion():"");
+				pedto.setTelprof(obj.getTelfprof());
+				pedto.setCelprof(obj.getCelprof());
+				pedto.setCorreoprof(obj.getMailprof());				
+				listProgeducDto.add(pedto);
+			}
 		});
 		return new ResponseEntity<List<ProgeducDto>>(listProgeducDto, HttpStatus.OK) ;
 	}

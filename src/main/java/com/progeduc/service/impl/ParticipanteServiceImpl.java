@@ -77,5 +77,10 @@ public class ParticipanteServiceImpl implements IParticipanteService{
 		return repo.buscaTipoNroDocumento(tipoDocumentoid, nroDocumento);
 	}
 	
+	@Override
+	public List<Participante> buscaTipoNroDocumento(Integer id, Integer tipoDocumentoid, String nroDocumento){
+		return repo.buscaTipoNroDocumento(id, tipoDocumentoid, nroDocumento);
+	}
+	
 
 }

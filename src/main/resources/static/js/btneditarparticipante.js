@@ -290,7 +290,7 @@ $(document).ready(function(){
 					}
 					else if(respuesta==0){
 						$("#modalimagencargando").modal('hide');
-						$("#textoerror").html("Error al registrar participante");
+						$("#textoerroreditar").html("Error al registrar participante");
 						$('#modalerroreditar').modal({
 							show : true,
 							backdrop : 'static',
@@ -299,7 +299,7 @@ $(document).ready(function(){
 					}
 					else if(respuesta==-1){
 						$("#modalimagencargando").modal('hide');
-						$("#textoerror").html("IE no se ha registrado actualmente en el Programa Educativo");
+						$("#textoerroreditar").html("IE no se ha registrado actualmente en el Programa Educativo");
 						$('#modalerroreditar').modal({
 							show : true,
 							backdrop : 'static',
@@ -308,7 +308,7 @@ $(document).ready(function(){
 					}	
 					else if(respuesta==-2){
 						$("#modalimagencargando").modal('hide');
-						$("#textoerror").html("Ya existe un participante registrado en el sistema con el mismo Tipo y número de documento");
+						$("#textoerroreditar").html("Ya existe un participante registrado en el sistema con el mismo Tipo y número de documento");
 						$('#modalerroreditar').modal({
 							show : true,
 							backdrop : 'static',

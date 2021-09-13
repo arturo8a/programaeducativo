@@ -11,6 +11,6 @@ import com.progeduc.model.CerrarOds;
 @Repository
 public interface ICerrarOdsRepo extends CrudRepository<CerrarOds,Integer>{
 	
-	@Query(value="SELECT * from cerrarods where odsid=?1 and anio = EXTRACT(YEAR FROM sysdate)",nativeQuery = true)
+	@Query(value="SELECT * from cerrar_ods where odsid=?1 and anio = EXTRACT(YEAR FROM sysdate)",nativeQuery = true)
 	CerrarOds buscarPorOdsAnioactual(Integer odsid);
 }

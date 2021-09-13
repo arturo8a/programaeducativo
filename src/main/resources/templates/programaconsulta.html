@@ -91,6 +91,7 @@
 					            <th>EDITAR FICHA</th>
 					            <th>ESTADO</th>		            
 					            <th>MOTIVO</th>
+					            <th style="display:none">MOTIVO</th>
 					        </tr>   
 					    </thead>
 					</table>
@@ -479,7 +480,8 @@
                         }
 	                },
 	                { 'data' : 'estado' },
-	                { 'defaultContent' : '<img src="./images/svg/eye-solid.svg" class="motivo" style="width:20px; cursor:pointer"/>' }
+	                { 'defaultContent' : '<img src="./images/svg/eye-solid.svg" class="motivo" style="width:20px; cursor:pointer"/>' },
+	                {'data'  : 'motivoobservacion'}
 	            ],
 	            'columnDefs': [
 	            	  {
@@ -493,7 +495,8 @@
 	             	  {
 	            	      "targets": 9,
 	            	      "className": "text-center"
-	             	  }
+	             	  },
+	             	  { "visible": false, "targets": 10 }
 	            ],
 	            "fnPreDrawCallback": function(oSettings) {
 	            	$("#btnbuscarpe").prop("disabled",true);
@@ -505,7 +508,7 @@
 	            		text:"<img src='./images/iconos_nd/excel1.svg' style='size:15px;margin:0px;padding:0px'/>",
 	                    title: 'RESULTADOS DE CONSULTA',
 	                    exportOptions: {
-			                columns: [0,1,2,3,4,8]
+			                columns: [0,1,2,3,4,8,10]
 			            },
 	                    titleAttr: 'Excel',
 	                    messageTop: function(){
@@ -531,8 +534,7 @@
 	                    	}
 	            	    	return "PE"+hoy.getFullYear()+'_'+dia+'-'+mes+'-'+hoy.getFullYear()+'_'+hora + minuto;
 	                    }
-	            	}
-	            	
+	            	}	            	
 	            ]
 	        });
 			$("div.rs_aprobar_inscripcion").html("<strong>RESULTADOS DE APROBACIÓN DE INSCRIPCIONES</strong>");

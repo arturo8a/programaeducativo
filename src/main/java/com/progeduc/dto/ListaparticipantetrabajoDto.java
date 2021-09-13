@@ -16,8 +16,6 @@ public class ListaparticipantetrabajoDto {
 	Integer modalidadindividual;
 	Integer modalidadgrupal;
 	String nivel;
-	Integer categoriatrabajo;
-	Integer modalidadtrabajo;
 	
 	public Integer getComposicionmusical() {
 		return composicionmusical;
@@ -102,17 +100,5 @@ public class ListaparticipantetrabajoDto {
 	}
 	public void setNivel(String nivel) {
 		this.nivel = nivel;
-	}
-	public Integer getCategoriatrabajo() {
-		return categoriatrabajo;
-	}
-	public void setCategoriatrabajo(Integer categoriatrabajo) {
-		this.categoriatrabajo = categoriatrabajo;
-	}
-	public Integer getModalidadtrabajo() {
-		return modalidadtrabajo;
-	}
-	public void setModalidadtrabajo(Integer modalidadtrabajo) {
-		this.modalidadtrabajo = modalidadtrabajo;
 	}
 }

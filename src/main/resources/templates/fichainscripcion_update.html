@@ -144,6 +144,7 @@
 					  				<input type="hidden" th:value="${docentetutor.id}" id="id" />
 					  				<input type="hidden" th:value="${docentetutor.anio}" id="anio" />
 					  				<input type="hidden" th:value="${activar_trabajos_finales}" id="activar_trabajos_finales" />
+					  				<input type="hidden" th:value="${finalizaparticipaciontrabajo}" id="finalizaparticipaciontrabajo" />
 					  				<input type="text" id="codmod" style="width:100%" class="form-control" th:value="${codmod}" disabled />
 					  			</div>
 					  		</div>
@@ -534,8 +535,7 @@
 	var categoriacuento=0, categoriapoesia=0,categoriadibujopintura=0,categoriacomposicionmusical=0,categoriaahorroagua=0,modalidadpostulacionindividual=0,modalidadpostulaciongrupal=0;
 	var appaternopmt="",apmaternopmt="",nombrepmt="",parentesco="",tipodocumentopmt="",nrodocumentopmt="",nrotelefonopmt="",correoelectronicopmt="";
 	var celdaseleccionada,mensajeValidacion=false;
-	
-	
+	var finalizaparticipaciontrabajo = $("#finalizaparticipaciontrabajo").val();	
 	
 	$(document).ready(function(){	
 		//listar();
@@ -548,10 +548,10 @@
 			$('#myTab a[href="#trabajosfinales"]').tab('show');
 			setTimeout(function(){
 				listar_trabajos_finales(); 
-				if($("#activar_trabajos_finales").val() != 1){
+				/*if($("#activar_trabajos_finales").val() != 1){
 					$("#agregartrabajo").prop("disabled",true);
 					$("#finalizarparticipacion").prop("disabled",true);
-				}
+				}*/
 			}, 100);
 		});
 		
@@ -941,44 +941,58 @@
 			        { 'data' : 'archivos' },
 			        { 'data' : 'enviado' ,
 	                   render: function(data, type) { 
-	                   		var x = '';
-	                        switch (data) {
-	                            case 0:
-	                                x = '<img src="./images/svg/edit-regular.svg" class="editartrabajo" style="width:20px; cursor:pointer" />';
+							var x = '';
+							if(data=='0'  && finalizaparticipaciontrabajo=='0'){
+								x = '<img src="./images/svg/edit-regular.svg" class="editartrabajo" style="width:20px; cursor:pointer" />';
+							}else{
+								x = '<img src="./images/svg/eye-solid.svg" class="vertrabajo" style="width:20px; cursor:pointer"/>' ;
+							}
+	                        /*switch (data) {
+	                            case 0:	                                
 	                                break;
-	                            case 1:
-	                            	x = '<img src="./images/svg/eye-solid.svg" class="vertrabajo" style="width:20px; cursor:pointer"/>' ;
+	                            case 1:	                            	
 	                                break;	                                
 	                            case 2:
 	                            	x = '<img src="./images/svg/eye-solid.svg" class="vertrabajo" style="width:20px; cursor:pointer" />' ;
 	                                break;
-                            }
+                            }*/
                             return x;
                         }
 	                },
 			        { 'data' : 'enviado' ,
 	                   render: function(data, type) { 
 	                   		var x = '';
-	                        switch (data) {
+	                   		if(data=='0' && finalizaparticipaciontrabajo=='0'){
+								x = '<img src="./images/svg/eliminar-alt-regular.svg" class="eliminartrabajo" style="width:20px; cursor:pointer" />';
+							}else{
+								x = '<img src="./images/svg/eliminar-alt-regular.svg" style="width:20px; filter: invert(70%)" />';
+							}
+	                        /*switch (data) {
 	                            case 0:
 	                                x = '<img src="./images/svg/eliminar-alt-regular.svg" class="eliminartrabajo" style="width:20px; cursor:pointer" />';
 	                                break;
-	                            case 1:
-	                            	x = '<img src="./images/svg/eliminar-alt-regular.svg" style="width:20px; filter: invert(70%)" />';
+	                            case 1:	                            	
 	                                break;
 	                            case 2:
 	                            	x = '<img src="./images/svg/eliminar-alt-regular.svg" style="width:20px; filter: invert(70%)" disabled />';
 	                                break;
-                            }
+                            }*/
                             return x;
                         }
 	                },			        
 			        { 'data' : 'enviado' ,
 	                   render: function(data, type) { 
 	                   		var x = '';
-	                        switch (data) {
+	                   		if(data == '0' && finalizaparticipaciontrabajo=='0' ){
+								x = "<button type='button' class='enviartrabajo btn btn-primary'>Enviar</button>";
+							}else if(data == '0' && finalizaparticipaciontrabajo=='1' ){
+								x = "<button type='button' class='enviartrabajo btn btn-primary' disabled>Enviar</button>";
+							}else{
+								x= "Enviado";
+							}
+	                        /*switch (data) {
 	                            case 0:
-	                                x = "<button type='button' class='enviartrabajo btn btn-primary'>Enviar</button>";
+	                                
 	                                break;
 	                            case 1:
 	                            	x = "Enviado";
@@ -987,7 +1001,7 @@
 	                               // x = "<button type='button' class='enviartrabajo btn btn-primary' disabled>Enviar</button>";4x = "Enviado";
 	                               x = "Enviado";
 	                                break;
-                            }
+                            }*/
                             return x;
                         }
 	                }
