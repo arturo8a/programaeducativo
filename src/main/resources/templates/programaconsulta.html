@@ -40,38 +40,7 @@
 			<div class="col-xs-12 col-sm-4" >
 				<select id="cbods" name="cbods" class="form-control">
 					<option value="Todos">ODS</option>
-					<option value="Amazonas">Amazonas</option>
-					<option value="Ancash - Huaraz">Ancash - Huaraz</option>
-					<option value="Ancash - Chimbote">Ancash - Chimbote</option>
-					<option value="Apurimac">Apurimac</option>
-					<option value="Arequipa">Arequipa</option>
-					<option value="Ayacucho">Ayacucho</option>
-					<option value="Cajamarca">Cajamarca</option>							
-					<option value="Cusco">Cusco</option>
-					<option value="Huancavelica">Huancavelica</option>
-					<option value="Huanuco">Huanuco</option>
-					<option value="Ica">Ica</option>
-					<option value="Junin">Junin</option>
-					<option value="Libertad">La libertad</option>
-					<option value="Lambayeque">Lambayeque</option>
-					<option value="Lima provincias">Lima provincias</option>
-					<option value="Loreto">Loreto</option>
-					<option value="Madre de dios">Madre de dios</option>
-					<option value="Moquegua">Moquegua</option>
-					<option value="OAU Callao">OAU Callao</option>
-					<option value="OAU cañete">OAU cañete</option>
-					<option value="OAU comas">OAU comas</option>
-					<option value="OAU huacho">OAU huacho</option>							
-					<option value="OAU SJL">OAU SJL</option>
-					<option value="OAU VES">OAU VES</option>	
-					<option value="Pasco">Pasco</option>
-					<option value="Piura">Piura</option>
-					<option value="Puno">Puno</option>
-					<option value="San martin">San martin</option>
-					<option value="Sede central">Sede central</option>
-					<option value="Tacna">Tacna</option>
-					<option value="Tumbes">Tumbes</option>
-					<option value="Ucayali">Ucayali</option>
+					<option th:each="len:${ods}" th:value="${len.descripcion}" th:utext="${len.descripcion}"/>
 				</select>
 			</div>
 			<div class="col-xs-12 col-sm-4">
@@ -122,6 +91,7 @@
 					            <th>EDITAR FICHA</th>
 					            <th>ESTADO</th>		            
 					            <th>MOTIVO</th>
+					            <th style="display:none">MOTIVO</th>
 					        </tr>   
 					    </thead>
 					</table>
@@ -510,7 +480,8 @@
                         }
 	                },
 	                { 'data' : 'estado' },
-	                { 'defaultContent' : '<img src="./images/svg/eye-solid.svg" class="motivo" style="width:20px; cursor:pointer"/>' }
+	                { 'defaultContent' : '<img src="./images/svg/eye-solid.svg" class="motivo" style="width:20px; cursor:pointer"/>' },
+	                {'data'  : 'motivoobservacion'}
 	            ],
 	            'columnDefs': [
 	            	  {
@@ -524,13 +495,47 @@
 	             	  {
 	            	      "targets": 9,
 	            	      "className": "text-center"
-	             	  }
+	             	  },
+	             	  { "visible": false, "targets": 10 }
 	            ],
 	            "fnPreDrawCallback": function(oSettings) {
 	            	$("#btnbuscarpe").prop("disabled",true);
 	            	$("#btnlimpiar").prop("disabled",true);
 	            },
-	            "buttons": []
+	            "buttons": [
+	            	{
+	            		extend: 'excelHtml5',
+	            		text:"<img src='./images/iconos_nd/excel1.svg' style='size:15px;margin:0px;padding:0px'/>",
+	                    title: 'RESULTADOS DE CONSULTA',
+	                    exportOptions: {
+			                columns: [0,1,2,3,4,8,10]
+			            },
+	                    titleAttr: 'Excel',
+	                    messageTop: function(){
+	                    	return '[ Ods: ' + $("#cbods").val() + ']            [ Año de inscripcion: '+ $("#cbanio").val() + ']           [ Nombre: ' + $("#txtnombre").val() + ']           [ Estado: ' + $("#cbestado").val() + ']'
+	                    },
+	                    filename : function(){
+	                    	var hoy = new Date();
+	                    	var dia = String(hoy.getDate());
+	                    	if(dia.length==1){
+	                    		dia = "0"+dia;
+	                    	}
+	                    	var mes = String(hoy.getMonth()+1);
+	                    	if(mes.length==1){
+	                    		mes = "0"+mes;
+	                    	}
+	                    	var hora = String(hoy.getHours());
+	                    	if(hora.length==1){
+	                    		hora = "0"+hora;
+	                    	}
+	                    	var minuto = String(hoy.getMinutes());
+	                    	if(minuto.length==1){
+	                    		minuto = "0"+minuto;
+	                    	}
+	            	    	return "PE"+hoy.getFullYear()+'_'+dia+'-'+mes+'-'+hoy.getFullYear()+'_'+hora + minuto;
+	                    }
+	            	}	            	
+	            ]
 	        });
 			$("div.rs_aprobar_inscripcion").html("<strong>RESULTADOS DE APROBACIÓN DE INSCRIPCIONES</strong>");
 	        obtener_data_descargar("#table_pe tbody",table_pe);

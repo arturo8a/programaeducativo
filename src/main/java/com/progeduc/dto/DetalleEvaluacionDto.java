@@ -5,7 +5,7 @@ public class DetalleEvaluacionDto {
 	String nombre;
 	String appaterno;
 	String apmaterno;
-	float nota;
+	String nota;
 	
 	public String getNombre() {
 		return nombre;
@@ -25,10 +25,10 @@ public class DetalleEvaluacionDto {
 	public void setApmaterno(String apmaterno) {
 		this.apmaterno = apmaterno;
 	}
-	public float getNota() {
+	public String getNota() {
 		return nota;
 	}
-	public void setNota(float nota) {
+	public void setNota(String nota) {
 		this.nota = nota;
 	}
 

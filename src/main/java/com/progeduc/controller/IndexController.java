@@ -22,9 +22,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.progeduc.componente.Ldap;
 import com.progeduc.dto.DetalleEvaluacionDto;
 import com.progeduc.model.Aperturaranio;
+import com.progeduc.model.Departamento;
 import com.progeduc.model.Docente;
 import com.progeduc.model.Docentetutor;
 import com.progeduc.model.Evaluacion;
+import com.progeduc.model.Modalidadtrabajo;
+import com.progeduc.model.Ods;
 import com.progeduc.model.Participante;
 import com.progeduc.model.Postulacionconcurso;
 import com.progeduc.model.Programaeducativo;
@@ -40,6 +43,7 @@ import com.progeduc.model.UsuarioLdap;
 import com.progeduc.service.IAperturaranioService;
 import com.progeduc.service.ICategoriaevaluacionService;
 import com.progeduc.service.ICategoriatrabajoService;
+import com.progeduc.service.ICerrarOdsService;
 import com.progeduc.service.IDepartamentoService;
 import com.progeduc.service.IDistritoService;
 import com.progeduc.service.IDocenteService;
@@ -204,6 +208,9 @@ public class IndexController {
 	private ITipoAuspicioService tipoAuspicioServ;
 	
 	@Autowired
+	private ICerrarOdsService cerrarOdsService;
+	
+	@Autowired
 	private ITrabajosfinales_UsuarioAlianzaService trabfin_usuarioal;
 	
 	String participanteid;
@@ -213,7 +220,9 @@ public class IndexController {
 	String id_rubrica_edit,id_questionario_edit,ods_edit,id_questionario_pregunta_respuesta_edit,id_pr_edit;
 	Integer odsid;
 	String indices;
-	float nota;
+	String nota;
+	boolean banderaBuscarPorOdsAnioactual;
+	boolean banderaDepa;
 	
 	@GetMapping("/inicio")
 	public String inicio(@RequestParam(name="name",required=false,defaultValue="world") String name, Model model) {
@@ -242,7 +251,7 @@ public class IndexController {
 	@GetMapping("/detalleverevaluacion/{id}")
 	public String detalleverevaluacion(@PathVariable("id") Integer id, Model model) {
 		
-		nota = 0;
+		nota = "";
 		List<DetalleEvaluacionDto> lista = new ArrayList<DetalleEvaluacionDto>();
 		
 		trabfin_usuarioal.listarByTrabajosfinalesId(id).forEach(obj->{
@@ -250,9 +259,9 @@ public class IndexController {
 			dto.setNombre(obj.getUsuarioalianza().getNombresautoridad());
 			dto.setAppaterno(obj.getUsuarioalianza().getApepatautoridad());
 			dto.setApmaterno(obj.getUsuarioalianza().getApematautoridad());
-			dto.setNota(obj.getNota()==null ? 0 : obj.getNota());
+			dto.setNota((obj.getNota()==null || obj.getNota()==-1.0)  ? "" : obj.getNota().toString());
 			lista.add(dto);		
-			nota = obj.getTrabajosfinales().getNota() == null ? 0 : obj.getTrabajosfinales().getNota();
+			nota = obj.getTrabajosfinales().getNota() == null  ? "" : obj.getTrabajosfinales().getNota().toString();
 		});
 		model.addAttribute("total", nota);
 		model.addAttribute("lista", lista);
@@ -262,11 +271,22 @@ public class IndexController {
 	@GetMapping("/formeditartrabajos/{id}")
 	public String formeditartrabajos(@PathVariable("id") Integer id, Model model) {
 		
+		List<Modalidadtrabajo> listaModalidad = new ArrayList<>();
+		
 		Trabajosfinales tf  = trabajosfinalesService.ListarporId(id);
 		model.addAttribute("tf", tf);
 		model.addAttribute("hd_categoria", (tf.getCategoriatrabajo().getId()== 1 || tf.getCategoriatrabajo().getId() == 3) ? false : true);
 		model.addAttribute("categoriatrabajo",categoriatrabajoService.listar());
-		model.addAttribute("modalidadtrabajo",modalidadtrabajoService.listar());
+		
+		if(tf.getCategoriatrabajo().getId()==1) {
+			listaModalidad.add(modalidadtrabajoService.ListarporId(1));
+			listaModalidad.add(modalidadtrabajoService.ListarporId(2));
+		}	
+		else {
+			listaModalidad.add(modalidadtrabajoService.ListarporId(1));
+		}
+		model.addAttribute("modalidadtrabajo",listaModalidad);
+		
 		model.addAttribute("tipodoc",tipodocserv.findAll());
 		model.addAttribute("genero",generoprofserv.listar());		
 		
@@ -493,25 +513,99 @@ public class IndexController {
 	}
 	
 	@GetMapping("/contenidoconsulta")
-	public String contenido_consulta(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
-		model.addAttribute("departamento",depaServ.listar());
+	public String contenido_consulta(@RequestParam(name="name",required=false,defaultValue="") String name, Model model,HttpSession ses) {
+		
+		List<Departamento> listaDepartamento = new ArrayList<Departamento>();
+		List<Ods> listaOds = new ArrayList<>();
+		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		if(tipousuarioid.equals(2)) {
+			String usuario = ses.getAttribute("usuario").toString();
+			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
+				listaOds.add(obj.getOds());
+			});
+			listaOds.forEach(obj->{
+				distServ.listByOdsid(obj.getId()).forEach(obj1->{
+					banderaDepa = false;
+					if(listaDepartamento.size()==0) {
+						listaDepartamento.add(obj1.getProvincia().getDepartamento());
+					}	
+					else {
+						for(int i=0;i<listaDepartamento.size();i++) {
+							if(listaDepartamento.get(i).getDescripcion()!=obj1.getProvincia().getDepartamento().getDescripcion()) {
+								banderaDepa = true;
+								break;
+							}
+						}
+						if(banderaDepa) {
+							listaDepartamento.add(obj1.getProvincia().getDepartamento());
+						}
+					}
+				});
+			});
+			model.addAttribute("departamento",listaDepartamento);
+		}
+		else {
+			//model.addAttribute("ods",odsserv.listarAll());
+			model.addAttribute("departamento",depaServ.listar());
+		}
 		return "contenido_consulta";
 	}	
 	
 	@GetMapping("/programaconsulta")
-	public String programaconsulta(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
+	public String programaconsulta(@RequestParam(name="name",required=false,defaultValue="") String name, Model model,HttpSession ses) {
+		
+		List<Ods> listaOds = new ArrayList<>();
+		
+		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		if(tipousuarioid.equals(2)) {
+			String usuario = ses.getAttribute("usuario").toString();
+			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
+				listaOds.add(obj.getOds());
+			});
+			model.addAttribute("ods", listaOds);
+		}
+		else {
+			model.addAttribute("ods",odsserv.listarAll());
+		}
+		
 		model.addAttribute("departamento",depaServ.listar());
 		return "programaconsulta";
 	}
 	
 	@GetMapping("/docenteconsulta")
-	public String docenteconsulta(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
+	public String docenteconsulta(@RequestParam(name="name",required=false,defaultValue="") String name, Model model,HttpSession ses) {
+		
+		List<Ods> listaOds = new ArrayList<>();		
+		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		if(tipousuarioid.equals(2)) {
+			String usuario = ses.getAttribute("usuario").toString();
+			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
+				listaOds.add(obj.getOds());
+			});
+			model.addAttribute("ods", listaOds);
+		}
+		else {
+			model.addAttribute("ods",odsserv.listarAll());
+		}
 		return "docenteconsulta";
 	}
 	
 	@GetMapping("/listaformconcurso")
-	public String listaconcurso(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {		
-		model.addAttribute("ods",odsserv.listarAll());
+	public String listaconcurso(@RequestParam(name="name",required=false,defaultValue="") String name, Model model,HttpSession ses) {		
+		
+		List<Ods> listaOds = new ArrayList<>();		
+		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		if(tipousuarioid.equals(2)) {
+			String usuario = ses.getAttribute("usuario").toString();
+			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
+				listaOds.add(obj.getOds());
+			});
+			model.addAttribute("ods", listaOds);
+		}
+		else {
+			model.addAttribute("ods",odsserv.listarAll());
+		}
+		
 		Calendar fecha = Calendar.getInstance();
         List<Integer> lista = new ArrayList<Integer>();
         int anio = fecha.get(Calendar.YEAR);
@@ -540,17 +634,23 @@ public class IndexController {
 	@GetMapping("/formasignarevaluador")
 	public String formasignarevaluador(@RequestParam(name="name",required=false,defaultValue="") String name, Model model,HttpSession ses) {
 		
-		if(ses.getAttribute("tipousuarioid").toString().equals("1") || ses.getAttribute("tipousuarioid").toString().equals("11") || ses.getAttribute("tipousuarioid").toString().equals("12") || ses.getAttribute("tipousuarioid").toString().equals("30")) {
-			odsid = 0;
-		}
-		else if(ses.getAttribute("tipousuarioid").toString().equals("2")) {
-			
+		List<Ods> listaOds = new ArrayList<>();
+		
+		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		if(tipousuarioid.equals(2)) {
+			String usuario = ses.getAttribute("usuario").toString();
+			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
+				listaOds.add(obj.getOds());
+			});
+			model.addAttribute("ods", listaOds);
 			odsid = usuarioService.byUsuario(ses.getAttribute("usuario").toString()).getOdsid();
-			//odsid = 18;
-		}		
-		System.out.println("odsid :" + odsid);
+			
+		}
+		else {
+			model.addAttribute("ods",odsserv.listarAll());
+			odsid = 0;
+		}	
 		model.addAttribute("odsid",odsid);
-		model.addAttribute("ods",odsserv.listarAll());
 		model.addAttribute("nivelparticipacion",nivelparticipacionService.listar());
 		model.addAttribute("categoriatrabajo",categoriaevaluacionService.listar());
 		Calendar fecha = Calendar.getInstance();
@@ -622,11 +722,22 @@ public class IndexController {
 		return "formcrearevaluacion";
 	}
 	
-	
-	
 	@GetMapping("/reportes")
-	public String reportes(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
-		model.addAttribute("ods",odsserv.listarAll());
+	public String reportes(@RequestParam(name="name",required=false,defaultValue="") String name, Model model,HttpSession ses) {
+		
+		List<Ods> listaOds = new ArrayList<>();
+		
+		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		if(tipousuarioid.equals(2)) {
+			String usuario = ses.getAttribute("usuario").toString();
+			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
+				listaOds.add(obj.getOds());
+			});
+			model.addAttribute("ods", listaOds);
+		}
+		else {
+			model.addAttribute("ods",odsserv.listarAll());
+		}		
 		return "reportes";
 	}
 	
@@ -760,9 +871,26 @@ public class IndexController {
 	    	String codmod = ses.getAttribute("usuario").toString();
 			Programaeducativo pe = progeducService.getActualByCodmod(codmod);	    	
 	    	Postulacionconcurso postconc = postulacionconcursoService.getByIdAnio(pe.getId(), fecha.get(Calendar.YEAR));	    	
-	    	model.addAttribute("finalizaparticipaciontrabajo",postconc.getFinalizarparticipaciontrabajo());	    	
+	    	
+	    	Integer odsid = pe.getDistrito().getOdsid();
+	    	if(cerrarOdsService.buscarPorOdsAnioactual(odsid)!=null) {
+	    		if(cerrarOdsService.buscarPorOdsAnioactual(odsid).getEstado()==1)
+	    			banderaBuscarPorOdsAnioactual = true;
+	    		else
+	    			banderaBuscarPorOdsAnioactual = false;
+	    	}
+	    	else {
+	    		banderaBuscarPorOdsAnioactual = false;
+	    	}		
+	    			
+	    	if((postconc.getFinalizarparticipaciontrabajo() == 1) || banderaBuscarPorOdsAnioactual) 
+	    		model.addAttribute("finalizaparticipaciontrabajo",1);
+	    	else
+	    		model.addAttribute("finalizaparticipaciontrabajo",0);	   
+	    	
 	        if(fechaactual.compareTo(ap.getCuartaetapadesde())>=0 && fechaactual.compareTo(ap.getCuartaetapahasta())<=0)
 	        	activar_trabajos_finales = 1;        
+	        
 	        model.addAttribute("activar_trabajos_finales",activar_trabajos_finales);
 	        model.addAttribute("cuarta_etapa_desde", ap.getCuartaetapadesde());
 	        model.addAttribute("cuarta_etapa_hasta", ap.getCuartaetapahasta());
@@ -1190,7 +1318,20 @@ public class IndexController {
 	
 	@GetMapping("/formregistrarusuario")
 	public String formregistrarusuario(Model model,HttpSession ses) {
-		model.addAttribute("odsregusu",odsserv.listarAll());
+		
+		List<Ods> listaOds = new ArrayList<>();		
+		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		if(tipousuarioid.equals(2)) {
+			String usuario = ses.getAttribute("usuario").toString();
+			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
+				listaOds.add(obj.getOds());
+			});
+			model.addAttribute("odsregusu", listaOds);
+		}
+		else {
+			model.addAttribute("odsregusu",odsserv.listarAll());
+		}		
+		//model.addAttribute("odsregusu",odsserv.listarAll());
 		model.addAttribute("categoriaregusu",categoriaevaluacionService.listar());
 		model.addAttribute("idAlianzaEstrategica","0");
 		model.addAttribute("tipodoc",tipodocumentoserv.listar());

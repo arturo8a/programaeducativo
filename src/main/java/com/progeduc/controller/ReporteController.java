@@ -35,14 +35,17 @@ import com.progeduc.dto.DetalleEvaluacionReporteDto;
 import com.progeduc.dto.DocenteDto;
 import com.progeduc.dto.IieeReporteDto;
 import com.progeduc.dto.ListaparticipantereporteDto;
+import com.progeduc.dto.NotasEvaluadorDto;
 import com.progeduc.dto.ResultadosRegionalesDto;
 import com.progeduc.model.Auspicio;
+import com.progeduc.model.Ods;
 import com.progeduc.model.Participante;
 import com.progeduc.model.Postulacionconcurso;
 import com.progeduc.model.ProgramaeducativoNivel;
 import com.progeduc.model.ProgramaeducativoTurno;
 import com.progeduc.model.Trabajosfinales;
 import com.progeduc.model.TrabajosfinalesParticipante;
+import com.progeduc.model.TrabajosfinalesUsuarioAlianza;
 import com.progeduc.model.UsuarioAlianza;
 import com.progeduc.service.IDistritoService;
 import com.progeduc.service.IDocentetutorService;
@@ -60,6 +63,8 @@ import com.progeduc.service.ITrabajosfinalesParticipanteService;
 import com.progeduc.service.ITrabajosfinalesService;
 import com.progeduc.service.ITrabajosfinales_UsuarioAlianzaService;
 import com.progeduc.service.IUsuarioAlianzaService;
+import com.progeduc.service.IUsuarioOdsService;
+import com.progeduc.service.IUsuarioService;
 
 @RestController
 @RequestMapping("")
@@ -113,51 +118,278 @@ public class ReporteController {
 	@Autowired
 	private IGeneroprofService generoprofserv;
 	
-	String mi_nivel_participacion;
-	String nivelSeccionDocenteAlumnoVaronMujer;
-	String peTurno;
-	String peSuministro;
-	String peParticipantes;
-	String peEjesTematicos;
-	String peNivelParticipacion;
-	String peGeneroParticipante;
-	String peModalidad;
-	String peCategorias;
+	@Autowired
+	IUsuarioService usuarioService;
+	
+	@Autowired
+	IUsuarioOdsService usuarioodsService; 
+	
+	List<Ods> listaOds;
+	
+	String mi_nivel_participacion, nivelSeccionDocenteAlumnoVaronMujer,peTurno, peSuministro,peParticipantes,peEjesTematicos,peNivelParticipacion,peGeneroParticipante,peModalidad,peCategorias,fecha_archivo;
 	boolean bandera_ods,bandera_anio,bandera_categoria,bandera_modalidad,bandera_nivel,flag;
-	int contador;
-	int indice;
 	DecimalFormat dosDecimales = new DecimalFormat("##.00");
 	Float pregunta1,pregunta2,pregunta3,pregunta4,pregunta5;
-	int contador1,contador2,contador3,contador4,contador5;
+	int contador1,contador2,contador3,contador4,contador5,contador,indice;
 	List<Float> puntaje;
 	Integer nroEvaluadoresAsignados;
-	boolean bandera;
-	
+	boolean bandera, banderaods, banderaOdsReporte;
 	
 	@GetMapping(value="/reporteparticipantesinscritos/{ods}/{anio}/{categoria}/{modalidad}/{nivel}")	
 	public ResponseEntity<InputStreamResource> exportParticipantes(@PathVariable(value="ods") Integer ods,
 			@PathVariable(value="anio") Integer anio,
 			@PathVariable(name="categoria") Integer categoria,
 			@PathVariable(name="modalidad") Integer modalidad,
-			@PathVariable(name="nivel") Integer nivel) {
+			@PathVariable(name="nivel") Integer nivel,HttpSession ses) {
 		
 		Date date = new Date();
 		DateFormat hourFormat = new SimpleDateFormat("HHmmss");
 		DateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
 		
-		ByteArrayInputStream stream = reporteparticipantesinscritos(ods,anio,categoria,modalidad,nivel);
+		ByteArrayInputStream stream = reporteparticipantesinscritos(ods,anio,categoria,modalidad,nivel,ses);
 		
 		HttpHeaders headers = new HttpHeaders();
 		
-		String fecha_archivo = dateFormat.format(date) + hourFormat.format(date);
+		fecha_archivo = dateFormat.format(date) + hourFormat.format(date);
 		
 		headers.add("Content-Disposition", "attachment; filename=Reportedocente_participantes_"+fecha_archivo+".csv");
 		
-		return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
-		
+		return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));		
 	}
 	
-	public ByteArrayInputStream reporteparticipantesinscritos(Integer ods,Integer anio,Integer categoria,Integer modalidad,Integer nivel)   {
+	@GetMapping(value="/reportenotasevaluador/{ods}/{anio}/{categoria}/{nivel}")	
+	public ResponseEntity<InputStreamResource> reportenotasevaluador(@PathVariable(value="ods") Integer ods,
+			@PathVariable(value="anio") Integer anio,
+			@PathVariable(name="categoria") Integer categoria,
+			@PathVariable(name="nivel") Integer nivel,HttpSession ses) {
+		
+		Date date = new Date();
+		DateFormat hourFormat = new SimpleDateFormat("HHmmss");
+		DateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
+		
+		ByteArrayInputStream stream = reporteexcelnotasevaluador(ods,anio,categoria,nivel,ses);
+		
+		HttpHeaders headers = new HttpHeaders();
+		
+		fecha_archivo = dateFormat.format(date) + hourFormat.format(date);
+		
+		headers.add("Content-Disposition", "attachment; filename=ReporteNotasEvaluador_"+fecha_archivo+".csv");
+		
+		return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
+	}
+	
+	public ByteArrayInputStream reporteexcelnotasevaluador(Integer ods,Integer anio,Integer categoria,Integer nivel,HttpSession ses)   {
+		
+		listaOds = new ArrayList<>();
+		
+		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		if(tipousuarioid.equals(2)) {
+			String usuario = ses.getAttribute("usuario").toString();
+			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
+				listaOds.add(obj.getOds());
+			});
+		}
+		else {
+			listaOds = odsserv.listarAll();
+		}
+		
+		Workbook workbook = new HSSFWorkbook();
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				
+		List<NotasEvaluadorDto> lista = new ArrayList<NotasEvaluadorDto>();
+		
+		trabajosFinalesServ.listarhabilitados().forEach(tf->{	
+			List<TrabajosfinalesUsuarioAlianza> listatfua = trabajosFinales_UsuarioAlianzaServ.listarByTrabajosfinalesId(tf.getId());
+			if(listatfua.size()==0) {
+				banderaods = false;	
+				bandera_anio = false;
+				bandera_categoria = false;
+				
+				if(anio!=-1) {
+					if(tf.getAnio().equals(anio))
+						bandera_anio = true;
+				}
+				else {
+					bandera_anio = true;
+				}
+				
+				if(ods!=-1) {
+					if(tf.getProgramaeducativo().getDistrito().getOdsid().equals(ods))
+						banderaods  = true;
+				}
+				else {
+					listaOds.forEach(objOds->{
+						if(objOds.getId().equals(tf.getProgramaeducativo().getDistrito().getOdsid())) {
+							banderaods = true;
+						}
+					});
+				}	
+				
+				if(categoria!=-1) {
+					if(tf.getCategoriatrabajo().getId().equals(categoria))
+						bandera_categoria  = true;
+				}
+				else {
+					bandera_categoria = true;
+				}
+				
+				mi_nivel_participacion = "";
+				if(nivel!=-1) {
+					trabajosFinalesParticipanteService.listar(tf.getId()).forEach(tfp->{
+						if(tfp.getParticipante().getGradoestudiante().getNivelgradopartid().equals(nivel)) {
+							mi_nivel_participacion = tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+							bandera_nivel = true;
+						}
+					});
+				}
+				else {
+					bandera_nivel = true;
+				}
+				
+				
+				if(bandera_anio && banderaods && bandera_categoria && bandera_nivel && tf.getEnviado()==1){				
+					NotasEvaluadorDto dto = new NotasEvaluadorDto();
+					dto.setAnio(tf.getAnio());
+					dto.setOds(odsserv.byOds(tf.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+					dto.setCodigoIe(tf.getProgramaeducativo().getCodmod());
+					dto.setNombreIe(tf.getProgramaeducativo().getNomie());
+					dto.setCodigoTrabajo(tf.getProgramaeducativo().getCodmod()+"_"+tf.getNumeracion());
+					dto.setEstadoTrabajo(tf.getEstadotrabajo().getDescripcion());
+					dto.setCategoria(tf.getCategoriatrabajo().getDescripcion());
+					
+					if(mi_nivel_participacion.equals("")) {
+						trabajosFinalesParticipanteService.listar(tf.getId()).forEach(tfp->{
+							mi_nivel_participacion = tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+						});
+					}
+					
+					dto.setNivelParticipacion(mi_nivel_participacion);
+					dto.setEvaluador("-");
+					dto.setCalificacion("");
+					lista.add(dto);
+				}				
+			}
+			else {
+				listatfua.forEach(obj->{
+					banderaods = false;	
+					bandera_anio = false;
+					bandera_categoria = false;
+					
+					if(anio!=-1) {
+						if(obj.getTrabajosfinales().getAnio().equals(anio))
+							bandera_anio = true;
+					}
+					else {
+						bandera_anio = true;
+					}
+					
+					if(ods!=-1) {
+						if(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid().equals(ods))
+							banderaods  = true;
+					}
+					else {
+						listaOds.forEach(objOds->{
+							if(objOds.getId().equals(tf.getProgramaeducativo().getDistrito().getOdsid())) {
+								banderaods = true;
+							}
+						});
+					}	
+					
+					if(categoria!=-1) {
+						if(obj.getTrabajosfinales().getCategoriatrabajo().getId().equals(categoria))
+							bandera_categoria  = true;
+					}
+					else {
+						bandera_categoria = true;
+					}
+					
+					mi_nivel_participacion = "";
+					if(nivel!=-1) {
+						trabajosFinalesParticipanteService.listar(obj.getTrabajosfinales().getId()).forEach(tfp->{
+							if(tfp.getParticipante().getGradoestudiante().getNivelgradopartid().equals(nivel)) {
+								mi_nivel_participacion = tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+								bandera_nivel = true;
+							}
+						});
+					}
+					else {
+						bandera_nivel = true;
+					}
+					
+					
+					if(bandera_anio && banderaods && bandera_categoria && bandera_nivel && obj.getTrabajosfinales().getEnviado()==1){				
+						NotasEvaluadorDto dto = new NotasEvaluadorDto();
+						dto.setAnio(obj.getTrabajosfinales().getAnio());
+						dto.setOds(odsserv.byOds(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+						dto.setCodigoIe(obj.getTrabajosfinales().getProgramaeducativo().getCodmod());
+						dto.setNombreIe(obj.getTrabajosfinales().getProgramaeducativo().getNomie());
+						dto.setCodigoTrabajo(obj.getTrabajosfinales().getProgramaeducativo().getCodmod()+"_"+obj.getTrabajosfinales().getNumeracion());
+						dto.setEstadoTrabajo(obj.getTrabajosfinales().getEstadotrabajo().getDescripcion());
+						dto.setCategoria(obj.getTrabajosfinales().getCategoriatrabajo().getDescripcion());
+						
+						if(mi_nivel_participacion.equals("")) {
+							trabajosFinalesParticipanteService.listar(obj.getTrabajosfinales().getId()).forEach(tfp->{
+								mi_nivel_participacion = tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+							});
+						}
+						
+						dto.setNivelParticipacion(mi_nivel_participacion);
+						dto.setEvaluador(obj.getUsuarioalianza().getNombresautoridad() + " " + obj.getUsuarioalianza().getApepatautoridad()+ " " + obj.getUsuarioalianza().getApematautoridad());
+						dto.setCalificacion(obj.getNota()!=null?obj.getNota().toString():"");
+						lista.add(dto);
+					}				
+				});	
+			}		
+		});		
+		
+		String [] columns = {"AÑO","ODS","CODIGO II.EE","NOMBRE II.EE","Código de trabajo","Estado de trabajo","Categoria","Nivel de participación","Evaluador","Calificación"};
+		
+		Sheet sheet = workbook.createSheet("Notas de evaluadores");
+		Row row = sheet.createRow(0);		
+		for(int i=0;i<columns.length;i++) {
+			Cell cell = row.createCell(i);
+			cell.setCellValue(columns[i]);
+		}		
+		int initRow = 1;
+		for(NotasEvaluadorDto dto : lista) {
+			row = sheet.createRow(initRow);
+			row.createCell(0).setCellValue(dto.getAnio());
+			row.createCell(1).setCellValue(dto.getOds());
+			row.createCell(2).setCellValue(dto.getCodigoIe());
+			row.createCell(3).setCellValue(dto.getNombreIe());
+			row.createCell(4).setCellValue(dto.getCodigoTrabajo());
+			row.createCell(5).setCellValue(dto.getEstadoTrabajo());
+			row.createCell(6).setCellValue(dto.getCategoria());
+			row.createCell(7).setCellValue(dto.getNivelParticipacion());
+			row.createCell(8).setCellValue(dto.getEvaluador());
+			row.createCell(9).setCellValue(dto.getCalificacion());
+			initRow++;			
+		}		
+		try {
+			workbook.write(stream);
+			workbook.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return new ByteArrayInputStream(stream.toByteArray());
+	}
+	
+	public ByteArrayInputStream reporteparticipantesinscritos(Integer ods,Integer anio,Integer categoria,Integer modalidad,Integer nivel,HttpSession ses)   {
+		
+		listaOds = new ArrayList<>();
+		
+		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		
+		if(tipousuarioid.equals(2)) {
+			String usuario = ses.getAttribute("usuario").toString();
+			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
+				listaOds.add(obj.getOds());
+			});
+		}
+		else {
+			listaOds = odsserv.listarAll();
+		}
 		
 		Workbook workbook = new HSSFWorkbook();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -165,7 +397,7 @@ public class ReporteController {
 		List<DocenteDto> listadocentedto = new ArrayList<DocenteDto>();
 		
 		docentetutorServ.listar().forEach(obj->{
-			boolean banderaods = false;	
+			banderaods = false;
 			bandera_anio=false;
 			
 			if(anio!=-1) {
@@ -179,13 +411,16 @@ public class ReporteController {
 			}
 			
 			if(ods!=-1) {
-				if(obj.getProgramaeducativo().getDistrito().getOdsid().equals(ods))
+				if(obj.getProgramaeducativo().getDistrito().getOdsid().equals(ods)) {
 					banderaods  = true;
-				else
-					banderaods = false;
+				}				
 			}
 			else {
-				banderaods = true;
+				listaOds.forEach(objOds->{
+					if(objOds.getId().equals(obj.getProgramaeducativo().getDistrito().getOdsid())) {
+						banderaods = true;
+					}
+				});
 			}			
 			if(bandera_anio && banderaods){				
 				DocenteDto dto = new DocenteDto();
@@ -348,13 +583,16 @@ public class ReporteController {
 			boolean bandera_nivel = false;
 			
 			if(ods!=-1) {
-				if(obj.getProgramaeducativo().getDistrito().getOdsid().equals(ods))
+				if(obj.getProgramaeducativo().getDistrito().getOdsid().equals(ods)) {
 					bandera_ods = true;
-				else
-					bandera_ods = false;					
+				}		
 			}
 			else {
-				bandera_ods = true;
+				listaOds.forEach(objOds->{
+					if(objOds.getId().equals(obj.getProgramaeducativo().getDistrito().getOdsid())) {
+						banderaods = true;
+					}
+				});
 			}
 			/**/
 			if(anio!=-1) {
@@ -610,17 +848,17 @@ public class ReporteController {
 			@PathVariable(value="anio") Integer anio,
 			@PathVariable(name="categoria") Integer categoria,
 			@PathVariable(name="modalidad") Integer modalidad,
-			@PathVariable(name="nivel") Integer nivel) {
+			@PathVariable(name="nivel") Integer nivel, HttpSession ses) {
 		
 		Date date = new Date();
 		DateFormat hourFormat = new SimpleDateFormat("HHmmss");
 		DateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
 		
-		ByteArrayInputStream stream = reportegeneral(ods,anio,categoria,modalidad,nivel);
+		ByteArrayInputStream stream = reportegeneral(ods,anio,categoria,modalidad,nivel,ses);
 		
 		HttpHeaders headers = new HttpHeaders();
 		
-		String fecha_archivo = dateFormat.format(date) + hourFormat.format(date);
+		fecha_archivo = dateFormat.format(date) + hourFormat.format(date);
 		
 		headers.add("Content-Disposition", "attachment; filename=Reportegeneral_"+fecha_archivo+".csv");
 		
@@ -628,7 +866,20 @@ public class ReporteController {
 		
 	}
 	
-	public ByteArrayInputStream reportegeneral(Integer ods,Integer anio,Integer categoria,Integer modalidad,Integer nivel)   {
+	public ByteArrayInputStream reportegeneral(Integer ods,Integer anio,Integer categoria,Integer modalidad,Integer nivel,HttpSession ses)   {
+		
+		listaOds = new ArrayList<>();
+		
+		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		if(tipousuarioid.equals(2)) {
+			String usuario = ses.getAttribute("usuario").toString();
+			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
+				listaOds.add(obj.getOds());
+			});
+		}
+		else {
+			listaOds = odsserv.listarAll();
+		}
 		
 		Workbook workbook = new HSSFWorkbook();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -647,13 +898,14 @@ public class ReporteController {
 					if(ods!=-1) {
 						if(pe.getDistrito().getOdsid().equals(ods))
 							bandera_ods = true;
-						else
-							bandera_ods = false;
 					}
 					else {
-						bandera_ods = true;
+						listaOds.forEach(objOds->{
+							if(objOds.getId().equals(pe.getDistrito().getOdsid())) {
+								bandera_ods = true;
+							}
+						});
 					}
-					
 					if(anio!=-1) {
 						if(pe.getAnhio().equals(anio))
 							bandera_anio = true;
@@ -796,6 +1048,17 @@ public class ReporteController {
 										bandera_categoria = false;
 										bandera_modalidad = false;
 										bandera_nivel = false;
+										if(ods!=-1) {
+											if(tfp.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid().equals(ods))
+												bandera_ods = true;
+										}
+										else {
+											listaOds.forEach(objOds->{
+												if(objOds.getId().equals(tfp.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid())) {
+													bandera_ods = true;
+												}
+											});
+										}
 										if(categoria!=-1) {
 											if(categoria.equals(tfp.getTrabajosfinales().getCategoriatrabajo().getId()))
 												bandera_categoria = true;
@@ -820,7 +1083,7 @@ public class ReporteController {
 											bandera_nivel = true;
 										}	
 										
-										if(bandera_categoria && bandera_modalidad && bandera_nivel) {		
+										if(bandera_categoria && bandera_modalidad && bandera_nivel && bandera_ods && tfp.getTrabajosfinales().getEnviado()==1) {		
 											IieeReporteDto iiee = new IieeReporteDto();
 											iiee.setAnio(pe.getAnhio());
 											iiee.setOds(odsserv.byOds(pe.getDistrito().getOdsid()).getDescripcion());
@@ -894,7 +1157,7 @@ public class ReporteController {
 											
 											peEjesTematicos = "";
 											if(tf.getConversacion()==1) {
-												peEjesTematicos += "Conversación de las fuentes de agua/";
+												peEjesTematicos += "Conservación de las fuentes de agua/";
 											}
 											if(tf.getValoracionagua()==1) {
 												peEjesTematicos += "Valoración de los servicios de agua potable/";
@@ -1092,11 +1355,13 @@ public class ReporteController {
 			if(ods!=-1) {
 				if(obj.getProgramaeducativo().getDistrito().getOdsid().equals(ods))
 					bandera_ods = true;
-				else
-					bandera_ods = false;
 			}
 			else {
-				bandera_ods = true;
+				listaOds.forEach(objOds->{
+					if(objOds.getId().equals(obj.getProgramaeducativo().getDistrito().getOdsid())) {
+						bandera_ods = true;
+					}
+				});
 			}
 			/**/
 			if(anio!=-1) {
@@ -1141,7 +1406,7 @@ public class ReporteController {
 				bandera_nivel = true;
 			}
 			
-			if( bandera_ods && bandera_anio && bandera_categoria && bandera_modalidad && bandera_nivel) 			
+			if( bandera_ods && bandera_anio && bandera_categoria && bandera_modalidad && bandera_nivel && obj.getEnviado()==1) 			
 			{
 				DetalleEvaluacionReporteDto dto  = new DetalleEvaluacionReporteDto();
 				dto.setAnio(obj.getProgramaeducativo().getAnhio());
@@ -1263,11 +1528,13 @@ public class ReporteController {
 			if(ods!=-1) {
 				if(obj.getProgramaeducativo().getDistrito().getOdsid().equals(ods))
 					bandera_ods = true;
-				else
-					bandera_ods = false;
 			}
 			else {
-				bandera_ods = true;
+				listaOds.forEach(objOds->{
+					if(objOds.getId().equals(obj.getProgramaeducativo().getDistrito().getOdsid())) {
+						banderaods = true;
+					}
+				});
 			}
 			/**/
 			if(anio!=-1) {
@@ -1314,7 +1581,7 @@ public class ReporteController {
 				bandera_nivel = true;
 			}			
 			
-			if( bandera_ods && bandera_anio && bandera_categoria && bandera_modalidad && bandera_nivel) 			
+			if( bandera_ods && bandera_anio && bandera_categoria && bandera_modalidad && bandera_nivel && obj.getEnviado()==1) 			
 			{
 				ResultadosRegionalesDto rrdto = new ResultadosRegionalesDto();
 				rrdto.setAnio(obj.getAnio());
@@ -1399,6 +1666,19 @@ public class ReporteController {
 		DateFormat hourFormat = new SimpleDateFormat("HHmmss");
 		DateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
 		DateFormat dateFormatFecha = new SimpleDateFormat("dd/MM/yyyy");
+		
+		listaOds = new ArrayList<>();
+		
+		tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		if(tipousuarioid.equals(2)) {
+			String usuario = ses.getAttribute("usuario").toString();
+			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
+				listaOds.add(obj.getOds());
+			});
+		}
+		else {
+			listaOds = odsserv.listarAll();
+		}
 		
 		String role6, role7, role8, role9;
 		String strRol = "";
@@ -1627,7 +1907,7 @@ public class ReporteController {
 		
 		HttpHeaders headers = new HttpHeaders();
 		
-		String fecha_archivo = dateFormat.format(date) + hourFormat.format(date);
+		fecha_archivo = dateFormat.format(date) + hourFormat.format(date);
 		
 		headers.add("Content-Disposition", "attachment; filename=Lista_alianzaestrategica_"+fecha_archivo+".csv");
 		
