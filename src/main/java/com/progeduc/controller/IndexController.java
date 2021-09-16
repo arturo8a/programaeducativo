@@ -1186,7 +1186,7 @@ public class IndexController {
 		
 		List<Rubrica> listaRubrica = new ArrayList<Rubrica>();
         evaluacionrubricaServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
-        	if(obj.getRubrica().getEstado()==1) {
+        	if(obj.getRubrica().getEstado().equals(1)) {
         		listaRubrica.add(obj.getRubrica());
             	id_rubrica += obj.getRubrica().getId().toString() + "-";
         	}
@@ -1194,7 +1194,7 @@ public class IndexController {
         
         List<Questionario> listaQuestionario = new ArrayList<Questionario>();
         evaluacionquestionarioServ.listarPorEvaluacionId(eval.getId()).forEach(obj->{
-        	if(obj.getQuestionario().getEstado()==1) {
+        	if(obj.getQuestionario().getEstado().equals(1)) {
         		listaQuestionario.add(obj.getQuestionario());
             	id_questionario += obj.getQuestionario().getId().toString() + "-";
         	}

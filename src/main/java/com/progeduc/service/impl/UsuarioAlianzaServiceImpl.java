@@ -75,4 +75,10 @@ public class UsuarioAlianzaServiceImpl implements IUsuarioAlianzaService{
 	public List<UsuarioAlianza> listaUsuarioFiltro(String ods, String anio, String estado, String role6, String role7, String role8, String role9) {
 		return usuarioRepo.listaUsuarioFiltro(ods, anio, estado, role6, role7, role8, role9);
 	}
+	
+	@Override
+	public List<UsuarioAlianza> buscarEvaluador(String usuarioEvaluador){
+		return usuarioRepo.buscarEvaluador(usuarioEvaluador);
+	}
+	
 }

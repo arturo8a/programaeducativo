@@ -9,6 +9,11 @@ $(document).ready(function(){
 		$("#modalerror").modal('hide');
 	});
 	
+	$("#btncerrarmensajeerroralianzaestrategica").on("click",function(){
+		$("#modalerroralianzaestrategica").modal('hide');
+		$("#btnaceptarRegistro").prop("disabled",false);
+	});
+	
 	$("#perfilregusuComiteEvaluador").on("click",function(){
 		if($('#perfilregusuComiteEvaluador').is(':checked') ) {
 	    	$("#section-datos-autoridad").show();
@@ -316,8 +321,13 @@ $("#btnaceptarRegistro").on("click",function(){ console.log(armarData());
 					$("#modalimagencargando").modal('hide');
 					$("#modalAlianzaEstrategica").modal('hide');
 				}
-				//listarAlianzaEstrategica();
-			}else{
+			}
+			else if(respuesta==-1){
+				$("#textoerroralianzaestrategica").html("<div style='color:green' class='text-left'>Evaluador "+$("#usuarioautoridad").val()+" ya existe en el sistema</div>");
+				$("#modalerroralianzaestrategica").modal();
+				$("#modalimagencargando").modal('hide');
+			}
+			else{
 				$("#btnaceptarRegistro").prop("disabled",false);
 				$("#modalimagencargando").modal('hide');
 				alert("Exception al registrar");

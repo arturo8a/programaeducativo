@@ -216,9 +216,9 @@ public class ConcursoeducativoController {
 	IUsuarioService usuarioService;
 	
 	@Autowired
-<<<<<<< HEAD
 	private ITrabajosfinalesService trabajosFinalesServ;
-=======
+	
+	@Autowired
 	private ICategoriatrabajoService categoriaSserv;
 	
 	@Autowired
@@ -229,10 +229,9 @@ public class ConcursoeducativoController {
 	
 	@Autowired
 	private IEvaluacionRespuestaNacionalService evaluacionRespuestaNacionalServ;
->>>>>>> a0041e797b274b58e2d5efc2267315702af947d9
 	
 	ListaparticipanteDto dto;	
-	ListatrabajosfinalesDto dtotf;			
+	ListatrabajosfinalesDto dtotf;	
 	ListaparticipantetrabajoDto ptdto;	
 	ListaDocenteInscritos listadocentesinscritos;
 	ListaTrabajosFinalesPendientes listaTrabajosFinalesPendientes;
@@ -1715,36 +1714,36 @@ public class ConcursoeducativoController {
 		}
 		
 		listTrabAsignados.forEach(data->{
-			List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteServ.listar(data.getTrabajosfinales().getId());
-			Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
-			Evaluacion eval = evaluacionService.getPorAnioCategoriaNivelparticipacion(data.getTrabajosfinales().getAnio(), 
-					data.getTrabajosfinales().getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
-			List<EvaluacionResultado> listEvaResultado = evaluacionRespuestaServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
-			List<EvaluacionResultadoNacional> listEvaResultadoN = evaluacionRespuestaNacionalServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
-			log.info(data.getTrabajosfinales().getId()+"-"+data.getTrabajosfinales().getEstadotrabajo().getId());
-			if(eval != null && listEvaResultado.size() == 0 && listEvaResultadoN.size() == 0 && data.getTrabajosfinales().getEnviado() == 1 && 
-					(
-							(data.getTrabajosfinales().getEstadotrabajo().getId() == 2 || data.getTrabajosfinales().getEstadotrabajo().getId() == 21)
-					 ||
-					
-							(data.getTrabajosfinales().getEstadonacional().getId() == 2 || data.getTrabajosfinales().getEstadonacional().getId() == 21)
-					) 
-				) {
-				String strOds = "";
-				listaTrabajosFinalesPendientes = new ListaTrabajosFinalesPendientes();
-				listaTrabajosFinalesPendientes.setAnio(data.getTrabajosfinales().getAnio());
-				listaTrabajosFinalesPendientes.setCodigo(data.getTrabajosfinales().getProgramaeducativo().getCodmod()+"_"+data.getTrabajosfinales().getNumeracion());
-				listaTrabajosFinalesPendientes.setOds(odsserv.byOds(data.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
-				listaTrabajosFinalesPendientes.setIiee(data.getTrabajosfinales().getProgramaeducativo().getCodmod());
-				listaTrabajosFinalesPendientes.setCategoria(data.getTrabajosfinales().getCategoriatrabajo().getDescripcion());
-				listaTrabajosFinalesPendientes.setModalidad(data.getTrabajosfinales().getModalidadtrabajo().getDescripcion());
-				listaTrabajosFinalesPendientes.setTitulotrabajo(data.getTrabajosfinales().getTitulotrabajo());
-				listaTrabajosFinalesPendientes.setNivelparticipacion(participante.getGradoestudiante().getNivelgradopartdesc());
-				listaTrabajosFinalesPendientes.setEvaluacion("ficha trabajo");
-				listaTrabajosFinalesPendientes.setTrabajo(data.getTrabajosfinales().getId().toString());
-				listaTrabajosFinalesPendientes.setFichatrabajo("ficha trabajo");
-				lista.add(listaTrabajosFinalesPendientes);
-			}
+				List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteServ.listar(data.getTrabajosfinales().getId());
+				Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
+				Evaluacion eval = evaluacionService.getPorAnioCategoriaNivelparticipacion(data.getTrabajosfinales().getAnio(), 
+						data.getTrabajosfinales().getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
+				List<EvaluacionResultado> listEvaResultado = evaluacionRespuestaServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
+				List<EvaluacionResultadoNacional> listEvaResultadoN = evaluacionRespuestaNacionalServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
+				log.info(data.getTrabajosfinales().getId()+"-"+data.getTrabajosfinales().getEstadotrabajo().getId());
+				if(eval != null && listEvaResultado.size() == 0 && listEvaResultadoN.size() == 0 && data.getTrabajosfinales().getEnviado() == 1 && 
+						(
+								(data.getTrabajosfinales().getEstadotrabajo().getId() == 2 || data.getTrabajosfinales().getEstadotrabajo().getId() == 21)
+						 ||
+						
+								(data.getTrabajosfinales().getEstadonacional().getId() == 2 || data.getTrabajosfinales().getEstadonacional().getId() == 21)
+						) 
+					) {
+					String strOds = "";
+					listaTrabajosFinalesPendientes = new ListaTrabajosFinalesPendientes();
+					listaTrabajosFinalesPendientes.setAnio(data.getTrabajosfinales().getAnio());
+					listaTrabajosFinalesPendientes.setCodigo(data.getTrabajosfinales().getProgramaeducativo().getCodmod()+"_"+data.getTrabajosfinales().getNumeracion());
+					listaTrabajosFinalesPendientes.setOds(odsserv.byOds(data.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+					listaTrabajosFinalesPendientes.setIiee(data.getTrabajosfinales().getProgramaeducativo().getCodmod());
+					listaTrabajosFinalesPendientes.setCategoria(data.getTrabajosfinales().getCategoriatrabajo().getDescripcion());
+					listaTrabajosFinalesPendientes.setModalidad(data.getTrabajosfinales().getModalidadtrabajo().getDescripcion());
+					listaTrabajosFinalesPendientes.setTitulotrabajo(data.getTrabajosfinales().getTitulotrabajo());
+					listaTrabajosFinalesPendientes.setNivelparticipacion(participante.getGradoestudiante().getNivelgradopartdesc());
+					listaTrabajosFinalesPendientes.setEvaluacion("ficha trabajo");
+					listaTrabajosFinalesPendientes.setTrabajo(data.getTrabajosfinales().getId().toString());
+					listaTrabajosFinalesPendientes.setFichatrabajo("ficha trabajo");
+					lista.add(listaTrabajosFinalesPendientes);
+				}	
 		});
 		return new ResponseEntity<List<ListaTrabajosFinalesPendientes>>(lista, HttpStatus.OK) ;
 	}
@@ -1787,18 +1786,25 @@ public class ConcursoeducativoController {
 				listaTrabajosFinalesPendientes.setTrabajo(data.getTrabajosfinales().getId().toString());
 				listaTrabajosFinalesPendientes.setFichatrabajo("ficha trabajo");
 				lista.add(listaTrabajosFinalesPendientes);
-			}
+			}	
 		});	
 		return new ResponseEntity<List<ListaTrabajosFinalesPendientes>>(lista, HttpStatus.OK) ;
 	}
 	
 	@PostMapping(value="/saveusuarioalianza")
 	public Integer registrarusuarioalianza(@Valid @RequestBody UsuarioAlianzaDto dto) {
-		System.out.println(dto.getId());
 		UsuarioAlianza usu = usuAlianzaserv.ListarporId(dto.getId());
 		Calendar cal= Calendar.getInstance();
 		int respuesta = 0;
+		
+		if(dto.getUsuarioautoridad()!=null) {
+			if(usuAlianzaserv.buscarEvaluador(dto.getUsuarioautoridad()).size()>0) {
+				return -1;
+			}
+		}
+		
 		if(usu != null) {
+			
 			usu.setOds(dto.getOds());
 			if(dto.getCategoria().getId() != 0) {
 				usu.setCategoria(dto.getCategoria());
