@@ -14,6 +14,8 @@ public interface ITrabajosfinalesParticipanteService {
 	
 	List<TrabajosfinalesParticipante> listarTodos();
 	
+	List<TrabajosfinalesParticipante> listarPorParticipante(Integer participanteid,Integer idCategoria, Integer idModalidad,Integer idTrabajo);
+	
 	List<TrabajosfinalesParticipante> listarPorParticipante(Integer participanteid,Integer idCategoria, Integer idModalidad);
 
 }

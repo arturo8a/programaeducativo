@@ -22,7 +22,7 @@ public class UploadFileService {
 
     public void saveFile(MultipartFile file,Integer id,String ruta) throws IOException {
         if(!file.isEmpty()){
-            byte[] bytes = file.getBytes();            
+            byte[] bytes = file.getBytes();
             File directorio = new File(upload_folder+ ruta+ "//"+id+"//");
             if(directorio.mkdirs()) {
             	Path path = Paths.get(upload_folder + ruta+ "//"+id+"//" + file.getOriginalFilename());

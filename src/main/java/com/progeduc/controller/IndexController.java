@@ -223,6 +223,7 @@ public class IndexController {
 	String nota;
 	boolean banderaBuscarPorOdsAnioactual;
 	boolean banderaDepa;
+	boolean idDepartamentoDiferente;
 	
 	@GetMapping("/inicio")
 	public String inicio(@RequestParam(name="name",required=false,defaultValue="world") String name, Model model) {
@@ -518,34 +519,27 @@ public class IndexController {
 		List<Departamento> listaDepartamento = new ArrayList<Departamento>();
 		List<Ods> listaOds = new ArrayList<>();
 		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		
 		if(tipousuarioid.equals(2)) {
 			String usuario = ses.getAttribute("usuario").toString();
 			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
 				listaOds.add(obj.getOds());
 			});
 			listaOds.forEach(obj->{
-				distServ.listByOdsid(obj.getId()).forEach(obj1->{
-					banderaDepa = false;
-					if(listaDepartamento.size()==0) {
-						listaDepartamento.add(obj1.getProvincia().getDepartamento());
-					}	
-					else {
-						for(int i=0;i<listaDepartamento.size();i++) {
-							if(listaDepartamento.get(i).getDescripcion()!=obj1.getProvincia().getDepartamento().getDescripcion()) {
-								banderaDepa = true;
-								break;
-							}
+				distServ.listByOdsid(obj.getId()).forEach(objDist->{
+					idDepartamentoDiferente = true;
+					listaDepartamento.forEach(objDep->{
+						if(objDep.getId().equals(objDist.getProvincia().getDepartamento().getId())) {
+							idDepartamentoDiferente = false;
 						}
-						if(banderaDepa) {
-							listaDepartamento.add(obj1.getProvincia().getDepartamento());
-						}
+					});
+					if(idDepartamentoDiferente) {
+						listaDepartamento.add(objDist.getProvincia().getDepartamento());
 					}
 				});
 			});
 			model.addAttribute("departamento",listaDepartamento);
-		}
-		else {
-			//model.addAttribute("ods",odsserv.listarAll());
+		}else {
 			model.addAttribute("departamento",depaServ.listar());
 		}
 		return "contenido_consulta";
@@ -874,10 +868,7 @@ public class IndexController {
 	    	
 	    	Integer odsid = pe.getDistrito().getOdsid();
 	    	if(cerrarOdsService.buscarPorOdsAnioactual(odsid)!=null) {
-	    		if(cerrarOdsService.buscarPorOdsAnioactual(odsid).getEstado()==1)
-	    			banderaBuscarPorOdsAnioactual = true;
-	    		else
-	    			banderaBuscarPorOdsAnioactual = false;
+	    		banderaBuscarPorOdsAnioactual = true;
 	    	}
 	    	else {
 	    		banderaBuscarPorOdsAnioactual = false;

@@ -1,11 +1,10 @@
 package com.progeduc.dto;
 
-public class TrabajoCategoriaModalidadDto {
+public class TrabajoCategoriaModalidadAddDto {
 	
 	Integer id;
 	Integer idCategoria;
 	Integer idModalidad;
-	Integer idTrabajo;
 	
 	public Integer getId() {
 		return id;
@@ -25,11 +24,4 @@ public class TrabajoCategoriaModalidadDto {
 	public void setIdModalidad(Integer idModalidad) {
 		this.idModalidad = idModalidad;
 	}
-	public Integer getIdTrabajo() {
-		return idTrabajo;
-	}
-	public void setIdTrabajo(Integer idTrabajo) {
-		this.idTrabajo = idTrabajo;
-	}
-
 }

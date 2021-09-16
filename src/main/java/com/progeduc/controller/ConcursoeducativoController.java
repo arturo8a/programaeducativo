@@ -64,6 +64,8 @@ import com.progeduc.dto.ListaparticipantetrabajoDto;
 import com.progeduc.dto.ListatrabajosfinalesDto;
 import com.progeduc.dto.OdsFinalizarDto;
 import com.progeduc.dto.ParticipanteVerDto;
+import com.progeduc.dto.ResultadosGanadoresDto;
+import com.progeduc.dto.TrabajoCategoriaModalidadAddDto;
 import com.progeduc.dto.TrabajoCategoriaModalidadDto;
 import com.progeduc.dto.TrabajofinalesEnviadoDto;
 import com.progeduc.dto.TrabajosFinalesConcursoDto;
@@ -204,6 +206,9 @@ public class ConcursoeducativoController {
 	@Autowired
 	IUsuarioService usuarioService;
 	
+	@Autowired
+	private ITrabajosfinalesService trabajosFinalesServ;
+	
 	ListaparticipanteDto dto;	
 	ListatrabajosfinalesDto dtotf;			
 	ListaDocenteInscritos listadocentesinscritos;
@@ -211,7 +216,7 @@ public class ConcursoeducativoController {
 	String miparticipante = "";	
 	boolean banderaUpdate,banderaods;
 	Mail mail;	
-	String participantes, msj2;
+	String msj2;
 	UsuarioLdap usuarioldap = null;
 	String nivelparticipacion;
 	Integer idnivelparticipacion, nro_evidencias;
@@ -242,6 +247,8 @@ public class ConcursoeducativoController {
 	DecimalFormat dosDecimales = new DecimalFormat("##.00");
 	List<Float> puntaje;
 	List<Ods> listaOds;
+	boolean bandera_ods ,bandera_anio ,bandera_categoria,bandera_modalidad;
+	String participantes,generoParticipante,peNivelParticipacion;
 	
 	@PostMapping(value="/registrarconcurso")
 	public String registrarconcurso(@Valid @RequestBody Postulacionconcurso dto)  {
@@ -1495,6 +1502,14 @@ public class ConcursoeducativoController {
 	
 	@PostMapping(value="/verificaParticipanteSubidoTrabajo")
 	public Integer verificaParticipanteSubidoTrabajo(@Valid @RequestBody TrabajoCategoriaModalidadDto dto) {
+		List<TrabajosfinalesParticipante> listatfp = trabajosfinalesparticipanteServ.listarPorParticipante(dto.getId(),dto.getIdCategoria(),dto.getIdModalidad(),dto.getIdTrabajo());
+		if(listatfp.size()>0)
+			return 1;
+		return 0;
+	}
+	
+	@PostMapping(value="/verificaParticipanteSubidoTrabajoAdd")
+	public Integer verificaParticipanteSubidoTrabajoAdd(@Valid @RequestBody TrabajoCategoriaModalidadAddDto dto) {
 		List<TrabajosfinalesParticipante> listatfp = trabajosfinalesparticipanteServ.listarPorParticipante(dto.getId(),dto.getIdCategoria(),dto.getIdModalidad());
 		if(listatfp.size()>0)
 			return 1;
@@ -2732,14 +2747,14 @@ public class ConcursoeducativoController {
 			@PathVariable(name="categoria_reporte") String categoria,
 			@PathVariable(name="nivel_participacion_reporte") String nivel_participacion,
 			@PathVariable(name="nombre_ie_reporte") String nombreie,
-			@PathVariable(name="puesto_reporte") String puesto
+			@PathVariable(name="puesto_reporte") String puesto, HttpSession ses
 			) {
 		
 		Date date = new Date();
 		DateFormat hourFormat = new SimpleDateFormat("HHmmss");
 		DateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
 		
-		ByteArrayInputStream stream = reportetrabajosfinalesconcurso(ods,anio,modalidad,estado,categoria,nivel_participacion,nombreie,puesto);
+		ByteArrayInputStream stream = reportetrabajosfinalesconcurso(ods,anio,modalidad,estado,categoria,nivel_participacion,nombreie,puesto,ses);
 		
 		HttpHeaders headers = new HttpHeaders();
 		
@@ -2751,16 +2766,31 @@ public class ConcursoeducativoController {
 		
 	}
 	
-	public ByteArrayInputStream reportetrabajosfinalesconcurso(String ods,String anio,String modalidad,String estado,String categoria,String nivel_participacion,String nombreie,String puesto)   {
+	public ByteArrayInputStream reportetrabajosfinalesconcurso(String ods,String anio,String modalidad,String estado,String categoria,String nivel_participacion,String nombreie,String puesto,HttpSession ses)   {
 		
 		Workbook workbook = new HSSFWorkbook();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();		
+		
+		
+		listaOds = new ArrayList<>();
+		
+		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		if(tipousuarioid.equals(2)) {
+			String usuario = ses.getAttribute("usuario").toString();
+			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
+				listaOds.add(obj.getOds());
+			});
+		}
+		else {
+			listaOds = odsserv.listarAll();
+		}
 				
 		List<TrabajosFinalesConcursoDto> lista = new ArrayList<TrabajosFinalesConcursoDto>();		
 		List<DetalleEvaluacionReporteDto> listaDerDto = new ArrayList<>();
 		trabajosfinalesparticipanteServ.listarTodos().forEach(obj->{			
 			if(obj.getTrabajosfinales().getEstado() == 1 && obj.getParticipante().getEstado()==1 && obj.getTrabajosfinales().getEnviado()==1) {				
 				bandera = true;				
+				banderaOds = false;
 				mi_ods = odsserv.byOds(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid()).getDescripcion();
 				mi_anio = obj.getTrabajosfinales().getAnio();
 				mi_modalidad = obj.getTrabajosfinales().getModalidadtrabajo().getDescripcion();
@@ -2770,9 +2800,15 @@ public class ConcursoeducativoController {
 				mi_puesto = obj.getTrabajosfinales().getPuesto().toString();
 				
 				if(! ods.equals("Todos")) {
-					if(! mi_ods.toLowerCase().equals(ods.toLowerCase())) {
-						bandera = false;
+					if(mi_ods.toLowerCase().equals(ods.toLowerCase())) {
+						banderaOds = true;
 					}
+				}else {
+					listaOds.forEach(objOds->{
+						if(objOds.getDescripcion().equals(mi_ods)) {
+							banderaOds = true;
+						}
+					});
 				}
 				if(! anio.equals("Todos")) {
 					if(mi_anio != Integer.parseInt(anio)){
@@ -2809,7 +2845,7 @@ public class ConcursoeducativoController {
 						bandera = false;
 					}
 				}
-				if(bandera) {
+				if(bandera && banderaOds) {
 					TrabajosFinalesConcursoDto dto = new TrabajosFinalesConcursoDto();
 					dto.setAnio(obj.getTrabajosfinales().getAnio());
 					dto.setOds(odsserv.byOds(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
@@ -2904,13 +2940,20 @@ public class ConcursoeducativoController {
 			mi_puesto = obj.getPuesto().toString();
 			
 			bandera = true;	
+			banderaOds = false;
 			
 			if(obj.getEnviado()==1) {
 				if(! ods.equals("Todos")) {
-					if(! mi_ods.toLowerCase().equals(ods.toLowerCase())) {
-						bandera = false;
-					}
+					if(mi_ods.toLowerCase().equals(ods.toLowerCase()))
+						banderaOds = true;
+				}else {
+					listaOds.forEach(objOds->{
+						if(objOds	.getDescripcion().equals(mi_ods)) {
+							banderaOds = true;
+						}
+					});
 				}
+				
 				if(! anio.equals("Todos")) {
 					if(mi_anio != Integer.parseInt(anio)){
 						bandera = false;
@@ -2944,8 +2987,7 @@ public class ConcursoeducativoController {
 					}
 				}
 				
-				
-				if(bandera) {
+				if(bandera && banderaOds) {
 					nroEvaluadoresAsignados = 0;
 					trabajosFinales_UsuarioAlianzaServ.listarByTrabajosfinalesId(obj.getId()).forEach(tf_ua->{
 						nroEvaluadoresAsignados++;
@@ -3145,6 +3187,207 @@ public class ConcursoeducativoController {
 			row1DetalleEvaluacion.createCell(18).setCellValue(dto.getNota());
 			row1DetalleEvaluacion.createCell(19).setCellValue(dto.getPuesto());
 			initRow++;
+		}
+		
+		String[] ColumnaResultados = {"AÑO","ODS","CATEGORIA","NIVEL DE PARTICIPACIÓN","PUESTO","CODIGO DE II.EE","NOMBRE DE II.EE","AMBITO DE II.EE","MODALIDAD","NOMBRE DEL TRABAJO","PARTICIPANTES","GENERO","NOTA FINAL","DOCENTE","CELULAR DOCENTE"};
+		Sheet hojaResultados = workbook.createSheet("Resultados");
+		
+		Row row1Resultados = hojaResultados.createRow(0);
+		
+		row1Resultados.createCell(0).setCellValue("");
+		hojaResultados.addMergedRegion(new CellRangeAddress(0, 0, 0, 3));/*1era celda , ultima celda, 1era columna, ultima columna*/		
+		
+		row1Resultados.createCell(4).setCellValue("GANADORES");
+		hojaResultados.addMergedRegion(new CellRangeAddress(0, 0, 4, 14));
+		
+		row1Resultados = hojaResultados.createRow(1);
+		for(int i=0;i<ColumnaResultados.length;i++) {
+			Cell cell = row1Resultados.createCell(i);
+			cell.setCellValue(ColumnaResultados[i]);
+		}
+		
+		List<ResultadosGanadoresDto> listaResultadosGanadores  =new ArrayList<ResultadosGanadoresDto>();		
+		
+		trabajosFinalesServ.listarhabilitados().forEach(obj->{
+			
+			mi_ods = odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion();
+			mi_anio = obj.getAnio();
+			mi_modalidad = obj.getModalidadtrabajo().getDescripcion();
+			mi_estado = obj.getEstadotrabajo().getDescripcion();
+			mi_categoria = obj.getCategoriatrabajo().getDescripcion();
+			mi_puesto = obj.getPuesto().toString();
+			
+			bandera = true;	
+			banderaOds = false;
+			
+			if(obj.getEnviado()==1) {
+				if(! ods.equals("Todos")) {
+					if(mi_ods.toLowerCase().equals(ods.toLowerCase())) {
+						banderaOds = true;
+					}
+				}else {
+					listaOds.forEach(objOds->{
+						if(objOds.getDescripcion().equals(mi_ods)) {
+							banderaOds = true;
+						}
+					});
+				}
+				
+				if(! anio.equals("Todos")) {
+					if(mi_anio != Integer.parseInt(anio)){
+						bandera = false;
+					}
+				}
+				if(! modalidad.equals("Todos")) {
+					if(! mi_modalidad.toLowerCase().equals(modalidad.toLowerCase())){
+						bandera = false;
+					}
+				}
+				if(! puesto.equals("Todos")) {
+					if(! mi_puesto.toLowerCase().equals(puesto.toLowerCase())){
+						bandera = false;
+					}
+				}
+				
+				peNivelParticipacion = "";
+				if(! nivel_participacion.equals("Todos")) {
+					List<Participante> listaParticipante = participanteService.listarhabilitados(obj.getProgramaeducativo().getId());
+					listaParticipante.forEach(objParticipante->{
+						if(objParticipante.getGradoestudiante().getDescripcion()==nivel_participacion) {
+							bandera = true;
+							peNivelParticipacion = objParticipante.getGradoestudiante().getNivelgradopartdesc();
+						}
+					});
+				}
+				
+				if(! puesto.equals("Todos")) {
+					if(! mi_puesto.toLowerCase().equals(puesto.toLowerCase())){
+						bandera = false;
+					}
+				}
+				
+				if(bandera && banderaOds) {
+					participantes = "";
+					generoParticipante = "";
+					ResultadosGanadoresDto dto = new ResultadosGanadoresDto();
+					switch(obj.getPuesto()) {
+						case  1 :  
+							dto.setAnio(obj.getAnio());
+							dto.setOds(odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+							dto.setCategoria(obj.getCategoriatrabajo().getDescripcion());
+							if(peNivelParticipacion.equals("")) {
+								trabajosfinalesparticipanteServ.listar(obj.getId()).forEach(obj3->{
+									peNivelParticipacion = obj3.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+								});									
+							}
+							dto.setNivelParticipacion(peNivelParticipacion);
+							dto.setPuesto("PRIMER PUESTO");
+							dto.setCodigoIiee(obj.getProgramaeducativo().getCodmod());
+							dto.setNombreIiee(obj.getProgramaeducativo().getNomie());
+							dto.setAmbitoIiee(obj.getProgramaeducativo().getAmbito().getDescripcion());
+							dto.setModalidad(obj.getModalidadtrabajo().getDescripcion());
+							dto.setNombreTrabajo(obj.getNombre());
+							trabajosfinalesparticipanteServ.listar(obj.getId()).forEach(tfp->{
+								participantes += tfp.getParticipante().getNombreestudiante() + " " + tfp.getParticipante().getAppaternoestudiante()+ " " + tfp.getParticipante().getApmaternoestudiante() + ",";
+								generoParticipante += tfp.getParticipante().getGeneroestudiante().getDescripcion() + ",";
+							});
+							if(participantes.length()>0) {
+								participantes = participantes.substring(0, participantes.length()-1);
+								generoParticipante  = generoParticipante.substring(0, generoParticipante.length()-1);
+							}							
+							dto.setParticipantes(participantes);
+							dto.setGenero(generoParticipante);
+							dto.setNotaFinal(obj.getNota());
+							dto.setDocente(obj.getNombre() + " "  + obj.getAppaterno() + " " + obj.getApmaterno());
+							dto.setCelularDocente(obj.getTelefono());	
+							listaResultadosGanadores.add(dto);
+							break;
+						case  2 :  
+							dto.setAnio(obj.getAnio());
+							dto.setOds(odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+							dto.setCategoria(obj.getCategoriatrabajo().getDescripcion());
+							if(peNivelParticipacion.equals("")) {
+								trabajosfinalesparticipanteServ.listar(obj.getId()).forEach(obj3->{
+									peNivelParticipacion = obj3.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+								});									
+							}
+							dto.setNivelParticipacion(peNivelParticipacion);
+							dto.setPuesto("SEGUNDO PUESTO");
+							dto.setCodigoIiee(obj.getProgramaeducativo().getCodmod());
+							dto.setNombreIiee(obj.getProgramaeducativo().getNomie());
+							dto.setAmbitoIiee(obj.getProgramaeducativo().getAmbito().getDescripcion());
+							dto.setModalidad(obj.getModalidadtrabajo().getDescripcion());
+							dto.setNombreTrabajo(obj.getNombre());
+							trabajosfinalesparticipanteServ.listar(obj.getId()).forEach(tfp->{
+								participantes += tfp.getParticipante().getNombreestudiante() + " " + tfp.getParticipante().getAppaternoestudiante()+ " " + tfp.getParticipante().getApmaternoestudiante() + ",";
+								generoParticipante += tfp.getParticipante().getGeneroestudiante().getDescripcion() + ",";
+							});
+							if(participantes.length()>0) {
+								participantes = participantes.substring(0, participantes.length()-1);
+								generoParticipante  = generoParticipante.substring(0, generoParticipante.length()-1);
+							}							
+							dto.setParticipantes(participantes);
+							dto.setGenero(generoParticipante);
+							dto.setNotaFinal(obj.getNota());
+							dto.setDocente(obj.getNombre() + " "  + obj.getAppaterno() + " " + obj.getApmaterno());
+							dto.setCelularDocente(obj.getTelefono());
+							listaResultadosGanadores.add(dto);
+							break;
+						case  3 :  
+							dto.setAnio(obj.getAnio());
+							dto.setOds(odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+							dto.setCategoria(obj.getCategoriatrabajo().getDescripcion());
+							if(peNivelParticipacion.equals("")) {
+								trabajosfinalesparticipanteServ.listar(obj.getId()).forEach(obj3->{
+									peNivelParticipacion = obj3.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+								});									
+							}
+							dto.setNivelParticipacion(peNivelParticipacion);
+							dto.setPuesto("TERCER PUESTO");
+							dto.setCodigoIiee(obj.getProgramaeducativo().getCodmod());
+							dto.setNombreIiee(obj.getProgramaeducativo().getNomie());
+							dto.setAmbitoIiee(obj.getProgramaeducativo().getAmbito().getDescripcion());
+							dto.setModalidad(obj.getModalidadtrabajo().getDescripcion());
+							dto.setNombreTrabajo(obj.getNombre());
+							trabajosfinalesparticipanteServ.listar(obj.getId()).forEach(tfp->{
+								participantes += tfp.getParticipante().getNombreestudiante() + " " + tfp.getParticipante().getAppaternoestudiante()+ " " + tfp.getParticipante().getApmaternoestudiante() + ",";
+								generoParticipante += tfp.getParticipante().getGeneroestudiante().getDescripcion() + ",";
+							});
+							if(participantes.length()>0) {
+								participantes = participantes.substring(0, participantes.length()-1);
+								generoParticipante  = generoParticipante.substring(0, generoParticipante.length()-1);
+							}							
+							dto.setParticipantes(participantes);
+							dto.setGenero(generoParticipante);
+							dto.setNotaFinal(obj.getNota());
+							dto.setDocente(obj.getNombre() + " "  + obj.getAppaterno() + " " + obj.getApmaterno());
+							dto.setCelularDocente(obj.getTelefono());
+							listaResultadosGanadores.add(dto);
+							break;
+						}
+				}
+			}
+		});
+		
+		int initRow3 = 2;
+		for(ResultadosGanadoresDto dto : listaResultadosGanadores) {
+			row1Resultados = hojaResultados.createRow(initRow3);
+			row1Resultados.createCell(0).setCellValue(dto.getAnio());
+			row1Resultados.createCell(1).setCellValue(dto.getOds());
+			row1Resultados.createCell(2).setCellValue(dto.getCategoria());
+			row1Resultados.createCell(3).setCellValue(dto.getNivelParticipacion());
+			row1Resultados.createCell(4).setCellValue(dto.getPuesto());
+			row1Resultados.createCell(5).setCellValue(dto.getCodigoIiee());
+			row1Resultados.createCell(6).setCellValue(dto.getNombreIiee());
+			row1Resultados.createCell(7).setCellValue(dto.getAmbitoIiee());
+			row1Resultados.createCell(8).setCellValue(dto.getModalidad());
+			row1Resultados.createCell(9).setCellValue(dto.getNombreTrabajo());
+			row1Resultados.createCell(10).setCellValue(dto.getParticipantes());
+			row1Resultados.createCell(11).setCellValue(dto.getGenero());
+			row1Resultados.createCell(12).setCellValue(dto.getNotaFinal());
+			row1Resultados.createCell(12).setCellValue(dto.getDocente());
+			row1Resultados.createCell(12).setCellValue(dto.getCelularDocente());
+			initRow3 ++;
 		}
 		
 		try {
