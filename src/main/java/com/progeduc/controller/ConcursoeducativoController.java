@@ -227,7 +227,6 @@ public class ConcursoeducativoController {
 	
 	ListaparticipanteDto dto;	
 	ListatrabajosfinalesDto dtotf;			
-	ListatrabajosfinalesDto dtotf;	
 	ListaparticipantetrabajoDto ptdto;	
 	ListaDocenteInscritos listadocentesinscritos;
 	ListaTrabajosFinalesPendientes listaTrabajosFinalesPendientes;
