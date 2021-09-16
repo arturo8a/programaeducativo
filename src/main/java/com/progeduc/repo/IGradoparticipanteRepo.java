@@ -15,4 +15,7 @@ public interface IGradoparticipanteRepo extends CrudRepository<Gradoparticipante
 	@Query(value="SELECT TB1.* FROM GRADOPARTICIPANTE TB1 WHERE TB1.nivelparticipanteid = ?1",nativeQuery = true)
 	List<Gradoparticipante> listargradopornivel(Integer idnivel);
 	
+	@Query(value="SELECT TB1.* FROM GRADOPARTICIPANTE TB1 WHERE TB1.id in (1,7,15)",nativeQuery = true)
+	List<Gradoparticipante> listarParaCierre();
+	
 }

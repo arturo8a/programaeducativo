@@ -124,6 +124,23 @@ public class Trabajosfinales {
 	@Column(name="EMPATE",nullable=true)
 	private Integer empate;
 	
+	
+	@ManyToOne
+	@JoinColumn(name="estadonacional",nullable=true,foreignKey=@ForeignKey(name="FK_trabajos_nacional"))
+	private Estadotrabajo estadonacional;
+	
+	@Column(name="NOTA_NACIONAL",nullable=true)
+	private Float nota_nacional;
+	
+	@Column(name="EMPATE_NACIONAL",nullable=true)
+	private Integer empate_nacional;
+	
+	@Column(name="PUESTO_NACIONAL",nullable=true)
+	private Integer puesto_nacional;
+	
+	
+	
+	
 	public Integer getId() {
 		return id;
 	}
@@ -378,6 +395,38 @@ public class Trabajosfinales {
 
 	public void setEmpate(Integer empate) {
 		this.empate = empate;
+	}
+
+	public Estadotrabajo getEstadonacional() {
+		return estadonacional;
+	}
+
+	public void setEstadonacional(Estadotrabajo estadonacional) {
+		this.estadonacional = estadonacional;
+	}
+
+	public Float getNota_nacional() {
+		return nota_nacional;
+	}
+
+	public void setNota_nacional(Float nota_nacional) {
+		this.nota_nacional = nota_nacional;
+	}
+
+	public Integer getEmpate_nacional() {
+		return empate_nacional;
+	}
+
+	public void setEmpate_nacional(Integer empate_nacional) {
+		this.empate_nacional = empate_nacional;
+	}
+
+	public Integer getPuesto_nacional() {
+		return puesto_nacional;
+	}
+
+	public void setPuesto_nacional(Integer puesto_nacional) {
+		this.puesto_nacional = puesto_nacional;
 	}
 	
 	

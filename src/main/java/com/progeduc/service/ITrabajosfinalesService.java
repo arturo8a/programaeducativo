@@ -63,4 +63,18 @@ public interface ITrabajosfinalesService extends ICRUD<Trabajosfinales,Integer>{
 	List<TrabajosFinalizados> listaTrabajosFinalesConNotaPromedioPorCategoriaNivelOdsEmpatadosPendientes(Integer idcategoria, String nivel,Integer odsId);
 	
 	List<Trabajosfinales> listaTrabajosEmpatadosPorODS(Integer odsId);
+	
+	List<Trabajosfinales> listarTrabajosConsursoNacional();
+	
+	List<Trabajosfinales> listaTrabajoEvaluadEmpateNacional();
+	
+	List<Trabajosfinales> listarTrabajosfinalesPorNivelCategoria(Integer categoriaId, String nivel);
+	
+	List<Trabajosfinales> listarTrabajosfinalesPorNivelCategoriaEmpatadosConNota(Integer categoriaId, String nivel);
+	
+	List<Trabajosfinales> listaTrabajosEmpatadosNacionalPorCatNivPuesto(Integer idcategoria, String nivel, Integer puesto);
+	
+	List<Object[]> listarTrabajosConsursoNacionalaFinalizar();
+	
+	int updateEstadoTrabajoNacional(Integer id,Integer estadoTrabajoId);
 }

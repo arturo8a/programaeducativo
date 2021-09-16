@@ -1,5 +1,6 @@
 package com.progeduc.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,12 @@ public class GradoparticipanteServiceImpl implements IGradoparticipanteService{
 	@Override
 	public List<Gradoparticipante> listar() {
 		// TODO Auto-generated method stub
-		return null;
+		List<Gradoparticipante> listar = new ArrayList<>();
+		Iterable<Gradoparticipante> iterable =repo.findAll();
+		for (Gradoparticipante gradoparticipante : iterable) {
+			listar.add(gradoparticipante);
+		}
+		return listar;
 	}
 
 	@Override
@@ -48,6 +54,11 @@ public class GradoparticipanteServiceImpl implements IGradoparticipanteService{
 	@Override
 	public List<Gradoparticipante> listargradopornivel(Integer id){
 		return repo.listargradopornivel(id);
+	}
+
+	@Override
+	public List<Gradoparticipante> listarParaCierre() {
+		return repo.listarParaCierre();
 	}
 
 }
