@@ -257,4 +257,41 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 		return trabajosfinalesRepo.listaTrabajosEmpatadosPorODS(odsId);
 	}
 
+	@Override
+	public List<Trabajosfinales> listarTrabajosConsursoNacional() {
+		return trabajosfinalesRepo.listarTrabajosConsursoNacional();
+	}
+
+	@Override
+	public List<Trabajosfinales> listaTrabajoEvaluadEmpateNacional() {
+		return trabajosfinalesRepo.listaTrabajoEvaluadEmpateNacional();
+	}
+
+	@Override
+	public List<Trabajosfinales> listarTrabajosfinalesPorNivelCategoria(Integer categoriaId, String nivel) {
+		return trabajosfinalesRepo.listarTrabajosfinalesPorNivelCategoria(categoriaId, nivel);
+	}
+
+	@Override
+	public List<Trabajosfinales> listaTrabajosEmpatadosNacionalPorCatNivPuesto(Integer idcategoria, String nivel,
+			Integer puesto) {
+		return trabajosfinalesRepo.listaTrabajosEmpatadosNacionalPorCatNivPuesto(idcategoria, nivel, puesto);
+	}
+
+	@Override
+	public List<Trabajosfinales> listarTrabajosfinalesPorNivelCategoriaEmpatadosConNota(Integer categoriaId, String nivel) {
+		return trabajosfinalesRepo.listarTrabajosfinalesPorNivelCategoriaEmpatadosConNota(categoriaId, nivel);
+	}
+
+	@Override
+	public List<Object[]> listarTrabajosConsursoNacionalaFinalizar() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int updateEstadoTrabajoNacional(Integer id, Integer estadoTrabajoId) {
+		return trabajosfinalesRepo.updateEstadoTrabajoNacional(id, estadoTrabajoId);
+	}
+
 }

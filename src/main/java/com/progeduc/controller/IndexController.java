@@ -1363,5 +1363,28 @@ public class IndexController {
 		return "formCerrarAsignarEvaluador";
 	}
 	
+	@GetMapping("/formCerrarNacionalAsignarEvaluador")
+	public String formCerrarNacionalAsignarEvaluador(Model model,HttpSession ses) {
+		
+		if(ses.getAttribute("tipousuarioid").toString().equals("1") || ses.getAttribute("tipousuarioid").toString().equals("11") || ses.getAttribute("tipousuarioid").toString().equals("12") || ses.getAttribute("tipousuarioid").toString().equals("30")) {
+			odsid = 0;
+		}
+		else if(ses.getAttribute("tipousuarioid").toString().equals("2")) {
+			
+			odsid = usuarioService.byUsuario(ses.getAttribute("usuario").toString()).getOdsid();
+			//odsid = 18;
+		}		
+		
+		model.addAttribute("odsid",odsid);
+		//model.addAttribute("ods",odsserv.listarOdsEmpatadas());//ods empatadas
+		model.addAttribute("ods",odsserv.listarAll());
+		model.addAttribute("nivelparticipacion",nivelparticipacionService.listar());
+		model.addAttribute("categoriatrabajo",categoriaevaluacionService.listar());
+		Calendar fecha = Calendar.getInstance();
+        model.addAttribute("anio", fecha.get(Calendar.YEAR));
+        model.addAttribute("colegios", progeducService.listCentrosEducativosGroupbyNomie());
+		return "formCerrarNacionalAsignarEvaluador";
+	}
+	
 }
 
