@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.progeduc.dto.CategoriaModalidadByOds;
 import com.progeduc.dto.CategoriaNivelParticipacionByOds;
+import com.progeduc.dto.EtapaNacionalDto;
 import com.progeduc.dto.TrabajosFinalizados;
 import com.progeduc.dto.TrabajosfinalesParticipanteDto;
 import com.progeduc.model.Trabajosfinales;
@@ -74,7 +75,7 @@ public interface ITrabajosfinalesService extends ICRUD<Trabajosfinales,Integer>{
 	
 	List<Trabajosfinales> listaTrabajosEmpatadosNacionalPorCatNivPuesto(Integer idcategoria, String nivel, Integer puesto);
 	
-	List<Object[]> listarTrabajosConsursoNacionalaFinalizar();
+	List<EtapaNacionalDto> listarTrabajosConsursoNacionalaFinalizar();
 	
 	int updateEstadoTrabajoNacional(Integer id,Integer estadoTrabajoId);
 }
