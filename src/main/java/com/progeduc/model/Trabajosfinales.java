@@ -138,7 +138,8 @@ public class Trabajosfinales {
 	@Column(name="PUESTO_NACIONAL",nullable=true)
 	private Integer puesto_nacional;
 	
-	
+	@Column(name="NOTA_ORIGINAL_NA",nullable=true)
+	private Float nota_original_nacional;
 	
 	
 	public Integer getId() {
@@ -427,6 +428,14 @@ public class Trabajosfinales {
 
 	public void setPuesto_nacional(Integer puesto_nacional) {
 		this.puesto_nacional = puesto_nacional;
+	}
+
+	public Float getNota_original_nacional() {
+		return nota_original_nacional;
+	}
+
+	public void setNota_original_nacional(Float nota_original_nacional) {
+		this.nota_original_nacional = nota_original_nacional;
 	}
 	
 	

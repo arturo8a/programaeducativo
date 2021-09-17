@@ -8,6 +8,19 @@ import com.progeduc.model.Gradoparticipante;
 
 public class DataEtapaNacionalDto {
 	
+	List<EtapaNacionalDto> listaEtapaNacional;
+
+	public List<EtapaNacionalDto> getListaEtapaNacional() {
+		return listaEtapaNacional;
+	}
+
+	public void setListaEtapaNacional(List<EtapaNacionalDto> listaEtapaNacional) {
+		this.listaEtapaNacional = listaEtapaNacional;
+	}
+	
+	
+	
+	/*
 	List<Gradoparticipante> listaNivel;
 	List<Categoriatrabajo> listaCategoria;
 	List<Gradoparticipante> listaNivelEmpatadas;
@@ -51,6 +64,6 @@ public class DataEtapaNacionalDto {
 	public void setListaCerrarEtapaNacional(List<CerrarEtapaNacional> listaCerrarEtapaNacional) {
 		this.listaCerrarEtapaNacional = listaCerrarEtapaNacional;
 	}
-	
+	*/
 	
 }

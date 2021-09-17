@@ -15,6 +15,8 @@ public class ConcursoDto {
 	String estado;
 	Float calificacion;
 	Integer puesto;
+	Float calificacionnacional;
+	Integer puestonacional;
 	
 	public Integer getId() {
 		return id;
@@ -93,5 +95,17 @@ public class ConcursoDto {
 	}
 	public void setPuesto(Integer puesto) {
 		this.puesto = puesto;
+	}
+	public Float getCalificacionnacional() {
+		return calificacionnacional;
+	}
+	public void setCalificacionnacional(Float calificacionnacional) {
+		this.calificacionnacional = calificacionnacional;
+	}
+	public Integer getPuestonacional() {
+		return puestonacional;
+	}
+	public void setPuestonacional(Integer puestonacional) {
+		this.puestonacional = puestonacional;
 	}
 }

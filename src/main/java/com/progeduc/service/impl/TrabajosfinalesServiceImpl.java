@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.progeduc.dto.CategoriaModalidadByOds;
 import com.progeduc.dto.CategoriaNivelParticipacionByOds;
+import com.progeduc.dto.EtapaNacionalDto;
 import com.progeduc.dto.TrabajosFinalizados;
 import com.progeduc.dto.TrabajosfinalesParticipanteDto;
 import com.progeduc.model.Trabajosfinales;
@@ -284,9 +285,20 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 	}
 
 	@Override
-	public List<Object[]> listarTrabajosConsursoNacionalaFinalizar() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<EtapaNacionalDto> listarTrabajosConsursoNacionalaFinalizar() {
+		List<EtapaNacionalDto> lista = new ArrayList<>();
+		List<Object[]> listaObject = trabajosfinalesRepo.listarTrabajosConsursoNacionalaFinalizar();
+		for (Object[] objects : listaObject) {
+			System.out.println(objects.length);
+			EtapaNacionalDto t = new EtapaNacionalDto();
+			t.setNivelDesc(objects[0].toString());
+			t.setCategoriaId(Integer.parseInt(objects[1].toString()));
+			t.setCategoriaDesc(objects[2].toString());
+			t.setEstado(objects[3].toString());
+			lista.add(t);
+		}
+		
+		return lista;
 	}
 
 	@Override

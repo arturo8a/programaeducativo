@@ -197,10 +197,10 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
     		+ "where tf.estado=1 and tf.estadotrabajoid=21 and tf.puesto!= 0 and tf.anio = EXTRACT(YEAR FROM sysdate) and tf.programaeducativoid=?1 ",nativeQuery = true)
 	List<Trabajosfinales> listaTrabajosEmpatadosPorODS(Integer odsId);
 	
-	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where tb1.estado=1 and tb1.anio = EXTRACT(YEAR FROM sysdate) and TB1.estadotrabajoid=3 and TB1.puesto > 0 ",nativeQuery = true)
+	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where tb1.estado=1 and tb1.anio = EXTRACT(YEAR FROM sysdate) and TB1.estadotrabajoid=3 and TB1.puesto = 1 ",nativeQuery = true)
 	List<Trabajosfinales> listarTrabajosConsursoNacional();
 	
-	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where tb1.estado=1 and tb1.anio = EXTRACT(YEAR FROM sysdate) and TB1.estadotrabajoid=3 and TB1.puesto > 0 and (TB1.estadonacional !=3 OR TB1.estadonacional IS NULL)",nativeQuery = true)
+	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where tb1.estado=1 and tb1.anio = EXTRACT(YEAR FROM sysdate) and TB1.estadotrabajoid=3 and TB1.puesto = 1 and (TB1.estadonacional !=3 OR TB1.estadonacional IS NULL)",nativeQuery = true)
 	List<Trabajosfinales> listaTrabajoEvaluadEmpateNacional();
 	
 	
@@ -211,8 +211,8 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
 			+ "inner join trabajosfinales_participante tfp on tfp.trabajosfinalesid = tf.id "
 			+ "inner join participante p on p.id = tfp.participanteid "
 			+ "inner join gradoparticipante gp on gp.id = p.gradooestudiante "
-    		+ "where tf.nota is not null and gp.nivelgradopartdesc=?2 AND tf.categoriatrabajoid = ?1 and and tf.estadotrabajoid=3"
-    		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) AND tf.puesto > 0"
+    		+ "where tf.nota is not null and gp.nivelgradopartdesc=?2 AND tf.categoriatrabajoid = ?1  and tf.estadotrabajoid=3 "
+    		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) AND tf.puesto = 1	"
     		+ "order by tf.nota_nacional desc ",nativeQuery = true)
 	List<Trabajosfinales> listarTrabajosfinalesPorNivelCategoria(Integer categoriaId, String nivel);
 	
@@ -223,8 +223,8 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
 			+ "inner join trabajosfinales_participante tfp on tfp.trabajosfinalesid = tf.id "
 			+ "inner join participante p on p.id = tfp.participanteid "
 			+ "inner join gradoparticipante gp on gp.id = p.gradooestudiante "
-    		+ "where tf.nota is not null and gp.nivelgradopartdesc=?2 AND tf.categoriatrabajoid = ?1 and and tf.estadotrabajoid=3"
-    		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) AND tf.puesto_nacional > 0 AND tf.estadonacional=21 and tf.nota_nacional > 0"
+    		+ "where tf.nota is not null and gp.nivelgradopartdesc=?2 AND tf.categoriatrabajoid = ?1 and tf.estadotrabajoid=3 AND tf.puesto = 1 "
+    		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) AND tf.puesto_nacional > 0 AND tf.estadonacional=21 and tf.nota_nacional > 0 "
     		+ "order by tf.nota_nacional desc ",nativeQuery = true)
 	List<Trabajosfinales> listarTrabajosfinalesPorNivelCategoriaEmpatadosConNota(Integer categoriaId, String nivel);
 	
@@ -235,21 +235,22 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
 			+ "inner join trabajosfinales_participante tfp on tfp.trabajosfinalesid = tf.id "
 			+ "inner join participante p on p.id = tfp.participanteid "
 			+ "inner join gradoparticipante gp on gp.id = p.gradooestudiante "
-    		+ "where tf.nota is not null and o.id=?3 AND tf.categoriatrabajoid = ?1 and gp.nivelgradopartdesc=?2 "
+    		+ "where tf.nota is not null and o.id=?3 AND tf.categoriatrabajoid = ?1 and gp.nivelgradopartdesc=?2  AND tf.puesto = 1 "
     		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) AND tf.puesto_nacional= ?3 AND tf.puesto_nacional > 0 AND tf.estadonacional=21"
     		+ "order by tf.nota desc ",nativeQuery = true)
 	List<Trabajosfinales> listaTrabajosEmpatadosNacionalPorCatNivPuesto(Integer idcategoria, String nivel, Integer puesto);
 	
 	
-	@Query(value="select gp.nivelgradopartdesc, tf.categoriatrabajoid, NVL(cn.estado, 1) as \"estado\" from trabajosfinales tf "
+	@Query(value="select gp.nivelgradopartdesc, tf.categoriatrabajoid, ct.descripcion, NVL(cn.estado, 0) from trabajosfinales tf "
 			+ "inner join programaeducativo pe on tf.programaeducativoid = pe.id "
 			+ "inner join distrito d on pe.distritoid = d.id "
 			+ "inner join ods o on d.odsid = o.id "
 			+ "inner join trabajosfinales_participante tfp on tfp.trabajosfinalesid = tf.id "
 			+ "inner join participante p on p.id = tfp.participanteid "
 			+ "inner join gradoparticipante gp on gp.id = p.gradooestudiante "
-			+ "left join cerrar_nacional cn on cn.categoria_id = tf.categoriatrabajoid and cn.nivel = gp.nivelgradopartdesc"
-			+ "group by gp.nivelgradopartdesc, tf.categoriatrabajoid, cn.estado",nativeQuery = true)
+			+ "inner join categoriaTrabajo ct on ct.id = tf.categoriatrabajoid "
+			+ "left join cerrar_nacional cn on cn.categoria_id = tf.categoriatrabajoid and cn.nivel = gp.nivelgradopartdesc "
+			+ "group by gp.nivelgradopartdesc, tf.categoriatrabajoid, ct.descripcion, NVL(cn.estado, 0)",nativeQuery = true)
 	List<Object[]> listarTrabajosConsursoNacionalaFinalizar();
 	
 	

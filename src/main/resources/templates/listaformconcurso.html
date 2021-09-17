@@ -341,25 +341,25 @@
 			<div class="div_filtro">
 				<div class="row pt-2 m-0">			
 					<div class="col-xs-4 col-sm-3">
-						<select class="form-control" id="odsconcurso" name="odsconcurso">
+						<select class="form-control" id="odsconcursoN" name="odsconcursoN">
 							<option value="Todos">ODS</option>	
 							<option th:each="dato:${ods}" th:value="${dato.descripcion}" th:utext="${dato.descripcion}"/>   				    				
 						</select>
 					</div>
 					<div class="col-xs-4 col-sm-3 ">
-						<select class="form-control" id="categoriaconcurso" name="categoriaconcurso">
+						<select class="form-control" id="categoriaconcursoN" name="categoriaconcursoN">
 							<option value="Todos">Categoria</option>
 							<option th:each="dato:${categoriatrabajo}" th:value="${dato.descripcion}" th:utext="${dato.descripcion}"/>			    				
 						</select>
 					</div>
 					<div class="col-xs-4 col-sm-3">
-						<select class="form-control" id="participacionconcurso" name="participacionconcurso">
+						<select class="form-control" id="participacionconcursoN" name="participacionconcursoN">
 							<option value="Todos">Nivel de participación</option>
 							<option th:each="dato:${nivelparticipacion}" th:value="${dato.descripcion}" th:utext="${dato.descripcion}"/>					       				
 						</select>
 					</div>
 					<div class="col-xs-4 col-sm-3">
-						<select class="form-control" id="puestoconcurso" name="puestoconcurso">
+						<select class="form-control" id="puestoconcursoN" name="puestoconcursoN">
 							<option value="Todos">Selecciones</option>
 							<option value="1">Primer puesto</option>
 							<option value="2">Segundo puesto</option>
@@ -368,8 +368,8 @@
 					</div>
 
 					<div class="col-xs-12 col-sm-3 pt-3 text-right">
-						<input type="image" id="btnbuscarconcurso"  src="./images/iconos_nd/botonbuscar.svg" width="125px" />
-						<input type="image" id="btnlimpiarconcurso"  src="./images/iconos_nd/botonrefrescar.svg" width="32px"  />
+						<input type="image" id="btnbuscarconcursoNacional"  src="./images/iconos_nd/botonbuscar.svg" width="125px" />
+						<input type="image" id="btnlimpiarconcursoNacional"  src="./images/iconos_nd/botonrefrescar.svg" width="32px"  />
 					</div>
 					<div class="col-xs-12 col-sm-3 pt-3">
 						<input th:if="${showFinalizar == 1}" type="button" id="btnFinalizarNacional" name="btnFinalizarNacional" class="btn btn-primary text-right" value="Finalizar" style=" margin-right: 20px;">
@@ -576,10 +576,10 @@
 			<br>
 			<div class="row">
 				<div class="col-xs-6 col-sm-6 text-right">
-					<input type="button" id="btnCerrarFinalizarNacional" value="Cancelar" class="btn btn-outline-primary"/>
+					<input type="button" id="btnCerrarFinalizar" value="Cancelar" class="btn btn-outline-primary"/>
 				</div>
 				<div class="col-xs-6 col-sm-6 text-left">
-					<input type="button" id="btnFinalizarCierreNacional" value="Registrar" class="btn btn-primary"/>
+					<input type="button" id="btnFinalizarCierre" value="Registrar" class="btn btn-primary"/>
 				</div>
 			</div>	 	
 	      </div>
@@ -628,17 +628,19 @@
 	      	<div class="div_filtro">
 				<div class="p-0 m-0">
 					<div class="row pt-2 pb-4 m-0">
-						<div class="col-xs-12 col-sm-12">
+						<div class="col-xs-12 col-sm-12" style="overflow: scroll; height: 400px;">
 							<table id="table_lista_finalizar_nacional"  class="table table-striped display nowrap" style="width:100%">
 								<thead class="cabecera_tabla">
 							        <tr>
-							        	<th><input type="checkbox" id="seleccionarTodo"/></th>
+							        	<th><input type="checkbox" id="seleccionarTodoNacional"/></th>
 							        	<th>NIVEL</th>
 										<th>CATEGORIA</th>
 							            <th>ESTADO</th>
 							        </tr>   
 							    </thead>
+							    <tbody id="listaNacionalPorFinalizar"></tbody>
 							</table>
+							
 						</div>
 						<br><br>
 					</div>
@@ -647,10 +649,10 @@
 			<br>
 			<div class="row">
 				<div class="col-xs-6 col-sm-6 text-right">
-					<input type="button" id="btnCerrarFinalizar" value="Cancelar" class="btn btn-outline-primary"/>
+					<input type="button" id="btnCerrarFinalizarNacional" value="Cancelar" class="btn btn-outline-primary"/>
 				</div>
 				<div class="col-xs-6 col-sm-6 text-left">
-					<input type="button" id="btnFinalizarCierre" value="Registrar" class="btn btn-primary"/>
+					<input type="button" id="btnFinalizarCierreNacional" value="Registrar" class="btn btn-primary"/>
 				</div>
 			</div>	 	
 	      </div>
@@ -1933,51 +1935,29 @@ $(document).ready(function(){
 		    contentType : "application/json",
 		    url : url_base + "pedesa/consultarEtapaNacionalHabilitada",
 			success: function(respuesta) {
-				if(respuesta.status == 1){dataaa=respuesta;
-					var html = '';
-					/*Nivel*/
-					$.each(respuesta.listaNivel, function( i, value ) {
-						html +='<div class="col-xs-12 col-sm-2 text-left">';
-						html +='<input type="checkbox" class="case_edit" name="chk_nivel"  id="chk_nivel_'+value.nivelgradopartdesc+'" data-id='+value.nivelgradopartdesc+' data-etapa="1" style="margin:5px"/> <label>'+value.nivelgradopartdesc+'</label>';
-						html +='</div>';
-					}); 
-					$("#listaNivelPorFinalizar").html(html);
-					
-					/*Categoria*/
-					html = '';
-					$.each(respuesta.listaCategoria, function( i, value ) {
-						html +='<div class="col-xs-12 col-sm-2 text-left">';
-						html +='<input type="checkbox" class="case_edit" name="chk_cat"  id="chk_cat_'+value.id+'" data-id='+value.id+' data-etapa="1" style="margin:5px"/> <label>'+value.descripcion+'</label>';
-						html +='</div>';
-					}); 
-					$("#listaCategoriaPorFinalizar").html(html);
-					
-					/*$.each(respuesta.listOds, function( i, value ) {
-						html +='<div class="col-xs-12 col-sm-2 text-left">';
-						html +='<input type="checkbox" class="case_edit" name="chk_ods"  id="chk_ods_'+value.id+'" data-id='+value.id+' data-etapa="1" style="margin:5px"/> <label>'+value.descripcion+'</label>';
-						html +='</div>';
-					}); 
-					$("#listaOdsPorFinalizar").html(html);
-					
-					$.each(respuesta.listCerrarOds, function( i, value ) {
-						$('[id=chk_ods_'+value.odsid.id+'][data-etapa='+value.etapa+']').prop('disabled',true);
-						$('[id=chk_ods_'+value.odsid.id+'][data-etapa='+value.etapa+']').parent().hide();
-						$('[id=chk_ods_'+value.odsid.id+'][data-etapa='+value.etapa+']').parent().remove();
-					});
-					
-					/*ODS empatadas*/
-					/*html = '';
-					$.each(respuesta.listCerrarOds, function( i, value ) {
-						if(value.estado === 2){
-							html +='<div class="col-xs-12 col-sm-2 text-left">';
-							html +='<input type="checkbox" class="case_edit" name="chk_ods"  id="chk_ods_'+value.odsid.id+'" data-id='+value.odsid.id+' data-etapa="1" style="margin:5px"/> <label>'+value.odsid.descripcion+'</label>';
-							html +='</div>';
+				var html = '';
+				if(respuesta.length > 0){console.log(respuesta);
+					$.each(respuesta, function( i, value ) {
+						if(value.estado != "1"){
+							html += '<tr role="row">';
+							html += '<td><input type="checkbox" class="case_edit" name="chk_finalizar"  id="chk_finalizar_'+i+'" data-nivel="'+value.nivelDesc+'" data-cate="'+value.categoriaId+'" style="margin:5px"/></td>';
+							html += '<td>'+value.nivelDesc+'</td>';
+							html += '<td>'+value.categoriaDesc+'</td>';
+							
+							var estado = "";
+							if(value.estado == "0"){
+								estado = "FINALIZAR";
+							}else if(value.estado == "2"){
+								estado = "DESEMPATAR";
+							}else{
+								estado = "FINALIZAR";
+							}
+							
+							html += '<td>'+estado+'</td>';
+							html += '</tr>';
 						}
-						
-					});
-					$("#listaOdsEmpatadasPorFinalizar").html(html);
-					*/
-					
+					}); 
+					$("#listaNacionalPorFinalizar").html(html);
 					$("#modalFinalizarNacional").modal('show');
 				}else{
 					alert("Etapa no disponible");
@@ -1992,14 +1972,16 @@ $(document).ready(function(){
 				
 	});
 	
-	$("#check-na-todos").on("click",function(e){
+	$("#seleccionarTodoNacional").on("click",function(e){
 		if($(this).is(":checked")) {
-			$("#listaNivelPorFinalizar [name=chk_nivel]").prop('checked', true);
-			$("#listaCategoriaPorFinalizar [name=chk_cat]").prop('checked', true);
+			$("[name=chk_finalizar]").prop('checked', true);
 		}else{
-			$("#listaNivelPorFinalizar [name=chk_nivel]").prop('checked', false);
-			$("#listaCategoriaPorFinalizar [name=chk_cat]").prop('checked', false);
+			$("[name=chk_finalizar]").prop('checked', false);
 		}
+	});
+	
+	$("#btnCerrarFinalizarNacional").on("click",function(e){
+		$("#modalFinalizarNacional").modal('hide');
 	});
 	
 	$("#btnFinalizarCierreNacional").on("click",function(e){
@@ -2008,28 +1990,25 @@ $(document).ready(function(){
 	
 	$("#btnConfirmarCierreNacional").on("click",function(e){
 		openCargando();
-		var dataArrayNivel = [];
-		var dataArrayNivel = [];
+		var listaCierreNacional = [];
 		
-		
-		
-		$.each($("[name=chk_ods]"), function( i, value ){
+		$.each($("[name=chk_finalizar]"), function( i, value ){
 			if($(value).is(":checked") && !$(value).is(":disabled")  && $(value).is(":visible")){
-				listaOds.push({id: $(value).attr('data-id'), etapa:  $(value).attr('data-etapa')});
+				listaCierreNacional.push({id: '', categoriaId:  $(value).attr('data-cate'), nivelDesc:  $(value).attr('data-nivel'), estado:  ''});
 			}
 		}); 
 		
 		$.ajax({
 			type : "POST",
 		    contentType : "application/json",
-		    url : url_base + "pedesa/cerrarOds",
-		    data : JSON.stringify(listaOds),
+		    url : url_base + "pedesa/cerrarNacional",
+		    data : JSON.stringify(listaCierreNacional),
 		    dataType : 'json',
 			success: function(respuesta) {
 				console.log('Registro Correcto');
 				closeCargando();
-				$("#modalConfimarCierreFinalizar").modal('hide');
-				$("#modalFinalizar").modal('hide');
+				$("#modalConfimarCierreNacionalFinalizar").modal('hide');
+				$("#modalFinalizarNacional").modal('hide');
 				listar();
 			},
 			error: function() {
@@ -2077,6 +2056,47 @@ $(document).ready(function(){
 	});
 	
 	listarNacional();
+	
+	$("#btnbuscarconcursoNacional").click(function(){
+	        	
+	        	setTimeout(() => {        		  
+	        		table_lista_concurso_nacional.draw();
+	        		ods_reporte = $("#odsconcursoN").val();
+	        		categoria_reporte = $("#categoriaconcursoN").val();
+	        		nivel_participacion_reporte = $("#participacionconcursoN").val();
+	        		puesto_reporte = $("#puestoconcursoN").val();
+	        	}, 100);	
+	});
+	
+	$("#btnlimpiaralianzaNacional").on("click",function(){
+		$('#odsconcursoN').val('Todos');
+		$('#categoriaconcursoN').val('Todos');
+		$('#participacionconcursoN').val('Todos');
+		$('#puestoconcursoN').val('Todos');
+		table_lista_concurso_nacional.draw();
+	});
+	
+	$.fn.dataTable.ext.search.push(
+				function( settings, data, dataIndex ) {
+					if ( settings.nTable.id !== 'table_lista_concurso_nacional' ) {
+				        return true;
+				    }
+				    var ods = $('#odsconcursoN').val();
+			        var categoria_reporte = $('#categoriaconcursoN').val();
+			        var nivel_participacion_reporte = $('#participacionconcursoN').val();		
+			        var puesto_reporte = $('#puestoconcursoN').val();			
+			        if(!filtraSelect(ods,data[4]))
+						return false;
+					if(!filtraSelect(categoria_reporte,data[7]))
+						return false;
+					if(!filtraSelect(nivel_participacion_reporte,data[10]))
+						return false;
+					if(!filtraSelect(puesto_reporte,data[15]))
+						return false;
+					
+					return true;
+				}
+			);
 });
 
 var listarNacional = function(){
@@ -2140,8 +2160,8 @@ var listarNacional = function(){
             { 'defaultContent' : '<img src="./images/iconos_nd/pdf1.svg" class="fichatrabajo" style="width:20px; cursor:pointer"/>' },
             { 'data' : 'calificacion' },
             { 'data' : 'puesto'},
-            { 'data' : 'calificacion' },
-            { 'data' : 'puesto'},
+            { 'data' : 'calificacionnacional' },
+            { 'data' : 'puestonacional'},
             { 'defaultContent' : '<img src="./images/svg/eye-solid.svg" class="detalleevaluacion" style="width:20px; cursor:pointer"/>' }
             
         ],
@@ -2235,16 +2255,13 @@ var listarFinalizarNacional = function(){
             }
         },
         "ajax" : {
-            "url" : url_base + 'pedesa/listaconcursonacionalfinalizar',
+            "url" : url_base + 'pedesa/consultarEtapaNacionalHabilitada2',
             "type" : "GET",
             "dataSrc" : ""
         },
         "columns" : [
         	{
         		 "data":null, render:function(){return "";}
-        	},
-        	{	            	
-        		"data": null, "render": function (data, type, full, meta) { return meta.row + 1; }
         	},
         	{ 'data' : 'anio' },
         	{ 'data' : 'codigotrabajo' },
