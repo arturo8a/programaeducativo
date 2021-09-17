@@ -684,10 +684,7 @@
 	});
 	
 	$('#table_lpt').DataTable().on("draw", function(){
-		//console.log("draw");   	
-		//table_lpt.draw();
-	});
-	
+	});	
 	
 	$.fn.dataTable.ext.search.push(
    	    function( settings, data, dataIndex ) {
@@ -735,7 +732,7 @@
    	    	$.ajax({
 						type : "POST",
 					    contentType : "application/json",
-					    url : url_base + "pedesa/verificaParticipanteSubidoTrabajo",
+					    url : url_base + "pedesa/verificaParticipanteSubidoTrabajoAdd",
 					    data : JSON.stringify(miData),
 					    async: false,
 					    dataType : 'json',

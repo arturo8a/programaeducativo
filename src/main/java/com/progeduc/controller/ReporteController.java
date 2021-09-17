@@ -36,6 +36,7 @@ import com.progeduc.dto.DocenteDto;
 import com.progeduc.dto.IieeReporteDto;
 import com.progeduc.dto.ListaparticipantereporteDto;
 import com.progeduc.dto.NotasEvaluadorDto;
+import com.progeduc.dto.ResultadosGanadoresDto;
 import com.progeduc.dto.ResultadosRegionalesDto;
 import com.progeduc.model.Auspicio;
 import com.progeduc.model.Ods;
@@ -134,6 +135,7 @@ public class ReporteController {
 	List<Float> puntaje;
 	Integer nroEvaluadoresAsignados;
 	boolean bandera, banderaods, banderaOdsReporte;
+	String participantes,generoParticipante;
 	
 	@GetMapping(value="/reporteparticipantesinscritos/{ods}/{anio}/{categoria}/{modalidad}/{nivel}")	
 	public ResponseEntity<InputStreamResource> exportParticipantes(@PathVariable(value="ods") Integer ods,
@@ -576,7 +578,7 @@ public class ReporteController {
 		listaParticipante.forEach(obj->{
 			ListaparticipantereporteDto reporte  = new ListaparticipantereporteDto();
 			
-			boolean bandera_ods = false;
+			bandera_ods = false;
 			boolean bandera_anio = false;
 			boolean bandera_categoria = false;
 			boolean bandera_modalidad = false;
@@ -590,7 +592,7 @@ public class ReporteController {
 			else {
 				listaOds.forEach(objOds->{
 					if(objOds.getId().equals(obj.getProgramaeducativo().getDistrito().getOdsid())) {
-						banderaods = true;
+						bandera_ods = true;
 					}
 				});
 			}
@@ -1644,6 +1646,209 @@ public class ReporteController {
 			initRow2 ++;
 		}
 		
+		String[] ColumnaResultados = {"AÑO","ODS","CATEGORIA","NIVEL DE PARTICIPACIÓN","PUESTO","CODIGO DE II.EE","NOMBRE DE II.EE","AMBITO DE II.EE","MODALIDAD","NOMBRE DEL TRABAJO","PARTICIPANTES","GENERO","NOTA FINAL","DOCENTE","CELULAR DOCENTE"};
+		Sheet hojaResultados = workbook.createSheet("Resultados");
+		
+		Row row1Resultados = hojaResultados.createRow(0);
+		
+		row1Resultados.createCell(0).setCellValue("");
+		hojaResultados.addMergedRegion(new CellRangeAddress(0, 0, 0, 3));/*1era celda , ultima celda, 1era columna, ultima columna*/		
+		
+		row1Resultados.createCell(4).setCellValue("GANADORES");
+		hojaResultados.addMergedRegion(new CellRangeAddress(0, 0, 4, 14));
+		
+		row1Resultados = hojaResultados.createRow(1);
+		for(int i=0;i<ColumnaResultados.length;i++) {
+			Cell cell = row1Resultados.createCell(i);
+			cell.setCellValue(ColumnaResultados[i]);
+		}
+		
+		List<ResultadosGanadoresDto> listaResultadosGanadores  =new ArrayList<ResultadosGanadoresDto>();		
+		
+		trabajosFinalesServ.listarhabilitados().forEach(obj->{
+			
+			if(obj.getEnviado()==1) {
+				
+				bandera_ods = false;
+				bandera_anio = false;	
+				bandera_categoria=false;
+				bandera_modalidad = false;
+				bandera_nivel = false;
+				
+				if(ods!=-1) {
+					if(obj.getProgramaeducativo().getDistrito().getOdsid().equals(ods))
+						bandera_ods = true;
+				}
+				else {
+					listaOds.forEach(objOds->{
+						if(objOds.getId().equals(obj.getProgramaeducativo().getDistrito().getOdsid()))
+							bandera_ods = true;
+					});
+				}
+				
+				if(anio!=-1) {
+					if(obj.getProgramaeducativo().getAnhio().equals(anio))
+						bandera_anio = true;
+				}
+				else {
+					bandera_anio = true;
+				}
+				
+				if(categoria!=-1) {
+					if(categoria == obj.getCategoriatrabajo().getId())
+						bandera_categoria=true;
+				}
+				else {
+					bandera_categoria = true;
+				}
+				
+				if(modalidad!=-1) {
+					if(modalidad == obj.getModalidadtrabajo().getId())
+						bandera_modalidad = true;
+				}
+				else {
+					bandera_modalidad = true;
+				}
+				
+				peNivelParticipacion="";
+				if(nivel!=-1) {
+					List<Participante> listaParticipante = participanteServ.listarhabilitados(obj.getProgramaeducativo().getId());
+					listaParticipante.forEach(objParticipante->{
+						if(objParticipante.getGradoestudiante().getNivelgradopartid()==nivel) {
+							bandera_nivel = true;
+							peNivelParticipacion = objParticipante.getGradoestudiante().getNivelgradopartdesc();
+						}
+					});
+				}
+				else {
+					bandera_nivel = true;
+				}			
+				
+				if( bandera_ods && bandera_anio && bandera_categoria && bandera_modalidad && bandera_nivel) 			
+				{
+					participantes = "";
+					generoParticipante = "";
+					ResultadosGanadoresDto dto = new ResultadosGanadoresDto();
+					switch(obj.getPuesto()) {
+						case  1 :  
+							dto.setAnio(obj.getAnio());
+							dto.setOds(odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+							dto.setCategoria(obj.getCategoriatrabajo().getDescripcion());
+							if(peNivelParticipacion.equals("")) {
+								trabajosFinalesParticipanteService.listar(obj.getId()).forEach(objTF->{
+									peNivelParticipacion = objTF.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+								});
+							}		
+							dto.setNivelParticipacion(peNivelParticipacion);
+							dto.setPuesto("PRIMER PUESTO");
+							dto.setCodigoIiee(obj.getProgramaeducativo().getCodmod());
+							dto.setNombreIiee(obj.getProgramaeducativo().getNomie());
+							dto.setAmbitoIiee(obj.getProgramaeducativo().getAmbito().getDescripcion());
+							dto.setModalidad(obj.getModalidadtrabajo().getDescripcion());
+							dto.setNombreTrabajo(obj.getNombre());
+							trabajosFinalesParticipanteService.listar(obj.getId()).forEach(tfp->{
+								participantes += tfp.getParticipante().getNombreestudiante() + " " + tfp.getParticipante().getAppaternoestudiante()+ " " + tfp.getParticipante().getApmaternoestudiante() + ",";
+								generoParticipante += tfp.getParticipante().getGeneroestudiante().getDescripcion() + ",";
+							});
+							if(participantes.length()>0) {
+								participantes = participantes.substring(0, participantes.length()-1);
+								generoParticipante  = generoParticipante.substring(0, generoParticipante.length()-1);
+							}							
+							dto.setParticipantes(participantes);
+							dto.setGenero(generoParticipante);
+							dto.setNotaFinal(obj.getNota());
+							dto.setDocente(obj.getNombre() + " "  + obj.getAppaterno() + " " + obj.getApmaterno());
+							dto.setCelularDocente(obj.getTelefono());	
+							listaResultadosGanadores.add(dto);
+							break;
+						case  2 :  
+							dto.setAnio(obj.getAnio());
+							dto.setOds(odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+							dto.setCategoria(obj.getCategoriatrabajo().getDescripcion());
+							if(peNivelParticipacion.equals("")) {
+								trabajosFinalesParticipanteService.listar(obj.getId()).forEach(objTF->{
+									peNivelParticipacion = objTF.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+								});
+							}		
+							dto.setNivelParticipacion(peNivelParticipacion);
+							dto.setPuesto("SEGUNDO PUESTO");
+							dto.setCodigoIiee(obj.getProgramaeducativo().getCodmod());
+							dto.setNombreIiee(obj.getProgramaeducativo().getNomie());
+							dto.setAmbitoIiee(obj.getProgramaeducativo().getAmbito().getDescripcion());
+							dto.setModalidad(obj.getModalidadtrabajo().getDescripcion());
+							dto.setNombreTrabajo(obj.getNombre());
+							trabajosFinalesParticipanteService.listar(obj.getId()).forEach(tfp->{
+								participantes += tfp.getParticipante().getNombreestudiante() + " " + tfp.getParticipante().getAppaternoestudiante()+ " " + tfp.getParticipante().getApmaternoestudiante() + ",";
+								generoParticipante += tfp.getParticipante().getGeneroestudiante().getDescripcion() + ",";
+							});
+							if(participantes.length()>0) {
+								participantes = participantes.substring(0, participantes.length()-1);
+								generoParticipante  = generoParticipante.substring(0, generoParticipante.length()-1);
+							}							
+							dto.setParticipantes(participantes);
+							dto.setGenero(generoParticipante);
+							dto.setNotaFinal(obj.getNota());
+							dto.setDocente(obj.getNombre() + " "  + obj.getAppaterno() + " " + obj.getApmaterno());
+							dto.setCelularDocente(obj.getTelefono());
+							listaResultadosGanadores.add(dto);
+							break;
+						case  3 :  
+							dto.setAnio(obj.getAnio());
+							dto.setOds(odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+							dto.setCategoria(obj.getCategoriatrabajo().getDescripcion());
+							if(peNivelParticipacion.equals("")) {
+								trabajosFinalesParticipanteService.listar(obj.getId()).forEach(objTF->{
+									peNivelParticipacion = objTF.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+								});
+							}		
+							dto.setNivelParticipacion(peNivelParticipacion);
+							dto.setPuesto("TERCER PUESTO");
+							dto.setCodigoIiee(obj.getProgramaeducativo().getCodmod());
+							dto.setNombreIiee(obj.getProgramaeducativo().getNomie());
+							dto.setAmbitoIiee(obj.getProgramaeducativo().getAmbito().getDescripcion());
+							dto.setModalidad(obj.getModalidadtrabajo().getDescripcion());
+							dto.setNombreTrabajo(obj.getNombre());
+							trabajosFinalesParticipanteService.listar(obj.getId()).forEach(tfp->{
+								participantes += tfp.getParticipante().getNombreestudiante() + " " + tfp.getParticipante().getAppaternoestudiante()+ " " + tfp.getParticipante().getApmaternoestudiante() + ",";
+								generoParticipante += tfp.getParticipante().getGeneroestudiante().getDescripcion() + ",";
+							});
+							if(participantes.length()>0) {
+								participantes = participantes.substring(0, participantes.length()-1);
+								generoParticipante  = generoParticipante.substring(0, generoParticipante.length()-1);
+							}							
+							dto.setParticipantes(participantes);
+							dto.setGenero(generoParticipante);
+							dto.setNotaFinal(obj.getNota());
+							dto.setDocente(obj.getNombre() + " "  + obj.getAppaterno() + " " + obj.getApmaterno());
+							dto.setCelularDocente(obj.getTelefono());
+							listaResultadosGanadores.add(dto);
+							break;
+					}
+				}
+			}
+		});
+		
+		int initRow3 = 2;
+		for(ResultadosGanadoresDto dto : listaResultadosGanadores) {
+			row1Resultados = hojaResultados.createRow(initRow3);
+			row1Resultados.createCell(0).setCellValue(dto.getAnio());
+			row1Resultados.createCell(1).setCellValue(dto.getOds());
+			row1Resultados.createCell(2).setCellValue(dto.getCategoria());
+			row1Resultados.createCell(3).setCellValue(dto.getNivelParticipacion());
+			row1Resultados.createCell(4).setCellValue(dto.getPuesto());
+			row1Resultados.createCell(5).setCellValue(dto.getCodigoIiee());
+			row1Resultados.createCell(6).setCellValue(dto.getNombreIiee());
+			row1Resultados.createCell(7).setCellValue(dto.getAmbitoIiee());
+			row1Resultados.createCell(8).setCellValue(dto.getModalidad());
+			row1Resultados.createCell(9).setCellValue(dto.getNombreTrabajo());
+			row1Resultados.createCell(10).setCellValue(dto.getParticipantes());
+			row1Resultados.createCell(11).setCellValue(dto.getGenero());
+			row1Resultados.createCell(12).setCellValue(dto.getNotaFinal());
+			row1Resultados.createCell(12).setCellValue(dto.getDocente());
+			row1Resultados.createCell(12).setCellValue(dto.getCelularDocente());
+			initRow3 ++;
+		}
+		
 		try {
 			workbook.write(stream);
 			workbook.close();
@@ -1717,8 +1922,18 @@ public class ReporteController {
 			ods = obsSesion;
 		}
 		
-		System.out.println(ods+anio+estado);
-		List<UsuarioAlianza> listaUsu = usuarioAlianzaServ.listaUsuarioFiltro(ods, anio, estado, role6, role7, role8, role9);
+		List<UsuarioAlianza> listaUsu =	new ArrayList<UsuarioAlianza>();
+		usuarioAlianzaServ.listaUsuarioFiltro(ods, anio, estado, role6, role7, role8, role9).forEach(objua->{
+			bandera_ods = false;
+			listaOds.forEach(objOds->{
+				if(objOds.getId().equals(objua.getOds().getId())) {
+					bandera_ods = true;
+				}
+			});
+			if(bandera_ods) {
+				listaUsu.add(objua);
+			}
+		});
 		List<Auspicio> listaAuspicio = new ArrayList<>();
 		
 		HSSFWorkbook workbook = new HSSFWorkbook();

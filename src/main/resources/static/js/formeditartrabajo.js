@@ -159,7 +159,7 @@ var mis_evidencias_eliminadas = new Array();
 	        "emptyTable": "No se han registrado",
 	        "info": "",
 	        "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
-	        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+	        "infoFiltered": "",
 	        "infoPostFix": "",
 	        "thousands": ",",
 	        "lengthMenu": "Mostrar _MENU_ Entradas",
@@ -392,8 +392,6 @@ var mis_evidencias_eliminadas = new Array();
 					alert("Exception al registrar");
 			    }
 			});	
-			
-			
 		}
 		else{
 			$("#modalimagencargando").modal('hide');
@@ -404,16 +402,13 @@ var mis_evidencias_eliminadas = new Array();
 				keyboard:false
 			});
 		}
-	});		
-	/*});*/
+	});	
 	
 	$('#table_lpt_editar').DataTable().on("draw", function(row, data){
 		
-		var array_data = table_lpt_editar.data();
 		var array_participanteid = $("#participanteid").val();
 		array_participanteid = array_participanteid.split(',');
 		
-		var contador = 0;
 		for(var i=0;i<array_indice.length;i++){				
 			for(var j=0;j<array_participanteid.length-1;j++){ 
 				if(array_indice[i] == array_participanteid[j]){
@@ -429,8 +424,7 @@ var mis_evidencias_eliminadas = new Array();
    	    	
    	    	if(settings.nTable.id !== 'table_lpt_editar'){
    	            return true;
-   	        }
-   	    	
+   	        }   	    	
    	    	var composicionmusical  = 0, cuento = 0, poesia = 0,  dibujopintura = 0 , ahorraragua = 0, modalidadindividual = 0 , modalidadgrupal = 0;
    	    	categoriatrabajo= $("#categoriatrabajoeditar").val();
    	    	modalidadtrabajo = $("#modalidadpostulaciontrabajoeditar").val();
@@ -462,35 +456,38 @@ var mis_evidencias_eliminadas = new Array();
    	    		return false;
    	    	if(!filtraCategoriaModalidad(modalidadgrupal, data[12]))
    	    		return false;
-   	    	array_indice.push(data[14])
    	    	
    	    	/*verifica si a registrado un trabajo con esta misma categoria y modalidad*/
+   	    	
    	    	var miData = {
 				id : data[14],
 				idCategoria  :  parseInt(categoriatrabajo),
-				idModalidad : parseInt(modalidadtrabajo)
+				idModalidad : parseInt(modalidadtrabajo),
+				idTrabajo : $("#trabajooid").val()
 			};
    	    	
    	    	var bandera;
    	    	$.ajax({
-						type : "POST",
-					    contentType : "application/json",
-					    url : url_base + "pedesa/verificaParticipanteSubidoTrabajo",
-					    data : JSON.stringify(miData),
-					    async: false,
-					    dataType : 'json',
-						success: function(respuesta) {	
-							if(respuesta!=0){
-								bandera = false;
-							}
-							else{
-								bandera = true;
-							}							
-						},
-						error: function() {
-							alert("error en el servicio verificaParticipanteSubidoTrabajo ");
-					    }
-					});
+					type : "POST",
+				    contentType : "application/json",
+				    url : url_base + "pedesa/verificaParticipanteSubidoTrabajo",
+				    data : JSON.stringify(miData),
+				    async: false,
+				    dataType : 'json',
+					success: function(respuesta) {	
+						if(respuesta!=0){
+							bandera = false;
+						}
+						else{
+							bandera = true;
+						}							
+					},
+					error: function() {
+						alert("error en el servicio verificaParticipanteSubidoTrabajo ");
+				    }
+				});
+			if(bandera)
+				array_indice.push(data[14]);
    	    	return bandera;
    	    	
    	    }
@@ -675,8 +672,6 @@ var mis_evidencias_eliminadas = new Array();
 				}
 			}			
 		}
-		console.log("mis_evidencias_edit.length : " + mis_evidencias_edit.length);
-		console.log("mis_evidencias_inicial_edit.length : " + mis_evidencias_inicial_edit.length);
 		
 		if( ((mis_evidencias_edit.length + mis_evidencias_inicial_edit.length) >10	) || ( (mis_evidencias_edit.length + mis_evidencias_inicial_edit.length) == 0)){
 			mensajeValidacion += "Debe subir hasta 10 evidencias"+"<br>";

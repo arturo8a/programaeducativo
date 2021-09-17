@@ -536,6 +536,7 @@
 	var appaternopmt="",apmaternopmt="",nombrepmt="",parentesco="",tipodocumentopmt="",nrodocumentopmt="",nrotelefonopmt="",correoelectronicopmt="";
 	var celdaseleccionada,mensajeValidacion=false;
 	var finalizaparticipaciontrabajo = $("#finalizaparticipaciontrabajo").val();	
+	var idTrabajo;
 	
 	$(document).ready(function(){	
 		//listar();
@@ -947,15 +948,6 @@
 							}else{
 								x = '<img src="./images/svg/eye-solid.svg" class="vertrabajo" style="width:20px; cursor:pointer"/>' ;
 							}
-	                        /*switch (data) {
-	                            case 0:	                                
-	                                break;
-	                            case 1:	                            	
-	                                break;	                                
-	                            case 2:
-	                            	x = '<img src="./images/svg/eye-solid.svg" class="vertrabajo" style="width:20px; cursor:pointer" />' ;
-	                                break;
-                            }*/
                             return x;
                         }
 	                },
@@ -967,16 +959,6 @@
 							}else{
 								x = '<img src="./images/svg/eliminar-alt-regular.svg" style="width:20px; filter: invert(70%)" />';
 							}
-	                        /*switch (data) {
-	                            case 0:
-	                                x = '<img src="./images/svg/eliminar-alt-regular.svg" class="eliminartrabajo" style="width:20px; cursor:pointer" />';
-	                                break;
-	                            case 1:	                            	
-	                                break;
-	                            case 2:
-	                            	x = '<img src="./images/svg/eliminar-alt-regular.svg" style="width:20px; filter: invert(70%)" disabled />';
-	                                break;
-                            }*/
                             return x;
                         }
 	                },			        
@@ -990,18 +972,6 @@
 							}else{
 								x= "Enviado";
 							}
-	                        /*switch (data) {
-	                            case 0:
-	                                
-	                                break;
-	                            case 1:
-	                            	x = "Enviado";
-	                                break;
-	                            case 2:
-	                               // x = "<button type='button' class='enviartrabajo btn btn-primary' disabled>Enviar</button>";4x = "Enviado";
-	                               x = "Enviado";
-	                                break;
-                            }*/
                             return x;
                         }
 	                }
@@ -1214,7 +1184,6 @@
 			    url : url_base + "pedesa/enviartrabajoid/"+ id,
 				success: function(respuesta) {
 					if(respuesta==1){
-						//table_lista_trabajos_finales.row(celdaseleccionada).remove().draw(false);
 						table_lista_trabajos_finales.cell(celdaseleccionada,6).data(1).draw();
 						table_lista_trabajos_finales.cell(celdaseleccionada,7).data(1).draw();
 						table_lista_trabajos_finales.cell(celdaseleccionada,8).data(1).draw();
@@ -1232,7 +1201,6 @@
 					}
 				},
 				error: function() {
-					//$("#textoerror").html("Excepcion Eliminar trabajo");
 					console.log("Excepcion Eliminar trabajo");
 			    }
 			});			
