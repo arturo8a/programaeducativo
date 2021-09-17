@@ -364,7 +364,7 @@ public class ReporteController {
 			row.createCell(6).setCellValue(dto.getCategoria());
 			row.createCell(7).setCellValue(dto.getNivelParticipacion());
 			row.createCell(8).setCellValue(dto.getEvaluador());
-			row.createCell(9).setCellValue(dto.getCalificacion());
+			row.createCell(9).setCellValue(dto.getCalificacion()!="-1.0"?dto.getCalificacion():"");
 			initRow++;			
 		}		
 		try {
@@ -1756,7 +1756,7 @@ public class ReporteController {
 							}							
 							dto.setParticipantes(participantes);
 							dto.setGenero(generoParticipante);
-							dto.setNotaFinal(obj.getNota());
+							dto.setNotaFinal(obj.getNota()!=null?obj.getNota().toString():"");
 							dto.setDocente(obj.getNombre() + " "  + obj.getAppaterno() + " " + obj.getApmaterno());
 							dto.setCelularDocente(obj.getTelefono());	
 							listaResultadosGanadores.add(dto);
@@ -1787,7 +1787,7 @@ public class ReporteController {
 							}							
 							dto.setParticipantes(participantes);
 							dto.setGenero(generoParticipante);
-							dto.setNotaFinal(obj.getNota());
+							dto.setNotaFinal(obj.getNota()!=null?obj.getNota().toString():"");
 							dto.setDocente(obj.getNombre() + " "  + obj.getAppaterno() + " " + obj.getApmaterno());
 							dto.setCelularDocente(obj.getTelefono());
 							listaResultadosGanadores.add(dto);
@@ -1818,7 +1818,7 @@ public class ReporteController {
 							}							
 							dto.setParticipantes(participantes);
 							dto.setGenero(generoParticipante);
-							dto.setNotaFinal(obj.getNota());
+							dto.setNotaFinal(obj.getNota()!=null?obj.getNota().toString():"");
 							dto.setDocente(obj.getNombre() + " "  + obj.getAppaterno() + " " + obj.getApmaterno());
 							dto.setCelularDocente(obj.getTelefono());
 							listaResultadosGanadores.add(dto);
@@ -1843,9 +1843,9 @@ public class ReporteController {
 			row1Resultados.createCell(9).setCellValue(dto.getNombreTrabajo());
 			row1Resultados.createCell(10).setCellValue(dto.getParticipantes());
 			row1Resultados.createCell(11).setCellValue(dto.getGenero());
-			row1Resultados.createCell(12).setCellValue(dto.getNotaFinal());
-			row1Resultados.createCell(12).setCellValue(dto.getDocente());
-			row1Resultados.createCell(12).setCellValue(dto.getCelularDocente());
+			row1Resultados.createCell(12).setCellValue(dto.getNotaFinal()=="-1.0"?"":dto.getNotaFinal());
+			row1Resultados.createCell(13).setCellValue(dto.getDocente());
+			row1Resultados.createCell(14).setCellValue(dto.getCelularDocente());
 			initRow3 ++;
 		}
 		
