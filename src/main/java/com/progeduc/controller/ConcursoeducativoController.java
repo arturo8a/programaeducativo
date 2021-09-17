@@ -2141,6 +2141,9 @@ public class ConcursoeducativoController {
 						
 						Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(te.getId());
 						trabajoFinal.setNota(0f);
+						Estadotrabajo estado = new Estadotrabajo();
+						estado.setId(1);
+						trabajoFinal.setEstadonacional(estado);
 						trabajosfinalesServ.modificar(trabajoFinal);
 						
 						rpta = 1;
