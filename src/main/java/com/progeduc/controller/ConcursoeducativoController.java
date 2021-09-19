@@ -3451,7 +3451,7 @@ public class ConcursoeducativoController {
 							}							
 							dto.setParticipantes(participantes);
 							dto.setGenero(generoParticipante);
-							dto.setNotaFinal(obj.getNota());
+							dto.setNotaFinal(obj.getNota()!=null?obj.getNota().toString():"");
 							dto.setDocente(obj.getNombre() + " "  + obj.getAppaterno() + " " + obj.getApmaterno());
 							dto.setCelularDocente(obj.getTelefono());	
 							listaResultadosGanadores.add(dto);
@@ -3482,7 +3482,7 @@ public class ConcursoeducativoController {
 							}							
 							dto.setParticipantes(participantes);
 							dto.setGenero(generoParticipante);
-							dto.setNotaFinal(obj.getNota());
+							dto.setNotaFinal(obj.getNota()!=null?obj.getNota().toString():"");
 							dto.setDocente(obj.getNombre() + " "  + obj.getAppaterno() + " " + obj.getApmaterno());
 							dto.setCelularDocente(obj.getTelefono());
 							listaResultadosGanadores.add(dto);
@@ -3513,7 +3513,7 @@ public class ConcursoeducativoController {
 							}							
 							dto.setParticipantes(participantes);
 							dto.setGenero(generoParticipante);
-							dto.setNotaFinal(obj.getNota());
+							dto.setNotaFinal(obj.getNota()!=null?obj.getNota().toString():"");
 							dto.setDocente(obj.getNombre() + " "  + obj.getAppaterno() + " " + obj.getApmaterno());
 							dto.setCelularDocente(obj.getTelefono());
 							listaResultadosGanadores.add(dto);
@@ -3538,9 +3538,9 @@ public class ConcursoeducativoController {
 			row1Resultados.createCell(9).setCellValue(dto.getNombreTrabajo());
 			row1Resultados.createCell(10).setCellValue(dto.getParticipantes());
 			row1Resultados.createCell(11).setCellValue(dto.getGenero());
-			row1Resultados.createCell(12).setCellValue(dto.getNotaFinal());
-			row1Resultados.createCell(12).setCellValue(dto.getDocente());
-			row1Resultados.createCell(12).setCellValue(dto.getCelularDocente());
+			row1Resultados.createCell(12).setCellValue(dto.getNotaFinal()=="-1.0"?"":dto.getNotaFinal());
+			row1Resultados.createCell(13).setCellValue(dto.getDocente());
+			row1Resultados.createCell(14).setCellValue(dto.getCelularDocente());
 			initRow3 ++;
 		}
 		

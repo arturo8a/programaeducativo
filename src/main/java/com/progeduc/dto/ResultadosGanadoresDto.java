@@ -14,7 +14,7 @@ public class ResultadosGanadoresDto {
 	String nombreTrabajo;
 	String participantes;
 	String genero;
-	Float notaFinal;
+	String notaFinal;
 	String docente;
 	String celularDocente;
 	
@@ -90,10 +90,10 @@ public class ResultadosGanadoresDto {
 	public void setGenero(String genero) {
 		this.genero = genero;
 	}
-	public Float getNotaFinal() {
+	public String getNotaFinal() {
 		return notaFinal;
 	}
-	public void setNotaFinal(Float notaFinal) {
+	public void setNotaFinal(String notaFinal) {
 		this.notaFinal = notaFinal;
 	}
 	public String getDocente() {
