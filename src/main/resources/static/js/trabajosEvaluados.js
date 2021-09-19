@@ -69,7 +69,7 @@ var listar = function (){ console.log('listar()');
 		        "dataSrc" : ""
 		    },
 		    "deferRender": true,
-		    'columnDefs': [],
+		    columnDefs: [],
 		    'columns' : [
 		    	{ 
 		    		"data": null, "render": function (data, type, full, meta) { return meta.row + 1; }
@@ -82,6 +82,20 @@ var listar = function (){ console.log('listar()');
 		        { 'data' : 'modalidad' },
 		        { 'data' : 'titulotrabajo' },
 		       	{ 'data' : 'nivelparticipacion' },
+		       	{ 'data' : 'etapa',
+               		render: function(data, type) {
+	                   		var x = '<div class="data-etapa" data-etapa="'+data+'" />';
+	                   		switch (data) {
+	                            case 1:
+	                                x = '<div class="data-etapa" data-etapa="'+data+'">Regional</div>';
+	                                break;
+	                            case 2:
+	                            	x = '<div class="data-etapa" data-etapa="'+data+'">Nacional</div>';
+	                                break;
+                            }
+                            return x;
+                    }
+                },
 		        { 'data' : 'trabajo' ,
 	                   render: function(data, type) {
 	                   		var x = '<img src="./images/iconos_nd/pdf1.svg" class="fichatrabajo" data-id="'+data+'" style="width:20px; cursor:pointer"/>';
@@ -181,7 +195,11 @@ function filtraSelect(dato,campo){
 
 var obtener_data_form = function(tbody,table){
 	$(document).on("click",".mostrarEvaliacion",function(){ console.log('open modal registrar evaluacion');
-		registarEvaliacionTrabajosPendientes($(this).attr('data-id'));
+		
+		var none = $(this).parent().prev().prev().prev().prev().prev();
+		var etapa = none.find('.data-etapa').attr('data-etapa');
+		console.log(etapa);
+		registarEvaliacionTrabajosPendientes($(this).attr('data-id'),etapa);
 	});
 };
 
@@ -203,7 +221,7 @@ var obtener_trabajos = function(tbody,table){
 	});
 };
 
-function registarEvaliacionTrabajosPendientes(id){ console.log('-->mostrarrEvaliacionTrabajosPendientes');
+function registarEvaliacionTrabajosPendientes(id, etapa){ console.log('-->mostrarrEvaliacionTrabajosPendientes');
 	
 	$("#modalimagencargando").modal({
 		show : true,
@@ -218,7 +236,7 @@ function registarEvaliacionTrabajosPendientes(id){ console.log('-->mostrarrEvali
 			$("#contenidoevaluartrabajospendientes").html(respuesta);
 			$("#modalimagencargando").modal('hide');
 			$("#modaleEvaluarTrabajoPendientes").modal();
-			getRespuestas(id);
+			getRespuestas(id, etapa);
 		},
 		error: function() {
 			$("#modalimagencargando").modal('hide');
@@ -232,11 +250,11 @@ function registarEvaliacionTrabajosPendientes(id){ console.log('-->mostrarrEvali
 	});		
 }
 
-function getRespuestas(id){
+function getRespuestas(id, etapa){
 	$.ajax({
 		type : "GET",
 	    contentType : "application/json",
-	    url : url_base + "pedesa/getRespuestas/"+id,
+	    url : url_base + "pedesa/getRespuestas/"+id+"/"+etapa,
 		success: function(respuesta) {
 			var dataRespuestas = respuesta; console.log(dataRespuestas); 
 			$.each(dataRespuestas, function( i, value ) {

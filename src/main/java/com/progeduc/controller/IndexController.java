@@ -73,6 +73,7 @@ import com.progeduc.service.ITipodocumentoService;
 import com.progeduc.service.ITipousuarioService;
 import com.progeduc.service.ITrabajosfinalesParticipanteService;
 import com.progeduc.service.ITrabajosfinalesService;
+import com.progeduc.service.ITrabajosfinales_UsuarioAlianzaNacionalService;
 import com.progeduc.service.ITrabajosfinales_UsuarioAlianzaService;
 import com.progeduc.service.IUsuarioAlianzaService;
 import com.progeduc.service.IUsuarioOdsService;
@@ -213,6 +214,9 @@ public class IndexController {
 	@Autowired
 	private ITrabajosfinales_UsuarioAlianzaService trabfin_usuarioal;
 	
+	@Autowired
+	private ITrabajosfinales_UsuarioAlianzaNacionalService trabfinal_usuario_nacional;
+	
 	String participanteid;
 	
 	int contador;
@@ -263,6 +267,26 @@ public class IndexController {
 			dto.setNota((obj.getNota()==null || obj.getNota()==-1.0)  ? "" : obj.getNota().toString());
 			lista.add(dto);		
 			nota = obj.getTrabajosfinales().getNota() == null  ? "" : obj.getTrabajosfinales().getNota().toString();
+		});
+		model.addAttribute("total", nota);
+		model.addAttribute("lista", lista);
+		return "modal_detalleevaluacion";
+	}
+	
+	@GetMapping("/detalleverevaluacionnacional/{id}")
+	public String detalleverevaluacionnacional(@PathVariable("id") Integer id, Model model) {
+		
+		nota = "";
+		List<DetalleEvaluacionDto> lista = new ArrayList<DetalleEvaluacionDto>();
+		
+		trabfinal_usuario_nacional.listarByTrabajosfinalesId(id).forEach(obj->{
+			DetalleEvaluacionDto dto = new DetalleEvaluacionDto();
+			dto.setNombre(obj.getUsuarioalianza().getNombresautoridad());
+			dto.setAppaterno(obj.getUsuarioalianza().getApepatautoridad());
+			dto.setApmaterno(obj.getUsuarioalianza().getApematautoridad());
+			dto.setNota((obj.getNota()==null || obj.getNota()==-1.0)  ? "" : obj.getNota().toString());
+			lista.add(dto);		
+			nota = obj.getTrabajosfinales().getNota_nacional() == null  ? "" : obj.getTrabajosfinales().getNota_nacional().toString();
 		});
 		model.addAttribute("total", nota);
 		model.addAttribute("lista", lista);
@@ -1384,6 +1408,29 @@ public class IndexController {
         model.addAttribute("anio", fecha.get(Calendar.YEAR));
         model.addAttribute("colegios", progeducService.listCentrosEducativosGroupbyNomie());
 		return "formCerrarNacionalAsignarEvaluador";
+	}
+	
+	@GetMapping("/formCerrarNacionalAsignarEmpatesEvaluador")
+	public String formCerrarNacionalAsignarEmpatesEvaluador(Model model,HttpSession ses) {
+		
+		if(ses.getAttribute("tipousuarioid").toString().equals("1") || ses.getAttribute("tipousuarioid").toString().equals("11") || ses.getAttribute("tipousuarioid").toString().equals("12") || ses.getAttribute("tipousuarioid").toString().equals("30")) {
+			odsid = 0;
+		}
+		else if(ses.getAttribute("tipousuarioid").toString().equals("2")) {
+			
+			odsid = usuarioService.byUsuario(ses.getAttribute("usuario").toString()).getOdsid();
+			//odsid = 18;
+		}		
+		
+		model.addAttribute("odsid",odsid);
+		//model.addAttribute("ods",odsserv.listarOdsEmpatadas());//ods empatadas
+		model.addAttribute("ods",odsserv.listarAll());
+		model.addAttribute("nivelparticipacion",nivelparticipacionService.listar());
+		model.addAttribute("categoriatrabajo",categoriaevaluacionService.listar());
+		Calendar fecha = Calendar.getInstance();
+        model.addAttribute("anio", fecha.get(Calendar.YEAR));
+        model.addAttribute("colegios", progeducService.listCentrosEducativosGroupbyNomie());
+		return "formCerrarNacionalAsignarEmpatesEvaluador";
 	}
 	
 }

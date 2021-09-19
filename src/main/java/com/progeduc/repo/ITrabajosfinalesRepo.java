@@ -200,8 +200,11 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
 	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where tb1.estado=1 and tb1.anio = EXTRACT(YEAR FROM sysdate) and TB1.estadotrabajoid=3 and TB1.puesto = 1 ",nativeQuery = true)
 	List<Trabajosfinales> listarTrabajosConsursoNacional();
 	
-	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where tb1.estado=1 and tb1.anio = EXTRACT(YEAR FROM sysdate) and TB1.estadotrabajoid=3 and TB1.puesto = 1 and (TB1.estadonacional !=3 OR TB1.estadonacional IS NULL)",nativeQuery = true)
+	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where tb1.estado=1 and tb1.anio = EXTRACT(YEAR FROM sysdate) and TB1.estadotrabajoid=3 and TB1.puesto = 1 and (TB1.estadonacional !=3 OR TB1.estadonacional IS NULL ) and TB1.empate_nacional=1 ",nativeQuery = true)
 	List<Trabajosfinales> listaTrabajoEvaluadEmpateNacional();
+	
+	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where tb1.estado=1 and tb1.anio = EXTRACT(YEAR FROM sysdate) and TB1.estadotrabajoid=3 and TB1.puesto = 1 and (TB1.estadonacional !=3 OR TB1.estadonacional IS NULL )",nativeQuery = true)
+	List<Trabajosfinales> listaTrabajoEvaluadNacional();
 	
 	
 	@Query(value="select tf.* from trabajosfinales tf "
