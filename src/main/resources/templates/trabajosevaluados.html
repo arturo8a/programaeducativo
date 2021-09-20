@@ -91,6 +91,7 @@
 					            <th>MODALIDAD</th>			            
 					            <th>TÍTULO DEL TRABAJO</th>		
 					            <th>NIVEL DE PARTICIPACIÓN</th>
+					            <th>ETAPA</th>
 					            <th>FICHA DE TRABAJO</th>
 					            <th>EVIDENCIAS</th>
                                 <th>TRABAJO</th>
@@ -193,7 +194,7 @@
 <script type="text/javascript" th:src="@{/js/pdfobject.min.js}"></script>
 <script>
 $('#modaleEvaluarTrabajoPendientes').on('hidden.bs.modal', function () {
-	listar();
+	//listar();
 })
 function openModalTrabajosPermisos(idTrabajo){
 	openCargando();

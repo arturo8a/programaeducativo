@@ -1705,14 +1705,6 @@ public class ConcursoeducativoController {
 		List<TrabajosfinalesUsuarioAlianza> listTrabAsignados = trabajosFinales_UsuarioAlianzaServ.listaTrabajosIdByUsuarioId(userAlianzaId);
 		List<TrabajosfinalesUsuarioAlianzaNacional> listTrabAsignadosNacional = trabajosFinales_UsuarioAlianzaNacionalServ.listaTrabajosIdByUsuarioId(userAlianzaId);
 		List<ListaTrabajosFinalesPendientes> lista = new ArrayList<ListaTrabajosFinalesPendientes>();
-
-		for (TrabajosfinalesUsuarioAlianzaNacional trabajosfinalesUsuarioAlianzaNacional : listTrabAsignadosNacional) {
-			TrabajosfinalesUsuarioAlianza tra = new TrabajosfinalesUsuarioAlianza();
-			tra.setUsuarioalianza(trabajosfinalesUsuarioAlianzaNacional.getUsuarioalianza());
-			tra.setTrabajosfinales(trabajosfinalesUsuarioAlianzaNacional.getTrabajosfinales());
-			tra.setNota(trabajosfinalesUsuarioAlianzaNacional.getNota());
-			listTrabAsignados.add(tra);
-		}
 		
 		listTrabAsignados.forEach(data->{
 				List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteServ.listar(data.getTrabajosfinales().getId());
@@ -1721,15 +1713,10 @@ public class ConcursoeducativoController {
 						data.getTrabajosfinales().getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
 				List<EvaluacionResultado> listEvaResultado = evaluacionRespuestaServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
 				List<EvaluacionResultadoNacional> listEvaResultadoN = evaluacionRespuestaNacionalServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
-				log.info(data.getTrabajosfinales().getId()+"-"+data.getTrabajosfinales().getEstadotrabajo().getId());
-				if(eval != null && listEvaResultado.size() == 0 && listEvaResultadoN.size() == 0 && data.getTrabajosfinales().getEnviado() == 1 && 
-						(
-								(data.getTrabajosfinales().getEstadotrabajo().getId() == 2 || data.getTrabajosfinales().getEstadotrabajo().getId() == 21)
-						 ||
-						
-								(data.getTrabajosfinales().getEstadonacional().getId() == 2 || data.getTrabajosfinales().getEstadonacional().getId() == 21)
-						) 
-					) {
+				
+				if(eval != null  && listEvaResultado.size() == 0 && data.getTrabajosfinales().getEnviado() == 1 && 
+						(data.getTrabajosfinales().getEstadotrabajo().getId() == 2 || data.getTrabajosfinales().getEstadotrabajo().getId() == 21)
+					) {log.info("Regional: "+data.getTrabajosfinales().getId()+"-"+data.getTrabajosfinales().getEstadotrabajo().getId());
 					String strOds = "";
 					listaTrabajosFinalesPendientes = new ListaTrabajosFinalesPendientes();
 					listaTrabajosFinalesPendientes.setAnio(data.getTrabajosfinales().getAnio());
@@ -1743,9 +1730,39 @@ public class ConcursoeducativoController {
 					listaTrabajosFinalesPendientes.setEvaluacion("ficha trabajo");
 					listaTrabajosFinalesPendientes.setTrabajo(data.getTrabajosfinales().getId().toString());
 					listaTrabajosFinalesPendientes.setFichatrabajo("ficha trabajo");
+					listaTrabajosFinalesPendientes.setEtapa(1);
 					lista.add(listaTrabajosFinalesPendientes);
-				}	
+				}
 		});
+		
+		listTrabAsignadosNacional.forEach(data->{
+			List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteServ.listar(data.getTrabajosfinales().getId());
+			Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
+			Evaluacion eval = evaluacionService.getPorAnioCategoriaNivelparticipacion(data.getTrabajosfinales().getAnio(), 
+					data.getTrabajosfinales().getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
+			List<EvaluacionResultado> listEvaResultado = evaluacionRespuestaServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
+			List<EvaluacionResultadoNacional> listEvaResultadoN = evaluacionRespuestaNacionalServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
+	
+			if(eval != null && listEvaResultadoN.size() == 0 && data.getTrabajosfinales().getEnviado() == 1 && 
+					(data.getTrabajosfinales().getEstadonacional().getId() == 2 || data.getTrabajosfinales().getEstadonacional().getId() == 21)
+				) {log.info("Nacional: "+data.getTrabajosfinales().getId()+"-"+data.getTrabajosfinales().getEstadotrabajo().getId());
+				String strOds = "";
+				listaTrabajosFinalesPendientes = new ListaTrabajosFinalesPendientes();
+				listaTrabajosFinalesPendientes.setAnio(data.getTrabajosfinales().getAnio());
+				listaTrabajosFinalesPendientes.setCodigo(data.getTrabajosfinales().getProgramaeducativo().getCodmod()+"_"+data.getTrabajosfinales().getNumeracion());
+				listaTrabajosFinalesPendientes.setOds(odsserv.byOds(data.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+				listaTrabajosFinalesPendientes.setIiee(data.getTrabajosfinales().getProgramaeducativo().getCodmod());
+				listaTrabajosFinalesPendientes.setCategoria(data.getTrabajosfinales().getCategoriatrabajo().getDescripcion());
+				listaTrabajosFinalesPendientes.setModalidad(data.getTrabajosfinales().getModalidadtrabajo().getDescripcion());
+				listaTrabajosFinalesPendientes.setTitulotrabajo(data.getTrabajosfinales().getTitulotrabajo());
+				listaTrabajosFinalesPendientes.setNivelparticipacion(participante.getGradoestudiante().getNivelgradopartdesc());
+				listaTrabajosFinalesPendientes.setEvaluacion("ficha trabajo");
+				listaTrabajosFinalesPendientes.setTrabajo(data.getTrabajosfinales().getId().toString());
+				listaTrabajosFinalesPendientes.setFichatrabajo("ficha trabajo");
+				listaTrabajosFinalesPendientes.setEtapa(2);
+				lista.add(listaTrabajosFinalesPendientes);
+			}	
+	});
 		return new ResponseEntity<List<ListaTrabajosFinalesPendientes>>(lista, HttpStatus.OK) ;
 	}
 	
@@ -1757,14 +1774,6 @@ public class ConcursoeducativoController {
 		List<TrabajosfinalesUsuarioAlianzaNacional> listTrabAsignadosNacional = trabajosFinales_UsuarioAlianzaNacionalServ.listaTrabajosIdByUsuarioId(userAlianzaId);
 		List<ListaTrabajosFinalesPendientes> lista = new ArrayList<ListaTrabajosFinalesPendientes>();
 		
-		for (TrabajosfinalesUsuarioAlianzaNacional trabajosfinalesUsuarioAlianzaNacional : listTrabAsignadosNacional) {
-			TrabajosfinalesUsuarioAlianza tra = new TrabajosfinalesUsuarioAlianza();
-			tra.setUsuarioalianza(trabajosfinalesUsuarioAlianzaNacional.getUsuarioalianza());
-			tra.setTrabajosfinales(trabajosfinalesUsuarioAlianzaNacional.getTrabajosfinales());
-			tra.setNota(trabajosfinalesUsuarioAlianzaNacional.getNota());
-			listTrabAsignados.add(tra);
-		}
-		
 		listTrabAsignados.forEach(data->{
 			List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteServ.listar(data.getTrabajosfinales().getId());
 			Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
@@ -1772,7 +1781,7 @@ public class ConcursoeducativoController {
 					data.getTrabajosfinales().getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
 			List<EvaluacionResultado> listEvaResultado = evaluacionRespuestaServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
 			List<EvaluacionResultadoNacional> listEvaResultadoN = evaluacionRespuestaNacionalServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
-			if(eval != null &&  (listEvaResultado.size() > 0  || listEvaResultadoN.size() > 0) && data.getTrabajosfinales().getEnviado() == 1) {
+			if(eval != null &&  (listEvaResultado.size() > 0) && data.getTrabajosfinales().getEnviado() == 1) {
 				System.out.println("eval: "+eval+" | listEvaResultado: "+data.getTrabajosfinales().getId());
 				listaTrabajosFinalesPendientes = new ListaTrabajosFinalesPendientes();
 				listaTrabajosFinalesPendientes.setAnio(data.getTrabajosfinales().getAnio());
@@ -1786,6 +1795,33 @@ public class ConcursoeducativoController {
 				listaTrabajosFinalesPendientes.setEvaluacion("ficha trabajo");
 				listaTrabajosFinalesPendientes.setTrabajo(data.getTrabajosfinales().getId().toString());
 				listaTrabajosFinalesPendientes.setFichatrabajo("ficha trabajo");
+				listaTrabajosFinalesPendientes.setEtapa(1);
+				lista.add(listaTrabajosFinalesPendientes);
+			}	
+		});
+		
+		listTrabAsignadosNacional.forEach(data->{
+			List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteServ.listar(data.getTrabajosfinales().getId());
+			Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
+			Evaluacion eval = evaluacionService.getPorAnioCategoriaNivelparticipacion(data.getTrabajosfinales().getAnio(), 
+					data.getTrabajosfinales().getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
+			List<EvaluacionResultado> listEvaResultado = evaluacionRespuestaServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
+			List<EvaluacionResultadoNacional> listEvaResultadoN = evaluacionRespuestaNacionalServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
+			if(eval != null &&  (listEvaResultadoN.size() > 0) && data.getTrabajosfinales().getEnviado() == 1) {
+				System.out.println("eval: "+eval+" | listEvaResultado: "+data.getTrabajosfinales().getId());
+				listaTrabajosFinalesPendientes = new ListaTrabajosFinalesPendientes();
+				listaTrabajosFinalesPendientes.setAnio(data.getTrabajosfinales().getAnio());
+				listaTrabajosFinalesPendientes.setCodigo(data.getTrabajosfinales().getProgramaeducativo().getCodmod()+"_"+data.getTrabajosfinales().getNumeracion());
+				listaTrabajosFinalesPendientes.setOds(odsserv.byOds(data.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+				listaTrabajosFinalesPendientes.setIiee(data.getTrabajosfinales().getProgramaeducativo().getCodmod());
+				listaTrabajosFinalesPendientes.setCategoria(data.getTrabajosfinales().getCategoriatrabajo().getDescripcion());
+				listaTrabajosFinalesPendientes.setModalidad(data.getTrabajosfinales().getModalidadtrabajo().getDescripcion());
+				listaTrabajosFinalesPendientes.setTitulotrabajo(data.getTrabajosfinales().getTitulotrabajo());
+				listaTrabajosFinalesPendientes.setNivelparticipacion(participante.getGradoestudiante().getNivelgradopartdesc());
+				listaTrabajosFinalesPendientes.setEvaluacion("ficha trabajo");
+				listaTrabajosFinalesPendientes.setTrabajo(data.getTrabajosfinales().getId().toString());
+				listaTrabajosFinalesPendientes.setFichatrabajo("ficha trabajo");
+				listaTrabajosFinalesPendientes.setEtapa(2);
 				lista.add(listaTrabajosFinalesPendientes);
 			}	
 		});	
@@ -2254,10 +2290,28 @@ public class ConcursoeducativoController {
 		return 1;
 	}
 
-	@GetMapping("/getRespuestas/{id}")
-	public ResponseEntity<List<EvaluacionResultado>>getRespuestas(@PathVariable("id") Integer id,HttpSession ses){
+	@GetMapping("/getRespuestas/{id}/{etapa}")
+	public ResponseEntity<List<EvaluacionResultado>>getRespuestas(@PathVariable("id") Integer id,@PathVariable("etapa") Integer etapa,HttpSession ses){
 		Integer userAlianzaId = Integer.parseInt(ses.getAttribute("userId").toString());
-		List<EvaluacionResultado> lista = evaluacionRespuestaServ.listaEvaluacionResultado(id,userAlianzaId);
+		List<EvaluacionResultado> lista = new ArrayList<>();
+		if(etapa == 1) {
+			lista = evaluacionRespuestaServ.listaEvaluacionResultado(id,userAlianzaId);
+		}else if(etapa == 2){
+			List<EvaluacionResultadoNacional> listaNacionnal = evaluacionRespuestaNacionalServ.listaEvaluacionResultado(id,userAlianzaId);
+			if(!listaNacionnal.isEmpty()) {
+				for (EvaluacionResultadoNacional evaluacionResultadoNacional : listaNacionnal) {
+					EvaluacionResultado eva = new EvaluacionResultado();
+					eva.setId(evaluacionResultadoNacional.getId());
+					eva.setPreguntaid(evaluacionResultadoNacional.getPreguntaid());
+					eva.setPuntaje(evaluacionResultadoNacional.getPuntaje());
+					eva.setRespuestaid(evaluacionResultadoNacional.getRespuestaid());
+					eva.setTipo(evaluacionResultadoNacional.getTipo());
+					eva.setTrabajosfinales(evaluacionResultadoNacional.getTrabajosfinales());
+					eva.setUsuario(evaluacionResultadoNacional.getUsuario());
+					lista.add(eva);
+				}	
+			}
+		}
 		return new ResponseEntity<List<EvaluacionResultado>>(lista, HttpStatus.OK);
 	}
 	
@@ -3603,7 +3657,7 @@ public class ConcursoeducativoController {
 				idnivelparticipacion = obj1.getParticipante().getGradoestudiante().getNivelgradopartid();
 			});			
 			dto.setNivelparticipacion(nivelparticipacion);
-			dto.setEstado(obj.getEstadotrabajo().getDescripcion());
+			dto.setEstado(obj.getEstadonacional().getDescripcion());
 			dto.setCalificacion(obj.getNota());
 			dto.setPuesto(obj.getPuesto());
 			dto.setCalificacionnacional(obj.getNota_nacional());
@@ -3641,6 +3695,38 @@ public class ConcursoeducativoController {
 
 		}
 		return new ResponseEntity<List<EtapaNacionalDto>>(lista, HttpStatus.OK);
+	}
+	
+	@GetMapping("/listaTrabajoEvaluadNacional")
+	public ResponseEntity<List<trabajoEvaluadoDto>> listaTrabajoEvaluadNacional(@RequestParam(name="name",required=false,defaultValue="") String name, Model model, HttpSession ses) {
+		
+		List<trabajoEvaluadoDto> listadto  = new ArrayList<trabajoEvaluadoDto>();
+		
+		trabajosfinalesServ.listaTrabajoEvaluadNacional().forEach(tf->{							
+			nivel_participante = "";
+			evaluadores_asignados = 0;
+			trabajoEvaluadoDto dto = new trabajoEvaluadoDto();
+			dto.setOds(odsserv.byOds(tf.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+			dto.setCategoria(tf.getCategoriatrabajo().getDescripcion());
+			trabajosfinalesparticipanteServ.listar(tf.getId()).forEach(tfp->{
+				nivel_participante  = tfp.getParticipante().getGradoestudiante().getNivelgradopartdesc();
+			});
+			dto.setNivel_participacion(nivel_participante);
+			dto.setCodigoie(tf.getProgramaeducativo().getCodmod());
+			dto.setNombreie(tf.getProgramaeducativo().getNomie());
+			dto.setCodigo_trabajo(tf.getProgramaeducativo().getCodmod() + "_" + tf.getNumeracion());
+			dto.setModalidad(tf.getModalidadtrabajo().getDescripcion());
+			dto.setTitulo(tf.getTitulotrabajo());				
+			trabajosFinales_UsuarioAlianzaServ.listarByTrabajosfinalesId(tf.getId()).forEach(tf_ua->{
+				evaluadores_asignados += 1;
+			});
+			dto.setEvaluadores_asignados(evaluadores_asignados);
+			dto.setTiene_evaluador_asignado(evaluadores_asignados>0? "Si" : "No");
+			dto.setId(tf.getId());
+			listadto.add(dto);
+		});
+		
+		return new ResponseEntity<List<trabajoEvaluadoDto>>(listadto, HttpStatus.OK);
 	}
 	
 	@GetMapping("/listaTrabajoEvaluadEmpateNacional")
@@ -3726,7 +3812,7 @@ public class ConcursoeducativoController {
 						/*BuscarEmpate*/
 						for (Trabajosfinales trabajos : listaTrabEmpatados) {
 							if(trabajos.getNota_nacional() == NotaPuesto1 ) {
-								puestoEmpate = trabajos.getPuesto();//PUESTO DE LOS EMPATADOS
+								puestoEmpate = trabajos.getPuesto_nacional();//PUESTO DE LOS EMPATADOS
 								cantidad++;
 							}
 						}
@@ -3741,82 +3827,82 @@ public class ConcursoeducativoController {
 							//int puestoDeEmpate = 100;
 							for (Trabajosfinales trabajos : listaTrabEmpatados) {
 								Trabajosfinales  trabajoFinal = trabajos;
-								log.info("TRABAJO EMPATADO FINALIZADOS: "+trabajos.getId() +" | "+"CAREGORIAID: "+cerrarNacioanl.getCategoriaId() +" | NIVEL: "+cerrarNacioanl.getNivelDesc()+" | PUESTO: "+trabajoFinal.getPuesto()+indice+" | NOTA: "+trabajoFinal.getNota_nacional());
-								log.info("+++++++++++++++++++++puestoNuevo: "+puestoNuevo +" - trabajoFinal.getPuesto():"+ trabajoFinal.getPuesto());
+								log.info("TRABAJO EMPATADO FINALIZADOS: "+trabajos.getId() +" | "+"CAREGORIAID: "+cerrarNacioanl.getCategoriaId() +" | NIVEL: "+cerrarNacioanl.getNivelDesc()+" | PUESTO: "+trabajoFinal.getPuesto_nacional()+indice+" | NOTA: "+trabajoFinal.getNota_nacional());
+								log.info("+++++++++++++++++++++puestoNuevo: "+puestoNuevo +" - trabajoFinal.getPuesto():"+ trabajoFinal.getPuesto_nacional());
 								if(trabajos.getNota_nacional() == notaPuestoNuevo) { log.info("EMPATE NUEVO");log.info("PUESTO: "+puestoNuevo);
 									cantidadEmpateNuevo++;
 									if(puestoFinalizados) {
-										trabajoFinal.setPuesto(0);
+										trabajoFinal.setPuesto_nacional(0);
 									}else {
-										trabajoFinal.setPuesto(puestoNuevo);
+										trabajoFinal.setPuesto_nacional(puestoNuevo);
 									}
 	
 									//puestoDeEmpate = puestoNuevo;
 									cerrarNacioanl.setEstado(2);//empate
 									cerrarNacionalSserv.registrar(cerrarNacioanl);
 									indice=0;
-									if(trabajoFinal.getPuesto() == 3) {
+									if(trabajoFinal.getPuesto_nacional() == 3) {
 										indice=10;
 									}
-									if(trabajoFinal.getPuesto() == 1) {
+									if(trabajoFinal.getPuesto_nacional() == 1) {
 										empates1++;log.info("empates1: "+empates1);
 									}
-									if(trabajoFinal.getPuesto() == 2) {
+									if(trabajoFinal.getPuesto_nacional() == 2) {
 										empates2++;log.info("empates2: "+empates2);
 									}
 									
-								}else if(trabajos.getNota_nacional() < notaPuestoNuevo || puestoNuevo != trabajoFinal.getPuesto()){ log.info("SIN EMPATE NUEVO");log.info("PUESTO: "+trabajoFinal.getPuesto()+"+"+ indice);log.info("Puestos distintos:  "+puestoNuevo +" != "+ trabajoFinal.getPuesto());
-									if(trabajoFinal.getPuesto() == 3 && indice ==2) {
+								}else if(trabajos.getNota_nacional() < notaPuestoNuevo || puestoNuevo != trabajoFinal.getPuesto_nacional()){ log.info("SIN EMPATE NUEVO");log.info("PUESTO: "+trabajoFinal.getPuesto_nacional()+"+"+ indice);log.info("Puestos distintos:  "+puestoNuevo +" != "+ trabajoFinal.getPuesto_nacional());
+									if(trabajoFinal.getPuesto_nacional() == 3 && indice ==2) {
 										indice=0;
 									}
-									if(puestoNuevo > trabajoFinal.getPuesto() && cantidadEmpateNuevo > 0) {
-										trabajoFinal.setPuesto(0);
+									if(puestoNuevo > trabajoFinal.getPuesto_nacional() && cantidadEmpateNuevo > 0) {
+										trabajoFinal.setPuesto_nacional(0);
 										puestoFinalizados = true;
 									}else {
 										if((puestoNuevo + indice) > 3) {
-											trabajoFinal.setPuesto(0);
+											trabajoFinal.setPuesto_nacional(0);
 											puestoFinalizados = true;
 										}else {
-											if(puestoNuevo < trabajoFinal.getPuesto()) indice=0;
+											if(puestoNuevo < trabajoFinal.getPuesto_nacional()) indice=0;
 											else indice++;
-											if(trabajoFinal.getPuesto() == 3) {
-												trabajoFinal.setPuesto(trabajoFinal.getPuesto()); //asignar nuevo puesto
+											if(trabajoFinal.getPuesto_nacional() == 3) {
+												trabajoFinal.setPuesto_nacional(trabajoFinal.getPuesto_nacional()); //asignar nuevo puesto
 											}else {
-												trabajoFinal.setPuesto(trabajoFinal.getPuesto() + indice+empates1); //asignar nuevo puesto
+												trabajoFinal.setPuesto_nacional(trabajoFinal.getPuesto_nacional() + indice+empates1); //asignar nuevo puesto
 											}
 											puestoNuevo = trabajoFinal.getPuesto();log.info("Nuevo puesto: "+puestoNuevo);
 										}
-										if(trabajoFinal.getPuesto() == 3) {
+										if(trabajoFinal.getPuesto_nacional() == 3) {
 											indice=10;
 										}
 										//indice++;
 										log.info("empates1: "+empates1);
 										if(empates1 > 1) {
-											trabajoFinal.setPuesto(0);
+											trabajoFinal.setPuesto_nacional(0);
 											puestoFinalizados = true;
 										}log.info("empates2: "+empates2);
 										if(empates2 > 1) {
-											trabajoFinal.setPuesto(0);
+											trabajoFinal.setPuesto_nacional(0);
 											puestoFinalizados = true;
 										}
 										if(cantidadEmpateNuevo > 2) {
-											trabajoFinal.setPuesto(0);
+											trabajoFinal.setPuesto_nacional(0);
 											puestoFinalizados = true;
 										}
 										
 										if(empates1 == 1) {
 											if(cantidadEmpateNuevo > 1) {
-												trabajoFinal.setPuesto(0);
+												trabajoFinal.setPuesto_nacional(0);
 												puestoFinalizados = true;
 											}
 										}
 										
 										if(cantidadEmpateNuevo > 2) {
-											trabajoFinal.setPuesto(0);
+											trabajoFinal.setPuesto_nacional(0);
 											puestoFinalizados = true;
 										}
 										/*if(puestoNuevo < trabajoFinal.getPuesto()) {
-											trabajoFinal.setPuesto(0);
+											trabajoFinal.setPuesto_nacional(0);
 										}*/
 									}
 									log.info("********************PUESTO: "+puestoNuevo);
@@ -3836,12 +3922,12 @@ public class ConcursoeducativoController {
 							log.info("TOTAL PUESTO 3:"+listaPuesto3.size());
 							for (Trabajosfinales trab : listaPuesto1) {
 								if(listaPuesto1.size() > 1) { log.info("lista 1 mayor  a 1 ");
-									evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getId());//borrar las respuestas de las evaluaciones;
-									trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getId());//borrar asignacion de evaluadores
+									evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trab.getId());//borrar las respuestas de las evaluaciones;
+									trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trab.getId());//borrar asignacion de evaluadores
 									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getId());
 									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
 									estadoTrabajo.setId(21);
-									trabajoFinal.setEstadotrabajo(estadoTrabajo);
+									trabajoFinal.setEstadonacional(estadoTrabajo);
 		
 									trabajosfinalesServ.modificar(trabajoFinal);
 								}
@@ -3850,16 +3936,16 @@ public class ConcursoeducativoController {
 							for (Trabajosfinales trab : listaPuesto2) {
 								if(listaPuesto1.size() >= 3) { log.info("YA HAY MAS DE 3 en lista 1 ");
 									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getId());
-									trabajoFinal.setPuesto(0);
+									trabajoFinal.setPuesto_nacional(0);
 									
 									trabajosfinalesServ.modificar(trabajoFinal);
 								}else if(listaPuesto2.size() > 1) { log.info("lista 2 mayor  a 1 ");
-									evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getId());//borrar las respuestas de las evaluaciones;
-									trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getId());//borrar asignacion de evaluadores
+									evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trab.getId());//borrar las respuestas de las evaluaciones;
+									trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trab.getId());//borrar asignacion de evaluadores
 									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getId());
 									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
 									estadoTrabajo.setId(21);
-									trabajoFinal.setEstadotrabajo(estadoTrabajo);
+									trabajoFinal.setEstadonacional(estadoTrabajo);
 		
 									trabajosfinalesServ.modificar(trabajoFinal);
 								}
@@ -3867,16 +3953,16 @@ public class ConcursoeducativoController {
 							for (Trabajosfinales trab : listaPuesto3) {
 								if((listaPuesto1.size() + listaPuesto2.size()) >= 3) { log.info("YA HAY MAS DE 3 en lista 1 + lista 2 ");
 									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getId());
-									trabajoFinal.setPuesto(0);
+									trabajoFinal.setPuesto_nacional(0);
 									
 									trabajosfinalesServ.modificar(trabajoFinal);
 								}else if(listaPuesto3.size() > 1){ log.info("lista 3 mayor  a 1 ");
-									evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getId());//borrar las respuestas de las evaluaciones;
-									trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getId());//borrar asignacion de evaluadores
+									evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trab.getId());//borrar las respuestas de las evaluaciones;
+									trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trab.getId());//borrar asignacion de evaluadores
 									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getId());
 									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
 									estadoTrabajo.setId(21);
-									trabajoFinal.setEstadotrabajo(estadoTrabajo);
+									trabajoFinal.setEstadonacional(estadoTrabajo);
 		
 									trabajosfinalesServ.modificar(trabajoFinal);
 								}
@@ -3893,7 +3979,7 @@ public class ConcursoeducativoController {
 							for (Trabajosfinales trabajos : trabajoFinales) {
 								if(trabajos.getNota_nacional() == NotaPuesto1 ) {
 									Trabajosfinales  trabajoFinal = trabajos;
-									trabajoFinal.setPuesto(1);
+									trabajoFinal.setPuesto_nacional(1);
 									trabajosfinalesServ.modificar(trabajoFinal);
 									cantidad++;
 								}
@@ -3902,17 +3988,17 @@ public class ConcursoeducativoController {
 								trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 1);
 								List<Trabajosfinales> listaPuesto1= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 1);
 								for (Trabajosfinales trab : listaPuesto1) {
-									evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getId());//borrar las respuestas de las evaluaciones;
-									trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getId());//borrar asignacion de evaluadores
+									evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trab.getId());//borrar las respuestas de las evaluaciones;
+									trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trab.getId());//borrar asignacion de evaluadores
 									
 									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
 									estadoTrabajo.setId(21);
 									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getId());
-									trabajoFinal.setEstadotrabajo(estadoTrabajo);
-									trabajoFinal.setEmpate(1);//empate si
+									trabajoFinal.setEstadonacional(estadoTrabajo);
+									trabajoFinal.setEmpate_nacional(1);//empate si
 									trabajoFinal.setNota_original_nacional(trabajoFinal.getNota_nacional());//nota original
 									trabajosfinalesServ.modificar(trabajoFinal);
-									log.info("TRABAJO EMPATADO F1: "+trab.getId() +" | "+"CAREGORIAID: "+cerrarNacioanl.getCategoriaId() +" | NIVEL: "+cerrarNacioanl.getNivelDesc()+" | PUESTO: "+trabajoFinal.getPuesto()+indice+" | NOTA: "+trabajoFinal.getNota_nacional());
+									log.info("TRABAJO EMPATADO F1: "+trab.getId() +" | "+"CAREGORIAID: "+cerrarNacioanl.getCategoriaId() +" | NIVEL: "+cerrarNacioanl.getNivelDesc()+" | PUESTO: "+trabajoFinal.getPuesto_nacional()+indice+" | NOTA: "+trabajoFinal.getNota_nacional());
 								}
 								cerrarNacioanl.setEstado(2);//empate
 								cerrarNacionalSserv.registrar(cerrarNacioanl);
@@ -3926,7 +4012,7 @@ public class ConcursoeducativoController {
 								for (Trabajosfinales trabajos : trabajoFinales) {
 									if(trabajos.getNota_nacional() == NotaPuesto2 ) {
 										Trabajosfinales  trabajoFinal = trabajos;
-										trabajoFinal.setPuesto(2);
+										trabajoFinal.setPuesto_nacional(2);
 										trabajosfinalesServ.modificar(trabajoFinal);
 										cantidad2++;
 									}
@@ -3935,17 +4021,17 @@ public class ConcursoeducativoController {
 							if(cantidad2 > 1 && cantidad == 1) {
 								List<Trabajosfinales> listaPuesto2= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 2);
 								for (Trabajosfinales trab : listaPuesto2) {
-									evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getId());
-									trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getId());
+									evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trab.getId());
+									trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trab.getId());
 									
 									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
 									estadoTrabajo.setId(21);
 									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getId());
-									trabajoFinal.setEstadotrabajo(estadoTrabajo);
-									trabajoFinal.setEmpate(1);//empate si
+									trabajoFinal.setEstadonacional(estadoTrabajo);
+									trabajoFinal.setEmpate_nacional(1);//empate si
 									trabajoFinal.setNota_original(trabajoFinal.getNota_nacional());//nota original
 									trabajosfinalesServ.modificar(trabajoFinal);
-									log.info("TRABAJO EMPATADO F1: "+trab.getId() +" | "+"CAREGORIAID: "+cerrarNacioanl.getCategoriaId() +" | NIVEL: "+cerrarNacioanl.getNivelDesc()+" | PUESTO: "+trabajoFinal.getPuesto()+indice+" | NOTA: "+trabajoFinal.getNota_nacional());
+									log.info("TRABAJO EMPATADO F1: "+trab.getId() +" | "+"CAREGORIAID: "+cerrarNacioanl.getCategoriaId() +" | NIVEL: "+cerrarNacioanl.getNivelDesc()+" | PUESTO: "+trabajoFinal.getPuesto_nacional()+indice+" | NOTA: "+trabajoFinal.getNota_nacional());
 								}
 								cerrarNacioanl.setEstado(2);//empate
 								cerrarNacionalSserv.registrar(cerrarNacioanl);
@@ -3959,7 +4045,7 @@ public class ConcursoeducativoController {
 								for (Trabajosfinales trabajos : trabajoFinales) {
 									if(trabajos.getNota_nacional() == NotaPuesto3 ) {
 										Trabajosfinales  trabajoFinal = trabajos;
-										trabajoFinal.setPuesto(3);
+										trabajoFinal.setPuesto_nacional(3);
 										trabajosfinalesServ.modificar(trabajoFinal);
 										cantidad3++;
 									}
@@ -3968,17 +4054,17 @@ public class ConcursoeducativoController {
 							if(cantidad3 > 1 && (cantidad+cantidad2) == 2) {
 								List<Trabajosfinales> listaPuesto3= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 3);
 								for (Trabajosfinales trab : listaPuesto3) {
-									evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getId());
-									trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getId());
+									evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trab.getId());
+									trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trab.getId());
 									
 									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
 									estadoTrabajo.setId(21);
 									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getId());
-									trabajoFinal.setEstadotrabajo(estadoTrabajo);
-									trabajoFinal.setEmpate(1);//empate si
+									trabajoFinal.setEstadonacional(estadoTrabajo);
+									trabajoFinal.setEmpate_nacional(1);//empate si
 									trabajoFinal.setNota_original_nacional(trabajoFinal.getNota_nacional());//nota original
 									trabajosfinalesServ.modificar(trabajoFinal);
-									log.info("TRABAJO EMPATADO F1: "+trab.getId() +" | "+"CAREGORIAID: "+cerrarNacioanl.getCategoriaId() +" | NIVEL: "+cerrarNacioanl.getNivelDesc()+" | PUESTO: "+trabajoFinal.getPuesto()+indice+" | NOTA: "+trabajoFinal.getNota_nacional());
+									log.info("TRABAJO EMPATADO F1: "+trab.getId() +" | "+"CAREGORIAID: "+cerrarNacioanl.getCategoriaId() +" | NIVEL: "+cerrarNacioanl.getNivelDesc()+" | PUESTO: "+trabajoFinal.getPuesto_nacional()+indice+" | NOTA: "+trabajoFinal.getNota_nacional());
 								}
 								cerrarNacioanl.setEstado(2);//empate
 								cerrarNacionalSserv.registrar(cerrarNacioanl);
@@ -4052,7 +4138,7 @@ public class ConcursoeducativoController {
 						trabajosfinalesServ.updateEstadoTrabajoNacional(te.getId(),2);
 						
 						Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(te.getId());
-						trabajoFinal.setNota(0f);
+						trabajoFinal.setNota_nacional(0f);
 						trabajosfinalesServ.modificar(trabajoFinal);
 						
 						rpta = 1;

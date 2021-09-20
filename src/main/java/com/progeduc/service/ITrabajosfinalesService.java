@@ -71,6 +71,8 @@ public interface ITrabajosfinalesService extends ICRUD<Trabajosfinales,Integer>{
 	
 	List<Trabajosfinales> listaTrabajoEvaluadEmpateNacional();
 	
+	List<Trabajosfinales> listaTrabajoEvaluadNacional();
+	
 	List<Trabajosfinales> listarTrabajosfinalesPorNivelCategoria(Integer categoriaId, String nivel);
 	
 	List<Trabajosfinales> listarTrabajosfinalesPorNivelCategoriaEmpatadosConNota(Integer categoriaId, String nivel);

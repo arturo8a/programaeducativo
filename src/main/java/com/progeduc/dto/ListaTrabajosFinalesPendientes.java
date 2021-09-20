@@ -14,6 +14,7 @@ public class ListaTrabajosFinalesPendientes {
 	String evaluacion;
 	String permisos;
 	String trabajo;
+	int etapa;
 	
 	
 	public String getTrabajo() {
@@ -87,6 +88,12 @@ public class ListaTrabajosFinalesPendientes {
 	}
 	public void setPermisos(String permisos) {
 		this.permisos = permisos;
+	}
+	public int getEtapa() {
+		return etapa;
+	}
+	public void setEtapa(int etapa) {
+		this.etapa = etapa;
 	}
 	
 	

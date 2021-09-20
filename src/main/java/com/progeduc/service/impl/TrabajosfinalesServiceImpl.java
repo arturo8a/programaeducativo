@@ -272,6 +272,11 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 	public List<Trabajosfinales> listaTrabajoEvaluadEmpateNacional() {
 		return trabajosfinalesRepo.listaTrabajoEvaluadEmpateNacional();
 	}
+	
+	@Override
+	public List<Trabajosfinales> listaTrabajoEvaluadNacional() {
+		return trabajosfinalesRepo.listaTrabajoEvaluadNacional();
+	}
 
 	@Override
 	public List<Trabajosfinales> listarTrabajosfinalesPorNivelCategoria(Integer categoriaId, String nivel) {
