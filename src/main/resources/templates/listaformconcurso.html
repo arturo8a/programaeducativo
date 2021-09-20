@@ -2019,7 +2019,13 @@ $(document).ready(function(){
 		if($('#nav-concursonacional-tab').hasClass( "active" )){
 			listarNacional();
 		}	
-	})
+	});
+	
+	$('#modalasignarevaluador').on('hidden.bs.modal', function () {
+		if($('#nav-concursonacional-tab').hasClass( "active" )){
+			listarNacional();
+		}	
+	});
 	
 	$("#btnConfirmarCierreNacional").on("click",function(e){
 		openCargando();
