@@ -3680,7 +3680,7 @@ public class ConcursoeducativoController {
 				idnivelparticipacion = obj1.getParticipante().getGradoestudiante().getNivelgradopartid();
 			});			
 			dto.setNivelparticipacion(nivelparticipacion);
-			dto.setEstado(obj.getEstadotrabajo().getDescripcion());
+			dto.setEstado(obj.getEstadonacional().getDescripcion());
 			dto.setCalificacion(obj.getNota());
 			dto.setPuesto(obj.getPuesto());
 			dto.setCalificacionnacional(obj.getNota_nacional());
@@ -3945,8 +3945,8 @@ public class ConcursoeducativoController {
 							log.info("TOTAL PUESTO 3:"+listaPuesto3.size());
 							for (Trabajosfinales trab : listaPuesto1) {
 								if(listaPuesto1.size() > 1) { log.info("lista 1 mayor  a 1 ");
-									evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getId());//borrar las respuestas de las evaluaciones;
-									trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getId());//borrar asignacion de evaluadores
+									evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trab.getId());//borrar las respuestas de las evaluaciones;
+									trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trab.getId());//borrar asignacion de evaluadores
 									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getId());
 									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
 									estadoTrabajo.setId(21);
@@ -3963,8 +3963,8 @@ public class ConcursoeducativoController {
 									
 									trabajosfinalesServ.modificar(trabajoFinal);
 								}else if(listaPuesto2.size() > 1) { log.info("lista 2 mayor  a 1 ");
-									evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getId());//borrar las respuestas de las evaluaciones;
-									trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getId());//borrar asignacion de evaluadores
+									evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trab.getId());//borrar las respuestas de las evaluaciones;
+									trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trab.getId());//borrar asignacion de evaluadores
 									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getId());
 									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
 									estadoTrabajo.setId(21);
@@ -3980,8 +3980,8 @@ public class ConcursoeducativoController {
 									
 									trabajosfinalesServ.modificar(trabajoFinal);
 								}else if(listaPuesto3.size() > 1){ log.info("lista 3 mayor  a 1 ");
-									evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getId());//borrar las respuestas de las evaluaciones;
-									trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getId());//borrar asignacion de evaluadores
+									evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trab.getId());//borrar las respuestas de las evaluaciones;
+									trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trab.getId());//borrar asignacion de evaluadores
 									Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(trab.getId());
 									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
 									estadoTrabajo.setId(21);
@@ -4011,8 +4011,8 @@ public class ConcursoeducativoController {
 								trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 1);
 								List<Trabajosfinales> listaPuesto1= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 1);
 								for (Trabajosfinales trab : listaPuesto1) {
-									evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getId());//borrar las respuestas de las evaluaciones;
-									trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getId());//borrar asignacion de evaluadores
+									evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trab.getId());//borrar las respuestas de las evaluaciones;
+									trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trab.getId());//borrar asignacion de evaluadores
 									
 									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
 									estadoTrabajo.setId(21);
@@ -4044,8 +4044,8 @@ public class ConcursoeducativoController {
 							if(cantidad2 > 1 && cantidad == 1) {
 								List<Trabajosfinales> listaPuesto2= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 2);
 								for (Trabajosfinales trab : listaPuesto2) {
-									evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getId());
-									trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getId());
+									evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trab.getId());
+									trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trab.getId());
 									
 									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
 									estadoTrabajo.setId(21);
@@ -4077,8 +4077,8 @@ public class ConcursoeducativoController {
 							if(cantidad3 > 1 && (cantidad+cantidad2) == 2) {
 								List<Trabajosfinales> listaPuesto3= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 3);
 								for (Trabajosfinales trab : listaPuesto3) {
-									evaluacionRespuestaServ.borrarEvaluacionesPorTrabajo(trab.getId());
-									trabajosFinales_UsuarioAlianzaServ.eliminar(trab.getId());
+									evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trab.getId());
+									trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trab.getId());
 									
 									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
 									estadoTrabajo.setId(21);
