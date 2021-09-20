@@ -1,6 +1,6 @@
 package com.progeduc.dto;
 
-public class ResultadosGanadoresDto {
+public class ResultadosGanadoresDto implements Comparable{
 	
 	Integer anio;
 	String ods;
@@ -11,6 +11,7 @@ public class ResultadosGanadoresDto {
 	String nombreIiee;
 	String ambitoIiee;
 	String modalidad;
+	String codigoTrabajo;
 	String nombreTrabajo;
 	String participantes;
 	String genero;
@@ -72,6 +73,12 @@ public class ResultadosGanadoresDto {
 	public void setModalidad(String modalidad) {
 		this.modalidad = modalidad;
 	}
+	public String getCodigoTrabajo() {
+		return codigoTrabajo;
+	}
+	public void setCodigoTrabajo(String codigoTrabajo) {
+		this.codigoTrabajo = codigoTrabajo;
+	}
 	public String getNombreTrabajo() {
 		return nombreTrabajo;
 	}
@@ -107,6 +114,24 @@ public class ResultadosGanadoresDto {
 	}
 	public void setCelularDocente(String celularDocente) {
 		this.celularDocente = celularDocente;
+	}
+	@Override
+	public int compareTo(Object o) {
+		ResultadosGanadoresDto otro = (ResultadosGanadoresDto)o;
+		int rpta   = anio.compareTo(otro.getAnio());
+		if(rpta!=0)
+			return rpta;
+		rpta = ods.compareTo(otro.getOds());
+		if(rpta!=0)
+			return rpta;
+		rpta = categoria.compareTo(otro.getCategoria());
+		if(rpta!=0)
+			return rpta;
+		rpta = nivelParticipacion.compareTo(otro.getNivelParticipacion());
+		if(rpta!=0)
+			return rpta;
+		rpta = puesto.compareTo(otro.getPuesto());
+		return rpta;
 	}
 	
 }
