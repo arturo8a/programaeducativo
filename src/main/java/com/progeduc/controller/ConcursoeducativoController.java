@@ -272,6 +272,8 @@ public class ConcursoeducativoController {
 	boolean bandera_ods ,bandera_anio ,bandera_categoria,bandera_modalidad;
 	String participantes,generoParticipante,peNivelParticipacion;
 	String puestoTrabajo;
+	float notaTrabajo;
+	int contNotaTrabajo;
 	
 	@PostMapping(value="/registrarconcurso")
 	public String registrarconcurso(@Valid @RequestBody Postulacionconcurso dto)  {
@@ -1084,7 +1086,7 @@ public class ConcursoeducativoController {
 		else if (tipousuarioid==30){	
 			
 			progeducService.getListarHabilitadosAnioActual().forEach(pe->{
-				List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarHabilitadosEnviado(pe.getId());
+				List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarHabilitadosEnviados(pe.getId());
 				listaTrabajoFinales.forEach(obj->{
 					banderaods = false;
 					listaOds.forEach(objOds->{
@@ -1130,7 +1132,7 @@ public class ConcursoeducativoController {
 							}
 						});
 						if(banderaods) {
-							List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarHabilitadosEnviado(pe.getId());
+							List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarHabilitadosEnviados(pe.getId());
 							listaTrabajoFinales.forEach(obj2->{
 								ConcursoDto dto = new ConcursoDto();
 								dto.setId(obj2.getId());
@@ -2415,6 +2417,7 @@ public class ConcursoeducativoController {
 			List<CerrarOds> lisCerrarOds = cerrarOdsServ.listCerrarOds();
 			
 			for (Ods ods : listOds) {
+				
 				CerrarOds cerrarOds = new CerrarOds();
 				cerrarOds.setOdsid(ods);
 				cerrarOds.setAnio(anio);
@@ -2433,9 +2436,25 @@ public class ConcursoeducativoController {
 				/*lista de trabajos finales por ODS*/
 				List<Trabajosfinales>  trabajoFinales = trabajosfinalesServ.listarTrabajosfinalesPorOds(ods.getId());
 				for (Trabajosfinales trabajos : trabajoFinales) {
+					/*Actualizar trabajos sin nota*/
+						
+						notaTrabajo = 0;
+						contNotaTrabajo = 0;
+						if(trabajos.getNota().equals(0)) {
+							trabajosFinales_UsuarioAlianzaServ.listarByTrabajosfinalesId(trabajos.getId()).forEach(obj->{
+								if(obj.getNota()!=-1) {
+									notaTrabajo += obj.getNota();
+									contNotaTrabajo++;
+								}
+							});
+						}
+						notaTrabajo = notaTrabajo/contNotaTrabajo;
+					/*Fin actualizar trabajos sin nota*/
+					
 					Estadotrabajo estadoTrabajo = new  Estadotrabajo();
 					estadoTrabajo.setId(3);
 					trabajos.setEstadotrabajo(estadoTrabajo);
+					trabajos.setNota(notaTrabajo);
 					trabajosfinalesServ.modificar(trabajos);
 				}
 				
@@ -2948,7 +2967,7 @@ public class ConcursoeducativoController {
 		List<TrabajosFinalesConcursoDto> lista = new ArrayList<TrabajosFinalesConcursoDto>();		
 		List<DetalleEvaluacionReporteDto> listaDerDto = new ArrayList<>();
 		trabajosfinalesparticipanteServ.listarTodos().forEach(obj->{			
-			if(obj.getTrabajosfinales().getEstado() == 1 && obj.getParticipante().getEstado()==1 && obj.getTrabajosfinales().getEnviado()==1) {				
+			if(	obj.getTrabajosfinales().getEstadotrabajo().getId()==3 &&	obj.getTrabajosfinales().getEstado() == 1 && obj.getParticipante().getEstado()==1 && obj.getTrabajosfinales().getEnviado()==1) {				
 				bandera = true;				
 				banderaOds = false;
 				mi_ods = odsserv.byOds(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid()).getDescripcion();
@@ -3091,7 +3110,7 @@ public class ConcursoeducativoController {
 		});
 		
 		
-		trabajosfinalesServ.listarhabilitados().forEach(obj->{
+		trabajosfinalesServ.listarTrabajosRegionales().forEach(obj->{
 			mi_ods = odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion();
 			mi_anio = obj.getAnio();
 			mi_modalidad = obj.getModalidadtrabajo().getDescripcion();
@@ -3368,7 +3387,7 @@ public class ConcursoeducativoController {
 		
 		List<ResultadosGanadoresDto> listaResultadosGanadores  =new ArrayList<ResultadosGanadoresDto>();		
 		
-		trabajosFinalesServ.listarhabilitados().forEach(obj->{
+		trabajosFinalesServ.listarTrabajosRegionales().forEach(obj->{
 			
 			mi_ods = odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion();
 			mi_anio = obj.getAnio();

@@ -128,6 +128,16 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 		Optional<Trabajosfinales> pe = trabajosfinalesRepo.findById(id);
 		return pe.isPresent() ? pe.get() : new Trabajosfinales();
 	}
+	
+	@Override
+	public List<Trabajosfinales> listarTrabajosRegionales(Integer programaeducativoid){
+		return trabajosfinalesRepo.listarTrabajosRegionales(programaeducativoid);
+	}
+	
+	@Override
+	public List<Trabajosfinales> listarTrabajosRegionales(){
+		return trabajosfinalesRepo.listarTrabajosRegionales();
+	}
 
 	@Override
 	public boolean Eliminar(Integer id) {
