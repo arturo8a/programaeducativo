@@ -1054,7 +1054,7 @@ public class ConcursoeducativoController {
 						}
 					});
 					if(banderaods) {
-						List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarHabilitadosEnviados(pe.getId());
+						List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarTrabajosRegionales(pe.getId());
 						listaTrabajoFinales.forEach(obj2->{
 							if(obj2.getEnviado()==1) {
 								ConcursoDto dto = new ConcursoDto();
@@ -1086,7 +1086,7 @@ public class ConcursoeducativoController {
 		else if (tipousuarioid==30){	
 			
 			progeducService.getListarHabilitadosAnioActual().forEach(pe->{
-				List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarHabilitadosEnviado(pe.getId());
+				List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarTrabajosRegionales(pe.getId());
 				listaTrabajoFinales.forEach(obj->{
 					banderaods = false;
 					listaOds.forEach(objOds->{
@@ -1132,7 +1132,7 @@ public class ConcursoeducativoController {
 							}
 						});
 						if(banderaods) {
-							List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarHabilitadosEnviado(pe.getId());
+							List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarTrabajosRegionales(pe.getId());
 							listaTrabajoFinales.forEach(obj2->{
 								ConcursoDto dto = new ConcursoDto();
 								dto.setId(obj2.getId());
