@@ -1,6 +1,6 @@
 package com.progeduc.dto;
 
-public class TrabajosFinalesConcursoDto {
+public class TrabajosFinalesConcursoDto implements Comparable{
 	
 	Integer anio;
 	String ods;
@@ -345,6 +345,15 @@ public class TrabajosFinalesConcursoDto {
 	}
 	public void setPuestoNacional(String puestoNacional) {
 		this.puestoNacional = puestoNacional;
+	}
+	@Override
+	public int compareTo(Object o) {
+		TrabajosFinalesConcursoDto otro = (TrabajosFinalesConcursoDto)o;
+		int rpta   = anio.compareTo(otro.getAnio());
+		if(rpta!=0)
+			return rpta;
+		rpta = ods.compareTo(otro.getOds());
+		return rpta;
 	}
 	
 }

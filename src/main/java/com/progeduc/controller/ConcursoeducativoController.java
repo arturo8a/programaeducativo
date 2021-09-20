@@ -3264,7 +3264,7 @@ public class ConcursoeducativoController {
 			Cell cell = row.createCell(i);
 			cell.setCellValue(columns[i]);
 		}
-		
+		Collections.sort(lista);
 		int initRow = 2;
 		for(TrabajosFinalesConcursoDto dto : lista) {
 			row = sheet.createRow(initRow);
@@ -3341,7 +3341,7 @@ public class ConcursoeducativoController {
 			Cell cell = row1DetalleEvaluacion.createCell(i);
 			cell.setCellValue(columnaDetalleEvaluacion[i]);
 		}
-		
+		Collections.sort(listaDerDto);
 		initRow = 2;
 		for(DetalleEvaluacionReporteDto dto : listaDerDto) {
 			row1DetalleEvaluacion = hojaDetalleEvaluacion.createRow(initRow);
