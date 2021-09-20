@@ -12,5 +12,6 @@ public interface IUsuarioAlianzaService extends ICRUD<UsuarioAlianza,Integer>{
 	UsuarioAlianza getUsuarioEvaluador(String usuario, String password);
 	List<UsuarioAlianza>  listaUsuarioFiltro(String ods, String anio, String estado, String role6, String role7, String role8, String role9);
 	List<UsuarioAlianza> buscarEvaluador(String usuarioEvaluador);
+	List<UsuarioAlianza> buscarEvaluador(Integer idusu,String usuarioEvaluador);
 
 }

@@ -60,6 +60,11 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 	}
 	
 	@Override
+	public int updateNotaVacio(Integer id) {
+		return trabajosfinalesRepo.updateNotaVacio(id);
+	}
+	
+	@Override
 	public Integer maxNumeracion(Integer programaeducativoid) {
 		return trabajosfinalesRepo.maxNumeracion(programaeducativoid);
 	}

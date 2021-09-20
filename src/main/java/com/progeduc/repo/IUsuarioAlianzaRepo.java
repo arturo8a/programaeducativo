@@ -26,4 +26,7 @@ public interface IUsuarioAlianzaRepo extends CrudRepository<UsuarioAlianza,Integ
 	@Query(value="select U.* from USUARIO_ALIANZA U where U.usuario_autoridad=?1 and U.anio = EXTRACT(YEAR FROM sysdate)",nativeQuery = true)
 	List<UsuarioAlianza> buscarEvaluador(String usuarioEvaluador);
 	
+	@Query(value="select U.* from USUARIO_ALIANZA U where U.id!=?1 and U.usuario_autoridad=?2 and U.anio = EXTRACT(YEAR FROM sysdate)",nativeQuery = true)
+	List<UsuarioAlianza> buscarEvaluador(Integer idusu,String usuarioEvaluador);
+	
 }

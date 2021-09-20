@@ -81,4 +81,9 @@ public class UsuarioAlianzaServiceImpl implements IUsuarioAlianzaService{
 		return usuarioRepo.buscarEvaluador(usuarioEvaluador);
 	}
 	
+	@Override
+	public List<UsuarioAlianza> buscarEvaluador(Integer idusu,String usuarioEvaluador){
+		return usuarioRepo.buscarEvaluador(idusu, usuarioEvaluador);
+	}
+	
 }

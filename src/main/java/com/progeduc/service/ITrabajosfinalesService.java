@@ -37,6 +37,8 @@ public interface ITrabajosfinalesService extends ICRUD<Trabajosfinales,Integer>{
     
     int updateEstadoTrabajo(Integer id,Integer estadoTrabajoId);
     
+    int updateNotaVacio(Integer id);
+    
     List<Trabajosfinales> listarTrabajosEvaluados();
     
 	List<Trabajosfinales> BuscarCategoriaModalidad(Integer idcategoria, Integer idmodalidad,Integer peid);
