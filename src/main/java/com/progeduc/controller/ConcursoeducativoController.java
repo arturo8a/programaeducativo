@@ -3220,20 +3220,21 @@ public class ConcursoeducativoController {
 								if(objQR.getQuestionario().getPregunta().toLowerCase().contains("cebe")) {
 									if(objQR.getRespuesta().toLowerCase().contains("si")) {
 										derDto.setEresCebe("SI");
+										derDto.setNota(objQR.getPuntaje()!=null?objQR.getPuntaje().toString():"");
 									}
 								}
 							});
 						}
 					});
 					
-					derDto.setNota(obj.getNota()!=null?obj.getNota().toString():"");
+					//derDto.setNota(obj.getNota()!=null?obj.getNota().toString():"");
 					derDto.setPuesto(obj.getPuesto()==0?"":obj.getPuesto().toString());
 					listaDerDto.add(derDto);
 				}
 			}
 		});
 		
-		String [] columns = {"AÑO","ODS","Codigo II.EE","NOMBRE II.EE","REGION","PROVINCIA","DISTRITO","MODALIDAD", "AMBITO","Código de trabajo","Estado de trabajo","Titulo de trabajo","Link de video","Modalidad","Categoria","Nivel de participación","Ejes temáticos","Nombres del participante","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Fecha de nacimiento","Género","Seccion","Nivel","Grado","Nombres tutor","Apellido paterno tutor","Apellido materno tutor","Tipo de documento","Nro de documento tutor","telefono","correo electronico","Parentesco","Nombres del docente","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Telefono","Género","Correo electrónico","Nota","Nota original","¿tuvo empate?","Puesto","Nota","Puesto"};
+		String [] columns = {"AÑO","ODS","Codigo II.EE","NOMBRE II.EE","REGION","PROVINCIA","DISTRITO","MODALIDAD", "AMBITO","Código de trabajo","Estado de trabajo","Titulo de trabajo","Link de video","Modalidad","Categoria","Nivel de participación","Ejes temáticos","Nombres del participante","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Fecha de nacimiento","Género","Seccion","Nivel","Grado","Nombres tutor","Apellido paterno tutor","Apellido materno tutor","Tipo de documento","Nro de documento tutor","telefono","correo electronico","Parentesco","Nombres del docente","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Telefono","Género","Correo electrónico","Nota","Nota original","¿tuvo empate?","Puesto"};
 		
 		Sheet sheet = workbook.createSheet("Registro de trabajos finales");
 		Row row = sheet.createRow(0);
@@ -3255,9 +3256,6 @@ public class ConcursoeducativoController {
 		
 		row.createCell(43).setCellValue("Concurso regional");
 		sheet.addMergedRegion(new CellRangeAddress(0, 0,43, 46));
-		
-		row.createCell(47).setCellValue("Concurso nacional");
-		sheet.addMergedRegion(new CellRangeAddress(0, 0,47, 48));
 		
 		row = sheet.createRow(1);
 		for(int i=0;i<columns.length;i++) {
@@ -3315,8 +3313,6 @@ public class ConcursoeducativoController {
 			row.createCell(44).setCellValue(dto.getNotaOriginal());
 			row.createCell(45).setCellValue(dto.getEmpate());
 			row.createCell(46).setCellValue(dto.getPuestoRegional());
-			row.createCell(47).setCellValue(dto.getNotaNacional());
-			row.createCell(48).setCellValue(dto.getPuestoNacional());
 			initRow++;
 		}
 		

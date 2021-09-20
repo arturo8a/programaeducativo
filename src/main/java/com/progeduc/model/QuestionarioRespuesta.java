@@ -24,7 +24,7 @@ public class QuestionarioRespuesta {
 	private String respuesta;
 	
 	@Column(name="PUNTAJE")	
-	private float puntaje;
+	private Float puntaje;
 
 	@JsonIgnore
 	@ManyToOne
@@ -47,11 +47,11 @@ public class QuestionarioRespuesta {
 		this.respuesta = respuesta;
 	}
 
-	public float getPuntaje() {
+	public Float getPuntaje() {
 		return puntaje;
 	}
 
-	public void setPuntaje(float puntaje) {
+	public void setPuntaje(Float puntaje) {
 		this.puntaje = puntaje;
 	}
 
