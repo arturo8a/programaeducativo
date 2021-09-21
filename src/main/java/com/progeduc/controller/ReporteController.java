@@ -200,7 +200,7 @@ public class ReporteController {
 				
 		List<NotasEvaluadorDto> lista = new ArrayList<NotasEvaluadorDto>();
 		
-		trabajosFinalesServ.listarTrabajosRegionales().forEach(tf->{	
+		trabajosFinalesServ.listarhabilitados().forEach(tf->{	
 			List<TrabajosfinalesUsuarioAlianza> listatfua = trabajosFinales_UsuarioAlianzaServ.listarByTrabajosfinalesId(tf.getId());
 			if(listatfua.size()==0) {
 				banderaods = false;	
@@ -920,7 +920,7 @@ public class ReporteController {
 					
 					if( bandera_ods && bandera_anio &&  pe.getAnhio()!=null) 			
 					{
-						List<Trabajosfinales> objTrabajosFinales = trabajosFinalesServ.listarTrabajosRegionales(pe.getId());
+						List<Trabajosfinales> objTrabajosFinales = trabajosFinalesServ.listarhabilitadosPE(pe.getId());
 						if(objTrabajosFinales.size()==0) {
 							
 							bandera=true;
@@ -1347,7 +1347,7 @@ public class ReporteController {
 		}		
 		
 		List<DetalleEvaluacionReporteDto> lista = new ArrayList<>();		
-		trabajosFinalesServ.listarTrabajosRegionales().forEach(obj->{			
+		trabajosFinalesServ.listarhabilitados().forEach(obj->{			
 			bandera_ods = false;
 			bandera_anio = false;
 			bandera_categoria = false;
@@ -1520,7 +1520,7 @@ public class ReporteController {
 		}
 		
 		List<ResultadosRegionalesDto> listarr = new ArrayList<>();		
-		trabajosFinalesServ.listarTrabajosRegionales().forEach(obj->{
+		trabajosFinalesServ.listarhabilitados().forEach(obj->{
 			bandera_ods = false;
 			bandera_anio = false;
 			bandera_categoria = false;
@@ -1665,7 +1665,7 @@ public class ReporteController {
 		
 		List<ResultadosGanadoresDto> listaResultadosGanadores  =new ArrayList<ResultadosGanadoresDto>();		
 		
-		trabajosFinalesServ.listarTrabajosRegionales().forEach(obj->{
+		trabajosFinalesServ.listarhabilitados().forEach(obj->{
 			
 			if(obj.getEnviado()==1) {
 				

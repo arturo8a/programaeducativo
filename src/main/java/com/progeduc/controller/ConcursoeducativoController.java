@@ -1086,7 +1086,7 @@ public class ConcursoeducativoController {
 		else if (tipousuarioid==30){	
 			
 			progeducService.getListarHabilitadosAnioActual().forEach(pe->{
-				List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarHabilitadosEnviados(pe.getId());
+				List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarHabilitadosEnviado(pe.getId());
 				listaTrabajoFinales.forEach(obj->{
 					banderaods = false;
 					listaOds.forEach(objOds->{
@@ -1132,7 +1132,7 @@ public class ConcursoeducativoController {
 							}
 						});
 						if(banderaods) {
-							List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarHabilitadosEnviados(pe.getId());
+							List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarHabilitadosEnviado(pe.getId());
 							listaTrabajoFinales.forEach(obj2->{
 								ConcursoDto dto = new ConcursoDto();
 								dto.setId(obj2.getId());
@@ -2967,7 +2967,7 @@ public class ConcursoeducativoController {
 		List<TrabajosFinalesConcursoDto> lista = new ArrayList<TrabajosFinalesConcursoDto>();		
 		List<DetalleEvaluacionReporteDto> listaDerDto = new ArrayList<>();
 		trabajosfinalesparticipanteServ.listarTodos().forEach(obj->{			
-			if(	obj.getTrabajosfinales().getEstadotrabajo().getId()==3 &&	obj.getTrabajosfinales().getEstado() == 1 && obj.getParticipante().getEstado()==1 && obj.getTrabajosfinales().getEnviado()==1) {				
+			if(obj.getTrabajosfinales().getEstado() == 1 && obj.getParticipante().getEstado()==1 && obj.getTrabajosfinales().getEnviado()==1) {				
 				bandera = true;				
 				banderaOds = false;
 				mi_ods = odsserv.byOds(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getOdsid()).getDescripcion();
@@ -3110,7 +3110,7 @@ public class ConcursoeducativoController {
 		});
 		
 		
-		trabajosfinalesServ.listarTrabajosRegionales().forEach(obj->{
+		trabajosfinalesServ.listarhabilitados().forEach(obj->{
 			mi_ods = odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion();
 			mi_anio = obj.getAnio();
 			mi_modalidad = obj.getModalidadtrabajo().getDescripcion();
@@ -3220,20 +3220,21 @@ public class ConcursoeducativoController {
 								if(objQR.getQuestionario().getPregunta().toLowerCase().contains("cebe")) {
 									if(objQR.getRespuesta().toLowerCase().contains("si")) {
 										derDto.setEresCebe("SI");
+										derDto.setNota(objQR.getPuntaje()!=null?objQR.getPuntaje().toString():"");
 									}
 								}
 							});
 						}
 					});
 					
-					derDto.setNota(obj.getNota()!=null?obj.getNota().toString():"");
+					//derDto.setNota(obj.getNota()!=null?obj.getNota().toString():"");
 					derDto.setPuesto(obj.getPuesto()==0?"":obj.getPuesto().toString());
 					listaDerDto.add(derDto);
 				}
 			}
 		});
 		
-		String [] columns = {"AÑO","ODS","Codigo II.EE","NOMBRE II.EE","REGION","PROVINCIA","DISTRITO","MODALIDAD", "AMBITO","Código de trabajo","Estado de trabajo","Titulo de trabajo","Link de video","Modalidad","Categoria","Nivel de participación","Ejes temáticos","Nombres del participante","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Fecha de nacimiento","Género","Seccion","Nivel","Grado","Nombres tutor","Apellido paterno tutor","Apellido materno tutor","Tipo de documento","Nro de documento tutor","telefono","correo electronico","Parentesco","Nombres del docente","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Telefono","Género","Correo electrónico","Nota","Nota original","¿tuvo empate?","Puesto","Nota","Puesto"};
+		String [] columns = {"AÑO","ODS","Codigo II.EE","NOMBRE II.EE","REGION","PROVINCIA","DISTRITO","MODALIDAD", "AMBITO","Código de trabajo","Estado de trabajo","Titulo de trabajo","Link de video","Modalidad","Categoria","Nivel de participación","Ejes temáticos","Nombres del participante","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Fecha de nacimiento","Género","Seccion","Nivel","Grado","Nombres tutor","Apellido paterno tutor","Apellido materno tutor","Tipo de documento","Nro de documento tutor","telefono","correo electronico","Parentesco","Nombres del docente","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Telefono","Género","Correo electrónico","Nota","Nota original","¿tuvo empate?","Puesto"};
 		
 		Sheet sheet = workbook.createSheet("Registro de trabajos finales");
 		Row row = sheet.createRow(0);
@@ -3256,15 +3257,12 @@ public class ConcursoeducativoController {
 		row.createCell(43).setCellValue("Concurso regional");
 		sheet.addMergedRegion(new CellRangeAddress(0, 0,43, 46));
 		
-		row.createCell(47).setCellValue("Concurso nacional");
-		sheet.addMergedRegion(new CellRangeAddress(0, 0,47, 48));
-		
 		row = sheet.createRow(1);
 		for(int i=0;i<columns.length;i++) {
 			Cell cell = row.createCell(i);
 			cell.setCellValue(columns[i]);
 		}
-		
+		Collections.sort(lista);
 		int initRow = 2;
 		for(TrabajosFinalesConcursoDto dto : lista) {
 			row = sheet.createRow(initRow);
@@ -3315,8 +3313,6 @@ public class ConcursoeducativoController {
 			row.createCell(44).setCellValue(dto.getNotaOriginal());
 			row.createCell(45).setCellValue(dto.getEmpate());
 			row.createCell(46).setCellValue(dto.getPuestoRegional());
-			row.createCell(47).setCellValue(dto.getNotaNacional());
-			row.createCell(48).setCellValue(dto.getPuestoNacional());
 			initRow++;
 		}
 		
@@ -3341,7 +3337,7 @@ public class ConcursoeducativoController {
 			Cell cell = row1DetalleEvaluacion.createCell(i);
 			cell.setCellValue(columnaDetalleEvaluacion[i]);
 		}
-		
+		Collections.sort(listaDerDto);
 		initRow = 2;
 		for(DetalleEvaluacionReporteDto dto : listaDerDto) {
 			row1DetalleEvaluacion = hojaDetalleEvaluacion.createRow(initRow);
@@ -3387,7 +3383,7 @@ public class ConcursoeducativoController {
 		
 		List<ResultadosGanadoresDto> listaResultadosGanadores  =new ArrayList<ResultadosGanadoresDto>();		
 		
-		trabajosFinalesServ.listarTrabajosRegionales().forEach(obj->{
+		trabajosFinalesServ.listarhabilitados().forEach(obj->{
 			
 			mi_ods = odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion();
 			mi_anio = obj.getAnio();
