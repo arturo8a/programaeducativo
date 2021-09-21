@@ -4422,6 +4422,9 @@ public ByteArrayInputStream reporteconcursonacional(String ods,String anio,Strin
 				/*lista de trabajos finales por Nivel y Categoria*/
 				List<Trabajosfinales>  trabajoFinales = trabajosfinalesServ.listarTrabajosfinalesPorNivelCategoria(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc());
 				for (Trabajosfinales trabajos : trabajoFinales) {
+					if(trabajos.getEstadonacional().getId() == 21) {
+						trabajos.setPuesto_nacional(0);
+					}
 					Estadotrabajo estadoTrabajo = new  Estadotrabajo();
 					estadoTrabajo.setId(3);
 					trabajos.setEstadonacional(estadoTrabajo);
