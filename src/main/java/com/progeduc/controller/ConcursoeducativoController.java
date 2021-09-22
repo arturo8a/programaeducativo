@@ -4424,17 +4424,7 @@ public ByteArrayInputStream reporteconcursonacional(String ods,String anio,Strin
 				List<Trabajosfinales> listaPuesto2= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 2);
 				List<Trabajosfinales> listaPuesto3= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 3);
 				
-				/*lista de trabajos finales por Nivel y Categoria*/
-				List<Trabajosfinales>  trabajoFinales = trabajosfinalesServ.listarTrabajosfinalesPorNivelCategoria(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc());
-				for (Trabajosfinales trabajos : trabajoFinales) {
-					if(trabajos.getEstadonacional().getId() == 21 /*|| trabajos.getNota_nacional() == 0*/) {
-						trabajos.setPuesto_nacional(0);
-					}
-					Estadotrabajo estadoTrabajo = new  Estadotrabajo();
-					estadoTrabajo.setId(3);
-					trabajos.setEstadonacional(estadoTrabajo);
-					trabajosfinalesServ.modificar(trabajos);
-				}
+				
 	
 				/*Listar Categorias X Nivel de Participacion*/
 
@@ -4447,7 +4437,7 @@ public ByteArrayInputStream reporteconcursonacional(String ods,String anio,Strin
 					
 					/*SECTION EMPATES*/
 					if(listaTrabEmpatados.size() > 0) {
-						float NotaPuesto1 = trabajoFinales.get(0).getNota_nacional(); //primera nota
+						float NotaPuesto1 = 0;//trabajoFinales.get(0).getNota_nacional(); //primera nota
 						int puestoEmpate = 0;
 						int cantidad = 0;
 						/*BuscarEmpate*/
@@ -4808,7 +4798,7 @@ public ByteArrayInputStream reporteconcursonacional(String ods,String anio,Strin
 							}
 							
 							if(listaTrabEmpatadosPuesto3NoAsignado.size() > 0) {
-								if(listaTrabEmpatadosPuesto1.size() > 0 && listaTrabEmpatadosPuesto2.size() > 0 && listaTrabEmpatadosPuesto3.size() > 0) {
+								if(listaTrabEmpatadosPuesto3.size() > 0) {
 									for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto3NoAsignado) {
 										trabajo.setPuesto_nacional(0);
 										Estadotrabajo estadoTrabajo = new  Estadotrabajo();
@@ -4818,7 +4808,7 @@ public ByteArrayInputStream reporteconcursonacional(String ods,String anio,Strin
 										trabajosfinalesServ.modificar(trabajo);
 									}
 								}
-								if(listaTrabEmpatadosPuesto1.size() > 0 && listaTrabEmpatadosPuesto2.size() > 0 && listaTrabEmpatadosPuesto3.size() == 0) {
+								if(listaTrabEmpatadosPuesto3.size() == 0) {
 									for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto3NoAsignado) {
 										trabajo.setPuesto_nacional(3);
 										Estadotrabajo estadoTrabajo = new  Estadotrabajo();
@@ -4988,6 +4978,18 @@ public ByteArrayInputStream reporteconcursonacional(String ods,String anio,Strin
 						}
 					}
 					else {
+						/*lista de trabajos finales por Nivel y Categoria*/
+						List<Trabajosfinales>  trabajoFinales = trabajosfinalesServ.listarTrabajosfinalesPorNivelCategoria(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc());
+						for (Trabajosfinales trabajos : trabajoFinales) {
+							if(trabajos.getEstadonacional().getId() == 21 /*|| trabajos.getNota_nacional() == 0*/) {
+								trabajos.setPuesto_nacional(0);
+							}
+							Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+							estadoTrabajo.setId(3);
+							trabajos.setEstadonacional(estadoTrabajo);
+							trabajosfinalesServ.modificar(trabajos);
+						}
+						
 						/*Obtener Puesto*/
 						if(trabajoFinales.size() > 0) {log.info("TOTAL DE TRABAJOS: "+trabajoFinales.size());
 							/*Puesto 1*/
