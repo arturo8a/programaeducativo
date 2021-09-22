@@ -4450,9 +4450,9 @@ public ByteArrayInputStream reporteconcursonacional(String ods,String anio,Strin
 						if(true) {
 							
 							int empatesPuesto1 = listaPuesto1.size();
-							float notaPuesto1 = 0;
-							float notaPuesto2 = 0;
-							float notaPuesto3 = 0;
+							float notaPuesto1 = -1;
+							float notaPuesto2 = -1;
+							float notaPuesto3 = -1;
 							
 							/**************************PUESTO 1*****************/
 							

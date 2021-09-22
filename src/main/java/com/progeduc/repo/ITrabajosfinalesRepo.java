@@ -238,7 +238,7 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
 			+ "inner join participante p on p.id = tfp.participanteid "
 			+ "inner join gradoparticipante gp on gp.id = p.gradooestudiante "
     		+ "where tf.nota is not null and gp.nivelgradopartdesc=?2 AND tf.categoriatrabajoid = ?1 and tf.estadotrabajoid=3 AND tf.puesto = 1 "
-    		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) AND tf.puesto_nacional > 0 AND tf.empate_nacional=1 and tf.nota_nacional > 0  "
+    		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) AND tf.puesto_nacional > 0 AND tf.empate_nacional=1   "
     		+ "order by tf.nota_nacional desc ",nativeQuery = true)
 	List<Trabajosfinales> listarTrabajosfinalesPorNivelCategoriaEmpatadosConNota(Integer categoriaId, String nivel);
 	
@@ -250,8 +250,8 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
 			+ "inner join participante p on p.id = tfp.participanteid "
 			+ "inner join gradoparticipante gp on gp.id = p.gradooestudiante "
     		+ "where tf.nota is not null AND tf.categoriatrabajoid = ?1 and gp.nivelgradopartdesc=?2  AND tf.puesto = 1 "
-    		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) AND tf.puesto_nacional= ?3 AND tf.puesto_nacional > 0 "
-    		+ "order by tf.nota desc ",nativeQuery = true)
+    		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) AND tf.puesto_nacional= ?3  "
+    		+ "order by tf.nota_nacional desc ",nativeQuery = true)
 	List<Trabajosfinales> listaTrabajosEmpatadosNacionalPorCatNivPuesto(Integer idcategoria, String nivel, Integer puesto);
 	
 	
