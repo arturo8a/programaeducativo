@@ -2446,14 +2446,17 @@ public class ConcursoeducativoController {
 								contNotaTrabajo++;
 							}
 						});
-						notaTrabajo = notaTrabajo/contNotaTrabajo;
-						/*Fin actualizar trabajos sin nota*/						
-						Estadotrabajo estadoTrabajo = new  Estadotrabajo();
-						estadoTrabajo.setId(3);
-						trabajos.setEstadotrabajo(estadoTrabajo);
-						trabajos.setNota(notaTrabajo);
-						trabajosfinalesServ.modificar(trabajos);
-					}						
+						if(notaTrabajo>0) {
+							notaTrabajo = notaTrabajo/contNotaTrabajo;
+							/*Fin actualizar trabajos sin nota*/						
+							Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+							estadoTrabajo.setId(3);
+							trabajos.setEstadotrabajo(estadoTrabajo);
+							trabajos.setNota(notaTrabajo);
+							trabajosfinalesServ.modificar(trabajos);
+						}
+						
+					}
 				}
 				
 				List<CerrarOds> listCerrarOds = cerrarOdsServ.listCerrarOds();//lista de ODS cerradas
