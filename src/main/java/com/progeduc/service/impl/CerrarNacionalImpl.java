@@ -24,7 +24,7 @@ public class CerrarNacionalImpl implements ICerrarNacionalService{
 	@Override
 	public CerrarEtapaNacional modificar(CerrarEtapaNacional obj) {
 		// TODO Auto-generated method stub
-		return null;
+		return cerrarRepo.save(obj);
 	}
 
 	@Override
