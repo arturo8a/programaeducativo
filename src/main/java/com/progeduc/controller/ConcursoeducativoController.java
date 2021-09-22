@@ -3466,7 +3466,7 @@ public class ConcursoeducativoController {
 							miEmpate.setIdCategoria(obj.getCategoriatrabajo().getId());
 							miEmpate.setIdNivelParticipacion(peNivelParticipacion);
 							miEmpate.setIdOds(odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getId());
-							miEmpate.setAnio(obj.getPuesto());
+							miEmpate.setPuesto(obj.getPuesto());
 							listaEmpate.add(miEmpate);
 							
 							
