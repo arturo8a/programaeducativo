@@ -226,7 +226,7 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
 			+ "inner join participante p on p.id = tfp.participanteid "
 			+ "inner join gradoparticipante gp on gp.id = p.gradooestudiante "
     		+ "where tf.nota is not null and gp.nivelgradopartdesc=?2 AND tf.categoriatrabajoid = ?1  and tf.estadotrabajoid=3 "
-    		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) AND tf.puesto = 1	"
+    		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) AND tf.puesto = 1 and (gp.descripcion='Inicial 3 años' or gp.descripcion='1er grado de primaria' or gp.descripcion='1er grado de secundaria') "
     		+ "order by tf.nota_nacional desc ",nativeQuery = true)
 	List<Trabajosfinales> listarTrabajosfinalesPorNivelCategoria(Integer categoriaId, String nivel);
 	
