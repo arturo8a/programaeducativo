@@ -60,6 +60,7 @@ import com.progeduc.dto.EvaluacionRubricaQuestionarioDto;
 import com.progeduc.dto.EvaluadorDto;
 import com.progeduc.dto.ListaDocente;
 import com.progeduc.dto.ListaDocenteInscritos;
+import com.progeduc.dto.ListaEmpateDto;
 import com.progeduc.dto.ListaTrabajosFinalesPendientes;
 import com.progeduc.dto.ListaparticipanteDto;
 import com.progeduc.dto.ListaparticipantetrabajoDto;
@@ -2898,24 +2899,15 @@ public class ConcursoeducativoController {
 							}
 							
 						}
-					}
-					
-					
-					
+					}					
 				}
-				
-				
-				
-				
-			}
-			
+			}		
 			
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			log.error("ERROR: ",e);
 			return 0;
-		}
-		
+		}		
 		return 1;
 	}
 	
@@ -3382,7 +3374,9 @@ public class ConcursoeducativoController {
 			cell.setCellValue(ColumnaResultados[i]);
 		}
 		
-		List<ResultadosGanadoresDto> listaResultadosGanadores  =new ArrayList<ResultadosGanadoresDto>();		
+		List<ResultadosGanadoresDto> listaResultadosGanadores  =new ArrayList<ResultadosGanadoresDto>();	
+		
+		List<ListaEmpateDto> listaEmpate = new ArrayList<ListaEmpateDto>();
 		
 		trabajosFinalesServ.listarhabilitados().forEach(obj->{
 			
@@ -3450,29 +3444,54 @@ public class ConcursoeducativoController {
 					
 					if(obj.getEstadotrabajo().getId().equals(21)) {
 						
-						dto.setAnio(obj.getAnio());
-						dto.setOds(odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
-						dto.setCategoria(obj.getCategoriatrabajo().getDescripcion());
 						if(peNivelParticipacion.equals("")) {
 							trabajosfinalesparticipanteServ.listar(obj.getId()).forEach(obj3->{
 								peNivelParticipacion = obj3.getParticipante().getGradoestudiante().getNivelgradopartdesc();
 							});									
 						}
-						dto.setNivelParticipacion(peNivelParticipacion);
-						puestoTrabajo = obj.getPuesto().equals(1)?"PRIMER PUESTO":(obj.getPuesto().equals(2)?"SEGUNDO PUESTO":(obj.getPuesto().equals(3)?"TERCER PUESTO":""));
-						dto.setPuesto(puestoTrabajo);
-						dto.setCodigoIiee("EMPATE");
-						dto.setNombreIiee("");
-						dto.setAmbitoIiee("");
-						dto.setCodigoTrabajo("");
-						dto.setModalidad("");
-						dto.setNombreTrabajo("");
-						dto.setParticipantes("");
-						dto.setGenero("");
-						dto.setNotaFinal("");
-						dto.setDocente("");
-						dto.setCelularDocente("");	
-						listaResultadosGanadores.add(dto);
+						
+						boolean soloUnEmpate = true;
+						for(ListaEmpateDto objEmpate : listaEmpate) {
+							if(odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getId().equals(objEmpate.getIdOds()) &&
+									obj.getAnio().equals(objEmpate.getAnio()) && obj.getCategoriatrabajo().getId().equals(objEmpate.getIdCategoria())
+											&& peNivelParticipacion.equals(objEmpate.getIdNivelParticipacion()) && obj.getPuesto().equals(objEmpate.getPuesto())) {
+								soloUnEmpate = false;
+								break;
+							}
+						}
+						
+						if(soloUnEmpate) {
+							ListaEmpateDto miEmpate = new ListaEmpateDto();
+							miEmpate.setAnio(obj.getAnio());
+							miEmpate.setIdCategoria(obj.getCategoriatrabajo().getId());
+							miEmpate.setIdNivelParticipacion(peNivelParticipacion);
+							miEmpate.setIdOds(odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getId());
+							miEmpate.setAnio(obj.getPuesto());
+							listaEmpate.add(miEmpate);
+							
+							
+							dto.setAnio(obj.getAnio());
+							dto.setOds(odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
+							dto.setCategoria(obj.getCategoriatrabajo().getDescripcion());
+							dto.setNivelParticipacion(peNivelParticipacion);
+							puestoTrabajo = obj.getPuesto().equals(1)?"PRIMER PUESTO":(obj.getPuesto().equals(2)?"SEGUNDO PUESTO":(obj.getPuesto().equals(3)?"TERCER PUESTO":""));
+							dto.setPuesto(puestoTrabajo);
+							dto.setCodigoIiee("EMPATE");
+							dto.setNombreIiee("");
+							dto.setAmbitoIiee("");
+							dto.setCodigoTrabajo("");
+							dto.setModalidad("");
+							dto.setNombreTrabajo("");
+							dto.setParticipantes("");
+							dto.setGenero("");
+							dto.setNotaFinal("");
+							dto.setDocente("");
+							dto.setCelularDocente("");	
+							listaResultadosGanadores.add(dto);
+							
+						}
+						
+						
 						
 					}else {
 							puestoTrabajo = obj.getPuesto().equals(1)?"PRIMER PUESTO":(obj.getPuesto().equals(2)?"SEGUNDO PUESTO":(obj.getPuesto().equals(3)?"TERCER PUESTO":""));
