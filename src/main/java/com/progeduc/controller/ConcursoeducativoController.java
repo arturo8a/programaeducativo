@@ -3801,10 +3801,15 @@ public class ConcursoeducativoController {
 				
 				cerrarNacioanl = cerrarNacionalSserv.registrar(cerrarNacioanl);
 				
+				//cambias estado a los trabajos empatados
+				List<Trabajosfinales> listaPuesto1= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 1);
+				List<Trabajosfinales> listaPuesto2= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 2);
+				List<Trabajosfinales> listaPuesto3= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 3);
+				
 				/*lista de trabajos finales por Nivel y Categoria*/
 				List<Trabajosfinales>  trabajoFinales = trabajosfinalesServ.listarTrabajosfinalesPorNivelCategoria(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc());
 				for (Trabajosfinales trabajos : trabajoFinales) {
-					if(trabajos.getEstadonacional().getId() == 21) {
+					if(trabajos.getEstadonacional().getId() == 21 /*|| trabajos.getNota_nacional() == 0*/) {
 						trabajos.setPuesto_nacional(0);
 					}
 					Estadotrabajo estadoTrabajo = new  Estadotrabajo();
@@ -3834,8 +3839,385 @@ public class ConcursoeducativoController {
 								cantidad++;
 							}
 						}
-						
-						if(true) {//if(cantidad <= 1) {//cantidad de empatados <= 1 (NO HAY EMPATES NUEVOS)
+						if(true) {
+							
+							int empatesPuesto1 = listaPuesto1.size();
+							float notaPuesto1 = 0;
+							float notaPuesto2 = 0;
+							float notaPuesto3 = 0;
+							
+							/**************************PUESTO 1*****************/
+							
+							//Nota puesto 1
+							for (Trabajosfinales trabajo : listaPuesto1) {
+								if(trabajo.getEstadonacional().getId() == 2) {
+									notaPuesto1 = trabajo.getNota_nacional();
+									break;
+								}
+							}
+							//Nota puesto2
+							for (Trabajosfinales trabajo : listaPuesto1) {
+								if(trabajo.getEstadonacional().getId() == 2 && trabajo.getNota_nacional() < notaPuesto1) {
+									notaPuesto2 = trabajo.getNota_nacional();
+									break;
+								}
+							}
+							//Nota puesto 3
+							for (Trabajosfinales trabajo : listaPuesto1) {
+								if(trabajo.getEstadonacional().getId() == 2 && trabajo.getNota_nacional() < notaPuesto2) {
+									notaPuesto3 = trabajo.getNota_nacional();
+									break;
+								}
+							}
+							
+							List<Trabajosfinales> listaTrabEmpatadosPuesto1 = new ArrayList<Trabajosfinales>();
+							List<Trabajosfinales> listaTrabEmpatadosPuesto2 = new ArrayList<Trabajosfinales>();
+							List<Trabajosfinales> listaTrabEmpatadosPuesto3 = new ArrayList<Trabajosfinales>();
+							List<Trabajosfinales> listaTrabEmpatadosPuesto1NoAsignado = new ArrayList<Trabajosfinales>();
+							List<Trabajosfinales> listaTrabEmpatadosPuesto2NoAsignado = new ArrayList<Trabajosfinales>();
+							List<Trabajosfinales> listaTrabEmpatadosPuesto3NoAsignado = new ArrayList<Trabajosfinales>();
+							
+							for (Trabajosfinales trabajo : listaPuesto1) {
+								if(trabajo.getNota_nacional() == notaPuesto1 && trabajo.getEstadonacional().getId() == 2) {
+									trabajo.setPuesto_nacional(1);
+									listaTrabEmpatadosPuesto1.add(trabajo);
+								}
+							}
+							
+							for (Trabajosfinales trabajo : listaPuesto1) {
+								if(trabajo.getNota_nacional() == notaPuesto2 && trabajo.getEstadonacional().getId() == 2) {
+									trabajo.setPuesto_nacional(2);
+									listaTrabEmpatadosPuesto2.add(trabajo);
+								}
+							}
+							
+							for (Trabajosfinales trabajo : listaPuesto1) {
+								if(trabajo.getNota_nacional() == notaPuesto3 && trabajo.getEstadonacional().getId() == 2) {
+									trabajo.setPuesto_nacional(3);
+									listaTrabEmpatadosPuesto3.add(trabajo);
+								}
+							}
+							
+							for (Trabajosfinales trabajo : listaPuesto1) {
+								if(trabajo.getEstadonacional().getId() == 21) {
+									listaTrabEmpatadosPuesto1NoAsignado.add(trabajo);
+								}
+							}
+							
+							if(listaTrabEmpatadosPuesto1.size() > 1) {
+								for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto1) {
+									evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trabajo.getId());//borrar las respuestas de las evaluaciones;
+									trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trabajo.getId());//borrar asignacion de evaluadores
+									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+									estadoTrabajo.setId(21);
+									trabajo.setEstadonacional(estadoTrabajo);
+		
+									trabajosfinalesServ.modificar(trabajo);
+								}
+							}else {
+								for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto1) {
+									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+									estadoTrabajo.setId(3);
+									trabajo.setEstadonacional(estadoTrabajo);
+		
+									trabajosfinalesServ.modificar(trabajo);
+								}
+							}
+							
+							if(listaTrabEmpatadosPuesto2.size() > 1) {
+								for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto2) {
+									evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trabajo.getId());//borrar las respuestas de las evaluaciones;
+									trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trabajo.getId());//borrar asignacion de evaluadores
+									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+									estadoTrabajo.setId(21);
+									trabajo.setEstadonacional(estadoTrabajo);
+		
+									trabajosfinalesServ.modificar(trabajo);
+								}
+							}else {
+								for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto2) {
+									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+									estadoTrabajo.setId(3);
+									trabajo.setEstadonacional(estadoTrabajo);
+		
+									trabajosfinalesServ.modificar(trabajo);
+								}
+							}
+							
+							if(listaTrabEmpatadosPuesto3.size() > 1) {
+								for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto3) {
+									evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trabajo.getId());//borrar las respuestas de las evaluaciones;
+									trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trabajo.getId());//borrar asignacion de evaluadores
+									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+									estadoTrabajo.setId(21);
+									trabajo.setEstadonacional(estadoTrabajo);
+		
+									trabajosfinalesServ.modificar(trabajo);
+								}
+							}else {
+								for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto3) {
+									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+									estadoTrabajo.setId(3);
+									trabajo.setEstadonacional(estadoTrabajo);
+		
+									trabajosfinalesServ.modificar(trabajo);
+								}
+							}
+							
+							if(listaTrabEmpatadosPuesto1NoAsignado.size() > 0) {
+								if(listaTrabEmpatadosPuesto1.size() > 0 && listaTrabEmpatadosPuesto2.size() > 0 && listaTrabEmpatadosPuesto3.size() > 0) {
+									for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto1NoAsignado) {
+										trabajo.setPuesto_nacional(0);
+										Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+										estadoTrabajo.setId(3);
+										trabajo.setEstadonacional(estadoTrabajo);
+			
+										trabajosfinalesServ.modificar(trabajo);
+									}
+								}
+								if(listaTrabEmpatadosPuesto1.size() > 0 && listaTrabEmpatadosPuesto2.size() > 0 && listaTrabEmpatadosPuesto3.size() == 0) {
+									for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto1NoAsignado) {
+										trabajo.setPuesto_nacional(3);
+										Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+										if(listaTrabEmpatadosPuesto1NoAsignado.size() > 1) {
+											estadoTrabajo.setId(21);
+										}else {
+											estadoTrabajo.setId(3);
+										}
+										trabajo.setEstadonacional(estadoTrabajo);
+			
+										trabajosfinalesServ.modificar(trabajo);
+									}
+								}
+								if(listaTrabEmpatadosPuesto1.size() > 0 && listaTrabEmpatadosPuesto2.size() == 0 && listaTrabEmpatadosPuesto3.size() == 0) {
+									for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto1NoAsignado) {
+										trabajo.setPuesto_nacional(2);
+										Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+										if(listaTrabEmpatadosPuesto1NoAsignado.size() > 1) {
+											estadoTrabajo.setId(21);
+										}else {
+											estadoTrabajo.setId(3);
+										}
+										trabajo.setEstadonacional(estadoTrabajo);
+			
+										trabajosfinalesServ.modificar(trabajo);
+									}
+								}
+								if(listaTrabEmpatadosPuesto1.size() == 0 && listaTrabEmpatadosPuesto2.size() == 0 && listaTrabEmpatadosPuesto3.size() == 0) {
+									for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto1NoAsignado) {
+										trabajo.setPuesto_nacional(1);
+										Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+										if(listaTrabEmpatadosPuesto1NoAsignado.size() > 1) {
+											estadoTrabajo.setId(21);
+										}else {
+											estadoTrabajo.setId(3);
+										}
+										trabajo.setEstadonacional(estadoTrabajo);
+			
+										trabajosfinalesServ.modificar(trabajo);
+									}
+								}
+							}
+							
+							/**************************PUESTO 2*****************/
+							//Nota puesto 2
+							for (Trabajosfinales trabajo : listaPuesto2) {
+								if(trabajo.getEstadonacional().getId() == 2) {
+									notaPuesto2 = trabajo.getNota_nacional();
+									break;
+								}
+							}
+							//Nota puesto3
+							for (Trabajosfinales trabajo : listaPuesto2) {
+								if(trabajo.getEstadonacional().getId() == 2 && trabajo.getNota_nacional() < notaPuesto2) {
+									notaPuesto3 = trabajo.getNota_nacional();
+									break;
+								}
+							}
+							
+							listaTrabEmpatadosPuesto2 = new ArrayList<Trabajosfinales>();
+							listaTrabEmpatadosPuesto3 = new ArrayList<Trabajosfinales>();
+							
+							for (Trabajosfinales trabajo : listaPuesto2) {
+								if(trabajo.getNota_nacional() == notaPuesto2 && trabajo.getEstadonacional().getId() == 2) {
+									trabajo.setPuesto_nacional(2);
+									listaTrabEmpatadosPuesto2.add(trabajo);
+								}
+							}
+							
+							for (Trabajosfinales trabajo : listaPuesto2) {
+								if(trabajo.getNota_nacional() == notaPuesto3 && trabajo.getEstadonacional().getId() == 2) {
+									trabajo.setPuesto_nacional(3);
+									listaTrabEmpatadosPuesto3.add(trabajo);
+								}
+							}
+							
+							for (Trabajosfinales trabajo : listaPuesto2) {
+								if(trabajo.getEstadonacional().getId() == 21) {
+									listaTrabEmpatadosPuesto2NoAsignado.add(trabajo);
+								}
+							}
+							
+							if(listaTrabEmpatadosPuesto2.size() > 1) {
+								for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto2) {
+									evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trabajo.getId());//borrar las respuestas de las evaluaciones;
+									trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trabajo.getId());//borrar asignacion de evaluadores
+									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+									estadoTrabajo.setId(21);
+									trabajo.setEstadonacional(estadoTrabajo);
+		
+									trabajosfinalesServ.modificar(trabajo);
+								}
+							}else {
+								for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto2) {
+									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+									estadoTrabajo.setId(3);
+									trabajo.setEstadonacional(estadoTrabajo);
+		
+									trabajosfinalesServ.modificar(trabajo);
+								}
+							}
+							
+							if(listaTrabEmpatadosPuesto3.size() > 1) {
+								for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto3) {
+									evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trabajo.getId());//borrar las respuestas de las evaluaciones;
+									trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trabajo.getId());//borrar asignacion de evaluadores
+									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+									estadoTrabajo.setId(21);
+									trabajo.setEstadonacional(estadoTrabajo);
+		
+									trabajosfinalesServ.modificar(trabajo);
+								}
+							}else {
+								for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto3) {
+									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+									estadoTrabajo.setId(3);
+									trabajo.setEstadonacional(estadoTrabajo);
+		
+									trabajosfinalesServ.modificar(trabajo);
+								}
+							}
+							
+							if(listaTrabEmpatadosPuesto2NoAsignado.size() > 0) {
+								if(listaTrabEmpatadosPuesto1.size() > 0 && listaTrabEmpatadosPuesto2.size() > 0 && listaTrabEmpatadosPuesto3.size() > 0) {
+									for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto2NoAsignado) {
+										trabajo.setPuesto_nacional(0);
+										Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+										estadoTrabajo.setId(3);
+										trabajo.setEstadonacional(estadoTrabajo);
+			
+										trabajosfinalesServ.modificar(trabajo);
+									}
+								}
+								if(listaTrabEmpatadosPuesto1.size() > 0 && listaTrabEmpatadosPuesto2.size() > 0 && listaTrabEmpatadosPuesto3.size() == 0) {
+									for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto2NoAsignado) {
+										trabajo.setPuesto_nacional(3);
+										Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+										if(listaTrabEmpatadosPuesto2NoAsignado.size() > 1) {
+											estadoTrabajo.setId(21);
+										}else {
+											estadoTrabajo.setId(3);
+										}
+										trabajo.setEstadonacional(estadoTrabajo);
+			
+										trabajosfinalesServ.modificar(trabajo);
+									}
+								}
+								if(listaTrabEmpatadosPuesto1.size() > 0 && listaTrabEmpatadosPuesto2.size() == 0 && listaTrabEmpatadosPuesto3.size() == 0) {
+									for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto2NoAsignado) {
+										trabajo.setPuesto_nacional(2);
+										Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+										if(listaTrabEmpatadosPuesto2NoAsignado.size() > 1) {
+											estadoTrabajo.setId(21);
+										}else {
+											estadoTrabajo.setId(3);
+										}
+										trabajo.setEstadonacional(estadoTrabajo);
+			
+										trabajosfinalesServ.modificar(trabajo);
+									}
+								}
+							}
+							
+							if(listaTrabEmpatadosPuesto1.size() > 1 || listaTrabEmpatadosPuesto2.size() > 1 || listaTrabEmpatadosPuesto3.size() > 1) {
+								//puestoDeEmpate = puestoNuevo;
+								cerrarNacioanl.setEstado(2);//empate
+								cerrarNacionalSserv.modificar(cerrarNacioanl);
+							}
+							
+							/**************************PUESTO 3*****************/
+							//Nota puesto 3
+							for (Trabajosfinales trabajo : listaPuesto3) {
+								if(trabajo.getEstadonacional().getId() == 2) {
+									notaPuesto3 = trabajo.getNota_nacional();
+									break;
+								}
+							}
+
+							listaTrabEmpatadosPuesto3 = new ArrayList<Trabajosfinales>();
+							
+							for (Trabajosfinales trabajo : listaPuesto3) {
+								if(trabajo.getNota_nacional() == notaPuesto3 && trabajo.getEstadonacional().getId() == 2) {
+									trabajo.setPuesto_nacional(3);
+									listaTrabEmpatadosPuesto3.add(trabajo);
+								}
+							}
+							
+							for (Trabajosfinales trabajo : listaPuesto3) {
+								if(trabajo.getEstadonacional().getId() == 21) {
+									listaTrabEmpatadosPuesto3NoAsignado.add(trabajo);
+								}
+							}
+							
+							if(listaTrabEmpatadosPuesto3.size() > 1) {
+								for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto3) {
+									evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trabajo.getId());//borrar las respuestas de las evaluaciones;
+									trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trabajo.getId());//borrar asignacion de evaluadores
+									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+									estadoTrabajo.setId(21);
+									trabajo.setEstadonacional(estadoTrabajo);
+		
+									trabajosfinalesServ.modificar(trabajo);
+								}
+							}else {
+								for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto3) {
+									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+									estadoTrabajo.setId(3);
+									trabajo.setEstadonacional(estadoTrabajo);
+		
+									trabajosfinalesServ.modificar(trabajo);
+								}
+							}
+							
+							if(listaTrabEmpatadosPuesto3NoAsignado.size() > 0) {
+								if(listaTrabEmpatadosPuesto1.size() > 0 && listaTrabEmpatadosPuesto2.size() > 0 && listaTrabEmpatadosPuesto3.size() > 0) {
+									for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto3NoAsignado) {
+										trabajo.setPuesto_nacional(0);
+										Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+										estadoTrabajo.setId(3);
+										trabajo.setEstadonacional(estadoTrabajo);
+			
+										trabajosfinalesServ.modificar(trabajo);
+									}
+								}
+								if(listaTrabEmpatadosPuesto1.size() > 0 && listaTrabEmpatadosPuesto2.size() > 0 && listaTrabEmpatadosPuesto3.size() == 0) {
+									for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto3NoAsignado) {
+										trabajo.setPuesto_nacional(3);
+										Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+										if(listaTrabEmpatadosPuesto3NoAsignado.size() > 1) {
+											estadoTrabajo.setId(21);
+										}else {
+											estadoTrabajo.setId(3);
+										}
+										trabajo.setEstadonacional(estadoTrabajo);
+			
+										trabajosfinalesServ.modificar(trabajo);
+									}
+								}
+							}
+							
+						}else
+						if(false) {//if(cantidad <= 1) {//cantidad de empatados <= 1 (NO HAY EMPATES NUEVOS)
 							int indice = 0;
 							float notaPuestoNuevo = 21;
 							int puestoNuevo = 0;
@@ -3932,9 +4314,9 @@ public class ConcursoeducativoController {
 							}
 							
 							//cambias estado a los trabajos empatados
-							List<Trabajosfinales> listaPuesto1= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 1);
+							/*List<Trabajosfinales> listaPuesto1= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 1);
 							List<Trabajosfinales> listaPuesto2= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 2);
-							List<Trabajosfinales> listaPuesto3= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 3);
+							List<Trabajosfinales> listaPuesto3= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 3);*/
 							log.info("TOTAL PUESTO 1:"+listaPuesto1.size());
 							log.info("TOTAL PUESTO 2:"+listaPuesto2.size());
 							log.info("TOTAL PUESTO 3:"+listaPuesto3.size());
@@ -4004,8 +4386,8 @@ public class ConcursoeducativoController {
 							}log.info("FINALIZACION 1 - TOTAL EMPATES P1: "+cantidad);
 							if(cantidad > 1) {
 								trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 1);
-								List<Trabajosfinales> listaPuesto1= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 1);
-								for (Trabajosfinales trab : listaPuesto1) {
+								List<Trabajosfinales> listaPuesto1I= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 1);
+								for (Trabajosfinales trab : listaPuesto1I) {
 									evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trab.getId());//borrar las respuestas de las evaluaciones;
 									trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trab.getId());//borrar asignacion de evaluadores
 									
@@ -4037,8 +4419,8 @@ public class ConcursoeducativoController {
 								}
 							}log.info("FINALIZACION 1 - TOTAL EMPATES P2: "+cantidad2);
 							if(cantidad2 > 1 && cantidad == 1) {
-								List<Trabajosfinales> listaPuesto2= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 2);
-								for (Trabajosfinales trab : listaPuesto2) {
+								List<Trabajosfinales> listaPuesto2I= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 2);
+								for (Trabajosfinales trab : listaPuesto2I) {
 									evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trab.getId());
 									trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trab.getId());
 									
@@ -4070,8 +4452,8 @@ public class ConcursoeducativoController {
 								}
 							}log.info("FINALIZACION 1 - TOTAL EMPATES P3: "+cantidad3);
 							if(cantidad3 > 1 && (cantidad+cantidad2) == 2) {
-								List<Trabajosfinales> listaPuesto3= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 3);
-								for (Trabajosfinales trab : listaPuesto3) {
+								List<Trabajosfinales> listaPuesto3I= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 3);
+								for (Trabajosfinales trab : listaPuesto3I) {
 									evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trab.getId());
 									trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trab.getId());
 									
