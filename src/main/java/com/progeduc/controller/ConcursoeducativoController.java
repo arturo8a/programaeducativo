@@ -2453,7 +2453,7 @@ public class ConcursoeducativoController {
 						trabajos.setEstadotrabajo(estadoTrabajo);
 						trabajos.setNota(notaTrabajo);
 						trabajosfinalesServ.modificar(trabajos);
-					}						
+					}
 				}
 				
 				List<CerrarOds> listCerrarOds = cerrarOdsServ.listCerrarOds();//lista de ODS cerradas

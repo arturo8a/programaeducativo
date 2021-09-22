@@ -265,10 +265,9 @@ public class IndexController {
 			dto.setAppaterno(obj.getUsuarioalianza().getApepatautoridad());
 			dto.setApmaterno(obj.getUsuarioalianza().getApematautoridad());
 			dto.setNota((obj.getNota()==null || obj.getNota()==-1.0)  ? "" : obj.getNota().toString());
-			lista.add(dto);		
-			nota = obj.getTrabajosfinales().getNota() == null  ? "" : obj.getTrabajosfinales().getNota().toString();
+			lista.add(dto);
 		});
-		model.addAttribute("total", nota);
+		model.addAttribute("total", trabajosfinalesService.ListarporId(id).getNota()!=null? trabajosfinalesService.ListarporId(id).getNota().toString():"");
 		model.addAttribute("lista", lista);
 		return "modal_detalleevaluacion";
 	}
