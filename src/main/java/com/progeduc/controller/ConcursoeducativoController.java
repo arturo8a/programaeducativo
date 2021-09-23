@@ -4486,20 +4486,8 @@ public ByteArrayInputStream reporteconcursonacional(String ods,String anio,Strin
 									break;
 								}
 							}
-							//Nota puesto2
-							for (Trabajosfinales trabajo : listaPuesto1) {
-								if(trabajo.getEstadonacional().getId() == 2 && trabajo.getNota_nacional() < notaPuesto1) {
-									notaPuesto2 = trabajo.getNota_nacional();
-									break;
-								}
-							}
-							//Nota puesto 3
-							for (Trabajosfinales trabajo : listaPuesto1) {
-								if(trabajo.getEstadonacional().getId() == 2 && trabajo.getNota_nacional() < notaPuesto2) {
-									notaPuesto3 = trabajo.getNota_nacional();
-									break;
-								}
-							}
+							
+							
 							
 							List<Trabajosfinales> listaTrabEmpatadosPuesto1 = new ArrayList<Trabajosfinales>();
 							List<Trabajosfinales> listaTrabEmpatadosPuesto2 = new ArrayList<Trabajosfinales>();
@@ -4515,6 +4503,14 @@ public ByteArrayInputStream reporteconcursonacional(String ods,String anio,Strin
 								}
 							}
 							
+							//Nota puesto2
+							for (Trabajosfinales trabajo : listaPuesto1) {
+								if(trabajo.getEstadonacional().getId() == 2 && trabajo.getNota_nacional() < notaPuesto1 && listaTrabEmpatadosPuesto1.size() < 2) {
+									notaPuesto2 = trabajo.getNota_nacional();
+									break;
+								}
+							}
+							
 							for (Trabajosfinales trabajo : listaPuesto1) {
 								if(trabajo.getNota_nacional() == notaPuesto2 && trabajo.getEstadonacional().getId() == 2) {
 									if(listaTrabEmpatadosPuesto1.size() < 2)
@@ -4525,9 +4521,24 @@ public ByteArrayInputStream reporteconcursonacional(String ods,String anio,Strin
 								}
 							}
 							
+							//Nota puesto 3
+							for (Trabajosfinales trabajo : listaPuesto1) {
+								if(listaTrabEmpatadosPuesto1.size() > 1) {
+									if(trabajo.getEstadonacional().getId() == 2 && trabajo.getNota_nacional() < notaPuesto1) {
+										notaPuesto3 = trabajo.getNota_nacional();
+										break;
+									}
+								}else {
+									if(trabajo.getEstadonacional().getId() == 2 && trabajo.getNota_nacional() < notaPuesto2) {
+										notaPuesto3 = trabajo.getNota_nacional();
+										break;
+									}
+								}
+							}
+							
 							for (Trabajosfinales trabajo : listaPuesto1) {
 								if(trabajo.getNota_nacional() == notaPuesto3 && trabajo.getEstadonacional().getId() == 2) {
-									if((listaTrabEmpatadosPuesto1.size()+listaTrabEmpatadosPuesto2.size()) < 2)
+									if((listaTrabEmpatadosPuesto1.size()+listaTrabEmpatadosPuesto2.size()) < 3)
 										trabajo.setPuesto_nacional(3);
 									else
 										trabajo.setPuesto_nacional(0);
@@ -4805,6 +4816,12 @@ public ByteArrayInputStream reporteconcursonacional(String ods,String anio,Strin
 								if(trabajo.getNota_nacional() == notaPuesto3 && trabajo.getEstadonacional().getId() == 2) {
 									trabajo.setPuesto_nacional(3);
 									listaTrabEmpatadosPuesto3.add(trabajo);
+								}else if(trabajo.getNota_nacional() < notaPuesto3){
+									trabajo.setPuesto_nacional(0);
+									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+									estadoTrabajo.setId(3);
+									trabajo.setEstadonacional(estadoTrabajo);
+									trabajosfinalesServ.modificar(trabajo);
 								}
 							}
 							
@@ -4865,6 +4882,10 @@ public ByteArrayInputStream reporteconcursonacional(String ods,String anio,Strin
 								cerrarNacioanl.setEstado(2);//empate
 								cerrarNacionalSserv.modificar(cerrarNacioanl);
 							}
+							if(listaTrabEmpatadosPuesto3.size() == 0 && listaTrabEmpatadosPuesto3NoAsignado.size() > 1) {
+								cerrarNacioanl.setEstado(2);//empate
+								cerrarNacionalSserv.modificar(cerrarNacioanl);
+							}
 						}
 					}
 					else {
@@ -4895,7 +4916,7 @@ public ByteArrayInputStream reporteconcursonacional(String ods,String anio,Strin
 								}
 							}log.info("FINALIZACION 1 - TOTAL EMPATES P1: "+cantidad);
 							if(cantidad > 1) {
-								trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 1);
+								
 								List<Trabajosfinales> listaPuesto1I= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 1);
 								for (Trabajosfinales trab : listaPuesto1I) {
 									evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trab.getId());//borrar las respuestas de las evaluaciones;
@@ -5048,6 +5069,9 @@ public ByteArrayInputStream reporteconcursonacional(String ods,String anio,Strin
 						trabajosfinalesServ.updateEstadoTrabajoNacional(te.getId(),2);
 						
 						Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(te.getId());
+						if(trabajoFinal.getNota_nacional() != null) {
+							trabajoFinal.setNota_original_nacional(trabajoFinal.getNota_nacional());
+						}
 						trabajoFinal.setNota_nacional(0f);
 						trabajosfinalesServ.modificar(trabajoFinal);
 						

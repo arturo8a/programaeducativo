@@ -2071,7 +2071,15 @@ $(document).ready(function(){
 		$("#modalConfimarCierreNacionalFinalizar").modal('hide');
 	});
 	
-	
+	$("#btnlimpiarconcursoNacional").on("click",function(e){
+		$("#odsconcursoN").val('Todos');
+		$("#anioasignacionN").val('Todos');
+		$("#categoriaconcursoN").val('Todos');
+		$("#participacionconcursoN").val('Todos');
+		$("#puestoconcursoN").val('Todos');
+		listarNacional();
+	});
+
 	$("#btnVerAsignarNacional").on("click",function(e){
 		//alert('No hay empates.');
 		openCargando();
