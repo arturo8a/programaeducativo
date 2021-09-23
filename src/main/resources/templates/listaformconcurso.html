@@ -1420,7 +1420,6 @@
 				celdaseleccionada = table.row($(this).parents("tr")).index();
 				var data = table.row($(this).parents("tr")).data();
 				id = data.id;
-				console.log("id :"  + id);
 				f_ce_detalleevaluacion(id);
 			});
 		};
@@ -1923,7 +1922,7 @@ $(document).ready(function(){
 				closeCargando();
 				$("#modalConfimarCierreFinalizar").modal('hide');
 				$("#modalFinalizar").modal('hide');
-				listar();
+				table_lista_concurso.ajax.reload();
 			},
 			error: function() {
 				console.log("Error");

@@ -2907,7 +2907,7 @@ public class ConcursoeducativoController {
 			log.error(e.getMessage());
 			log.error("ERROR: ",e);
 			return 0;
-		}		
+		}
 		return 1;
 	}
 	
