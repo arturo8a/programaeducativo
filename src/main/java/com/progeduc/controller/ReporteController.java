@@ -7,6 +7,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.progeduc.dto.DetalleEvaluacionReporteDto;
 import com.progeduc.dto.DocenteDto;
+import com.progeduc.dto.FormatoXlsResultadosGanadores;
 import com.progeduc.dto.IieeReporteDto;
 import com.progeduc.dto.ListaEmpateDto;
 import com.progeduc.dto.ListaparticipantereporteDto;
@@ -40,6 +42,8 @@ import com.progeduc.dto.NotasEvaluadorDto;
 import com.progeduc.dto.ResultadosGanadoresDto;
 import com.progeduc.dto.ResultadosRegionalesDto;
 import com.progeduc.model.Auspicio;
+import com.progeduc.model.Categoriatrabajo;
+import com.progeduc.model.Nivelparticipacion;
 import com.progeduc.model.Ods;
 import com.progeduc.model.Participante;
 import com.progeduc.model.Postulacionconcurso;
@@ -49,10 +53,12 @@ import com.progeduc.model.Trabajosfinales;
 import com.progeduc.model.TrabajosfinalesParticipante;
 import com.progeduc.model.TrabajosfinalesUsuarioAlianza;
 import com.progeduc.model.UsuarioAlianza;
+import com.progeduc.service.ICategoriatrabajoService;
 import com.progeduc.service.IDistritoService;
 import com.progeduc.service.IDocentetutorService;
 import com.progeduc.service.IEvaluacionRespuestaService;
 import com.progeduc.service.IGeneroprofService;
+import com.progeduc.service.INivelparticipacionService;
 import com.progeduc.service.IOdsService;
 import com.progeduc.service.IParticipanteService;
 import com.progeduc.service.IPostulacionconcursoService;
@@ -77,9 +83,6 @@ public class ReporteController {
 	
 	@Autowired
 	private IOdsService odsserv;
-	
-	@Autowired
-	private IDistritoService distServ;
 	
 	@Autowired
 	private IDocentetutorService docentetutorServ;
@@ -115,7 +118,10 @@ public class ReporteController {
 	private IQuestionarioRespuestaService questionarioRespuestaService;
 	
 	@Autowired
-	private IRubricaService rubricaServ;
+	private INivelparticipacionService nivelParticipacionServ;
+	
+	@Autowired
+	private ICategoriatrabajoService categoriaTrabajoServ;
 	
 	@Autowired
 	private IGeneroprofService generoprofserv;
@@ -127,6 +133,8 @@ public class ReporteController {
 	IUsuarioOdsService usuarioodsService; 
 	
 	List<Ods> listaOds;
+	List<Integer> listaAnio;
+	List<String> listaPuesto;
 	
 	String mi_nivel_participacion, nivelSeccionDocenteAlumnoVaronMujer,peTurno, peSuministro,peParticipantes,peEjesTematicos,peNivelParticipacion,peGeneroParticipante,peModalidad,peCategorias,fecha_archivo;
 	boolean bandera_ods,bandera_anio,bandera_categoria,bandera_modalidad,bandera_nivel,flag;
@@ -1665,6 +1673,7 @@ public class ReporteController {
 		}
 		
 		List<ResultadosGanadoresDto> listaResultadosGanadores  =new ArrayList<ResultadosGanadoresDto>();
+		List<ResultadosGanadoresDto> listaResultadosGanadores1  =new ArrayList<ResultadosGanadoresDto>();
 		
 		List<ListaEmpateDto> listaEmpate = new ArrayList<ListaEmpateDto>();
 		
@@ -1673,7 +1682,7 @@ public class ReporteController {
 			if(obj.getEnviado()==1) {
 				
 				bandera_ods = false;
-				bandera_anio = false;	
+				bandera_anio = false;
 				bandera_categoria=false;
 				bandera_modalidad = false;
 				bandera_nivel = false;
@@ -1816,21 +1825,17 @@ public class ReporteController {
 			}
 		});
 		
-		List<String> listaPuesto  = new ArrayList<String>();
-		listaPuesto.add("PRIMER PUESTO");
-		listaPuesto.add("SEGUNDO PUESTO");
-		listaPuesto.add("TERCER PUESTO");
-		
-		for(ResultadosGanadoresDto dto : listaResultadosGanadores) {
-			
-			
-		}
 		
 		
-		Collections.sort(listaResultadosGanadores);
+		List<Integer> listaAnio = buscarAnioListaGanadores(listaResultadosGanadores);
+		
+		
+		listaResultadosGanadores1 = formatoDesiertosResultadosGanadores(listaResultadosGanadores , listaAnio);
+		
+		Collections.sort(listaResultadosGanadores1);
 		
 		int initRow3 = 2;
-		for(ResultadosGanadoresDto dto : listaResultadosGanadores) {
+		for(ResultadosGanadoresDto dto : listaResultadosGanadores1) {
 			row1Resultados = hojaResultados.createRow(initRow3);
 			row1Resultados.createCell(0).setCellValue(dto.getAnio());
 			row1Resultados.createCell(1).setCellValue(dto.getOds());
@@ -1855,12 +1860,90 @@ public class ReporteController {
 			workbook.write(stream);
 			workbook.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		
 		return new ByteArrayInputStream(stream.toByteArray());
+	}
+	
+	public List<ResultadosGanadoresDto> formatoDesiertosResultadosGanadores(List<ResultadosGanadoresDto> lista,List<Integer> listaAnios){
+		
+		List<FormatoXlsResultadosGanadores> listaFormatoXls = new ArrayList<FormatoXlsResultadosGanadores>();
+		listaPuesto = new ArrayList<String>();
+		listaPuesto.add("PRIMER PUESTO");
+		listaPuesto.add("SEGUNDO PUESTO");
+		listaPuesto.add("TERCER PUESTO");
+		
+		for(Integer objAnio : listaAnios) {
+			for(Ods objOds : odsserv.listarAll()){
+				for(Categoriatrabajo objCategoria  : categoriaTrabajoServ.listar()) {
+					for(Nivelparticipacion objNivelParticipacion : nivelParticipacionServ.listar()) {
+						for(String objPuesto : listaPuesto) {
+							FormatoXlsResultadosGanadores xls = new FormatoXlsResultadosGanadores();
+							xls.setAnio(objAnio);
+							xls.setOds(objOds.getDescripcion());
+							xls.setCategoria(objCategoria.getDescripcion());
+							xls.setNivelParticipacion(objNivelParticipacion.getDescripcion());
+							xls.setPuesto(objPuesto);
+							listaFormatoXls.add(xls);
+						}						
+					}
+				}
+			}
+		}
+		
+		for(FormatoXlsResultadosGanadores objXls : listaFormatoXls) {
+			boolean banderaResultado = false;
+			for(ResultadosGanadoresDto dto: lista) {
+				if(dto.getAnio().equals(objXls.getAnio()) && dto.getOds().equals(objXls.getOds()) && 
+						dto.getCategoria().equalsIgnoreCase(objXls.getCategoria()) && dto.getNivelParticipacion().equalsIgnoreCase(objXls.getNivelParticipacion())) {
+					if(dto.getPuesto().equalsIgnoreCase(objXls.getPuesto())){
+						banderaResultado = true;
+					}
+				}
+			}
+			if(!banderaResultado) {
+				ResultadosGanadoresDto dtoXls = new ResultadosGanadoresDto();		
+				dtoXls.setAnio(objXls.getAnio());
+				dtoXls.setOds(objXls.getOds());
+				dtoXls.setCategoria(objXls.getCategoria());
+				dtoXls.setNivelParticipacion(objXls.getNivelParticipacion());
+				dtoXls.setPuesto(objXls.getPuesto());
+				dtoXls.setCodigoIiee("DESIERTO");
+				dtoXls.setNombreIiee("");
+				dtoXls.setAmbitoIiee("");
+				dtoXls.setModalidad("");
+				dtoXls.setCodigoTrabajo("");
+				dtoXls.setNombreTrabajo("");
+				dtoXls.setParticipantes("");
+				dtoXls.setGenero("");
+				dtoXls.setNotaFinal("");
+				dtoXls.setDocente("");
+				dtoXls.setCelularDocente("");
+				lista.add(dtoXls);
+			}
+		}
+		return lista;
+	}
+	
+	public List<Integer> buscarAnioListaGanadores(List<ResultadosGanadoresDto> lista) {
+		
+		Calendar cal= Calendar.getInstance();
+		int anio= cal.get(Calendar.YEAR);
+		
+		listaAnio = new ArrayList<Integer>();
+		listaAnio.add(anio);
+		for(ResultadosGanadoresDto dto : lista) {			
+			for(Integer nuevoAnio : listaAnio) {
+				if(! nuevoAnio.equals(dto.getAnio())) {
+					System.out.println("lista anio : " + dto.getAnio());
+					listaAnio.add(dto.getAnio()) ;
+				}
+			}
+		}
+		return listaAnio;
+		
 	}
 	
 	@GetMapping(value="/reporteAlianza/{ods}/{anio}/{rol}/{estado}")	

@@ -58,6 +58,7 @@ import com.progeduc.dto.EtapaNacionalDto;
 import com.progeduc.dto.EvaluacionDto;
 import com.progeduc.dto.EvaluacionRubricaQuestionarioDto;
 import com.progeduc.dto.EvaluadorDto;
+import com.progeduc.dto.FormatoXlsResultadosGanadores;
 import com.progeduc.dto.ListaDocente;
 import com.progeduc.dto.ListaDocenteInscritos;
 import com.progeduc.dto.ListaEmpateDto;
@@ -78,6 +79,7 @@ import com.progeduc.dto.UsuarioAlianzaDto;
 import com.progeduc.dto.trabajoEvaluadoDto;
 import com.progeduc.model.Aperturaranio;
 import com.progeduc.model.Auspicio;
+import com.progeduc.model.Categoriatrabajo;
 import com.progeduc.model.CerrarEtapaNacional;
 import com.progeduc.model.CerrarOds;
 import com.progeduc.model.Docente;
@@ -87,6 +89,7 @@ import com.progeduc.model.Evaluacion;
 import com.progeduc.model.EvaluacionResultado;
 import com.progeduc.model.EvaluacionResultadoNacional;
 import com.progeduc.model.Gradoparticipante;
+import com.progeduc.model.Nivelparticipacion;
 import com.progeduc.model.Ods;
 import com.progeduc.model.Participante;
 import com.progeduc.model.Postulacionconcurso;
@@ -113,6 +116,7 @@ import com.progeduc.service.IEvaluacionRespuestaService;
 import com.progeduc.service.IEvaluacionService;
 import com.progeduc.service.IGeneroprofService;
 import com.progeduc.service.IGradoparticipanteService;
+import com.progeduc.service.INivelparticipacionService;
 import com.progeduc.service.IOdsService;
 import com.progeduc.service.IParticipanteService;
 import com.progeduc.service.IPostulacionconcursoService;
@@ -220,7 +224,7 @@ public class ConcursoeducativoController {
 	private ITrabajosfinalesService trabajosFinalesServ;
 	
 	@Autowired
-	private ICategoriatrabajoService categoriaSserv;
+	private ICategoriatrabajoService categoriaTrabajoServ;
 	
 	@Autowired
 	private ICerrarNacionalService cerrarNacionalSserv;
@@ -230,6 +234,9 @@ public class ConcursoeducativoController {
 	
 	@Autowired
 	private IEvaluacionRespuestaNacionalService evaluacionRespuestaNacionalServ;
+	
+	@Autowired
+	private INivelparticipacionService nivelParticipacionServ;
 	
 	ListaparticipanteDto dto;	
 	ListatrabajosfinalesDto dtotf;	
@@ -275,6 +282,9 @@ public class ConcursoeducativoController {
 	String puestoTrabajo;
 	float notaTrabajo;
 	int contNotaTrabajo;
+	List<Integer> listaAnio;
+	List<String> listaPuesto;
+	
 	
 	@PostMapping(value="/registrarconcurso")
 	public String registrarconcurso(@Valid @RequestBody Postulacionconcurso dto)  {
@@ -3375,6 +3385,7 @@ public class ConcursoeducativoController {
 		}
 		
 		List<ResultadosGanadoresDto> listaResultadosGanadores  =new ArrayList<ResultadosGanadoresDto>();	
+		List<ResultadosGanadoresDto> listaResultadosGanadores1  =new ArrayList<ResultadosGanadoresDto>();
 		
 		List<ListaEmpateDto> listaEmpate = new ArrayList<ListaEmpateDto>();
 		
@@ -3440,16 +3451,13 @@ public class ConcursoeducativoController {
 					participantes = "";
 					generoParticipante = "";
 					puestoTrabajo = "";
-					ResultadosGanadoresDto dto = new ResultadosGanadoresDto();
-					
+					ResultadosGanadoresDto dto = new ResultadosGanadoresDto();					
 					if(obj.getEstadotrabajo().getId().equals(21)) {
-						
 						if(peNivelParticipacion.equals("")) {
 							trabajosfinalesparticipanteServ.listar(obj.getId()).forEach(obj3->{
 								peNivelParticipacion = obj3.getParticipante().getGradoestudiante().getNivelgradopartdesc();
 							});									
 						}
-						
 						boolean soloUnEmpate = true;
 						for(ListaEmpateDto objEmpate : listaEmpate) {
 							if(odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getId().equals(objEmpate.getIdOds()) &&
@@ -3459,7 +3467,6 @@ public class ConcursoeducativoController {
 								break;
 							}
 						}
-						
 						if(soloUnEmpate) {
 							ListaEmpateDto miEmpate = new ListaEmpateDto();
 							miEmpate.setAnio(obj.getAnio());
@@ -3468,7 +3475,6 @@ public class ConcursoeducativoController {
 							miEmpate.setIdOds(odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getId());
 							miEmpate.setPuesto(obj.getPuesto());
 							listaEmpate.add(miEmpate);
-							
 							
 							dto.setAnio(obj.getAnio());
 							dto.setOds(odsserv.byOds(obj.getProgramaeducativo().getDistrito().getOdsid()).getDescripcion());
@@ -3479,19 +3485,17 @@ public class ConcursoeducativoController {
 							dto.setCodigoIiee("EMPATE");
 							dto.setNombreIiee("");
 							dto.setAmbitoIiee("");
-							dto.setCodigoTrabajo("");
 							dto.setModalidad("");
+							dto.setCodigoTrabajo("");
 							dto.setNombreTrabajo("");
 							dto.setParticipantes("");
 							dto.setGenero("");
 							dto.setNotaFinal("");
 							dto.setDocente("");
-							dto.setCelularDocente("");	
+							dto.setCelularDocente("");
 							listaResultadosGanadores.add(dto);
 							
 						}
-						
-						
 						
 					}else {
 							puestoTrabajo = obj.getPuesto().equals(1)?"PRIMER PUESTO":(obj.getPuesto().equals(2)?"SEGUNDO PUESTO":(obj.getPuesto().equals(3)?"TERCER PUESTO":""));
@@ -3532,10 +3536,15 @@ public class ConcursoeducativoController {
 				}
 		});
 		
-		Collections.sort(listaResultadosGanadores);
+		List<Integer> listaAnio = buscarAnioListaGanadores(listaResultadosGanadores);
+		
+		
+		listaResultadosGanadores1 = formatoDesiertosResultadosGanadores(listaResultadosGanadores , listaAnio);
+		
+		Collections.sort(listaResultadosGanadores1);
 		
 		int initRow3 = 2;
-		for(ResultadosGanadoresDto dto : listaResultadosGanadores) {
+		for(ResultadosGanadoresDto dto : listaResultadosGanadores1) {
 			row1Resultados = hojaResultados.createRow(initRow3);
 			row1Resultados.createCell(0).setCellValue(dto.getAnio());
 			row1Resultados.createCell(1).setCellValue(dto.getOds());
@@ -3566,6 +3575,86 @@ public class ConcursoeducativoController {
 		
 		
 		return new ByteArrayInputStream(stream.toByteArray());
+	}
+	
+	
+	public List<ResultadosGanadoresDto> formatoDesiertosResultadosGanadores(List<ResultadosGanadoresDto> lista,List<Integer> listaAnios){
+		
+		List<FormatoXlsResultadosGanadores> listaFormatoXls = new ArrayList<FormatoXlsResultadosGanadores>();
+		listaPuesto = new ArrayList<String>();
+		listaPuesto.add("PRIMER PUESTO");
+		listaPuesto.add("SEGUNDO PUESTO");
+		listaPuesto.add("TERCER PUESTO");
+		
+		for(Integer objAnio : listaAnios) {
+			for(Ods objOds : odsserv.listarAll()){
+				for(Categoriatrabajo objCategoria  : categoriaTrabajoServ.listar()) {
+					for(Nivelparticipacion objNivelParticipacion : nivelParticipacionServ.listar()) {
+						for(String objPuesto : listaPuesto) {
+							FormatoXlsResultadosGanadores xls = new FormatoXlsResultadosGanadores();
+							xls.setAnio(objAnio);
+							xls.setOds(objOds.getDescripcion());
+							xls.setCategoria(objCategoria.getDescripcion());
+							xls.setNivelParticipacion(objNivelParticipacion.getDescripcion());
+							xls.setPuesto(objPuesto);
+							listaFormatoXls.add(xls);
+						}						
+					}
+				}
+			}
+		}
+		
+		for(FormatoXlsResultadosGanadores objXls : listaFormatoXls) {
+			boolean banderaResultado = false;
+			for(ResultadosGanadoresDto dto: lista) {
+				if(dto.getAnio().equals(objXls.getAnio()) && dto.getOds().equals(objXls.getOds()) && 
+						dto.getCategoria().equalsIgnoreCase(objXls.getCategoria()) && dto.getNivelParticipacion().equalsIgnoreCase(objXls.getNivelParticipacion())) {
+					if(dto.getPuesto().equalsIgnoreCase(objXls.getPuesto())){
+						banderaResultado = true;
+					}
+				}
+			}
+			if(!banderaResultado) {
+				ResultadosGanadoresDto dtoXls = new ResultadosGanadoresDto();		
+				dtoXls.setAnio(objXls.getAnio());
+				dtoXls.setOds(objXls.getOds());
+				dtoXls.setCategoria(objXls.getCategoria());
+				dtoXls.setNivelParticipacion(objXls.getNivelParticipacion());
+				dtoXls.setPuesto(objXls.getPuesto());
+				dtoXls.setCodigoIiee("DESIERTO");
+				dtoXls.setNombreIiee("");
+				dtoXls.setAmbitoIiee("");
+				dtoXls.setModalidad("");
+				dtoXls.setCodigoTrabajo("");
+				dtoXls.setNombreTrabajo("");
+				dtoXls.setParticipantes("");
+				dtoXls.setGenero("");
+				dtoXls.setNotaFinal("");
+				dtoXls.setDocente("");
+				dtoXls.setCelularDocente("");
+				lista.add(dtoXls);
+			}
+		}
+		return lista;
+	}
+	
+	public List<Integer> buscarAnioListaGanadores(List<ResultadosGanadoresDto> lista) {
+
+		Calendar cal= Calendar.getInstance();
+		int anio= cal.get(Calendar.YEAR);
+		
+		listaAnio = new ArrayList<Integer>();
+		listaAnio.add(anio);
+		for(ResultadosGanadoresDto dto : lista) {			
+			for(Integer nuevoAnio : listaAnio) {
+				if(! nuevoAnio.equals(dto.getAnio())) {
+					System.out.println("lista anio : " + dto.getAnio());
+					listaAnio.add(dto.getAnio()) ;
+				}
+			}
+		}
+		return listaAnio;
+		
 	}
 	
 	@GetMapping("/listaTrabajoEvaluadEmpate")
