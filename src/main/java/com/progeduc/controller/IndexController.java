@@ -1204,7 +1204,7 @@ public class IndexController {
 		Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
 
 		Evaluacion eval = evaluacionService.getPorAnioCategoriaNivelparticipacion(trabajosfinales.getAnio(), 
-				trabajosfinales.getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
+				trabajosfinales.getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelparticipacion().getId());
 		model.addAttribute("evaluacion", eval);
 		
 		List<Rubrica> listaRubrica = new ArrayList<Rubrica>();
@@ -1272,7 +1272,7 @@ public class IndexController {
 		Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
 
 		Evaluacion eval = evaluacionService.getPorAnioCategoriaNivelparticipacion(trabajosfinales.getAnio(), 
-				trabajosfinales.getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
+				trabajosfinales.getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelparticipacion().getId());
 		model.addAttribute("evaluacion", eval);
 		
 		List<Rubrica> listaRubrica = new ArrayList<Rubrica>();

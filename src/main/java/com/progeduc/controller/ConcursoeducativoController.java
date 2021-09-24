@@ -1723,7 +1723,7 @@ public class ConcursoeducativoController {
 				List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteServ.listar(data.getTrabajosfinales().getId());
 				Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
 				Evaluacion eval = evaluacionService.getPorAnioCategoriaNivelparticipacion(data.getTrabajosfinales().getAnio(), 
-						data.getTrabajosfinales().getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
+						data.getTrabajosfinales().getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelparticipacion().getId());
 				List<EvaluacionResultado> listEvaResultado = evaluacionRespuestaServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
 				List<EvaluacionResultadoNacional> listEvaResultadoN = evaluacionRespuestaNacionalServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
 				
@@ -1752,7 +1752,7 @@ public class ConcursoeducativoController {
 			List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteServ.listar(data.getTrabajosfinales().getId());
 			Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
 			Evaluacion eval = evaluacionService.getPorAnioCategoriaNivelparticipacion(data.getTrabajosfinales().getAnio(), 
-					data.getTrabajosfinales().getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
+					data.getTrabajosfinales().getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelparticipacion().getId());
 			List<EvaluacionResultado> listEvaResultado = evaluacionRespuestaServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
 			List<EvaluacionResultadoNacional> listEvaResultadoN = evaluacionRespuestaNacionalServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
 	
@@ -1791,7 +1791,7 @@ public class ConcursoeducativoController {
 			List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteServ.listar(data.getTrabajosfinales().getId());
 			Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
 			Evaluacion eval = evaluacionService.getPorAnioCategoriaNivelparticipacion(data.getTrabajosfinales().getAnio(), 
-					data.getTrabajosfinales().getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
+					data.getTrabajosfinales().getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelparticipacion().getId());
 			List<EvaluacionResultado> listEvaResultado = evaluacionRespuestaServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
 			List<EvaluacionResultadoNacional> listEvaResultadoN = evaluacionRespuestaNacionalServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
 			if(eval != null &&  (listEvaResultado.size() > 0) && data.getTrabajosfinales().getEnviado() == 1) {
@@ -1817,7 +1817,7 @@ public class ConcursoeducativoController {
 			List<TrabajosfinalesParticipante> listaTrabajosParticipante = trabajosfinalesparticipanteServ.listar(data.getTrabajosfinales().getId());
 			Participante participante = participanteService.ListarporId(listaTrabajosParticipante.get(0).getParticipante().getId());
 			Evaluacion eval = evaluacionService.getPorAnioCategoriaNivelparticipacion(data.getTrabajosfinales().getAnio(), 
-					data.getTrabajosfinales().getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelgradopartid());
+					data.getTrabajosfinales().getCategoriatrabajo().getId(), participante.getGradoestudiante().getNivelparticipacion().getId());
 			List<EvaluacionResultado> listEvaResultado = evaluacionRespuestaServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
 			List<EvaluacionResultadoNacional> listEvaResultadoN = evaluacionRespuestaNacionalServ.listaEvaluacionResultado(data.getTrabajosfinales().getId(),userAlianzaId);
 			if(eval != null &&  (listEvaResultadoN.size() > 0) && data.getTrabajosfinales().getEnviado() == 1) {

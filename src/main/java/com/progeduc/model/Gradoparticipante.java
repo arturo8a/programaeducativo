@@ -31,6 +31,10 @@ public class Gradoparticipante {
 	@Column(name="NIVELGRADOPARTDESC" ,length=50)
 	private String nivelgradopartdesc;
 	
+	@ManyToOne
+	@JoinColumn(name="nivelparticipacion",nullable=true,foreignKey=@ForeignKey(name="FK_grado_participacion"))
+	private Nivelparticipacion nivelparticipacion;
+	
 	public Integer getNivelgradopartid() {
 		return nivelgradopartid;
 	}
@@ -69,5 +73,13 @@ public class Gradoparticipante {
 
 	public void setNivelparticipante(Nivelparticipante nivelparticipante) {
 		this.nivelparticipante = nivelparticipante;
+	}
+
+	public Nivelparticipacion getNivelparticipacion() {
+		return nivelparticipacion;
+	}
+
+	public void setNivelparticipacion(Nivelparticipacion nivelparticipacion) {
+		this.nivelparticipacion = nivelparticipacion;
 	}
 }
