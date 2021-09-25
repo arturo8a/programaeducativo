@@ -122,8 +122,7 @@ public class Trabajosfinales {
 	private Float nota_original;
 	
 	@Column(name="EMPATE",nullable=true)
-	private Integer empate;
-	
+	private Integer empate;	
 	
 	@ManyToOne
 	@JoinColumn(name="estadonacional",nullable=true,foreignKey=@ForeignKey(name="FK_trabajos_nacional"))

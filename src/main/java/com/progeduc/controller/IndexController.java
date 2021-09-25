@@ -903,7 +903,7 @@ public class IndexController {
 	    		model.addAttribute("finalizaparticipaciontrabajo",0);	   
 	    	
 	        if(fechaactual.compareTo(ap.getCuartaetapadesde())>=0 && fechaactual.compareTo(ap.getCuartaetapahasta())<=0)
-	        	activar_trabajos_finales = 1;        
+	        	activar_trabajos_finales = 1;
 	        
 	        model.addAttribute("activar_trabajos_finales",activar_trabajos_finales);
 	        model.addAttribute("cuarta_etapa_desde", ap.getCuartaetapadesde());
