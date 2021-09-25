@@ -2468,6 +2468,10 @@ public class ConcursoeducativoController {
 						}
 						
 					}
+					Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+					estadoTrabajo.setId(3);
+					trabajos.setEstadotrabajo(estadoTrabajo);
+					trabajosfinalesServ.modificar(trabajos);
 				}
 				
 				List<CerrarOds> listCerrarOds = cerrarOdsServ.listCerrarOds();//lista de ODS cerradas
