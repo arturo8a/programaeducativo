@@ -3237,7 +3237,7 @@ public class ConcursoeducativoController {
 			}
 		});
 		
-		String [] columns = {"AÑO","ODS","Codigo II.EE","NOMBRE II.EE","REGION","PROVINCIA","DISTRITO","MODALIDAD", "AMBITO","Código de trabajo","Estado de trabajo","Titulo de trabajo","Link de video","Modalidad","Categoria","Nivel de participación","Ejes temáticos","Nombres del participante","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Fecha de nacimiento","Género","Seccion","Nivel","Grado","Nombres tutor","Apellido paterno tutor","Apellido materno tutor","Tipo de documento","Nro de documento tutor","telefono","correo electronico","Parentesco","Nombres del docente","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Telefono","Género","Correo electrónico","Nota","Nota original","¿tuvo empate?","Puesto"};
+		String [] columns = {"Año","ODS","Código de II.EE","Nombre de II.EE","Región","Provincia","Distrito","Modalidad de enseñanza", "Ambito de II.EE","Código de trabajo","Estado de trabajo","Título de trabajo","Link de video","Modalidad","Categoria","Nivel de participación","Ejes temáticos","Nombres del participante","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Fecha de nacimiento","Género","Sección","Nivel","Grado","Nombres tutor","Apellido paterno tutor","Apellido materno tutor","Tipo de documento","Nro de documento tutor","teléfono","correo electrónico","Parentesco","Nombres del docente","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Teléfono","Género","Correo electrónico","Nota","Nota original","¿tuvo empate?","Puesto"};
 		
 		Sheet sheet = workbook.createSheet("Registro de trabajos finales");
 		Row row = sheet.createRow(0);
@@ -3320,7 +3320,7 @@ public class ConcursoeducativoController {
 		}
 		
 		
-		String[] columnaDetalleEvaluacion = {"AÑO","ODS","CODIGO II.EE","NOMBRE II.EE","AMBITO","Código de trabajo","Estado de trabajo","Titulo de trabajo","Modalidad","Categoria","Nivel de participación","Cantidad de evaluadores asignados","Pregunta 1","Pregunta 2","Pregunta 3","Pregunta 4","Pregunta 5","Eres Cebe","Nota","Puesto"};
+		String[] columnaDetalleEvaluacion = {"Año","ODS","Código de II.EE","Nombre de II.EE","Ámbito de II.EE","Código de trabajo","Estado de trabajo","Título de trabajo","Modalidad","Categoría","Nivel de participación","Cantidad de evaluadores asignados","Pregunta 1","Pregunta 2","Pregunta 3","Pregunta 4","Pregunta 5","Eres Cebe","Nota","Puesto"};
 		Sheet hojaDetalleEvaluacion = workbook.createSheet("Detalle de la evaluación");
 		
 		Row row1DetalleEvaluacion = hojaDetalleEvaluacion.createRow(0);
@@ -3367,7 +3367,7 @@ public class ConcursoeducativoController {
 			initRow++;
 		}
 		
-		String[] ColumnaResultados = {"AÑO","ODS","CATEGORIA","NIVEL DE PARTICIPACIÓN","PUESTO","CODIGO DE II.EE","NOMBRE DE II.EE","AMBITO DE II.EE","MODALIDAD","CODIGO DE TRABAJO","NOMBRE DEL TRABAJO","PARTICIPANTES","GENERO","NOTA FINAL","DOCENTE","CELULAR DOCENTE"};
+		String[] ColumnaResultados = {"Año","ODS","Categoría","Nivel de participación","Puesto","Código de II.EE","Nombre de II.EE","Ámbito de II.EE","Modalidad","Código de trabajo","Título de trabajo","Participante","Género","Nota final","Docente","Celular docente"};
 		Sheet hojaResultados = workbook.createSheet("Resultados");
 		
 		Row row1Resultados = hojaResultados.createRow(0);
@@ -4091,7 +4091,7 @@ public ByteArrayInputStream reporteconcursonacional(String ods,String anio,Strin
 		}
 	});
 	
-	String [] columns = {"AÑO","ODS","Codigo II.EE","NOMBRE II.EE","REGION","PROVINCIA","DISTRITO","MODALIDAD", "AMBITO","Código de trabajo","Estado de trabajo","Titulo de trabajo","Link de video","Modalidad","Categoria","Nivel de participación","Ejes temáticos","Nombres del participante","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Fecha de nacimiento","Género","Seccion","Nivel","Grado","Nombres tutor","Apellido paterno tutor","Apellido materno tutor","Tipo de documento","Nro de documento tutor","telefono","correo electronico","Parentesco","Nombres del docente","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Telefono","Género","Correo electrónico","Nota","Nota original","¿tuvo empate?","Puesto","Nota","Puesto"};
+	String [] columns = {"Año","ODS","Código de II.EE","Nombre de II.EE","Región","Provincia","Distrito","Modalidad", "Ambito de II.EE","Código de trabajo","Estado de trabajo","Título de trabajo","Link de video","Modalidad","Categoría","Nivel de participación","Ejes temáticos","Nombres del participante","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Fecha de nacimiento","Género","Sección","Nivel","Grado","Nombres tutor","Apellido paterno tutor","Apellido materno tutor","Tipo de documento","Nro de documento tutor","teléfono","correo electrónico","Parentesco","Nombres del docente","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Teléfono","Género","Correo electrónico","Nota","Nota original","¿tuvo empate?","Puesto","Nota","Puesto"};
 	
 	Sheet sheet = workbook.createSheet("Registro de trabajos finales");
 	Row row = sheet.createRow(0);
@@ -4179,7 +4179,7 @@ public ByteArrayInputStream reporteconcursonacional(String ods,String anio,Strin
 	}
 	
 	
-	String[] columnaDetalleEvaluacion = {"AÑO","ODS","CODIGO II.EE","NOMBRE II.EE","AMBITO","Código de trabajo","Estado de trabajo","Titulo de trabajo","Modalidad","Categoria","Nivel de participación","Cantidad de evaluadores asignados","Pregunta 1","Pregunta 2","Pregunta 3","Pregunta 4","Pregunta 5","Eres Cebe","Nota","Puesto"};
+	String[] columnaDetalleEvaluacion = {"Año","ODS","Código de II.EE","Nombre de II.EE","Ámbito de II.EE","Código de trabajo","Estado de trabajo","Título de trabajo","Modalidad","Categoría","Nivel de participación","Cantidad de evaluadores asignados","Pregunta 1","Pregunta 2","Pregunta 3","Pregunta 4","Pregunta 5","Eres Cebe","Nota","Puesto"};
 	Sheet hojaDetalleEvaluacion = workbook.createSheet("Detalle de la evaluación");
 	
 	Row row1DetalleEvaluacion = hojaDetalleEvaluacion.createRow(0);
@@ -4226,7 +4226,7 @@ public ByteArrayInputStream reporteconcursonacional(String ods,String anio,Strin
 		initRow++;
 	}
 	
-	String[] ColumnaResultados = {"AÑO","CATEGORIA","NIVEL DE PARTICIPACIÓN","ODS","PUESTO","CODIGO DE II.EE","NOMBRE DE II.EE","AMBITO DE II.EE","MODALIDAD","CODIGO DE TRABAJO","NOMBRE DEL TRABAJO","PARTICIPANTES","GENERO","NOTA FINAL","DOCENTE","CELULAR DOCENTE"};
+	String[] ColumnaResultados = {"Año","Categoría","Nivel de participación","ODS","Puesto","Código de II.EE","Nombre de II.EE","Ámbito de II.EE","Modalidad","Código de trabajo","Título de trabajo","Participante","Género","Nota final","Docente","Celular docente"};
 	Sheet hojaResultados = workbook.createSheet("Resultados");
 	
 	Row row1Resultados = hojaResultados.createRow(0);
