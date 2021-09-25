@@ -77,13 +77,13 @@
 						        <tr>
 						        	<th>Nº</th>
 						        	<th style="display:none">ODS</th>
-						        	<th>PERFIL</th>
-						            <th>NOMBRE</th>
-						            <th>APELLIDO</th>
-						            <th>USUARIO</th>
-						            <th>CORREO</th>
-						            <th>EDITAR</th>
-						            <th>ACTIVAR/INACTIVAR</th>
+						        	<th>Perfil</th>
+						            <th>Nombre</th>
+						            <th>Apellido</th>
+						            <th>Usuario</th>
+						            <th>Correo</th>
+						            <th>Editar</th>
+						            <th>Estado</th>
 						            <th style="display:none">Estado</th>
 						        </tr>   
 						    </thead>
@@ -218,10 +218,7 @@
 		      	}, 200);
 			});
 			
-			$("#btnbuscarusuario").click(function(){	
-				/*$("#consulta_menu").prop("disabled",true);
-	        	$("#btnbuscarpe").prop("disabled",true);
-	        	$("#btnlimpiar").prop("disabled",true);*/
+			$("#btnbuscarusuario").click(function(){
 	        	
 	        	setTimeout(() => {        		  
 	        		table_lista_usuario.draw();
