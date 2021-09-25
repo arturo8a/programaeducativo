@@ -841,7 +841,7 @@ public class ConcursoeducativoController {
 						dto.setEvaluadores_asignados(evaluadores_asignados);
 						dto.setTiene_evaluador_asignado(evaluadores_asignados>0? "Si" : "No");
 						dto.setId(tf.getId());
-						if(tf.getEmpate() != 1)
+						if(tf.getEmpate() != 1 && tf.getEstadotrabajo().getId() !=3)
 						listadto.add(dto);
 					});
 				});
@@ -871,7 +871,7 @@ public class ConcursoeducativoController {
 					dto.setEvaluadores_asignados(evaluadores_asignados);
 					dto.setTiene_evaluador_asignado(evaluadores_asignados>0? "Si" : "No");
 					dto.setId(tf.getId());
-					if(tf.getEmpate() != 1)
+					if(tf.getEmpate() != 1 && tf.getEstadotrabajo().getId() !=3)
 					listadto.add(dto);
 				});			
 			});			
@@ -903,7 +903,7 @@ public class ConcursoeducativoController {
 							dto.setEvaluadores_asignados(evaluadores_asignados);
 							dto.setTiene_evaluador_asignado(evaluadores_asignados>0? "Si" : "No");
 							dto.setId(tf.getId());
-							if(tf.getEmpate() != 1)
+							if(tf.getEmpate() != 1 && tf.getEstadotrabajo().getId() !=3)
 							listadto.add(dto);
 						});					
 					});
