@@ -366,7 +366,9 @@ public class ConcursoeducativoController {
 		Timestamp ts = new Timestamp(time);
 		dto.getTrabajosfinales().setFecha_registro(ts);
 		dto.getTrabajosfinales().setAnio(ts.toLocalDateTime().getYear());		
-		
+		dto.getTrabajosfinales().setEmpate(0);
+		dto.getTrabajosfinales().setEmpate_nacional(0);
+		dto.getTrabajosfinales().setNota_nacional(0f);
 		dto.getTrabajosfinales().setProgramaeducativo(pe);
 		
 		if(dto.getTrabajosfinales().getId() == null) { /*cuando registra*/
