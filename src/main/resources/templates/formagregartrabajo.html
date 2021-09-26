@@ -120,7 +120,7 @@
 			<div class="col-xs-12 col-sm-6 text-left pt-4">
 				<label>Subir archivos de evidencias</label>
 				<input type="file" id="evidenciastrabajo" class="form-control" name="file[]"  multiple/>
-				<div id="divevidencias_agregar" style="height:65px;">											
+				<div id="divevidencias_agregar" style="height:65px;overflow-x: auto;">											
 				</div>
 			</div>
 			<div class="col-xs-12 col-sm-3 text-left pt-4">
@@ -403,10 +403,12 @@
 				if(flag_existe){
 					mis_evidencias.push(evidenciastrabajo.files[k]);
 				}
-			}			
+			}
 			var data_archivo_subir = "<table><tr>";
 			for(var i=0;i<mis_evidencias.length;i++){
-				data_archivo_subir += "<td><div class='alert alert-primary alert-dismissible fade show' role='alert' style='padding:10px'><strong><abbr title='"+(mis_evidencias[i].name)+"'>"+	 (	(mis_evidencias[i].name).length <5 ? (mis_evidencias[i].name) :	(mis_evidencias[i].name).substr(0,5))	+"<abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaAgregar("+i+")' data-dismiss='alert' aria-label='Close' style='padding:0px; margin:-3px'><span aria-hidden='true'>&times;</span></button></div></td>";
+				if(mis_evidencias[i]!="-1"){
+					data_archivo_subir += "<td><div class='alert alert-primary alert-dismissible fade show' role='alert' style='padding:10px'><strong><abbr title='"+(mis_evidencias[i].name)+"'>"+	 (	(mis_evidencias[i].name).length <5 ? (mis_evidencias[i].name) :	(mis_evidencias[i].name).substr(0,5))	+"<abbr></strong><button type='button' class='close' onclick='eliminarEvidenciaAgregar("+i+")' data-dismiss='alert' aria-label='Close' style='padding:0px; margin:-3px'><span aria-hidden='true'>&times;</span></button></div></td>";
+				}
 			}
 			data_archivo_subir += "</tr></table>";
 			if(msj_eviste_evidencia.length>0){

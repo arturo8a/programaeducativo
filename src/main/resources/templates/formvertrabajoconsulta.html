@@ -45,7 +45,7 @@
 				<label for="archivotrabajo"><strong>Archivo de trabajo final</strong></label>
 				<table  th:each="trabajo : ${nombretrabajos}">
 				    <tr>
-				        <td th:text="${trabajo}"></td>
+				        <td th:text="${#strings.abbreviate(trabajo,25)}"></td>
 				    </tr>
 				</table>
 			</div>

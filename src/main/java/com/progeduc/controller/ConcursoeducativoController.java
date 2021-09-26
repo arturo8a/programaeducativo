@@ -4035,7 +4035,7 @@ public ByteArrayInputStream reporteconcursonacional(String ods,String anio,Strin
 			
 			if(bandera && banderaOds) {
 				nroEvaluadoresAsignados = 0;
-				trabajosFinales_UsuarioAlianzaServ.listarByTrabajosfinalesId(obj.getId()).forEach(tf_ua->{
+				trabajosFinales_UsuarioAlianzaNacionalServ.listarByTrabajosfinalesId(obj.getId()).forEach(tf_ua->{
 					nroEvaluadoresAsignados++;
 				});				
 				DetalleEvaluacionReporteDto derDto = new DetalleEvaluacionReporteDto();
@@ -4067,7 +4067,7 @@ public ByteArrayInputStream reporteconcursonacional(String ods,String anio,Strin
 				
 				puntaje  = new ArrayList<Float>();
 				
-				evaluacionRepuestaServ.listaRubricaPuntajeDto(obj.getId()).forEach(er->{
+				evaluacionRespuestaNacionalServ.listaRubricaPuntajeDto(obj.getId()).forEach(er->{
 					puntaje.add(er.getPuntaje());
 				});
 				
@@ -4081,20 +4081,19 @@ public ByteArrayInputStream reporteconcursonacional(String ods,String anio,Strin
 					}
 				}	
 				
-				evaluacionRepuestaServ.getRespuestas(obj.getId()).forEach(objER->{
+				evaluacionRespuestaNacionalServ.getRespuestas(obj.getId()).forEach(objER->{
 					if(objER.getTipo()==2) {
 						questionarioRespuestaServ.listarByQuestionario(objER.getPreguntaid()).forEach(objQR->{
 							if(objQR.getQuestionario().getPregunta().toLowerCase().contains("cebe")) {
 								if(objQR.getRespuesta().toLowerCase().contains("si")) {
 									derDto.setEresCebe("SI");
-									derDto.setNota(objQR.getPuntaje()!=null?objQR.getPuntaje().toString():"");
 								}
 							}
 						});
 					}
 				});
-				
-				derDto.setPuesto(obj.getPuesto()==0?"":obj.getPuesto().toString());
+				derDto.setNota(obj.getNota_nacional()==0?"":obj.getNota_nacional().toString());
+				derDto.setPuesto(obj.getPuesto_nacional()==0?"":obj.getPuesto_nacional().toString());
 				listaDerDto.add(derDto);
 			}
 		}
