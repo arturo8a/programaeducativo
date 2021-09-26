@@ -506,7 +506,7 @@ public class ReporteController {
 			}				
 		});
 		
-		String [] columns = {"Año","ODS","Departamento","Provincia","Distrito","Intitución educativa","Código local II.EE","Fecha de registro","Inscrito al C.E","Nivel-N°Secciones-N°Docentes-N°Alumnos-N°Varones-N°Mujeres","Ámbito de II.EE","Modalidad de enseñanza", "Código local","Tipo de II.EE","Dirección","DRE","UGEL","Teléfono II.EE","Correo electrónico II.EE","Facebook","Lengua","Clasificación","Turno","Proveedor servicio","Horas abastecimiento","¿Piscina?","Tipo doc. Director","N° doc. director","Apellidos director","Nombres director","Género director","Teléfono director","Celular director","Correo director","Tipo doc. profesor","N° doc. profesor","Apellidos profesor","Nombres profesor","Género profesor","Teléfono profesor","Celular profesor","Correo profesor","Nombres","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Género","Télefono","Email","Curso","Tipo de docente"};
+		String [] columns = {"Año","ODS","Departamento","Provincia","Distrito","Intitución educativa","Código local II.EE","Fecha de registro","Inscrito al C.E","Nivel-N°Secciones-N°Docentes-N°Alumnos-N°Varones-N°Mujeres","Ámbito de II.EE","Modalidad de enseñanza", "Código local","Tipo de II.EE","Dirección","DRE","UGEL","Teléfono II.EE","Correo electrónico II.EE","Facebook","Lengua","Clasificación","Turno","Proveedor servicio","Horas abastecimiento","¿Piscina?","Tipo doc. director","N° doc. director","Apellidos director","Nombres director","Género director","Teléfono director","Celular director","Correo director","Tipo doc. profesor","N° doc. profesor","Apellidos profesor","Nombres profesor","Género profesor","Teléfono profesor","Celular profesor","Correo profesor","Nombres","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Género","Télefono","Email","Curso","Tipo de docente"};
 		
 		Sheet sheet = workbook.createSheet("Datos de docentes");
 		Row row = sheet.createRow(0);
@@ -1237,7 +1237,7 @@ public class ReporteController {
 			}
 		});
 		
-		String [] columns = {"Año","ODS","Departamento","Provincia","Distrito","Institución educativa","Código local II.EE","Fecha registro","Inscrito al C.E","Nivel-N°Secciones-N°Docentes-N°Alumnos-N°Varones-N°Mujeres","Ámbito de II.EE","Modalidad de enseñanza", "Código local","Tipo de II.EE","Dirección","DRE","UGEL","Teléfono II.EE","Correo eléctronico II.EE","Facebook","Lengua","Clasificación","Turno","Proveedor servicio","Horas abastecimiento","¿Piscina?","Tipo doc. Director","N° doc. director","Apellidos director","Nombres director","Género director","Teléfono director","Celular director","Correo director","Tipo doc. profesor","N° doc. profesor","Apellidos profesor","Nombres profesor","Género profesor","Teléfono profesor","Celular profesor","Correo profesor","Código de trabajo","Estado de trabajo","Título de trabajo","Link video","Modalidad","Categoria","Nivel de participación","Ejes tématicos","Nombres del participante","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Fecha de nacimiento","Género","Sección","Nivel","Grado","Nombres de tutor","Apellido paterno tutor","Apellido materno tutor","Tipo de documento","Nro de documento","Teléfono","Correo electrénico","Parentesco","Nombre del docente","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Teléfono","Género","Correo electrónico","Nota","Puesto","Nota","Puesto"};
+		String [] columns = {"Año","ODS","Departamento","Provincia","Distrito","Institución educativa","Código local II.EE","Fecha registro","Inscrito al C.E","Nivel-N°Secciones-N°Docentes-N°Alumnos-N°Varones-N°Mujeres","Ámbito de II.EE","Modalidad de enseñanza", "Código local","Tipo de II.EE","Dirección","DRE","UGEL","Teléfono II.EE","Correo electrónico II.EE","Facebook","Lengua","Clasificación","Turno","Proveedor servicio","Horas abastecimiento","¿Piscina?","Tipo doc. director","N° doc. director","Apellidos director","Nombres director","Género director","Teléfono director","Celular director","Correo director","Tipo doc. profesor","N° doc. profesor","Apellidos profesor","Nombres profesor","Género profesor","Teléfono profesor","Celular profesor","Correo profesor","Código de trabajo","Estado de trabajo","Título de trabajo","Link video","Modalidad","Categoría","Nivel de participación","Ejes tématicos","Nombres del participante","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Fecha de nacimiento","Género","Sección","Nivel","Grado","Nombres de tutor","Apellido paterno tutor","Apellido materno tutor","Tipo de documento","Nro de documento","Teléfono","Correo electrónico","Parentesco","Nombre del docente","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Teléfono","Género","Correo electrónico","Nota","Puesto","Nota","Puesto"};
 		
 		Sheet sheet = workbook.createSheet("Datos de la II.EE");
 		Row row = sheet.createRow(0);
@@ -1485,7 +1485,7 @@ public class ReporteController {
 			}					
 		});
         
-		String [] columns1 = {"Año","ODS","Código de II.EE","Nombre de II.EE","Ámbito de II.EE","Código de trabajo","Título de trabajo","Modalidad","Categoria","Nivel de participación","Cantidad de evaluadores","Pregunta 1","Pregunta 2","Pregunta 3","Pregunta 4","Pregunta 5","Eres CEBE","Nota","Puesto"};
+		String [] columns1 = {"Año","ODS","Código de II.EE","Nombre de II.EE","Ámbito de II.EE","Código de trabajo","Título de trabajo","Modalidad","Categoría","Nivel de participación","Cantidad de evaluadores","Pregunta 1","Pregunta 2","Pregunta 3","Pregunta 4","Pregunta 5","Eres CEBE","Nota","Puesto"};
 		Sheet sheet1 = workbook.createSheet("Detalle de la evaluacion Region");
 		Row row1 = sheet1.createRow(0);
 		
@@ -1559,7 +1559,7 @@ public class ReporteController {
 			}
 			/**/
 			if(categoria!=-1) {
-				if(categoria == obj.getCategoriatrabajo().getId())
+				if(obj.getCategoriatrabajo().getId().equals(categoria))
 					bandera_categoria=true;
 				else
 					bandera_categoria=false;
@@ -1569,7 +1569,7 @@ public class ReporteController {
 			}
 			/**/
 			if(modalidad!=-1) {
-				if(modalidad == obj.getModalidadtrabajo().getId())
+				if(obj.getModalidadtrabajo().getId().equals(modalidad))
 					bandera_modalidad = true;
 				else
 					bandera_modalidad = false;
@@ -1582,7 +1582,7 @@ public class ReporteController {
 			if(nivel!=-1) {
 				List<Participante> listaParticipante = participanteServ.listarhabilitados(obj.getProgramaeducativo().getId());
 				listaParticipante.forEach(objParticipante->{
-					if(objParticipante.getGradoestudiante().getNivelgradopartid()==nivel) {
+					if(objParticipante.getGradoestudiante().getNivelgradopartid().equals(nivel)) {
 						bandera_nivel = true;
 						peNivelParticipacion = objParticipante.getGradoestudiante().getNivelgradopartdesc();
 					}
@@ -1707,7 +1707,7 @@ public class ReporteController {
 				}
 				
 				if(categoria!=-1) {
-					if(categoria == obj.getCategoriatrabajo().getId())
+					if(obj.getCategoriatrabajo().getId().equals(categoria))
 						bandera_categoria=true;
 				}
 				else {
@@ -1715,7 +1715,7 @@ public class ReporteController {
 				}
 				
 				if(modalidad!=-1) {
-					if(modalidad == obj.getModalidadtrabajo().getId())
+					if(obj.getModalidadtrabajo().getId().equals(modalidad))
 						bandera_modalidad = true;
 				}
 				else {
@@ -1726,7 +1726,7 @@ public class ReporteController {
 				if(nivel!=-1) {
 					List<Participante> listaParticipante = participanteServ.listarhabilitados(obj.getProgramaeducativo().getId());
 					listaParticipante.forEach(objParticipante->{
-						if(objParticipante.getGradoestudiante().getNivelgradopartid()==nivel) {
+						if(objParticipante.getGradoestudiante().getNivelgradopartid().equals(nivel)) {
 							bandera_nivel = true;
 							peNivelParticipacion = objParticipante.getGradoestudiante().getNivelgradopartdesc();
 						}
