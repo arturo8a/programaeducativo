@@ -84,7 +84,7 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
     		+ "inner join distrito d on pe.distritoid = d.id "
     		+ "inner join ods o on d.odsid = o.id "
     		+ "where tf.nota is not null and o.id=?3 AND tf.categoriatrabajoid = ?1 and tf.modalidadtrabajoid=?2 "
-    		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) AND tf.nota >= 16"
+    		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) AND tf.nota >= 14"
     		+ "order by tf.nota desc ",nativeQuery = true)
     List<Trabajosfinales> listaTrabajosFinalesConNotaPromedioPorCategoriaModalidadDds(Integer idcategoria, Integer idmodalidad,Integer odsId);
     
@@ -130,7 +130,7 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
 			+ "inner join participante p on p.id = tfp.participanteid "
 			+ "inner join gradoparticipante gp on gp.id = p.gradooestudiante "
     		+ "where tf.nota is not null and o.id=?3 AND tf.categoriatrabajoid = ?1 and gp.nivelgradopartdesc=?2 "
-    		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) AND tf.nota >= 16 "
+    		+ "and tf.anio = EXTRACT(YEAR FROM sysdate) AND tf.nota >= 14 "
     		+ "group by tf.id, d.odsid, tf.categoriatrabajoid, gp.nivelgradopartdesc, tf.nota "
     		+ "order by tf.nota desc ",nativeQuery = true)
     List<Object[]> listaTrabajosFinalesConNotaPromedioPorCategoriaNivelOds(Integer idcategoria, String nivel,Integer odsId);
