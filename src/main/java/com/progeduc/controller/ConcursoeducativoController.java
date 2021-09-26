@@ -3045,7 +3045,7 @@ public class ConcursoeducativoController {
 					dto.setRegion(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getProvincia().getDepartamento().getDescripcion());
 					dto.setProvincia(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getProvincia().getDescripcion());
 					dto.setDitrito(obj.getTrabajosfinales().getProgramaeducativo().getDistrito().getDescripcion());
-					dto.setModalidad(mi_modalidad);
+					dto.setModalidad(obj.getTrabajosfinales().getProgramaeducativo().getModensenianza().getDescripcion());
 					dto.setAmbito(obj.getTrabajosfinales().getProgramaeducativo().getAmbito().getDescripcion());
 					dto.setCodigoTrabajo(obj.getTrabajosfinales().getProgramaeducativo().getCodmod() + "_" + obj.getTrabajosfinales().getNumeracion().toString());
 					dto.setEstadoTrabajo(obj.getTrabajosfinales().getEstadotrabajo().getDescripcion());
@@ -3246,7 +3246,7 @@ public class ConcursoeducativoController {
 			}
 		});
 		
-		String [] columns = {"Año","ODS","Código de II.EE","Nombre de II.EE","Región","Provincia","Distrito","Modalidad de enseñanza", "Ambito de II.EE","Código de trabajo","Estado de trabajo","Título de trabajo","Link de video","Modalidad","Categoria","Nivel de participación","Ejes temáticos","Nombres del participante","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Fecha de nacimiento","Género","Sección","Nivel","Grado","Nombres tutor","Apellido paterno tutor","Apellido materno tutor","Tipo de documento","Nro de documento tutor","teléfono","correo electrónico","Parentesco","Nombres del docente","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Teléfono","Género","Correo electrónico","Nota","Nota original","¿tuvo empate?","Puesto"};
+		String [] columns = {"Año","ODS","Código de II.EE","Nombre de II.EE","Región","Provincia","Distrito","Modalidad de II.EE", "Ambito de II.EE","Código de trabajo","Estado de trabajo","Título de trabajo","Link de video","Modalidad","Categoria","Nivel de participación","Ejes temáticos","Nombres del participante","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Fecha de nacimiento","Género","Sección","Nivel","Grado","Nombres tutor","Apellido paterno tutor","Apellido materno tutor","Tipo de documento","Nro de documento tutor","Teléfono","Correo electrónico","Parentesco","Nombres del docente","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Teléfono","Género","Correo electrónico","Nota","Nota original","¿Tuvo empate?","Puesto"};
 		
 		Sheet sheet = workbook.createSheet("Registro de trabajos finales");
 		Row row = sheet.createRow(0);
@@ -4100,7 +4100,7 @@ public ByteArrayInputStream reporteconcursonacional(String ods,String anio,Strin
 		}
 	});
 	
-	String [] columns = {"Año","ODS","Código de II.EE","Nombre de II.EE","Región","Provincia","Distrito","Modalidad", "Ambito de II.EE","Código de trabajo","Estado de trabajo","Título de trabajo","Link de video","Modalidad","Categoría","Nivel de participación","Ejes temáticos","Nombres del participante","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Fecha de nacimiento","Género","Sección","Nivel","Grado","Nombres tutor","Apellido paterno tutor","Apellido materno tutor","Tipo de documento","Nro de documento tutor","teléfono","correo electrónico","Parentesco","Nombres del docente","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Teléfono","Género","Correo electrónico","Nota","Nota original","¿tuvo empate?","Puesto","Nota","Puesto"};
+	String [] columns = {"Año","ODS","Código de II.EE","Nombre de II.EE","Región","Provincia","Distrito","Modalidad de la II.EE", "Ámbito de II.EE","Código de trabajo","Estado de trabajo","Título de trabajo","Link de video","Modalidad","Categoría","Nivel de participación","Ejes temáticos","Nombres del participante","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Fecha de nacimiento","Género","Sección","Nivel","Grado","Nombres tutor","Apellido paterno tutor","Apellido materno tutor","Tipo de documento","Nro de documento tutor","Teléfono","Correo electrónico","Parentesco","Nombres del docente","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Teléfono","Género","Correo electrónico","Nota","Nota original","¿Tuvo empate?","Puesto","Nota","Puesto"};
 	
 	Sheet sheet = workbook.createSheet("Registro de trabajos finales");
 	Row row = sheet.createRow(0);

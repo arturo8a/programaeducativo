@@ -99,8 +99,7 @@
 			<div class="col-xs-12 col-sm-3 text-left pt-4">
 				<label for="categoriatrabajo">Seleccione categoria</label>
 				<select class="form-control" id="categoriatrabajo" name="categoriatrabajo">
-					<option value="0">Seleccione</option>
-				    <option th:each="len:${categoriatrabajo}" th:value="${len.id}" th:utext="${len.descripcion}" th:selected="${len.id} == 2"/>
+					<option th:each="len:${categoriatrabajo}" th:value="${len.id}" th:utext="${len.descripcion}" th:selected="${len.id} == 2"/>
 				</select>
 			</div>
 			<div class="col-xs-12 col-sm-6 text-left pt-4">
@@ -330,7 +329,7 @@
 	var click = true;
 	var rows_selected;
 	var flagTrabajoCategoriaModalidad;
-	
+	var contadorEvidencias;
 	var mis_evidencias = new Array();
 	
 	
@@ -412,7 +411,7 @@
 			data_archivo_subir += "</tr></table>";
 			if(msj_eviste_evidencia.length>0){
 				msj_eviste_evidencia = msj_eviste_evidencia.substring(0,msj_eviste_evidencia.length-1);
-				alert("La(s) siguientes evidencias no se subieron porque ya existen " + msj_eviste_evidencia);
+				alert("La(s) siguientes evidencias no subieron porque ya existen " + msj_eviste_evidencia);
 			}							
 			$("#divevidencias_agregar").html(data_archivo_subir);
 			
@@ -616,7 +615,9 @@
 							data.append('id',respuesta);
 							contador_archivos_subidos = 0;							
 							for(var i=0;i<mis_evidencias.length;i++){
-								data.append('files',mis_evidencias[i]);
+								if(mis_evidencias[i]!='-1'){
+									data.append('files',mis_evidencias[i]);
+								}
 							}
 							$.ajax({
 						        type: "POST",
@@ -641,7 +642,7 @@
 						        		"titulo" : titulotrabajo   ,
 						        		"modalidad" : $("#modalidadpostulaciontrabajo option:selected").html(),
 						        		"participantes" : nombreparticipante,
-						        		"archivos" : mis_evidencias.length + (mis_evidencias.length>1 ? " evidencias " : " evidencia ") + archivotrabajo.files.length + " final",
+						        		"archivos" : contadorEvidencias + (contadorEvidencias>1 ? " evidencias " : " evidencia ") + archivotrabajo.files.length + " final",
 						        		"enviado" : 0,
 						        		"enviado" : 0,
 						        		"enviado" :0
@@ -761,7 +762,7 @@
 	function eliminarEvidenciaAgregar(indice){
 		for(var i =0;i<mis_evidencias.length;i++){
 			if(i == indice){
-				mis_evidencias.splice(i,1);
+				mis_evidencias[i] = "-1";
 			}
 		}
 	}
@@ -914,36 +915,38 @@
 				default: mensajeValidacion += "El archivo " + archivotrabajo_name + " debe tener extensión jpg , png, pdf, word,mp3,mp4"+"<br>";	
 			}
 		}
-		
-		if((mis_evidencias.length>10) || (mis_evidencias.length == 0)){
+		contadorEvidencias = 0;
+		for(var i=0;i<mis_evidencias.length;i++){
+			if(mis_evidencias[i]!='-1'){
+				contadorEvidencias++;
+			}
+		}
+		if((contadorEvidencias>10) || (contadorEvidencias == 0)){
 			mensajeValidacion += "Debe subir hasta 10 evidencias"+"<br>";
 		}
 		else{			
 			for(var j=0;j<mis_evidencias.length;j++){
-				console.log("mis_evidencias[j] :" + mis_evidencias[j]);
-				var evidenciastrabajo_name = mis_evidencias[j].name;
-				var evidenciastrabajo_size = mis_evidencias[j].size;
-				if(evidenciastrabajo_size >40000000){
-					mensajeValidacion += "La evidencia "  + evidenciastrabajo_name + " no debe superar los 40MB"+"<br>";
-				}
-				var ext = evidenciastrabajo_name.split('.').pop();
-				ext = ext.toLowerCase();
-				switch(ext){
-					case 'jpg': break;
-					case 'png': break;
-					case 'jpeg': break;
-					case 'pdf': break;
-					case 'docx': break;
-					case 'mp3': break;
-					case 'mp4': break;
-					default: mensajeValidacion += "La evidencia " + evidenciastrabajo_name + " debe tener extensión jpg , png, pdf, word,mp3,mp4"+"<br>";	
+				if(mis_evidencias[j]!='-1'){
+					var evidenciastrabajo_name = mis_evidencias[j].name;
+					var evidenciastrabajo_size = mis_evidencias[j].size;
+					if(evidenciastrabajo_size >40000000){
+						mensajeValidacion += "La evidencia "  + evidenciastrabajo_name + " no debe superar los 40MB"+"<br>";
+					}
+					var ext = evidenciastrabajo_name.split('.').pop();
+					ext = ext.toLowerCase();
+					switch(ext){
+						case 'jpg': break;
+						case 'png': break;
+						case 'jpeg': break;
+						case 'pdf': break;
+						case 'docx': break;
+						case 'mp3': break;
+						case 'mp4': break;
+						default: mensajeValidacion += "La evidencia " + evidenciastrabajo_name + " debe tener extensión jpg , png, pdf, word,mp3,mp4"+"<br>";	
+					}
 				}
 			}	
 		}
-		
-		/*if(linkvideotrabajo.trim()=="" &&  (categoriatrabajo == "1" || categoriatrabajo == "3") ){
-			mensajeValidacion += "Debe ingresar link de video"+"<br>";
-		}*/
 		
 		var array = table_lpt.rows(".selected").data();	
 		var nombre="";
