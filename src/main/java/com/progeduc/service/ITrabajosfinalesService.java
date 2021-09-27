@@ -73,6 +73,8 @@ public interface ITrabajosfinalesService extends ICRUD<Trabajosfinales,Integer>{
 	
 	List<Trabajosfinales> listarTrabajosConsursoNacional();
 	
+	List<Trabajosfinales> listarTrabajosConsursoNacionalTodosPuestos();
+	
 	List<Trabajosfinales> listaTrabajoEvaluadEmpateNacional();
 	
 	List<Trabajosfinales> listaTrabajoEvaluadNacional();

@@ -1,6 +1,6 @@
 package com.progeduc.dto;
 
-public class ResultadosRegionalesDto {
+public class ResultadosGanadoresNacionalDto implements Comparable{
 	
 	Integer anio;
 	String ods;
@@ -9,11 +9,11 @@ public class ResultadosRegionalesDto {
 	String puesto;
 	String codigoIiee;
 	String nombreIiee;
-	String ambito;
+	String ambitoIiee;
 	String modalidad;
 	String codigoTrabajo;
 	String nombreTrabajo;
-	String participante;
+	String participantes;
 	String genero;
 	String notaFinal;
 	String docente;
@@ -61,11 +61,11 @@ public class ResultadosRegionalesDto {
 	public void setNombreIiee(String nombreIiee) {
 		this.nombreIiee = nombreIiee;
 	}
-	public String getAmbito() {
-		return ambito;
+	public String getAmbitoIiee() {
+		return ambitoIiee;
 	}
-	public void setAmbito(String ambito) {
-		this.ambito = ambito;
+	public void setAmbitoIiee(String ambitoIiee) {
+		this.ambitoIiee = ambitoIiee;
 	}
 	public String getModalidad() {
 		return modalidad;
@@ -85,11 +85,11 @@ public class ResultadosRegionalesDto {
 	public void setNombreTrabajo(String nombreTrabajo) {
 		this.nombreTrabajo = nombreTrabajo;
 	}
-	public String getParticipante() {
-		return participante;
+	public String getParticipantes() {
+		return participantes;
 	}
-	public void setParticipante(String participante) {
-		this.participante = participante;
+	public void setParticipantes(String participantes) {
+		this.participantes = participantes;
 	}
 	public String getGenero() {
 		return genero;
@@ -115,5 +115,23 @@ public class ResultadosRegionalesDto {
 	public void setCelularDocente(String celularDocente) {
 		this.celularDocente = celularDocente;
 	}
-	
+	@Override
+	public int compareTo(Object o) {
+		ResultadosGanadoresNacionalDto otro = (ResultadosGanadoresNacionalDto)o;
+		int rpta   = anio.compareTo(otro.getAnio());
+		if(rpta!=0)
+			return rpta;
+		rpta = categoria.compareTo(otro.getCategoria());
+		if(rpta!=0)
+			return rpta;
+		rpta = nivelParticipacion.compareTo(otro.getNivelParticipacion());
+		if(rpta!=0)
+			return rpta;
+		rpta = ods.compareTo(otro.getOds());
+		if(rpta!=0)
+			return rpta;
+		rpta = puesto.compareTo(otro.getPuesto());
+		return rpta;
+	}
+
 }
