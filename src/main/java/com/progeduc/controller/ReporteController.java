@@ -1543,7 +1543,7 @@ public class ReporteController {
 			else {
 				listaOds.forEach(objOds->{
 					if(objOds.getId().equals(obj.getProgramaeducativo().getDistrito().getOdsid())) {
-						banderaods = true;
+						bandera_ods = true;
 					}
 				});
 			}
@@ -1552,7 +1552,7 @@ public class ReporteController {
 				if(obj.getProgramaeducativo().getAnhio().equals(anio))
 					bandera_anio = true;
 				else
-					bandera_anio = false;					
+					bandera_anio = false;
 			}
 			else {
 				bandera_anio = true;
@@ -1592,7 +1592,7 @@ public class ReporteController {
 				bandera_nivel = true;
 			}			
 			
-			if( bandera_ods && bandera_anio && bandera_categoria && bandera_modalidad && bandera_nivel && obj.getEnviado()==1) 			
+			if( bandera_ods && bandera_anio && bandera_categoria && bandera_modalidad && bandera_nivel && obj.getEnviado().equals(1)) 			
 			{
 				ResultadosRegionalesDto rrdto = new ResultadosRegionalesDto();
 				rrdto.setAnio(obj.getAnio());
