@@ -353,7 +353,7 @@ public class ReporteController {
 			}		
 		});		
 		
-		String [] columns = {"Año","ODS","Código de II.EE","Nombre de II.EE","Código de trabajo","Estado de trabajo","Categoria","Nivel de participación","Evaluador","Calificación"};
+		String [] columns = {"Año","ODS","Código de II.EE","Nombre de II.EE","Código de trabajo","Estado de trabajo","Categoría","Nivel de participación","Evaluador","Calificación"};
 		
 		Sheet sheet = workbook.createSheet("Notas de evaluadores");
 		Row row = sheet.createRow(0);		
@@ -506,7 +506,7 @@ public class ReporteController {
 			}				
 		});
 		
-		String [] columns = {"Año","ODS","Departamento","Provincia","Distrito","Intitución educativa","Código local II.EE","Fecha de registro","Inscrito al C.E","Nivel-N°Secciones-N°Docentes-N°Alumnos-N°Varones-N°Mujeres","Ámbito de II.EE","Modalidad de enseñanza", "Código local","Tipo de II.EE","Dirección","DRE","UGEL","Teléfono II.EE","Correo electrónico II.EE","Facebook","Lengua","Clasificación","Turno","Proveedor servicio","Horas abastecimiento","¿Piscina?","Tipo doc. director","N° doc. director","Apellidos director","Nombres director","Género director","Teléfono director","Celular director","Correo director","Tipo doc. profesor","N° doc. profesor","Apellidos profesor","Nombres profesor","Género profesor","Teléfono profesor","Celular profesor","Correo profesor","Nombres","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Género","Télefono","Email","Curso","Tipo de docente"};
+		String [] columns = {"Año","ODS","Departamento","Provincia","Distrito","Institución educativa","Código local II.EE","Fecha de registro","Inscrito al C.E","Nivel-N°Secciones-N°Docentes-N°Alumnos-N°Varones-N°Mujeres","Ámbito de II.EE","Modalidad de enseñanza", "Código local","Tipo de II.EE","Dirección","DRE","UGEL","Teléfono II.EE","Correo electrónico II.EE","Facebook","Lengua","Clasificación","Turno","Proveedor servicio","Horas abastecimiento","¿Piscina?","Tipo doc. director","N° doc. director","Apellidos del director","Nombres del director","Género del director","Teléfono del director","Celular del director","Correo del director","Tipo doc. docente","N° doc. docente","Apellidos del docente","Nombres del docente","Género del docente","Teléfono del docente","Celular del docente","Correo del docente","Nombres del docente inscrito","Apellido paterno del docente inscrito","Apellido materno del docente inscrito","Tipo doc. docente inscrito","N° doc. docente inscrito","Género del docente inscrito","Télefono del docente inscrito","Correo del docente inscrito","Curso","Tipo de docente"};
 		
 		Sheet sheet = workbook.createSheet("Datos de docentes");
 		Row row = sheet.createRow(0);
@@ -754,11 +754,11 @@ public class ReporteController {
         
 		Collections.sort(listareporte);
 		
-		String [] columns1 = {"Año","ODS","Departamento","Provincia","Distrito","Institución educativa","Código local IIEE","Fecha de registro","Inscrito al CE","Nivel-N°Seciones-N°Docenes-N°Alumnos-N°Varones-N°Mujeres","Ámbito de II.EE","Modalidad de enseñanza","Código local","Tipo de II.EE","Dirección","DRE","UGEL","Teléfono II.EE","Correo electrónico II.EE","Facebook","Lengua","Clasificación","Turno","Proveedor de servicio","Horas de abastecimiento","¿Piscina?","Tipo doc. director","N° doc. director","Apellidos de director","Nombre director","Género director","Teléfono director","Celular director","Correo director","Tipo doc. profesor","N° doc. profesor","Apellidos profesor","Nombres profesor","Género profesor","Teléfono profesor","Celular profesor","Correo profesor","Nombres","Apellido paterno","Apellido materno","Fecha de nacimiento","Sección", "Tipo de documento","Nro de documento","Género","Nivel","Grado",    "Nivel de participación", "Modalidad",    "Categorías","Nombres tutor","Apellido paterno tutor","Apellido materno tutor","Teléfono","Correo electrónico", "Tipo de documento tutor","Nro de documento tutor","Parentesco"};
+		String [] columns1 = {"Año","ODS","Departamento","Provincia","Distrito","Institución educativa","Código local II.EE","Fecha de registro","Inscrito al C.E","Nivel-N°Seciones-N°Docenes-N°Alumnos-N°Varones-N°Mujeres","Ámbito de II.EE","Modalidad de enseñanza","Código local","Tipo de II.EE","Dirección","DRE","UGEL","Teléfono II.EE","Correo electrónico II.EE","Facebook","Lengua","Clasificación","Turno","Proveedor de servicio","Horas de abastecimiento","¿Piscina?","Tipo doc. director","N° doc. director","Apellidos del director","Nombres del director","Género del director","Teléfono del director","Celular del director","Correo del director","Tipo doc. docente","N° doc. docente","Apellidos del docente","Nombres del docente","Género del docente","Teléfono del docente","Celular del docente","Correo del docente","Nombres del participante","Apellido paterno del docente","Apellido materno del participante","Fecha de nacimiento del participante","Sección del participante", "Tipo de doc. participante","N° doc. participante","Género del participante","Nivel del participante","Grado del participante", "Nivel de participación", "Modalidad", "Categorías","Nombre del tutor","Apellido paterno del tutor","Apellido materno del tutor","Teléfono de tutor","Correo del tutor", "Tipo doc. tutor","N° doc. tutor","Parentesco"};
 		Sheet sheet1 = workbook.createSheet("Datos de participantes");
 		Row row1 = sheet1.createRow(0);
 		
-		row1.createCell(0).setCellValue("DATOS DE A II.EE");
+		row1.createCell(0).setCellValue("DATOS DE LA II.EE");
 		sheet1.addMergedRegion(new CellRangeAddress(0, 0, 0, 41));/*1era celda , ultima celda, 1era columna, ultima columna*/		
 		
 		row1.createCell(42).setCellValue("DATOS DEL ESTUDIANTE INSCRITOS EN EL C.E");
@@ -1237,7 +1237,7 @@ public class ReporteController {
 			}
 		});
 		
-		String [] columns = {"Año","ODS","Departamento","Provincia","Distrito","Institución educativa","Código local II.EE","Fecha registro","Inscrito al C.E","Nivel-N°Secciones-N°Docentes-N°Alumnos-N°Varones-N°Mujeres","Ámbito de II.EE","Modalidad de enseñanza", "Código local","Tipo de II.EE","Dirección","DRE","UGEL","Teléfono II.EE","Correo electrónico II.EE","Facebook","Lengua","Clasificación","Turno","Proveedor servicio","Horas abastecimiento","¿Piscina?","Tipo doc. director","N° doc. director","Apellidos director","Nombres director","Género director","Teléfono director","Celular director","Correo director","Tipo doc. profesor","N° doc. profesor","Apellidos profesor","Nombres profesor","Género profesor","Teléfono profesor","Celular profesor","Correo profesor","Código de trabajo","Estado de trabajo","Título de trabajo","Link video","Modalidad","Categoría","Nivel de participación","Ejes tématicos","Nombres del participante","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Fecha de nacimiento","Género","Sección","Nivel","Grado","Nombres de tutor","Apellido paterno tutor","Apellido materno tutor","Tipo de documento","Nro de documento","Teléfono","Correo electrónico","Parentesco","Nombre del docente","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Teléfono","Género","Correo electrónico","Nota","Puesto","Nota","Puesto"};
+		String [] columns = {"Año","ODS","Departamento","Provincia","Distrito","Institución educativa","Código local II.EE","Fecha registro","Inscrito al C.E","Nivel-N°Secciones-N°Docentes-N°Alumnos-N°Varones-N°Mujeres","Ámbito de II.EE","Modalidad de enseñanza", "Código local","Tipo de II.EE","Dirección","DRE","UGEL","Teléfono II.EE","Correo electrónico II.EE","Facebook","Lengua","Clasificación","Turno","Proveedor servicio","Horas abastecimiento","¿Piscina?","Tipo doc. director","N° doc. director","Apellidos del director","Nombres del director","Género del director","Teléfono del director","Celular del director","Correo del director","Tipo doc. docente","N° doc. docente","Apellidos del docente","Nombres del docente","Género del docente","Teléfono del docente","Celular del docente","Correo del docente","Código de trabajo","Estado de trabajo","Título de trabajo","Link video","Modalidad","Categoría","Nivel de participación","Ejes tématicos","Nombres del participante","Apellido paterno del participante","Apellido materno del participante","Tipo de doc. participante","N° doc. participante","Fecha de nacimiento del participante","Género del participante","Sección del participante","Nivel del participante","Grado del participante","Nombre del tutor","Apellido paterno del tutor","Apellido materno del tutor","Tipo doc. tutor","N° doc. tutor","Teléfono de tutor","Correo del tutor","Parentesco","Nombres del docente","Apellido paterno del docente","Apellido materno del docente","Tipo doc. docente","N° doc. docente","Teléfono del docente","Género del docente","Correo del docente","Nota","Puesto"};
 		
 		Sheet sheet = workbook.createSheet("Datos de la II.EE");
 		Row row = sheet.createRow(0);
@@ -1259,9 +1259,6 @@ public class ReporteController {
 		
 		row.createCell(76).setCellValue("CONCURSO REGIONAL");
 		sheet.addMergedRegion(new CellRangeAddress(0, 0, 76, 77));
-		
-		row.createCell(78).setCellValue("CONCURSO NACIONAL");
-		sheet.addMergedRegion(new CellRangeAddress(0, 0, 78, 79));
 		
 		row = sheet.createRow(1);
 		for(int i=0;i<columns.length;i++) {
@@ -1350,8 +1347,6 @@ public class ReporteController {
 			row.createCell(75).setCellValue(dto.getCorreoDocente());
 			row.createCell(76).setCellValue(dto.getNotaRegional());
 			row.createCell(77).setCellValue(dto.getPuestoRegional());
-			row.createCell(78).setCellValue(dto.getNotaNacional());
-			row.createCell(79).setCellValue(dto.getPuestoNacional());
 			initRow++;
 		}		
 		
@@ -1492,10 +1487,10 @@ public class ReporteController {
 		row1.createCell(0).setCellValue("DATOS DE A II.EE");
 		sheet1.addMergedRegion(new CellRangeAddress(0, 0, 0, 9));/*1era celda , ultima celda, 1era columna, ultima columna*/		
 		
-		row1.createCell(10).setCellValue("Rubrica");
+		row1.createCell(10).setCellValue("RUBRICA");
 		sheet1.addMergedRegion(new CellRangeAddress(0, 0, 10, 15));
 		
-		row1.createCell(16).setCellValue("Cuestionario");
+		row1.createCell(16).setCellValue("CUESTIONARIO");
 		
 		row1 = sheet1.createRow(1);
 		for(int i=0;i<columns1.length;i++) {
@@ -1716,6 +1711,8 @@ public class ReporteController {
 			row2.createCell(11).setCellValue(dto.getParticipante());
 			row2.createCell(12).setCellValue(dto.getGenero());
 			row2.createCell(13).setCellValue(dto.getNotaFinal());
+			row2.createCell(14).setCellValue(dto.getDocente());
+			row2.createCell(15).setCellValue(dto.getCelularDocente());
 			initRow2 ++;
 		}
 		
@@ -2104,10 +2101,10 @@ public class ReporteController {
         my_style_Cabecera1.setAlignment(HorizontalAlignment.CENTER);
         
 
-		String [] columns = {"Nº","Año","ODS","Categoria","Entidad","Dirección","Comité técnico","Comité evaluador","Auspiciador","Aliado","Estado",
-				"¿Cúantos contactos desea agregar?","Apellido paterno","Apellido materno","Nombres","Tipo de documento","Nro de documento","N° de teléfono 1",
+		String [] columns = {"Nº","Año","ODS","Categoría","Entidad","Dirección","Comité técnico","Comité evaluador","Auspiciador","Aliado","Estado",
+				"¿Cuántos contactos desea agregar?","Apellido paterno","Apellido materno","Nombres","Tipo de documento","N° de documento","N° de teléfono 1",
 				"N° de teléfono 2","Correo institucional","Cargo","Apellido paterno","Apellido materno","Nombres","Correo institucional","Cargo","Usuario",
-				"Contraseña","Enviar oficio","Nro oficio","Fecha de oficio","Monto total"};
+				"Contraseña","Enviar oficio","N° de oficio","Fecha de oficio","Monto total"};
 		
 		Sheet sheet = workbook.createSheet("Alianza Estrategica");
 		
@@ -2144,13 +2141,13 @@ public class ReporteController {
 		sheet.addMergedRegion(new CellRangeAddress(2,2,11,20));
 		
 		Cell cell32 = rowline3.createCell(21);
-		cell32.setCellValue("Datos de la Autoridad/Representante");
+		cell32.setCellValue("DATOS DE LA AUTORIDAD/REPRESENTANTE");
 		cell32.setCellStyle(my_style_Cabecera1);
 		
 		sheet.addMergedRegion(new CellRangeAddress(2,2,21,30));
 		
 		Cell cell33 = rowline3.createCell(31);
-		cell33.setCellValue("Datos del auspicio");
+		cell33.setCellValue("DATOS DEL AUSPICIO");
 		cell33.setCellStyle(my_style_Cabecera1);
 		
 		//sheet.addMergedRegion(new CellRangeAddress(2,2,31,31));

@@ -3247,7 +3247,7 @@ public class ConcursoeducativoController {
 			}
 		});
 		
-		String [] columns = {"Año","ODS","Código de II.EE","Nombre de II.EE","Región","Provincia","Distrito","Modalidad de II.EE", "Ambito de II.EE","Código de trabajo","Estado de trabajo","Título de trabajo","Link de video","Modalidad","Categoria","Nivel de participación","Ejes temáticos","Nombres del participante","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Fecha de nacimiento","Género","Sección","Nivel","Grado","Nombres tutor","Apellido paterno tutor","Apellido materno tutor","Tipo de documento","Nro de documento tutor","Teléfono","Correo electrónico","Parentesco","Nombres del docente","Apellido paterno","Apellido materno","Tipo de documento","Nro de documento","Teléfono","Género","Correo electrónico","Nota","Nota original","¿Tuvo empate?","Puesto"};
+		String [] columns = {"Año","ODS","Código de II.EE","Nombre de II.EE","Región","Provincia","Distrito","Modalidad de enseñanza", "Ámbito de II.EE","Código de trabajo","Estado de trabajo","Título de trabajo","Link de video","Modalidad","Categoría","Nivel de participación","Ejes temáticos","Nombres del participante","Apellido paterno del participante","Apellido materno del participante","Tipo de doc. participante","N° doc. participante","Fecha de nacimiento del participante","Género del participante","Sección del participante","Nivel del participante","Grado del participante","Nombre del tutor","Apellido paterno del tutor","Apellido materno del tutor","Tipo doc. tutor","N° doc. tutor","Teléfono de tutor","Correo del tutor","Parentesco","Nombres del docente","Apellido paterno del docente","Apellido materno del docente","Tipo doc. docente","N° doc. docente","Teléfono del docente","Género del docente","Correo electrónico","Nota","Nota original","¿Tuvo empate?","Puesto"};
 		
 		Sheet sheet = workbook.createSheet("Registro de trabajos finales");
 		Row row = sheet.createRow(0);
@@ -3267,7 +3267,7 @@ public class ConcursoeducativoController {
 		row.createCell(35).setCellValue("DATOS DEL DOCENTE");
 		sheet.addMergedRegion(new CellRangeAddress(0, 0,35, 42));
 		
-		row.createCell(43).setCellValue("Concurso regional");
+		row.createCell(43).setCellValue("CONCURSO REGIONAL");
 		sheet.addMergedRegion(new CellRangeAddress(0, 0,43, 46));
 		
 		row = sheet.createRow(1);

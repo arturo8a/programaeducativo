@@ -318,7 +318,7 @@
 							        	<th>Nº</th>
 										<th>Año</th>
 							            <th>ODS</th>
-							            <th>Código de la II.EE</th>
+							            <th>Código de II.EE</th>
 							            <th>Nombre de II.EE</th>
 							            <th>Código de trabajo</th>
 							            <th style="display:none;">Título de trabajo</th>
@@ -1359,6 +1359,9 @@
 	            		extend: 'excelHtml5',
 	            		text:"<img src='./images/iconos_nd/excel1.svg' style='size:15px;margin:0px;padding:0px'/>",
 	                    titleAttr : 'RESULTADOS DE ASIGNACION',
+	                    exportOptions: {
+			                columns: [1,2,3,4,5,6,7,8,9,10,11,12,13]
+			            },
 	                    messageTop: function(){
 	                    	return '[ ODS: ' + $("#odsasignacion").val() + ']            [ Año de inscripción: '+ $("#anioasignacion").val() + ']';
 	                    },
