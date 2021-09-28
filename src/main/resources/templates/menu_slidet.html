@@ -105,6 +105,9 @@
                         <li >
                             <input type="button" class="btn btn-link" id="trabajos_finales_evaluados" value="Trabajos evaluados"/>                            
                         </li>
+                        <li >
+                            <input type="button" class="btn btn-link" id="consulta_historica" value="Consulta historica" style="display: none;"/>                            
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -157,6 +160,9 @@
                         </li>
                         <li >
                             <input type="button" class="btn btn-link" id="trabajos_finales_evaluados" value="Trabajos evaluados" style="display: none;"/>                            
+                        </li>
+                        <li >
+                            <input type="button" class="btn btn-link" id="consulta_historica" value="Consulta historica"/>                            
                         </li>
                     </ul>
                 </li>
@@ -467,6 +473,29 @@
 		    			success: function(respuesta) {
 		    				$('#modalimagencargando').modal('hide');
 		    				$("#contenedor_consulta").html(respuesta);
+		    			}
+		    		});
+	        	}, 200);
+	    	});
+	    	
+	    	$("#consulta_historica").click(function(){
+				$("ul li a").css("background","");
+				$("ul li ul li input").css("color","");
+	    		document.getElementById("a_pageSubmenuConcursoEducativo").style.background = "#0083C9";
+	    		document.getElementById("consulta_historica").style.color = "#0083C9";
+   	    		$("#consulta_menu").prop("disabled",true);
+	        	$("#btnbuscar").prop("disabled",true);
+	    		$('#modalimagencargando').modal({
+					show : true,
+					backdrop : 'static',
+					keyboard:false
+				});
+	    		setTimeout(() => {        		  
+	    			$.ajax({
+		    			url: url_base + "pedesa/consultahistorica",
+		    			success: function(respuesta) {
+		    				$('#modalimagencargando').modal('hide');
+		    				$("#contenedor_consulta").html(respuesta);    				
 		    			}
 		    		});
 	        	}, 200);
