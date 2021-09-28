@@ -1432,5 +1432,46 @@ public class IndexController {
 		return "formCerrarNacionalAsignarEmpatesEvaluador";
 	}
 	
+	@GetMapping("/consultahistorica")
+	public String consultahistorica(@RequestParam(name="name",required=false,defaultValue="") String name, Model model,HttpSession ses) {		
+		
+		List<Ods> listaOds = new ArrayList<>();		
+		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		if(tipousuarioid.equals(2)) {
+			String usuario = ses.getAttribute("usuario").toString();
+			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
+				listaOds.add(obj.getOds());
+			});
+			model.addAttribute("ods", listaOds);
+		}
+		else {
+			model.addAttribute("ods",odsserv.listarAll());
+		}
+		
+		Calendar fecha = Calendar.getInstance();
+        List<Integer> lista = new ArrayList<Integer>();
+        int anio = fecha.get(Calendar.YEAR);
+        for(int i = anio-5;i<=anio;i++) {
+                lista.add(i);
+        }
+        
+        Aperturaranio apertura = aperturaranioService.buscar(anio);
+		LocalDate dateActual = LocalDate.now();
+		//if(apertura.getQuintaetapadesde().isAfter(dateActual)) {
+		if(apertura.getQuintaetapadesde().isBefore(dateActual) || apertura.getQuintaetapadesde().isEqual(dateActual)) {
+			model.addAttribute("showFinalizar",1);
+		}else {
+			model.addAttribute("showFinalizar",0);
+		}
+        
+        
+        model.addAttribute("anios", lista);
+        model.addAttribute("modalidadtrabajo",modalidadtrabajoService.listar());
+        model.addAttribute("listaestadoevaluacion", estadoevaluacionService.listar());
+        model.addAttribute("categoriatrabajo",categoriaevaluacionService.listar());//categoriatrabajoService.listar());
+        model.addAttribute("nivelparticipacion",nivelparticipacionService.listar());
+		return "consulta_historica";
+	}
+	
 }
 
