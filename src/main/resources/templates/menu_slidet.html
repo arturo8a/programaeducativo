@@ -253,6 +253,7 @@
     		});
 	    	
 	    	$("#consulta").click(function(e){
+				console.log("click en consulta de menu");
 				$("ul li a").css("background","");
 				$("ul li ul li input").css("color","");
 	    		document.getElementById("a_pageSubmenuProgramaEducativo").style.background = "#0083C9";
@@ -268,8 +269,12 @@
 	    			$.ajax({
 		    			url: url_base + "pedesa/contenidoconsulta",
 		    			success: function(respuesta) {
-		    				$('#modalimagencargando').modal('hide');
-		    				$("#contenedor_consulta").html(respuesta);
+							if(respuesta!="session_cerrada"){
+								$('#modalimagencargando').modal('hide');
+		    					$("#contenedor_consulta").html(respuesta);
+							}else{
+								window.location = url_base+"pedesa/";
+							}		    				
 		    			}
 		    		});
 	        	}, 200);	    		

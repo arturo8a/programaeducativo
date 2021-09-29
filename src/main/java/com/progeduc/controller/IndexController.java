@@ -83,6 +83,7 @@ import com.progeduc.service.ProveedorService;
 import com.progeduc.service.TipodocService;
 import com.progeduc.service.TipoieService;
 import com.progeduc.service.impl.UploadFileService;
+import com.sun.java.swing.plaf.windows.resources.windows;
 
 @Controller
 @RequestMapping("")
@@ -538,6 +539,13 @@ public class IndexController {
 	
 	@GetMapping("/contenidoconsulta")
 	public String contenido_consulta(@RequestParam(name="name",required=false,defaultValue="") String name, Model model,HttpSession ses) {
+		
+		/*if(ses.getAttribute("usuario")==null) {
+			ses.removeAttribute("usuario");
+			ses.removeAttribute("perfil");
+			ses.removeAttribute("flag");	
+			return "session_cerrada";
+		}*/
 		
 		List<Departamento> listaDepartamento = new ArrayList<Departamento>();
 		List<Ods> listaOds = new ArrayList<>();
