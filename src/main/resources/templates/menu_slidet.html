@@ -52,7 +52,6 @@
     <div class="wrapper">
         <nav id="sidebar" class="border-right">
             <div class="sidebar-header pt-4 pl-5 pb-0 mt-0 mb-5">
-                <!-- img th:src="@{./images/iconos_nd/Frame3.svg}"alt="" class="ml-2 pt-1"-->
                 <img th:src="@{./images/iconos_nd/logosunass.svg}" alt="" class="ml-2">
             </div>
              <ul th:if="${tipousuarioid == 5}" class="list-unstyled components">
@@ -273,6 +272,7 @@
 								$('#modalimagencargando').modal('hide');
 		    					$("#contenedor_consulta").html(respuesta);
 							}else{
+								
 								window.location = url_base+"pedesa/";
 							}		    				
 		    			}
