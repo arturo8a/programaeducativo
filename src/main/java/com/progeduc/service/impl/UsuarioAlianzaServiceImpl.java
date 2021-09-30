@@ -85,5 +85,23 @@ public class UsuarioAlianzaServiceImpl implements IUsuarioAlianzaService{
 	public List<UsuarioAlianza> buscarEvaluador(Integer idusu,String usuarioEvaluador){
 		return usuarioRepo.buscarEvaluador(idusu, usuarioEvaluador);
 	}
+
+	@Override
+	public List<UsuarioAlianza> listarPorAnio(Integer anio) {
+		if(anio == 0) {
+			return (List<UsuarioAlianza>) usuarioRepo.findAll();
+		}else {
+			return usuarioRepo.listarPorAnio(anio);
+		}
+	}
+
+	@Override
+	public List<UsuarioAlianza> listarByOdsAnio(Integer odsid, Integer anio) {
+		if(anio == 0) {
+			return (List<UsuarioAlianza>) usuarioRepo.listarByOds(odsid);
+		}else {
+			return usuarioRepo.listarByOdsAnio(odsid, anio);
+		}
+	}
 	
 }

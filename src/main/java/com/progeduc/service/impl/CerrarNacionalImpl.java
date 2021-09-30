@@ -50,4 +50,9 @@ public class CerrarNacionalImpl implements ICerrarNacionalService{
 		return cerrarRepo.listaNacionalEmpates();
 	}
 
+	@Override
+	public List<CerrarEtapaNacional> listaPorAnio() {
+		return cerrarRepo.listaPorAnio();
+	}
+
 }

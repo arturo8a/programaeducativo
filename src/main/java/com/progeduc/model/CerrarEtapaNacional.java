@@ -23,6 +23,9 @@ public class CerrarEtapaNacional {
 	
 	@Column(name="estado")
 	private Integer estado;
+	
+	@Column(name="anio")
+	private Integer anio;
 
 	public Integer getId() {
 		return id;
@@ -54,6 +57,14 @@ public class CerrarEtapaNacional {
 
 	public void setEstado(Integer estado) {
 		this.estado = estado;
+	}
+
+	public Integer getAnio() {
+		return anio;
+	}
+
+	public void setAnio(Integer anio) {
+		this.anio = anio;
 	}
 	
 	

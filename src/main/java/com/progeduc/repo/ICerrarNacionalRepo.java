@@ -16,5 +16,8 @@ public interface ICerrarNacionalRepo extends CrudRepository<CerrarEtapaNacional,
 	
 	@Query(value="SELECT TB1.nivel, TB1.categoria_Id FROM CERRAR_NACIONAL TB1 where TB1.estado=2 GROUP BY TB1.nivel, TB1.categoria_Id",nativeQuery = true)
 	List<CerrarEtapaNacional> listaNacionalEmpates();
+	
+	@Query(value="SELECT * FROM CERRAR_NACIONAL TB1 where TB1.anio=EXTRACT(YEAR FROM sysdate) ",nativeQuery = true)
+	List<CerrarEtapaNacional> listaPorAnio();
 
 }

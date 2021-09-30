@@ -207,4 +207,22 @@ public class ProgramaeducativoServiceImpl implements IProgramaeducativoService{
 	public List<Programaeducativo> listarAprobados(){
 		return progeducRepo.listarAprobados();
 	}
+
+	@Override
+	public List<Programaeducativo> listarPorAnio(Integer iddistrito, Integer anio) {
+		if(anio == 0) {
+			return progeducRepo.listar(iddistrito);
+		}else {
+			return progeducRepo.listarPorAnio(iddistrito, anio);
+		}
+	}
+
+	@Override
+	public List<Programaeducativo> getListarHabilitadosPorAnio(Integer anio) {
+		if(anio == 0) {
+			return progeducRepo.getListarHabilitados();
+		}else {
+			return progeducRepo.getListarHabilitadosPorAnio(anio);
+		}
+	}
 }

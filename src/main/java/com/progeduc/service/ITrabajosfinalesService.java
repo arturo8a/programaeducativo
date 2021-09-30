@@ -88,4 +88,8 @@ public interface ITrabajosfinalesService extends ICRUD<Trabajosfinales,Integer>{
 	List<EtapaNacionalDto> listarTrabajosConsursoNacionalaFinalizar();
 	
 	int updateEstadoTrabajoNacional(Integer id,Integer estadoTrabajoId);
+	
+	List<Trabajosfinales> listarhabilitadosPorAnio(Integer anio);
+	
+	List<Trabajosfinales> listarTrabajosConsursoNacionalPorAnio(Integer anio);
 }

@@ -267,6 +267,7 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
 			+ "inner join gradoparticipante gp on gp.id = p.gradooestudiante "
 			+ "inner join categoriaTrabajo ct on ct.id = tf.categoriatrabajoid "
 			+ "left join cerrar_nacional cn on cn.categoria_id = tf.categoriatrabajoid and cn.nivel = gp.nivelgradopartdesc "
+			+ " where tf.anio = EXTRACT(YEAR FROM sysdate) "
 			+ "group by gp.nivelgradopartdesc, tf.categoriatrabajoid, ct.descripcion, NVL(cn.estado, 0) "
 			+ "order by tf.categoriatrabajoid asc, gp.nivelgradopartdesc asc ",nativeQuery = true)
 	List<Object[]> listarTrabajosConsursoNacionalaFinalizar();
@@ -276,5 +277,11 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
 	@Modifying	
 	@Query(value="update Trabajosfinales p set p.estadonacional = ?2 WHERE p.id = ?1 ",nativeQuery = true)
 	int updateEstadoTrabajoNacional(Integer id,Integer estadoTrabajoId);
+	
+	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where TB1.estado=1 and TB1.anio = ?1",nativeQuery = true)
+	List<Trabajosfinales> listarhabilitadosPorAnio(Integer anio);
+	
+	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where tb1.estado=1 and tb1.anio = ?1 and TB1.estadotrabajoid=3 and TB1.puesto = 1 ",nativeQuery = true)
+	List<Trabajosfinales> listarTrabajosConsursoNacionalPorAnio(Integer anio);
 	
 }
