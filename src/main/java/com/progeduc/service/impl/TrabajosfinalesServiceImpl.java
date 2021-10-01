@@ -350,4 +350,13 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 		
 	}
 
+	@Override
+	public List<Trabajosfinales> listarHabilitadosEnviadoPorAnio(Integer programaeducativoid, Integer anio) {
+		if(anio == 0) {
+			return trabajosfinalesRepo.listarHabilitadosEnviado(programaeducativoid);
+		}else {
+			return trabajosfinalesRepo.listarHabilitadosEnviadoPorAnio(programaeducativoid, anio);
+		}
+	}
+
 }

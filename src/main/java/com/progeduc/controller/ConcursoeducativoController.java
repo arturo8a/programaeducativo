@@ -1104,7 +1104,7 @@ listaOds = new ArrayList<>();
 		else if (tipousuarioid==30){	
 			
 			progeducService.getListarHabilitadosPorAnio(anio).forEach(pe->{
-				List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarHabilitadosEnviado(pe.getId());
+				List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarHabilitadosEnviadoPorAnio(pe.getId(), anio);
 				listaTrabajoFinales.forEach(obj->{
 					banderaods = false;
 					listaOds.forEach(objOds->{

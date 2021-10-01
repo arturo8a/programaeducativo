@@ -284,4 +284,7 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
 	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where tb1.estado=1 and tb1.anio = ?1 and TB1.estadotrabajoid=3 and TB1.puesto = 1 ",nativeQuery = true)
 	List<Trabajosfinales> listarTrabajosConsursoNacionalPorAnio(Integer anio);
 	
+	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where TB1.programaeducativoid=?1 and tb1.estado=1 and tb1.anio = ?2 and enviado=1",nativeQuery = true)
+	List<Trabajosfinales> listarHabilitadosEnviadoPorAnio(Integer programaeducativoid, Integer anio);
+	
 }
