@@ -6,6 +6,8 @@ import com.progeduc.dto.ColegioDto;
 import com.progeduc.dto.ListaInstitucionEducativa;
 import com.progeduc.dto.ProgeducTurnoNivelDto;
 import com.progeduc.dto.ProgeducUpdateTurnoNivelDto;
+import com.progeduc.interfac.AprobacionInscripciones;
+import com.progeduc.interfac.ProgeducDto;
 import com.progeduc.model.Programaeducativo;
 
 public interface IProgramaeducativoService extends ICRUD<Programaeducativo,Integer>{
@@ -48,4 +50,8 @@ public interface IProgramaeducativoService extends ICRUD<Programaeducativo,Integ
 	Programaeducativo getActualByCodmod(String codmod);
 	
 	List<Programaeducativo> listarTodos();
+	
+	List<AprobacionInscripciones> listarAprobacionInscripcion(Integer idods,Integer anio,String nombre,String estado);
+	
+	List<ProgeducDto> listarConsultaPe(String usuario,String fechaDesde,String fechaHasta,String nombreie,Integer idDepartamento,Integer idProvincia,Integer idDistrito,Integer inscritoce);
 }

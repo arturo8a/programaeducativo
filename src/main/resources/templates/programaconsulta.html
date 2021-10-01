@@ -39,18 +39,14 @@
 		<div class="row">
 			<div class="col-xs-12 col-sm-4" >
 				<select id="cbods" name="cbods" class="form-control">
-					<option value="Todos">ODS</option>
-					<option th:each="len:${ods}" th:value="${len.descripcion}" th:utext="${len.descripcion}"/>
+					<option value="0">ODS</option>
+					<option th:each="len:${ods}" th:value="${len.id}" th:utext="${len.descripcion}"/>
 				</select>
 			</div>
 			<div class="col-xs-12 col-sm-4">
 				<select id="cbanio" name="cbanio" class="form-control">
 					<option value="Todos">Año de inscripción</option>
-					<option value="2017">2017</option >
-					<option value="2018">2018</option>
-					<option value="2019">2019</option>
-					<option value="2020">2020</option>
-					<option value="2021">2021</option>
+					<option th:each="anio:${anios}" th:value="${anio}" th:utext="${anio}" th:selected="${anio==anioActual}"/>
 				</select>
 			</div>
 			<div class="col-xs-12 col-sm-4" >	
@@ -235,17 +231,49 @@
 		var celdaseleccionada;
 		var table_pe;
 		var id;
+		var ods, anio, nombreie,estado;
+		var data_json;
 		
 		$(document).ready(function(){	
 			
+			ods = $("#cbods").val();
+			anio = $("#cbanio").val();
+			nombreie = $("#txtnombre").val();
+			estado = $("#cbestado").val();
+			
+			data_json = {
+				idods: ods,
+				anio : anio,
+				nombreie: '%'+nombreie+'%',
+				estado : estado
+			};
+			
 			$("#btnbuscarpe").click(function(){	
-				$("#consulta_menu").prop("disabled",true);
-	        	$("#btnbuscarpe").prop("disabled",true);
-	        	$("#btnlimpiar").prop("disabled",true);
+				ods = $("#cbods").val();
+				anio = $("#cbanio").val();
+				nombreie = $("#txtnombre").val();
+				estado = $("#cbestado").val();
+				
+				data_json = {
+					idods: ods,
+					anio : anio,
+					nombreie: '%'+nombreie+'%',
+					estado : estado
+				};
 	        	
-	        	setTimeout(() => {        		  
-	        			  table_pe.draw();
-	        	}, 200);	
+	        	table_pe.clear().draw();
+	        	
+	        	$.ajax({
+					"type" : "POST",
+	                "dataType": 'json',	
+	                "contentType" : 'application/json',	 
+					"url" : url_base + "pedesa/listacolegiosinscritos",
+					"data" : JSON.stringify(data_json),
+					"success" : function(data){
+						table_pe.rows.add(data).draw();
+					}					
+				});
+	        	
 			});
 			
 			$("#btnlimpiar").click(function(){
@@ -397,8 +425,7 @@
 		
 		var listar = function(){
 				
-				$("#table_pe").dataTable().fnDestroy();				
-			    
+				$("#table_pe").dataTable().fnDestroy();
 				table_pe = $('#table_pe').DataTable({
 				"dom": '<B><"rs_aprobar_inscripcion">frtip',
 	            "scrollX": true,
@@ -431,9 +458,15 @@
 	                    "previous": "Anterior"
 	                }
 	            },
-	            "ajax" : {
+	            "ajax" : {	                
 	                "url" : url_base + 'pedesa/listacolegiosinscritos',
-	                "type" : "GET",
+	                "type" : "POST",
+	                "async": true,
+	                "dataType": 'json',	
+	                "contentType" : 'application/json',	                
+	                "data" : function(){
+						return JSON.stringify(data_json);
+					},	
 	                "dataSrc" : ""
 	            },
 	            "columns" : [
@@ -551,38 +584,6 @@
         	$("#btnlimpiar").prop("disabled",false);
         	
 		});
-		
-		$.fn.dataTable.ext.search.push(
-    	    function( settings, data, dataIndex ) {
-    	    	
-    	    	if ( settings.nTable.id !== 'table_pe' ) {
-    	            return true;
-    	        }
-    	    	
-    	    	var ods = $("#cbods").val();
-    	    	var nombre = $("#txtnombre").val();
-    	    	var anio = $("#cbanio").val();
-    	    	var estado = $("#cbestado").val();
-    	    	if(!filtra(ods,data[1]))
-    	    		return false;
-    	    	if(!filtra(nombre,data[3]))
-    	    		return false;
-    	    	if(!filtra(anio,data[4]))
-    	    		return false;
-    	    	if(!filtra(estado,data[8]))
-    	    		return false;
-   	    		return true;
-    	    }
-    	);
-		
-		function filtra(campofiltro,campotabla){
-	    	if(campofiltro==="Todos" || campofiltro===undefined)
-	    		return true;
-	    	var posicion = (campotabla.toLowerCase()).indexOf(campofiltro.toLowerCase()); 
-	    	if(posicion != -1)
-	    		return  true;
-	    	return false;
-	    }
 		
 		var obtener_data_descargar = function(tbody,table){
 			$(tbody).on("click","img.descargar",function(){

@@ -10,6 +10,8 @@ import com.progeduc.dto.ColegioDto;
 import com.progeduc.dto.ListaInstitucionEducativa;
 import com.progeduc.dto.ProgeducTurnoNivelDto;
 import com.progeduc.dto.ProgeducUpdateTurnoNivelDto;
+import com.progeduc.interfac.AprobacionInscripciones;
+import com.progeduc.interfac.ProgeducDto;
 import com.progeduc.model.Programaeducativo;
 import com.progeduc.model.ProgramaeducativoNivel;
 import com.progeduc.model.ProgramaeducativoTurno;
@@ -193,11 +195,6 @@ public class ProgramaeducativoServiceImpl implements IProgramaeducativoService{
 		return progeducRepo.verificarEstadoAnio(codmod,anio, estado);
 	}
 	
-	/*public Programaeducativo searchId(Integer id) {
-		Optional<Programaeducativo> op = progEduc.
-		return op.isPresent() ? op.get() : new Programaeducativo();
-	}*/
-	
 	@Override
 	public Programaeducativo getActualByCodmod(String codmod) {
 		return progeducRepo.getActualByCodmod(codmod);
@@ -207,4 +204,20 @@ public class ProgramaeducativoServiceImpl implements IProgramaeducativoService{
 	public List<Programaeducativo> listarAprobados(){
 		return progeducRepo.listarAprobados();
 	}
+	
+	@Override
+	public List<AprobacionInscripciones> listarAprobacionInscripcion(Integer idods,Integer anio,String nombre,String estado){
+		return progeducRepo.listarAprobacionInscripcion(idods, anio,nombre,estado);
+	}
+	
+	@Override
+	public List<ProgeducDto> listarConsultaPe(String usuario,String fechaDesde,String fechaHasta,String nombreie,Integer idDepartamento,Integer idProvincia,Integer idDistrito,Integer inscritoce){
+		return progeducRepo.listarConsultaPe(usuario, fechaDesde, fechaHasta, nombreie, idDepartamento, idProvincia, idDistrito, inscritoce);
+	}
+	
+	
+	
+	
+	
+	
 }

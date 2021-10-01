@@ -82,7 +82,7 @@ public class LoginController {
 			Usuario obj = usuarioServ.byUsuario(usuario);
 			if(obj!=null) {
 				if(obj.getTipousuario().getId() == 1 || obj.getTipousuario().getId() == 2 || obj.getTipousuario().getId() == 11 || obj.getTipousuario().getId() == 12 ) {
-					ses.setAttribute("usuario", obj.getUsuario());/*admin,espcialista ods, especialista du*/
+					ses.setAttribute("usuario", obj.getUsuario());/*administrador,espcialista ods, especialista du*/
 	        		ses.setAttribute("perfil", obj.getTipousuario().getDescripcion());
 	        		ses.setAttribute("tipousuarioid", obj.getTipousuario().getId());
 	        		return obj.getUsuario();
@@ -95,15 +95,16 @@ public class LoginController {
 		else {
 			Usuario obj = usuarioServ.login(usuario, password);
 			if(obj == null) {
-				Usuario_Ods uo = usuario_odsServ.login(usuario, password);
+				return "-1";
+				/*Usuario_Ods uo = usuario_odsServ.login(usuario, password);
         		if(uo == null) {
         			return "-1";
         		}
-        		ses.setAttribute("usuario", uo.getOds());/*ODS*/
+        		ses.setAttribute("usuario", uo.getOds());
         		ses.setAttribute("perfil", uo.getOds());
         		ses.setAttribute("tipousuarioid", 0);
         		ses.setAttribute("odsid", uo.getOdsid());
-        		return uo.getNombres();
+        		return uo.getNombres();*/
     		}
 			Programaeducativo pe = progeducService.getCodmodByAnioActual(obj.getUsuario());
     		if(pe!=null) { /*IIEE*/

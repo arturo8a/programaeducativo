@@ -821,8 +821,8 @@ public class ConcursoeducativoController {
 		
 		if(tipousuarioid == 0){			
 			Object ob = ses.getAttribute("odsid");
-			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(dist->{
-				progeducService.listar(dist.getId()).forEach(pe->{
+			distServ.listByOdsid(Integer.parseInt(ob.toString()),2021).forEach(dist->{
+				/*progeducService.listar(dist.getId()).forEach(pe->{
 					trabajosfinalesServ.listarHabilitadosEnviado(pe.getId()).forEach(tf->{							
 						nivel_participante = "";
 						evaluadores_asignados = 0;
@@ -847,7 +847,7 @@ public class ConcursoeducativoController {
 						if(tf.getEmpate() != 1 && tf.getEstadotrabajo().getId() !=3)
 						listadto.add(dto);
 					});
-				});
+				});*/
 			});		
 		}
 		else if (tipousuarioid==30){
@@ -882,7 +882,7 @@ public class ConcursoeducativoController {
 		else {
 			String usuario = ses.getAttribute("usuario").toString();
 			Usuario user = usuarioServ.byUsuario(usuario);
-			usuarioodsServ.listarByUsuario(user.getId()).forEach(obj->{
+			/*usuarioodsServ.listarByUsuario(user.getId(),2021).forEach(obj->{
 				distServ.listByOdsid(obj.getOds().getId()).forEach(dist->{					
 					progeducService.listar(dist.getId()).forEach(pe->{
 						trabajosfinalesServ.listarHabilitadosEnviado(pe.getId()).forEach(tf->{
@@ -911,7 +911,7 @@ public class ConcursoeducativoController {
 						});					
 					});
 				});
-			});
+			});*/
 		}
 		return new ResponseEntity<List<trabajoEvaluadoDto>>(listadto, HttpStatus.OK);
 	}
@@ -1062,8 +1062,8 @@ public class ConcursoeducativoController {
 		
 		if(tipousuarioid == 0){			
 			Object ob = ses.getAttribute("odsid");
-			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(obj->{				
-				progeducService.listar(obj.getId()).forEach(pe->{
+			distServ.listByOdsid(Integer.parseInt(ob.toString()),2021).forEach(obj->{				
+				/*progeducService.listar(obj.getId()).forEach(pe->{
 					banderaods = false;
 					listaOds.forEach(objOds->{
 						if(objOds.getId().equals(pe.getDistrito().getOdsid())) {
@@ -1097,7 +1097,7 @@ public class ConcursoeducativoController {
 							}
 						});
 					}
-				});
+				});*/
 			});		
 		}
 		else if (tipousuarioid==30){	
@@ -1140,8 +1140,8 @@ public class ConcursoeducativoController {
 			String usuario = ses.getAttribute("usuario").toString();
 			Usuario user = usuarioServ.byUsuario(usuario);
 			usuarioodsServ.listarByUsuario(user.getId()).forEach(obj->{
-				distServ.listByOdsid(obj.getOds().getId()).forEach(dist->{
-					progeducService.listar(dist.getId()).forEach(pe->{
+				distServ.listByOdsid(obj.getOds().getId(),2021).forEach(dist->{
+					/*progeducService.listar(dist.getId()).forEach(pe->{
 						banderaods = false;
 						listaOds.forEach(objOds->{
 							if(objOds.getId().equals(pe.getDistrito().getOdsid())) {
@@ -1173,7 +1173,7 @@ public class ConcursoeducativoController {
 								listadto.add(dto);
 							});
 						}
-					});
+					});*/
 				});
 			});
 		}
@@ -1188,8 +1188,8 @@ public class ConcursoeducativoController {
 		
 		if(tipousuarioid == 0){			
 			Object ob = ses.getAttribute("odsid");
-			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(obj->{
-				progeducService.listar(obj.getId()).forEach(obj1->{
+			distServ.listByOdsid(Integer.parseInt(ob.toString()),2021).forEach(obj->{
+				/*progeducService.listar(obj.getId()).forEach(obj1->{
 					trabajosfinalesServ.listarhabilitados(obj1.getId()).forEach(tf->{
 						AsignacionDto dto = new AsignacionDto();
 						rol_entidad = "";
@@ -1237,7 +1237,7 @@ public class ConcursoeducativoController {
 							lista.add(dto);
 						}
 					});
-				});
+				});*/
 			});	
 		}
 		else if (tipousuarioid==30){
@@ -1293,8 +1293,8 @@ public class ConcursoeducativoController {
 			String usuario = ses.getAttribute("usuario").toString();
 			Usuario user = usuarioServ.byUsuario(usuario);
 			usuarioodsServ.listarByUsuario(user.getId()).forEach(usu->{		
-				distServ.listByOdsid(usu.getOds().getId()).forEach(obj->{
-					progeducService.listar(obj.getId()).forEach(obj1->{
+				distServ.listByOdsid(usu.getOds().getId(),2021).forEach(obj->{
+					/*progeducService.listar(obj.getId()).forEach(obj1->{
 						trabajosfinalesServ.listarhabilitados(obj1.getId()).forEach(tf->{
 							AsignacionDto dto = new AsignacionDto();
 							rol_entidad = "";
@@ -1342,7 +1342,7 @@ public class ConcursoeducativoController {
 								lista.add(dto);
 							}
 						});
-					});
+					});*/
 				});	
 			});			
 		}
@@ -1608,8 +1608,8 @@ public class ConcursoeducativoController {
 		List<ListaDocenteInscritos> arrayie = new ArrayList<ListaDocenteInscritos>();
 		if(tipousuarioid == 0){			
 			Object ob = ses.getAttribute("odsid");
-			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(dist->{
-				progeducService.listar(dist.getId()).forEach(pe->{
+			distServ.listByOdsid(Integer.parseInt(ob.toString()),2021).forEach(dist->{
+				/*progeducService.listar(dist.getId()).forEach(pe->{
 					docenteService.listarhabilitados(pe.getId()).forEach(obj->{
 						listadocentesinscritos= new ListaDocenteInscritos();				
 						listadocentesinscritos.setAnio(obj.getAnhio());				
@@ -1634,7 +1634,7 @@ public class ConcursoeducativoController {
 						listadocentesinscritos.setFecha_registro(obj.getFecha_registro());
 						arrayie.add(listadocentesinscritos);
 					});
-				});
+				});*/
 			});		
 		}
 		else if (tipousuarioid==30){
@@ -1667,8 +1667,8 @@ public class ConcursoeducativoController {
 			String usuario = ses.getAttribute("usuario").toString();
 			Usuario user = usuarioServ.byUsuario(usuario);
 			usuarioodsServ.listarByUsuario(user.getId()).forEach(obj1->{
-				distServ.listByOdsid(obj1.getOds().getId()).forEach(dist->{
-					progeducService.listar(dist.getId()).forEach(pe->{
+				distServ.listByOdsid(obj1.getOds().getId(),2021).forEach(dist->{
+					/*progeducService.listar(dist.getId()).forEach(pe->{
 						docenteService.listarhabilitados(pe.getId()).forEach(obj->{
 							listadocentesinscritos= new ListaDocenteInscritos();				
 							listadocentesinscritos.setAnio(obj.getAnhio());
@@ -1693,7 +1693,7 @@ public class ConcursoeducativoController {
 							listadocentesinscritos.setFecha_registro(obj.getFecha_registro());
 							arrayie.add(listadocentesinscritos);
 						});
-					});
+					});*/
 				});
 			});
 		}
@@ -3669,8 +3669,8 @@ public class ConcursoeducativoController {
 		
 		if(tipousuarioid == 0){			
 			Object ob = ses.getAttribute("odsid");
-			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(dist->{
-				progeducService.listar(dist.getId()).forEach(pe->{
+			distServ.listByOdsid(Integer.parseInt(ob.toString()),2021).forEach(dist->{
+				/*progeducService.listar(dist.getId()).forEach(pe->{
 					trabajosfinalesServ.listaTrabajosEmpatadosPorODS(pe.getId()).forEach(tf->{							
 						nivel_participante = "";
 						evaluadores_asignados = 0;
@@ -3694,7 +3694,7 @@ public class ConcursoeducativoController {
 						dto.setId(tf.getId());
 						listadto.add(dto);
 					});
-				});
+				});*/
 			});
 		}
 		else if (tipousuarioid==30){
@@ -3729,8 +3729,8 @@ public class ConcursoeducativoController {
 			String usuario = ses.getAttribute("usuario").toString();
 			Usuario user = usuarioServ.byUsuario(usuario);
 			usuarioodsServ.listarByUsuario(user.getId()).forEach(obj->{
-				distServ.listByOdsid(obj.getOds().getId()).forEach(dist->{
-					progeducService.listar(dist.getId()).forEach(pe->{
+				distServ.listByOdsid(obj.getOds().getId(),2021).forEach(dist->{
+					/*progeducService.listar(dist.getId()).forEach(pe->{
 						trabajosfinalesServ.listaTrabajosEmpatadosPorODS(pe.getId()).forEach(tf->{							
 							nivel_participante = "";
 							evaluadores_asignados = 0;
@@ -3754,7 +3754,7 @@ public class ConcursoeducativoController {
 							dto.setId(tf.getId());
 							listadto.add(dto);
 						});
-					});
+					});*/
 				});
 			});
 			

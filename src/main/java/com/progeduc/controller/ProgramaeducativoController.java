@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +28,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.progeduc.dto.ActualizarContraseniaDto;
+import com.progeduc.dto.ConsultapeDto;
 import com.progeduc.dto.DatocorreoDto;
+import com.progeduc.dto.FilterListAprobacionInscripcionDto;
 import com.progeduc.dto.ListaCategoriaDto;
 import com.progeduc.dto.ListaInstitucionEducativa;
 import com.progeduc.dto.ParticipanteTrabajosfinalesDto;
@@ -38,7 +41,6 @@ import com.progeduc.dto.UpdateAprobarProgramaDto;
 import com.progeduc.dto.UpdateObservarProgramaDto;
 import com.progeduc.dto.Usuarioemail;
 import com.progeduc.model.Aperturaranio;
-import com.progeduc.model.Distrito;
 import com.progeduc.model.Docentetutor;
 import com.progeduc.model.Evaluacion;
 import com.progeduc.model.Nivel;
@@ -70,6 +72,7 @@ import com.progeduc.service.IProgeducNivelService;
 import com.progeduc.service.IProgeducTurnoService;
 import com.progeduc.service.IProgramaeducativoService;
 import com.progeduc.service.IProvinciaService;
+import com.progeduc.service.ISuministroService;
 import com.progeduc.service.ITipousuarioService;
 import com.progeduc.service.ITrabajosfinalesParticipanteService;
 import com.progeduc.service.ITrabajosfinalesService;
@@ -162,6 +165,9 @@ public class ProgramaeducativoController {
 	@Autowired
 	private IGeneroprofService generoprofserv;
 	
+	@Autowired
+	private ISuministroService suministroServ;
+	
 	ProgeducTurnoNivelDto dto;
 	List<Nivel> listNivel;
 	List<Ods> listaOds;
@@ -177,6 +183,8 @@ public class ProgramaeducativoController {
 	private String suministro;
 	Date fechaNueva=new Date();
 	
+	String idods;
+	
 	Usuarioemail usuarioEmail;
 	
 	@Autowired
@@ -187,6 +195,8 @@ public class ProgramaeducativoController {
 	
 	Mail mail ;	
 	String ejestematicos;
+	
+	Calendar fecha;
 	
 	@GetMapping("/searchid/{id}")
 	public ResponseEntity<ProgeducTurnoNivelDto> searchId(@PathVariable("id") Integer id){
@@ -262,170 +272,110 @@ public class ProgramaeducativoController {
 		return new ResponseEntity<List<Aperturaranio>>(aperturaranioService.listar(), HttpStatus.OK) ;
 	}	
 	
-	@GetMapping("/listaprogeduc")
-	public ResponseEntity<List<ProgeducDto>> listaprogeduc(Model model,HttpSession ses) {
+	@PostMapping(value="/listaprogeduc")
+	public ResponseEntity<List<ProgeducDto>> listaprogeduc(@Valid @RequestBody ConsultapeDto dto,HttpSession ses) {
 		
-		listaOds = new ArrayList<>();
-		
-		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
-		if(tipousuarioid.equals(2)) {
-			String usuario = ses.getAttribute("usuario").toString();
-			usuarioodsServ.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
-				listaOds.add(obj.getOds());
-			});
-			model.addAttribute("ods", listaOds);
-		}
-		else {
-			listaOds = odsserv.listarAll();
-		}
-		
-		listProgeducDto = new ArrayList<ProgeducDto>();
 		pedto = new ProgeducDto();
-		progeducTurno = new ProgramaeducativoTurno();
-		
-		progeducService.listarAprobados().forEach(obj->{
-			banderaOds = false;
-			listaOds.forEach(objOds->{
-				if(objOds.getId().equals(obj.getDistrito().getOdsid())) {
-					banderaOds = true;
-				}
+		String usuario = ses.getAttribute("usuario").toString();
+		List<ProgeducDto> listProgeducDto = new ArrayList<ProgeducDto>();
+		progeducService.listarConsultaPe(usuario, dto.getFechaDesde(), dto.getFechaHasta(), dto.getNombreie(), dto.getDepartamento(), dto.getProvincia(), dto.getDistrito(), dto.getInscritoce()).forEach(obj->{
+			turno = "";
+			nivel = "";
+			suministro="";
+			pedto = new ProgeducDto();
+			pedto.setOds(obj.getOds());
+			pedto.setDepartamento(obj.getDepartamento());
+			pedto.setProvincia(obj.getProvincia());
+			pedto.setDistrito(obj.getDistrito());
+			pedto.setInsteduc(obj.getInsteduc());			
+			pedto.setInscrito_ce(postulacionconcursoServ.getByIdAnio(obj.getId(), obj.getAnio())!=null?"Si":"No");					
+			pedto.setFecharegistro(obj.getFecharegistro());
+			pedto.setCodlocalie(obj.getCodlocalie());
+			pedto.setEstado(null);
+			pedto.setAmbito(obj.getAmbito());
+			pedto.setModensenianza(obj.getModensenianza());
+			pedto.setId(obj.getId());
+			pedto.setTipoieid(obj.getTipoieid());
+			pedto.setDirie(obj.getDirie());
+			pedto.setDre(obj.getDre());
+			pedto.setUgel(obj.getUgel());
+			pedto.setTelfie(obj.getTelfie());
+			pedto.setMailie(obj.getMailie());
+			pedto.setFacebook(obj.getFacebook());
+			pedto.setLengua(obj.getLengua());		
+			pedto.setGenero(obj.getGenero());
+			pedto.setProvedor(obj.getProvedor());			
+			suministroServ.listarPorProgramaeducativo(obj.getId()).forEach(objS->{
+				suministro += objS.getNumero() + " / ";
 			});
-			if(banderaOds) {
-				turno = "";
-				nivel = "";
-				suministro="";
-				pedto = new ProgeducDto();
-				pedto.setOds(odsserv.byOds(obj.getDistrito().getOdsid()).getDescripcion());
-				pedto.setDepartamento((obj.getDistrito()!=null? (obj.getDistrito().getProvincia()!=null?(obj.getDistrito().getProvincia().getDepartamento()!=null?obj.getDistrito().getProvincia().getDepartamento().getDescripcion():""):""):""));
-				pedto.setProvincia((obj.getDistrito()!=null? (obj.getDistrito().getProvincia()!=null?(obj.getDistrito().getProvincia().getDescripcion()):""):""));
-				pedto.setDistrito((obj.getDistrito()!=null? (obj.getDistrito().getDescripcion()):""));
-				pedto.setInsteduc(obj.getNomie());			
-				pedto.setInscrito_ce(postulacionconcursoServ.getByIdAnio(obj.getId(), obj.getAnhio())!=null?"Si":"No");					
-				pedto.setFecharegistro(obj.getFecha_registro());
-				pedto.setCodlocalie(obj.getCodmod());
-				pedto.setEstado(null);
-				pedto.setAmbito(obj.getAmbito()!=null?obj.getAmbito().getDescripcion():"");
-				pedto.setModensenianza(obj.getModensenianza()!=null?obj.getModensenianza().getDescripcion():"");
-				pedto.setId(obj.getId());
-				pedto.setTipoieid(obj.getTipoie()!=null?obj.getTipoie().getDescripcion():"");
-				pedto.setDirie(obj.getDirie());
-				pedto.setDre(obj.getDre());
-				pedto.setUgel(obj.getUgel());
-				pedto.setTelfie(obj.getTelfie());
-				pedto.setMailie(obj.getMailie());
-				pedto.setFacebook(obj.getFacebook());
-				pedto.setLengua(obj.getLengua()!=null?obj.getLengua().getDescripcion():"");		
-				pedto.setGenero(obj.getGenero()!=null?obj.getGenero().getDescripcion():"");
-				pedto.setProvedor(obj.getProveedor()!=null?obj.getProveedor().getDescripcion():"");
-				obj.getSuministro().forEach(obj3->{
-					suministro += obj3.getNumero() + " / ";
-				});		
-				listTurno = new ArrayList<Turno>();
-				progeducTurnoService.listProgeducTurno(pedto.getId()).forEach(obj1->{
-					turno += " " + obj1.getTurno().getDescripcion();
-				});
-				pedto.setTurno(turno);
-				listNivel = new ArrayList<Nivel>();
-				progeducNivelService.listProgeducNivel(obj.getId()).forEach(obj2->{
-					nivel += " "+ obj2.getNivel().getTiponivel().getDescripcion() + "-"+(obj2.getNivel().getNrosecciones()!=null?obj2.getNivel().getNrosecciones():'0')+"-"+(obj2.getNivel().getNrodocentes()!=null?obj2.getNivel().getNrodocentes():'0')+"-" + (obj2.getNivel().getNroalumnos()!=null?obj2.getNivel().getNroalumnos():'0')+ "-"+(obj2.getNivel().getNrovarones()!=null?obj2.getNivel().getNrovarones():'0') + "-"+(obj2.getNivel().getNromujeres()!=null?obj2.getNivel().getNromujeres():'0' )+ "/";
-				});
-				pedto.setNivel(nivel);
-				pedto.setSuministro(suministro);
-				pedto.setHora_abastecimiento(obj.getAbastecimiento());
-				pedto.setPiscina(obj.getPiscina()!=null?obj.getPiscina().getDescripcion():"");
-				
-				pedto.setTipodocdir(obj.getTipodocidentdir()!=null?obj.getTipodocidentdir().getDescripcion():"");
-				pedto.setNrodocidentdir(obj.getDocdir());
-				pedto.setApedir(obj.getApedir());
-				pedto.setNomdir(obj.getNomdir());
-				pedto.setGenerodir(obj.getGenerodir()!=null?obj.getGenerodir().getDescripcion():"");				
-				pedto.setTeldir(obj.getTelfdir());
-				pedto.setCeldir(obj.getCeldir());
-				pedto.setCorreodir(obj.getMaildir());
-				
-				pedto.setTipodocprof(obj.getTipodocidentprof()!=null?obj.getTipodocidentprof().getDescripcion():"");
-				pedto.setNrodocidentprof(obj.getDocprof());
-				pedto.setApeprof(obj.getApeprof());
-				pedto.setNomprof(obj.getNomprof());
-				pedto.setGeneroprof(obj.getGeneroprof()!=null?obj.getGeneroprof().getDescripcion():"");
-				pedto.setTelprof(obj.getTelfprof());
-				pedto.setCelprof(obj.getCelprof());
-				pedto.setCorreoprof(obj.getMailprof());				
-				listProgeducDto.add(pedto);
-			}
+			listTurno = new ArrayList<Turno>();
+			progeducTurnoService.listProgeducTurno(obj.getId()).forEach(obj1->{
+				turno += " " + obj1.getTurno().getDescripcion();
+			});
+			pedto.setTurno(turno);
+			listNivel = new ArrayList<Nivel>();
+			progeducNivelService.listProgeducNivel(obj.getId()).forEach(obj2->{
+				nivel += " "+ obj2.getNivel().getTiponivel().getDescripcion() + "-"+(obj2.getNivel().getNrosecciones()!=null?obj2.getNivel().getNrosecciones():'0')+"-"+(obj2.getNivel().getNrodocentes()!=null?obj2.getNivel().getNrodocentes():'0')+"-" + (obj2.getNivel().getNroalumnos()!=null?obj2.getNivel().getNroalumnos():'0')+ "-"+(obj2.getNivel().getNrovarones()!=null?obj2.getNivel().getNrovarones():'0') + "-"+(obj2.getNivel().getNromujeres()!=null?obj2.getNivel().getNromujeres():'0' )+ "/";
+			});
+			pedto.setNivel(nivel);
+			pedto.setSuministro(suministro);
+			pedto.setHora_abastecimiento(obj.getHora_abastecimiento());
+			pedto.setPiscina(obj.getPiscina());			
+			pedto.setTipodocdir(obj.getTipodocdir());
+			pedto.setNrodocidentdir(obj.getNrodocidentdir());
+			pedto.setApedir(obj.getApedir());
+			pedto.setNomdir(obj.getNomdir());
+			pedto.setGenerodir(obj.getGenerodir());				
+			pedto.setTeldir(obj.getTeldir());
+			pedto.setCeldir(obj.getCeldir());
+			pedto.setCorreodir(obj.getCorreodir());			
+			pedto.setTipodocprof(obj.getTipodocprof());
+			pedto.setNrodocidentprof(obj.getNrodocidentprof());
+			pedto.setApeprof(obj.getApeprof());
+			pedto.setNomprof(obj.getNomprof());
+			pedto.setGeneroprof(obj.getGeneroprof());
+			pedto.setTelprof(obj.getTelprof());
+			pedto.setCelprof(obj.getCelprof());
+			pedto.setCorreoprof(obj.getCorreoprof());				
+			listProgeducDto.add(pedto);			
 		});
 		return new ResponseEntity<List<ProgeducDto>>(listProgeducDto, HttpStatus.OK) ;
 	}
 	
 	
-	@GetMapping("/listacolegiosinscritos")
-	public ResponseEntity<List<ListaInstitucionEducativa>> listacolegiosinscritos(HttpSession ses) {
+	@PostMapping(value="/listacolegiosinscritos")
+	public ResponseEntity<List<ListaInstitucionEducativa>> listacolegiosinscritos(@Valid @RequestBody FilterListAprobacionInscripcionDto dto, HttpSession ses) {
 		
 		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
 		List<ListaInstitucionEducativa> arrayie = new ArrayList<ListaInstitucionEducativa>();
-		if(tipousuarioid == 0){			
-			Object ob = ses.getAttribute("odsid");
-			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(obj->{
-				progeducService.listar(obj.getId()).forEach(obj1->{
-					listaie= new ListaInstitucionEducativa();
-					listaie.setOds(odsserv.byOds(obj1.getDistrito().getOdsid()).getDescripcion());
-					listaie.setAnhio(obj1.getAnhio());
-					listaie.setNomie(obj1.getNomie());
-					listaie.setCodmod(obj1.getCodmod());
-					listaie.setEstado(obj1.getEstado());
-					listaie.setId(obj1.getId());
-					listaie.setMotivoobservacion(obj1.getMotivoobservacion());
-					arrayie.add(listaie);
-				});
-			});		
+		
+		if (tipousuarioid==30){
+			progeducService.listarAprobacionInscripcion(dto.getIdods(),dto.getAnio(),dto.getNombreie(),dto.getEstado()).forEach(obj->{
+				listaie= new ListaInstitucionEducativa();
+				listaie.setOds(obj.getOds());
+				listaie.setAnhio(obj.getAnhio());
+				listaie.setNomie(obj.getNomie());
+				listaie.setCodmod(obj.getCodmod());
+				listaie.setEstado(obj.getEstado());
+				listaie.setId(obj.getId());
+				listaie.setMotivoobservacion(obj.getMotivoobservacion());
+				arrayie.add(listaie);
+			});
 		}
-		else if (tipousuarioid==30){
-			progeducService.listar().forEach(obj->{
-				if(obj!=null) {
-					listaie= new ListaInstitucionEducativa();
-					if(obj.getDistrito()!=null){
-						Distrito dist = distServ.getById(obj.getDistrito().getId());
-						if(dist!=null) {
-							if(dist.getOdsid()!=null) {
-								Ods ods = odsserv.byOds(dist.getOdsid());
-								if(ods !=null) {
-									listaie.setOds(ods.getDescripcion());
-									listaie.setAnhio(obj.getAnhio());
-									listaie.setNomie(obj.getNomie());
-									listaie.setCodmod(obj.getCodmod());
-									listaie.setEstado(obj.getEstado());
-									listaie.setId(obj.getId());
-									listaie.setMotivoobservacion(obj.getMotivoobservacion());
-									arrayie.add(listaie);
-								}
-							}
-						}
-					}					
-				}		
-			});		
-		}
-		else {
+		else{
 			String usuario = ses.getAttribute("usuario").toString();
 			Usuario user = usuarioServ.byUsuario(usuario);
-			usuarioodsServ.listarByUsuario(user.getId()).forEach(obj->{
-				distServ.listByOdsid(obj.getOds().getId()).forEach(dist->{
-					if(dist.getOdsid()!=null) {
-						Ods ods = odsserv.byOds(dist.getOdsid());
-						if(ods !=null) {
-							progeducService.listar(dist.getId()).forEach(obj1->{
-								listaie= new ListaInstitucionEducativa();
-								listaie.setOds(ods.getDescripcion());
-								listaie.setAnhio(obj1.getAnhio());
-								listaie.setNomie(obj1.getNomie());
-								listaie.setCodmod(obj1.getCodmod());
-								listaie.setEstado(obj1.getEstado());
-								listaie.setId(obj1.getId());
-								listaie.setMotivoobservacion(obj1.getMotivoobservacion());
-								arrayie.add(listaie);
-							});
-						}
-					}
-				});
+			idods = "";
+			usuarioodsServ.listarByUsuarioAprobacionInscripciones(user.getId(),dto.getIdods(),dto.getAnio(),dto.getNombreie(),dto.getEstado()).forEach(obj->{
+				listaie= new ListaInstitucionEducativa();
+				listaie.setOds(obj.getOds());
+				listaie.setAnhio(obj.getAnhio());
+				listaie.setNomie(obj.getNomie());
+				listaie.setCodmod(obj.getCodmod());
+				listaie.setEstado(obj.getEstado());
+				listaie.setId(obj.getId());
+				listaie.setMotivoobservacion(obj.getMotivoobservacion());
+				arrayie.add(listaie);
 			});
 		}
 		return new ResponseEntity<List<ListaInstitucionEducativa>>(arrayie, HttpStatus.OK);

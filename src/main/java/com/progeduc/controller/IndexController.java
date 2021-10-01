@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.progeduc.componente.Ldap;
 import com.progeduc.dto.DetalleEvaluacionDto;
+import com.progeduc.interfac.DepartamentoDto;
 import com.progeduc.model.Aperturaranio;
-import com.progeduc.model.Departamento;
 import com.progeduc.model.Docente;
 import com.progeduc.model.Docentetutor;
 import com.progeduc.model.Evaluacion;
@@ -83,7 +83,6 @@ import com.progeduc.service.ProveedorService;
 import com.progeduc.service.TipodocService;
 import com.progeduc.service.TipoieService;
 import com.progeduc.service.impl.UploadFileService;
-import com.sun.java.swing.plaf.windows.resources.windows;
 
 @Controller
 @RequestMapping("")
@@ -218,7 +217,8 @@ public class IndexController {
 	@Autowired
 	private ITrabajosfinales_UsuarioAlianzaNacionalService trabfinal_usuario_nacional;
 	
-	String participanteid;
+	String participanteid, usuario;
+	Integer tipousuarioid,anioActual;
 	
 	int contador;
 	String id_rubrica,id_questionario,ods,id_pregunta_respuesta,id_pr;
@@ -229,6 +229,7 @@ public class IndexController {
 	boolean banderaBuscarPorOdsAnioactual;
 	boolean banderaDepa;
 	boolean idDepartamentoDiferente;
+	Calendar fecha;
 	
 	@GetMapping("/inicio")
 	public String inicio(@RequestParam(name="name",required=false,defaultValue="world") String name, Model model) {
@@ -428,8 +429,15 @@ public class IndexController {
 	
 	
 	@GetMapping("/nuevoregistroapertura")
-	public String nuevoregistroapertura() {
+	public String nuevoregistroapertura(Model model) {
 		
+		List<Integer> listaAnio = new ArrayList<Integer>();
+		Calendar fecha = Calendar.getInstance();
+        int anio = fecha.get(Calendar.YEAR);
+        for(int i = anio;i<anio+3;i++) {
+        	listaAnio.add(i);
+        }	
+        model.addAttribute("anios",listaAnio);
 		return "nuevoregistroapertura";
 	}
 	
@@ -538,52 +546,34 @@ public class IndexController {
 	}
 	
 	@GetMapping("/contenidoconsulta")
-	public String contenido_consulta(@RequestParam(name="name",required=false,defaultValue="") String name, Model model,HttpSession ses) {
+	public String contenido_consulta(Model model,HttpSession ses) {
 		
-		/*if(ses.getAttribute("usuario")==null) {
+		if(ses.getAttribute("usuario")==null) {
 			ses.removeAttribute("usuario");
 			ses.removeAttribute("perfil");
-			ses.removeAttribute("flag");	
+			ses.removeAttribute("flag");
 			return "session_cerrada";
-		}*/
+		}
 		
-		List<Departamento> listaDepartamento = new ArrayList<Departamento>();
-		List<Ods> listaOds = new ArrayList<>();
-		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
-		
+		tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());		
 		if(tipousuarioid.equals(2)) {
-			String usuario = ses.getAttribute("usuario").toString();
-			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
-				listaOds.add(obj.getOds());
-			});
-			listaOds.forEach(obj->{
-				distServ.listByOdsid(obj.getId()).forEach(objDist->{
-					idDepartamentoDiferente = true;
-					listaDepartamento.forEach(objDep->{
-						if(objDep.getId().equals(objDist.getProvincia().getDepartamento().getId())) {
-							idDepartamentoDiferente = false;
-						}
-					});
-					if(idDepartamentoDiferente) {
-						listaDepartamento.add(objDist.getProvincia().getDepartamento());
-					}
-				});
-			});
-			model.addAttribute("departamento",listaDepartamento);
+			usuario = ses.getAttribute("usuario").toString();			
+			model.addAttribute("departamento",usuarioodsService.listarDepartamentoByUsuario(usuario));
 		}else {
 			model.addAttribute("departamento",depaServ.listar());
 		}
+		fecha = Calendar.getInstance();
+		model.addAttribute("anioActual",fecha.get(Calendar.YEAR));
 		return "contenido_consulta";
 	}	
 	
 	@GetMapping("/programaconsulta")
-	public String programaconsulta(@RequestParam(name="name",required=false,defaultValue="") String name, Model model,HttpSession ses) {
+	public String programaconsulta(Model model,HttpSession ses) {
 		
-		List<Ods> listaOds = new ArrayList<>();
-		
-		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		List<Ods> listaOds = new ArrayList<>();		
+		tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
 		if(tipousuarioid.equals(2)) {
-			String usuario = ses.getAttribute("usuario").toString();
+			usuario = ses.getAttribute("usuario").toString();
 			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
 				listaOds.add(obj.getOds());
 			});
@@ -592,8 +582,15 @@ public class IndexController {
 		else {
 			model.addAttribute("ods",odsserv.listarAll());
 		}
-		
 		model.addAttribute("departamento",depaServ.listar());
+		fecha = Calendar.getInstance();
+        List<Integer> lista = new ArrayList<Integer>();
+        anioActual = fecha.get(Calendar.YEAR);
+        for(int i = anioActual-4;i<=anioActual;i++) {
+                lista.add(i);
+        }
+        model.addAttribute("anioActual", anioActual);
+        model.addAttribute("anios",lista);
 		return "programaconsulta";
 	}
 	
@@ -601,9 +598,9 @@ public class IndexController {
 	public String docenteconsulta(@RequestParam(name="name",required=false,defaultValue="") String name, Model model,HttpSession ses) {
 		
 		List<Ods> listaOds = new ArrayList<>();		
-		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
 		if(tipousuarioid.equals(2)) {
-			String usuario = ses.getAttribute("usuario").toString();
+			usuario = ses.getAttribute("usuario").toString();
 			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
 				listaOds.add(obj.getOds());
 			});
@@ -619,9 +616,9 @@ public class IndexController {
 	public String listaconcurso(@RequestParam(name="name",required=false,defaultValue="") String name, Model model,HttpSession ses) {		
 		
 		List<Ods> listaOds = new ArrayList<>();		
-		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
 		if(tipousuarioid.equals(2)) {
-			String usuario = ses.getAttribute("usuario").toString();
+			usuario = ses.getAttribute("usuario").toString();
 			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
 				listaOds.add(obj.getOds());
 			});
@@ -640,7 +637,6 @@ public class IndexController {
         
         Aperturaranio apertura = aperturaranioService.buscar(anio);
 		LocalDate dateActual = LocalDate.now();
-		//if(apertura.getQuintaetapadesde().isAfter(dateActual)) {
 		if(apertura.getQuintaetapadesde().isBefore(dateActual) || apertura.getQuintaetapadesde().isEqual(dateActual)) {
 			model.addAttribute("showFinalizar",1);
 		}else {
@@ -659,11 +655,10 @@ public class IndexController {
 	@GetMapping("/formasignarevaluador")
 	public String formasignarevaluador(@RequestParam(name="name",required=false,defaultValue="") String name, Model model,HttpSession ses) {
 		
-		List<Ods> listaOds = new ArrayList<>();
-		
-		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		List<Ods> listaOds = new ArrayList<>();		
+		tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
 		if(tipousuarioid.equals(2)) {
-			String usuario = ses.getAttribute("usuario").toString();
+			usuario = ses.getAttribute("usuario").toString();
 			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
 				listaOds.add(obj.getOds());
 			});
@@ -750,11 +745,10 @@ public class IndexController {
 	@GetMapping("/reportes")
 	public String reportes(@RequestParam(name="name",required=false,defaultValue="") String name, Model model,HttpSession ses) {
 		
-		List<Ods> listaOds = new ArrayList<>();
-		
-		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		List<Ods> listaOds = new ArrayList<>();		
+		tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
 		if(tipousuarioid.equals(2)) {
-			String usuario = ses.getAttribute("usuario").toString();
+			usuario = ses.getAttribute("usuario").toString();
 			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
 				listaOds.add(obj.getOds());
 			});
@@ -795,11 +789,11 @@ public class IndexController {
 	@GetMapping("/menu")	
     public String menu_slidet(@RequestParam(name="name",required=false,defaultValue="") String name, Model model,HttpSession ses){
 		if(ses.getAttribute("usuario")!=null) {
+			Calendar fecha = Calendar.getInstance();
 			if(Integer.parseInt(ses.getAttribute("tipousuarioid").toString()) == 3) { /*el usuario es la IE*/
 				model.addAttribute("usuario", ses.getAttribute("usuario"));
 				model.addAttribute("perfil", ses.getAttribute("perfil"));
 				model.addAttribute("tipousuarioid", ses.getAttribute("tipousuarioid"));
-				Calendar fecha = Calendar.getInstance();
 				model.addAttribute("nombre_concurso",aperturaranioService.buscar(fecha.get(Calendar.YEAR)).getNombreconcurso());
 				model.addAttribute("cargainicialtabla", 1);
 				model.addAttribute("cargainicialtablatrabajos", 1);
@@ -810,10 +804,11 @@ public class IndexController {
 				model.addAttribute("tipousuarioid", ses.getAttribute("tipousuarioid"));
 				return "menu_evaluadores";
 			}
-			else { /*El admin,espcialista ods, especialista du, ODS*/
+			else {
 				model.addAttribute("usuario", ses.getAttribute("usuario"));
 				model.addAttribute("perfil", ses.getAttribute("perfil"));
 				model.addAttribute("tipousuarioid", ses.getAttribute("tipousuarioid"));
+				model.addAttribute("anioActual",fecha.get(Calendar.YEAR));
 				return "menu_slidet";
 			}
 		}
@@ -1342,9 +1337,9 @@ public class IndexController {
 	public String formregistrarusuario(Model model,HttpSession ses) {
 		
 		List<Ods> listaOds = new ArrayList<>();		
-		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
 		if(tipousuarioid.equals(2)) {
-			String usuario = ses.getAttribute("usuario").toString();
+			usuario = ses.getAttribute("usuario").toString();
 			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
 				listaOds.add(obj.getOds());
 			});
@@ -1444,9 +1439,9 @@ public class IndexController {
 	public String consultahistorica(@RequestParam(name="name",required=false,defaultValue="") String name, Model model,HttpSession ses) {		
 		
 		List<Ods> listaOds = new ArrayList<>();		
-		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
 		if(tipousuarioid.equals(2)) {
-			String usuario = ses.getAttribute("usuario").toString();
+			usuario = ses.getAttribute("usuario").toString();
 			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
 				listaOds.add(obj.getOds());
 			});

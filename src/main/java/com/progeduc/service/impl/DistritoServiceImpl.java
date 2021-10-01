@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+import com.progeduc.interfac.AprobacionInscripciones;
 import com.progeduc.model.Distrito;
 import com.progeduc.repo.IDistritoRepo;
 import com.progeduc.service.IDistritoService;
@@ -32,8 +32,8 @@ public class DistritoServiceImpl implements IDistritoService{
 	}
 	
 	@Override
-	public List<Distrito> listByOdsid(@Param("id") Integer id) {
-		return distritoRepo.listByOdsid(id);
+	public List<AprobacionInscripciones> listByOdsid(Integer iddistrito,Integer anio) {
+		return distritoRepo.listByOdsid(iddistrito,anio);
 	}
 
 }

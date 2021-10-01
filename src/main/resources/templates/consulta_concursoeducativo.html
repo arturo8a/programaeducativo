@@ -557,8 +557,7 @@
 		    },
 		    'ajax' : {
 		        "url" : url_base + 'pedesa/listatrabajosfinalesbyanio',
-		        "type" : "POST",
-		        "data" : { 'anio' : anioSelect },
+		        "type" : "GET",
 		        "dataSrc" : ""
 		    },
 		    "deferRender": true,
@@ -638,11 +637,8 @@
 	
 	obtener_data_archivo = function(tbody,table){
 		$(tbody).on("click","img.archivo",function(){
-			//console.log("table : " + table);
-			//console.log("celdaseleccionada :" + celdaseleccionada);
 			data = table.row($(this).parents("tr")).data();
 			if(data!=undefined){
-				//console.log("data1 :" + data);
 				id = data.id;
 				archivo(id);
 			}

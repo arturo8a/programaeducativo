@@ -51,23 +51,23 @@
 			</div>
 			<div class="col-xs-12 col-sm-6 col-md-4 pt-3">
      			<select class="form-control" placeholder="Departamento" id="departamento" name="departamento">
-     				<option value="Todos">Departamento</option>	
+     				<option value="0">Departamento</option>	
      				<option th:each="depa:${departamento}" th:value="${depa.id}" th:utext="${depa.descripcion}"/>       				
      			</select>
      		</div>
      		<div class="col-xs-12 col-sm-6 col-md-4 pt-3">
      			<select placeholder="Provincia" class="form-control" id="provincia" name="provincia">
-     				<option value="Todos">Provincia</option>
+     				<option value="0">Provincia</option>
      			</select>
      		</div>
      		<div class="col-xs-12 col-sm-6 col-md-4 pt-3">
      			<select placeholder="Distrito" class="form-control" id="distrito" name="distrito">
-     				<option value="Todos">Distrito</option>
+     				<option value="0">Distrito</option>
      			</select>
      		</div>
      		<div class="col-xs-12 col-sm-6 col-md-4 pt-3">
      			<select placeholder="Inscrito C.E" class="form-control" id="estado" name="estado">
-     				<option value='Todos'>Inscrito al C.E</option>
+     				<option value='0'>Inscrito al C.E</option>
      				<option value='Si'>Si</option>
      				<option value='No'>No</option>
      			</select>
@@ -144,11 +144,17 @@
 </html>
 <script type="text/javascript">
 		
-		var objarray="";
-		var hhmmss="" ;
-		var arrayfecha="" ;
-		var fecha=""; 
-$(document).ready(function(){		
+	var objarray="";
+	var hhmmss="" ;
+	var arrayfecha="" ;
+	var fecha=""; 	
+	var table_ie;
+	var fecha_desde,fecha_hasta, nombreie,departamento,provincia,distrito,incritoce,data_json;
+	
+	$(document).ready(function(){		
+		
+		listar();
+		
 		$("#btnlimpiar").click(function(){
 			
 			$("#fecha_desde").val("")
@@ -165,32 +171,43 @@ $(document).ready(function(){
 		
 		$("#btnbuscar").click(function(){	
 			
-			$("#consulta_menu").prop("disabled",true);
-        	$("#btnbuscar").prop("disabled",true);
 			
-        	setTimeout(() => {        		  
-        		if(validarFecha($("#fecha_desde").val(),'campo fecha Desde') && validarFecha($("#fecha_hasta").val(),'campo fecha Hasta')){				
-    				if($("#fecha_desde").val()!="" && $("#fecha_hasta").val()!=""){
-    					var fecha_desde= $("#fecha_desde").val();
-    					var fecha_hasta= $("#fecha_hasta").val();					
-    					fecha_desde = fecha_desde.split('/');
-    		    		fecha_desde = fecha_desde[2]+'/'+fecha_desde[1]+'/'+fecha_desde[0];
-    		    	    fecha_desde = moment(fecha_desde).format("YYYY/MM/DD");		    	    
-    		    	    fecha_hasta = fecha_hasta.split('/');
-    		    	    fecha_hasta = fecha_hasta[2]+'/'+fecha_hasta[1]+'/'+fecha_hasta[0];
-    		    	    fecha_hasta = moment(fecha_hasta).format('YYYY/MM/DD');			    	
-    			    	if(fecha_desde>fecha_hasta){
-    			    		alert("FECHA DESDE debe ser menor que FECHA HASTA");
-    			    	}	
-    					else{
-    			    		table_ie.draw();
-    					}
-    				}
-    				else{
-    					table_ie.draw();
-    				}					
-    			}
-        	}, 200); 		
+			fechaDesde = $("#fecha_desde").val();
+			fechaHasta = $("#fecha_hasta").val();
+			nombreie = $("#nomie").val();
+			departamento = $("#departamento").val();
+			provincia = $("#provincia").val();
+			distrito = $("#distrito").val();
+			inscritoce = $("#estado").val();
+			
+			if(fechaDesde.trim()=="")
+				fechaDesde = "todos";
+			if(fechaHasta.trim()=="")
+				fechaHasta = "todos";			
+			
+			data_json = {
+				fechaDesde : fechaDesde,
+				fechaHasta : fechaHasta,
+				nombreie : '%'+nombreie+'%',
+				departamento : departamento,
+				provincia : provincia,
+				distrito : distrito,
+				inscritoce : inscritoce
+			};
+        	
+        	table_ie.clear().draw();
+        	
+        	$.ajax({
+				"type" : "POST",
+                "dataType": 'json',	
+                "contentType" : 'application/json',	 
+				"url" : url_base + "pedesa/listaprogeduc",
+				"data" : JSON.stringify(data_json),
+				"success" : function(data){
+					table_ie.rows.add(data).draw();
+				}					
+			});
+					
 		});	    
 
 		$("#fecha_desde").datepicker({
@@ -210,7 +227,7 @@ $(document).ready(function(){
     			$.ajax({
     				url: url_base + "pedesa/provincias/bydepa/"+$("#departamento").val(),
     				success: function(respuesta) {
-    					var contenido = "<option value='Todos'>Provincia</option>";
+    					var contenido = "<option value='0'>Provincia</option>";
     					for(var i=0;i<respuesta.length;i++){
     						contenido = contenido + "<option value="+respuesta[i].id+">"+respuesta[i].descripcion+"</option>";
     					}
@@ -222,9 +239,9 @@ $(document).ready(function(){
     			});
     		}
     		else{
-    			$("#provincia").html("<option value='Todos'>Provincia</option>");
+    			$("#provincia").html("<option value='0'>Provincia</option>");
     		}
-    		$("#distrito").html("<option value='Todos'>Distrito</option>");
+    		$("#distrito").html("<option value='0'>Distrito</option>");
     	});	
 		
 		$("#provincia").on("change",function(){
@@ -232,7 +249,7 @@ $(document).ready(function(){
     			$.ajax({
     				url: url_base + "/pedesa/distritos/byprovincia/"+$("#provincia").val(),
     				success: function(respuesta) {
-    					var contenido = "<option value='Todos'>Distrito</option>";
+    					var contenido = "<option value='0'>Distrito</option>";
     					for(var i=0;i<respuesta.length;i++){
     						contenido = contenido + "<option value="+respuesta[i].id+">"+respuesta[i].descripcion+"</option>";
     					}
@@ -244,13 +261,40 @@ $(document).ready(function(){
     			});
     		}
     		else{
-    			$("#distrito").html("<option value='Todos'>Distrito</option>");
+    			$("#distrito").html("<option 0='Todos'>Distrito</option>");
     		}    		
     	});
 		
+	});    	
+	
+    var listar = function (){
+	
+		fechaDesde = $("#fecha_desde").val();
+		fechaHasta = $("#fecha_hasta").val();
+		nombreie = $("#nomie").val();
+		departamento = $("#departamento").val();
+		provincia = $("#provincia").val();
+		distrito = $("#distrito").val();
+		inscritoce = $("#estado").val();
+		
+		if(fechaDesde.trim()=="")
+			fechaDesde = "todos";
+		if(fechaHasta.trim()=="")
+			fechaHasta = "todos";			
+		
+		data_json = {
+			fechaDesde : fechaDesde,
+			fechaHasta : fechaHasta,
+			nombreie : '%'+nombreie+'%',
+			departamento : departamento,
+			provincia : provincia,
+			distrito : distrito,
+			inscritoce : inscritoce
+		};
+		
 		$("#table_ie").dataTable().fnDestroy();
 		$.fn.dataTable.moment('DD/MM/YYYY hh:mm:ss');
-		var table_ie = $('#table_ie').DataTable({
+		table_ie = $('#table_ie').DataTable({
 			dom: '<"excelHtml5"B><"rs_consulta">frtip',
             "scrollX": true,
             "searching": true,
@@ -285,7 +329,13 @@ $(document).ready(function(){
             },
             'ajax' : {
                 "url" : url_base + 'pedesa/listaprogeduc',
-                "type" : "GET",
+                "type" : "POST",
+                "async": true,
+                "dataType": 'json',	
+                "contentType" : 'application/json',	                
+                "data" : function(){
+					return JSON.stringify(data_json);
+				},	
                 "dataSrc" : ""
             },
             'columns' : [
@@ -375,10 +425,6 @@ $(document).ready(function(){
 		  		{ "visible": false, "targets": 41 },
 		  		{ "visible": false, "targets": 42 }
             ],
-            "fnPreDrawCallback": function(oSettings) {
-            	$("#consulta_menu").prop("disabled",true);
-            	$("#btnbuscar").prop("disabled",true);
-            },
             buttons: [
             	{
             		extend: 'excelHtml5',
@@ -412,150 +458,41 @@ $(document).ready(function(){
             ]
         });
 		
-		 $("div.rs_consulta").html('<strong>RESULTADOS DE CONSULTA</strong>');
-		
-		$('#table_ie').DataTable().on("draw", function(){
-			$("#consulta_menu").prop("disabled",false);
-        	$("#btnbuscar").prop("disabled",false);
-		});
-		
-		$.fn.dataTable.ext.search.push(
-    	    function( settings, data, dataIndex ) {
-    	    	
-    	    	if ( settings.nTable.id !== 'table_ie' ) {
-    	            return true;
-    	          }
-    	    	
-    	    	var fecha_desde = $("#fecha_desde").val();
-    	    	var fecha_hasta = $("#fecha_hasta").val();
-    	    	var nombre = $("#nomie").val();
-    	    	var departamento = $("#departamento option:selected").text();
-    	    	var provincia = $("#provincia option:selected").text();
-    	    	var distrito = $("#distrito option:selected").text();
-    	    	var estado = $("#estado option:selected").val();
-    	    	
-    	    	if(!filtraUbigeo(departamento,"Departamento",data[2]))
-    	    		return false;
-    	    	if(!filtraUbigeo(provincia,"Provincia",data[3]))
-    	    		return false;
-    	    	if(!filtraUbigeo(distrito,"Distrito",data[4]))
-    	    		return false;	    	
-    	    	if(!filtraNombre(nombre,data[5]))
-    	    		return false;
-    	    	if(!filtraFecha(fecha_desde,fecha_hasta,data[7]))
-    	    		return false;
-    	    	if(!filtraConcurso(estado,data[8]))
-    	    		return false;
-   	    		return true;
-    	    }
-    	);
-	});    	
-    	function filtraUbigeo(dato,etiqueta,campo){
-	    	if(dato===etiqueta)
-	    		return true;
-	    	return dato===campo;
-	    }
-	
-	    function filtraNombre(nombre,campo){
-	    	if(nombre==="" || nombre === undefined)
-	    		return true;
-	    	var posicion = (campo.toLowerCase()).indexOf(nombre.toLowerCase()); 
-	    	if(posicion != -1)
-	    		return  true;
-	    	return false;
-	    }	
-	
-	    function filtraFecha(fecha_desde,fecha_hasta,fecha_registro){
-	    	objarray = fecha_registro.split(" ");
-	    	hhmmss = objarray[1];
-	    	arrayfecha = objarray[0].split("/");
-	    	fecha = arrayfecha[2] + "/" + arrayfecha[1] + "/" + arrayfecha[0] + " "+ hhmmss; 
-	    		
-	    	momentFechaRegistro = moment(fecha).format("YYYY/MM/DD");
-	    	if(fecha_desde==="" && fecha_hasta===""){
-	    		return true;
-	    	}
-	    	if(fecha_desde!="" && fecha_hasta===""){
-	    		fecha_desde = fecha_desde.split('/');
-	    		fecha_desde = fecha_desde[2]+'/'+fecha_desde[1]+'/'+fecha_desde[0];
-	    	    let momentFechaDesde = moment(fecha_desde).format("YYYY/MM/DD");
-	    	    return momentFechaRegistro>=fecha_desde;
-	    	}
-	    	else if(fecha_desde===""  && fecha_hasta!=""){
-	    		fecha_hasta = fecha_hasta.split('/');
-	    	    fecha_hasta = fecha_hasta[2]+'/'+fecha_hasta[1]+'/'+fecha_hasta[0];
-	    	    fecha_hasta = moment(fecha_hasta).format('YYYY/MM/DD');
-	    	    return momentFechaRegistro<=fecha_hasta;
-	    	}
-	    	else{
-	    		fecha_desde = fecha_desde.split('/');
-	    		fecha_desde = fecha_desde[2]+'/'+fecha_desde[1]+'/'+fecha_desde[0];
-	    	    fecha_desde = moment(fecha_desde).format("YYYY/MM/DD");
-	    	    
-	    	    fecha_hasta = fecha_hasta.split('/');
-	    	    fecha_hasta = fecha_hasta[2]+'/'+fecha_hasta[1]+'/'+fecha_hasta[0];
-	    	    fecha_hasta = moment(fecha_hasta).format('YYYY/MM/DD');
-	    	    
-	    	    return momentFechaRegistro>=fecha_desde && momentFechaRegistro<=fecha_hasta;
-	    	}
-	    	return true;
-	    } 
-	
-	    function filtraConcurso(dato,campo){
-	    	if(dato==="Todos")
-	    		return true;
-	    	return dato===campo;	
-	    }
-	    
-	    function validarFecha(fecha,mensaje){
-			if(fecha=="")
-				return true;
-	    	if(validarFormatoFecha(fecha)){
-				if(existeFecha(fecha)){
-					return true;
-				}else{
-					alert("La fecha del "+ mensaje +" introducida no existe.");
-					return false;
-				}
-			}
-			else{
-				alert("El formato del "+ mensaje +" es incorrecto.");
-				return false;
-			}
-		}
+		$("div.rs_consulta").html('<strong>RESULTADOS DE CONSULTA</strong>');
+	}	
 
-		function validarFormatoFecha(campo) {
-			var RegExPattern = /^\d{1,2}\/\d{1,2}\/\d{2,4}$/;
-			if ((campo.match(RegExPattern)) && (campo!='')) {
-				return true;
-			} 
-			else {
-				return false;
-			}
+	function validarFormatoFecha(campo) {
+		var RegExPattern = /^\d{1,2}\/\d{1,2}\/\d{2,4}$/;
+		if ((campo.match(RegExPattern)) && (campo!='')) {
+			return true;
+		} 
+		else {
+			return false;
 		}
+	}
 
-		function existeFecha(fecha){
-			var fechaf = fecha.split("/");
-			var day = fechaf[0];
-			var month = fechaf[1];
-			var year = fechaf[2];
-			var date = new Date(year,month,'0');
-			if((day-0)>(date.getDate()-0)){
-				return false;
-			}
-			return month > 0 && month < 13 && year > 0 && year < 32768 && day > 0 && day <= (new Date(year, month, 0)).getDate();;
+	function existeFecha(fecha){
+		var fechaf = fecha.split("/");
+		var day = fechaf[0];
+		var month = fechaf[1];
+		var year = fechaf[2];
+		var date = new Date(year,month,'0');
+		if((day-0)>(date.getDate()-0)){
+			return false;
 		}
-		
-		function filterInt(evt,input){
-		    var key = window.Event ? evt.which : evt.keyCode;    
-		    var chark = String.fromCharCode(key);
-		    var tempValue = input.value+chark;
-		    if(key >= 47 && key <= 57){    
-		        return true;
-		    }
-		    else{
-		        return false;
-		    }
-		}
+		return month > 0 && month < 13 && year > 0 && year < 32768 && day > 0 && day <= (new Date(year, month, 0)).getDate();;
+	}
+	
+	function filterInt(evt,input){
+	    var key = window.Event ? evt.which : evt.keyCode;    
+	    var chark = String.fromCharCode(key);
+	    var tempValue = input.value+chark;
+	    if(key >= 47 && key <= 57){    
+	        return true;
+	    }
+	    else{
+	        return false;
+	    }
+	}
 		
 </script>
