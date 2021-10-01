@@ -742,25 +742,54 @@
 		
 		var ods_reporte="Todos", anio_reporte="Todos", modalidad_reporte="Todos", estado_reporte="Todos", categoria_reporte="Todos", nivel_participacion_reporte="Todos", nombre_ie_reporte="Todos",puesto_reporte="Todos";
 		
+		var anioActual = (new Date).getFullYear();
+		$('#anioconcurso').val(anioActual);
+		$('#anioalianza').val(anioActual);
+		$('#anioasignacion').val(anioActual);
+		$('#anioasignacionN').val(anioActual);
+		
+		var searchConcurso = false;
+		var searchAlianza = false;
+		var searchAsignacion = false;
+		var searchNacional = false;
+		
 		$(document).off("click",".btnInactivarUsuario");
 		$(document).off("click",".btnEditarUsuario");
 		
 		$(document).ready(function(){
 			
+			$("#anioconcurso").on("change",function(){
+				searchConcurso = true;
+			});
+			$("#anioalianza").on("change",function(){
+				searchAlianza = true;
+			});
+			$("#anioasignacion").on("change",function(){
+				searchAsignacion = true;
+			});
+			$("#anioasignacionN").on("change",function(){
+				searchNacional = true;
+			});
+			
 			/*funcionesAlianza();**/
 			$("#btnbuscarconcurso").click(function(){
-	        	
-	        	setTimeout(() => {        		  
-	        		table_lista_concurso.draw();
-	        		ods_reporte = $("#odsconcurso").val();
-	        		anio_reporte = $("#anioconcurso").val();
-	        		modalidad_reporte = $("#modalidadconcurso").val();
-	        		estado_reporte = $("#estadoconcurso").val();
-	        		categoria_reporte = $("#categoriaconcurso").val();
-	        		nivel_participacion_reporte = $("#participacionconcurso").val();
-	        		nombre_ie_reporte = $("#nombreieconcurso").val();
-	        		puesto_reporte = $("#puestoconcurso").val();
-	        	}, 100);	
+	        	if(searchConcurso){
+					listar();
+					searchConcurso = false;
+				}else{
+					setTimeout(() => {        		  
+		        		table_lista_concurso.draw();
+		        		ods_reporte = $("#odsconcurso").val();
+		        		anio_reporte = $("#anioconcurso").val();
+		        		modalidad_reporte = $("#modalidadconcurso").val();
+		        		estado_reporte = $("#estadoconcurso").val();
+		        		categoria_reporte = $("#categoriaconcurso").val();
+		        		nivel_participacion_reporte = $("#participacionconcurso").val();
+		        		nombre_ie_reporte = $("#nombreieconcurso").val();
+		        		puesto_reporte = $("#puestoconcurso").val();
+		        	}, 100);
+				}
+	        		
 			});
 			
 			$("#btnlimpiaralianza").on("click",function(){
@@ -822,9 +851,14 @@
 			listarAlianzaEstrategica();
 			
 			$("#btnbuscarasignacion").click(function(){
-				setTimeout(() => {        		  
-					table_lista_asignacion.draw();
-	        	}, 100);	
+				if(searchAsignacion){
+					listarasignacion();
+					searchAsignacion = false;
+				}else{
+					setTimeout(() => {        		  
+						table_lista_asignacion.draw();
+		        	}, 100);
+				}	
 			});
 			
 			$.fn.dataTable.ext.search.push(
@@ -923,6 +957,10 @@
 		});		
 		
 		var listar = function(){
+				var paramAnio = 0;
+				if($('#anioconcurso').val() != 'Todos'){
+					paramAnio = $('#anioconcurso').val();
+				}
 				
 				$("#table_lista_concurso").dataTable().fnDestroy();				
 			    
@@ -960,7 +998,7 @@
 	                }
 	            },
 	            "ajax" : {
-	                "url" : url_base + 'pedesa/listaconcurso',
+	                "url" : url_base + 'pedesa/listaconcurso/'+paramAnio,
 	                "type" : "GET",
 	                "dataSrc" : ""
 	            },
@@ -1047,6 +1085,11 @@
 		
 		var listarAlianzaEstrategica = function(){ console.log('mostrar usuario alianza');
 				
+				var paramAnio = 0;
+				if($('#anioalianza').val() != 'Todos'){
+					paramAnio = $('#anioalianza').val();
+				}
+				
 				$("#table_lista_usuarios").dataTable().fnDestroy();				
 			    
 				table_lista_usuarios = $('#table_lista_usuarios').DataTable({
@@ -1083,7 +1126,7 @@
 	                }
 	            },
 	            "ajax" : {
-	                "url" : url_base + 'pedesa/listaalianzaestrategica',
+	                "url" : url_base + 'pedesa/listaalianzaestrategica/'+paramAnio,
 	                "type" : "GET",
 	                "dataSrc" : ""
 	            },
@@ -1227,7 +1270,12 @@
 		}
 		
 		$("#btnbuscaralianza").on("click",function(){ 
-			table_lista_usuarios.draw();
+			if(searchAlianza){
+				listarAlianzaEstrategica();
+				searchAlianza = false;
+			}else{
+				table_lista_usuarios.draw();
+			}
 		});
 		
 		$('#table_lista_asignacion').DataTable().on("draw", function(){
@@ -1257,13 +1305,13 @@
 			}
 		);
 		
-		function filtraSelect(dato,campo){console.log(dato+"-"+campo);
+		function filtraSelect(dato,campo){
 			if(dato==="Todos" || dato==="ODS")
 				return true;
 			return dato===campo;
 		}
 		
-		function filtraSelectRol(dato,campo6,campo7,campo8,campo9){console.log(dato+":"+campo6+"-"+campo7+"-"+campo8+"-"+campo9);
+		function filtraSelectRol(dato,campo6,campo7,campo8,campo9){
 			if(dato==="Todos"){
 				return true;
 			}else{
@@ -1281,6 +1329,11 @@
 		
 		
 		var listarasignacion = function(){
+			
+			var paramAnio = 0;
+			if($('#anioasignacion').val() != 'Todos'){
+				paramAnio = $('#anioasignacion').val();
+			}
 			
 			$("#table_lista_asignacion").dataTable().fnDestroy();				
 		    
@@ -1318,7 +1371,7 @@
 	                }
 	            },
 	            "ajax" : {
-	                "url" : url_base + 'pedesa/listaasignacion',
+	                "url" : url_base + 'pedesa/listaasignacion/'+paramAnio,
 	                "type" : "GET",
 	                "dataSrc" : ""
 	            },
@@ -2144,14 +2197,18 @@ $(document).ready(function(){
 	listarNacional();
 	
 	$("#btnbuscarconcursoNacional").click(function(){
-	        	
-	        	setTimeout(() => {        		  
+	        if(searchNacional){
+				listarNacional();
+				searchNacional = false;
+			}else{
+				setTimeout(() => {        		  
 	        		table_lista_concurso_nacional.draw();
 	        		ods_reporte = $("#odsconcursoN").val();
 	        		categoria_reporte = $("#categoriaconcursoN").val();
 	        		nivel_participacion_reporte = $("#participacionconcursoN").val();
 	        		puesto_reporte = $("#puestoconcursoN").val();
-	        	}, 100);	
+	        	}, 100);
+			}	 		
 	});
 	
 	$("#btnlimpiaralianzaNacional").on("click",function(){
@@ -2186,7 +2243,12 @@ $(document).ready(function(){
 });
 
 var listarNacional = function(){
-				
+		
+		var paramAnio = 0;
+		if($('#anioasignacionN').val() != 'Todos'){
+			paramAnio = $('#anioasignacionN').val();
+		}
+		
 		$("#table_lista_concurso_nacional").dataTable().fnDestroy();				
 	    
 		table_lista_concurso_nacional = $('#table_lista_concurso_nacional').DataTable({
@@ -2223,7 +2285,7 @@ var listarNacional = function(){
             }
         },
         "ajax" : {
-            "url" : url_base + 'pedesa/listaconcursonacional',
+            "url" : url_base + 'pedesa/listaconcursonacional/'+paramAnio,
             "type" : "GET",
             "dataSrc" : ""
         },

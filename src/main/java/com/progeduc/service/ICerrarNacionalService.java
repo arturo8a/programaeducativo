@@ -13,5 +13,7 @@ public interface ICerrarNacionalService extends ICRUD<CerrarEtapaNacional,Intege
 	public CerrarEtapaNacional registrar(CerrarEtapaNacional obj);
 	
 	public CerrarEtapaNacional modificar(CerrarEtapaNacional obj);
+	
+	List<CerrarEtapaNacional> listaPorAnio();
 
 }

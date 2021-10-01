@@ -54,4 +54,8 @@ public interface IProgramaeducativoService extends ICRUD<Programaeducativo,Integ
 	List<AprobacionInscripciones> listarAprobacionInscripcion(Integer idods,Integer anio,String nombre,String estado);
 	
 	List<ProgeducDto> listarConsultaPe(String usuario,String fechaDesde,String fechaHasta,String nombreie,Integer idDepartamento,Integer idProvincia,Integer idDistrito,Integer inscritoce);
+	
+	List<Programaeducativo> listarPorAnio(Integer iddistrito, Integer anio);
+	
+	List<Programaeducativo> getListarHabilitadosPorAnio(Integer anio);
 }

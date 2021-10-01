@@ -13,4 +13,7 @@ public interface ICerrarOdsRepo extends CrudRepository<CerrarOds,Integer>{
 	
 	@Query(value="SELECT * from cerrar_ods where odsid=?1 and anio = EXTRACT(YEAR FROM sysdate)",nativeQuery = true)
 	CerrarOds buscarPorOdsAnioactual(Integer odsid);
+	
+	@Query(value="SELECT * from cerrar_ods where anio = EXTRACT(YEAR FROM sysdate)",nativeQuery = true)
+	List<CerrarOds>  listarPorAnio();
 }

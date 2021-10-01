@@ -118,4 +118,13 @@ public interface IProgramaeducativoRepo extends CrudRepository<Programaeducativo
 	@Query(value="SELECT TB1.* FROM PROGRAMAEDUCATIVO TB1 WHERE TB1.CODMOD=?1 AND TB1.ANHIO =?2 AND TB1.ESTADO =?3",nativeQuery = true)
 	Programaeducativo verificarEstadoAnio(String codmod,Integer anio, String estado);
 	
+	@Query(value="SELECT TB1.* FROM Programaeducativo TB1 where TB1.distritoid=?1 and TB1.anhio is not null and TB1.ANHIO = ?2",nativeQuery = true)
+	List<Programaeducativo> listarPorAnio(Integer iddistrito, Integer anio);
+	
+	@Query(value="SELECT TB1.* FROM PROGRAMAEDUCATIVO TB1 where TB1.ANHIO = ?1 and TB1.estado='Aprobado'",nativeQuery = true)
+	List<Programaeducativo> getListarHabilitadosPorAnio(Integer anio);
+	
+	@Query(value="SELECT TB1.* FROM PROGRAMAEDUCATIVO TB1 where TB1.estado='Aprobado'",nativeQuery = true)
+	List<Programaeducativo> getListarHabilitados();
+	
 }

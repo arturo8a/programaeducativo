@@ -818,11 +818,11 @@ public class ConcursoeducativoController {
 		
 		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
 		List<trabajoEvaluadoDto> listadto = new ArrayList<trabajoEvaluadoDto>();		
-		
+		Calendar cal= Calendar.getInstance();
 		if(tipousuarioid == 0){			
 			Object ob = ses.getAttribute("odsid");
-			distServ.listByOdsid(Integer.parseInt(ob.toString()),2021).forEach(dist->{
-				/*progeducService.listar(dist.getId()).forEach(pe->{
+			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(dist->{
+				progeducService.listarPorAnio(dist.getId(), cal.get(Calendar.YEAR)).forEach(pe->{
 					trabajosfinalesServ.listarHabilitadosEnviado(pe.getId()).forEach(tf->{							
 						nivel_participante = "";
 						evaluadores_asignados = 0;
@@ -847,12 +847,12 @@ public class ConcursoeducativoController {
 						if(tf.getEmpate() != 1 && tf.getEstadotrabajo().getId() !=3)
 						listadto.add(dto);
 					});
-				});*/
-			});		
+				});
+			});
 		}
 		else if (tipousuarioid==30){
 			
-			progeducService.getListarHabilitadosAnioActual().forEach(pe->{
+			progeducService.getListarHabilitadosPorAnio(cal.get(Calendar.YEAR)).forEach(pe->{
 				trabajosfinalesServ.listarHabilitadosEnviado(pe.getId()).forEach(tf->{
 					nivel_participante = "";
 					evaluadores_asignados = 0;
@@ -882,9 +882,9 @@ public class ConcursoeducativoController {
 		else {
 			String usuario = ses.getAttribute("usuario").toString();
 			Usuario user = usuarioServ.byUsuario(usuario);
-			/*usuarioodsServ.listarByUsuario(user.getId(),2021).forEach(obj->{
+			usuarioodsServ.listarByUsuario(user.getId()).forEach(obj->{
 				distServ.listByOdsid(obj.getOds().getId()).forEach(dist->{					
-					progeducService.listar(dist.getId()).forEach(pe->{
+					progeducService.listarPorAnio(dist.getId(),cal.get(Calendar.YEAR)).forEach(pe->{
 						trabajosfinalesServ.listarHabilitadosEnviado(pe.getId()).forEach(tf->{
 							nivel_participante = "";
 							evaluadores_asignados = 0;
@@ -911,7 +911,7 @@ public class ConcursoeducativoController {
 						});					
 					});
 				});
-			});*/
+			});
 		}
 		return new ResponseEntity<List<trabajoEvaluadoDto>>(listadto, HttpStatus.OK);
 	}
@@ -921,10 +921,11 @@ public class ConcursoeducativoController {
 		
 		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());		
 		List<EvaluadorDto> lista = new ArrayList<EvaluadorDto>();		
+		Calendar cal= Calendar.getInstance();
 		
 		if(tipousuarioid == 0){			
 			Object ob = ses.getAttribute("odsid");			
-			List<UsuarioAlianza> listaUsu = usuAlianzaserv.listarByOds(Integer.parseInt(ob.toString()));
+			List<UsuarioAlianza> listaUsu = usuAlianzaserv.listarByOdsAnio(Integer.parseInt(ob.toString()), cal.get(Calendar.YEAR));
 			listaUsu.forEach(ua->{
 				
 				if(ua.getComiteevaluador().equals("1")) {
@@ -963,7 +964,7 @@ public class ConcursoeducativoController {
 			});
 		}
 		else if (tipousuarioid==30){
-			usuAlianzaserv.listar().forEach(ua->{
+			usuAlianzaserv.listarPorAnio(cal.get(Calendar.YEAR)).forEach(ua->{
 				EvaluadorDto dto = new EvaluadorDto();
 				dto.setOds(ua.getOds().getDescripcion());
 				rol_entidad = "";				
@@ -1002,7 +1003,7 @@ public class ConcursoeducativoController {
 			String usuario = ses.getAttribute("usuario").toString();
 			Usuario user = usuarioServ.byUsuario(usuario);
 			usuarioodsServ.listarByUsuario(user.getId()).forEach(usu->{				
-				List<UsuarioAlianza> listaUsu = usuAlianzaserv.listarByOds(usu.getOds().getId());
+				List<UsuarioAlianza> listaUsu = usuAlianzaserv.listarByOdsAnio(usu.getOds().getId(), cal.get(Calendar.YEAR));
 				//List<UsuarioAlianza> listaUsu = usuAlianzaserv.listarByOds(10);
 				listaUsu.forEach(ua->{
 					EvaluadorDto dto = new EvaluadorDto();
@@ -1041,10 +1042,10 @@ public class ConcursoeducativoController {
 		return new ResponseEntity<List<EvaluadorDto>>(lista, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/listaconcurso")
-	public ResponseEntity<List<ConcursoDto>> listarconcurso(HttpSession ses){
+	@GetMapping(value = "/listaconcurso/{id}")
+	public ResponseEntity<List<ConcursoDto>> listarconcurso(HttpSession ses, @PathVariable("id") Integer anio){
 		
-		listaOds = new ArrayList<>();
+listaOds = new ArrayList<>();
 		
 		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
 		if(tipousuarioid.equals(2)) {
@@ -1062,8 +1063,8 @@ public class ConcursoeducativoController {
 		
 		if(tipousuarioid == 0){			
 			Object ob = ses.getAttribute("odsid");
-			distServ.listByOdsid(Integer.parseInt(ob.toString()),2021).forEach(obj->{				
-				/*progeducService.listar(obj.getId()).forEach(pe->{
+			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(obj->{				
+				progeducService.listarPorAnio(obj.getId(), anio).forEach(pe->{
 					banderaods = false;
 					listaOds.forEach(objOds->{
 						if(objOds.getId().equals(pe.getDistrito().getOdsid())) {
@@ -1097,12 +1098,12 @@ public class ConcursoeducativoController {
 							}
 						});
 					}
-				});*/
+				});
 			});		
 		}
 		else if (tipousuarioid==30){	
 			
-			progeducService.getListarHabilitadosAnioActual().forEach(pe->{
+			progeducService.getListarHabilitadosPorAnio(anio).forEach(pe->{
 				List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarHabilitadosEnviado(pe.getId());
 				listaTrabajoFinales.forEach(obj->{
 					banderaods = false;
@@ -1140,8 +1141,8 @@ public class ConcursoeducativoController {
 			String usuario = ses.getAttribute("usuario").toString();
 			Usuario user = usuarioServ.byUsuario(usuario);
 			usuarioodsServ.listarByUsuario(user.getId()).forEach(obj->{
-				distServ.listByOdsid(obj.getOds().getId(),2021).forEach(dist->{
-					/*progeducService.listar(dist.getId()).forEach(pe->{
+				distServ.listByOdsid(obj.getOds().getId()).forEach(dist->{
+					progeducService.listarPorAnio(dist.getId(), anio).forEach(pe->{
 						banderaods = false;
 						listaOds.forEach(objOds->{
 							if(objOds.getId().equals(pe.getDistrito().getOdsid())) {
@@ -1173,23 +1174,23 @@ public class ConcursoeducativoController {
 								listadto.add(dto);
 							});
 						}
-					});*/
+					});
 				});
 			});
 		}
 		return new ResponseEntity<List<ConcursoDto>>(listadto, HttpStatus.OK) ;
 	}
 	
-	@GetMapping(value="/listaasignacion")
-	public ResponseEntity<List<AsignacionDto>> listaasignacion(HttpSession ses){
+	@GetMapping(value="/listaasignacion/{id}")
+	public ResponseEntity<List<AsignacionDto>> listaasignacion(HttpSession ses, @PathVariable("id") Integer anio){
 		
 		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
 		List<AsignacionDto> lista = new ArrayList<AsignacionDto>();	
 		
 		if(tipousuarioid == 0){			
 			Object ob = ses.getAttribute("odsid");
-			distServ.listByOdsid(Integer.parseInt(ob.toString()),2021).forEach(obj->{
-				/*progeducService.listar(obj.getId()).forEach(obj1->{
+			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(obj->{
+				progeducService.listarPorAnio(obj.getId(), anio).forEach(obj1->{
 					trabajosfinalesServ.listarhabilitados(obj1.getId()).forEach(tf->{
 						AsignacionDto dto = new AsignacionDto();
 						rol_entidad = "";
@@ -1237,11 +1238,11 @@ public class ConcursoeducativoController {
 							lista.add(dto);
 						}
 					});
-				});*/
+				});
 			});	
 		}
 		else if (tipousuarioid==30){
-			trabajosfinalesServ.listarhabilitados().forEach(tf->{
+			trabajosfinalesServ.listarhabilitadosPorAnio(anio).forEach(tf->{
 				AsignacionDto dto = new AsignacionDto();
 				rol_entidad = "";
 				entidad = "";
@@ -1293,8 +1294,8 @@ public class ConcursoeducativoController {
 			String usuario = ses.getAttribute("usuario").toString();
 			Usuario user = usuarioServ.byUsuario(usuario);
 			usuarioodsServ.listarByUsuario(user.getId()).forEach(usu->{		
-				distServ.listByOdsid(usu.getOds().getId(),2021).forEach(obj->{
-					/*progeducService.listar(obj.getId()).forEach(obj1->{
+				distServ.listByOdsid(usu.getOds().getId()).forEach(obj->{
+					progeducService.listarPorAnio(obj.getId(), anio).forEach(obj1->{
 						trabajosfinalesServ.listarhabilitados(obj1.getId()).forEach(tf->{
 							AsignacionDto dto = new AsignacionDto();
 							rol_entidad = "";
@@ -1342,7 +1343,7 @@ public class ConcursoeducativoController {
 								lista.add(dto);
 							}
 						});
-					});*/
+					});
 				});	
 			});			
 		}
@@ -1608,8 +1609,8 @@ public class ConcursoeducativoController {
 		List<ListaDocenteInscritos> arrayie = new ArrayList<ListaDocenteInscritos>();
 		if(tipousuarioid == 0){			
 			Object ob = ses.getAttribute("odsid");
-			distServ.listByOdsid(Integer.parseInt(ob.toString()),2021).forEach(dist->{
-				/*progeducService.listar(dist.getId()).forEach(pe->{
+			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(dist->{
+				progeducService.listar(dist.getId()).forEach(pe->{
 					docenteService.listarhabilitados(pe.getId()).forEach(obj->{
 						listadocentesinscritos= new ListaDocenteInscritos();				
 						listadocentesinscritos.setAnio(obj.getAnhio());				
@@ -1634,7 +1635,7 @@ public class ConcursoeducativoController {
 						listadocentesinscritos.setFecha_registro(obj.getFecha_registro());
 						arrayie.add(listadocentesinscritos);
 					});
-				});*/
+				});
 			});		
 		}
 		else if (tipousuarioid==30){
@@ -1667,8 +1668,8 @@ public class ConcursoeducativoController {
 			String usuario = ses.getAttribute("usuario").toString();
 			Usuario user = usuarioServ.byUsuario(usuario);
 			usuarioodsServ.listarByUsuario(user.getId()).forEach(obj1->{
-				distServ.listByOdsid(obj1.getOds().getId(),2021).forEach(dist->{
-					/*progeducService.listar(dist.getId()).forEach(pe->{
+				distServ.listByOdsid(obj1.getOds().getId()).forEach(dist->{
+					progeducService.listar(dist.getId()).forEach(pe->{
 						docenteService.listarhabilitados(pe.getId()).forEach(obj->{
 							listadocentesinscritos= new ListaDocenteInscritos();				
 							listadocentesinscritos.setAnio(obj.getAnhio());
@@ -1693,7 +1694,7 @@ public class ConcursoeducativoController {
 							listadocentesinscritos.setFecha_registro(obj.getFecha_registro());
 							arrayie.add(listadocentesinscritos);
 						});
-					});*/
+					});
 				});
 			});
 		}
@@ -2071,8 +2072,8 @@ public class ConcursoeducativoController {
 	}
 	
 	
-	@GetMapping(value="/listaalianzaestrategica")
-	public ResponseEntity<List<DetalleUsuarioAlianzaEstrategica>> listausuariosAlianza(HttpSession ses){
+	@GetMapping(value="/listaalianzaestrategica/{id}")
+	public ResponseEntity<List<DetalleUsuarioAlianzaEstrategica>> listausuariosAlianza(HttpSession ses, @PathVariable("id") Integer anio){
 		
 		listaOds = new ArrayList<>();		
 		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
@@ -2091,7 +2092,7 @@ public class ConcursoeducativoController {
 		
 		if(tipousuarioid == 0){
 			Object ob = ses.getAttribute("odsid");
-			List<UsuarioAlianza> listaUsu = usuAlianzaserv.listarByOds(Integer.parseInt(ob.toString()));
+			List<UsuarioAlianza> listaUsu = usuAlianzaserv.listarByOdsAnio(Integer.parseInt(ob.toString()), anio);
 			listaUsu.forEach(obj->{
 				banderaOds = false;				
 				listaOds.forEach(objOds->{
@@ -2117,7 +2118,7 @@ public class ConcursoeducativoController {
 			});
 		}
 		else if (tipousuarioid==30){
-			List<UsuarioAlianza> listaUsu= usuAlianzaserv.listar();	
+			List<UsuarioAlianza> listaUsu= usuAlianzaserv.listarPorAnio(anio);	
 			listaUsu.forEach(obj->{
 				banderaOds = false;				
 				listaOds.forEach(objOds->{
@@ -2146,7 +2147,7 @@ public class ConcursoeducativoController {
 			String usuario = ses.getAttribute("usuario").toString();
 			Usuario user = usuarioServ.byUsuario(usuario);
 			usuarioodsServ.listarByUsuario(user.getId()).forEach(usu->{				
-				List<UsuarioAlianza> listaUsu = usuAlianzaserv.listarByOds(usu.getOds().getId());
+				List<UsuarioAlianza> listaUsu = usuAlianzaserv.listarByOdsAnio(usu.getOds().getId(), anio);
 				listaUsu.forEach(obj->{
 					banderaOds = false;				
 					listaOds.forEach(objOds->{
@@ -2388,7 +2389,7 @@ public class ConcursoeducativoController {
 				
 				
 				List<CerrarOds> listCerrarOds = new ArrayList<>();
-				Optional<CerrarOds> cerrarOds = cerrarOdsServ.listCerrarOds().stream().filter(o -> o.getOdsid().getId() == Integer.parseInt(odsId)).findFirst();
+				Optional<CerrarOds> cerrarOds = cerrarOdsServ.listCerrarOds().stream().filter(o -> o.getOdsid().getId() == Integer.parseInt(odsId) && o.getAnio() == anio).findFirst();
 				if(!cerrarOds.isEmpty()) listCerrarOds.add(cerrarOds.get());
 				odsRespuesta.setListCerrarOds(listCerrarOds);
 			}else if(tipousuarioid != null && (tipousuarioid.equals("0") || tipousuarioid.equals("2") || tipousuarioid.equals("11")) ) {
@@ -2405,7 +2406,7 @@ public class ConcursoeducativoController {
 				if(!listCerrarOdsTotales.isEmpty()) {
 					for (int i = 0; i < listCerrarOdsTotales.size(); i++) {
 						for (int j = 0; j < listOds.size(); j++) {
-							if(listOds.get(j).getId() == listCerrarOdsTotales.get(i).getOdsid().getId() ) {
+							if(listOds.get(j).getId() == listCerrarOdsTotales.get(i).getOdsid().getId() && listCerrarOdsTotales.get(i).getAnio() == anio) {
 								listCerrarOds.add(listCerrarOdsTotales.get(i));
 							}
 						}
@@ -2415,7 +2416,10 @@ public class ConcursoeducativoController {
 				odsRespuesta.setListCerrarOds(listCerrarOds);
 			}else {
 				odsRespuesta.setListOds(odsserv.listarAll());
-				odsRespuesta.setListCerrarOds(cerrarOdsServ.listCerrarOds());
+				List<CerrarOds> listCerrarOds = new ArrayList<>();
+				Optional<CerrarOds> cerrarOds = cerrarOdsServ.listCerrarOds().stream().filter(o -> o.getAnio() == anio).findFirst();
+				if(!cerrarOds.isEmpty()) listCerrarOds.add(cerrarOds.get());
+				odsRespuesta.setListCerrarOds(listCerrarOds);
 			}
 		}else {
 			odsRespuesta.setStatus(0);
@@ -2431,7 +2435,7 @@ public class ConcursoeducativoController {
 			Calendar cal= Calendar.getInstance();
 			int anio= cal.get(Calendar.YEAR);
 			
-			List<CerrarOds> lisCerrarOds = cerrarOdsServ.listCerrarOds();
+			List<CerrarOds> lisCerrarOds = cerrarOdsServ.listarPorAnio();
 			
 			for (Ods ods : listOds) {
 				
@@ -3669,8 +3673,8 @@ public class ConcursoeducativoController {
 		
 		if(tipousuarioid == 0){			
 			Object ob = ses.getAttribute("odsid");
-			distServ.listByOdsid(Integer.parseInt(ob.toString()),2021).forEach(dist->{
-				/*progeducService.listar(dist.getId()).forEach(pe->{
+			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(dist->{
+				progeducService.listar(dist.getId()).forEach(pe->{
 					trabajosfinalesServ.listaTrabajosEmpatadosPorODS(pe.getId()).forEach(tf->{							
 						nivel_participante = "";
 						evaluadores_asignados = 0;
@@ -3694,7 +3698,7 @@ public class ConcursoeducativoController {
 						dto.setId(tf.getId());
 						listadto.add(dto);
 					});
-				});*/
+				});
 			});
 		}
 		else if (tipousuarioid==30){
@@ -3729,8 +3733,8 @@ public class ConcursoeducativoController {
 			String usuario = ses.getAttribute("usuario").toString();
 			Usuario user = usuarioServ.byUsuario(usuario);
 			usuarioodsServ.listarByUsuario(user.getId()).forEach(obj->{
-				distServ.listByOdsid(obj.getOds().getId(),2021).forEach(dist->{
-					/*progeducService.listar(dist.getId()).forEach(pe->{
+				distServ.listByOdsid(obj.getOds().getId()).forEach(dist->{
+					progeducService.listar(dist.getId()).forEach(pe->{
 						trabajosfinalesServ.listaTrabajosEmpatadosPorODS(pe.getId()).forEach(tf->{							
 							nivel_participante = "";
 							evaluadores_asignados = 0;
@@ -3754,7 +3758,7 @@ public class ConcursoeducativoController {
 							dto.setId(tf.getId());
 							listadto.add(dto);
 						});
-					});*/
+					});
 				});
 			});
 			
@@ -3762,12 +3766,12 @@ public class ConcursoeducativoController {
 		return new ResponseEntity<List<trabajoEvaluadoDto>>(listadto, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/listaconcursonacional")
-	public ResponseEntity<List<ConcursoDto>> listaconcursonacional(HttpSession ses){
+	@GetMapping(value = "/listaconcursonacional/{id}")
+	public ResponseEntity<List<ConcursoDto>> listaconcursonacional(HttpSession ses, @PathVariable("id") Integer anio){
 	
 		List<ConcursoDto> listadto  = new ArrayList<ConcursoDto>();
 		
-		List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarTrabajosConsursoNacional();
+		List<Trabajosfinales> listaTrabajoFinales =  trabajosfinalesServ.listarTrabajosConsursoNacionalPorAnio(anio);
 		listaTrabajoFinales.forEach(obj->{
 			ConcursoDto dto = new ConcursoDto();
 			dto.setId(obj.getId());
@@ -4598,12 +4602,13 @@ public class ConcursoeducativoController {
 			Calendar cal= Calendar.getInstance();
 			int anio= cal.get(Calendar.YEAR);
 			
-			List<CerrarEtapaNacional> listaCerrarNacionales = cerrarNacionalSserv.listar();
+			List<CerrarEtapaNacional> listaCerrarNacionales = cerrarNacionalSserv.listaPorAnio();
 			
 			for (CerrarEtapaNacional cerrarN : listCerrar) {
 				CerrarEtapaNacional cerrarNacioanl = new CerrarEtapaNacional();
 				cerrarNacioanl.setNivelDesc(cerrarN.getNivelDesc());
 				cerrarNacioanl.setCategoriaId(cerrarN.getCategoriaId());
+				cerrarNacioanl.setAnio(anio);
 				cerrarNacioanl.setEstado(1);//finalizado
 				
 				for (CerrarEtapaNacional cerrarN2 : listaCerrarNacionales) {

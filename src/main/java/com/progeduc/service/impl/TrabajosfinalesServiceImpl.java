@@ -331,4 +331,23 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 		return trabajosfinalesRepo.updateEstadoTrabajoNacional(id, estadoTrabajoId);
 	}
 
+	@Override
+	public List<Trabajosfinales> listarhabilitadosPorAnio(Integer anio) {
+		if(anio == 0) {
+			return trabajosfinalesRepo.listarhabilitados();
+		}else {
+			return trabajosfinalesRepo.listarhabilitadosPorAnio(anio);
+		}
+	}
+
+	@Override
+	public List<Trabajosfinales> listarTrabajosConsursoNacionalPorAnio(Integer anio) {
+		if(anio == 0) {
+			return trabajosfinalesRepo.listarTrabajosConsursoNacional();
+		}else {
+			return trabajosfinalesRepo.listarTrabajosConsursoNacionalPorAnio(anio);
+		}
+		
+	}
+
 }

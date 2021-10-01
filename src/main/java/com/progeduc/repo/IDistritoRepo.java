@@ -24,6 +24,9 @@ public interface IDistritoRepo extends CrudRepository<Distrito,Integer>{
 			+ " inner join ods o on o.id = d.odsid"
 			+ " where d.odsid = ?1 and  't'=(case ?2 when 0	then 't' else (case ?2 when p.anhio then 't' else 'f' end) end) ",nativeQuery = true)
 	List<AprobacionInscripciones> listByOdsid(Integer iddistrito, Integer anio);
+	
+	@Query(value="SELECT D.* FROM DISTRITO D WHERE D.ODSID=?1",nativeQuery = true)
+	List<Distrito> listByOdsid(@Param("id") Integer id);
 }
 
 

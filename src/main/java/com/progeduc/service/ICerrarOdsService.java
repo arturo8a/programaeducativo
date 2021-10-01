@@ -15,4 +15,6 @@ public interface ICerrarOdsService {
 	
 	CerrarOds buscarPorOdsAnioactual(Integer odsid);
 	
+	List<CerrarOds>  listarPorAnio();
+	
 }
