@@ -92,4 +92,6 @@ public interface ITrabajosfinalesService extends ICRUD<Trabajosfinales,Integer>{
 	List<Trabajosfinales> listarhabilitadosPorAnio(Integer anio);
 	
 	List<Trabajosfinales> listarTrabajosConsursoNacionalPorAnio(Integer anio);
+	
+	List<Trabajosfinales> listarHabilitadosEnviadoPorAnio(Integer programaeducativoid, Integer anio);
 }
