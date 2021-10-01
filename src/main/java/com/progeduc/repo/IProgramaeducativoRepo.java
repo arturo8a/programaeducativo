@@ -78,6 +78,7 @@ public interface IProgramaeducativoRepo extends CrudRepository<Programaeducativo
 			+ " left join generodir gd on gd.id = p.generodirid"
 			+ " left join tipodocidentprof tdp on tdp.id = p.tipodocidentprofid"
 			+ " left join generoprof gp on gp.id = p.generoprofid"
+			+ " left join postulacionconcurso pc on pc.programaeducativoid = p.id"
 			+ " where u.usuario=?1 "
 			+ " and 't'=(case ?2 when 'todos' then 't' else ( case when ?2<= p.fecha_registro then 't' else 'f' end) end)" 
 			+ " and 't'=(case ?3 when 'todos' then 't' else ( case when ?3>=p.fecha_registro then 't' else 'f' end) end)"
@@ -85,7 +86,7 @@ public interface IProgramaeducativoRepo extends CrudRepository<Programaeducativo
 			+ " and 't'=(case ?5 when 0 then 't' else (case ?5 when dep.id then 't' else 'f' end) end)"
 			+ " and 't'=(case ?6 when 0 then 't' else (case ?6 when pr.id then 't' else 'f' end) end)"
 			+ " and 't'=(case ?7 when 0 then 't' else (case ?7 when d.id then 't' else 'f' end) end)"
-			+ " and 't' = (case ?8 when 0 then 't' else 'f' end) ",nativeQuery = true)
+			+ " and 't' = (case ?8 when 0 then 't' else (case when ?8 = (case when pc.programaeducativoid is null then 2 else 1 end) then 't' else 'f' end )end) ",nativeQuery = true)
 	List<ProgeducDto> listarConsultaPe(String usuario,String fechaDesde,String fechaHasta,String nombreie,Integer idDepartamento,Integer idProvincia,Integer idDistrito,Integer inscritoce);
 	
 	
