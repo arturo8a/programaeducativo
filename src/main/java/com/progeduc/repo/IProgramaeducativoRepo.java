@@ -29,6 +29,9 @@ public interface IProgramaeducativoRepo extends CrudRepository<Programaeducativo
 	@Query(value="SELECT TB1.* FROM PROGRAMAEDUCATIVO TB1 WHERE TB1.CODMOD = ?1 AND TB1.ANHIO = EXTRACT(YEAR FROM sysdate) FETCH FIRST 1 ROWS ONLY",nativeQuery = true)
 	Programaeducativo getCodmodByAnioActual(String codmod);
 	
+	@Query(value="SELECT TB1.* FROM PROGRAMAEDUCATIVO TB1 WHERE TB1.CODMOD = ?1 AND TB1.ANHIO = EXTRACT(YEAR FROM sysdate)",nativeQuery = true)
+	List<Programaeducativo> listaCodmodByAnioActual(String codmod);
+	
 	@Query(value="SELECT TB1.* FROM PROGRAMAEDUCATIVO TB1 where TB1.ANHIO = EXTRACT(YEAR FROM sysdate) and TB1.estado='Aprobado'",nativeQuery = true)
 	List<Programaeducativo> getListarHabilitadosAnioActual();
 	
@@ -54,12 +57,12 @@ public interface IProgramaeducativoRepo extends CrudRepository<Programaeducativo
 	List<AprobacionInscripciones> listarAprobacionInscripcion(Integer idods,Integer anio,String nombre,String estado);
 	
 	
-	@Query(value="select o.descripcion as ods,dep.descripcion as departamento,pr.descripcion as provincia,d.descripcion as distrito,'' as inscrito,p.nomie as insteduc,"
-			+ " p.codmod as codlocalie, p.fecha_registro as fecharegistro, '' as estado, a.descripcion as ambito, me.descripcion as modensenianza, p.id, t.descripcion as tipoieid,"
-			+ " p.dirie , p.dre, p.ugel, p.telfie,p.mailie , p.facebook, l.descripcion as lengua, g.descripcion as genero, '' as turno, pro.descripcion as proveedor, '' as suministro,"
-			+ " p.abastecimiento as hora_abastecimiento, pi.descripcion as piscina , tdd.descripcion as tipodocdir, p.docdir as nrodocidentdir, p.apedir, p.nomdir,"
+	@Query(value="select p.id , o.descripcion as ods,dep.descripcion as departamento,pr.descripcion as provincia,d.descripcion as distrito,p.nomie as insteduc,"
+			+ " p.codmod as codlocalie, to_date(to_char(p.fecha_registro,'DD/MM/YYYY')) as fecharegistro, a.descripcion as ambito, me.descripcion as modensenianza,  t.descripcion as tipoieid,"
+			+ " p.dirie , p.dre, p.ugel, p.telfie,p.mailie , p.facebook, l.descripcion as lengua, g.descripcion as genero, pro.descripcion as proveedor, "
+			+ " p.abastecimiento as horaabastecimiento, pi.descripcion as piscina , tdd.descripcion as tipodocdir, p.docdir as nrodocidentdir, p.apedir, p.nomdir,"
 			+ " gd.descripcion as generodir, p.telfdir as teldir, p.celdir, p.maildir as correodir, tdp.descripcion as tipodocprof,p.docprof as nrodocidentprof,p.apeprof,p.nomprof,"
-			+ " gp.descripcion as generoprof,p.telfprof as telprof, p.celprof,p.mailprof as correoprof,p.anhio as anio"
+			+ " gp.descripcion as generoprof,p.telfprof as telprof, p.celprof,p.mailprof as correoprof,p.anhio as anio,p.concurso"
 			+ " from programaeducativo p "
 			+ " left join distrito d on d.id = p.distritoid"
 			+ " left join provincia pr on pr.id = d.provinciaid"
@@ -78,15 +81,22 @@ public interface IProgramaeducativoRepo extends CrudRepository<Programaeducativo
 			+ " left join generodir gd on gd.id = p.generodirid"
 			+ " left join tipodocidentprof tdp on tdp.id = p.tipodocidentprofid"
 			+ " left join generoprof gp on gp.id = p.generoprofid"
-			+ " left join postulacionconcurso pc on pc.programaeducativoid = p.id"
-			+ " where u.usuario=?1 "
-			+ " and 't'=(case ?2 when 'todos' then 't' else ( case when ?2<= p.fecha_registro then 't' else 'f' end) end)" 
-			+ " and 't'=(case ?3 when 'todos' then 't' else ( case when ?3>=p.fecha_registro then 't' else 'f' end) end)"
+			+ " where 't' = (case ?1 when '-1' then 't' else( case ?1  when u.usuario then 't' else 'f' end) end)"
+			+ " and 't'=(case ?2 when 'todos' then 't' else ( case when to_date(?2)<= to_date(to_char(p.fecha_registro,'DD/MM/YYYY')) then 't' else 'f' end) end)" 
+			+ " and 't'=(case ?3 when 'todos' then 't' else ( case when to_date(?3) >=to_date(to_char(p.fecha_registro,'DD/MM/YYYY')) then 't' else 'f' end) end)"
 			+ " and UPPER(p.nomie) like UPPER(?4)"
 			+ " and 't'=(case ?5 when 0 then 't' else (case ?5 when dep.id then 't' else 'f' end) end)"
 			+ " and 't'=(case ?6 when 0 then 't' else (case ?6 when pr.id then 't' else 'f' end) end)"
 			+ " and 't'=(case ?7 when 0 then 't' else (case ?7 when d.id then 't' else 'f' end) end)"
-			+ " and 't' = (case ?8 when 0 then 't' else (case when ?8 = (case when pc.programaeducativoid is null then 2 else 1 end) then 't' else 'f' end )end) ",nativeQuery = true)
+			+ " and 't' = (case ?8 when 2 then 't' else (case ?8 when p.concurso then 't' else 'f' end)end) "
+			+ " and p.fecha_registro is not null and p.anhio is not null"
+			+ " group by o.descripcion,dep.descripcion,pr.descripcion,d.descripcion ,p.nomie," 
+			+ " p.codmod , p.fecha_registro , a.descripcion , me.descripcion , p.id, t.descripcion," 
+			+ " p.dirie , p.dre, p.ugel, p.telfie,p.mailie , p.facebook, l.descripcion, g.descripcion, pro.descripcion," 
+			+ " p.abastecimiento , pi.descripcion , tdd.descripcion, p.docdir, p.apedir, p.nomdir," 
+			+ " gd.descripcion , p.telfdir , p.celdir, p.maildir, tdp.descripcion,p.docprof,p.apeprof,p.nomprof,"  
+			+ " gp.descripcion ,p.telfprof, p.celprof,p.mailprof,p.anhio,p.concurso"
+			+ " order by p.fecha_registro desc",nativeQuery = true)
 	List<ProgeducDto> listarConsultaPe(String usuario,String fechaDesde,String fechaHasta,String nombreie,Integer idDepartamento,Integer idProvincia,Integer idDistrito,Integer inscritoce);
 	
 	
@@ -109,7 +119,14 @@ public interface IProgramaeducativoRepo extends CrudRepository<Programaeducativo
 	@Transactional
 	@Modifying	
 	@Query("update Programaeducativo p set p.estado = ?2 , p.motivoobservacion = ?3  WHERE p.id = ?1")
-	int updateestado(@Param("id") Integer id, @Param("estado") String estado, @Param("motivoobservacion") String motivoobservacion);	
+	int updateestado(@Param("id") Integer id, @Param("estado") String estado, @Param("motivoobservacion") String motivoobservacion);		
+	
+	
+	@Transactional
+	@Modifying	
+	@Query("update Programaeducativo p set p.concurso= ?2  WHERE p.id = ?1")
+	int updateConcurso(Integer idpe,Integer valor);	
+	
 	
 	@Transactional
 	@Modifying	

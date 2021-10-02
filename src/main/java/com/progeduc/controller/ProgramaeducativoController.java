@@ -168,6 +168,19 @@ public class ProgramaeducativoController {
 	@Autowired
 	private ISuministroService suministroServ;
 	
+	@Autowired
+	IUsuarioService usuarioServ;
+	
+	@Autowired
+	private UploadFileService uploadfile;
+	
+	Mail mail ;	
+	String ejestematicos;	
+	Calendar fecha;
+	SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yy");
+	String idods;
+	Usuarioemail usuarioEmail;
+	
 	ProgeducTurnoNivelDto dto;
 	List<Nivel> listNivel;
 	List<Ods> listaOds;
@@ -183,20 +196,6 @@ public class ProgramaeducativoController {
 	private String suministro;
 	Date fechaNueva=new Date();
 	
-	String idods;
-	
-	Usuarioemail usuarioEmail;
-	
-	@Autowired
-	IUsuarioService usuarioServ;
-	
-	@Autowired
-	private UploadFileService uploadfile;
-	
-	Mail mail ;	
-	String ejestematicos;
-	
-	Calendar fecha;
 	
 	@GetMapping("/searchid/{id}")
 	public ResponseEntity<ProgeducTurnoNivelDto> searchId(@PathVariable("id") Integer id){
@@ -230,6 +229,13 @@ public class ProgramaeducativoController {
 			return null;
 		}
 		return obj;
+	}
+	
+	@GetMapping("/buscarcolegioanioatual/{codmod}")
+	public int buscarcolegioanioatual(@PathVariable("codmod") String codmod) {
+		
+		return progeducService.listaCodmodByAnioActual(codmod).size();
+			
 	}
 	
 	@GetMapping("/searchcodmod/{id}")
@@ -277,6 +283,8 @@ public class ProgramaeducativoController {
 		
 		pedto = new ProgeducDto();
 		String usuario = ses.getAttribute("usuario").toString();
+		if(usuario.equals("admin"))
+			usuario = "-1";
 		List<ProgeducDto> listProgeducDto = new ArrayList<ProgeducDto>();
 		progeducService.listarConsultaPe(usuario, dto.getFechaDesde(), dto.getFechaHasta(), dto.getNombreie(), dto.getDepartamento(), dto.getProvincia(), dto.getDistrito(), dto.getInscritoce()).forEach(obj->{
 			turno = "";
@@ -288,8 +296,8 @@ public class ProgramaeducativoController {
 			pedto.setProvincia(obj.getProvincia());
 			pedto.setDistrito(obj.getDistrito());
 			pedto.setInsteduc(obj.getInsteduc());			
-			pedto.setInscrito_ce(postulacionconcursoServ.getByIdAnio(obj.getId(), obj.getAnio())!=null?"Si":"No");					
-			pedto.setFecharegistro(obj.getFecharegistro());
+			pedto.setInscrito_ce(obj.getConcurso().equals(1)?"Si":"No");
+			pedto.setFecharegistro(obj.getFecharegistro());			
 			pedto.setCodlocalie(obj.getCodlocalie());
 			pedto.setEstado(null);
 			pedto.setAmbito(obj.getAmbito());
@@ -319,7 +327,7 @@ public class ProgramaeducativoController {
 			});
 			pedto.setNivel(nivel);
 			pedto.setSuministro(suministro);
-			pedto.setHora_abastecimiento(obj.getHora_abastecimiento());
+			pedto.setHoraabastecimiento(obj.getHora_abastecimiento());
 			pedto.setPiscina(obj.getPiscina());			
 			pedto.setTipodocdir(obj.getTipodocdir());
 			pedto.setNrodocidentdir(obj.getNrodocidentdir());
@@ -600,7 +608,7 @@ public class ProgramaeducativoController {
 				});
 				pedto.setNivel(nivel);
 				pedto.setSuministro(suministro);
-				pedto.setHora_abastecimiento(obj.getAbastecimiento());
+				pedto.setHoraabastecimiento(obj.getAbastecimiento());
 				pedto.setPiscina(obj.getPiscina()!=null?obj.getPiscina().getDescripcion():"");
 				pedto.setTipodocdir(obj.getTipodocidentdir()!=null?obj.getTipodocidentdir().getDescripcion():"");
 				pedto.setNrodocidentdir(obj.getNomdir());

@@ -340,20 +340,23 @@ $(document).ready(function(){
 	
 	$("#btnregistrarprogeduc").click(function(){
 		
-		/*var msj = validarControles();
-		if(msj!=""){
-			alert("Debe ingresar "+msj);
-		}
-		else{
-			$('#modalcargando').modal({
-				backdrop: 'static'
-			});
-		}*/
-		
 		var validacion = validarControles();
 		if(validacion){
-			$('#modalcargando').modal({
-				backdrop: 'static'
+			$.ajax({
+				url: url_base + "pedesa/buscarcolegioanioatual/"+$("#codmod").val(),
+				success: function(respuesta) {					
+					if(respuesta>0){
+						alert("Este centro educativo ya se ha registrado este año");
+						return false;
+					}else{
+						$('#modalcargando').modal({
+							backdrop: 'static'
+						});
+					}
+				},
+				error: function() {
+					console.log("No se ha podido obtener la información");
+				}
 			});
 		}
 		else{

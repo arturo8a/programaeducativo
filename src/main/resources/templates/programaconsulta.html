@@ -45,7 +45,7 @@
 			</div>
 			<div class="col-xs-12 col-sm-4">
 				<select id="cbanio" name="cbanio" class="form-control">
-					<option value="Todos">Año de inscripción</option>
+					<option value="0">Año de inscripción</option>
 					<option th:each="anio:${anios}" th:value="${anio}" th:utext="${anio}" th:selected="${anio==anioActual}"/>
 				</select>
 			</div>
@@ -262,6 +262,7 @@
 				};
 	        	
 	        	table_pe.clear().draw();
+	        	table_pe.ajax.reload();
 	        	
 	        	$.ajax({
 					"type" : "POST",
@@ -277,13 +278,37 @@
 			});
 			
 			$("#btnlimpiar").click(function(){
-				$("#cbods").val("Todos");
-				$("#cbanio").val("Todos");
+				$("#cbods").val("0");
+				$("#cbanio").val("0");
 				$("#txtnombre").val("");
 				$("#cbestado").val("Todos");
-				setTimeout(() => {        		  
-		      			  table_pe.draw();
-		      	}, 200);
+				
+				
+				ods = $("#cbods").val();
+				anio = $("#cbanio").val();
+				nombreie = $("#txtnombre").val();
+				estado = $("#cbestado").val();
+				
+				data_json = {
+					idods: ods,
+					anio : anio,
+					nombreie: '%'+nombreie+'%',
+					estado : estado
+				};
+	        	
+	        	table_pe.clear().draw();
+	        	table_pe.ajax.reload();
+	        	
+	        	$.ajax({
+					"type" : "POST",
+	                "dataType": 'json',	
+	                "contentType" : 'application/json',	 
+					"url" : url_base + "pedesa/listacolegiosinscritos",
+					"data" : JSON.stringify(data_json),
+					"success" : function(data){
+						table_pe.rows.add(data).draw();
+					}					
+				});
 			});
 			
 			$("#btncerrarmensajeexito").click(function(){
@@ -531,10 +556,6 @@
 	             	  },
 	             	  { "visible": false, "targets": 10 }
 	            ],
-	            "fnPreDrawCallback": function(oSettings) {
-	            	$("#btnbuscarpe").prop("disabled",true);
-	            	$("#btnlimpiar").prop("disabled",true);
-	            },
 	            "buttons": [
 	            	{
 	            		extend: 'excelHtml5',

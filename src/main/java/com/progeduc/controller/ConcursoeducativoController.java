@@ -297,8 +297,10 @@ public class ConcursoeducativoController {
 		
 		Postulacionconcurso pc = postulacionconcursoServ.registrar(dto);
 		String respuesta="0";
-		if(pc !=null) 
+		if(pc !=null) {
+			progeducService.updateConcurso(pc.getProgeduc().getId(), 1);
 			respuesta = aperturaranioService.buscar(pc.getAnio()).getNombreconcurso();
+		}	
 		return respuesta;
 	}
 	

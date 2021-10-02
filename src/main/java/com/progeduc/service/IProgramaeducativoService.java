@@ -58,4 +58,8 @@ public interface IProgramaeducativoService extends ICRUD<Programaeducativo,Integ
 	List<Programaeducativo> listarPorAnio(Integer iddistrito, Integer anio);
 	
 	List<Programaeducativo> getListarHabilitadosPorAnio(Integer anio);
+	
+	List<Programaeducativo> listaCodmodByAnioActual(String codmod);
+	
+	int updateConcurso(Integer idpe,Integer valor);
 }

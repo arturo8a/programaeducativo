@@ -1,6 +1,6 @@
 package com.progeduc.interfac;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 public interface ProgeducDto {
 	
@@ -8,11 +8,9 @@ public interface ProgeducDto {
 	public String getDepartamento();	
 	public String getProvincia();	
 	public String getDistrito();	
-	public String getInscritoce();
 	public String getInsteduc();	
 	public String getCodlocalie();	
-	public Timestamp getFecharegistro();
-	public String getEstado();	
+	public Date  getFecharegistro();
 	public String getNivel();	
 	public String getAmbito();	
 	public String getModensenianza();
@@ -25,10 +23,8 @@ public interface ProgeducDto {
 	public String getMailie();	
 	public String getFacebook();	
 	public String getLengua();	
-	public String getGenero();	
-	public String getTurno();	
+	public String getGenero();		
 	public String getProvedor();	
-	public String getSuministro();	
 	public Integer getHora_abastecimiento();	
 	public String getPiscina();	
 	public String getTipodocdir();	
@@ -48,4 +44,5 @@ public interface ProgeducDto {
 	public String getCelprof();	
 	public String getCorreoprof();
 	public Integer getAnio();
+	public Integer getConcurso();
 }

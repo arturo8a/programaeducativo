@@ -232,4 +232,14 @@ public class ProgramaeducativoServiceImpl implements IProgramaeducativoService{
 			return progeducRepo.getListarHabilitadosPorAnio(anio);
 		}
 	}
+	
+	@Override
+	public List<Programaeducativo> listaCodmodByAnioActual(String codmod){
+		return progeducRepo.listaCodmodByAnioActual(codmod);
+	}
+	
+	@Override
+	public int updateConcurso(Integer idpe,Integer valor) {
+		return progeducRepo.updateConcurso(idpe, valor);
+	}
 }

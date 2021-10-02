@@ -12,7 +12,7 @@ public class ProgeducDto {
 	private String inscrito_ce;
 	private String insteduc;	
 	private String codlocalie;	
-	private Timestamp fecharegistro;
+	private Date fecharegistro;
 	private String estado;	
 	private String nivel;	
 	private String ambito;	
@@ -30,7 +30,7 @@ public class ProgeducDto {
 	private String turno;	
 	private String provedor;	
 	private String suministro;	
-	private Integer hora_abastecimiento;	
+	private Integer horaabastecimiento;	
 	private String piscina;	
 	private String tipodocdir;	
 	private String nrodocidentdir;	
@@ -90,10 +90,10 @@ public class ProgeducDto {
 	public void setCodlocalie(String codlocalie) {
 		this.codlocalie = codlocalie;
 	}
-	public Timestamp getFecharegistro() {
+	public Date getFecharegistro() {
 		return fecharegistro;
 	}
-	public void setFecharegistro(Timestamp fecharegistro) {
+	public void setFecharegistro(Date fecharegistro) {
 		this.fecharegistro = fecharegistro;
 	}
 	public String getEstado() {
@@ -198,11 +198,11 @@ public class ProgeducDto {
 	public void setSuministro(String suministro) {
 		this.suministro = suministro;
 	}
-	public Integer getHora_abastecimiento() {
-		return hora_abastecimiento;
+	public Integer getHoraabastecimiento() {
+		return horaabastecimiento;
 	}
-	public void setHora_abastecimiento(Integer hora_abastecimiento) {
-		this.hora_abastecimiento = hora_abastecimiento;
+	public void setHoraabastecimiento(Integer horaabastecimiento) {
+		this.horaabastecimiento = horaabastecimiento;
 	}
 	public String getPiscina() {
 		return piscina;
