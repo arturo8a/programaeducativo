@@ -1159,7 +1159,7 @@ public class IndexController {
 	@GetMapping("/consulta_concursoeducativo")
 	public String consulta_concursoeducativo(HttpSession ses,Model model) {	
 		String codmod = ses.getAttribute("usuario").toString();
-		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
+		Programaeducativo pe = progeducService.getPenultimoAnioByCodmod(codmod);
 		
 		model.addAttribute("idprogramaeducativo", pe.getId());
 		model.addAttribute("codmod",pe.getCodmod());
