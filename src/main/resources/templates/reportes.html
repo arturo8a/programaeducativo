@@ -17,8 +17,6 @@
 
 <script type="text/javascript" th:src="@{/js/bootstrapv4.js}" ></script>
 
-<!-- script type="text/javascript" th:src="@{/js/BsMultiSelect.js}" ></script-->
-
 <div>
 	<div class="row p-0 m-0">
 		<h4 class="text-primary" style="margin-top:-25px;margin-left:10px">CONCURSO ESCOLAR</h4>
@@ -47,11 +45,7 @@
 			<label>Año</label>
 			<select id="cbanio" name="cbanio" class="form-control">
 				<option value="-1">Todos</option>
-				<option value="2017">2017</option >
-				<option value="2018">2018</option>
-				<option value="2019">2019</option>
-				<option value="2020">2020</option>
-				<option value="2021">2021</option>
+				<option th:each="dato:${anios}" th:value="${dato}" th:utext="${dato}"/>
 			</select>		
 		</div>
 		<div class="col-xs-12 col-sm-4" style="margin-top:40px">

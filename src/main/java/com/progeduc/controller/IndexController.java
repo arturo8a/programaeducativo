@@ -434,7 +434,7 @@ public class IndexController {
 		List<Integer> listaAnio = new ArrayList<Integer>();
 		Calendar fecha = Calendar.getInstance();
         int anio = fecha.get(Calendar.YEAR);
-        for(int i = anio;i<anio+3;i++) {
+        for(int i = anio;i<anio+5;i++) {
         	listaAnio.add(i);
         }	
         model.addAttribute("anios",listaAnio);
@@ -548,12 +548,12 @@ public class IndexController {
 	@GetMapping("/contenidoconsulta")
 	public String contenido_consulta(Model model,HttpSession ses) {
 		
-		if(ses.getAttribute("usuario")==null) {
+		/*if(ses.getAttribute("usuario")==null) {
 			ses.removeAttribute("usuario");
 			ses.removeAttribute("perfil");
 			ses.removeAttribute("flag");
 			return "session_cerrada";
-		}
+		}*/
 		
 		tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());		
 		if(tipousuarioid.equals(2)) {
@@ -609,6 +609,13 @@ public class IndexController {
 		else {
 			model.addAttribute("ods",odsserv.listarAll());
 		}
+		Calendar fecha = Calendar.getInstance();
+		List<Integer> lista = new ArrayList<Integer>();
+		int anio = fecha.get(Calendar.YEAR);
+		for(int i = anio-5;i<=anio;i++) {
+			lista.add(i);
+		}
+		model.addAttribute("anios", lista);
 		return "docenteconsulta";
 	}
 	
@@ -757,6 +764,12 @@ public class IndexController {
 		else {
 			model.addAttribute("ods",odsserv.listarAll());
 		}		
+		List<Integer> lista = new ArrayList<Integer>();
+		int anio = fecha.get(Calendar.YEAR);
+		for(int i = anio-5;i<=anio;i++) {
+			lista.add(i);
+		}
+		model.addAttribute("anios", lista);
 		return "reportes";
 	}
 	
@@ -767,6 +780,14 @@ public class IndexController {
 	
 	@GetMapping("/aperturar_anio")
 	public String contenido_aperturar_anio(@RequestParam(name="name",required=false,defaultValue="") String name, Model model) {
+		Calendar fecha = Calendar.getInstance();
+		List<Integer> lista = new ArrayList<Integer>();
+		int anio = fecha.get(Calendar.YEAR);
+		for(int i = anio;i<=anio+4;i++) {
+			System.out.println("año : " + i);
+			lista.add(i);
+		}
+		model.addAttribute("anios", lista);
 		return "contenido_aperturar_anio";
 	}
 	

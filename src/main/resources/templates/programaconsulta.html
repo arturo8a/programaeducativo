@@ -233,8 +233,11 @@
 		var id;
 		var ods, anio, nombreie,estado;
 		var data_json;
+		var fechaSistema,anioSistema;
 		
-		$(document).ready(function(){	
+		$(document).ready(function(){
+			fechaSistema = new Date();
+			anioSistema = fechaSistema.getFullYear();	
 			
 			ods = $("#cbods").val();
 			anio = $("#cbanio").val();
@@ -279,13 +282,13 @@
 			
 			$("#btnlimpiar").click(function(){
 				$("#cbods").val("0");
-				$("#cbanio").val("0");
+				$("#cbanio").val(anioSistema);
 				$("#txtnombre").val("");
 				$("#cbestado").val("Todos");
 				
 				
 				ods = $("#cbods").val();
-				anio = $("#cbanio").val();
+				anio = anioSistema;
 				nombreie = $("#txtnombre").val();
 				estado = $("#cbestado").val();
 				

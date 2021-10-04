@@ -29,7 +29,6 @@ import com.progeduc.service.IUsuario_odsService;
 
 @Controller
 @RequestMapping("")
-//@CrossOrigin(origins = "*")
 public class LoginController {
 	
 	@Autowired

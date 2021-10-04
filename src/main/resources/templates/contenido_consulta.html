@@ -150,15 +150,37 @@
 	var fecha=""; 	
 	var table_ie;
 	var fecha_desde,fecha_hasta, nombreie,departamento,provincia,distrito,incritoce,data_json;
+	var fechaSistema,anioSistema;
+	var fechaInicio,fechaFin;
 	
 	$(document).ready(function(){		
+		
+		fechaSistema = new Date();
+		anioSistema = fechaSistema.getFullYear();
+		
+		fechaInicio = "01/01/"+anioSistema;
+		fechaFin = "31/12/"+anioSistema;
+		
+		$("#fecha_desde").datepicker({
+			locale: 'es-es',
+		    format: 'dd/mm/yyyy',
+		    uiLibrary: 'bootstrap4'
+		});
+		$("#fecha_hasta").datepicker({
+			locale: 'es-es',
+		    format: 'dd/mm/yyyy',
+		    uiLibrary: 'bootstrap4'
+		});
+		
+		$("#fecha_desde").val(fechaInicio);
+		$("#fecha_hasta").val(fechaFin);
 		
 		listar();
 		
 		$("#btnlimpiar").click(function(){
 			
-			$("#fecha_desde").val("")
-			$("#fecha_hasta").val("");
+			$("#fecha_desde").val(fechaInicio)
+			$("#fecha_hasta").val(fechaFin);
 			$("#nomie").val("");
 			$("#departamento").val("0");
 			$("#provincia").val("0");
@@ -248,18 +270,8 @@
 				}					
 			});
 					
-		});	    
-
-		$("#fecha_desde").datepicker({
-			locale: 'es-es',
-		    format: 'dd/mm/yyyy',
-		    uiLibrary: 'bootstrap4'
 		});
-		$("#fecha_hasta").datepicker({
-			locale: 'es-es',
-		    format: 'dd/mm/yyyy',
-		    uiLibrary: 'bootstrap4'
-		});
+		
 		$("#departamento").on("change",function(){
     		
     		if($("#departamento").val()!="Todos"){
