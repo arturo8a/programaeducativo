@@ -779,14 +779,6 @@
 				}else{
 					setTimeout(() => {        		  
 		        		table_lista_concurso.draw();
-		        		ods_reporte = $("#odsconcurso").val();
-		        		anio_reporte = $("#anioconcurso").val();
-		        		modalidad_reporte = $("#modalidadconcurso").val();
-		        		estado_reporte = $("#estadoconcurso").val();
-		        		categoria_reporte = $("#categoriaconcurso").val();
-		        		nivel_participacion_reporte = $("#participacionconcurso").val();
-		        		nombre_ie_reporte = $("#nombreieconcurso").val();
-		        		puesto_reporte = $("#puestoconcurso").val();
 		        	}, 100);
 				}
 	        		
@@ -825,7 +817,7 @@
 			
 			$("#btnlimpiarconcurso").click(function(){
 				$("#odsconcurso").val("Todos");
-				$("#anioconcurso").val("Todos");
+				$("#anioconcurso").val(anioActual);
 				$("#modalidadconcurso").val("Todos");
 				$("#estadoconcurso").val("Todos");
 				$("#categoriaconcurso").val("Todos");
@@ -833,14 +825,6 @@
 				$("#nombreieconcurso").val("Todos");
 				$("#puestoconcurso").val("Todos");
 				
-				ods_reporte = $("#odsconcurso").val();
-        		anio_reporte = $("#anioconcurso").val();
-        		modalidad_reporte = $("#modalidadconcurso").val();
-        		estado_reporte = $("#estadoconcurso").val();
-        		categoria_reporte = $("#categoriaconcurso").val();
-        		nivel_participacion_reporte = $("#participacionconcurso").val();
-        		nombre_ie_reporte = $("#nombreieconcurso").val();
-        		puesto_reporte = $("#puestoconcurso").val();
 				setTimeout(() => {        		  
 					table_lista_concurso.draw();
 		      	}, 100);
@@ -957,6 +941,17 @@
 		});		
 		
 		var listar = function(){
+			
+				ods_reporte = $("#odsconcurso").val();
+        		anio_reporte = $("#anioconcurso").val();
+        		modalidad_reporte = $("#modalidadconcurso").val();
+        		estado_reporte = $("#estadoconcurso").val();
+        		categoria_reporte = $("#categoriaconcurso").val();
+        		nivel_participacion_reporte = $("#participacionconcurso").val();
+        		nombre_ie_reporte = $("#nombreieconcurso").val();
+        		puesto_reporte = $("#puestoconcurso").val();
+			
+			
 				var paramAnio = 0;
 				if($('#anioconcurso').val() != 'Todos'){
 					paramAnio = $('#anioconcurso').val();

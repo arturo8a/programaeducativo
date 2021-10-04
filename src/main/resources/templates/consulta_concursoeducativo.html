@@ -168,52 +168,52 @@
 									  <div class="row m-0 p-0">
 									  		<div class="col-4 text-left">
 									  			<label>Apellido paterno</label>	
-									  			<input type="text" id="appaterno" class="form-control" style="width:100%" th:field="*{docentetutor_appaterno}" disabled/>
+									  			<input type="text" id="appaterno" class="form-control" style="width:100%" th:value="*{docentetutor_appaterno}" disabled/>
 									  		</div>
 									  		<div class="col-4 text-left">
 									  			<label>Apellido materno</label>	
-									  			<input type="text" id="apmaterno" class="form-control" style="width:100%" th:field="*{docentetutor_apmaterno}" disabled/>
+									  			<input type="text" id="apmaterno" class="form-control" style="width:100%" th:value="*{docentetutor_apmaterno}" disabled/>
 									  		</div>
 									  		<div class="col-4 text-left">
 									  			<label>Nombres</label>	
-									  			<input type="text" id="nombre" class="form-control" style="width:100%" th:field="*{docentetutor_nombre}" disabled/>
+									  			<input type="text" id="nombre" class="form-control" style="width:100%" th:value="*{docentetutor_nombre}" disabled/>
 									  		</div>
 									  </div>
 									  <br>
 									  <div class="row m-0 p-0">
 									  		<div class="col-4 text-left">
 									  			<label>Tipo de documento</label>	
-									  			<input type="text" id="tipodocumento" style="width:100%" class="form-control" th:field="*{docentetutor_tipodocumento}" disabled/>
+									  			<input type="text" id="tipodocumento" style="width:100%" class="form-control" th:value="*{docentetutor_tipodocumento}" disabled/>
 									  		</div>
 									  		<div class="col-4 text-left">
 									  			<label>N° de documento</label>	
-									  			<input type="text" id="nrodocumento" style="width:100%" class="form-control" th:field="*{docentetutor_nrodocumento}" disabled/>
+									  			<input type="text" id="nrodocumento" style="width:100%" class="form-control" th:value="*{docentetutor_nrodocumento}" disabled/>
 									  		</div>
 									  		<div class="col-4 text-left">
 									  			<label>Género</label>	
-									  			<input type="text" id="genero" style="width:100%" class="form-control" th:field="*{docentetutor_genero}" disabled/>
+									  			<input type="text" id="genero" style="width:100%" class="form-control" th:value="*{docentetutor_genero}" disabled/>
 									  		</div>
 									  </div>
 									  <br>
 									  <div class="row m-0 p-0">
 									  		<div class="col-4 text-left">
 									  			<label>N° de teléfono</label>	
-									  			<input type="text" id="nrotelefono" style="width:100%" class="form-control" th:field="*{docentetutor_nrotelefono}" disabled/>
+									  			<input type="text" id="nrotelefono" style="width:100%" class="form-control" th:value="*{docentetutor_nrotelefono}" disabled/>
 									  		</div>
 									  		<div class="col-4 text-left">
 									  			<label>Correo electrónico</label>	
-									  			<input type="text" id="correoelectronico" style="width:100%" class="form-control" th:field="*{docentetutor_correoelectronico}" disabled/>
+									  			<input type="text" id="correoelectronico" style="width:100%" class="form-control" th:value="*{docentetutor_correoelectronico}" disabled/>
 									  		</div>
 									  		<div class="col-4 text-left">
 									  			<label>Responsable de registro</label>	
-									  			<input type="text" id="responsable" style="width:100%" class="form-control" th:field="*{docentetutor_responsable}" disabled />
+									  			<input type="text" id="responsable" style="width:100%" class="form-control" th:value="*{docentetutor_responsable}" disabled />
 									  		</div>
 									  </div>
 								  		<br>
 									  <div class="row m-0 p-0">
 									  		<div class="col-4 text-left">
 									  			<label>Curso</label>	
-									  			<input type="text" id="curso" style="width:100%" class="form-control" th:field="*{docentetutor_curso}" disabled/>
+									  			<input type="text" id="curso" style="width:100%" class="form-control" th:value="*{docentetutor_curso}" disabled/>
 									  		</div>
 									  		<div class="col-4">
 									  			&nbsp;
@@ -557,8 +557,9 @@
 		    },
 		    'ajax' : {
 		        "url" : url_base + 'pedesa/listatrabajosfinalesbyanio',
-		        "type" : "GET",
-		        "dataSrc" : ""
+		        "type" : "POST",
+                "data" : {'anio':  anioSelect},	
+                "dataSrc" : ""
 		    },
 		    "deferRender": true,
 		    'columnDefs': [	],

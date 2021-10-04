@@ -83,6 +83,7 @@
 		<div class="row">
 			<div class="col text-right">
 				<input type="button" value="Agregar docente" id="btnFormAgregarDocente" name="btnFormAgregarDocente" class="btn btn-success" style="margin-top:10px"/>
+				<input type="button" value="Ir al inicio" id="inicioconcursoconsulta" class="btn btn-primary" style="margin-top:10px"/>
 			</div>
 		</div>
 		<div class="row pt-2 pb-4 m-0">
@@ -161,6 +162,24 @@
 	$(document).ready(function(){
 		
 		listar();
+		
+		$("#inicioconcursoconsulta").click(function(){
+			$("#modalimagencargando").modal({
+				show : true,
+				backdrop : 'static',
+				keyboard:false
+			});
+			$.ajax({
+				url: url_base + "pedesa/menu_concurso",
+				success: function(respuesta) {
+					$("#modalimagencargando").modal('hide');
+					$("#container").html(respuesta);
+				},
+				error: function() {
+			        console.log("No se ha podido obtener la información");
+			    }
+			});
+		});
 		
 		$("#inicio").click(function(){
 			$("#modalimagencargando").modal({

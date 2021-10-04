@@ -774,7 +774,7 @@ public class ConcursoeducativoController {
 			ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://prometeo.sunass.gob.pe/pedesa")).build();
 		}		
 		String codmod = ses.getAttribute("usuario").toString();
-		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
+		Programaeducativo pe = progeducService.getCodmodAnio(codmod, anio);
 		List<ListaparticipanteDto> lista = new ArrayList<ListaparticipanteDto>();
 		List<Participante> listaParticipante = participanteService.listarhabilitadosbyanio(pe.getId(),anio);
 		if(listaParticipante!=null) {
@@ -810,7 +810,7 @@ public class ConcursoeducativoController {
 	@PostMapping(value="/getdocentetutor")
 	public Docentetutor getdocentetutor(@RequestParam("anio") Integer anio,Model model, HttpSession ses) {
 		String codmod = ses.getAttribute("usuario").toString();
-		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
+		Programaeducativo pe = progeducService.getCodmodAnio(codmod, anio);
 		Docentetutor docentetutor = docentetutorService.getByProgeducByAnio(pe.getId(),anio);
 		return docentetutor;
 	}
@@ -1469,8 +1469,7 @@ listaOds = new ArrayList<>();
     	LocalDate fechaactual = LocalDate.parse(today, formatter);  
     	
     	String codmod = ses.getAttribute("usuario").toString();
-		Programaeducativo pe = progeducService.getActualByCodmod(codmod);	    	
-    	//Postulacionconcurso postconc = postulacionconcursoServ.getByIdAnio(pe.getId(), fecha.get(Calendar.YEAR));
+		Programaeducativo pe = progeducService.getCodmodAnio(codmod, anio);
     	if(fechaactual.compareTo(ap.getCuartaetapadesde())>=0 && fechaactual.compareTo(ap.getCuartaetapahasta())<=0)
     		estado_fuera_plazo = 1;
 		
@@ -2985,7 +2984,7 @@ listaOds = new ArrayList<>();
 				
 		List<TrabajosFinalesConcursoDto> lista = new ArrayList<TrabajosFinalesConcursoDto>();		
 		List<DetalleEvaluacionReporteDto> listaDerDto = new ArrayList<>();
-		trabajosfinalesparticipanteServ.listarTodos().forEach(obj->{			
+		trabajosfinalesparticipanteServ.listarTodos().forEach(obj->{
 			if(obj.getTrabajosfinales().getEstado() == 1 && obj.getParticipante().getEstado()==1 && obj.getTrabajosfinales().getEnviado()==1) {				
 				bandera = true;				
 				banderaOds = false;

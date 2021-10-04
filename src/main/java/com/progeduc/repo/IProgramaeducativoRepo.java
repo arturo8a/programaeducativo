@@ -29,6 +29,12 @@ public interface IProgramaeducativoRepo extends CrudRepository<Programaeducativo
 	@Query(value="SELECT TB1.* FROM PROGRAMAEDUCATIVO TB1 WHERE TB1.CODMOD = ?1 AND TB1.ANHIO = EXTRACT(YEAR FROM sysdate) FETCH FIRST 1 ROWS ONLY",nativeQuery = true)
 	Programaeducativo getCodmodByAnioActual(String codmod);
 	
+	@Query(value="SELECT TB1.* FROM PROGRAMAEDUCATIVO TB1 WHERE TB1.CODMOD = ?1 and TB1.ANHIO = EXTRACT(YEAR FROM sysdate)-1",nativeQuery = true)
+	Programaeducativo getPenultimoAnioByCodmod(String codmod);
+	
+	@Query(value="SELECT TB1.* FROM PROGRAMAEDUCATIVO TB1 WHERE TB1.CODMOD = ?1 and TB1.ANHIO = ?2",nativeQuery = true)
+	Programaeducativo getCodmodAnio(String codmod,Integer anio);
+	
 	@Query(value="SELECT TB1.* FROM PROGRAMAEDUCATIVO TB1 WHERE TB1.CODMOD = ?1 AND TB1.ANHIO = EXTRACT(YEAR FROM sysdate)",nativeQuery = true)
 	List<Programaeducativo> listaCodmodByAnioActual(String codmod);
 	

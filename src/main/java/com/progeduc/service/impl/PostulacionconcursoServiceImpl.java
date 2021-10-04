@@ -61,8 +61,8 @@ public class PostulacionconcursoServiceImpl implements IPostulacionconcursoServi
 	}
 	
 	@Override
-	public List<Integer> aniosConcurso(Integer peid){
-		return postulacionconcursoRepo.aniosConcurso(peid);
+	public List<Integer> aniosConcurso(String codmod){
+		return postulacionconcursoRepo.aniosConcurso(codmod);
 	}
 
 }

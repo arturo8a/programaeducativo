@@ -157,6 +157,16 @@ public class ProgramaeducativoServiceImpl implements IProgramaeducativoService{
 	public Programaeducativo getCodmod(String codmod) {
 		return progeducRepo.getCodmod(codmod);
 	}
+	
+	@Override
+	public Programaeducativo getCodmodAnio(String codmod,Integer anio) {
+		return progeducRepo.getCodmodAnio(codmod, anio);
+	}
+	
+	@Override
+	public Programaeducativo getPenultimoAnioByCodmod(String codmod) {
+		return progeducRepo.getPenultimoAnioByCodmod(codmod);
+	}
 
 	@Override
 	public List<String> listCentrosEducativosGroupbyCodmod() {

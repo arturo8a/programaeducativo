@@ -1201,7 +1201,7 @@ public class IndexController {
 		model.addAttribute("nivel",nivelparticipanteService.listar());
 		model.addAttribute("parentesco",parentescoService.listar());
 		
-		model.addAttribute("anios", postulacionconcursoService.aniosConcurso(pe.getId()));
+		model.addAttribute("anios", postulacionconcursoService.aniosConcurso(codmod));
     	/*List<Integer> anios = new ArrayList<Integer>();
     	anios.add(2019);
     	anios.add(2020);
