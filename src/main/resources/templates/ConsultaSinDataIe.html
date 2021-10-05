@@ -1,0 +1,87 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>ProgramaEducativo</title>
+    <script type="text/javascript">
+		window.history.forward();
+	</script>
+	
+	<style>
+		
+		.rs_trabajos{
+		  float:left;
+		  text-align:center;
+		  display: inline-flex;
+		  vertical-align: middle;
+		  padding: 0.375rem 0.75rem;
+		  font-size: 0.75rem;
+		  line-height: 1.5;
+		  justify-content: left;
+		}
+		
+		.rs_participantes_update{
+		  float:left;
+		  text-align:center;
+		  display: inline-flex;
+		  vertical-align: middle;
+		  padding: 0.375rem 0.75rem;
+		  font-size: 0.75rem;
+		  line-height: 1.5;
+		  justify-content: left;
+		}
+		
+		table{
+        	overflow-x:auto;
+	    }
+	    table td{
+	        word-wrap: break-word;
+	        max-width: 600px;
+	    }
+	    #table_lista_participantes_consulta td{
+	        white-space: inherit;
+	    }
+	    
+	    #table_lista_trabajos_finales_consulta td{
+	    	white-space: inherit;
+	    }		
+	</style>	
+</head>
+<body>
+
+<h3>No existen datos de la Institución educativa para la opción Consulta</h3>
+<input type="button" value="Ir al inicio" id="inicioconcursoconsulta" class="btn btn-primary" style="cursor: pointer"/>
+
+
+</body>
+</html>
+
+<script type="text/javascript">
+	
+	var url_base = location.origin+"/";
+	$(document).ready(function(){
+		
+		$("#inicioconcursoconsulta").click(function(){
+			$("#modalimagencargando").modal({
+				show : true,
+				backdrop : 'static',
+				keyboard:false
+			});
+			$.ajax({
+				url: url_base + "pedesa/menu_concurso",
+				success: function(respuesta) {
+					$("#modalimagencargando").modal('hide');
+					$("#container").html(respuesta);
+				},
+				error: function() {
+			        console.log("No se ha podido obtener la información");
+			    }
+			});
+		});
+		
+	});
+	
+	
+</script>

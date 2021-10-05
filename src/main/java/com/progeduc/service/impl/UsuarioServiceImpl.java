@@ -86,9 +86,13 @@ public class UsuarioServiceImpl implements IUsuarioService{
 	
 	@Override
 	public Usuario saveUsuarioOds(UsuarioOdsDto dto) {
+		System.out.println("1");
 		usuarioRepo.save(dto.getUsuario());
+		System.out.println("2");
 		dto.getOds().forEach(obj->{
+			System.out.println("3");
 			usuarioodsRepo.guardar(dto.getUsuario().getId(), obj);
+			System.out.println("4");
 		});
 		return dto.getUsuario();
 	}

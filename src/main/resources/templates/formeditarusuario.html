@@ -138,11 +138,12 @@
 								});
 							}
 							else if (respuesta == 1){
-								table_lista_usuario.cell(celdaseleccionada,1).data($("#perfil_usuario_edit option:selected").html()).draw();
+								/*table_lista_usuario.cell(celdaseleccionada,1).data($("#perfil_usuario_edit option:selected").html()).draw();
 								table_lista_usuario.cell(celdaseleccionada,2).data($("#nombresusuario_edit").val()).draw();
 								table_lista_usuario.cell(celdaseleccionada,3).data($("#apellidosusuario_edit").val()).draw();
 								table_lista_usuario.cell(celdaseleccionada,4).data($("#usuario_edit").val()).draw();
-								table_lista_usuario.cell(celdaseleccionada,5).data($("#correoelectronico_edit").val()).draw();
+								table_lista_usuario.cell(celdaseleccionada,5).data($("#correoelectronico_edit").val()).draw();*/
+								table_lista_usuario.ajax.reload();
 								$("#textoexitocrearusuario").html("Se actualizó Usuario");
 								$('#modalexitocrearusuario').modal({
 									show : true,

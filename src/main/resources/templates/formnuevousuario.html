@@ -165,7 +165,6 @@
 						success: function(respuesta) {
 							$("#modalimagencargando").modal('hide');
 							if(respuesta==0){
-								console.log("error al registrar usuario");
 								$("#textoerrorusuario").html("Error al registrar Usuario");
 								$('#modalerrorusuario').modal({
 									show : true,
@@ -174,16 +173,8 @@
 								});
 							}
 							else if (respuesta == 1){
-								/*console.log("usuario registrado");*/
-								table_lista_usuario.row.add({
-						        		"perfil": $("#perfil_usuario option:selected").html(),
-						        		"nombre": $("#nombresusuario").val(),
-						        		"apellido" : $("#apellidosusuario").val()   ,
-						        		"usuario" : $("#usuario").val(),
-						        		"correo" : $("#correoelectronico").val(),
-						        		"defaultContent" : '<img src="./images/iconos_nd/lapiz.svg" class="editar" style="width:20px; cursor:pointer" />',
-						        		"estado" : 1
-						        	}).draw();
+								table_lista_usuario.ajax.reload();
+						        	
 								$("#textoexitocrearusuario").html("Se registro Usuario");
 								$('#modalexitocrearusuario').modal({
 									show : true,

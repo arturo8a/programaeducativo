@@ -1161,6 +1161,9 @@ public class IndexController {
 		String codmod = ses.getAttribute("usuario").toString();
 		Programaeducativo pe = progeducService.getPenultimoAnioByCodmod(codmod);
 		
+		if(pe==null)
+			return "ConsultaSinDataIe";
+		
 		model.addAttribute("idprogramaeducativo", pe.getId());
 		model.addAttribute("codmod",pe.getCodmod());
 		model.addAttribute("responsableregistro", responsableregistroserv.listar());
@@ -1207,7 +1210,7 @@ public class IndexController {
     	anios.add(2020);
     	anios.add(2021);
     	model.addAttribute("anios", anios);	*/
-    	model.addAttribute("ultimo_anio", fecha.get(Calendar.YEAR)-1);
+    	model.addAttribute("ultimo_anio", fecha.get(Calendar.YEAR));
 		return "consulta_concursoeducativo";
 	}	
 	

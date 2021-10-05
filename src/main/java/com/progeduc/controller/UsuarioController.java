@@ -86,14 +86,12 @@ public class UsuarioController {
 	@PostMapping(value="/registrarusuarioods")
 	public Integer registrarusuarioods(@Valid @RequestBody UsuarioOdsDto dto) {
 		
-		if(usuarioServ.verificarexistenciausuario(dto.getUsuario().getUsuario()) == null) {
-			
+		if(usuarioServ.verificarexistenciausuario(dto.getUsuario().getUsuario()) == null) {			
 			Date date= new Date();
 			long time = date.getTime();
 			Timestamp ts = new Timestamp(time);
 			dto.getUsuario().setFecha_registro(ts);
-			dto.getUsuario().setAnio(ts.toLocalDateTime().getYear());
-			
+			dto.getUsuario().setAnio(ts.toLocalDateTime().getYear());			
 			if(usuarioServ.saveUsuarioOds(dto)!=null)
 				return 1;//registrado
 			else
