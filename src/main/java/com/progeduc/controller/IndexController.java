@@ -1210,7 +1210,7 @@ public class IndexController {
     	anios.add(2020);
     	anios.add(2021);
     	model.addAttribute("anios", anios);	*/
-    	model.addAttribute("ultimo_anio", fecha.get(Calendar.YEAR));
+    	model.addAttribute("ultimo_anio", fecha.get(Calendar.YEAR)-1);
 		return "consulta_concursoeducativo";
 	}	
 	
