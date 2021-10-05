@@ -18,7 +18,7 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
 	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where TB1.programaeducativoid=?1 and tb1.estado=1 and tb1.anio = EXTRACT(YEAR FROM sysdate)",nativeQuery = true)
 	List<Trabajosfinales> listarhabilitados(Integer programaeducativoid);
 	
-	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where TB1.programaeducativoid=?1 and tb1.estado=1 and tb1.anio = EXTRACT(YEAR FROM sysdate) and enviado=1",nativeQuery = true)
+	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where TB1.programaeducativoid=?1 and tb1.estado=1 /*and tb1.anio = EXTRACT(YEAR FROM sysdate) */ and enviado=1",nativeQuery = true)
 	List<Trabajosfinales> listarHabilitadosEnviado(Integer programaeducativoid);
 	
 	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where TB1.estado=1",nativeQuery = true)
