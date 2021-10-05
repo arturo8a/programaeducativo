@@ -99,6 +99,11 @@ public class ProgramaeducativoServiceImpl implements IProgramaeducativoService{
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	@Override
+	public List<Programaeducativo> buscarCodmod(String codmod){
+		return progeducRepo.buscarCodmod(codmod);
+	}
 
 	@Override
 	public List<Programaeducativo> listarfiltro(String fecha_desde, String fecha_hasta, String nombreie, Integer depa,Integer prov,Integer dist){

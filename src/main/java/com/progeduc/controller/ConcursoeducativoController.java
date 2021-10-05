@@ -1589,21 +1589,23 @@ listaOds = new ArrayList<>();
 		List<ListaDocente> docente = new ArrayList<ListaDocente>();
 		String codmod = ses.getAttribute("usuario").toString();
 		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
-		docenteService.listarhabilitados(pe.getId()).forEach(obj->{
-			ListaDocente ld = new ListaDocente();
-			ld.setId(obj.getId());
-			ld.setAppaterno(obj.getAppaterno());
-			ld.setApmaterno(obj.getApmaterno());
-			ld.setNombre(obj.getNombre());
-			ld.setTipodocumento(obj.getTipodocumento().getDescripcion());
-			ld.setNrodocumento(obj.getNrodocumento());
-			ld.setNrotelefono(obj.getNrotelefono());
-			ld.setCorreoelectronico(obj.getCorreoelectronico());
-			ld.setFecha_registro(obj.getFecha_registro());
-			Postulacionconcurso pc = postulacionconcursoServ.getByIdAnio(pe.getId(), obj.getAnhio());
-			ld.setNomie(pc!=null?"Si":"No");
-			docente.add(ld);
-		});			
+		if(pe!=null) {
+			docenteService.listarhabilitados(pe.getId()).forEach(obj->{
+				ListaDocente ld = new ListaDocente();
+				ld.setId(obj.getId());
+				ld.setAppaterno(obj.getAppaterno());
+				ld.setApmaterno(obj.getApmaterno());
+				ld.setNombre(obj.getNombre());
+				ld.setTipodocumento(obj.getTipodocumento().getDescripcion());
+				ld.setNrodocumento(obj.getNrodocumento());
+				ld.setNrotelefono(obj.getNrotelefono());
+				ld.setCorreoelectronico(obj.getCorreoelectronico());
+				ld.setFecha_registro(obj.getFecha_registro());
+				Postulacionconcurso pc = postulacionconcursoServ.getByIdAnio(pe.getId(), obj.getAnhio());
+				ld.setNomie(pc!=null?"Si":"No");
+				docente.add(ld);
+			});	
+		}				
 		return new ResponseEntity<List<ListaDocente>>(docente, HttpStatus.OK) ;
 	}
 	

@@ -105,9 +105,8 @@ public class LoginController {
         		ses.setAttribute("odsid", uo.getOdsid());
         		return uo.getNombres();*/
     		}
-			Programaeducativo pe = progeducService.getCodmodByAnioActual(obj.getUsuario());
-    		if(pe!=null) { /*IIEE*/
-    			ses.setAttribute("usuario", pe.getCodmod());
+			if(progeducService.buscarCodmod(obj.getUsuario()).size()>0) { /*IIEE*/
+    			ses.setAttribute("usuario", obj.getUsuario());
         		ses.setAttribute("perfil", obj.getTipousuario().getDescripcion());
         		ses.setAttribute("tipousuarioid", obj.getTipousuario().getId());
         		return obj.getUsuario();
