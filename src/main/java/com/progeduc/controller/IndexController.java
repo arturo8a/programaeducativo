@@ -921,7 +921,8 @@ public class IndexController {
 	    		banderaBuscarPorOdsAnioactual = false;
 	    	}		
 	    			
-	    	if((postconc.getFinalizarparticipaciontrabajo() == 1) || banderaBuscarPorOdsAnioactual) 
+	    	//if((postconc.getFinalizarparticipaciontrabajo() == 1) || banderaBuscarPorOdsAnioactual) 
+	    	if(banderaBuscarPorOdsAnioactual)
 	    		model.addAttribute("finalizaparticipaciontrabajo",1);
 	    	else
 	    		model.addAttribute("finalizaparticipaciontrabajo",0);	   
