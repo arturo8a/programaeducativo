@@ -118,7 +118,7 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
     		+ "inner join distrito d on pe.distritoid = d.id "
     		+ "inner join ods o on d.odsid = o.id "
     		+ "inner join cerrar_ods co on co.odsid = o.id  "
-    		+ "where tf.estado=1 and tf.estadotrabajoid=21 and tf.puesto!= 0 and tf.anio = EXTRACT(YEAR FROM sysdate) ",nativeQuery = true)
+    		+ "where tf.estado=1 and tf.estadotrabajoid=21 and tf.puesto!= 0 and co.anio = EXTRACT(YEAR FROM sysdate) and tf.anio = EXTRACT(YEAR FROM sysdate) ",nativeQuery = true)
 	List<Trabajosfinales> listaTrabajosEmpatados();
 	
 	/*Finalizar ODS*/
@@ -205,7 +205,7 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
     		+ "inner join distrito d on pe.distritoid = d.id "
     		+ "inner join ods o on d.odsid = o.id "
     		+ "inner join cerrar_ods co on co.odsid = o.id  "
-    		+ "where tf.estado=1 and tf.estadotrabajoid=21 and tf.puesto!= 0 and tf.anio = EXTRACT(YEAR FROM sysdate) and tf.programaeducativoid=?1 ",nativeQuery = true)
+    		+ "where tf.estado=1 and tf.estadotrabajoid=21 and tf.puesto!= 0 and co.anio = EXTRACT(YEAR FROM sysdate) and tf.anio = EXTRACT(YEAR FROM sysdate) and tf.programaeducativoid=?1 ",nativeQuery = true)
 	List<Trabajosfinales> listaTrabajosEmpatadosPorODS(Integer odsId);
 	
 	@Query(value="SELECT TB1.* FROM Trabajosfinales TB1 where tb1.estado=1 /*and tb1.anio = EXTRACT(YEAR FROM sysdate)*/ and TB1.estadotrabajoid=3 and TB1.puesto = 1 ",nativeQuery = true)
@@ -266,7 +266,7 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
 			+ "inner join participante p on p.id = tfp.participanteid "
 			+ "inner join gradoparticipante gp on gp.id = p.gradooestudiante "
 			+ "inner join categoriaTrabajo ct on ct.id = tf.categoriatrabajoid "
-			+ "left join cerrar_nacional cn on cn.categoria_id = tf.categoriatrabajoid and cn.nivel = gp.nivelgradopartdesc "
+			+ "left join cerrar_nacional cn on cn.categoria_id = tf.categoriatrabajoid and cn.nivel = gp.nivelgradopartdesc and cn.anio = EXTRACT(YEAR FROM sysdate) "
 			+ " where tf.anio = EXTRACT(YEAR FROM sysdate) "
 			+ "group by gp.nivelgradopartdesc, tf.categoriatrabajoid, ct.descripcion, NVL(cn.estado, 0) "
 			+ "order by tf.categoriatrabajoid asc, gp.nivelgradopartdesc asc ",nativeQuery = true)
