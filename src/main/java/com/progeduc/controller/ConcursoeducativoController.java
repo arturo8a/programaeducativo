@@ -821,6 +821,7 @@ public class ConcursoeducativoController {
 		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
 		List<trabajoEvaluadoDto> listadto = new ArrayList<trabajoEvaluadoDto>();		
 		Calendar cal= Calendar.getInstance();
+		System.out.println("************ \n tipousuario :" + tipousuarioid + "************ \n");
 		if(tipousuarioid == 0){			
 			Object ob = ses.getAttribute("odsid");
 			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(dist->{
