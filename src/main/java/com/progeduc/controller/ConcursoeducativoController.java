@@ -4988,6 +4988,16 @@ listaOds = new ArrayList<>();
 								cerrarNacionalSserv.modificar(cerrarNacioanl);
 							}
 							
+							listaPuesto2= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 2);
+							
+							for (Trabajosfinales trabajo : listaPuesto2) {
+								if(trabajo.getEstadonacional().getId() == 2) {
+									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+									estadoTrabajo.setId(3);
+									trabajo.setEstadonacional(estadoTrabajo);
+								}
+							}
+							
 							/**************************PUESTO 3*****************/
 							//Nota puesto 3
 							for (Trabajosfinales trabajo : listaPuesto3) {
@@ -5072,6 +5082,25 @@ listaOds = new ArrayList<>();
 							if(listaTrabEmpatadosPuesto3.size() == 0 && listaTrabEmpatadosPuesto3NoAsignado.size() > 1) {
 								cerrarNacioanl.setEstado(2);//empate
 								cerrarNacionalSserv.modificar(cerrarNacioanl);
+							}
+							for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto2) {
+								evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trabajo.getId());//borrar las respuestas de las evaluaciones;
+								trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trabajo.getId());//borrar asignacion de evaluadores
+								Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+								estadoTrabajo.setId(21);
+								trabajo.setEstadonacional(estadoTrabajo);
+	
+								trabajosfinalesServ.modificar(trabajo);
+							}
+							
+							listaPuesto3= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 3);
+							
+							for (Trabajosfinales trabajo : listaPuesto3) {
+								if(trabajo.getEstadonacional().getId() == 2) {
+									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+									estadoTrabajo.setId(3);
+									trabajo.setEstadonacional(estadoTrabajo);
+								}
 							}
 						}
 					}
