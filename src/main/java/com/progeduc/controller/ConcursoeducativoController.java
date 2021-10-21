@@ -4994,6 +4994,8 @@ listaOds = new ArrayList<>();
 									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
 									estadoTrabajo.setId(3);
 									trabajo.setEstadonacional(estadoTrabajo);
+									trabajo.setPuesto_nacional(0);
+									trabajosfinalesServ.modificar(trabajo);
 								}
 							}
 							
@@ -5082,15 +5084,19 @@ listaOds = new ArrayList<>();
 								cerrarNacioanl.setEstado(2);//empate
 								cerrarNacionalSserv.modificar(cerrarNacioanl);
 							}
-							for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto2) {
-								evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trabajo.getId());//borrar las respuestas de las evaluaciones;
-								trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trabajo.getId());//borrar asignacion de evaluadores
-								Estadotrabajo estadoTrabajo = new  Estadotrabajo();
-								estadoTrabajo.setId(21);
-								trabajo.setEstadonacional(estadoTrabajo);
-	
-								trabajosfinalesServ.modificar(trabajo);
+							
+							if(listaTrabEmpatadosPuesto2.size() > 1) {
+								for (Trabajosfinales trabajo : listaTrabEmpatadosPuesto2) {
+									evaluacionRespuestaNacionalServ.borrarEvaluacionesPorTrabajo(trabajo.getId());//borrar las respuestas de las evaluaciones;
+									trabajosFinales_UsuarioAlianzaNacionalServ.eliminar(trabajo.getId());//borrar asignacion de evaluadores
+									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
+									estadoTrabajo.setId(21);
+									trabajo.setEstadonacional(estadoTrabajo);
+		
+									trabajosfinalesServ.modificar(trabajo);
+								}
 							}
+							
 							
 							listaPuesto3= trabajosfinalesServ.listaTrabajosEmpatadosNacionalPorCatNivPuesto(cerrarNacioanl.getCategoriaId(), cerrarNacioanl.getNivelDesc(), 3);
 							
@@ -5099,6 +5105,8 @@ listaOds = new ArrayList<>();
 									Estadotrabajo estadoTrabajo = new  Estadotrabajo();
 									estadoTrabajo.setId(3);
 									trabajo.setEstadonacional(estadoTrabajo);
+									trabajo.setPuesto_nacional(0);
+									trabajosfinalesServ.modificar(trabajo);
 								}
 							}
 						}
