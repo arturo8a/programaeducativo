@@ -821,7 +821,6 @@ public class ConcursoeducativoController {
 		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
 		List<trabajoEvaluadoDto> listadto = new ArrayList<trabajoEvaluadoDto>();		
 		Calendar cal= Calendar.getInstance();
-		System.out.println("************ \n tipousuario :" + tipousuarioid + "************ \n");
 		if(tipousuarioid == 0){			
 			Object ob = ses.getAttribute("odsid");
 			distServ.listByOdsid(Integer.parseInt(ob.toString())).forEach(dist->{
@@ -5293,8 +5292,19 @@ listaOds = new ArrayList<>();
 						
 						rpta = 1;
 					}
-				});
+				});				
 			});
+			
+			Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(dto.getTrabajos_evaluados().get(0).getId());			
+			
+			trabajosfinalesServ.listaTrabajoEvaluadEmpateNacional().forEach(tf->{
+				if(tf.getCategoriatrabajo().getId().equals(trabajoFinal.getCategoriatrabajo().getId())) {					
+					if(trabajosfinalesparticipanteServ.listar(tf.getId()).get(0).getParticipante().getGradoestudiante().getNivelparticipacion().getId().equals(trabajosfinalesparticipanteServ.listar(trabajoFinal.getId()).get(0).getParticipante().getGradoestudiante().getNivelparticipacion().getId())) {
+						trabajosfinalesServ.updateNotaPuestoEstado(tf.getId());
+					}					
+				}
+			});
+			
 			return rpta;
 		}
 		catch(Exception exc) {

@@ -339,6 +339,11 @@ public class TrabajosfinalesServiceImpl implements ITrabajosfinalesService{
 			return trabajosfinalesRepo.listarhabilitadosPorAnio(anio);
 		}
 	}
+	
+	@Override
+	public int updateNotaPuestoEstado(Integer id) {
+		return trabajosfinalesRepo.updateNotaPuestoEstado(id);
+	}
 
 	@Override
 	public List<Trabajosfinales> listarTrabajosConsursoNacionalPorAnio(Integer anio) {
