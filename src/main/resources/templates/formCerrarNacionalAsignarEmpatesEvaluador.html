@@ -245,7 +245,10 @@
 	var anio, idods,idnivelparticipacion,idcategoria,idcodmod,tieneevaluadoresasignados;
 	var mensajeValidacionAsignarEvaluador;
 	var array_trabajos_evaluados;
+	var array_trabajos;
+	var array_trabajos_noevaluados;
 	var array_id_te;
+	var array_id_note;
 	var array_evaluadores ;
 	var array_id_ev ;
 	var listarTrabajosEvaluados;
@@ -341,13 +344,14 @@
 				
 				var data_asignar_evaluador = {
 					trabajos_evaluados : array_id_te,
+					trabajos_noevaluados : array_id_note,
 					evaluadores : array_id_ev
 				};
 				
 				$.ajax({
 					type : "POST",
 				    contentType : "application/json",
-				    url : url_base + "pedesa/saveasignarevaluadorNacional",
+				    url : url_base + "pedesa/saveasignarevaluadorEmpateNacional",
 				    data : JSON.stringify(data_asignar_evaluador),
 				    dataType : 'json',
 					success: function(respuesta) {
@@ -547,15 +551,31 @@
 	
 	function validarCamposAsignarEvaluador(){
 		
+		var bandera;
 		mensajeValidacionAsignarEvaluador = "";
 		
+		array_trabajos = table_lista_trabajos_evaluados.rows().data();
 		array_trabajos_evaluados = table_lista_trabajos_evaluados.rows(".selected").data();
+		array_trabajos_noevaluados = new Array();
 		array_id_te = new Array();
+		array_id_note = new Array();
 		array_evaluadores = table_lista_evaluadores.rows(".selected").data();
 		array_id_ev = new Array();
 		
 		for(i=0;i<array_trabajos_evaluados.length;i++){
 			array_id_te.push({ id : array_trabajos_evaluados[i].id});
+		}
+		
+		for(i=0;i<array_trabajos.length;i++){
+			bandera = true;
+			for(var j=0;j<array_trabajos_evaluados.length;j++){
+				if(array_trabajos[i].id == array_trabajos_evaluados[j].id){
+					bandera = false;
+				}
+			}			
+			if(bandera){
+				array_id_note.push({ id : array_trabajos[i].id});
+			}			
 		}
 		
 		for(i=0;i<array_evaluadores.length;i++){

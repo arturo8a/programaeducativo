@@ -48,6 +48,7 @@ import com.progeduc.componente.Ldap;
 import com.progeduc.dto.AsignacionDto;
 import com.progeduc.dto.AsignarEvaluadorDto;
 import com.progeduc.dto.AsignarEvaluadoresDto;
+import com.progeduc.dto.AsignarEvaluadoresEmpateDto;
 import com.progeduc.dto.CategoriaNivelParticipacionByOds;
 import com.progeduc.dto.ClaveValor;
 import com.progeduc.dto.ConcursoDto;
@@ -58,7 +59,6 @@ import com.progeduc.dto.EtapaNacionalDto;
 import com.progeduc.dto.EvaluacionDto;
 import com.progeduc.dto.EvaluacionRubricaQuestionarioDto;
 import com.progeduc.dto.EvaluadorDto;
-import com.progeduc.dto.FormatoXlsResultadosGanadores;
 import com.progeduc.dto.ListaDocente;
 import com.progeduc.dto.ListaDocenteInscritos;
 import com.progeduc.dto.ListaEmpateDto;
@@ -80,7 +80,6 @@ import com.progeduc.dto.UsuarioAlianzaDto;
 import com.progeduc.dto.trabajoEvaluadoDto;
 import com.progeduc.model.Aperturaranio;
 import com.progeduc.model.Auspicio;
-import com.progeduc.model.Categoriatrabajo;
 import com.progeduc.model.CerrarEtapaNacional;
 import com.progeduc.model.CerrarOds;
 import com.progeduc.model.Docente;
@@ -90,7 +89,6 @@ import com.progeduc.model.Evaluacion;
 import com.progeduc.model.EvaluacionResultado;
 import com.progeduc.model.EvaluacionResultadoNacional;
 import com.progeduc.model.Gradoparticipante;
-import com.progeduc.model.Nivelparticipacion;
 import com.progeduc.model.Ods;
 import com.progeduc.model.Participante;
 import com.progeduc.model.Postulacionconcurso;
@@ -5303,14 +5301,39 @@ listaOds = new ArrayList<>();
 				});				
 			});
 			
-			Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(dto.getTrabajos_evaluados().get(0).getId());			
+			return rpta;
+		}
+		catch(Exception exc) {
+			return 0;
+		}
+	}
+	
+	
+	@PostMapping(value="/saveasignarevaluadorEmpateNacional")
+	public Integer saveasignarevaluadorEmpateNacional(@Valid @RequestBody AsignarEvaluadoresEmpateDto dto) {
+		
+		rpta=2;
+		try {			
+			dto.getTrabajos_evaluados().forEach(te->{
+				dto.getEvaluadores().forEach(ev->{
+					if(trabajosFinales_UsuarioAlianzaNacionalServ.buscar(te.getId(),ev.getId()) == null) {
+						trabajosFinales_UsuarioAlianzaNacionalServ.guardar(te.getId(),ev.getId(),-1f);
+						trabajosfinalesServ.updateEstadoTrabajoNacional(te.getId(),2);
+						
+						Trabajosfinales  trabajoFinal = trabajosfinalesServ.ListarporId(te.getId());
+						if(trabajoFinal.getNota_nacional() != null) {
+							trabajoFinal.setNota_original_nacional(trabajoFinal.getNota_nacional());
+						}
+						trabajoFinal.setNota_nacional(0f);
+						trabajosfinalesServ.modificar(trabajoFinal);
+						
+						rpta = 1;
+					}
+				});				
+			});
 			
-			trabajosfinalesServ.listaTrabajoEvaluadEmpateNacional().forEach(tf->{
-				if(tf.getCategoriatrabajo().getId().equals(trabajoFinal.getCategoriatrabajo().getId())) {					
-					if(trabajosfinalesparticipanteServ.listar(tf.getId()).get(0).getParticipante().getGradoestudiante().getNivelparticipacion().getId().equals(trabajosfinalesparticipanteServ.listar(trabajoFinal.getId()).get(0).getParticipante().getGradoestudiante().getNivelparticipacion().getId())) {
-						trabajosfinalesServ.updateNotaPuestoEstado(tf.getId());
-					}					
-				}
+			dto.getTrabajos_noevaluados().forEach(tnoe->{
+				trabajosfinalesServ.updateNotaPuestoEstado(tnoe.getId());
 			});
 			
 			return rpta;
@@ -5319,4 +5342,5 @@ listaOds = new ArrayList<>();
 			return 0;
 		}
 	}
+	
 }

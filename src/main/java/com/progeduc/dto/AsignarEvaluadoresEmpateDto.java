@@ -2,7 +2,7 @@ package com.progeduc.dto;
 
 import java.util.List;
 
-public class AsignarEvaluadoresDto {
+public class AsignarEvaluadoresEmpateDto {
 	
 	List<ClaveDto> trabajos_evaluados;
 	List<ClaveDto> trabajos_noevaluados;
@@ -26,4 +26,5 @@ public class AsignarEvaluadoresDto {
 	public void setTrabajos_noevaluados(List<ClaveDto> trabajos_noevaluados) {
 		this.trabajos_noevaluados = trabajos_noevaluados;
 	}
+
 }

@@ -2078,13 +2078,15 @@ $(document).ready(function(){
 	
 	$('#modalFinalizarNacional').on('hidden.bs.modal', function () {
 		if($('#nav-concursonacional-tab').hasClass( "active" )){
-			listarNacional();
+			//listarNacional();
+			table_lista_concurso_nacional.ajax.reload();
 		}	
 	});
 	
 	$('#modalasignarevaluador').on('hidden.bs.modal', function () {
 		if($('#nav-concursonacional-tab').hasClass( "active" )){
-			listarNacional();
+			//listarNacional();
+			table_lista_concurso_nacional.ajax.reload();
 		}	
 	});
 	
@@ -2128,7 +2130,8 @@ $(document).ready(function(){
 		$("#categoriaconcursoN").val('Todos');
 		$("#participacionconcursoN").val('Todos');
 		$("#puestoconcursoN").val('Todos');
-		listarNacional();
+		//listarNacional();
+		table_lista_concurso_nacional.ajax.reload();
 	});
 
 	$("#btnVerAsignarNacional").on("click",function(e){
@@ -2193,7 +2196,8 @@ $(document).ready(function(){
 	
 	$("#btnbuscarconcursoNacional").click(function(){
 	        if(searchNacional){
-				listarNacional();
+				//listarNacional();
+				table_lista_concurso_nacional.ajax.reload();
 				searchNacional = false;
 			}else{
 				setTimeout(() => {        		  

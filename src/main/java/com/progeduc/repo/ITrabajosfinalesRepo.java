@@ -71,7 +71,7 @@ public interface ITrabajosfinalesRepo  extends CrudRepository<Trabajosfinales,In
 	
 	@Transactional
 	@Modifying	
-	@Query(value="update Trabajosfinales p set p.nota_nacional = 0,p.puesto_nacional=0,p.estadotrabajoid=3 WHERE p.id = ?1",nativeQuery = true)
+	@Query(value="update Trabajosfinales p set p.nota_nacional = 0,p.puesto_nacional=0,p.estadonacional=3 WHERE p.id = ?1",nativeQuery = true)
 	int updateNotaPuestoEstado(Integer id);
 	
 	@Transactional
