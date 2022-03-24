@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.11.0.final using JasperReports Library version 6.11.0-0c4056ccaa4d25a5a8c45672d2f764ea3498bebb  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ficha_participante" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="00a12866-d1ae-42a6-b21f-f528526897f8">
+	<parameter name="appaternoestudiante" class="java.lang.String"/>
+	<parameter name="apmaternoestudiante" class="java.lang.String"/>
+	<parameter name="nombreestudiante" class="java.lang.String"/>
+	<parameter name="tipodocumentoestudiante" class="java.lang.String"/>
+	<parameter name="nrodocumentoestudiante" class="java.lang.String"/>
+	<parameter name="fechanacimientoestudiante" class="java.lang.String"/>
+	<parameter name="generoestudiante" class="java.lang.String"/>
+	<parameter name="nivelestudiante" class="java.lang.String"/>
+	<parameter name="gradoestudiante" class="java.lang.String"/>
+	<parameter name="seccion" class="java.lang.String"/>
+	<parameter name="categorias" class="java.lang.String"/>
+	<parameter name="modalidad" class="java.lang.String"/>
+	<parameter name="appaternopmt" class="java.lang.String"/>
+	<parameter name="apmaternopmt" class="java.lang.String"/>
+	<parameter name="nombrepmt" class="java.lang.String"/>
+	<parameter name="parentesco" class="java.lang.String"/>
+	<parameter name="tipodocumentopmt" class="java.lang.String"/>
+	<parameter name="nrodocumentopmt" class="java.lang.String"/>
+	<parameter name="nrotelefonopmt" class="java.lang.String"/>
+	<parameter name="correoelectronicopmt" class="java.lang.String"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="60" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement x="0" y="10" width="552" height="30" forecolor="#004DF2" uuid="531434d8-5bb4-4c1a-b04d-393dda1a0511"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FICHA DE INSCRIPCION DEL PARTICIPANTE]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="555">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement x="2" y="0" width="550" height="20" uuid="6f1562ac-fe9f-4a91-aa4b-f343038dfb03"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATOS DEL ESTUDIANTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="30" width="180" height="20" uuid="a45adc0c-cdc7-48d3-a0ba-e5c77a243fa8"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Apellido Paterno]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="2" y="50" width="180" height="30" uuid="e5974727-153a-4def-8134-25ae0be86f75"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#E3E3E3"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{appaternoestudiante}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="182" y="30" width="170" height="20" uuid="c9895e7e-e48c-4921-b838-e09d79f02591"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Apellido Materno]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="182" y="50" width="170" height="30" uuid="a324ff5f-d84c-4b12-b005-b44ab9bfc3d5"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#E3E3E3"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{apmaternoestudiante}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="352" y="30" width="200" height="20" uuid="5e2f49e6-112d-4891-8367-13139d72ade1"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Nombres]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="352" y="50" width="200" height="30" uuid="9d61c84e-3a95-4a52-b8a4-c042dd32a7f1"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#E3E3E3"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nombreestudiante}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="90" width="180" height="20" uuid="1d2fa158-281e-4db6-9aee-8ae7d5bab3a6"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Tipo de documento]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="2" y="110" width="180" height="30" uuid="af90ebe0-f854-4c40-b528-bd2a5bc81c7c"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#E3E3E3"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{tipodocumentoestudiante}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="182" y="90" width="170" height="20" uuid="6a49b2b6-3c69-4b6e-a196-a2c50c201a43"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[N° documento]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="182" y="110" width="170" height="30" uuid="b2feb707-f01d-4b14-a0ae-b587b9a2769f"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#E3E3E3"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nrodocumentoestudiante}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="352" y="90" width="200" height="20" uuid="eeb6df91-a0d2-4702-a6f6-92c86859e83d"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Fecha nacimiento]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="352" y="110" width="200" height="30" uuid="a2f79ec0-59fe-489a-84fb-28ab96e6541e"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#E3E3E3"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fechanacimientoestudiante}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="150" width="180" height="20" uuid="6913d888-2e6c-4664-ac84-fc287901b3f3"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Género]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="2" y="170" width="180" height="30" uuid="f7d60c84-4203-4fe3-bd1d-c66ab943130b"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#E3E3E3"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{generoestudiante}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="182" y="150" width="170" height="20" uuid="7e0d322b-9c07-4c37-85bf-a6a82f9b81d2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Nivel]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="182" y="170" width="170" height="30" uuid="2ea62f79-9f67-4283-874a-c5ef25626022"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#E3E3E3"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nivelestudiante}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="352" y="150" width="200" height="20" uuid="c87b5de1-7987-459d-a2d1-d0070524c7c2"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Grado]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="352" y="170" width="200" height="30" uuid="524364b5-2681-4741-b57a-2795bcf0e414"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#E3E3E3"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{gradoestudiante}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="210" width="180" height="20" uuid="df4bf42c-2518-47ca-9d2d-e20095bbab1b"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Correo electrónico]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="2" y="230" width="180" height="30" uuid="e5960b04-e3de-40e2-a076-eeee043e2172"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#E3E3E3"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{seccion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="182" y="210" width="170" height="20" uuid="9a2e953b-a2ad-4bdf-b6a2-00b417aba5eb"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Categorias]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="182" y="230" width="170" height="40" uuid="346af1a1-16e2-4313-aef3-7275a171c465"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#E3E3E3"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{categorias}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="352" y="210" width="200" height="20" uuid="db6f40ce-2bf6-4e80-aef0-813143c05603"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Modalidad]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="352" y="230" width="200" height="30" uuid="bbadfcc6-9b73-4207-a04f-b2a7a85c960e"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#E3E3E3"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#E3E3E3"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{modalidad}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

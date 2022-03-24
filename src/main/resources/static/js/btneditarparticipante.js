@@ -752,7 +752,7 @@ function validarCamposEditarDocente(){
 		mensajeValidacionEditar += "Debe Seleccionar Grado de Docente"+"<br>";
 	}
 	if(seccionestudiante.trim()==""){
-		mensajeValidacionEditar += "Debe ingresar Sección de Docente"+"<br>";
+		mensajeValidacionEditar += "Debe ingresar Correo electrónico de Docente"+"<br>";
 	}
 	if(!($("#categoriadocenteeditar").is(':checked'))){		
 		mensajeValidacionEditar += "Debe Seleccionar una Categoria de Docente"+"<br>";

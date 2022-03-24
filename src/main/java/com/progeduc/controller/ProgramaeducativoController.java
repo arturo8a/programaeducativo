@@ -821,6 +821,11 @@ public class ProgramaeducativoController {
 		DateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
 	
 	 	File file = ResourceUtils.getFile("classpath:ficha_participante.jrxml" );
+	 	
+	 	if(pe.getTipoparticipante().equals("2")) {
+	 		file = ResourceUtils.getFile("classpath:ficha_participante_docente.jrxml" );
+	 	}
+	 	
 		JasperReport jr = JasperCompileManager.compileReport(file.getAbsolutePath());
 		
         Map parameters = new HashMap();
@@ -836,8 +841,12 @@ public class ProgramaeducativoController {
         	categorias += "dibujo pintura/";
         if(pe.getCategoriapoesia() ==1)
         	categorias += "poesía/";
+        if(pe.getCategoriadocente() != null) {
+        	categorias += pe.getCategoriadocente()==1?"Acciones de comunicación y sensibilización para la promoción de la cultura del agua con impacto positivo" : "";
+		}
         if(categorias.length()>0)
-        	categorias = categorias.substring(0,categorias.length()-1);	
+        	categorias = categorias.substring(0,categorias.length()-1);
+        
         
         if(pe.getModalidadpostulacionindividual()==1)
         	modalidad = "individual/";
