@@ -16,10 +16,10 @@
 	<div class="row pt-2" style="width:100%">
 		<div class="col-4">
 			<img th:src="@{/images/imagen1.PNG}" style="padding:10px; border:1px solid #C9C9C9" width="400px"/>
-			<h4>
-				<a id="participarce" style="cursor:pointer; color:#2E2D2D">Participar del C.E</a>
+			<h4 class="pt-2">
+				<a id="item_participar" style="cursor:pointer; color:#2E2D2D">Inscripci&oacute;n al Concurso Escolar Nacional 'Buenas pr&aacute;cticas para el ahorro del agua potable'</a>
 			</h4>
-			<label style="color:#2E2D2D"><i>Aqu&iacute; podr&aacute;s participar el '</i></label><i><label style="color:#2E2D2D" th:text="${nombre_concurso}"></label></i>'
+			<label style="color:#2E2D2D"><i>Si eres docente o alumno, podr&aacute;s reg&iacute;strate  en nuestras categor&iacute;as, haciendo <strong id="item_participar_sec" style="cursor:pointer;">clic aqu&iacute;</strong></i></label>
 		</div>
 		<div class="col-4">
 			<img th:src="@{/images/imagen3.PNG}" style="padding:10px; border:1px solid #C9C9C9" width="220px"/>
@@ -68,9 +68,13 @@
 	    				window.location.href = url_base+"pedesa/";
 	    			}
 	    		});		
-	    	}); 
+	    	});
 	    	
-	    	$("#participarce").click(function(){
+	    	$("#item_participar_sec").click(function(){
+	    		$("#item_participar").click();
+	    	});
+	    	
+	    	$("#item_participar").click(function(){
 	    		
 	    		$("#modalimagencargando").modal({
 	    			show : true,

@@ -68,6 +68,9 @@ public class Participante {
 	@Column(name="CATEGORIAAHORROAGUA")
 	private Integer categoriaahorroagua;
 	
+	@Column(name="CATEGORIADOCENTE")
+	private Integer categoriadocente;
+	
 	@Column(name="MODALIDADPINDIVIDUAL")
 	private Integer modalidadpostulacionindividual;
 	
@@ -118,6 +121,9 @@ public class Participante {
 	@JsonIgnore
 	@Column(name="FECHA_REGISTRO",nullable=true)
 	private Timestamp fecha_registro;
+	
+	@Column(name="TIPOPARTICIPANTE",nullable=true,length=150)
+	private String tipoparticipante;
 	
 	public Integer getEstado() {
 		return estado;
@@ -358,5 +364,21 @@ public class Participante {
 	public void setFecha_registro(Timestamp fecha_registro) {
 		this.fecha_registro = fecha_registro;
 	}
-	
+
+	public Integer getCategoriadocente() {
+		return categoriadocente;
+	}
+
+	public void setCategoriadocente(Integer categoriadocente) {
+		this.categoriadocente = categoriadocente;
+	}
+
+	public String getTipoparticipante() {
+		return tipoparticipante;
+	}
+
+	public void setTipoparticipante(String tipoparticipante) {
+		this.tipoparticipante = tipoparticipante;
+	}
+
 }

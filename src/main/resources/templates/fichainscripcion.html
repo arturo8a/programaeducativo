@@ -94,7 +94,13 @@
 	    #table_lista_participantes td{
 	        white-space: inherit;
 	    }
-		
+		.boton-seleccion{
+			margin-bottom: 60px;
+		    margin-top: 150px;
+		    padding: 60px;
+		    width: 230px;
+		    font-size: 20px;
+		}
 	</style>
 </head>
 <body>
@@ -107,7 +113,15 @@
 			<input type="button" value="Ir al inicio" id="inicioconcurso1" class="btn btn-primary" style="margin-top:40px" />
 		</div>
 	</div>
-	<div style="margin:15px">
+	<div class="row" id="section-seleccion">
+		<div class="col-6">
+			<input type="button" value="Estudiantes" id="btnSeleccionEstudiante" class="btn btn-primary text-white boton-seleccion"/>
+		</div>
+		<div class="col-6">
+			<input type="button" value="Docentes" id="btnSeleccionDocente" class="btn btn-primary text-white boton-seleccion"/>
+		</div>
+	</div>
+	<div style="margin:15px; display: none;" id="section-formulario">
 		
 		<ul class="nav nav-tabs" id="myTab" role="tablist">
 		  <li class="nav-item">
@@ -214,6 +228,7 @@
 					<div class="row">
 						<div class="col text-right">
 							<input type="button" value="Agregar participante" id="agregarparticipante" class="btn btn-primary  mr-3">
+							<input type="button" value="Agregar participante" id="agregarparticipantedocente" class="btn btn-primary  mr-3" style="display: none;">
 						</div>
 					</div>
 					<div class="row pt-2 pb-4 m-0">
@@ -444,9 +459,112 @@
 	var categoriacuento=0, categoriapoesia=0,categoriadibujopintura=0,categoriacomposicionmusical=0,categoriaahorroagua=0,modalidadpostulacionindividual=0,modalidadpostulaciongrupal=0;
 	var appaternopmt="",apmaternopmt="",nombrepmt="",parentesco="",tipodocumentopmt="",nrodocumentopmt="",nrotelefonopmt="",correoelectronicopmt="";
 	var celdaseleccionada,mensajeValidacion=false;
-	
+	var metodoEditar="";
+	var metodoListarParticiapntes = "";
+	var metodoListarParticiapntestrabajo = "";
+	var metodoupdateTrabajosFinalesDocenteEnviados = "";
+	var formatoNombre = "";
 	
 	$(document).ready(function(){
+		
+		$("#btnSeleccionEstudiante").click(function(){
+			$("#section-seleccion").hide();
+			$("#section-formulario").show();
+			metodoEditar="editarviewparticipanteid";
+			metodoListarParticiapntes = "listaparticipantes";
+			metodoListarParticiapntestrabajo = "listaparticipantes_trabajo";
+			metodoupdateTrabajosFinalesDocenteEnviados = "updateTrabajosFinalesEnviados";
+			formatoNombre="FORMATO_DE_AUTORIZACION_PADRE_DE_FAMILIA.docx";
+		});
+		
+		$("#btnSeleccionDocente").click(function(){
+			
+			$("#modalimagencargando").modal({
+				show : true,
+				backdrop : 'static',
+				keyboard:false
+			});
+			
+			$("select option:nth-child(2)").attr('selected', 'selected');
+			var fecha = new Date();
+			var anio = fecha.getFullYear();
+			var id = $("#id").val();
+			var appaterno = $("#appaterno").val();
+			var apmaterno = $("#apmaterno").val();
+			var nombre = $("#nombre").val();
+			var tipodocumento = $("#tipodocumento").val();
+			var nrodocumento = $("#nrodocumento").val();
+			var genero =  $("#genero").val();
+			var nrotelefono =  $("#nrotelefono").val();
+			var correoelectronico =  $("#correoelectronico").val();
+			var responsable =  $("#responsable").val();
+			var curso = $("#curso").val();
+			var idprogramaeducativo = $("#idprogramaeducativo").val();
+			
+			var obj = {
+					id: id,
+					appaterno : appaterno,
+					apmaterno : apmaterno,
+					nombre : nombre,
+					tipodocumento : {
+						id :tipodocumento
+					},
+					nrodocumento : nrodocumento,
+					genero : {
+						id :genero 
+					},
+					nrotelefono : nrotelefono,
+					correoelectronico : correoelectronico,
+					responsable : {
+						id :responsable
+					},
+					curso : curso,
+					anio : anio,
+					programaeducativo : {
+						id : idprogramaeducativo
+					}
+			};	
+			
+			$.ajax({
+				type : "POST",
+			    contentType : "application/json",
+			    url : url_base + "pedesa/guardardocentetutor",
+			    data : JSON.stringify(obj),
+			    dataType : 'json',
+				success: function(respuesta) {
+					
+					switch(respuesta){
+						case 0 : 
+								$("#textoerror").html("Error al registrar Docente o tutor");
+								break;
+						case 1 :  
+							$("#textoexito").html("Se registro al Profesor o tutor exitosamente");
+							break;
+					}
+					
+					$("#section-seleccion").hide();
+					$("#section-formulario").show();
+					$("#participante-tab").removeClass("disabled");
+					$("#docente-tab").parent().empty();
+					$("#participante-tab").text("1. Datos de los participantes");
+					$("#trabajosfinales-tab").text("2. Registro de trabajos finales");
+					$("#agregarparticipante").hide();
+					$("#agregarparticipantedocente").show();
+					$("#participante-tab").click();
+					metodoEditar="editarviewparticipantedocenteid";
+					metodoListarParticiapntes = "listaparticipantesdocente";
+					metodoListarParticiapntestrabajo = "listaparticipantesdocente_trabajo";
+					metodoupdateTrabajosFinalesDocenteEnviados = "updateTrabajosFinalesDocenteEnviados";
+					formatoNombre="FORMATO_DE_AUTORIZACION_DOCENTE.docx";
+					
+					$("#modalimagencargando").modal('hide');
+				},
+				error: function() {
+					$("#modalimagencargando").modal('hide');
+					alert("Error al Registrarse en el Programa Educativo. Comunicarse con la Oficina de Tecnología de Información de Sunass");
+			    }
+			});
+		});
 		
 		$("#participante-tab").click(function(){
 			console.log("cargar datos");
@@ -521,7 +639,7 @@
 				$.ajax({
 					type : "POST",
 				    contentType : "application/json",
-				    url : url_base + "pedesa/updateTrabajosFinalesEnviados",
+				    url : url_base + "pedesa/"+metodoupdateTrabajosFinalesDocenteEnviados,
 				    data : JSON.stringify(array_enviados),
 				    dataType : 'json',
 					success: function(respuesta) {
@@ -658,7 +776,30 @@
 		
 		
 		
-		
+	$("#agregarparticipantedocente").click(function(){
+			
+			$("#modalimagencargando").modal({
+				show : true,
+				backdrop : 'static',
+				keyboard:false
+			});
+			
+			$.ajax({
+				url: url_base + "pedesa/formregistrarparticipantedocente",
+				success: function(respuesta) {
+					$("#modalimagencargando").modal('hide');
+					$("#contenidoagregarparticipante").html(respuesta);
+					$("#modalagregarParticipante").modal({
+						show : true,
+						backdrop : 'static',
+						keyboard:false
+					});
+				},
+				error: function() {
+			        console.log("No se ha podido vista del web service");
+			    }
+			});
+		});	
 		
 		
 		
@@ -877,7 +1018,7 @@
 			        }
 			    },
 			    'ajax' : {
-			        "url" : url_base + 'pedesa/listaparticipantes',
+			        "url" : url_base + 'pedesa/'+metodoListarParticiapntes,
 			        "type" : "GET",
 			        "dataSrc" : ""
 			    },
@@ -905,7 +1046,7 @@
 			    		"text" : "Descargar el formato de autorización Aqu&iacute;",
 			    		"titleAttr" : "descargar",
 			    		"action" : function(){
-			    			window.open('/alfresco_programaeducativo/pedesa/reportes/AUTORIZACIÓNDEPADREPARAPARTICIPACIONVIIICONCURSO.docx', '_blank');		    			
+			    			window.open('/alfresco_programaeducativo/pedesa/reportes/'+formatoNombre, '_blank');		    			
 			    		}
 			    	}
 			    ]
@@ -1149,7 +1290,7 @@
 		});
 		
 		$.ajax({
-			url : url_base + "pedesa/editarviewparticipanteid/"+ id,
+			url : url_base + "pedesa/"+metodoEditar+"/"+ id,
 			success: function(respuesta) {
 				$("#modalimagencargando").modal('hide');
 				$("#contenidoeditarparticipante").html(respuesta);

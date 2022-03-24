@@ -58,6 +58,11 @@ public class ParticipanteServiceImpl implements IParticipanteService{
 	}
 	
 	@Override
+	public List<Participante> listarhabilitadosdocentes(Integer programaeducativoid){
+		return repo.listarhabilitadosdocentes(programaeducativoid);
+	}
+	
+	@Override
 	public List<Participante> listarhabilitadosbyanio(Integer programaeducativoid, Integer anio){
 		return repo.listarhabilitadosbyanio(programaeducativoid, anio);
 	}

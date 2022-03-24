@@ -29,4 +29,9 @@ public interface IPostulacionconcursoRepo  extends CrudRepository<Postulacioncon
 	@Query(value = "update POSTULACIONCONCURSO p set p.finalizarparticipaciontrabajo = 1  WHERE p.programaeducativoid = ?1" ,nativeQuery = true)
 	int updatefinalizarparticipaciontrabajo(Integer id);
 	
+	@Transactional
+	@Modifying	
+	@Query(value = "update POSTULACIONCONCURSO p set p.FINALIZARPARTDOCENTETRABAJO = 1  WHERE p.programaeducativoid = ?1" ,nativeQuery = true)
+	int updatefinalizarparticipaciondocentetrabajo(Integer id);
+	
 }

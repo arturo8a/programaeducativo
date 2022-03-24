@@ -10,6 +10,8 @@ public interface IParticipanteService extends ICRUD<Participante,Integer>{
 	
 	List<Participante> listarhabilitados(Integer programaeducativoid);
 	
+	List<Participante> listarhabilitadosdocentes(Integer programaeducativoid);
+	
 	List<Participante> listarReporte(String filtro_categoria,String filtro_modalidad,String filtro_nivel_participante);
 	
 	List<Participante> listarhabilitados();

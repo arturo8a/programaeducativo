@@ -61,6 +61,11 @@ public class PostulacionconcursoServiceImpl implements IPostulacionconcursoServi
 	}
 	
 	@Override
+	public int updatefinalizarparticipaciondocentetrabajo(Integer id) {
+		return postulacionconcursoRepo.updatefinalizarparticipaciondocentetrabajo(id);
+	}
+	
+	@Override
 	public List<Integer> aniosConcurso(String codmod){
 		return postulacionconcursoRepo.aniosConcurso(codmod);
 	}

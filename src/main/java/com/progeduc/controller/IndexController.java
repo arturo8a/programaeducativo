@@ -951,6 +951,15 @@ public class IndexController {
 		return "formregistrarparticipante";
 	}
 	
+	@GetMapping("/formregistrarparticipantedocente")
+	public String formregistrarparticipantedocente( Model model) {
+		model.addAttribute("tipodoc",tipodocserv.findAll());
+		model.addAttribute("genero",generoprofserv.listar());
+		model.addAttribute("nivel",nivelparticipanteService.listar());
+		model.addAttribute("parentesco",parentescoService.listar());
+		return "formregistrarparticipantedocente";
+	}
+	
 	@GetMapping("/formagregartrabajo")
 	public String formagregartrabajo( Model model) {
 		model.addAttribute("categoriatrabajo",categoriatrabajoService.listar());
@@ -983,6 +992,22 @@ public class IndexController {
 		model.addAttribute("parentesco",parentescoService.listar());
 		model.addAttribute("nombrearchivo",uploadfile.buscarArchivo(pa.getId(),"upload_participantes"));
 		return "formeditarparticipante";
+	}
+	
+	@GetMapping("/editarviewparticipantedocenteid/{id}")
+	public String editarviewparticipantedocenteid(@PathVariable("id") Integer id,  Model model,HttpSession ses) {
+		
+		Participante pa = participanteService.ListarporId(id);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		model.addAttribute("fechanacimiento", pa.getFechanacimientoestudiante().format(formatter).toString());
+		model.addAttribute("participante", pa);
+		model.addAttribute("tipodoc",tipodocserv.findAll());
+		model.addAttribute("genero",generoprofserv.listar());
+		model.addAttribute("nivel",nivelparticipanteService.listar());
+		model.addAttribute("grado",gradoparticipanteService.listargradopornivel(pa.getGradoestudiante().getNivelparticipante().getId()));
+		model.addAttribute("parentesco",parentescoService.listar());
+		model.addAttribute("nombrearchivo",uploadfile.buscarArchivo(pa.getId(),"upload_participantes"));
+		return "formeditarparticipantedocente";
 	}
 	
 	@GetMapping("/editarviewusuarioid/{miusuario}")

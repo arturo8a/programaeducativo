@@ -613,6 +613,51 @@ public class ConcursoeducativoController {
 		return 0;
 	}
 	
+	@PostMapping(value="/updateTrabajosFinalesDocenteEnviados")
+	public Integer updateTrabajosFinalesDocenteEnviados(@Valid @RequestBody List<TrabajofinalesEnviadoDto> dto,HttpSession ses) {
+		
+		if( ses.getAttribute("usuario")==null)
+			return -100;
+		String codmod = ses.getAttribute("usuario").toString();
+		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
+		banderaUpdate = true;		
+		dto.forEach(dato->{
+			rpta = trabajosfinalesServ.updateEnviados(1,dato.getId());
+			if(rpta != 1)
+				banderaUpdate = false;
+		});
+		if(!banderaUpdate)
+			return 0;
+		
+		if(postulacionconcursoServ.updatefinalizarparticipaciondocentetrabajo(pe.getId()) !=1)
+			return 0;		
+		
+		/*enviar correo*/
+		String msj = "<img src='./images/logo_login.PNG' style='width:400px' /><img src='./images/imagen1.PNG' style='width:400px' />";
+		String msj1 = "<p>Estimado(a) docente,Por medio de la presente reciba a nombre de la Superindencia Nacionalde Servicios de Saneamiento nuestro Saludos de Bienvenida al “VIII Concurso Escolar Nacional de Buenas prácticas para el Ahorro del Agua Potable”, a través de este mensaje le hacemos llegar el siguiente cuadro con el consolidado de estudiantes inscritos y datos de sus trabajos finales presentados a esta edición del Concurso Escolar:</p>";
+		msj2 = "<br><table><tr><td>Categoria</td><td>Modalidad</td><td>Título de trabajo</td><td>Participantes</td></tr>";
+		String msj3 = "<p>Cabe resaltar que tanto las evidencias como trabajos finales subidos a través del Sistema del Concurso Escolar, serán evaluador según cronograma por nuestro Comité Evaluador. En caso que alguno de sus estudiantes haya alcanzado algún puesto en nuestro cuadro de mérito nos pondremos en contacto con usted a través del correo electrónico y números personales registrados por usted en el sistema. Aprovechamos esta oportunidad para agradecer su compromiso y dedicación demostrados a lo largo de todo este certamen, los cuales sin duda contribuyen a la formación de la una cultura valorativa de los servicios de agua y saneamiento entre sus estudiantes. Atentamente. PROGRAMA EDUCATIVO SUNASS</p>";
+		
+		trabajosfinalesServ.listarhabilitados(pe.getId()).forEach(obj->{			
+			participantes = "";			
+			msj2 += "<tr><td>"+ obj.getCategoriatrabajo().getDescripcion() + "</td>";
+			msj2 += "<td>"+ obj.getModalidadtrabajo().getDescripcion() + "</td>";
+			msj2 += "<td>"+ obj.getTitulotrabajo() + "</td>";
+			
+			trabajosfinalesparticipanteServ.listar(obj.getId()).forEach(obj1->{
+				participantes += obj1.getParticipante().getNombreestudiante() + " " + obj1.getParticipante().getAppaternoestudiante() + " " + obj1.getParticipante().getApmaternoestudiante() + "/";
+			});
+			msj2 += "<td>" + participantes + "</td></tr>";
+		});
+		msj2 += "</table>";
+		
+		mail = new Mail();
+		if( mail.enviarCorreoTrabajosFinalesConcursoEscolar("Confirmación de registro de trabajos finales al Concurso Escolar",msj+msj1+msj2+msj3,pe.getMailie())) {
+			return 1;
+		}
+		return 0;
+	}
+	
 	@PostMapping(value="/subirtrabajoarchivoevidencia")
 	public Integer subirtrabajoarchivoevidencia(@RequestParam("file") MultipartFile file,@RequestParam("id") Integer id, @RequestParam("files") ArrayList<MultipartFile> files) {
 		
@@ -751,6 +796,52 @@ public class ConcursoeducativoController {
 				categoria += obj.getCategoriadibujopintura()==1?"Dibujo o Pintura/":"";
 				categoria += obj.getCategoriacomposicionmusical()==1?"Composición musical/":"";
 				categoria += obj.getCategoriaahorroagua()==1?"Ahorro del agua en tu hogar/" : "";
+				if(obj.getCategoriadocente() != null) {
+					categoria += obj.getCategoriadocente()==1?"Acciones de comunicación y sensibilización para la promoción de la cultura del agua con impacto positivo" : "";
+				}
+				if(categoria.length()>0)
+					categoria = categoria.substring(0,categoria.length()-1);				
+				dto.setCategoria(categoria);
+				modalidad = obj.getModalidadpostulacionindividual()==1?"Individual/":"";
+				modalidad += obj.getModalidadpostulaciongrupal()==1?"Grupal/":"";				
+				if(modalidad.length()>0)
+					modalidad = modalidad.substring(0,modalidad.length()-1);
+				dto.setModalidad(modalidad);
+				lista.add(dto);
+			});
+		}		
+		return new ResponseEntity<List<ListaparticipanteDto>>(lista, HttpStatus.OK) ;
+	}
+	
+	@GetMapping(value = "/listaparticipantesdocente")
+	public ResponseEntity<List<ListaparticipanteDto>> listaparticipantedocente(HttpSession ses){
+		
+		if( ses.getAttribute("usuario")==null) {
+			ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://prometeo.sunass.gob.pe/pedesa")).build();
+		}		
+		String codmod = ses.getAttribute("usuario").toString();
+		Programaeducativo pe = progeducService.getActualByCodmod(codmod);		
+		List<ListaparticipanteDto> lista = new ArrayList<ListaparticipanteDto>();
+		List<Participante> listaParticipante = participanteService.listarhabilitadosdocentes(pe.getId());
+		if(listaParticipante!=null) {
+			listaParticipante.forEach(obj->{			
+				String categoria = "";
+				String modalidad = "";
+				ListaparticipanteDto dto =new ListaparticipanteDto();
+				dto.setId(obj.getId());
+				dto.setAppaterno(obj.getAppaternoestudiante());
+				dto.setApmaterno(obj.getApmaternoestudiante());
+				dto.setNombre(obj.getNombreestudiante());
+				dto.setTipodocumento(obj.getTipodocumentoestudiante().getDescripcion());
+				dto.setNrodocumento(obj.getNrodocumentoestudiante());
+				categoria = obj.getCategoriacuento()==1?"Cuento/":"";
+				categoria += obj.getCategoriapoesia()==1?"Poesía/":"";
+				categoria += obj.getCategoriadibujopintura()==1?"Dibujo o Pintura/":"";
+				categoria += obj.getCategoriacomposicionmusical()==1?"Composición musical/":"";
+				categoria += obj.getCategoriaahorroagua()==1?"Ahorro del agua en tu hogar/" : "";
+				if(obj.getCategoriadocente() != null) {
+					categoria += obj.getCategoriadocente()==1?"Acciones de comunicación y sensibilización para la promoción de la cultura del agua con impacto positivo" : "";
+				}
 				if(categoria.length()>0)
 					categoria = categoria.substring(0,categoria.length()-1);				
 				dto.setCategoria(categoria);
@@ -1544,7 +1635,37 @@ listaOds = new ArrayList<>();
 			});
 		}		
 		return new ResponseEntity<List<ListaparticipantetrabajoDto>>(lista, HttpStatus.OK) ;
-	}	
+	}
+	
+	@GetMapping("/listaparticipantesdocente_trabajo")
+	public ResponseEntity<List<ListaparticipantetrabajoDto>> listaparticipantesdocente_trabajo(HttpSession ses){
+		
+		String codmod = ses.getAttribute("usuario").toString();
+		Programaeducativo pe = progeducService.getActualByCodmod(codmod);
+		List<ListaparticipantetrabajoDto> lista = new ArrayList<>();
+		List<Participante> listaParticipante = participanteService.listarhabilitadosdocentes(pe.getId());
+		if(listaParticipante!=null) {
+			listaParticipante.forEach(p->{
+					ListaparticipantetrabajoDto ptdto =new ListaparticipantetrabajoDto();
+					ptdto.setId(p.getId());
+					ptdto.setAppaterno(p.getAppaternoestudiante());
+					ptdto.setApmaterno(p.getApmaternoestudiante());
+					ptdto.setNombre(p.getNombreestudiante());
+					ptdto.setTipodocumento(p.getTipodocumentoestudiante().getDescripcion());
+					ptdto.setNrodocumento(p.getNrodocumentoestudiante());
+					ptdto.setComposicionmusical(p.getCategoriacomposicionmusical());
+					ptdto.setCuento(p.getCategoriacuento());
+					ptdto.setPoesia(p.getCategoriapoesia());
+					ptdto.setDibujopintura(p.getCategoriadibujopintura());
+					ptdto.setAhorraragua(p.getCategoriaahorroagua());
+					ptdto.setModalidadindividual(p.getModalidadpostulacionindividual());
+					ptdto.setModalidadgrupal(p.getModalidadpostulaciongrupal());
+					ptdto.setNivel(p.getGradoestudiante().getNivelgradopartdesc());
+					lista.add(ptdto);
+			});
+		}		
+		return new ResponseEntity<List<ListaparticipantetrabajoDto>>(lista, HttpStatus.OK) ;
+	}
 	
 	@PostMapping(value="/verificaParticipanteSubidoTrabajo")
 	public Integer verificaParticipanteSubidoTrabajo(@Valid @RequestBody TrabajoCategoriaModalidadDto dto) {
@@ -1556,6 +1677,7 @@ listaOds = new ArrayList<>();
 	
 	@PostMapping(value="/verificaParticipanteSubidoTrabajoAdd")
 	public Integer verificaParticipanteSubidoTrabajoAdd(@Valid @RequestBody TrabajoCategoriaModalidadAddDto dto) {
+		dto.getIdCategoria();
 		List<TrabajosfinalesParticipante> listatfp = trabajosfinalesparticipanteServ.listarPorParticipante(dto.getId(),dto.getIdCategoria(),dto.getIdModalidad());
 		if(listatfp.size()>0)
 			return 1;
@@ -2395,7 +2517,7 @@ listaOds = new ArrayList<>();
 				
 				List<CerrarOds> listCerrarOds = new ArrayList<>();
 				Optional<CerrarOds> cerrarOds = cerrarOdsServ.listCerrarOds().stream().filter(o -> o.getOdsid().getId() == Integer.parseInt(odsId) && o.getAnio() == anio).findFirst();
-				if(!cerrarOds.isEmpty()) listCerrarOds.add(cerrarOds.get());
+				if(!cerrarOds.isPresent()) listCerrarOds.add(cerrarOds.get());
 				odsRespuesta.setListCerrarOds(listCerrarOds);
 			}else if(tipousuarioid != null && (tipousuarioid.equals("0") || tipousuarioid.equals("2") || tipousuarioid.equals("11")) ) {
 				List<Ods> listOds = new ArrayList<>();
@@ -2423,7 +2545,7 @@ listaOds = new ArrayList<>();
 				odsRespuesta.setListOds(odsserv.listarAll());
 				List<CerrarOds> listCerrarOds = new ArrayList<>();
 				Optional<CerrarOds> cerrarOds = cerrarOdsServ.listCerrarOds().stream().filter(o -> o.getAnio() == anio).findFirst();
-				if(!cerrarOds.isEmpty()) listCerrarOds.add(cerrarOds.get());
+				if(!cerrarOds.isPresent()) listCerrarOds.add(cerrarOds.get());
 				odsRespuesta.setListCerrarOds(listCerrarOds);
 			}
 		}else {

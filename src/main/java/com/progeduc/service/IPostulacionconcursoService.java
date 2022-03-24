@@ -9,5 +9,6 @@ public interface IPostulacionconcursoService extends ICRUD<Postulacionconcurso,I
 	Postulacionconcurso getById(Integer programaeducativoid);
 	Postulacionconcurso getByIdAnio(Integer programaeducativoid, Integer anio);
 	int updatefinalizarparticipaciontrabajo(Integer id);
+	int updatefinalizarparticipaciondocentetrabajo(Integer id);
 	List<Integer> aniosConcurso(String codmod);
 }

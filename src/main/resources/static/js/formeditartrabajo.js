@@ -175,7 +175,7 @@ var mis_evidencias_eliminadas = new Array();
 	        }
 	    },
 	    'ajax' : {
-	        "url" : url_base + 'pedesa/listaparticipantes_trabajo',
+	        "url" : url_base + 'pedesa/'+metodoListarParticiapntestrabajo,
 	        "type" : "GET",
 	        "dataSrc" : ""
 	    },

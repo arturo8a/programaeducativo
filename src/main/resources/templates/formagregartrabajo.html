@@ -370,6 +370,9 @@
 			case '5':
 				htmlModalidad  = "<option value='1'>Individual</option>";
 				break;
+			case '6':
+				htmlModalidad  = "<option value='1'>Individual</option>";
+				break;
 		}
 		$("#modalidadpostulaciontrabajo").html(htmlModalidad);
 		table_lpt.rows().deselect();
@@ -455,7 +458,7 @@
 	        }
 	    },
 	    'ajax' : {
-	        "url" : url_base + 'pedesa/listaparticipantes_trabajo',
+	        "url" : url_base + 'pedesa/'+metodoListarParticiapntestrabajo,
 	        "type" : "GET",
 	        "dataSrc" : ""
 	    },
