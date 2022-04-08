@@ -1069,13 +1069,41 @@
 							window.location.href = url_base + "pedesa/trabajosfinalesconcurso/"+ods_reporte+"/"+anio_reporte+"/"+modalidad_reporte+"/"+estado_reporte+"/"+categoria_reporte+"/"+nivel_participacion_reporte+"/"+nombre_ie_reporte+"/"+puesto_reporte;
 		                }
 		            }
-	            ]
+	            ],
+	            fnInitComplete: function() {
+	            	$("#table_lista_concurso tbody").on("click","img.fichatrabajo",function(){
+	            		celdaseleccionada = table_lista_concurso.row($(this).parents("tr")).index();
+	            		var data = table_lista_concurso.row($(this).parents("tr")).data();
+	            		id = data.id;
+	            		verfichatrabajo(id);
+	            	});
+	            	$("#table_lista_concurso tbody").on("click","img.evidencia",function(){
+	            		celdaseleccionada = table_lista_concurso.row($(this).parents("tr")).index();
+	            		var data = table_lista_concurso.row($(this).parents("tr")).data();
+	            		id = data.id;
+	            		verevidencia(id);
+	            	});
+	            	
+	            	$("#table_lista_concurso tbody").on("click","img.trabajo",function(){
+	            		celdaseleccionada = table_lista_concurso.row($(this).parents("tr")).index();
+	            		var data = table_lista_concurso.row($(this).parents("tr")).data();
+	            		id = data.id;
+	            		vertrabajo(id);
+	            	});
+	            	
+	            	$("#table_lista_concurso tbody").on("click","img.ce_detalleevaluacion",function(){
+	            		celdaseleccionada = table_lista_concurso.row($(this).parents("tr")).index();
+	            		var data = table_lista_concurso.row($(this).parents("tr")).data();
+	            		id = data.id;
+	            		f_ce_detalleevaluacion(id);
+	            	});
+	            }
 	        });
 			$("div.rs_concurso_educativo").html("<strong>RESULTADOS CONCURSO EDUCATIVO</strong>");
-			obtener_fichatrabajo("#table_lista_concurso tbody",table_lista_concurso);
+			/*obtener_fichatrabajo("#table_lista_concurso tbody",table_lista_concurso);
 			obtener_evidencia("#table_lista_concurso tbody",table_lista_concurso);
 			obtener_trabajos("#table_lista_concurso tbody",table_lista_concurso);
-			obtener_ce_detalleevaluacion("#table_lista_concurso tbody",table_lista_concurso);
+			obtener_ce_detalleevaluacion("#table_lista_concurso tbody",table_lista_concurso);*/
 		}
 		
 		var listarAlianzaEstrategica = function(){ console.log('mostrar usuario alianza');
@@ -1439,7 +1467,7 @@
 			$("div.rs_asignacion").html("<strong>RESULTADOS DE ASIGNACIÓN</strong>");
 		}
 		
-		var obtener_fichatrabajo = function(tbody,table){
+		/*var obtener_fichatrabajo = function(tbody,table){
 			$(tbody).on("click","img.fichatrabajo",function(){
 				celdaseleccionada = table.row($(this).parents("tr")).index();
 				var data = table.row($(this).parents("tr")).data();
@@ -1473,7 +1501,7 @@
 				id = data.id;
 				f_ce_detalleevaluacion(id);
 			});
-		};
+		};*/
 		
 		function f_ce_detalleevaluacion(id){
 	    	
@@ -2331,11 +2359,25 @@ var listarNacional = function(){
 					window.location.href = url_base + "pedesa/exportListaconcursonacional/"+$("#odsconcursoN").val()+"/"+$("#anioasignacionN").val()+"/"+$("#categoriaconcursoN").val()+"/"+$("#participacionconcursoN").val()+"/"+$("#puestoconcursoN").val();
                 }
             }
-        ]
+        ],
+        fnInitComplete: function() {
+        	$("#table_lista_concurso_nacional tbody").on("click","img.ce_detalleevaluacion_nac",function(){
+        		celdaseleccionada_na = table_lista_concurso_nacional.row($(this).parents("tr")).index();
+        		var data = table_lista_concurso_nacional.row($(this).parents("tr")).data();
+        		f_ce_detalleevaluacion_nac(data.id);
+        	});
+        	
+        	$("#table_lista_concurso_nacional tbody").on("click","img.fichatrabajo",function(){
+        		celdaseleccionada = table_lista_concurso_nacional.row($(this).parents("tr")).index();
+        		var data = table_lista_concurso_nacional.row($(this).parents("tr")).data();
+        		id = data.id;
+        		verfichatrabajo(id);
+        	});
+        }
     });
 	$("div.rs_concurso_educativo_nacional").html("<strong>RESULTADOS CONCURSO NACIONAL</strong>");
-	obtener_fichatrabajo("#table_lista_concurso_nacional tbody",table_lista_concurso_nacional);
-	obtener_ce_detalleevaluacion_nac("#table_lista_concurso_nacional tbody",table_lista_concurso_nacional);
+	/*obtener_fichatrabajo("#table_lista_concurso_nacional tbody",table_lista_concurso_nacional);
+	obtener_ce_detalleevaluacion_nac("#table_lista_concurso_nacional tbody",table_lista_concurso_nacional);*/
 }
 
 var listarFinalizarNacional = function(){
@@ -2411,10 +2453,18 @@ var listarFinalizarNacional = function(){
         select: {
             style:    'multi', 
             selector: 'td:first-child'
+        },
+        fnInitComplete: function() {
+        	$("#table_lista_concurso_nacional tbody").on("click","img.fichatrabajo",function(){
+        		celdaseleccionada = table_lista_concurso_nacional.row($(this).parents("tr")).index();
+        		var data = table_lista_concurso_nacional.row($(this).parents("tr")).data();
+        		id = data.id;
+        		verfichatrabajo(id);
+        	});
         }
     });
 	$("div.rs_concurso_educativo").html("<strong>RESULTADOS CONCURSO EDUCATIVO</strong>");
-	obtener_fichatrabajo("#table_lista_concurso_nacional tbody",table_lista_concurso_nacional);
+	/*obtener_fichatrabajo("#table_lista_concurso_nacional tbody",table_lista_concurso_nacional);*/
 }
 
 
