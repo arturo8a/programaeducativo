@@ -1,15 +1,15 @@
 package com.progeduc.service.impl;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+import com.progeduc.dto.DocentesReporteDto;
 import com.progeduc.model.Participante;
-import com.progeduc.model.Programaeducativo;
 import com.progeduc.repo.IParticipanteRepo;
 import com.progeduc.service.IParticipanteService;
 
@@ -85,6 +85,28 @@ public class ParticipanteServiceImpl implements IParticipanteService{
 	@Override
 	public List<Participante> buscaTipoNroDocumento(Integer id, Integer tipoDocumentoid, String nroDocumento){
 		return repo.buscaTipoNroDocumento(id, tipoDocumentoid, nroDocumento);
+	}
+	
+	@Override
+	public List<DocentesReporteDto> buscarDocente(Integer idods,Integer anio) {
+		
+		List<Object[]> docentesObjetos = repo.buscarDocente(idods, anio);
+		List<DocentesReporteDto> lista = new ArrayList<>();
+		for (Object[] objects : docentesObjetos) {
+			lista.add(new DocentesReporteDto(
+											objects[0].toString(),
+											objects[1].toString(),
+											objects[2].toString(),
+											objects[3].toString(),
+											objects[4].toString(),
+											objects[5].toString(),
+											objects[6].toString(),
+											objects[7].toString(),
+											objects[8].toString(),
+											objects[9].toString(),
+											objects[10].toString()));
+		}		
+		return lista;
 	}
 	
 

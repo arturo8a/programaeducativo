@@ -7,7 +7,6 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -34,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.progeduc.dto.DetalleEvaluacionReporteDto;
 import com.progeduc.dto.DocenteDto;
-import com.progeduc.dto.FormatoXlsResultadosGanadores;
+import com.progeduc.dto.DocentesReporteDto;
 import com.progeduc.dto.IieeReporteDto;
 import com.progeduc.dto.ListaEmpateDto;
 import com.progeduc.dto.ListaparticipantereporteDto;
@@ -42,8 +41,6 @@ import com.progeduc.dto.NotasEvaluadorDto;
 import com.progeduc.dto.ResultadosGanadoresDto;
 import com.progeduc.dto.ResultadosRegionalesDto;
 import com.progeduc.model.Auspicio;
-import com.progeduc.model.Categoriatrabajo;
-import com.progeduc.model.Nivelparticipacion;
 import com.progeduc.model.Ods;
 import com.progeduc.model.Participante;
 import com.progeduc.model.Postulacionconcurso;
@@ -54,7 +51,6 @@ import com.progeduc.model.TrabajosfinalesParticipante;
 import com.progeduc.model.TrabajosfinalesUsuarioAlianza;
 import com.progeduc.model.UsuarioAlianza;
 import com.progeduc.service.ICategoriatrabajoService;
-import com.progeduc.service.IDistritoService;
 import com.progeduc.service.IDocentetutorService;
 import com.progeduc.service.IEvaluacionRespuestaService;
 import com.progeduc.service.IGeneroprofService;
@@ -66,7 +62,6 @@ import com.progeduc.service.IProgeducNivelService;
 import com.progeduc.service.IProgeducTurnoService;
 import com.progeduc.service.IProgramaeducativoService;
 import com.progeduc.service.IQuestionarioRespuestaService;
-import com.progeduc.service.IRubricaService;
 import com.progeduc.service.ITrabajosfinalesParticipanteService;
 import com.progeduc.service.ITrabajosfinalesService;
 import com.progeduc.service.ITrabajosfinales_UsuarioAlianzaService;
@@ -135,6 +130,9 @@ public class ReporteController {
 	List<Ods> listaOds;
 	List<Integer> listaAnio;
 	List<String> listaPuesto;
+	
+	Integer odsid_;
+	Integer anio_;
 	
 	String mi_nivel_participacion, nivelSeccionDocenteAlumnoVaronMujer,peTurno, peSuministro,peParticipantes,peEjesTematicos,peNivelParticipacion,peGeneroParticipante,peModalidad,peCategorias,fecha_archivo;
 	boolean bandera_ods,bandera_anio,bandera_categoria,bandera_modalidad,bandera_nivel,flag;
@@ -2271,6 +2269,132 @@ public class ReporteController {
 		
 		headers.add("Content-Disposition", "attachment; filename=Lista_alianzaestrategica_"+fecha_archivo+".csv");
 		
+		return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
+		
+	}
+	
+	@GetMapping(value="/reportedocentes/{ods}/{anio}")	
+	public ResponseEntity<InputStreamResource> exportDocentes(@PathVariable(value="ods") String ods,
+			@PathVariable(value="anio") String anio,HttpSession ses) {
+		Integer tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());	
+		Date date = new Date();
+		DateFormat hourFormat = new SimpleDateFormat("HHmmss");
+		DateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
+		DateFormat dateFormatFecha = new SimpleDateFormat("dd/MM/yyyy");
+		
+		listaOds = new ArrayList<>();
+		
+		tipousuarioid = Integer.parseInt(ses.getAttribute("tipousuarioid").toString());
+		if(tipousuarioid.equals(2)) {
+			String usuario = ses.getAttribute("usuario").toString();
+			usuarioodsService.listarByUsuario(usuarioService.byUsuario(usuario).getId()).forEach(obj->{
+				listaOds.add(obj.getOds());
+			});
+		}
+		else {
+			listaOds = odsserv.listarAll();
+		}
+		
+		String role6, role7, role8, role9;
+		String strRol = "";
+		
+		if(ods.equals("-1"))
+			odsid_ = 0;
+		else
+			odsid_ = Integer.parseInt(ods);
+		
+		if(anio.equals("-1"))
+			anio_ = 0;
+		else
+			anio_ = Integer.parseInt(anio);
+		
+		List<DocentesReporteDto> dto = participanteServ.buscarDocente(odsid_, anio_);
+		
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		ByteArrayOutputStream streamOut = new ByteArrayOutputStream();
+		
+		/* Get access to HSSFCellStyle */
+		HSSFCellStyle my_style = workbook.createCellStyle();
+		HSSFFont my_font = workbook.createFont();
+        my_font.setBold(true);
+        my_style.setFont(my_font);
+        
+        /* Get access to HSSFCellStyle */
+		HSSFCellStyle my_style_Titulo = workbook.createCellStyle();
+		my_style_Titulo.setAlignment(HorizontalAlignment.CENTER);
+		
+		HSSFCellStyle my_style_Cabecera1 = workbook.createCellStyle();
+		HSSFFont my_font2 = workbook.createFont();
+        my_font2.setBold(true);
+        my_style_Cabecera1.setFont(my_font2);
+        my_style_Cabecera1.setAlignment(HorizontalAlignment.CENTER);
+        
+
+		String [] columns = {"Nº","ODS","Departamento","Provincia","Apellido Paterno","Apellido Materno","Nombre","DNI","Codigo IE","Nombre IE","UGEL","Fecha Registro"};
+		
+		Sheet sheet = workbook.createSheet("DOCENTES");
+		
+		/*Linea 1*/
+		Row rowline1 = sheet.createRow(0);
+		Cell cell1 = rowline1.createCell(0);
+		cell1.setCellValue("DOCENTES");
+		cell1.setCellStyle(my_style_Titulo);
+		
+		//rowline1.createCell(0).setCellValue("Reporte Alianza Estratégica");
+		
+		sheet.addMergedRegion(new CellRangeAddress(0,0,0,columns.length-1));
+		
+		/*Linea 1*/
+		Row rowline2 = sheet.createRow(1);		
+		String strOds = "[ODS: "+(ods.equals("-1") ? "Todos" :  odsserv.byOds(odsid_).getDescripcion() )+"]";
+		String strAnio= "[Año: "+(anio.equals("-1") ? "Todos" :  anio )+"]";
+		
+		Cell cell2 = rowline2.createCell(1);
+		cell2.setCellValue(strOds+"            "+strAnio);
+		cell2.setCellStyle(my_style_Titulo);
+		
+		//sheet.addMergedRegion(new CellRangeAddress(1,1,0,columns.length-1));
+		
+		
+		/*Contenido de la lista - Cabecera*/
+		Row row = sheet.createRow(2);
+		for(int i=0;i<columns.length;i++) {
+			Cell cell = row.createCell(i);
+			cell.setCellValue(columns[i]);
+			cell.setCellStyle(my_style);
+		}
+		
+		int initRow = 3;
+		
+		for (DocentesReporteDto obj : dto) {
+			int i = 0;			
+			row = sheet.createRow(initRow);
+			row.createCell(i++).setCellValue(initRow-2); sheet.autoSizeColumn(i);
+			row.createCell(i++).setCellValue(obj.getOds()); sheet.autoSizeColumn(i);
+			row.createCell(i++).setCellValue(obj.getDepartamento()); sheet.autoSizeColumn(i);
+			row.createCell(i++).setCellValue(obj.getProvincia()); sheet.autoSizeColumn(i);
+			row.createCell(i++).setCellValue(obj.getApellidoPaterno()); sheet.autoSizeColumn(i);
+			row.createCell(i++).setCellValue(obj.getApellidoMaterno()); sheet.autoSizeColumn(i);
+			row.createCell(i++).setCellValue(obj.getNombre()); sheet.autoSizeColumn(i);
+			row.createCell(i++).setCellValue(obj.getDni()); sheet.autoSizeColumn(i);
+			row.createCell(i++).setCellValue(obj.getCodigoie()); sheet.autoSizeColumn(i);
+			row.createCell(i++).setCellValue(obj.getNombreie()); sheet.autoSizeColumn(i);
+			row.createCell(i++).setCellValue(obj.getUgel()); sheet.autoSizeColumn(i);			
+			row.createCell(i++).setCellValue(obj.getFecharegistro()); sheet.autoSizeColumn(i);			
+			initRow++;
+		}
+		
+		try {
+			workbook.write(streamOut);
+			workbook.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		ByteArrayInputStream stream = new ByteArrayInputStream(streamOut.toByteArray());
+		HttpHeaders headers = new HttpHeaders();		
+		fecha_archivo = dateFormat.format(date) + hourFormat.format(date);		
+		headers.add("Content-Disposition", "attachment; filename=reporte_docentes_"+fecha_archivo+".csv");		
 		return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
 		
 	}

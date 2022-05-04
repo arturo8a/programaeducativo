@@ -2,6 +2,7 @@ package com.progeduc.service;
 
 import java.util.List;
 
+import com.progeduc.dto.DocentesReporteDto;
 import com.progeduc.model.Participante;
 
 public interface IParticipanteService extends ICRUD<Participante,Integer>{
@@ -21,5 +22,7 @@ public interface IParticipanteService extends ICRUD<Participante,Integer>{
 	List<Participante> buscaTipoNroDocumento(Integer tipoDocumentoid, String nroDocumento);
 	
 	List<Participante> buscaTipoNroDocumento(Integer id, Integer tipoDocumentoid, String nroDocumento);
+	
+	List<DocentesReporteDto> buscarDocente(Integer idods,Integer anio);
 		
 }
